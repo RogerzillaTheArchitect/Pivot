@@ -1,12 +1,4 @@
 // PIVOT — /api/send-email
-// Onde vai: cria uma pasta "api" na raiz do teu projeto Vercel e coloca
-// este ficheiro lá dentro como api/send-email.js
-//
-// Variável de ambiente necessária no Vercel (Project Settings → Environment Variables):
-//   RESEND_API_KEY = a tua chave do Resend
-//
-// O frontend chama isto com: fetch('/api/send-email', { method:'POST', body: JSON.stringify({...}) })
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Método não permitido' });
@@ -25,7 +17,7 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: 'Pivot <onboarding@resend.dev>', // troca pelo teu domínio verificado quando o tiveres
+        from: 'Pivot <notificacoes@pivots.app>',
         to,
         subject,
         html
