@@ -1889,27 +1889,7 @@
      ============================================================ */
   const SUPABASE_URL = 'https://erqdsaczclnqbyxjahgs.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: {
-      // Evita que a sessão fique presa à espera de um "lock" entre abas do browser
-      // que, depois de muitos testes em várias abas/browsers, pode nunca ser libertado.
-      lock: async (name, acquireTimeout, fn) => { return await fn(); }
-    }
-  });
-
-  // Verificação de ligação — mostra um aviso visível se não conseguir alcançar o Supabase
-  // (ex: projeto pausado, sem internet, ou bloqueado por uma extensão do browser).
-  (async function verificarLigacaoSupabase(){
-    try{
-      await sb.auth.getSession();
-    }catch(e){
-      const aviso=document.createElement('div');
-      aviso.style.cssText='position:fixed;top:0;left:0;right:0;background:#b91c1c;color:#fff;text-align:center;padding:10px 16px;font:600 13.5px system-ui,sans-serif;z-index:99999';
-      aviso.textContent='Não foi possível ligar à base de dados. Verifica se o projeto Supabase não está pausado, a tua ligação à internet, ou desativa bloqueadores de anúncios para este site.';
-      document.body.prepend(aviso);
-      console.error('Falha de ligação ao Supabase:', e);
-    }
-  })();
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   let currentWorkspaceId = null;
   let currentUser = null;
@@ -1920,9 +1900,11 @@
     return data;
   }
   async function pivotSignIn(email, password){
+    // NÃO chamamos onAuthReady aqui. O onAuthStateChange (abaixo) é a ÚNICA
+    // fonte de verdade que reage ao login — evita disparar onAuthReady duas vezes
+    // em simultâneo (o que causava deadlock ao ler workspace_members).
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
     if (error) throw error;
-    await onAuthReady(data.session);
     return data;
   }
   async function pivotSignInGoogle(){
@@ -1933,8 +1915,7 @@
     currentWorkspaceId = null; currentUser = null;
     location.reload();
   }
-  async function onAuthReady(session){
-    if (!session) return;
+  async function carregarWorkspace(session){
     currentUser = session.user;
     const { data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
     if (error) {
@@ -1943,23 +1924,32 @@
       aviso.style.cssText='position:fixed;top:0;left:0;right:0;background:#b91c1c;color:#fff;text-align:center;padding:10px 16px;font:600 13.5px system-ui,sans-serif;z-index:99999';
       aviso.textContent='Login funcionou, mas não foi possível carregar o teu workspace. Detalhe técnico: '+(error.message||'erro desconhecido');
       document.body.prepend(aviso);
-      throw new Error('Falha ao carregar workspace: '+(error.message||'erro desconhecido'));
+      return false;
     }
     currentWorkspaceId = data.workspace_id;
-    // Se veio um nome do registo (email/password ou Google) e o perfil ainda não tem nome, aplica-o
     const nomeMeta = currentUser.user_metadata && (currentUser.user_metadata.nome || currentUser.user_metadata.full_name);
     if (nomeMeta && typeof perfilData!=='undefined' && !perfilData.nome) {
       perfilData.nome = nomeMeta;
       if (typeof savePerfilData==='function') savePerfilData();
       if (typeof aplicarPerfilData==='function') aplicarPerfilData();
     }
+    return true;
   }
-  // Apanha o regresso do login com Google (redirect) e entra na app automaticamente
+
+  // FONTE ÚNICA DE VERDADE para reação à autenticação.
+  // Dispara no arranque (se já há sessão), no login por email/password, e no regresso do Google.
+  let aProcessarAuth = false;
   sb.auth.onAuthStateChange(async (_event, session) => {
-    if (session) {
-      await onAuthReady(session);
-      const tela=document.getElementById('login-screen');
-      if (tela) tela.classList.add('hide');
+    if (!session || aProcessarAuth) return;
+    aProcessarAuth = true;
+    try {
+      const ok = await carregarWorkspace(session);
+      if (ok) {
+        const tela=document.getElementById('login-screen');
+        if (tela) tela.classList.add('hide');
+      }
+    } finally {
+      aProcessarAuth = false;
     }
   });
 
@@ -6134,9 +6124,8 @@
     try{
       const data = await pivotSignUp(email, pass, nome);
       if(data.session){
-        // Conta já vem ativa (confirmação de email desligada): entra logo.
-        await onAuthReady(data.session);
-        document.getElementById('login-screen').classList.add('hide');
+        // Conta já vem ativa (confirmação de email desligada): o onAuthStateChange
+        // trata de carregar o workspace e esconder o ecrã de login automaticamente.
         showToast('Conta criada. Bem-vindo(a), '+nome+'!');
       } else {
         // Confirmação de email exigida: mostra ecrã claro de "verifica o teu email", não um toast que passa despercebido.
@@ -6171,14 +6160,8 @@
   function terminarSessao(){
     pivotSignOut();
   }
-  async function verificarSessao(){
-    const { data } = await sb.auth.getSession();
-    if(data.session){
-      await onAuthReady(data.session);
-      document.getElementById('login-screen').classList.add('hide');
-    }
-  }
-  verificarSessao();
+  // No arranque, o onAuthStateChange dispara automaticamente se já existir uma
+  // sessão guardada — não é preciso verificar manualmente aqui (fonte única de verdade).
 
   loadJobsData();
   loadClientesData();
