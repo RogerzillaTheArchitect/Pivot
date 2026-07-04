@@ -1889,16 +1889,12 @@
      ============================================================ */
   const SUPABASE_URL = 'https://erqdsaczclnqbyxjahgs.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
-
-  // Rede de segurança temporária de diagnóstico: apanha QUALQUER erro não tratado
-  // em qualquer parte da app, mesmo os que bibliotecas externas engolem silenciosamente.
-  // Usa alert() de propósito — é a única coisa que nenhum filtro de consola pode esconder.
-  window.addEventListener('unhandledrejection', function(ev){
-    mostrarDiagnostico('ERRO NÃO TRATADO (promise): ' + (ev.reason && ev.reason.message ? ev.reason.message : JSON.stringify(ev.reason)));
-  });
-  window.addEventListener('error', function(ev){
-    mostrarDiagnostico('ERRO DE SCRIPT: ' + ev.message + ' (linha ' + ev.lineno + ')');
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      // Evita que a sessão fique presa à espera de um "lock" entre abas do browser
+      // que, depois de muitos testes em várias abas/browsers, pode nunca ser libertado.
+      lock: async (name, acquireTimeout, fn) => { return await fn(); }
+    }
   });
 
   // Verificação de ligação — mostra um aviso visível se não conseguir alcançar o Supabase
@@ -1937,34 +1933,11 @@
     currentWorkspaceId = null; currentUser = null;
     location.reload();
   }
-  function mostrarDiagnostico(texto){
-    let painel = document.getElementById('painel-diagnostico');
-    if (!painel){
-      painel = document.createElement('div');
-      painel.id = 'painel-diagnostico';
-      painel.style.cssText = 'position:fixed;bottom:0;left:0;right:0;max-height:50vh;overflow-y:auto;background:#111;color:#0f0;font:12px/1.5 monospace;padding:12px;z-index:999999;white-space:pre-wrap';
-      document.body.appendChild(painel);
-    }
-    const linha = document.createElement('div');
-    linha.textContent = '[' + new Date().toLocaleTimeString() + '] ' + texto;
-    painel.appendChild(linha);
-  }
   async function onAuthReady(session){
-    mostrarDiagnostico('onAuthReady chamado. session existe? ' + !!session);
-    if (!session) { mostrarDiagnostico('PAROU: sessão vazia/nula.'); return; }
+    if (!session) return;
     currentUser = session.user;
-    mostrarDiagnostico('sessão OK, user id = '+currentUser.id+'. A tentar carregar workspace...');
-    let data, error;
-    try{
-      const resultado = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
-      data = resultado.data; error = resultado.error;
-      mostrarDiagnostico('Pedido a workspace_members terminou. error = ' + JSON.stringify(error) + ' | data = ' + JSON.stringify(data));
-    }catch(excecao){
-      mostrarDiagnostico('EXCEÇÃO na chamada .from(): ' + excecao.message);
-      throw excecao;
-    }
+    const { data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
     if (error) {
-      mostrarDiagnostico('PAROU: Supabase devolveu erro: '+error.message+' (código: '+(error.code||'sem código')+')');
       console.error('Erro a obter workspace:', error);
       const aviso=document.createElement('div');
       aviso.style.cssText='position:fixed;top:0;left:0;right:0;background:#b91c1c;color:#fff;text-align:center;padding:10px 16px;font:600 13.5px system-ui,sans-serif;z-index:99999';
@@ -1972,7 +1945,6 @@
       document.body.prepend(aviso);
       throw new Error('Falha ao carregar workspace: '+(error.message||'erro desconhecido'));
     }
-    mostrarDiagnostico('SUCESSO: workspace carregado, id = '+data.workspace_id);
     currentWorkspaceId = data.workspace_id;
     // Se veio um nome do registo (email/password ou Google) e o perfil ainda não tem nome, aplica-o
     const nomeMeta = currentUser.user_metadata && (currentUser.user_metadata.nome || currentUser.user_metadata.full_name);
@@ -6120,19 +6092,15 @@
     document.getElementById('login-form-entrar').style.display='block';
   }
   async function entrarNaApp(){
-    mostrarDiagnostico('Botão Entrar clicado. entrarNaApp() está a correr.');
     const email=document.getElementById('login-email').value.trim();
     const pass=document.getElementById('login-pass').value;
     const err=document.getElementById('login-err');
     if(!email || !pass){ err.querySelector('span').textContent='Preenche o email e a password.'; err.style.display='block'; return; }
     err.style.display='none';
     try{
-      mostrarDiagnostico('A chamar pivotSignIn...');
       await pivotSignIn(email, pass);
-      mostrarDiagnostico('pivotSignIn terminou sem erro. A esconder ecrã de login.');
       document.getElementById('login-screen').classList.add('hide');
     }catch(e){
-      mostrarDiagnostico('CATCH em entrarNaApp: ' + e.message);
       const msg = /confirm/i.test(e.message||'') ? 'Confirma o teu email antes de entrares — verifica a tua caixa de entrada.'
         : /workspace/i.test(e.message||'') ? e.message
         : 'Email ou password incorretos.';
