@@ -1931,7 +1931,14 @@
     if (!session) return;
     currentUser = session.user;
     const { data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
-    if (error) { console.error('Erro a obter workspace:', error); return; }
+    if (error) {
+      console.error('Erro a obter workspace:', error);
+      const aviso=document.createElement('div');
+      aviso.style.cssText='position:fixed;top:0;left:0;right:0;background:#b91c1c;color:#fff;text-align:center;padding:10px 16px;font:600 13.5px system-ui,sans-serif;z-index:99999';
+      aviso.textContent='Login funcionou, mas não foi possível carregar o teu workspace. Detalhe técnico: '+(error.message||'erro desconhecido')+' — experimenta noutro browser (Chrome) ou numa aba anónima.';
+      document.body.prepend(aviso);
+      throw new Error('Falha ao carregar workspace: '+(error.message||'erro desconhecido'));
+    }
     currentWorkspaceId = data.workspace_id;
     // Se veio um nome do registo (email/password ou Google) e o perfil ainda não tem nome, aplica-o
     const nomeMeta = currentUser.user_metadata && (currentUser.user_metadata.nome || currentUser.user_metadata.full_name);
@@ -6088,7 +6095,9 @@
       await pivotSignIn(email, pass);
       document.getElementById('login-screen').classList.add('hide');
     }catch(e){
-      const msg = /confirm/i.test(e.message||'') ? 'Confirma o teu email antes de entrares — verifica a tua caixa de entrada.' : 'Email ou password incorretos.';
+      const msg = /confirm/i.test(e.message||'') ? 'Confirma o teu email antes de entrares — verifica a tua caixa de entrada.'
+        : /workspace/i.test(e.message||'') ? e.message
+        : 'Email ou password incorretos.';
       err.querySelector('span').textContent = msg;
       err.style.display='block';
     }
