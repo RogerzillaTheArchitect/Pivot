@@ -1939,18 +1939,25 @@
   // FONTE ÚNICA DE VERDADE para reação à autenticação.
   // Dispara no arranque (se já há sessão), no login por email/password, e no regresso do Google.
   let aProcessarAuth = false;
-  sb.auth.onAuthStateChange(async (_event, session) => {
+  sb.auth.onAuthStateChange((_event, session) => {
     if (!session || aProcessarAuth) return;
     aProcessarAuth = true;
-    try {
-      const ok = await carregarWorkspace(session);
-      if (ok) {
-        const tela=document.getElementById('login-screen');
-        if (tela) tela.classList.add('hide');
+    // IMPORTANTE: o supabase-js@2 mantém um lock de autenticação enquanto este
+    // callback corre. Qualquer chamada sb.* aqui dentro (ex.: sb.from(...) em
+    // carregarWorkspace, que precisa da sessão) fica à espera do mesmo lock e
+    // bloqueia para sempre — o login nunca resolve. Adiar com setTimeout(0)
+    // corre o trabalho FORA do lock, depois do callback retornar.
+    setTimeout(async () => {
+      try {
+        const ok = await carregarWorkspace(session);
+        if (ok) {
+          const tela=document.getElementById('login-screen');
+          if (tela) tela.classList.add('hide');
+        }
+      } finally {
+        aProcessarAuth = false;
       }
-    } finally {
-      aProcessarAuth = false;
-    }
+    }, 0);
   });
 
   // Substitui o antigo window.storage (localStorage) por leitura/escrita real na base de dados
