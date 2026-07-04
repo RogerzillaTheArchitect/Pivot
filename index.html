@@ -1891,6 +1891,16 @@
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  // Rede de segurança temporária de diagnóstico: apanha QUALQUER erro não tratado
+  // em qualquer parte da app, mesmo os que bibliotecas externas engolem silenciosamente.
+  // Usa alert() de propósito — é a única coisa que nenhum filtro de consola pode esconder.
+  window.addEventListener('unhandledrejection', function(ev){
+    alert('ERRO NÃO TRATADO (promise): ' + (ev.reason && ev.reason.message ? ev.reason.message : JSON.stringify(ev.reason)));
+  });
+  window.addEventListener('error', function(ev){
+    alert('ERRO DE SCRIPT: ' + ev.message + ' (linha ' + ev.lineno + ')');
+  });
+
   // Verificação de ligação — mostra um aviso visível se não conseguir alcançar o Supabase
   // (ex: projeto pausado, sem internet, ou bloqueado por uma extensão do browser).
   (async function verificarLigacaoSupabase(){
@@ -1928,10 +1938,19 @@
     location.reload();
   }
   async function onAuthReady(session){
-    if (!session) return;
+    if (!session) { alert('DIAGNÓSTICO: onAuthReady recebeu sessão vazia/nula.'); return; }
     currentUser = session.user;
-    const { data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
+    alert('DIAGNÓSTICO: sessão OK, user id = '+currentUser.id+'. A tentar carregar workspace...');
+    let data, error;
+    try{
+      const resultado = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
+      data = resultado.data; error = resultado.error;
+    }catch(excecao){
+      alert('DIAGNÓSTICO: a própria chamada .from() rebentou: '+excecao.message);
+      throw excecao;
+    }
     if (error) {
+      alert('DIAGNÓSTICO: Supabase devolveu erro ao ler workspace_members: '+error.message+' (código: '+(error.code||'sem código')+')');
       console.error('Erro a obter workspace:', error);
       const aviso=document.createElement('div');
       aviso.style.cssText='position:fixed;top:0;left:0;right:0;background:#b91c1c;color:#fff;text-align:center;padding:10px 16px;font:600 13.5px system-ui,sans-serif;z-index:99999';
@@ -1939,6 +1958,7 @@
       document.body.prepend(aviso);
       throw new Error('Falha ao carregar workspace: '+(error.message||'erro desconhecido'));
     }
+    alert('DIAGNÓSTICO: workspace carregado com sucesso! id = '+data.workspace_id);
     currentWorkspaceId = data.workspace_id;
     // Se veio um nome do registo (email/password ou Google) e o perfil ainda não tem nome, aplica-o
     const nomeMeta = currentUser.user_metadata && (currentUser.user_metadata.nome || currentUser.user_metadata.full_name);
