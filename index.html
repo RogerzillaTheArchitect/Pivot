@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -59,7 +59,7 @@
       radial-gradient(ellipse 90% 55% at 85% 100%, rgba(35,110,145,.20), transparent 55%),
       radial-gradient(ellipse 60% 40% at 0% 90%, rgba(63,161,105,.09), transparent 60%),
       linear-gradient(170deg, #1A2226 0%, var(--bg-ice) 45%, var(--bg-ice-2) 75%, #030405 100%)}
-  .shell{display:flex;height:100vh;max-width:1180px;margin:0 auto;
+  .shell{display:flex;height:100vh;width:100%;
     background:
       radial-gradient(ellipse 90% 50% at 15% -5%, rgba(255,214,170,.16), transparent 55%),
       radial-gradient(ellipse 80% 55% at 100% 10%, rgba(20,83,45,.10), transparent 55%),
@@ -114,7 +114,6 @@
   .sb-search{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line);
     border-radius:10px;color:var(--neutral);font-size:13.5px;cursor:pointer;margin-bottom:4px}
   .sb-search svg{width:15px;height:15px}
-  .sb-search .k{margin-left:auto;font-size:11px;border:1px solid var(--line);border-radius:5px;padding:1px 5px}
   .sb-create{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:10px;background:var(--btn-72);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid var(--btn-8);
     color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:2px;transition:background .15s}
@@ -595,7 +594,6 @@
     border-radius:13px;padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
   .searchbox svg{width:18px;height:18px;color:var(--neutral)}
   .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}
-  .kbd{font-size:11px;color:var(--neutral);border:1px solid var(--line);border-radius:6px;padding:2px 6px}
   .res{font-size:13px;color:var(--neutral);padding:0 2px}
 
   /* ===== ACTION SHEET ===== */
@@ -1005,7 +1003,7 @@
     <div style="font-size:10px;color:var(--neutral);letter-spacing:.02em;margin:0 8px 22px">Contact, contract, compact.</div>
     <div class="sb-search" onclick="go('pesquisa')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-      <span id="sb-label-pesquisar" data-t="nav.search">Pesquisar</span> <span class="k">⌘K</span>
+      <span id="sb-label-pesquisar" data-t="nav.search">Pesquisar</span>
     </div>
     <div class="sb-create" onclick="openSheet()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg> <span id="sb-label-criar" data-t="nav.create">Criar</span>
@@ -1026,7 +1024,7 @@
     <div class="sb-spacer"></div>
     <div class="sb-profile" onclick="go('perfil')">
       <div class="sb-avatar">U</div>
-      <div><div class="nm">Usuário</div><div class="pl" data-t="profile.plan.label">Plano Pro</div></div>
+      <div><div class="nm">Usuário</div><div class="pl">Plano Pro</div></div>
     </div>
   </aside>
 
@@ -1053,7 +1051,7 @@
       <section class="view active" id="v-hoje">
         <div class="date" id="hoje-data">Quarta, 24 de junho</div>
 
-        <div class="month-summary" onclick="abrirRelatorioDoMes()" style="cursor:pointer">
+        <div class="month-summary">
           <div class="ms-head-big">
             <span class="ms-fatura-title-big" data-t="home.revenue">Faturamento</span>
             <span class="ms-mes-atual" id="ms-mes-atual">Junho</span>
@@ -1064,7 +1062,7 @@
               <div class="ms-rings-legend">
                 <div class="mrl-item"><span class="mrl-dot mr-meta-c"></span><span data-t="home.projected">Previsto</span> <b id="mrl-meta">4.300 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirCustos()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.spent">Gasto</span> <b id="mrl-gastos">45 €</b></div>
+                <div class="mrl-item" onclick="abrirCustos()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.spent">Gasto</span> <b id="mrl-gastos">45 €</b></div>
               </div>
             </div>
             <div class="ms-rings-wrap">
@@ -1158,34 +1156,23 @@
           <div class="collapse" onclick="this.classList.toggle('open')">
             <div class="collapse-head">
               <div class="collapse-l"><div class="sec-icon sm c-pagamentos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/></svg></div> <span data-t="dashboard.pendingPayments">Pagamentos pendentes</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n">4</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-pagamentos-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
             </div>
-            <div class="collapse-body">
-              <div class="crow-mini"><span class="a">Sofia &amp; João</span><span class="b">1.200 € · <span data-t="status.overdue">atrasado</span></span></div>
-              <div class="crow-mini"><span class="a">Aurora</span><span class="b">1.500 € · <span data-t="status.inDaysPrefix">em </span>3<span data-t="status.inDaysSuffix"> dias</span></span></div>
-              <div class="crow-mini"><span class="a">Marketing 360</span><span class="b">400 € · <span data-t="status.inDaysPrefix">em </span>9<span data-t="status.inDaysSuffix"> dias</span></span></div>
-              <div class="crow-mini"><span class="a">Loja Âmago</span><span class="b">850 € · <span data-t="status.inDaysPrefix">em </span>14<span data-t="status.inDaysSuffix"> dias</span></span></div>
-            </div>
+            <div class="collapse-body" id="resumo-pagamentos"></div>
           </div>
           <div class="collapse" onclick="this.classList.toggle('open')">
             <div class="collapse-head">
               <div class="collapse-l"><div class="sec-icon sm c-entrega"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div> <span data-t="dashboard.upcomingDeliveries">Próximas entregas</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n">2</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-entregas-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
             </div>
-            <div class="collapse-body">
-              <div class="crow-mini"><span class="a">Ana Martins</span><span class="b" data-t="status.today">hoje</span></div>
-              <div class="crow-mini"><span class="a">Grupo Atlas</span><span class="b"><span data-t="status.sentNotSeenPrefix">enviada · não vista há </span>4<span data-t="status.daysSuffixShort">d</span></span></div>
-            </div>
+            <div class="collapse-body" id="resumo-entregas"></div>
           </div>
           <div class="collapse" onclick="this.classList.toggle('open')">
             <div class="collapse-head">
               <div class="collapse-l"><div class="sec-icon sm c-historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div> <span data-t="dashboard.recentJobs">Trabalhos recentes</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n">6</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
+              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-recentes-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
             </div>
-            <div class="collapse-body">
-              <div class="crow-mini"><span class="a">Marketing 360</span><span class="b" data-t="jobs.status.done">concluído</span></div>
-              <div class="crow-mini"><span class="a">Aurora</span><span class="b" data-t="jobs.filter.delivering">a entregar</span></div>
-            </div>
+            <div class="collapse-body" id="resumo-recentes"></div>
           </div>
         </div>
 
@@ -1229,9 +1216,9 @@
           </div>
         </div>
 
-        <button class="clientbtn" onclick="openClient()">
+        <button class="clientbtn" onclick="abrirCompartilharPortal(currentJobId)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
-          <span id="lbl-previsualizar-portal" data-t="job.preview">Pré-visualizar Portal do Cliente</span>
+          <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
         </button>
 
         <div id="detalhe-static">
@@ -1445,7 +1432,6 @@
         <div class="searchbox">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
           <input placeholder="Cliente, email, local, data, trabalho…" id="searchin" oninput="fakeSearch()" data-t-placeholder="search.inputHint">
-          <span class="kbd">⌘K</span>
         </div>
         <div class="res" id="searchres" data-t="search.placeholder2">Procura por qualquer coisa. Sofia, Riverside, 14 ago, 1.200 €…</div>
         <div id="searchhits"></div>
@@ -1927,6 +1913,7 @@
       return false;
     }
     currentWorkspaceId = data.workspace_id;
+    await carregarDadosDaConta();
     const nomeMeta = currentUser.user_metadata && (currentUser.user_metadata.nome || currentUser.user_metadata.full_name);
     if (nomeMeta && typeof perfilData!=='undefined' && !perfilData.nome) {
       perfilData.nome = nomeMeta;
@@ -2212,6 +2199,9 @@
     "job.payments.markPaid": { pt:"Marcar pago", en:"Mark as paid", es:"Marcar como pagado" },
     "job.payments.requestProof": { pt:"Pedir comprovante", en:"Request proof", es:"Pedir justificante" },
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
+    "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
+    "portal.shareTitle": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
+    "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing y firme el contrato." },
     "job.resources": { pt:"Recursos adicionais", en:"Additional resources", es:"Recursos adicionales" },
     "job.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
     "job.status.paid": { pt:"pago", en:"paid", es:"pagado" },
@@ -2403,12 +2393,18 @@
     "profile.account.save": { pt:"Guardar alterações", en:"Save changes", es:"Guardar cambios" },
     "profile.account.studioDesc": { pt:"€39/mês · multi-usuário, relatórios", en:"€39/mo · multi-user, reports", es:"€39/mes · multiusuario, informes" },
     "profile.account.switchStudio": { pt:"Estúdio", en:"Studio", es:"Estudio" },
+    "plan.name.free": { pt:"Plano Free", en:"Free Plan", es:"Plan Free" },
+    "plan.name.pro": { pt:"Plano Pro", en:"Pro Plan", es:"Plan Pro" },
+    "plan.name.studio": { pt:"Plano Estúdio", en:"Studio Plan", es:"Plan Estudio" },
+    "plan.desc.free": { pt:"Grátis · 1 trabalho ativo, marca Pivot no portal", en:"Free · 1 active job, Pivot branding on portal", es:"Gratis · 1 trabajo activo, marca Pivot en el portal" },
+    "plan.current": { pt:" · atual", en:" · current", es:" · actual" },
+    "plan.billingNotConnected": { pt:"Pagamentos ainda não estão ligados a este plano. Contacta o suporte para ativar.", en:"Billing isn't connected for this plan yet. Contact support to activate it.", es:"Los pagos aún no están conectados a este plan. Contacta con soporte para activarlo." },
+    "toast.planChangedFree": { pt:"Mudaste para o Plano Free.", en:"Switched to the Free plan.", es:"Cambiaste al Plan Free." },
     "profile.darkMode": { pt:"Modo escuro", en:"Dark mode", es:"Modo oscuro" },
     "profile.help": { pt:"Ajuda", en:"Help", es:"Ayuda" },
     "profile.language": { pt:"Idioma da interface", en:"Interface language", es:"Idioma de la interfaz" },
     "profile.myAccount": { pt:"Minha conta", en:"My account", es:"Mi cuenta" },
     "profile.notifications": { pt:"Notificações", en:"Notifications", es:"Notificaciones" },
-    "profile.plan.label": { pt:"Plano Pro", en:"Pro Plan", es:"Plan Pro" },
     "profile.privacy": { pt:"Privacidade", en:"Privacy", es:"Privacidad" },
     "profile.product": { pt:"Produto", en:"Product", es:"Producto" },
     "profile.reminders": { pt:"Perfil de lembretes", en:"Reminder profile", es:"Perfil de recordatorios" },
@@ -2578,7 +2574,6 @@
     "toast.sessionEnded": { pt:"Sessão terminada.", en:"Signed out.", es:"Sesión cerrada." },
     "toast.settingsSaved": { pt:"Configurações guardadas", en:"Settings saved", es:"Ajustes guardados" },
     "toast.signatureSaved": { pt:"Assinatura guardada.", en:"Signature saved.", es:"Firma guardada." },
-    "toast.studioUpgrade": { pt:"Abrindo checkout do plano Estúdio…", en:"Opening Studio plan checkout…", es:"Abriendo checkout del plan Estudio…" },
     "toast.taskPrefix": { pt:"Tarefa \"", en:"Task \"", es:"Tarea \"" },
     "toast.templateImported": { pt:"Modelo importado.", en:"Template imported.", es:"Modelo importado." },
     "toast.uploadFileFirst": { pt:"Carrega um arquivo primeiro.", en:"Upload a file first.", es:"Sube un archivo primero." },
@@ -2660,7 +2655,7 @@
     "wizard.viewReferences": { pt:"Ver referências guardadas", en:"View saved references", es:"Ver referencias guardadas" },
     "wizard.whatToSend": { pt:"O que enviar ao cliente?", en:"What to send the client?", es:"¿Qué enviar al cliente?" },
   };
-  let LANG='pt';
+  let LANG='en';
   const MESES_ABREV={
     pt:['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'],
     en:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
@@ -2867,6 +2862,7 @@
     }
     renderVencimentos();
     renderRadarDashboard();
+    renderResumoTrabalhos();
     updateHoje();
   }
   function diasEntre(dataISO){
@@ -3019,6 +3015,40 @@
         '<svg class="venc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'+
       '</div>';
     }).join('');
+  }
+
+  /* ===== Resumo do dia — Pagamentos pendentes / Próximas entregas / Trabalhos recentes ===== */
+  function renderResumoTrabalhos(){
+    const pagamentos=gerarProximosVencimentos();
+    const wrapPag=document.getElementById('resumo-pagamentos');
+    const nPag=document.getElementById('resumo-pagamentos-n');
+    if(nPag) nPag.textContent=pagamentos.length;
+    if(wrapPag){
+      wrapPag.innerHTML = pagamentos.length ? pagamentos.slice(0,4).map(p=>{
+        const statusTxt = p.atrasado ? t('status.overdue') : (t('status.inDaysPrefix')+p.diffDias+t('status.inDaysSuffix'));
+        return '<div class="crow-mini" onclick="event.stopPropagation();openJob(\''+p.jobId+'\')"><span class="a">'+escapeHtml(p.client)+'</span><span class="b">'+fmtMoney(p.amount)+' · '+statusTxt+'</span></div>';
+      }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 0 2px">'+t('venc.empty')+'</p>';
+    }
+
+    const entregas=Object.values(jobsData).filter(j=>classificarTrabalho(j).aEntregar);
+    const wrapEnt=document.getElementById('resumo-entregas');
+    const nEnt=document.getElementById('resumo-entregas-n');
+    if(nEnt) nEnt.textContent=entregas.length;
+    if(wrapEnt){
+      wrapEnt.innerHTML = entregas.length ? entregas.slice(0,4).map(j=>
+        '<div class="crow-mini" onclick="event.stopPropagation();openJob(\''+j.id+'\')"><span class="a">'+escapeHtml(j.client)+'</span><span class="b">'+escapeHtml(j.date||t('wizard.date'))+'</span></div>'
+      ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 0 2px">'+t('jobs.emptyFilter')+'</p>';
+    }
+
+    const recentes=Object.values(jobsData).filter(j=>classificarTrabalho(j).concluido).slice(-4).reverse();
+    const wrapRec=document.getElementById('resumo-recentes');
+    const nRec=document.getElementById('resumo-recentes-n');
+    if(nRec) nRec.textContent=recentes.length;
+    if(wrapRec){
+      wrapRec.innerHTML = recentes.length ? recentes.map(j=>
+        '<div class="crow-mini" onclick="event.stopPropagation();openJob(\''+j.id+'\')"><span class="a">'+escapeHtml(j.client)+'</span><span class="b">'+t('jobs.status.done')+'</span></div>'
+      ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 0 2px">'+t('jobs.emptyFilter')+'</p>';
+    }
   }
 
   /* ===== Custos — planeamento financeiro manual e real ===== */
@@ -4018,9 +4048,9 @@
   function gerarLembretes(job){
     const offsets = lembretesPerfilAtual==='personalizado' ? lembretesOffsetsPersonalizado : PERFIS_LEMBRETES[lembretesPerfilAtual].offsets;
     if(!job || !job.dateRaw){
-      return offsets.map(d=>({t:gerarLembreteLabel(d), alvo:'pagamentos'}));
+      return offsets.map(d=>({t:gerarLembreteLabel(d), alvo:'pagamentos', offset:d, dataISO:null, enviado:false}));
     }
-    return offsets.map(delta=>({t:gerarLembreteLabel(delta)+' — '+fmtDiaMesPt(addDiasISO(job.dateRaw,delta)), alvo:'pagamento final'}));
+    return offsets.map(delta=>({t:gerarLembreteLabel(delta)+' — '+fmtDiaMesPt(addDiasISO(job.dateRaw,delta)), alvo:'pagamento final', offset:delta, dataISO:addDiasISO(job.dateRaw,delta).toISOString().slice(0,10), enviado:false}));
   }
   function abrirPerfisLembretes(){
     openInfo(t('modal.reminderProfile'), `
@@ -4417,6 +4447,24 @@
     showToast(t('toast.openingEmail'));
   }
   function abrirComoClienteSimulado(id){ currentJobId=id; openClient(); }
+  function abrirCompartilharPortal(id){
+    const job=jobsData[id];
+    if(!job){ showToast(t('toast.jobNotFound')); return; }
+    if(!job.contract.link){
+      openInfo(t('portal.shareTitle'), `
+        <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('portal.shareGenerateHint')}</p>
+        <button class="btn primary" style="width:100%" onclick="gerarLinkContrato('${id}').then(()=>abrirCompartilharPortal('${id}'))">${t('job.contract.getLink')}</button>
+        <button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeInfo();abrirComoClienteSimulado('${id}')">${t('job.preview')}</button>`);
+    } else {
+      openInfo(t('portal.shareTitle'), `
+        <p style="font-size:13px;color:var(--ink-soft);word-break:break-all;margin-bottom:14px">${escapeHtml(job.contract.link)}</p>
+        <div style="display:flex;gap:8px">
+          <button class="btn primary" style="flex:1" onclick="copiarLinkContrato('${id}')">${t('job.contract.copyLink')}</button>
+          <button class="btn soft" style="flex:1" onclick="enviarPorEmail('${id}')">${t('job.contract.email')}</button>
+        </div>
+        <button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeInfo();abrirComoClienteSimulado('${id}')">${t('job.preview')}</button>`);
+    }
+  }
 
   function marcarPagoDynamic(id,i){
     const job=jobsData[id];
@@ -5264,7 +5312,7 @@
   function saveClientesData(){ savePersisted('pivot-clientesData', ()=>clientesData); }
   function saveTarefasData(){ savePersisted('pivot-tarefasData', ()=>tarefasData); }
   async function loadClientesData(){ await loadPersisted('pivot-clientesData', d=>{ clientesData=d; }); }
-  let perfilData={nome:'', email:'', empresa:'', corMarca:'#14532D', corNome:'verde', idiomaUI:'Português', idiomaPortal:'Português', fotoUrl:null, assinaturaImg:null};
+  let perfilData={nome:'', email:'', empresa:'', corMarca:'#14532D', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free'};
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
     await loadPersisted('pivot-perfilData', d=>{ perfilData=Object.assign({}, perfilData, d); });
@@ -5300,11 +5348,18 @@
     }catch(e){ showToast(t('toast.imageError')); }
     input.value='';
   }
+  const PLANOS = {
+    Free:   { labelKey:'plan.name.free',   descKey:'plan.desc.free' },
+    Pro:    { labelKey:'plan.name.pro',    descKey:'profile.account.proDesc' },
+    Studio: { labelKey:'plan.name.studio', descKey:'profile.account.studioDesc' }
+  };
+  function nomePlanoAtual(){ return t(PLANOS[perfilData.plano||'Free'].labelKey); }
   function aplicarPerfilData(){
     const nomeExibido = perfilData.nome || t('defaults.userName');
     document.querySelectorAll('.p-name').forEach(el=>el.textContent=nomeExibido);
     document.querySelectorAll('.sb-profile .nm').forEach(el=>el.textContent=nomeExibido);
-    const sub=document.querySelector('.p-sub'); if(sub) sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+t('profile.plan.label');
+    document.querySelectorAll('.sb-profile .pl').forEach(el=>el.textContent=nomePlanoAtual());
+    const sub=document.querySelector('.p-sub'); if(sub) sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+nomePlanoAtual();
     document.documentElement.style.setProperty('--brand', perfilData.corMarca);
     const inicial=(nomeExibido||'U').charAt(0).toUpperCase();
     document.querySelectorAll('.sb-avatar, .p-avatar').forEach(el=>{
@@ -5551,14 +5606,32 @@
     document.getElementById('infoSheet').classList.remove('show');
   }
   function infoMinhaConta(){
+    const planoAtual = perfilData.plano||'Free';
+    const linhasPlano = Object.keys(PLANOS).map(nome=>{
+      const p=PLANOS[nome];
+      const atual = nome===planoAtual;
+      const estilo = atual ? ' style="border-color:var(--brand);background:var(--brand-10)"' : '';
+      const onclick = atual ? '' : ` onclick="escolherPlano('${nome}')"`;
+      return `<div class="pick-row"${estilo}${onclick}><div><div class="nm">${t(p.labelKey)}${atual?t('plan.current'):''}</div><div class="sub">${t(p.descKey)}</div></div></div>`;
+    }).join('');
     openInfo(t('profile.myAccount'), `
       <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
       <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="mc-empresa"></div>
       <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
-      <div class="pick-row" style="border-color:var(--brand);background:var(--brand-10)"><div><div class="nm">${t('profile.account.proCurrent')}</div><div class="sub">${t('profile.account.proDesc')}</div></div></div>
-      <div class="pick-row" onclick="closeInfo();showToast(t('toast.studioUpgrade'))"><div><div class="nm">${t('profile.account.switchStudio')}</div><div class="sub">${t('profile.account.studioDesc')}</div></div></div>
+      ${linhasPlano}
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>`);
+  }
+  function escolherPlano(nome){
+    if(nome==='Free'){
+      perfilData.plano='Free';
+      savePerfilData();
+      aplicarPerfilData();
+      closeInfo();
+      showToast(t('toast.planChangedFree'));
+      return;
+    }
+    showToast(t('plan.billingNotConnected'));
   }
   function salvarMinhaConta(){
     perfilData.nome=document.getElementById('mc-nome').value.trim()||'Utilizador';
@@ -6170,13 +6243,17 @@
   // No arranque, o onAuthStateChange dispara automaticamente se já existir uma
   // sessão guardada — não é preciso verificar manualmente aqui (fonte única de verdade).
 
-  loadJobsData();
-  loadClientesData();
-  loadTarefasData();
-  loadCustosData();
-  loadPerfilData();
-  loadMetas();
-  loadLembretesPerfil();
+  // Todos os dados da conta só são lidos depois de currentWorkspaceId estar definido
+  // (ver carregarWorkspace) — carregar antes disso devolve sempre null e a conta
+  // parece "vazia"/com valores por defeito mesmo tendo dados guardados.
+  async function carregarDadosDaConta(){
+    await Promise.all([
+      loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(),
+      loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
+      loadReferenciasData(), loadModelosUsoData(), loadEquipaData(), loadTema()
+    ]);
+    renderMonthTicker();
+  }
   function aplicarTema(tema){
     document.documentElement.setAttribute('data-theme', tema);
     const tg=document.getElementById('toggle-dark-mode');
@@ -6191,11 +6268,6 @@
   async function loadTema(){
     await loadPersisted('pivot-tema', d=>{ if(d && d.tema) aplicarTema(d.tema); });
   }
-  loadColecoesData();
-  loadReferenciasData();
-  loadModelosUsoData();
-  loadEquipaData();
-  loadTema();
   staggerCards('#v-hoje .card, #v-hoje .collapse');
   renderMonthTicker();
   ajustarPaddingEcra();
