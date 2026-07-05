@@ -9,7 +9,7 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=Sora:wght@600;700;800&family=Big+Shoulders+Display:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
   :root{
@@ -53,21 +53,12 @@
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:var(--bg-ice-2);color:var(--ink);
     font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
   [data-theme="dark"] .shell{
-    background:
-      radial-gradient(ellipse 60% 50% at 12% -8%, rgba(230,150,110,.34), transparent 55%),
-      radial-gradient(ellipse 70% 55% at 100% 8%, rgba(79,161,137,.38), transparent 55%),
-      radial-gradient(ellipse 75% 60% at 88% 96%, rgba(35,110,145,.42), transparent 55%),
-      radial-gradient(ellipse 55% 45% at 4% 92%, rgba(79,161,137,.24), transparent 60%),
-      radial-gradient(ellipse 40% 35% at 55% 45%, rgba(180,120,200,.14), transparent 60%),
-      linear-gradient(170deg, #1A2226 0%, var(--bg-ice) 45%, var(--bg-ice-2) 75%, #030405 100%)}
+    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjUwIj4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9ImIiIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1NSIvPgogICAgPC9maWx0ZXI+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InZnIiBjeD0iNTAlIiBjeT0iNDUlIiByPSI3NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjQ1JSIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwLjU1Ii8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjY1MCIgZmlsbD0iIzE0MTgxQSIvPgogIDxnIGZpbHRlcj0idXJsKCNiKSI+CiAgICA8ZWxsaXBzZSBjeD0iMTUwIiBjeT0iMTEwIiByeD0iMjYwIiByeT0iMjAwIiBmaWxsPSIjQjU2MDNBIiBvcGFjaXR5PSIwLjU1Ii8+CiAgICA8ZWxsaXBzZSBjeD0iNzQwIiBjeT0iODAiIHJ4PSIyMjAiIHJ5PSIxNzAiIGZpbGw9IiMyOTUyNDQiIG9wYWNpdHk9IjAuNiIvPgogICAgPGVsbGlwc2UgY3g9IjgyMCIgY3k9IjQ4MCIgcng9IjI2MCIgcnk9IjIyMCIgZmlsbD0iIzFGM0I0RCIgb3BhY2l0eT0iMC42NSIvPgogICAgPGVsbGlwc2UgY3g9IjEyMCIgY3k9IjU2MCIgcng9IjI0MCIgcnk9IjE5MCIgZmlsbD0iIzRGQTE4OSIgb3BhY2l0eT0iMC4zMiIvPgogICAgPGVsbGlwc2UgY3g9IjQ1MCIgY3k9IjMzMCIgcng9IjMwMCIgcnk9IjIyMCIgZmlsbD0iIzZCM0UyQSIgb3BhY2l0eT0iMC4zNSIvPgogICAgPGVsbGlwc2UgY3g9IjYwMCIgY3k9IjIyMCIgcng9IjE1MCIgcnk9IjEyMCIgZmlsbD0iIzJGNkI1OCIgb3BhY2l0eT0iMC40Ii8+CiAgICA8ZWxsaXBzZSBjeD0iMzAwIiBjeT0iNDUwIiByeD0iMTMwIiByeT0iMTAwIiBmaWxsPSIjN0E0QTJFIiBvcGFjaXR5PSIwLjI4Ii8+CiAgPC9nPgogIDxyZWN0IHdpZHRoPSI5MDAiIGhlaWdodD0iNjUwIiBmaWxsPSJ1cmwoI3ZnKSIvPgo8L3N2Zz4K");
+    background-size:cover;background-position:center;background-repeat:no-repeat}
   .shell{display:flex;height:100vh;width:100%;
-    background:
-      radial-gradient(ellipse 65% 50% at 10% -8%, rgba(255,196,150,.40), transparent 55%),
-      radial-gradient(ellipse 60% 55% at 100% 5%, rgba(41,82,68,.30), transparent 55%),
-      radial-gradient(ellipse 70% 60% at 92% 98%, rgba(31,110,140,.34), transparent 55%),
-      radial-gradient(ellipse 45% 40% at 45% 40%, rgba(220,180,240,.16), transparent 60%),
-      linear-gradient(165deg, var(--bg-ice) 0%, var(--bg-ice-2) 60%, var(--bg-ice-2) 100%);
-    box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden;background-attachment:fixed}
+    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA5MDAgNjUwIj4KICA8ZGVmcz4KICAgIDxmaWx0ZXIgaWQ9ImIiIHg9Ii0yMCUiIHk9Ii0yMCUiIHdpZHRoPSIxNDAlIiBoZWlnaHQ9IjE0MCUiPgogICAgICA8ZmVHYXVzc2lhbkJsdXIgc3RkRGV2aWF0aW9uPSI1NSIvPgogICAgPC9maWx0ZXI+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9InZnIiBjeD0iNTAlIiBjeT0iNDUlIiByPSI3NSUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjU1JSIgc3RvcC1jb2xvcj0iIzAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzFhMTIxMCIgc3RvcC1vcGFjaXR5PSIwLjI4Ii8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iOTAwIiBoZWlnaHQ9IjY1MCIgZmlsbD0iI0Q4Q0JCOCIvPgogIDxnIGZpbHRlcj0idXJsKCNiKSI+CiAgICA8ZWxsaXBzZSBjeD0iMTUwIiBjeT0iMTEwIiByeD0iMjYwIiByeT0iMjAwIiBmaWxsPSIjRTg5MzVBIiBvcGFjaXR5PSIwLjg1Ii8+CiAgICA8ZWxsaXBzZSBjeD0iNzQwIiBjeT0iODAiIHJ4PSIyMjAiIHJ5PSIxNzAiIGZpbGw9IiNDOTdBNEEiIG9wYWNpdHk9IjAuNTUiLz4KICAgIDxlbGxpcHNlIGN4PSI4MjAiIGN5PSI0ODAiIHJ4PSIyNjAiIHJ5PSIyMjAiIGZpbGw9IiM4QTVBMzgiIG9wYWNpdHk9IjAuNyIvPgogICAgPGVsbGlwc2UgY3g9IjEyMCIgY3k9IjU2MCIgcng9IjI0MCIgcnk9IjE5MCIgZmlsbD0iI0I1NkIzRSIgb3BhY2l0eT0iMC42Ii8+CiAgICA8ZWxsaXBzZSBjeD0iNDUwIiBjeT0iMzMwIiByeD0iMzAwIiByeT0iMjIwIiBmaWxsPSIjRUZDNzlBIiBvcGFjaXR5PSIwLjU1Ii8+CiAgICA8ZWxsaXBzZSBjeD0iNjAwIiBjeT0iMjIwIiByeD0iMTUwIiByeT0iMTIwIiBmaWxsPSIjNEY2QjVDIiBvcGFjaXR5PSIwLjI4Ii8+CiAgICA8ZWxsaXBzZSBjeD0iMzAwIiBjeT0iNDUwIiByeD0iMTMwIiByeT0iMTAwIiBmaWxsPSIjN0E4QzZBIiBvcGFjaXR5PSIwLjIyIi8+CiAgPC9nPgogIDxyZWN0IHdpZHRoPSI5MDAiIGhlaWdodD0iNjUwIiBmaWxsPSJ1cmwoI3ZnKSIvPgo8L3N2Zz4K");
+    background-size:cover;background-position:center;background-repeat:no-repeat;
+    box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden}
   .shell::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
 
@@ -86,8 +77,8 @@
   .lp-nav-actions .btn{padding:9px 18px;font-size:13px}
   .lp-hero{display:flex;align-items:center;gap:60px;padding:70px 5vw;max-width:1280px;margin:0 auto}
   .lp-hero-text{flex:1;min-width:0;max-width:520px}
-  .lp-eyebrow{font-family:'Big Shoulders Display',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin:0 0 12px}
-  .landing-h1{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:38px;font-weight:600;line-height:1.2;color:var(--ink);margin:0 0 16px}
+  .lp-eyebrow{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin:0 0 12px}
+  .landing-h1{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:38px;font-weight:600;line-height:1.2;color:var(--ink);margin:0 0 16px}
   .landing-sub{font-size:15px;color:var(--ink-soft);line-height:1.65;margin:0 0 26px}
   .landing-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:22px}
   .landing-actions .btn{padding:13px 24px;font-size:14.5px}
@@ -105,7 +96,7 @@
   .lp-mock-sq span{display:block;font-size:10px;color:var(--neutral);margin-bottom:4px}
   .lp-mock-sq b{font-size:15px;color:var(--ink)}
   .lp-section{max-width:1100px;margin:0 auto;padding:64px 5vw;text-align:center}
-  .lp-h2{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:27px;font-weight:600;color:var(--ink);margin:0 0 36px}
+  .lp-h2{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:27px;font-weight:600;color:var(--ink);margin:0 0 36px}
   .lp-feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;text-align:left}
   .lp-feat-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px 20px;transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease}
   .lp-feat-card:hover{transform:translateY(-3px);box-shadow:0 16px 32px -14px rgba(15,20,15,.2)}
@@ -125,7 +116,7 @@
   .lp-price-list li{padding-left:16px;position:relative}
   .lp-price-list li::before{content:'✓';position:absolute;left:0;color:var(--brand);font-weight:700}
   .lp-cta-band{background:var(--ink);color:#fff;text-align:center;padding:64px 5vw}
-  .lp-cta-band h2{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:25px;font-weight:600;margin:0 0 22px}
+  .lp-cta-band h2{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:25px;font-weight:600;margin:0 0 22px}
   .lp-footer{text-align:center;padding:28px;font-size:12px;color:var(--neutral)}
   @media (max-width:860px){
     .lp-nav-links{display:none}
@@ -138,14 +129,14 @@
     padding:24px;transition:opacity .35s ease, visibility .35s}
   #login-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
   .login-card{width:100%;max-width:360px}
-  .login-logo{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:24px;letter-spacing:.01em;color:var(--ink);
+  .login-logo{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:24px;letter-spacing:.01em;color:var(--ink);
     display:flex;justify-content:center;margin-bottom:6px}
   .login-tag{font-size:13.5px;color:var(--neutral);text-align:center;margin-bottom:26px}
   .login-divider{display:flex;align-items:center;gap:10px;margin:16px 0;font-size:11.5px;color:var(--neutral);letter-spacing:.06em}
   .login-divider::before,.login-divider::after{content:'';flex:1;height:1px;background:var(--line)}
   .login-alt{text-align:center;font-size:13px;color:var(--ink-soft);margin-top:18px}
   .splash-mark{border-radius:18px;animation:splashIn .7s cubic-bezier(.2,.8,.2,1) both}
-  .splash-word{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:28px;letter-spacing:.01em;color:var(--ink);
+  .splash-word{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:28px;letter-spacing:.01em;color:var(--ink);
     opacity:0;animation:splashFade .6s ease .25s both}
   .splash-tag{font-size:12.5px;color:var(--neutral);letter-spacing:.02em;opacity:0;animation:splashFade .6s ease .4s both}
   @keyframes splashIn{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:scale(1)}}
@@ -160,7 +151,7 @@
     backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);position:relative;z-index:1}
   .sb-mark{display:flex;align-items:center;gap:9px;padding:0 8px;margin-bottom:4px}
   .logo-mark{flex:none;border-radius:8px}
-  .logo-text{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;letter-spacing:.01em;color:var(--ink)}
+  .logo-text{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;letter-spacing:.01em;color:var(--ink)}
   .pivot-logo-img{height:0.88em;aspect-ratio:788/200;position:relative;display:inline-block;vertical-align:-0.16em;margin:0 1px}
   .logo-piot-layer{filter:invert(1) brightness(.15)}
   [data-theme="dark"] .logo-piot-layer{filter:none}
@@ -190,7 +181,7 @@
     border-top:1px solid var(--line);margin-top:8px;padding-top:16px;transition:background .15s}
   .sb-profile:hover{background:var(--paper-2)}
   .sb-avatar{width:32px;height:32px;border-radius:9px;background:var(--ink);color:var(--paper);
-    font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;display:grid;place-items:center;flex:none}
+    font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;display:grid;place-items:center;flex:none}
   .sb-profile .nm{font-size:13.5px;font-weight:600}
   .sb-profile .pl{font-size:11.5px;color:var(--neutral)}
 
@@ -230,7 +221,7 @@
   [data-theme="dark"] .month-summary{border:1.5px solid #2A2A2D;
     box-shadow:0 20px 45px -12px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
   .ms-head-big{padding:16px 18px 2px;display:flex;align-items:baseline;justify-content:space-between}
-  .ms-fatura-title-big{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase}
+  .ms-fatura-title-big{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--ink-soft);text-align:center;margin-bottom:2px}
   .ms-rings-wrap-outer{flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:flex;align-items:center;gap:10px;padding:6px 18px 0}
@@ -274,7 +265,7 @@
   .ms-icon{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--c-icon-bg);color:var(--brand);flex:none}
   .ms-icon svg{width:12px;height:12px}
   .ms-c-label{font-size:11px;font-weight:600;color:var(--ink-soft);line-height:1.2}
-  .ms-c-value{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:25px;letter-spacing:-.01em;line-height:1}
+  .ms-c-value{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:25px;letter-spacing:-.01em;line-height:1}
   .ms-c-num{color:var(--ink-faint)}
   .ms-c-slash{color:var(--ink-faint);font-weight:400;margin:0 1px;font-size:.8em;vertical-align:.05em}
   .ms-c-den{color:var(--ink)}
@@ -282,8 +273,8 @@
   .ms-c-trend svg{width:9px;height:9px}
   .ms-sq-trend{display:flex;flex-direction:column;align-items:flex-end;gap:1px;text-align:right;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--neutral)}
-  .greeting{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:6px 0 2px;letter-spacing:.04em;text-transform:uppercase}
-  .headline{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;line-height:1.3;margin:16px 0 22px;letter-spacing:.02em}
+  .greeting{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:6px 0 2px;letter-spacing:.04em;text-transform:uppercase}
+  .headline{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;line-height:1.3;margin:16px 0 22px;letter-spacing:.02em}
   .headline em{font-style:normal;color:var(--ink);font-weight:600}
 
   .group{margin-bottom:24px}
@@ -343,8 +334,8 @@
   .email-head{background:linear-gradient(135deg,var(--brand),var(--brand-dk));padding:22px 22px 26px;color:#fff}
   .email-head .lm{display:flex;align-items:center;gap:8px;margin-bottom:18px;opacity:.95}
   .email-head .lm svg{width:20px;height:20px;border-radius:6px}
-  .email-head .lm span{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px}
-  .email-head h3{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;line-height:1.3;margin:0}
+  .email-head .lm span{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px}
+  .email-head h3{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;line-height:1.3;margin:0}
   .email-head p{font-size:12.5px;opacity:.88;margin-top:5px;line-height:1.4}
   .email-body{padding:22px}
   .email-stepper{display:flex;justify-content:space-between;margin:2px 0 24px;position:relative}
@@ -365,7 +356,7 @@
   .email-brand-head{text-align:center;padding:26px 22px;border-bottom:1px solid var(--line-soft);background:var(--paper)}
   .email-brand-logo{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;overflow:hidden}
   .email-brand-logo img{width:100%;height:100%;object-fit:cover}
-  .email-brand-name{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;letter-spacing:.03em;text-transform:uppercase}
+  .email-brand-name{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;letter-spacing:.03em;text-transform:uppercase}
   .email-brand-sub{font-size:11px;color:var(--neutral);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
   .email-brand-contacts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-top:12px}
   .email-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand-10);color:var(--brand);font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;margin-bottom:14px}
@@ -423,7 +414,7 @@
   .empty-mark{width:60px;height:60px;margin:0 auto 20px;border-radius:50%;border:1.5px solid var(--done);
     display:grid;place-items:center;color:var(--ink)}
   .empty-mark svg{width:26px;height:26px}
-  .empty h3{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:600;margin-bottom:6px}
+  .empty h3{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:600;margin-bottom:6px}
   .empty p{color:var(--neutral);font-size:14px}
   .quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:8px}
   .quick-btn{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 6px;
@@ -451,7 +442,7 @@
   .crow-mini .a{color:var(--ink-soft)} .crow-mini .b{color:var(--neutral)}
 
   /* ===== TRABALHOS ===== */
-  .page-title{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
+  .page-title{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
   .page-head{display:flex;align-items:center;justify-content:space-between}
   .evento-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
   .evento-tipo-card{display:flex;align-items:center;gap:9px;padding:13px 12px;border-radius:12px;border:1px solid var(--line);
@@ -487,7 +478,7 @@
   .job-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
   .job-top-l{display:flex;align-items:center;gap:11px;min-width:0}
   .client-avatar{border-radius:50%;display:flex;align-items:center;justify-content:center;
-    font-weight:600;color:#fff;flex:none;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
+    font-weight:600;color:#fff;flex:none;font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
   .job-client{font-size:16px;font-weight:500}
   .job-type{font-size:12.5px;color:var(--neutral);margin-top:1px}
   .state{font-size:11px;font-weight:600;letter-spacing:.03em;padding:4px 9px;text-transform:uppercase;
@@ -505,7 +496,7 @@
     margin:14px 0 12px;font-weight:500}
   .back svg{width:16px;height:16px}
   .detail-head-row{display:flex;gap:13px;align-items:center;margin:14px 0 18px}
-  .detail-h{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:18px;line-height:1.35;letter-spacing:.05em;text-transform:uppercase}
+  .detail-h{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:18px;line-height:1.35;letter-spacing:.05em;text-transform:uppercase}
   .detail-sub{color:var(--neutral);font-size:13.5px;margin-top:4px}
   .clientbtn{margin:18px 0 6px;width:100%;border:1px dashed var(--brand);color:var(--ink);
     background:var(--brand-10);border-radius:12px;padding:13px;font-weight:500;font-size:14px;cursor:pointer;
@@ -588,7 +579,7 @@
 
   /* ===== CALENDÁRIO ===== */
   .cal-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 16px}
-  .cal-month{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px}
+  .cal-month{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px}
   .cal-nav{display:flex;gap:6px}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
@@ -609,7 +600,7 @@
   /* ===== PERFIL ===== */
   .profile-head{display:flex;align-items:center;gap:14px;margin:18px 0 22px}
   .p-avatar{width:54px;height:54px;border-radius:14px;background:var(--ink);color:var(--paper);
-    font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center}
+    font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center}
   .p-avatar-wrap{position:relative;flex:none}
   .p-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--brand);
     color:#fff;display:grid;place-items:center;cursor:pointer;border:2px solid var(--paper)}
@@ -629,7 +620,7 @@
   .plabel{font-size:11.5px;font-weight:600;letter-spacing:.13em;color:var(--neutral);
     margin:18px 2px 9px}
   .rel-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:6px}
-  .rel-month-nav span{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;color:var(--ink);min-width:130px;text-align:center}
+  .rel-month-nav span{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;color:var(--ink);min-width:130px;text-align:center}
   .rel-nav-btn{width:30px;height:30px;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none}
   .rel-nav-btn svg{width:15px;height:15px}
   .vencimentos-card{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-62);border:1.5px solid #D6D6DA;border-radius:20px;padding:18px;
@@ -638,12 +629,12 @@
   .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
   .venc-icon{width:34px;height:34px;border-radius:10px;background:var(--c-icon-bg);color:var(--brand);display:grid;place-items:center;flex:none}
   .venc-icon svg{width:17px;height:17px}
-  .venc-title{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--ink)}
+  .venc-title{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--ink)}
   .venc-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-top:1px solid var(--line-soft);cursor:pointer}
   .venc-row:first-child{border-top:none}
   .venc-date{width:42px;height:42px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;background:var(--c-date-bg-ok)}
   .venc-date.atrasado{background:var(--c-date-bg-late)}
-  .venc-date .d{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--c-text-green);line-height:1}
+  .venc-date .d{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--c-text-green);line-height:1}
   .venc-date.atrasado .d{color:var(--c-text-red)}
   .venc-date .m{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--c-text-green);margin-top:1px}
   .venc-date.atrasado .m{color:var(--c-text-red)}
@@ -662,7 +653,7 @@
   .ring-fg{fill:none;stroke:var(--brand);stroke-width:10;stroke-linecap:round;
     stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)}
   .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring-pct{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:26px;letter-spacing:-.01em}
+  .ring-pct{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:26px;letter-spacing:-.01em}
   .ring-label{font-size:12px;color:var(--neutral);margin-top:2px;text-align:center;max-width:110px}
   .ring-legend{display:flex;justify-content:center;gap:22px;font-size:13px;color:var(--ink-soft);margin-bottom:4px}
   .ring-legend b{color:var(--ink);font-weight:600}
@@ -691,7 +682,7 @@
     transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -8px 30px rgba(0,0,0,.12);overflow-x:hidden}
   .sheet.show{transform:translateY(0)}
   .sheet-grab{width:36px;height:4px;background:var(--line);border-radius:99px;margin:6px auto 14px}
-  .sheet h3{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:19px;margin-bottom:14px;padding:0 4px}
+  .sheet h3{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:19px;margin-bottom:14px;padding:0 4px}
   .sheet-primary{display:flex;align-items:center;gap:13px;padding:16px;border-radius:14px;background:var(--ink);
     color:var(--paper);cursor:pointer;margin-bottom:14px}
   .sheet-primary svg{width:20px;height:20px}
@@ -709,7 +700,7 @@
   .sheet-back,.sheet-x{width:30px;height:30px;border-radius:9px;border:1px solid var(--line);background:var(--paper);
     display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none}
   .sheet-back svg,.sheet-x svg{width:15px;height:15px}
-  .sheet-header h3{flex:1;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:600;margin:0}
+  .sheet-header h3{flex:1;font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:600;margin:0}
   .sheet-progress{display:flex;gap:5px;margin:12px 2px 16px}
   .sheet-progress span{flex:1;height:3px;border-radius:2px;background:var(--line);transition:background .2s}
   .sheet-progress span.on{background:var(--brand)}
@@ -742,7 +733,7 @@
   .horario-col{flex:1;text-align:center;min-width:0}
   .horario-col label{display:block;font-size:11.5px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
   .horario-col input{border:none;background:none;font-size:21px;font-weight:600;color:var(--ink);text-align:center;
-    width:100%;padding:2px 0;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;outline:none}
+    width:100%;padding:2px 0;font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;outline:none}
   .horario-divider{width:1px;height:34px;background:var(--line);flex:none}
   .horario-duracao{text-align:center;font-size:12.5px;color:var(--neutral);margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
   .field-row .field{flex:1;min-width:0}
@@ -812,7 +803,7 @@
   .model-card:hover{border-color:var(--brand)}
   .model-card.selected{border-color:var(--brand);background:var(--brand-10)}
   .model-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
-  .model-card-name{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:600;color:var(--ink);line-height:1.3}
+  .model-card-name{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:600;color:var(--ink);line-height:1.3}
   .model-card-check{width:19px;height:19px;color:var(--brand);flex:none;visibility:hidden}
   .model-card.selected .model-card-check{visibility:visible}
   .model-card-type-pill{font-size:10px;font-weight:600;letter-spacing:.03em;color:var(--ink-soft);background:var(--paper-2);
@@ -828,7 +819,7 @@
   .model-group-label:first-child{margin-top:2px}
 
   .model-detail-head{margin-bottom:10px}
-  .model-detail-name{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:5px}
+  .model-detail-name{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);margin-bottom:5px}
   .model-detail-meta{font-size:12.5px;color:var(--neutral);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .model-detail-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.55;margin-bottom:16px}
   .rating-stars{display:flex;gap:6px}
@@ -922,19 +913,19 @@
   .sig-pad-clear{position:absolute;top:8px;right:10px;font-size:11px;color:var(--neutral);cursor:pointer;text-decoration:underline}
   .brandhead{text-align:center;margin-bottom:30px}
   .blogo{width:54px;height:54px;border-radius:14px;background:var(--ink);color:var(--paper);
-    font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center;margin:0 auto 14px}
+    font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center;margin:0 auto 14px}
   .brandhead .who{font-size:13px;color:var(--neutral)}
-  .brandhead h2{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:600;margin-top:2px}
+  .brandhead h2{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:600;margin-top:2px}
   .nextstep{background:var(--ink);color:var(--paper);border-radius:18px;padding:24px;text-align:center;margin-bottom:26px}
   .nextstep .lbl{font-size:11px;letter-spacing:.14em;opacity:.6;font-weight:600}
-  .nextstep h3{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:23px;font-weight:600;margin:8px 0 18px}
+  .nextstep h3{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:23px;font-weight:600;margin:8px 0 18px}
   .nextstep button{background:var(--paper);color:var(--ink);border:none;border-radius:11px;padding:13px 22px;
     font-family:inherit;font-weight:600;font-size:15px;cursor:pointer;width:100%}
   .briefing-intro{margin:18px 0 16px}
-  .briefing-intro h3{font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:3px}
+  .briefing-intro h3{font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:18px;font-weight:600;color:var(--ink);margin-bottom:3px}
   .briefing-intro p{font-size:13px;color:var(--ink-soft)}
   .briefing-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
-  .briefing-card-head{display:flex;align-items:center;gap:9px;font-family:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:12px}
+  .briefing-card-head{display:flex;align-items:center;gap:9px;font-family:'Bricolage Grotesque',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:14.5px;color:var(--ink);margin-bottom:12px}
   .briefing-step{width:20px;height:20px;border-radius:50%;background:var(--brand);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;flex:none}
   .briefing-card-hint{font-size:12px;color:var(--neutral);margin:-6px 0 12px}
   .cron-rows{display:flex;flex-direction:column;gap:8px}
@@ -1446,11 +1437,11 @@
       <section class="view" id="v-detalhe">
         <div class="back" onclick="go('trabalhos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="job.detail.back">Trabalhos</span></div>
         <div class="detail-head-row">
-          <div class="client-avatar" id="d-avatar" style="width:42px;height:42px;font-size:16px;background:#B23A1E">S&amp;J</div>
+          <div class="client-avatar" id="d-avatar" style="width:42px;height:42px;font-size:16px"></div>
           <div>
-            <div class="detail-h" id="d-title" style="margin:0">Casamento Sofia &amp; João</div>
-            <div class="detail-sub" id="d-sub" style="margin:0">Sofia Marques</div>
-            <div class="detail-sub" id="d-meta" style="margin:2px 0 0;color:var(--neutral)">14 ago · 2.400 €</div>
+            <div class="detail-h" id="d-title" style="margin:0"></div>
+            <div class="detail-sub" id="d-sub" style="margin:0"></div>
+            <div class="detail-sub" id="d-meta" style="margin:2px 0 0;color:var(--neutral)"></div>
             <div class="detail-sub" id="d-cal-sync" style="margin:4px 0 0;color:var(--c-text-green);font-weight:600;display:none"></div>
           </div>
         </div>
@@ -1460,55 +1451,7 @@
           <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
         </button>
 
-        <div id="detalhe-static">
-        <div class="sec">
-          <div class="sec-head" style="cursor:default">
-            <div class="sec-l"><div class="sec-icon c-contrato"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="sec-title" data-t="job.contract">Contrato</div></div>
-            <span class="sig-tag green" id="demo-contrato-tag" data-t="contract.tagSigned">ASSINADO</span>
-          </div>
-          <div class="sec-body" style="display:block" id="demo-contrato-body">
-            <p style="font-size:13px;color:var(--ink);margin:0"><span data-t="job.contract.signedByPrefix">Assinado por </span>Sofia Marques · 2 jun</p>
-          </div>
-        </div>
-        <div class="sec" id="sec-briefing">
-          <div class="sec-head" onclick="toggleSec(this)">
-            <div class="sec-l"><div class="sec-icon c-briefing"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><div class="sec-title"><span data-t="job.clientInfo">Informações do Cliente</span></div></div>
-            <div style="display:flex;align-items:center;gap:7px"><div class="sec-state" style="color:var(--ink-soft)">4<span data-t="job.clientInfo.answeredOf"> / 5 respondido</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
-          </div>
-          <div class="sec-body">
-            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.detail.ceremonyLocation">Local da cerimónia</div></div><span style="color:var(--ink);font-size:13px">Green Valley Estate</span></div>
-            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.detail.startTime">Hora de início</div></div><span style="color:var(--ink);font-size:13px">16:00</span></div>
-            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.detail.guestCount">Nº de convidados</div></div><span style="color:var(--ink);font-size:13px">120</span></div>
-            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.detail.references">Referências</div></div><span style="color:var(--ink);font-size:13px">3 <span data-t="job.detail.imagesCount">imagens</span></span></div>
-            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.detail.keyMoments">Lista de momentos-chave</div></div><span style="color:var(--ink);font-size:13px"><span data-t="job.clientInfo.unanswered">por responder</span></span></div>
-          </div>
-        </div>
-        <div class="sec">
-          <div class="sec-head"><div class="sec-l"><div class="sec-icon c-cronograma"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="sec-title" data-t="job.timeline">Timeline</div></div></div>
-          <div class="timeline">
-            <div class="tl"><div class="tl-line"></div><div class="tl-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div class="tl-body"><div class="t"><span data-t="jobs.status.signed">Contrato assinado</span></div><div class="m">2 jun</div></div></div>
-            <div class="tl"><div class="tl-line"></div><div class="tl-dot done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div class="tl-body"><div class="t"><span data-t="job.payment.initial">Pagamento inicial</span> · 1.200 €</div><div class="m">5 jun · <span data-t="job.status.paid">pago</span></div></div></div>
-            <div class="tl" id="tl-pag2"><div class="tl-line"></div><div class="tl-dot now"></div><div class="tl-body"><div class="t" style="color:var(--ink)"><span data-t="job.payment.installment2">Pagamento 2</span> · 1.200 €</div><div class="m"><span data-t="jobs.alert.overduePayment">venceu há 7 dias</span></div></div></div>
-            <div class="tl"><div class="tl-line"></div><div class="tl-dot"></div><div class="tl-body"><div class="t" data-t="jobtype.wedding">Casamento</div><div class="m">14 ago · Quinta, Riverside</div></div></div>
-            <div class="tl"><div class="tl-dot"></div><div class="tl-body"><div class="t" data-t="job.delivery.final">Entrega final</div><div class="m"><span data-t="job.delivery.expectedPrefix">prevista </span>14 set</div></div></div>
-          </div>
-        </div>
-        <div class="sec" id="sec-pagamentos">
-          <div class="sec-head" onclick="toggleSec(this)">
-            <div class="sec-l"><div class="sec-icon c-pagamentos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div><div class="sec-title" data-t="job.payments">Pagamentos</div></div>
-            <div style="display:flex;align-items:center;gap:7px"><div class="sec-state" id="det-pag-state" style="color:var(--ink)">1<span data-t="job.payment.overdueCountSuffix"> atrasado</span></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
-          </div>
-          <div class="sec-body">
-            <div class="struct-row"><div class="struct-l"><div class="nm"><span data-t="job.payment.deposit">Sinal</span> · 1.200 €</div><span class="sub" style="color:var(--ink)"><span data-t="job.payment.paidOnPrefix">pago a </span>5 jun</span></div></div>
-            <div class="struct-row" id="det-pag2">
-              <div class="struct-l"><div class="nm"><span data-t="job.payment.installment2">2ª parcela</span> · 1.200 €</div><span class="sub" style="color:var(--ink)"><span data-t="job.payment.overdueDaysPrefix">atrasado </span>7<span data-t="job.payment.overdueDaysSuffix"> dias</span></span></div>
-              <button class="btn primary" style="padding:8px 12px;font-size:12.5px" onclick="marcarPagoDetalhe()"><span data-t="job.payments.markPaid">Marcar pago</span></button>
-            </div>
-          </div>
-        </div>
-        </div>
-
-        <div id="detalhe-dynamic" style="display:none"></div>
+        <div id="detalhe-dynamic"></div>
       </section>
 
       <!-- ============ BUILDER DE CONTRATO ============ -->
@@ -1845,32 +1788,14 @@
       </div>
 
       <div class="panel" data-panel="contrato-usar">
-        <div class="field"><input placeholder="Procurar nos teus modelos" data-t-placeholder="wizard.searchTemplates"></div>
-        <div class="pick-row" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.demoTemplateWedding'))">
-          <div><div class="nm" data-t="wizard.template.wedding">Casamento completo</div><div class="sub">7 blocos · Usado 8 vezes</div></div>
-          <svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-        <div class="pick-row" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.demoTemplateCommercial'))">
-          <div><div class="nm" data-t="wizard.template.commercial">Comercial simples</div><div class="sub">4 blocos · Usado 3 vezes</div></div>
-          <svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
+        <div class="field"><input id="usar-modelo-busca" oninput="renderListaUsarModelo()" placeholder="Procurar nos teus modelos" data-t-placeholder="wizard.searchTemplates"></div>
+        <div id="usar-modelo-lista"></div>
         <p style="font-size:13px;color:var(--neutral);margin-top:10px">Sem o modelo certo? <span class="inline-link" onclick="pushPanel('comunidade-contratos')"><span data-t="explore.browseLibrary">Explorar Biblioteca →</span></span></p>
       </div>
 
       <div class="panel" data-panel="contrato-duplicar">
-        <div class="field"><input placeholder="Procurar por cliente ou trabalho" data-t-placeholder="wizard.searchByClientJob"></div>
-        <div class="pick-row" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.demoDuplicateSofia'))">
-          <div><div class="nm">Sofia &amp; João</div><div class="sub"><span data-t="explore.checklist">Checklist</span></div></div>
-          <svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-        <div class="pick-row" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.demoDuplicateCosta'))">
-          <div><div class="nm">Grupo Atlas</div><div class="sub">Consultoria</div></div>
-          <svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
-        <div class="pick-row" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.demoDuplicateAmago'))">
-          <div><div class="nm">Loja Âmago</div><div class="sub">Comercial</div></div>
-          <svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
+        <div class="field"><input id="dup-contrato-busca" oninput="renderListaDuplicarContrato()" placeholder="Procurar por cliente ou trabalho" data-t-placeholder="wizard.searchByClientJob"></div>
+        <div id="dup-contrato-lista"></div>
       </div>
 
       <div class="panel" data-panel="comunidade-contratos">
@@ -1997,9 +1922,9 @@
         <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()"></div>
         <div class="warn-box" id="cl-dup" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>
-          <div><span data-t="wizard.client.dupPrefix">Já existe </span><b>Sofia Marques</b><span data-t="wizard.client.dupSuffix"> com este email.</span>
+          <div><span data-t="wizard.client.dupPrefix">Já existe </span><b id="cl-dup-nome"></b><span data-t="wizard.client.dupSuffix"> com este email.</span>
             <div class="detail-actions" style="margin-top:9px">
-              <button class="btn soft" onclick="closeSheet();openJob('sofia');showToast(t('toast.openingDemoClient'))">Usar existente</button>
+              <button class="btn soft" onclick="usarClienteExistente()"><span data-t="wizard.client.useExisting">Usar existente</span></button>
               <button class="btn primary" onclick="document.getElementById('cl-dup').style.display='none'"><span data-t="wizard.createAnyway">Criar mesmo assim</span></button>
             </div>
           </div>
@@ -2088,25 +2013,6 @@
       <button class="btn ghost" onclick="sincronizarComAppleCalendar(clientContext)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:14px;height:14px;vertical-align:-2px;margin-right:4px"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Apple Calendar</span></button>
     </div>
     <div class="client-scroll">
-      <div id="client-static">
-        <div class="brandhead">
-          <div class="blogo" id="cw-static-blogo">U</div>
-          <div class="who" id="cw-static-who">Empresa Exemplo</div>
-          <h2 id="cw-static-titulo" data-tp="portal.demoTitle">O seu casamento</h2>
-        </div>
-        <div class="nextstep" id="cw-nextstep">
-          <div class="lbl" id="cw-static-proximo-lbl" data-tp="portal.nextStep">Próximo passo</div>
-          <h3 id="cw-static-falta-pag" data-tp="portal.paymentMissing">Falta o pagamento</h3>
-          <button id="cw-pagar-btn" onclick="pagarAgora()">Pagar 1.200 €</button>
-        </div>
-        <div class="csec-label" id="cw-static-otrabalho" data-tp="portal.yourJob">O seu trabalho</div>
-        <div class="crow"><div class="ci ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div class="crow-b"><div class="t" id="cw-static-contrato-t" data-tp="portal.contract">Contrato</div><div class="m" id="cw-static-contrato-m">assinado a 2 jun</div></div></div>
-        <div class="crow" id="cw-pagamento2"><div class="ci due">!</div><div class="crow-b"><div class="t" id="cw-static-pag2-t" data-tp="portal.payment2">Pagamento 2</div><div class="m" id="cw-static-pag2-m">venceu há 7 dias · 1.200 €</div></div><div class="act" id="cw-static-pag2-act" data-tp="portal.pay" onclick="pagarAgora()">Pagar</div></div>
-        <div class="crow"><div class="ci ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div class="crow-b"><div class="t"><span data-t="job.clientInfo">Informações do Cliente</span></div><div class="m" id="cw-static-info-m" data-tp="portal.thankYou">respondido · obrigado</div></div></div>
-        <div class="crow"><div class="ci" style="color:var(--neutral);font-size:11px;font-weight:600">○</div><div class="crow-b"><div class="t" id="cw-static-entrega-t" data-tp="portal.deliveryPhotos">Entrega das fotos</div><div class="m" id="cw-static-entrega-m" data-tp="portal.deliveryDate">prevista para 14 set</div></div></div>
-        <div class="help"><span id="cw-static-duvidas" data-tp="portal.questions">Dúvidas?</span> <a href="#" id="cw-static-falar" onclick="event.preventDefault();clientToast(tp('portal.talkToPrefix')+(perfilData.nome||tp('defaults.userName'))+'…')">Falar com o profissional</a></div>
-      </div>
-
       <div id="client-dynamic" style="display:none"></div>
     </div>
   </div>
@@ -2353,6 +2259,12 @@
     "builder.hint": { pt:"Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.", en:"Drag to reorder · tap the pencil to edit · toggle to include or exclude a clause.", es:"Arrastra para reordenar · toca el lápiz para editar · el interruptor incluye o excluye la cláusula." },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
     "builder.title": { pt:"Editor de contrato", en:"Contract editor", es:"Editor de contrato" },
+    "builder.newTemplateSub": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
+    "builder.basedOnPrefix": { pt:"Baseado em: ", en:"Based on: ", es:"Basado en: " },
+    "builder.saveTemplateTitle": { pt:"Guardar modelo", en:"Save template", es:"Guardar modelo" },
+    "builder.templateNamePlaceholder": { pt:"Ex: Contrato de casamento", en:"E.g. Wedding contract", es:"Ej: Contrato de boda" },
+    "builder.blocksCount": { pt:"blocos", en:"blocks", es:"bloques" },
+    "builder.usedPrefix": { pt:"usado", en:"used", es:"usado" },
     // --- Calendário ---
     "calendar.agenda": { pt:"AGENDA", en:"AGENDA", es:"AGENDA" },
     "calendar.clientInfo": { pt:"Informações do Cliente/assinaturas", en:"Client info / signatures", es:"Datos del cliente / firmas" },
@@ -3021,11 +2933,6 @@
     "toast.createdFemSuffix": { pt:"\" criada.", en:"\" created.", es:"\" creada." },
     "toast.customRemindersSaved": { pt:"Lembretes personalizados guardados.", en:"Custom reminders saved.", es:"Recordatorios personalizados guardados." },
     "toast.deletionRequested": { pt:"Pedido de eliminação registado.", en:"Deletion request submitted.", es:"Solicitud de eliminación registrada." },
-    "toast.demoDuplicateAmago": { pt:"Contrato duplicado de Loja Âmago", en:"Contract duplicated from Loja Âmago", es:"Contrato duplicado de Loja Âmago" },
-    "toast.demoDuplicateCosta": { pt:"Contrato duplicado de Grupo Atlas", en:"Contract duplicated from Grupo Atlas", es:"Contrato duplicado de Grupo Atlas" },
-    "toast.demoDuplicateSofia": { pt:"Contrato duplicado de Sofia & João", en:"Contract duplicated from Sofia & João", es:"Contrato duplicado a partir de Sofia & João" },
-    "toast.demoTemplateCommercial": { pt:"Modelo carregado: Comercial simples", en:"Template loaded: Simple commercial", es:"Modelo cargado: Comercial simple" },
-    "toast.demoTemplateWedding": { pt:"Modelo carregado: Casamento completo", en:"Template loaded: Full wedding", es:"Modelo cargado: Boda completa" },
     "toast.done": { pt:"Concluído.", en:"Done.", es:"Listo." },
     "toast.drawSignatureFirst": { pt:"Desenha a sua assinatura primeiro.", en:"Draw your signature first.", es:"Dibuja tu firma primero." },
     "toast.duplicatedForEdit": { pt:"Modelo duplicado para edição.", en:"Template duplicated for editing.", es:"Plantilla duplicada para edición." },
@@ -3047,7 +2954,6 @@
     "toast.moreComponentsSoon": { pt:"Mais tipos de componente em breve", en:"More component types coming soon", es:"Más tipos de componente próximamente" },
     "toast.nameRequired": { pt:"Dá um nome a este contrato.", en:"Please give this contract a name.", es:"Dale un nombre a este contrato." },
     "toast.nameRequiredRef": { pt:"Dá um nome a esta referência.", en:"Please give this reference a name.", es:"Dale un nombre a esta referencia." },
-    "toast.openingDemoClient": { pt:"Abrindo Sofia Marques", en:"Opening Sofia Marques", es:"Abriendo a Sofia Marques" },
     "toast.openingEmail": { pt:"Abrindo seu email…", en:"Opening your email…", es:"Abriendo tu email…" },
     "toast.pdfDownloaded": { pt:"PDF descarregado.", en:"PDF downloaded.", es:"PDF descargado." },
     "toast.personRemoved": { pt:"Pessoa removida da equipe.", en:"Person removed from the team.", es:"Persona eliminada del equipo." },
@@ -3077,6 +2983,7 @@
     "toast.uploadFileFirst": { pt:"Carrega um arquivo primeiro.", en:"Upload a file first.", es:"Sube un archivo primero." },
     "toast.uploadOrPasteText": { pt:"Carrega um arquivo ou cola o texto.", en:"Upload a file or paste the text.", es:"Sube un archivo o pega el texto." },
     "toast.useOrImportFirst": { pt:"Usa ou importa este modelo primeiro para poderes avaliar.", en:"Use or import this template first to be able to rate it.", es:"Usa o importa este modelo primero para poder valorarlo." },
+    "toast.usingExistingClientPrefix": { pt:"A usar cliente existente: ", en:"Using existing client: ", es:"Usando cliente existente: " },
     "toast.writeAtLeastOneDay": { pt:"Escreve pelo menos um dia.", en:"Write at least one day.", es:"Escribe al menos un día." },
     "toast.writePersonName": { pt:"Escreve o nome da pessoa.", en:"Write the person's name.", es:"Escribe el nombre de la persona." },
     "toast.writeResourceName": { pt:"Escreve o nome do recurso.", en:"Write the resource name.", es:"Escribe el nombre del recurso." },
@@ -3099,6 +3006,7 @@
     "wizard.client": { pt:"Cliente", en:"Client", es:"Cliente" },
     "wizard.client.dupPrefix": { pt:"Já existe ", en:"There's already a ", es:"Ya existe " },
     "wizard.client.dupSuffix": { pt:" com este email.", en:" with this email.", es:" con este email." },
+    "wizard.client.useExisting": { pt:"Usar existente", en:"Use existing", es:"Usar existente" },
     "wizard.client.nameError": { pt:"Precisa de um nome para continuar.", en:"A name is required to continue.", es:"Se necesita un nombre para continuar." },
     "wizard.client.notes": { pt:"Observações", en:"Notes", es:"Notas" },
     "wizard.client.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
@@ -3602,62 +3510,11 @@
     });
   }
 
-  const jobDemoData={
-    sofia:{typeKey:'jobtype.wedding', client:'Sofia &amp; João', statusKey:'jobs.status.active', day:14, month:7, amount:'2.400'},
-    amago:{typeKey:'jobtype.commercial', client:'Loja Âmago', statusKey:'jobs.status.active', today:true, time:'15:00', amount:'850'},
-    ana:{typeKey:'jobtype.photoSession', client:'Ana Martins', statusKey:'jobs.filter.delivering', day:12, month:5, amount:'320'},
-    costa:{typeKey:'jobtype.consulting', client:'Grupo Atlas', statusKey:'jobs.status.waiting', day:20, month:8, amount:'2.600'},
-    zenith:{typeKey:'jobtype.videoProduction', client:'Aurora', statusKey:'jobs.filter.delivering', day:8, month:5, amount:'1.500'},
-    rocha:{typeKey:'jobtype.podcast', client:'Marketing 360', statusKey:'jobs.status.done', day:1, month:6, amount:'400'}
-  };
-  function jobDemoTitleLine(id){
-    const d=jobDemoData[id]||jobDemoData.sofia;
-    return t(d.typeKey)+' — '+d.client;
-  }
-  function jobDemoSubtitleLine(id){
-    const d=jobDemoData[id]||jobDemoData.sofia;
-    const dataTxt = d.today ? (t('date.today')+' '+d.time) : (d.day+' '+mesAbrev(d.month));
-    return t(d.statusKey)+' · '+dataTxt+' · '+d.amount+' €';
-  }
-  const jobAvatars={
-    sofia:['S&amp;J','#B23A1E'], amago:['LÂ','#5C4A1E'], ana:['AM','#1F6E66'],
-    costa:['GA','#A8631A'], zenith:['AU','#B8466E'], rocha:['M3','#4C7A3D']
-  };
-  const demoContratoInfo={
-    sofia:{assinado:true, nome:'Luís Marques', data:'2 jun'},
-    amago:{assinado:true, nome:'Loja Âmago', data:'30 mai'},
-    ana:{assinado:true, nome:'Ana Martins', data:'1 jun'},
-    costa:{assinado:false},
-    zenith:{assinado:true, nome:'Aurora', data:'25 mai'},
-    rocha:{assinado:true, nome:'Marketing 360', data:'14 jun'}
-  };
   function openJob(id){
+    if(!jobsData[id]) return;
     currentJobId=id;
-    if(jobsData[id]){
-      document.getElementById('detalhe-static').style.display='none';
-      document.getElementById('detalhe-dynamic').style.display='block';
-      renderJobDetailDynamic(id);
-    } else {
-      const av=jobAvatars[id]||jobAvatars.sofia;
-      document.getElementById('d-title').innerHTML=jobDemoTitleLine(id);
-      document.getElementById('d-sub').innerHTML=jobDemoSubtitleLine(id);
-      const metaEl=document.getElementById('d-meta'); if(metaEl) metaEl.textContent='';
-      const calSyncEl=document.getElementById('d-cal-sync'); if(calSyncEl) calSyncEl.style.display='none';
-      const avEl=document.getElementById('d-avatar');
-      avEl.innerHTML=av[0]; avEl.style.background=av[1];
-      const info=demoContratoInfo[id]||demoContratoInfo.sofia;
-      const tagEl=document.getElementById('demo-contrato-tag');
-      const bodyEl=document.getElementById('demo-contrato-body');
-      if(info.assinado){
-        tagEl.className='sig-tag green'; tagEl.textContent=t('contract.tagSigned');
-        bodyEl.innerHTML='<p style="font-size:13px;color:var(--ink);margin:0">'+t('job.contract.signedByPrefix2')+info.nome+' · '+info.data+'</p>';
-      } else {
-        tagEl.className='sig-tag yellow'; tagEl.textContent=t('contract.tagPending');
-        bodyEl.innerHTML='<p style="font-size:13px;color:var(--ink-soft);margin:0">'+t('job.contract.awaitingClient')+'</p>';
-      }
-      document.getElementById('detalhe-static').style.display='block';
-      document.getElementById('detalhe-dynamic').style.display='none';
-    }
+    document.getElementById('detalhe-dynamic').style.display='block';
+    renderJobDetailDynamic(id);
     go('detalhe');
   }
 
@@ -3681,22 +3538,13 @@
   }
 
   function openClient(){
+    if(!jobsData[currentJobId]) return;
     const syncRow=document.getElementById('cw-cal-sync-row');
-    if(jobsData[currentJobId]){
-      clientContext=currentJobId;
-      document.getElementById('client-static').style.display='none';
-      document.getElementById('client-dynamic').style.display='block';
-      document.getElementById('cw-tag').textContent=t('portal.clientViewReal');
-      renderClientDynamic(currentJobId);
-      syncRow.style.display='flex';
-    } else {
-      clientContext=null;
-      document.getElementById('client-static').style.display='block';
-      document.getElementById('client-dynamic').style.display='none';
-      document.getElementById('cw-tag').textContent=t('portal.clientView');
-      syncRow.style.display='none';
-      aplicarTraducaoPortal();
-    }
+    clientContext=currentJobId;
+    document.getElementById('client-dynamic').style.display='block';
+    document.getElementById('cw-tag').textContent=t('portal.clientViewReal');
+    renderClientDynamic(currentJobId);
+    syncRow.style.display='flex';
     document.getElementById('clientwrap').classList.add('show');
     atualizarBotoesIdiomaPortal();
   }
@@ -3746,6 +3594,8 @@
     if(name==='importar-referencias') renderReferenciasGuardadas();
     if(name==='comunidade-contratos') renderBibliotecaPanel('contratos');
     if(name==='comunidade-modelos') renderBibliotecaPanel('modelos');
+    if(name==='contrato-duplicar') renderListaDuplicarContrato();
+    if(name==='contrato-usar') renderListaUsarModelo();
   }
   function panelBack(){
     const current=panelStack[panelStack.length-1];
@@ -4707,22 +4557,86 @@
     return html;
   }
 
-  /* Builder unificado — demo estático (builderContext=null) ou trabalho real (builderContext=jobId) */
+  /* Builder unificado — modelo em branco (builderContext=null) ou trabalho real (builderContext=jobId) */
   let builderContext=null;
-  const staticDemoJob={ id:'__static__', client:'Sofia & João', typeLabel:'Casamento', value:2400, date:'14 ago', local:'Riverside', email:'sofia@email.com',
-    contract:{ blocks:[
-      {id:'s1', key:'identificacao', customText:null, on:true},
-      {id:'s2', key:'pagamento', customText:null, on:true},
-      {id:'s3', key:'entrega', customText:null, on:true},
-      {id:'s4', key:'cancelamento', customText:null, on:true},
-      {id:'s5', key:'direitos', customText:null, on:false}
-    ]}};
-  function getBuilderJob(){ return builderContext ? jobsData[builderContext] : staticDemoJob; }
-  function abrirBuilder(jobId){ builderContext=jobId||null; renderBuilder(); go('builder'); }
+  let builderModeloOrigem=null;
+  function blocosModeloPadrao(){
+    return [
+      {id:'m1', key:'identificacao', customText:null, on:true},
+      {id:'m2', key:'pagamento', customText:null, on:true},
+      {id:'m3', key:'entrega', customText:null, on:true},
+      {id:'m4', key:'cancelamento', customText:null, on:true},
+      {id:'m5', key:'direitos', customText:null, on:false}
+    ];
+  }
+  function getBuilderJob(){
+    if(builderContext) return jobsData[builderContext];
+    return { id:'__template__', client:(builderModeloOrigem&&builderModeloOrigem.client)||'', typeLabel:'', value:0, date:null, local:'', email:'',
+      contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || blocosModeloPadrao() } };
+  }
+  function abrirBuilder(jobId){ builderContext=jobId||null; builderModeloOrigem=null; renderBuilder(); go('builder'); }
+  function renderListaDuplicarContrato(){
+    const wrap=document.getElementById('dup-contrato-lista');
+    if(!wrap) return;
+    const q=(document.getElementById('dup-contrato-busca').value||'').trim().toLowerCase();
+    const jobs=Object.values(jobsData).filter(j=>j.contract && j.contract.blocks && j.contract.blocks.length)
+      .filter(j=>!q || (j.client||'').toLowerCase().includes(q) || (j.typeLabel||'').toLowerCase().includes(q));
+    wrap.innerHTML = jobs.length ? jobs.map(j=>
+      '<div class="pick-row" onclick="duplicarContratoDoTrabalho(\''+j.id+'\')">'+
+      '<div><div class="nm">'+escapeHtml(j.client)+'</div><div class="sub">'+escapeHtml(j.typeLabel||'')+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
+  }
+  function duplicarContratoDoTrabalho(jobId){
+    const origem=jobsData[jobId];
+    if(!origem) return;
+    builderContext=null;
+    builderModeloOrigem={ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) };
+    closeSheet();
+    renderBuilder();
+    go('builder');
+  }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
   function guardarBuilderContexto(){
-    if(builderContext){ saveJobsData(); showToast(t('toast.changesSaved')); }
-    else { showToast(t('toast.savedAsTemplate')); }
+    if(builderContext){ saveJobsData(); showToast(t('toast.changesSaved')); return; }
+    openInfo(t('builder.saveTemplateTitle'), `
+      <div class="field"><label data-t="field.name">Nome</label><input id="modelo-contrato-nome" placeholder="${t('builder.templateNamePlaceholder')}"></div>
+      <button class="btn primary" style="width:100%" onclick="confirmarGuardarModeloContrato()">${t('action.save')}</button>`);
+  }
+  let modelosContratoData={};
+  function saveModelosContratoData(){ savePersisted('pivot-modelosContrato', ()=>modelosContratoData); }
+  async function loadModelosContratoData(){ await loadPersisted('pivot-modelosContrato', d=>{ modelosContratoData=d||{}; }); }
+  function confirmarGuardarModeloContrato(){
+    const nomeEl=document.getElementById('modelo-contrato-nome');
+    const nome=nomeEl.value.trim();
+    if(!nome){ nomeEl.focus(); return; }
+    const id='mc'+Date.now();
+    modelosContratoData[id]={ id, nome, blocks: getBuilderJob().contract.blocks.map(b=>Object.assign({},b)), criadoEm:new Date().toISOString(), usos:0 };
+    saveModelosContratoData();
+    closeInfo();
+    showToast(t('toast.savedAsTemplate'));
+  }
+  function renderListaUsarModelo(){
+    const wrap=document.getElementById('usar-modelo-lista');
+    if(!wrap) return;
+    const q=(document.getElementById('usar-modelo-busca').value||'').trim().toLowerCase();
+    const modelos=Object.values(modelosContratoData).filter(m=>!q || m.nome.toLowerCase().includes(q));
+    wrap.innerHTML = modelos.length ? modelos.map(m=>
+      '<div class="pick-row" onclick="usarModeloContrato(\''+m.id+'\')">'+
+      '<div><div class="nm">'+escapeHtml(m.nome)+'</div><div class="sub">'+m.blocks.length+' '+t('builder.blocksCount')+(m.usos?(' · '+t('builder.usedPrefix')+' '+m.usos+'x'):'')+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
+  }
+  function usarModeloContrato(id){
+    const m=modelosContratoData[id];
+    if(!m) return;
+    m.usos=(m.usos||0)+1;
+    saveModelosContratoData();
+    builderContext=null;
+    builderModeloOrigem={ client:'', blocks: m.blocks.map((b,i)=>Object.assign({}, b, {id:'use'+Date.now()+i})) };
+    closeSheet();
+    renderBuilder();
+    go('builder');
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
@@ -4741,7 +4655,7 @@
     const isJob=!!builderContext;
     const locked = isJob && contratoBloqueadoParaEdicao(job);
     document.getElementById('builder-title').textContent= isJob? (t('job.contract')+' — '+job.client) : t('builder.title');
-    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : 'Casamento Sofia & João · demonstração';
+    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub'));
     document.getElementById('builder-back-label').textContent= isJob? job.client : t('nav.jobs');
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
     document.getElementById('addblock-btn').style.display= isJob ? 'none' : 'flex';
@@ -5760,7 +5674,6 @@
     savePerfilData();
     atualizarBotoesIdiomaPortal();
     if(clientContext) renderClientDynamic(clientContext);
-    else aplicarTraducaoPortal();
   }
   function atualizarBotoesIdiomaPortal(){
     const langMap={'Português':'pt','English':'en','Español':'es'};
@@ -5768,20 +5681,6 @@
     document.getElementById('cwlang-pt').classList.toggle('active', lang==='pt');
     document.getElementById('cwlang-en').classList.toggle('active', lang==='en');
     document.getElementById('cwlang-es').classList.toggle('active', lang==='es');
-  }
-  function aplicarTraducaoPortal(){
-    document.querySelectorAll('#client-static [data-tp]').forEach(el=>{
-      const val=tp(el.dataset.tp);
-      if(val) el.textContent=val;
-    });
-    const btn=document.getElementById('cw-pagar-btn'); if(btn) btn.textContent=tp('portal.pay')+' 1.200 €';
-    const s=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-    s('cw-static-contrato-m', tp('portal.signedBy')+' Sofia Marques · 2 jun');
-    s('cw-static-pag2-m', tp('portal.overduePayment')+' · 1.200 €');
-    const empresa=perfilData.empresa||tp('defaults.companyName');
-    s('cw-static-who', empresa);
-    s('cw-static-blogo', empresa.charAt(0).toUpperCase());
-    s('cw-static-falar', tp('portal.talkToPrefix')+(perfilData.nome||tp('defaults.userName')));
   }
   function renderClientDynamic(id){
     const job=jobsData[id];
@@ -6427,10 +6326,20 @@
   }
 
   /* 👤 Cliente */
+  let clienteDuplicadoEncontrado=null;
   function checkClienteDuplicado(){
     const v=document.getElementById('cl-email').value.trim().toLowerCase();
-    const existe = v && Object.values(clientesData).some(c=>c.email && c.email.toLowerCase()===v);
-    document.getElementById('cl-dup').style.display = existe ? 'flex':'none';
+    clienteDuplicadoEncontrado = v ? (Object.values(clientesData).find(c=>c.email && c.email.toLowerCase()===v) || null) : null;
+    document.getElementById('cl-dup').style.display = clienteDuplicadoEncontrado ? 'flex':'none';
+    if(clienteDuplicadoEncontrado) document.getElementById('cl-dup-nome').textContent = clienteDuplicadoEncontrado.nome;
+  }
+  function usarClienteExistente(){
+    if(!clienteDuplicadoEncontrado) return;
+    closeSheet();
+    showToast(t('toast.usingExistingClientPrefix')+clienteDuplicadoEncontrado.nome);
+    ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    document.getElementById('cl-dup').style.display='none';
+    clienteDuplicadoEncontrado=null;
   }
   function criarCliente(){
     const nomeEl=document.getElementById('cl-nome');
@@ -6880,9 +6789,8 @@
     savePerfilData();
     closeInfo();
     showToast(t('toast.portalLang')+nome);
-    if(document.getElementById('clientwrap').classList.contains('show')){
-      if(clientContext) renderClientDynamic(clientContext);
-      else aplicarTraducaoPortal();
+    if(document.getElementById('clientwrap').classList.contains('show') && clientContext){
+      renderClientDynamic(clientContext);
     }
   }
   function infoNotificacoes(){
@@ -7412,7 +7320,7 @@
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(),
       loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
-      loadReferenciasData(), loadModelosUsoData(), loadTema(), carregarMinhasColaboracoes()
+      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes()
     ]);
     renderMonthTicker();
   }
