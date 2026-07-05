@@ -176,7 +176,8 @@
     box-shadow:0 20px 45px -12px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
   .ms-head-big{padding:16px 18px 2px;display:flex;align-items:baseline;justify-content:space-between}
   .ms-fatura-title-big{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase}
-  .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--ink-soft);flex:none}
+  .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--ink-soft);text-align:center;margin-bottom:2px}
+  .ms-rings-wrap-outer{flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:flex;align-items:center;gap:10px;padding:6px 18px 0}
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
@@ -1023,25 +1024,25 @@
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.94z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
         <span>Continuar com Google</span>
       </button>
-      <p class="login-alt">Ainda não tem conta? <span class="inline-link" onclick="mostrarEcraCriarConta()">Criar conta</span></p>
+      <p class="login-alt"><span data-t="login.noAccount">Ainda não tem conta?</span> <span class="inline-link" onclick="mostrarEcraCriarConta()" data-t="login.register">Criar conta</span></p>
     </div>
 
     <div id="login-form-criar" style="display:none">
       <div id="signup-form-fields">
-        <p class="login-tag">Cria a tua conta</p>
-        <div class="field"><label>Nome</label><input id="signup-nome" type="text" placeholder="O teu nome" autocomplete="name"></div>
-        <div class="field"><label>Email</label><input id="signup-email" type="email" placeholder="email@exemplo.pt" autocomplete="username"></div>
-        <div class="field"><label>Password</label><input id="signup-pass" type="password" placeholder="mín. 8 caracteres, com letras e números" autocomplete="new-password"></div>
-        <div class="field"><label>Confirmar password</label><input id="signup-pass2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
-        <p class="field-err" id="signup-err" style="display:none"><span>Preenche todos os campos.</span></p>
-        <button class="btn primary" style="width:100%" id="signup-btn" onclick="criarContaNaApp()">Criar conta</button>
-        <p class="login-alt">Já tem conta? <span class="inline-link" onclick="mostrarEcraEntrar()">Entrar</span></p>
+        <p class="login-tag" data-t="login.registerTitle">Cria a tua conta</p>
+        <div class="field"><label data-t="field.name">Nome</label><input id="signup-nome" type="text" placeholder="O teu nome" data-t-placeholder="signup.namePlaceholder" autocomplete="name"></div>
+        <div class="field"><label data-t="login.email">Email</label><input id="signup-email" type="email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
+        <div class="field"><label data-t="login.password">Password</label><input id="signup-pass" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
+        <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="signup-pass2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
+        <p class="field-err" id="signup-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
+        <button class="btn primary" style="width:100%" id="signup-btn" onclick="criarContaNaApp()"><span data-t="login.register">Criar conta</span></button>
+        <p class="login-alt"><span data-t="login.haveAccount">Já tem conta?</span> <span class="inline-link" onclick="mostrarEcraEntrar()" data-t="login.submit">Entrar</span></p>
       </div>
       <div id="signup-aguardando" style="display:none">
-        <p class="login-tag">Confirma o teu email</p>
-        <p style="font-size:13.5px;color:var(--ink-soft);text-align:center;margin-bottom:18px">Enviámos um link de confirmação para <b id="signup-email-enviado"></b>. Abre o email e clica no link para ativares a tua conta.</p>
-        <button class="btn soft" style="width:100%;margin-bottom:9px" id="signup-reenviar-btn" onclick="reenviarEmailConfirmacao()">Reenviar email</button>
-        <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()">Voltar ao login</span></p>
+        <p class="login-tag" data-t="signup.confirmEmailTitle">Confirma o teu email</p>
+        <p style="font-size:13.5px;color:var(--ink-soft);text-align:center;margin-bottom:18px"><span data-t="signup.emailSentPrefix">Enviámos um link de confirmação para </span><b id="signup-email-enviado"></b><span data-t="signup.emailSentSuffix">. Abre o email e clica no link para ativares a tua conta.</span></p>
+        <button class="btn soft" style="width:100%;margin-bottom:9px" id="signup-reenviar-btn" onclick="reenviarEmailConfirmacao()"><span data-t="signup.resendEmail">Reenviar email</span></button>
+        <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
       </div>
     </div>
 
@@ -1116,7 +1117,6 @@
         <div class="month-summary">
           <div class="ms-head-big">
             <span class="ms-fatura-title-big" data-t="home.revenue">Faturamento</span>
-            <span class="ms-mes-atual" id="ms-mes-atual">Junho</span>
           </div>
 
           <div class="ms-progress-row">
@@ -1127,14 +1127,17 @@
                 <div class="mrl-item" onclick="abrirCustos()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.spent">Gasto</span> <b id="mrl-gastos">45 €</b></div>
               </div>
             </div>
-            <div class="ms-rings-wrap">
-              <svg class="ms-rings-svg" viewBox="0 0 150 150">
-                <circle class="mr-track mr-track-outer" cx="75" cy="75" r="60" stroke-width="14"/>
-                <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="14"/>
-                <circle class="mr-ring mr-gastos" id="mr-gastos" cx="75" cy="75" r="60" stroke-width="14"/>
-              </svg>
-              <div class="ms-rings-center">
-                <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
+            <div class="ms-rings-wrap-outer">
+              <span class="ms-mes-atual" id="ms-mes-atual">Junho</span>
+              <div class="ms-rings-wrap">
+                <svg class="ms-rings-svg" viewBox="0 0 150 150">
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="60" stroke-width="14"/>
+                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="14"/>
+                  <circle class="mr-ring mr-gastos" id="mr-gastos" cx="75" cy="75" r="60" stroke-width="14"/>
+                </svg>
+                <div class="ms-rings-center">
+                  <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
+                </div>
               </div>
             </div>
           </div>
@@ -2452,6 +2455,28 @@
     "login.register": { pt:"Criar conta", en:"Create account", es:"Crear cuenta" },
     "login.submit": { pt:"Entrar", en:"Sign in", es:"Entrar" },
     "login.title": { pt:"Entra para continuar", en:"Sign in to continue", es:"Inicia sesión para continuar" },
+    "login.registerTitle": { pt:"Cria a tua conta", en:"Create your account", es:"Crea tu cuenta" },
+    "login.haveAccount": { pt:"Já tem conta?", en:"Already have an account?", es:"¿Ya tienes cuenta?" },
+    "field.confirmPassword": { pt:"Confirmar password", en:"Confirm password", es:"Confirmar contraseña" },
+    "signup.namePlaceholder": { pt:"O teu nome", en:"Your name", es:"Tu nombre" },
+    "signup.passwordHint": { pt:"mín. 8 caracteres, com letras e números", en:"min. 8 characters, with letters and numbers", es:"mín. 8 caracteres, con letras y números" },
+    "signup.error": { pt:"Preenche todos os campos.", en:"Fill in all fields.", es:"Completa todos los campos." },
+    "signup.weakPassword": { pt:"A password precisa de pelo menos 8 caracteres, com letras e números.", en:"The password needs at least 8 characters, with letters and numbers.", es:"La contraseña necesita al menos 8 caracteres, con letras y números." },
+    "signup.passwordMismatch": { pt:"As passwords não coincidem.", en:"Passwords don't match.", es:"Las contraseñas no coinciden." },
+    "signup.creating": { pt:"A criar…", en:"Creating…", es:"Creando…" },
+    "signup.rateLimited": { pt:"Espera cerca de um minuto antes de tentares novamente (proteção contra spam de emails).", en:"Wait about a minute before trying again (protection against email spam).", es:"Espera un minuto antes de intentarlo de nuevo (protección contra spam de emails)." },
+    "signup.genericError": { pt:"Erro ao criar conta.", en:"Error creating account.", es:"Error al crear la cuenta." },
+    "signup.confirmEmailTitle": { pt:"Confirma o teu email", en:"Confirm your email", es:"Confirma tu email" },
+    "signup.emailSentPrefix": { pt:"Enviámos um link de confirmação para ", en:"We've sent a confirmation link to ", es:"Enviamos un enlace de confirmación a " },
+    "signup.emailSentSuffix": { pt:". Abre o email e clica no link para ativares a tua conta.", en:". Open the email and click the link to activate your account.", es:". Abre el email y haz clic en el enlace para activar tu cuenta." },
+    "signup.resendEmail": { pt:"Reenviar email", en:"Resend email", es:"Reenviar email" },
+    "signup.sending": { pt:"A enviar…", en:"Sending…", es:"Enviando…" },
+    "signup.resendWait": { pt:"Espera um pouco antes de tentares reenviar.", en:"Wait a bit before trying to resend.", es:"Espera un poco antes de intentar reenviar." },
+    "signup.resendDone": { pt:"Email reenviado.", en:"Email resent.", es:"Email reenviado." },
+    "signup.resendError": { pt:"Erro ao reenviar email.", en:"Error resending email.", es:"Error al reenviar el email." },
+    "signup.backToLogin": { pt:"Voltar ao login", en:"Back to login", es:"Volver al login" },
+    "toast.accountCreatedPrefix": { pt:"Conta criada. Bem-vindo(a), ", en:"Account created. Welcome, ", es:"Cuenta creada. Bienvenido/a, " },
+    "toast.accountCreatedSuffix": { pt:"!", en:"!", es:"!" },
     "landing.headline": { pt:"Do contrato à entrega, sem perder o fio à meada.", en:"From contract to delivery, without losing track.", es:"Del contrato a la entrega, sin perder el hilo." },
     "landing.sub": { pt:"O Pivot organiza contratos, briefings, pagamentos e lembretes de cada trabalho num só sítio — para fotógrafos, videógrafos, consultores e qualquer profissional que trabalhe por projeto.", en:"Pivot keeps contracts, briefings, payments and reminders for every job in one place — for photographers, videographers, consultants and anyone who works project by project.", es:"Pivot organiza contratos, briefings, pagos y recordatorios de cada trabajo en un solo lugar — para fotógrafos, videógrafos, consultores y cualquier profesional que trabaje por proyecto." },
     "landing.login": { pt:"Entrar", en:"Log in", es:"Entrar" },
@@ -2599,18 +2624,21 @@
     "profile.company.website": { pt:"Website", en:"Website", es:"Sitio web" },
     "profile.account.name": { pt:"Nome", en:"Name", es:"Nombre" },
     "profile.account.plan": { pt:"Plano", en:"Plan", es:"Plan" },
-    "profile.account.proCurrent": { pt:"Pro · atual", en:"Pro · current", es:"Pro · actual" },
-    "profile.account.proDesc": { pt:"€19/mês · trabalhos ilimitados, sem marca Pivot", en:"€19/mo · unlimited jobs, no Pivot branding", es:"€19/mes · trabajos ilimitados, sin marca Pivot" },
     "profile.account.save": { pt:"Guardar alterações", en:"Save changes", es:"Guardar cambios" },
-    "profile.account.studioDesc": { pt:"€39/mês · multi-usuário, relatórios", en:"€39/mo · multi-user, reports", es:"€39/mes · multiusuario, informes" },
-    "profile.account.switchStudio": { pt:"Estúdio", en:"Studio", es:"Estudio" },
-    "plan.name.free": { pt:"Plano Free", en:"Free Plan", es:"Plan Free" },
-    "plan.name.pro": { pt:"Plano Pro", en:"Pro Plan", es:"Plan Pro" },
-    "plan.name.studio": { pt:"Plano Estúdio", en:"Studio Plan", es:"Plan Estudio" },
-    "plan.desc.free": { pt:"Grátis · 1 trabalho ativo, marca Pivot no portal", en:"Free · 1 active job, Pivot branding on portal", es:"Gratis · 1 trabajo activo, marca Pivot en el portal" },
+    "plan.name.free": { pt:"Free", en:"Free", es:"Free" },
+    "plan.name.plus": { pt:"Plus", en:"Plus", es:"Plus" },
+    "plan.name.pro": { pt:"Pro", en:"Pro", es:"Pro" },
+    "plan.name.business": { pt:"Business", en:"Business", es:"Business" },
+    "plan.name.enterprise": { pt:"Enterprise", en:"Enterprise", es:"Enterprise" },
+    "plan.desc.free": { pt:"Grátis · 3 trabalhos ativos · 100 clientes · 1 utilizador", en:"Free · 3 active jobs · 100 clients · 1 user", es:"Gratis · 3 trabajos activos · 100 clientes · 1 usuario" },
+    "plan.desc.plus": { pt:"US$2,99/mês · 10 trabalhos ativos · clientes ilimitados · 1 utilizador", en:"US$2.99/mo · 10 active jobs · unlimited clients · 1 user", es:"US$2,99/mes · 10 trabajos activos · clientes ilimitados · 1 usuario" },
+    "plan.desc.pro": { pt:"US$5,99/mês · trabalhos ilimitados · clientes ilimitados · até 3 utilizadores", en:"US$5.99/mo · unlimited jobs · unlimited clients · up to 3 users", es:"US$5,99/mes · trabajos ilimitados · clientes ilimitados · hasta 3 usuarios" },
+    "plan.desc.business": { pt:"US$14,99/mês · até 10 utilizadores · branding simples (logo, nome da empresa)", en:"US$14.99/mo · up to 10 users · simple branding (logo, company name)", es:"US$14,99/mes · hasta 10 usuarios · branding simple (logo, nombre de empresa)" },
+    "plan.desc.enterprise": { pt:"Entre em contacto para um orçamento personalizado", en:"Contact us for a custom quote", es:"Contáctanos para un presupuesto personalizado" },
     "plan.current": { pt:" · atual", en:" · current", es:" · actual" },
     "plan.billingNotConnected": { pt:"Pagamentos ainda não estão ligados a este plano. Contacta o suporte para ativar.", en:"Billing isn't connected for this plan yet. Contact support to activate it.", es:"Los pagos aún no están conectados a este plan. Contacta con soporte para activarlo." },
-    "toast.planChangedFree": { pt:"Mudaste para o Plano Free.", en:"Switched to the Free plan.", es:"Cambiaste al Plan Free." },
+    "plan.contactSales": { pt:"Vamos combinar os detalhes contigo. Escreve para o suporte para receberes um orçamento.", en:"Let's work out the details together. Contact support to get a quote.", es:"Vamos a acordar los detalles contigo. Escribe a soporte para recibir un presupuesto." },
+    "toast.planChangedFree": { pt:"Mudaste para o plano Free.", en:"Switched to the Free plan.", es:"Cambiaste al plan Free." },
     "profile.darkMode": { pt:"Modo escuro", en:"Dark mode", es:"Modo oscuro" },
     "profile.help": { pt:"Ajuda", en:"Help", es:"Ayuda" },
     "profile.language": { pt:"Idioma da interface", en:"Interface language", es:"Idioma de la interfaz" },
@@ -3107,7 +3135,9 @@
     if(dataEl){
       const diasSemana=LANG==='en'?['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']:LANG==='es'?['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']:['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
       const hoje=new Date();
-      dataEl.textContent=diasSemana[hoje.getDay()]+', '+hoje.getDate()+' de '+nomesMeses[hoje.getMonth()].toLowerCase();
+      const mesNome=nomesMeses[hoje.getMonth()];
+      const dataFmt = LANG==='en' ? (mesNome+' '+hoje.getDate()) : (hoje.getDate()+' de '+mesNome.toLowerCase());
+      dataEl.textContent=diasSemana[hoje.getDay()]+', '+dataFmt;
     }
     renderVencimentos();
     renderRadarDashboard();
@@ -6080,9 +6110,11 @@
     input.value='';
   }
   const PLANOS = {
-    Free:   { labelKey:'plan.name.free',   descKey:'plan.desc.free' },
-    Pro:    { labelKey:'plan.name.pro',    descKey:'profile.account.proDesc' },
-    Studio: { labelKey:'plan.name.studio', descKey:'profile.account.studioDesc' }
+    Free:       { labelKey:'plan.name.free',       descKey:'plan.desc.free' },
+    Plus:       { labelKey:'plan.name.plus',       descKey:'plan.desc.plus' },
+    Pro:        { labelKey:'plan.name.pro',        descKey:'plan.desc.pro' },
+    Business:   { labelKey:'plan.name.business',   descKey:'plan.desc.business' },
+    Enterprise: { labelKey:'plan.name.enterprise', descKey:'plan.desc.enterprise' }
   };
   function nomePlanoAtual(){ return t(PLANOS[perfilData.plano||'Free'].labelKey); }
   function aplicarPerfilData(){
@@ -6427,6 +6459,10 @@
       aplicarPerfilData();
       closeInfo();
       showToast(t('toast.planChangedFree'));
+      return;
+    }
+    if(nome==='Enterprise'){
+      showToast(t('plan.contactSales'));
       return;
     }
     showToast(t('plan.billingNotConnected'));
@@ -7019,23 +7055,23 @@
     const btn=document.getElementById('signup-btn');
 
     if(!nome || !email || !pass || !pass2){
-      err.querySelector('span').textContent='Preenche todos os campos.'; err.style.display='block'; return;
+      err.querySelector('span').textContent=t('signup.error'); err.style.display='block'; return;
     }
     if(!senhaForte(pass)){
-      err.querySelector('span').textContent='A password precisa de pelo menos 8 caracteres, com letras e números.'; err.style.display='block'; return;
+      err.querySelector('span').textContent=t('signup.weakPassword'); err.style.display='block'; return;
     }
     if(pass!==pass2){
-      err.querySelector('span').textContent='As passwords não coincidem.'; err.style.display='block'; return;
+      err.querySelector('span').textContent=t('signup.passwordMismatch'); err.style.display='block'; return;
     }
     err.style.display='none';
-    btn.disabled=true; btn.textContent='A criar...';
+    btn.disabled=true; btn.textContent=t('signup.creating');
 
     try{
       const data = await pivotSignUp(email, pass, nome);
       if(data.session){
         // Conta já vem ativa (confirmação de email desligada): o onAuthStateChange
         // trata de carregar o workspace e esconder o ecrã de login automaticamente.
-        showToast('Conta criada. Bem-vindo(a), '+nome+'!');
+        showToast(t('toast.accountCreatedPrefix')+nome+t('toast.accountCreatedSuffix'));
       } else {
         // Confirmação de email exigida: mostra ecrã claro de "verifica o teu email", não um toast que passa despercebido.
         ultimoEmailRegistado = email;
@@ -7045,25 +7081,23 @@
       }
     }catch(e){
       const rateLimited = /security purposes|rate limit/i.test(e.message||'');
-      err.querySelector('span').textContent = rateLimited
-        ? 'Espera cerca de um minuto antes de tentares novamente (proteção contra spam de emails).'
-        : (e.message || 'Erro ao criar conta.');
+      err.querySelector('span').textContent = rateLimited ? t('signup.rateLimited') : (e.message || t('signup.genericError'));
       err.style.display='block';
     }finally{
-      btn.disabled=false; btn.textContent='Criar conta';
+      btn.disabled=false; btn.textContent=t('login.register');
     }
   }
   async function reenviarEmailConfirmacao(){
     const btn=document.getElementById('signup-reenviar-btn');
     if(!ultimoEmailRegistado) return;
-    btn.disabled=true; btn.textContent='A enviar...';
+    btn.disabled=true; btn.textContent=t('signup.sending');
     try{
       const { error } = await sb.auth.resend({ type:'signup', email: ultimoEmailRegistado });
-      showToast(error ? 'Espera um pouco antes de tentares reenviar.' : 'Email reenviado.');
+      showToast(error ? t('signup.resendWait') : t('signup.resendDone'));
     }catch(e){
-      showToast('Erro ao reenviar email.');
+      showToast(t('signup.resendError'));
     }finally{
-      btn.disabled=false; btn.textContent='Reenviar email';
+      btn.disabled=false; btn.textContent=t('signup.resendEmail');
     }
   }
   function terminarSessao(){
