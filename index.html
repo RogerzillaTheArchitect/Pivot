@@ -73,6 +73,17 @@
   #splash{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease, visibility .5s}
   #splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+  #landing-page{position:fixed;inset:0;z-index:999;background:var(--bg-ice);overflow-y:auto;display:flex;align-items:center;justify-content:center;padding:60px 20px}
+  .landing-inner{max-width:640px;text-align:center}
+  .landing-logo{font-size:34px;margin-bottom:28px}
+  .landing-h1{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:34px;font-weight:600;line-height:1.25;color:var(--ink);margin:0 0 16px}
+  .landing-sub{font-size:15px;color:var(--ink-soft);line-height:1.6;max-width:480px;margin:0 auto 28px}
+  .landing-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+  .landing-actions .btn{padding:13px 26px;font-size:14.5px}
+  .landing-features{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:22px;text-align:left}
+  .landing-feature{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+  .landing-feature b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:5px}
+  .landing-feature span{font-size:12.5px;color:var(--ink-soft);line-height:1.5}
   #login-screen{position:fixed;inset:0;z-index:998;background:var(--bg-ice);display:flex;align-items:center;justify-content:center;
     padding:24px;transition:opacity .35s ease, visibility .35s}
   #login-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
@@ -151,7 +162,7 @@
   .screen{flex:1;overflow-y:auto;padding:8px 30px 40px}
   .screen::-webkit-scrollbar{width:8px}
   .screen::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
-  .view{display:none;animation:fade .45s cubic-bezier(.16,1,.3,1) both;max-width:680px}
+  .view{display:none;animation:fade .45s cubic-bezier(.16,1,.3,1) both;max-width:680px;margin-left:auto;margin-right:auto}
   .view.wide{max-width:760px}
   .view.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
@@ -165,10 +176,7 @@
     box-shadow:0 20px 45px -12px rgba(0,0,0,.55),0 2px 8px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.06)}
   .ms-head-big{padding:16px 18px 2px;display:flex;align-items:baseline;justify-content:space-between}
   .ms-fatura-title-big{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:19px;font-weight:600;color:var(--ink);letter-spacing:.06em;text-transform:uppercase}
-  .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--ink-soft);flex:none;display:inline-flex;align-items:center;gap:5px;
-    padding:7px 12px;border-radius:20px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-7);border:1px solid var(--line)}
-  .ms-mes-atual::after{content:'';width:7px;height:7px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
-    transform:rotate(45deg) translateY(-2px);margin-left:1px}
+  .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--ink-soft);flex:none}
   .ms-progress-row{display:flex;align-items:center;gap:10px;padding:6px 18px 0}
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
@@ -298,6 +306,28 @@
   .email-cta{display:block;text-align:center;background:var(--ink);color:#fff;font-weight:600;font-size:14px;
     padding:14px;border-radius:11px;margin-bottom:4px}
   .email-foot{text-align:center;padding:15px 22px;border-top:1px solid var(--line-soft);font-size:11px;color:var(--neutral)}
+  .email-brand-head{text-align:center;padding:26px 22px;border-bottom:1px solid var(--line-soft);background:var(--paper)}
+  .email-brand-logo{width:56px;height:56px;border-radius:50%;margin:0 auto 10px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px;overflow:hidden}
+  .email-brand-logo img{width:100%;height:100%;object-fit:cover}
+  .email-brand-name{font-family:'Jost',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;letter-spacing:.03em;text-transform:uppercase}
+  .email-brand-sub{font-size:11px;color:var(--neutral);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+  .email-brand-contacts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;font-size:11.5px;color:var(--ink-soft);margin-top:12px}
+  .email-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand-10);color:var(--brand);font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;margin-bottom:14px}
+  .email-deadline{display:flex;align-items:center;gap:10px;background:var(--paper-2);border-radius:12px;padding:12px 14px;margin:16px 0;font-size:12.5px;color:var(--ink-soft)}
+  .email-deadline b{display:block;color:var(--ink);font-size:13.5px}
+  .email-details{background:var(--paper-2);border-radius:12px;padding:14px 16px;margin-bottom:18px}
+  .email-details .ttl{font-size:10.5px;font-weight:600;letter-spacing:.06em;color:var(--neutral);margin-bottom:10px;text-transform:uppercase}
+  .email-detail-row{display:flex;justify-content:space-between;font-size:13px;color:var(--ink);padding:4px 0}
+  .email-detail-row span:first-child{color:var(--ink-soft)}
+  #portal-publico{position:fixed;inset:0;background:var(--bg-ice);z-index:200;overflow-y:auto;padding:40px 18px}
+  .pp-card{max-width:520px;margin:0 auto;background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:28px 24px;box-shadow:0 20px 45px -12px rgba(0,0,0,.25)}
+  .pp-badge{display:inline-flex;align-items:center;gap:6px;background:var(--brand-10);color:var(--brand);font-size:11px;font-weight:600;padding:5px 11px;border-radius:20px;margin-bottom:14px}
+  .pp-deadline{display:flex;align-items:center;gap:10px;background:var(--paper-2);border-radius:12px;padding:12px 14px;margin:14px 0;font-size:12.5px;color:var(--ink-soft)}
+  .pp-deadline b{display:block;color:var(--ink);font-size:13.5px}
+  .pp-block{padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .pp-block:last-child{border-bottom:none}
+  .pp-block h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
+  .pp-block p{margin:0;font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.55}
 
   /* ===== CARTÃO DE LOCALIZAÇÃO — mapa estilizado (não é mapa real) + pin + link real ===== */
   .map-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;background:var(--paper);
@@ -953,6 +983,31 @@
   <div class="splash-tag">Contact, contract, compact.</div>
 </div>
 
+<div id="portal-publico" style="display:none">
+  <div class="pp-card" id="pp-card"></div>
+</div>
+
+<div id="landing-page">
+  <div class="landing-inner">
+    <div class="landing-logo"><span class="pivot-logo-img" role="img" aria-label="Pivot"><span class="logo-piot-layer"></span><span class="logo-v-layer"></span></span></div>
+    <h1 class="landing-h1" data-t="landing.headline">Do contrato à entrega, sem perder o fio à meada.</h1>
+    <p class="landing-sub" data-t="landing.sub">O Pivot organiza contratos, briefings, pagamentos e lembretes de cada trabalho num só sítio — para fotógrafos, videógrafos, consultores e qualquer profissional que trabalhe por projeto.</p>
+    <div class="landing-actions">
+      <button class="btn primary" onclick="document.getElementById('landing-page').style.display='none'">
+        <span data-t="landing.login">Entrar</span>
+      </button>
+      <button class="btn soft" onclick="document.getElementById('landing-page').style.display='none';mostrarEcraCriarConta()">
+        <span data-t="landing.signup">Criar conta grátis</span>
+      </button>
+    </div>
+    <div class="landing-features">
+      <div class="landing-feature"><b data-t="landing.feat1Title">Contratos e assinaturas</b><span data-t="landing.feat1Sub">Gera, envia e recebe contratos assinados online.</span></div>
+      <div class="landing-feature"><b data-t="landing.feat2Title">Portal do cliente</b><span data-t="landing.feat2Sub">O cliente assina e preenche o briefing sem criar conta.</span></div>
+      <div class="landing-feature"><b data-t="landing.feat3Title">Pagamentos e lembretes</b><span data-t="landing.feat3Sub">Acompanha o que falta receber, com avisos automáticos.</span></div>
+    </div>
+  </div>
+</div>
+
 <div id="login-screen">
   <div class="login-card">
     <div class="login-logo"><span class="pivot-logo-img" role="img" aria-label="Pivot"><span class="logo-piot-layer"></span><span class="logo-v-layer"></span></span></div>
@@ -1021,6 +1076,13 @@
     <div class="sb-item" data-nav="explorar" onclick="go('explorar')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg> <span id="sb-label-explorar" data-t="nav.explore">Explorar</span>
     </div>
+    <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <span data-t="profile.notifications">Notificações</span>
+      <span class="notif-dot" style="position:absolute;left:21px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--late);display:none;border:1.5px solid var(--paper)"></span>
+    </div>
+    <div class="sb-item" id="sb-item-colaboracoes" data-nav="colaboracoes" style="display:none" onclick="go('colaboracoes')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-t="nav.collaborations">Colaborações</span>
+    </div>
     <div class="sb-spacer"></div>
     <div class="sb-profile" onclick="go('perfil')">
       <div class="sb-avatar">U</div>
@@ -1040,7 +1102,7 @@
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações" style="position:relative">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
-          <span id="notif-dot" style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--late);display:none;border:1.5px solid var(--paper)"></span>
+          <span class="notif-dot" style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--late);display:none;border:1.5px solid var(--paper)"></span>
         </div>
       </div>
     </div>
@@ -1327,10 +1389,21 @@
       <!-- ============ EXPLORAR ============ -->
       <section class="view" id="v-explorar">
         <div class="page-title" data-t="explore.title">Explorar</div>
-        <div class="job" onclick="abrirBuilder(null)"><div class="job-top"><div><div class="job-client"><span data-t="explore.contractModel">Modelo · </span><span data-t="wizard.template.wedding">Casamento completo</span></div><div class="job-type" data-t="explore.contractBlocks">Contrato · 5 blocos</div></div></div></div>
-        <div class="job" onclick="openSheet();abrirListaModelo('checklist')"><div class="job-top"><div><div class="job-client" data-t="explore.deliveryChecklist">Checklist de entrega</div><div class="job-type" data-t="explore.editableFlow">Fluxo · editável</div></div></div></div>
-        <div class="job" onclick="openSheet();abrirListaModelo('briefing')"><div class="job-top"><div><div class="job-client" data-t="explore.commercialBriefing">Informações do Cliente — sessão comercial</div><div class="job-type" data-t="explore.editableModel">Modelo · editável</div></div></div></div>
+        <div class="filter-row" id="explore-filter-row">
+          <div class="chip on" data-cat="todos" onclick="filterExplorar(this,'todos')"><span data-t="explore.filter.all">Todos</span></div>
+          <div class="chip" data-cat="contratos" onclick="filterExplorar(this,'contratos')"><span data-t="explore.filter.contracts">Contratos</span></div>
+          <div class="chip" data-cat="cronogramas" onclick="filterExplorar(this,'cronogramas')"><span data-t="explore.filter.timelines">Cronogramas</span></div>
+          <div class="chip" data-cat="checklists" onclick="filterExplorar(this,'checklists')"><span data-t="explore.filter.checklists">Checklists</span></div>
+          <div class="chip" data-cat="briefings" onclick="filterExplorar(this,'briefings')"><span data-t="explore.filter.briefings">Briefings</span></div>
+        </div>
+        <div id="explore-lista"></div>
         <p style="font-size:13px;color:var(--neutral);margin-top:6px"><span data-t="explore.empty">Em crescimento. Sugere um modelo que gostarias de ver aqui.</span></p>
+      </section>
+
+      <!-- ============ COLABORAÇÕES (colaborador externo) ============ -->
+      <section class="view" id="v-colaboracoes">
+        <div class="page-title" data-t="nav.collaborations">Colaborações</div>
+        <div id="colaboracoes-lista"></div>
       </section>
 
       <!-- ============ PERFIL ============ -->
@@ -1349,6 +1422,7 @@
         <div class="plabel" id="lbl-conta-section" data-t="profile.account">Conta</div>
         <div class="plist">
           <div class="prow" onclick="infoMinhaConta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" id="lbl-minha-conta" data-t="profile.myAccount">Minha conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" data-requer-admin onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" data-t="profile.company">Empresa</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="t" id="lbl-equipa" data-t="profile.team">Equipe</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
@@ -1377,7 +1451,7 @@
         <div class="page-title" style="font-size:25px" data-t="reports.title">Relatórios</div>
 
         <div class="rel-month-nav">
-          <div class="rel-nav-btn" onclick="relMonthNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></div>
+          <div class="rel-nav-btn" id="rel-prev-btn" onclick="relMonthNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></div>
           <span id="rel-month-label">Junho 2026</span>
           <div class="rel-nav-btn" id="rel-next-btn" onclick="relMonthNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
@@ -1560,6 +1634,10 @@
           <div class="struct-row"><div class="struct-l"><div class="nm"><span data-t="wizard.clientPortal">Portal do Cliente</span></div></div><div class="toggle on" id="envio-portal" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <p style="font-size:12px;color:var(--neutral);margin:10px 2px 0"><span data-t="wizard.clientReceives">Isto define só o que o cliente recebe e preenche — pode mudar depois.</span></p>
+          <div id="tw-equipa-wrap" style="display:none;margin-top:18px">
+            <p class="plabel" style="margin:0 0 9px" data-t="wizard.assignTeam">Quem fica responsável por este trabalho?</p>
+            <div id="tw-equipa-lista"></div>
+          </div>
           <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue.btn">Continuar</span></button>
         </div>
 
@@ -1940,6 +2018,8 @@
         if (ok) {
           const tela=document.getElementById('login-screen');
           if (tela) tela.classList.add('hide');
+          const landing=document.getElementById('landing-page');
+          if (landing) landing.style.display='none';
         }
       } finally {
         aProcessarAuth = false;
@@ -1974,11 +2054,88 @@
     if (error || !data) return null;
     return data;
   }
+  let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null;
   (function checkPortalAccess(){
     const params = new URLSearchParams(window.location.search);
     const token = params.get('portal');
-    if (token) window.PIVOT_PORTAL_TOKEN = token;
+    if (token){ window.PIVOT_PORTAL_TOKEN = token; ppToken = token; }
   })();
+  async function iniciarPortalPublicoSeAplicavel(){
+    if (!ppToken) return;
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('landing-page').style.display='none';
+    document.querySelector('.shell').style.display='none';
+    const el=document.getElementById('portal-publico');
+    el.style.display='block';
+    const data = await abrirPortalPorToken(ppToken);
+    if (!data){ renderPortalPublicoEstado('<h3>Link inválido</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link não é válido ou já não existe.</p>'); return; }
+    if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
+    ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
+    renderPortalPublicoPrincipal();
+  }
+  function renderPortalPublicoEstado(html){
+    document.getElementById('pp-card').innerHTML = html;
+  }
+  function renderPortalPublicoPrincipal(){
+    const job=ppJob;
+    const jaAssinado = job.contract && job.contract.status==='assinado';
+    const precisaBriefing = job.structure && job.structure.briefing && job.briefing && !job.briefing.respondido;
+    let html = '<div class="pp-badge">'+(jaAssinado?'Contrato assinado':'Portal do Cliente')+'</div>';
+    html += '<h2 style="font-family:\'Jost\',sans-serif;font-weight:600;margin:0 0 4px">'+escapeHtml(job.client||'')+'</h2>';
+    html += '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 16px">'+escapeHtml(job.typeLabel||'')+(job.date?(' · '+escapeHtml(job.date)):'')+(job.local?(' · '+escapeHtml(job.local)):'')+'</p>';
+    if (ppExpiresAt && !jaAssinado){
+      const d=new Date(ppExpiresAt);
+      html += '<div class="pp-deadline">Disponível até<b>'+d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'})+'</b></div>';
+    }
+
+    if (job.contract && job.contract.blocks && job.contract.blocks.length){
+      html += '<div style="margin-bottom:18px">'+job.contract.blocks.filter(b=>b.on).map(b=>
+        '<div class="pp-block"><h4>'+escapeHtml(blockName(b))+'</h4><p>'+escapeHtml(blockText(job,b))+'</p></div>'
+      ).join('')+'</div>';
+    }
+
+    if (jaAssinado){
+      html += '<p style="font-size:13px;color:var(--ink)">Assinado por '+escapeHtml(job.contract.signerName||'')+' · '+escapeHtml(job.contract.signedAt||'')+'</p>';
+    } else {
+      html += '<div class="field"><label>O seu nome completo</label><input id="pp-sig-nome" placeholder="Nome e apelido"></div>';
+      html += '<div class="field"><label>Assinatura — desenhe com o dedo ou o rato</label>'+
+        '<div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">Limpar</span></div></div>';
+      html += '<button class="btn primary" style="width:100%;margin-top:6px" onclick="assinarContratoPublico()">Assinar contrato</button>';
+    }
+
+    if (precisaBriefing){
+      html += '<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+        '<h4 style="margin:0 0 10px">Briefing</h4>'+
+        '<div class="field"><textarea id="pp-briefing-texto" placeholder="Conta-nos os detalhes importantes para o teu projeto…"></textarea></div>'+
+        '<button class="btn soft" style="width:100%" onclick="enviarBriefingPublico()">Enviar briefing</button></div>';
+    }
+
+    renderPortalPublicoEstado(html);
+    if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+  }
+  async function assinarContratoPublico(){
+    const nome=document.getElementById('pp-sig-nome').value.trim();
+    if (!nome){ alert('Escreve o teu nome completo.'); return; }
+    const canvas=document.getElementById('sig-canvas');
+    if (!canvas || !sigHasDrawing){ alert('Desenha a tua assinatura primeiro.'); return; }
+    const signatureImg=canvas.toDataURL('image/png');
+    const { data, error } = await sb.rpc('portal_sign_contract', { p_token: ppToken, p_signer_name: nome, p_signature_data_url: signatureImg });
+    if (error || !data || !data.ok){ alert('Não foi possível assinar. Tenta novamente.'); return; }
+    const data2 = await abrirPortalPorToken(ppToken);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('contratoAssinado', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
+  async function enviarBriefingPublico(){
+    const texto=document.getElementById('pp-briefing-texto').value.trim();
+    if (!texto){ alert('Escreve alguma informação antes de enviar.'); return; }
+    const { data, error } = await sb.rpc('portal_submit_briefing', { p_token: ppToken, p_briefing: { observacoes: texto } });
+    if (error || !data || !data.ok){ alert('Não foi possível enviar. Tenta novamente.'); return; }
+    const data2 = await abrirPortalPorToken(ppToken);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('briefingPreenchido', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
 
   /* ============================================================
      SISTEMA DE TRADUÇÃO — fonte única, co-localizada por chave.
@@ -2030,7 +2187,6 @@
     "calendar.deliveryConfirmed": { pt:"Entrega confirmada", en:"Delivery confirmed", es:"Entrega confirmada" },
     "calendar.today": { pt:"HOJE", en:"TODAY", es:"HOY" },
     "calendar.eventFallback": { pt:"evento", en:"event", es:"evento" },
-    "email.stageEvent": { pt:"Evento", en:"Event", es:"Evento" },
     "calendar.dayLabel": { pt:"Dia", en:"Day", es:"Día" },
     "calendar.week": { pt:"Semana", en:"Week", es:"Semana" },
     // --- Informações do Cliente ---
@@ -2073,20 +2229,54 @@
     "dashboard.recentJobs": { pt:"Trabalhos recentes", en:"Recent jobs", es:"Trabajos recientes" },
     "dashboard.upcomingDeliveries": { pt:"Próximas entregas", en:"Upcoming deliveries", es:"Próximas entregas" },
     // --- Email ---
-    "email.footerPrefix": { pt:" · enviado através do Pivot · assunto: ", en:" · sent via Pivot · subject: ", es:" · enviado a través de Pivot · asunto: " },
     "email.greeting": { pt:"Olá ", en:"Hello ", es:"Hola " },
     "email.signature": { pt:"Obrigado,\n", en:"Thanks,\n", es:"Gracias,\n" },
     "email.contractReadySubject": { pt:"Seu contrato está pronto", en:"Your contract is ready", es:"Su contrato está listo" },
     "email.contractReadyBody": { pt:"já está disponível. Abra o link para revisar, completar seus dados e assinar. Leva menos de 3 minutos.", en:"is ready. Open the link to review, fill in your details and sign. It takes less than 3 minutes.", es:"ya está disponible. Abra el enlace para revisar, completar sus datos y firmar. Lleva menos de 3 minutos." },
     "email.contractFor": { pt:"Seu contrato para ", en:"Your contract for ", es:"Su contrato para " },
-    "email.confirmationSubject": { pt:"Cópia do seu contrato assinado", en:"Copy of your signed contract", es:"Copia de su contrato firmado" },
-    "email.allSigned": { pt:"Está tudo assinado!", en:"Everything is signed!", es:"¡Todo está firmado!" },
-    "email.thanksPrefix": { pt:"Obrigado, ", en:"Thank you, ", es:"Gracias, " },
-    "email.confirmSuffix": { pt:". Aqui está a confirmação e sua cópia.", en:". Here's the confirmation and your copy.", es:". Aquí está la confirmación y su copia." },
-    "email.readySuffix": { pt:" Revise, complete seus dados e assine. Leva menos de 3 minutos.", en:" Review, fill in your details and sign. It takes less than 3 minutes.", es:" Revise, complete sus datos y firme. Lleva menos de 3 minutos." },
-    "email.noActiveBlocks": { pt:"sem blocos ativos", en:"no active blocks", es:"sin bloques activos" },
     "email.previewNote": { pt:"Pré-visualização do email: é isto que apareceria com um servidor real conectado. O botão \"Enviar email\" abre seu email de verdade, em texto simples, pois o protocolo mailto: não carrega HTML.", en:"Email preview: this is what it would look like with a real server connected. The \"Send email\" button opens your actual email client, in plain text, since the mailto: protocol doesn't load HTML.", es:"Vista previa del email: así se vería con un servidor real conectado. El botón \"Enviar email\" abre su cliente de correo real, en texto plano, ya que el protocolo mailto: no carga HTML." },
-    "email.whatIncluded": { pt:"O que está incluso", en:"What's included", es:"Qué está incluido" },
+    "email.stage.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "email.stage.briefing": { pt:"Briefing", en:"Briefing", es:"Briefing" },
+    "email.stage.payment": { pt:"Pagamento", en:"Payment", es:"Pago" },
+    "email.stage.execution": { pt:"Execução", en:"Execution", es:"Ejecución" },
+    "email.stage.delivery": { pt:"Entrega", en:"Delivery", es:"Entrega" },
+    "email.deadlineLabel": { pt:"Disponível até ", en:"Available until ", es:"Disponible hasta " },
+    "email.eventDetailsTitle": { pt:"Detalhes do Evento", en:"Event Details", es:"Detalles del Evento" },
+    "email.detail.date": { pt:"Data", en:"Date", es:"Fecha" },
+    "email.detail.location": { pt:"Local", en:"Location", es:"Lugar" },
+    "email.poweredBy": { pt:"Projeto gerido através do Pivot", en:"Project managed with Pivot", es:"Proyecto gestionado con Pivot" },
+    "email.badge.contractSent": { pt:"Contrato enviado", en:"Contract sent", es:"Contrato enviado" },
+    "email.title.contractSent": { pt:"O seu contrato está pronto para assinatura", en:"Your contract is ready to sign", es:"Su contrato está listo para firmar" },
+    "email.body.contractSent": { pt:"Enviámos o contrato referente ao projeto abaixo. Para continuarmos, basta assinar através do botão.", en:"We've sent the contract for the project below. To move forward, just sign using the button.", es:"Hemos enviado el contrato del proyecto de abajo. Para continuar, solo tiene que firmar con el botón." },
+    "email.cta.signContract": { pt:"Assinar contrato", en:"Sign contract", es:"Firmar contrato" },
+    "email.badge.contractSigned": { pt:"Contrato assinado", en:"Contract signed", es:"Contrato firmado" },
+    "email.title.contractSigned": { pt:"Contrato assinado com sucesso", en:"Contract signed successfully", es:"Contrato firmado con éxito" },
+    "email.body.contractSigned": { pt:"O seu contrato foi assinado. Aqui está a confirmação e os próximos passos.", en:"Your contract has been signed. Here's the confirmation and the next steps.", es:"Su contrato ha sido firmado. Aquí tiene la confirmación y los próximos pasos." },
+    "email.badge.briefingReady": { pt:"Briefing disponível", en:"Briefing available", es:"Briefing disponible" },
+    "email.title.briefingReady": { pt:"Preencha o briefing do seu projeto", en:"Fill in your project briefing", es:"Complete el briefing de su proyecto" },
+    "email.body.briefingReady": { pt:"Precisamos de mais alguns detalhes para dar continuidade ao seu projeto.", en:"We need a few more details to move your project forward.", es:"Necesitamos algunos detalles más para continuar con su proyecto." },
+    "email.cta.fillBriefing": { pt:"Preencher briefing", en:"Fill in briefing", es:"Completar briefing" },
+    "email.badge.briefingDone": { pt:"Briefing preenchido", en:"Briefing completed", es:"Briefing completado" },
+    "email.title.briefingDone": { pt:"Recebemos o seu briefing", en:"We received your briefing", es:"Recibimos su briefing" },
+    "email.body.briefingDone": { pt:"Obrigado por preencher as informações. Vamos usá-las para preparar o seu projeto.", en:"Thanks for filling in the information. We'll use it to prepare your project.", es:"Gracias por completar la información. La usaremos para preparar su proyecto." },
+    "email.badge.paymentDue": { pt:"Pagamento pendente", en:"Payment due", es:"Pago pendiente" },
+    "email.title.paymentDue": { pt:"Há um pagamento à sua espera", en:"A payment is waiting for you", es:"Hay un pago esperándole" },
+    "email.body.paymentDue": { pt:"Para continuarmos com o seu projeto, é necessário concluir o pagamento abaixo.", en:"To keep your project moving, please complete the payment below.", es:"Para continuar con su proyecto, es necesario completar el pago de abajo." },
+    "email.cta.payNow": { pt:"Pagar agora", en:"Pay now", es:"Pagar ahora" },
+    "email.badge.paymentReceived": { pt:"Pagamento recebido", en:"Payment received", es:"Pago recibido" },
+    "email.title.paymentReceived": { pt:"Recebemos o seu pagamento", en:"We received your payment", es:"Recibimos su pago" },
+    "email.body.paymentReceived": { pt:"Confirmamos a receção do pagamento. Obrigado!", en:"We confirm your payment was received. Thank you!", es:"Confirmamos la recepción del pago. ¡Gracias!" },
+    "email.badge.deliveryReady": { pt:"Entrega disponível", en:"Delivery available", es:"Entrega disponible" },
+    "email.title.deliveryReady": { pt:"O seu projeto está pronto para entrega", en:"Your project is ready for delivery", es:"Su proyecto está listo para entrega" },
+    "email.body.deliveryReady": { pt:"O material final já está disponível. Reveja e aprove através do botão abaixo.", en:"The final material is now available. Review and approve it using the button below.", es:"El material final ya está disponible. Revíselo y apruébelo con el botón de abajo." },
+    "email.cta.reviewDelivery": { pt:"Rever entrega", en:"Review delivery", es:"Revisar entrega" },
+    "email.badge.deliveryApproved": { pt:"Entrega aprovada", en:"Delivery approved", es:"Entrega aprobada" },
+    "email.title.deliveryApproved": { pt:"Entrega aprovada com sucesso", en:"Delivery approved successfully", es:"Entrega aprobada con éxito" },
+    "email.body.deliveryApproved": { pt:"Obrigado por aprovar a entrega do seu projeto.", en:"Thank you for approving your project's delivery.", es:"Gracias por aprobar la entrega de su proyecto." },
+    "email.badge.projectDone": { pt:"Projeto concluído", en:"Project completed", es:"Proyecto completado" },
+    "email.title.projectDone": { pt:"O seu projeto foi concluído", en:"Your project has been completed", es:"Su proyecto ha sido completado" },
+    "email.body.projectDone": { pt:"Foi um prazer trabalhar consigo. Esperamos que tenha gostado do resultado final.", en:"It was a pleasure working with you. We hope you love the final result.", es:"Fue un placer trabajar con usted. Esperamos que le encante el resultado final." },
+    "email.cta.viewProject": { pt:"Ver projeto", en:"View project", es:"Ver proyecto" },
     // --- Explorar ---
     "explore.browseLibrary": { pt:"Explorar Biblioteca →", en:"Browse Library →", es:"Explorar biblioteca →" },
     "explore.checklist": { pt:"Checklist", en:"Checklist", es:"Lista de verificación" },
@@ -2105,6 +2295,12 @@
     "explore.saveTemplate": { pt:"Guardar modelo →", en:"Save template →", es:"Guardar plantilla →" },
     "explore.templates": { pt:"Seus modelos", en:"Your templates", es:"Tus plantillas" },
     "explore.title": { pt:"Explorar", en:"Explore", es:"Explorar" },
+    "explore.filter.all": { pt:"Todos", en:"All", es:"Todos" },
+    "explore.filter.contracts": { pt:"Contratos", en:"Contracts", es:"Contratos" },
+    "explore.filter.timelines": { pt:"Cronogramas", en:"Timelines", es:"Cronogramas" },
+    "explore.filter.checklists": { pt:"Checklists", en:"Checklists", es:"Checklists" },
+    "explore.filter.briefings": { pt:"Briefings", en:"Briefings", es:"Briefings" },
+    "explore.sampleTimeline": { pt:"Cronograma — casamento", en:"Timeline — wedding", es:"Cronograma — boda" },
     // --- Campos de formulário genéricos ---
     "field.company": { pt:"Empresa", en:"Company", es:"Empresa" },
     "field.currency": { pt:"Moeda", en:"Currency", es:"Moneda" },
@@ -2173,7 +2369,6 @@
     "job.contract.sent": { pt:"Contrato já enviado — não pode ser editado.", en:"Contract already sent — editing is locked.", es:"Contrato ya enviado — no se puede editar." },
     "job.contract.signedByPrefix": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
     "job.contract.signedByPrefix2": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
-    "job.contract.viewAndSign": { pt:"Ver e assinar contrato", en:"View and sign contract", es:"Ver y firmar contrato" },
     "job.delivery.expectedPrefix": { pt:"prevista ", en:"expected ", es:"prevista " },
     "job.delivery.final": { pt:"Entrega final", en:"Final delivery", es:"Entrega final" },
     "job.detail.back": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
@@ -2257,6 +2452,16 @@
     "login.register": { pt:"Criar conta", en:"Create account", es:"Crear cuenta" },
     "login.submit": { pt:"Entrar", en:"Sign in", es:"Entrar" },
     "login.title": { pt:"Entra para continuar", en:"Sign in to continue", es:"Inicia sesión para continuar" },
+    "landing.headline": { pt:"Do contrato à entrega, sem perder o fio à meada.", en:"From contract to delivery, without losing track.", es:"Del contrato a la entrega, sin perder el hilo." },
+    "landing.sub": { pt:"O Pivot organiza contratos, briefings, pagamentos e lembretes de cada trabalho num só sítio — para fotógrafos, videógrafos, consultores e qualquer profissional que trabalhe por projeto.", en:"Pivot keeps contracts, briefings, payments and reminders for every job in one place — for photographers, videographers, consultants and anyone who works project by project.", es:"Pivot organiza contratos, briefings, pagos y recordatorios de cada trabajo en un solo lugar — para fotógrafos, videógrafos, consultores y cualquier profesional que trabaje por proyecto." },
+    "landing.login": { pt:"Entrar", en:"Log in", es:"Entrar" },
+    "landing.signup": { pt:"Criar conta grátis", en:"Create free account", es:"Crear cuenta gratis" },
+    "landing.feat1Title": { pt:"Contratos e assinaturas", en:"Contracts and signatures", es:"Contratos y firmas" },
+    "landing.feat1Sub": { pt:"Gera, envia e recebe contratos assinados online.", en:"Generate, send and receive contracts signed online.", es:"Genera, envía y recibe contratos firmados en línea." },
+    "landing.feat2Title": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
+    "landing.feat2Sub": { pt:"O cliente assina e preenche o briefing sem criar conta.", en:"Clients sign and fill in the briefing without creating an account.", es:"El cliente firma y completa el briefing sin crear una cuenta." },
+    "landing.feat3Title": { pt:"Pagamentos e lembretes", en:"Payments and reminders", es:"Pagos y recordatorios" },
+    "landing.feat3Sub": { pt:"Acompanha o que falta receber, com avisos automáticos.", en:"Track what's still owed, with automatic reminders.", es:"Controla lo que falta por cobrar, con avisos automáticos." },
     // --- Marcos ---
     "milestone.after": { pt:"após ", en:"after ", es:"después de " },
     "milestone.afterSignature": { pt:"após assinatura", en:"after signing", es:"tras la firma" },
@@ -2386,6 +2591,12 @@
     // --- Perfil ---
     "profile.account": { pt:"Conta", en:"Account", es:"Cuenta" },
     "profile.account.company": { pt:"Empresa", en:"Company", es:"Empresa" },
+    "profile.company": { pt:"Empresa", en:"Company", es:"Empresa" },
+    "profile.company.changeLogo": { pt:"Alterar logótipo", en:"Change logo", es:"Cambiar logo" },
+    "profile.company.category": { pt:"Categoria", en:"Category", es:"Categoría" },
+    "profile.company.categoryPlaceholder": { pt:"ex: Fotografia & Filmes", en:"e.g. Photography & Film", es:"ej: Fotografía y Cine" },
+    "profile.company.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
+    "profile.company.website": { pt:"Website", en:"Website", es:"Sitio web" },
     "profile.account.name": { pt:"Nome", en:"Name", es:"Nombre" },
     "profile.account.plan": { pt:"Plano", en:"Plan", es:"Plan" },
     "profile.account.proCurrent": { pt:"Pro · atual", en:"Pro · current", es:"Pro · actual" },
@@ -2456,6 +2667,8 @@
     "settings.projectedLabel": { pt:"Faturamento previsto este mês", en:"Projected revenue this month", es:"Ingresos previstos este mes" },
     "settings.ringHint": { pt:"Usado para calcular as percentagens e os anéis no resumo financeiro.", en:"Used to calculate the percentages and rings in the financial summary.", es:"Usado para calcular los porcentajes y los anillos del resumen financiero." },
     "settings.title": { pt:"Configurações", en:"Settings", es:"Ajustes" },
+    "settings.storageTitle": { pt:"Armazenamento", en:"Storage", es:"Almacenamiento" },
+    "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
     "sheet.import": { pt:"Importar", en:"Import", es:"Importar" },
     "sheet.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
@@ -2496,7 +2709,53 @@
     "team.roles": { pt:"Papéis e privilégios", en:"Roles & permissions", es:"Roles y permisos" },
     "team.seats": { pt:"de {n} lugar usado", en:"of {n} seat used", es:"de {n} plaza usada" },
     "team.seatsFullPrefix": { pt:"Usaste todos os ", en:"You've used all ", es:"Has usado las " },
-    "team.seatsFullSuffix": { pt:" lugares do seu plano. Aumenta o número de lugares para adicionares mais pessoas.", en:" seats on your plan. Increase the number of seats to add more people.", es:" plazas de tu plan. Aumenta el número de plazas para añadir más personas." },
+    "team.seatsFullSuffix": { pt:" lugares do teu plano. Muda para um plano superior para adicionares mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
+    "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
+    "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
+    "collab.sectionTitle": { pt:"Colaboradores Externos", en:"External Collaborators", es:"Colaboradores Externos" },
+    "collab.add": { pt:"Adicionar", en:"Add", es:"Añadir" },
+    "collab.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
+    "collab.none": { pt:"Sem colaboradores externos neste trabalho.", en:"No external collaborators on this job.", es:"Sin colaboradores externos en este trabajo." },
+    "collab.title": { pt:"Adicionar Colaborador Externo", en:"Add External Collaborator", es:"Añadir Colaborador Externo" },
+    "collab.searchHint": { pt:"Escreve o email de um utilizador já registado no Pivot.", en:"Enter the email of a user already registered on Pivot.", es:"Escribe el email de un usuario ya registrado en Pivot." },
+    "collab.search": { pt:"Procurar", en:"Search", es:"Buscar" },
+    "collab.notFound": { pt:"Não encontrámos nenhuma conta Pivot com este email.", en:"We couldn't find a Pivot account with this email.", es:"No encontramos ninguna cuenta Pivot con este email." },
+    "collab.permissionsTitle": { pt:"O que pode ver", en:"What they can see", es:"Qué puede ver" },
+    "collab.perm.briefing": { pt:"Briefing", en:"Briefing", es:"Briefing" },
+    "collab.perm.checklist": { pt:"Checklist", en:"Checklist", es:"Checklist" },
+    "collab.perm.files": { pt:"Arquivos", en:"Files", es:"Archivos" },
+    "collab.perm.dates": { pt:"Datas e prazos", en:"Dates and deadlines", es:"Fechas y plazos" },
+    "collab.perm.hours": { pt:"Horas previstas", en:"Estimated hours", es:"Horas previstas" },
+    "collab.perm.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "collab.perm.financial": { pt:"Informações financeiras", en:"Financial information", es:"Información financiera" },
+    "collab.levelTitle": { pt:"Nível de acesso", en:"Access level", es:"Nivel de acceso" },
+    "collab.level.read": { pt:"Leitura", en:"Read-only", es:"Lectura" },
+    "collab.level.readDesc": { pt:"Apenas visualiza conteúdos partilhados.", en:"Can only view shared content.", es:"Solo visualiza contenidos compartidos." },
+    "collab.level.collab": { pt:"Colaboração", en:"Collaboration", es:"Colaboración" },
+    "collab.level.collabDesc": { pt:"Visualiza e pode enviar entregas.", en:"Can view and submit deliveries.", es:"Visualiza y puede enviar entregas." },
+    "collab.level.owner": { pt:"Responsável", en:"Owner", es:"Responsable" },
+    "collab.level.ownerDesc": { pt:"Visualiza, envia entregas e atualiza o estado das tarefas.", en:"Views, submits deliveries and updates task status.", es:"Visualiza, envía entregas y actualiza el estado de las tareas." },
+    "collab.customizeScope": { pt:"Personalizar o que é partilhado", en:"Customize what's shared", es:"Personalizar lo que se comparte" },
+    "collab.hoursForThisPerson": { pt:"Horas previstas para este colaborador", en:"Estimated hours for this collaborator", es:"Horas previstas para este colaborador" },
+    "collab.agreementOptional": { pt:"Acordo de Colaboração (opcional)", en:"Collaboration Agreement (optional)", es:"Acuerdo de Colaboración (opcional)" },
+    "collab.agreementHint": { pt:"Escolhe um modelo ou escreve o teu próprio texto. O colaborador tem de assinar antes de aceder ao que foi partilhado.", en:"Choose a template or write your own text. The collaborator must sign before accessing what was shared.", es:"Elige una plantilla o escribe tu propio texto. El colaborador debe firmar antes de acceder a lo compartido." },
+    "collab.agreementTextPlaceholder": { pt:"Texto do acordo…", en:"Agreement text…", es:"Texto del acuerdo…" },
+    "collab.agreement.nda": { pt:"NDA", en:"NDA", es:"NDA" },
+    "collab.agreement.confidentiality": { pt:"Confidencialidade", en:"Confidentiality", es:"Confidencialidad" },
+    "collab.agreement.services": { pt:"Prestação de Serviços", en:"Service Agreement", es:"Prestación de Servicios" },
+    "collab.agreement.custom": { pt:"Modelo Personalizado", en:"Custom Template", es:"Modelo Personalizado" },
+    "collab.invite": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
+    "collab.invited": { pt:"Colaborador adicionado.", en:"Collaborator added.", es:"Colaborador añadido." },
+    "collab.agreementSigned": { pt:"acordo assinado", en:"agreement signed", es:"acuerdo firmado" },
+    "collab.agreementPending": { pt:"acordo por assinar", en:"agreement pending", es:"acuerdo por firmar" },
+    "collab.noneAssigned": { pt:"Ainda não fazes parte de nenhuma colaboração externa.", en:"You're not part of any external collaboration yet.", es:"Aún no formas parte de ninguna colaboración externa." },
+    "collab.agreementTitle": { pt:"Acordo de Colaboração", en:"Collaboration Agreement", es:"Acuerdo de Colaboración" },
+    "collab.signAndAccess": { pt:"Assinar e aceder", en:"Sign and access", es:"Firmar y acceder" },
+    "collab.deliveries": { pt:"Entregas", en:"Deliveries", es:"Entregas" },
+    "collab.newDelivery": { pt:"Nova entrega", en:"New delivery", es:"Nueva entrega" },
+    "collab.deliverySaved": { pt:"Entrega enviada.", en:"Delivery sent.", es:"Entrega enviada." },
+    "action.back": { pt:"Voltar", en:"Back", es:"Volver" },
+    "toast.inviteError": { pt:"Não foi possível concluir. Tenta novamente.", en:"Couldn't complete this. Try again.", es:"No se pudo completar. Inténtalo de nuevo." },
     "team.viewerDesc": { pt:"Só pode ver trabalhos e relatórios", en:"Read-only access to jobs and reports", es:"Solo puede ver trabajos e informes" },
     // --- Notificações toast ---
     "toast.accountDataUpdated": { pt:"Dados da conta atualizados.", en:"Account data updated.", es:"Datos de la cuenta actualizados." },
@@ -2606,6 +2865,7 @@
     "wizard.client.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
     "wizard.clientPortal": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del cliente" },
     "wizard.clientReceives": { pt:"Isto define o que o cliente recebe — pode mudar depois.", en:"This sets what the client receives — you can change it later.", es:"Esto define lo que recibe el cliente — puedes cambiarlo después." },
+    "wizard.assignTeam": { pt:"Quem fica responsável por este trabalho?", en:"Who's responsible for this job?", es:"¿Quién es responsable de este trabajo?" },
     "wizard.continue": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "wizard.continue.btn": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "wizard.createAnyway": { pt:"Criar mesmo assim", en:"Create anyway", es:"Crear igualmente" },
@@ -2752,8 +3012,10 @@
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); }
     if(v==='calendario') renderCalendar();
     if(v==='equipa') renderEquipaView();
+    if(v==='explorar') renderExplorar();
+    if(v==='colaboracoes') renderColaboracoesView();
   }
-  let METAS={receita:4300, gastos:500};
+  let METAS={receita:0, gastos:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
   async function loadMetas(){
     await loadPersisted('pivot-metas', d=>{ METAS=Object.assign({}, METAS, d); });
@@ -2778,8 +3040,8 @@
   }
   function renderRingsDashboard(recebido, custos){
     const meta=METAS.receita, limiteGastos=METAS.gastos||1;
-    const pctRecebido=Math.min(100, recebido/meta*100);
-    const pctGastosNoAnel=Math.min(pctRecebido, custos/meta*100);
+    const pctRecebido= meta>0 ? Math.min(100, recebido/meta*100) : 0;
+    const pctGastosNoAnel= meta>0 ? Math.min(pctRecebido, custos/meta*100) : 0;
     const pctGastosLimite = Math.min(100, custos/limiteGastos*100);
     const configurarAnel=(id, r, pctFinal)=>{
       const el=document.getElementById(id);
@@ -2801,16 +3063,16 @@
     const saldo=recebido-meta;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-    const pctMeta=Math.round(Math.min(100, recebido/meta*100));
+    const pctMeta= meta>0 ? Math.round(Math.min(100, recebido/meta*100)) : 0;
     const pctEl=document.getElementById('mt-pct-meta');
     if(pctEl) pctEl.textContent=pctMeta+'%';
     const pctGastosEl=document.getElementById('mt-pct-gastos');
     if(pctGastosEl) pctGastosEl.textContent=Math.round(pctGastosLimite)+'%';
   }
   function calcularEstatisticasMes(){
-    let recebido=2450, porReceber=1850;
-    let contratosFechados=5, trabalhosRealizar=4, trabalhosRealizados=1, trabalhosEntregar=2, trabalhosEntregues=3;
-    Object.values(jobsData).forEach(j=>{
+    let recebido=0, porReceber=0;
+    let contratosFechados=0, trabalhosRealizar=0, trabalhosRealizados=0, trabalhosEntregar=0, trabalhosEntregues=0;
+    jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach(p=>{
         const val=parseFloat(String(p.amount).replace(/[^\d]/g,''))||0;
         if(p.status==='pago') recebido+=val; else porReceber+=val;
@@ -2824,7 +3086,6 @@
     });
     return {recebido, porReceber, contratosFechados, trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues, custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
-  const ANTERIOR_FECHADOS=4, ANTERIOR_REALIZADOS=0.9, ANTERIOR_ENTREGUES=3;
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
@@ -2833,19 +3094,7 @@
     set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    const setTrend=(id, atual, anterior)=>{
-      const el=document.getElementById(id); if(!el) return;
-      const pct = anterior>0 ? Math.round(((atual-anterior)/anterior)*100) : 0;
-      const svg=el.querySelector('svg'), path=el.querySelector('path');
-      if(path) path.setAttribute('d', pct<0 ? 'M12 5v14M5 12l7 7 7-7' : 'M12 19V5M5 12l7-7 7 7');
-      el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
-      const texto = pct===0 ? '0%' : (pct>0?'+':'')+pct+'%';
-      if(svg && svg.nextSibling && svg.nextSibling.nodeType===3) svg.nextSibling.textContent=texto;
-      else el.appendChild(document.createTextNode(texto));
-    };
-    setTrend('mt-contratos-trend', s.contratosFechados, ANTERIOR_FECHADOS);
-    setTrend('mt-realizar-trend', s.trabalhosRealizados, ANTERIOR_REALIZADOS);
-    setTrend('mt-entregar-trend', s.trabalhosEntregues, ANTERIOR_ENTREGUES);
+    document.querySelectorAll('.ms-c-trend').forEach(el=>{ el.style.display='none'; });
     renderRingsDashboard(s.recebido, s.custos);
     atualizarNotifDot();
     const nomesMesesPt=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -2880,7 +3129,7 @@
   }
   function gerarItensRadar(){
     const itens=[];
-    Object.values(jobsData).forEach(j=>{
+    jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach((p,i)=>{
         if(p.status==='pago' || !p.dueDate) return;
         itens.push({ dataISO:p.dueDate, hora:null, nome:j.nome||j.client, principal:p.amount, secundaria:p.label, jobId:j.id, tipo:'pagamento', idx:i });
@@ -2985,7 +3234,7 @@
       const diffDias=Math.round((due-hoje)/86400000);
       return Object.assign({due, diffDias, atrasado: v.dueDate<hojeISO}, v);
     });
-    Object.values(jobsData).forEach(j=>{
+    jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach(p=>{
         if(p.status==='pago' || !p.dueDate) return;
         const due=new Date(p.dueDate+'T00:00:00');
@@ -3030,7 +3279,7 @@
       }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 0 2px">'+t('venc.empty')+'</p>';
     }
 
-    const entregas=Object.values(jobsData).filter(j=>classificarTrabalho(j).aEntregar);
+    const entregas=jobsVisiveis().filter(j=>classificarTrabalho(j).aEntregar);
     const wrapEnt=document.getElementById('resumo-entregas');
     const nEnt=document.getElementById('resumo-entregas-n');
     if(nEnt) nEnt.textContent=entregas.length;
@@ -3040,7 +3289,7 @@
       ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 0 2px">'+t('jobs.emptyFilter')+'</p>';
     }
 
-    const recentes=Object.values(jobsData).filter(j=>classificarTrabalho(j).concluido).slice(-4).reverse();
+    const recentes=jobsVisiveis().filter(j=>classificarTrabalho(j).concluido).slice(-4).reverse();
     const wrapRec=document.getElementById('resumo-recentes');
     const nRec=document.getElementById('resumo-recentes-n');
     if(nRec) nRec.textContent=recentes.length;
@@ -3424,99 +3673,116 @@
     closeSheet(); abrirBuilder(null);
     showToast(t('toast.templateImported'));
   }
-  /* Equipa — organização, lugares (seats) e privilégios por papel */
+  /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
+     Fonte única de verdade: a tabela em si, nunca um blob local. */
   const PAPEIS_EQUIPA_KEYS={
     Admin:{nameKey:'role.admin.name', descKey:'team.adminDesc'},
     Editor:{nameKey:'role.editor.name', descKey:'team.editorDesc'},
-    Visualizador:{nameKey:'role.viewer.name', descKey:'team.viewerDesc'}
+    Viewer:{nameKey:'role.viewer.name', descKey:'team.viewerDesc'}
   };
+  const LIMITE_UTILIZADORES_PLANO={Free:1, Plus:1, Pro:3, Business:10, Enterprise:Infinity};
   function papelNome(p){ return t(PAPEIS_EQUIPA_KEYS[p].nameKey); }
   function papelDesc(p){ return t(PAPEIS_EQUIPA_KEYS[p].descKey); }
-  let equipaData={ seatsTotal:1, membros:[ {id:'tu', nome:'Utilizador', email:'', papel:'Admin', admin:true} ] };
-  function saveEquipaData(){ savePersisted('pivot-equipaData', ()=>equipaData); }
+  let membrosEquipa=[];
+  let meuPapel='Admin';
+  function souAdmin(){ return meuPapel==='Admin'; }
   async function loadEquipaData(){
-    await loadPersisted('pivot-equipaData', d=>{ if(d) equipaData=d; });
-    equipaData.membros[0].nome=perfilData.nome; equipaData.membros[0].email=perfilData.email;
+    if(!currentWorkspaceId || !currentUser) return;
+    const { data, error } = await sb.from('workspace_members').select('user_id,email,papel').eq('workspace_id', currentWorkspaceId);
+    if(error){ console.error('Erro a carregar equipa:', error); return; }
+    membrosEquipa = data||[];
+    const eu = membrosEquipa.find(m=>m.user_id===currentUser.id);
+    meuPapel = eu ? eu.papel : 'Admin';
     atualizarContagemEquipaNav();
+    aplicarPermissoesUI();
   }
   function atualizarContagemEquipaNav(){
-    const n=equipaData.membros.length;
+    const n=membrosEquipa.length;
     const navEl=document.getElementById('equipa-nav-v'); if(navEl) navEl.textContent=n===1?t('team.1person'):(n+' '+t('team.nPersons').replace('{n}','').trim());
   }
+  /* Esconde ações que exigem Admin (equipa, dados da empresa) de quem não é Admin. */
+  function aplicarPermissoesUI(){
+    document.querySelectorAll('[data-requer-admin]').forEach(el=>{
+      el.style.display = souAdmin() ? '' : 'none';
+    });
+  }
   function renderEquipaView(){
-    const n=equipaData.membros.length;
-    document.getElementById('equipa-seats-label').textContent=n+' '+t('team.seats').replace('{n}',equipaData.seatsTotal);
+    const limite=LIMITE_UTILIZADORES_PLANO[perfilData.plano||'Free'];
+    const limiteTexto = limite===Infinity ? '∞' : limite;
+    document.getElementById('equipa-seats-label').textContent=membrosEquipa.length+' '+t('team.seats').replace('{n}',limiteTexto);
     const wrap=document.getElementById('equipa-lista');
-    wrap.innerHTML=equipaData.membros.map(m=>{
-      const nomeExibido=m.nome||t('defaults.userName');
+    wrap.innerHTML=membrosEquipa.map(m=>{
+      const nomeExibido=m.email||t('team.noEmail');
       const corAv=avatarColor(nomeExibido);
+      const souEu = m.user_id===currentUser.id;
+      const podeGerir = souAdmin() && !souEu;
       return '<div class="struct-row" style="align-items:center">'+
         '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+
           '<div style="width:36px;height:36px;border-radius:10px;background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>'+
-          '<div style="min-width:0"><div class="nm">'+escapeHtml(nomeExibido)+(m.admin?' <span style="font-size:10.5px;color:var(--brand);font-weight:700">'+t('team.youTag')+'</span>':'')+'</div><span class="sub">'+escapeHtml(m.email||t('team.noEmail'))+'</span></div>'+
+          '<div style="min-width:0"><div class="nm">'+escapeHtml(nomeExibido)+(souEu?' <span style="font-size:10.5px;color:var(--brand);font-weight:700">'+t('team.youTag')+'</span>':'')+'</div></div>'+
         '</div>'+
-        (m.admin
-          ? '<span class="sig-tag green">'+papelNome('Admin').toUpperCase()+'</span>'
-          : '<div style="display:flex;align-items:center;gap:8px;flex:none"><span class="sig-tag yellow" style="cursor:pointer" onclick="abrirAlterarPapel(\''+m.id+'\')">'+papelNome(m.papel).toUpperCase()+'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerMembroEquipa(\''+m.id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
+        (podeGerir
+          ? '<div style="display:flex;align-items:center;gap:8px;flex:none"><span class="sig-tag yellow" style="cursor:pointer" onclick="abrirAlterarPapel(\''+m.user_id+'\')">'+papelNome(m.papel).toUpperCase()+'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerMembroEquipa(\''+m.user_id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
+          : '<span class="sig-tag '+(m.papel==='Admin'?'green':'yellow')+'">'+papelNome(m.papel).toUpperCase()+'</span>'
         )+
       '</div>';
     }).join('');
   }
   function abrirAdicionarMembro(){
-    if(equipaData.membros.length>=equipaData.seatsTotal){
+    if(!souAdmin()){ showToast(t('team.onlyAdminInvites')); return; }
+    const limite=LIMITE_UTILIZADORES_PLANO[perfilData.plano||'Free'];
+    if(membrosEquipa.length>=limite){
       openInfo(t('modal.seatsFull'), `
-        <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('team.seatsFullPrefix')}${equipaData.seatsTotal}${t('team.seatsFullSuffix')}</p>
-        <button class="btn primary" style="width:100%" onclick="aumentarSeats()">${t('team.addSeat')}</button>`);
+        <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('team.seatsFullPrefix')}${limite}${t('team.seatsFullSuffix')}</p>
+        <button class="btn primary" style="width:100%" onclick="closeInfo();infoMinhaConta()">${t('profile.account.plan')}</button>`);
       return;
     }
     openInfo(t('team.addPerson'), `
-      <div class="field"><label>${t('field.name')}</label><input id="eq-nome" placeholder="${t('field.name')}"></div>
       <div class="field"><label>${t('login.email')}</label><input id="eq-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder"></div>
-      <div class="field"><label>${t('field.role')}</label><select id="eq-papel"><option value="Editor">${papelNome('Editor')}</option><option value="Visualizador">${papelNome('Visualizador')}</option></select></div>
+      <div class="field"><label>${t('field.role')}</label><select id="eq-papel"><option value="Editor">${papelNome('Editor')}</option><option value="Viewer">${papelNome('Viewer')}</option></select></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px" id="eq-papel-desc">${papelDesc('Editor')}</p>
       <button class="btn primary" style="width:100%" onclick="guardarNovoMembro()">${t('action.add')}</button>`);
     document.getElementById('eq-papel').addEventListener('change', e=>{
       document.getElementById('eq-papel-desc').textContent=papelDesc(e.target.value);
     });
   }
-  function aumentarSeats(){
-    equipaData.seatsTotal++;
-    saveEquipaData();
-    closeInfo();
-    abrirAdicionarMembro();
-    showToast(t('toast.seatAdded'));
-  }
-  function guardarNovoMembro(){
-    const nomeEl=document.getElementById('eq-nome');
-    const nome=nomeEl.value.trim();
-    if(!nome){ nomeEl.focus(); showToast(t('toast.writePersonName')); return; }
-    const email=document.getElementById('eq-email').value.trim();
+  async function guardarNovoMembro(){
+    const emailEl=document.getElementById('eq-email');
+    const email=emailEl.value.trim();
+    if(!email){ emailEl.focus(); showToast(t('toast.writePersonName')); return; }
     const papel=document.getElementById('eq-papel').value;
-    equipaData.membros.push({id:'m'+Date.now(), nome, email, papel, admin:false});
-    saveEquipaData();
-    closeInfo();
-    renderEquipaView();
-    atualizarContagemEquipaNav();
-    showToast(nome+t('team.memberAdded'));
+    const { data:sessionData } = await sb.auth.getSession();
+    const access_token = sessionData && sessionData.session && sessionData.session.access_token;
+    try{
+      const res=await fetch('/api/team/invite', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({access_token, workspace_id:currentWorkspaceId, email, papel})});
+      const body=await res.json().catch(()=>({}));
+      if(!res.ok || !body.ok){ showToast(body.error || t('toast.inviteError')); return; }
+      await loadEquipaData();
+      closeInfo();
+      renderEquipaView();
+      showToast(email+t('team.memberAdded'));
+    }catch(e){ showToast(t('toast.inviteError')); }
   }
-  function abrirAlterarPapel(id){
-    const m=equipaData.membros.find(x=>x.id===id);
+  function abrirAlterarPapel(userId){
+    const m=membrosEquipa.find(x=>x.user_id===userId);
     if(!m) return;
-    openInfo(t('modal.changeRolePrefix')+m.nome, Object.keys(PAPEIS_EQUIPA_KEYS).filter(p=>p!=='Admin').map(p=>
-      '<div class="pick-row'+(m.papel===p?' selected':'')+'" onclick="definirPapelMembro(\''+id+'\',\''+p+'\')"><div><div class="nm">'+papelNome(p)+'</div><div class="sub">'+papelDesc(p)+'</div></div></div>'
+    openInfo(t('modal.changeRolePrefix')+(m.email||''), Object.keys(PAPEIS_EQUIPA_KEYS).filter(p=>p!=='Admin').map(p=>
+      '<div class="pick-row'+(m.papel===p?' selected':'')+'" onclick="definirPapelMembro(\''+userId+'\',\''+p+'\')"><div><div class="nm">'+papelNome(p)+'</div><div class="sub">'+papelDesc(p)+'</div></div></div>'
     ).join(''));
   }
-  function definirPapelMembro(id,papel){
-    const m=equipaData.membros.find(x=>x.id===id);
-    if(m) m.papel=papel;
-    saveEquipaData();
+  async function definirPapelMembro(userId,papel){
+    const { error } = await sb.from('workspace_members').update({papel}).eq('workspace_id',currentWorkspaceId).eq('user_id',userId);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    await loadEquipaData();
     closeInfo();
     renderEquipaView();
     showToast(t('toast.roleUpdated'));
   }
-  function removerMembroEquipa(id){
-    equipaData.membros=equipaData.membros.filter(x=>x.id!==id);
-    saveEquipaData();
+  async function removerMembroEquipa(userId){
+    const { error } = await sb.from('workspace_members').delete().eq('workspace_id',currentWorkspaceId).eq('user_id',userId);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    await loadEquipaData();
     renderEquipaView();
     atualizarContagemEquipaNav();
     showToast(t('toast.personRemoved'));
@@ -3567,6 +3833,7 @@
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
     if(n===2) renderModelosSugeridos();
+    if(n===3) renderSeletorEquipaTrabalho();
     if(n===4) renderReview();
     syncChrome();
   }
@@ -3650,6 +3917,25 @@
   /* ===== Endereço — um único campo, geocodificação real (OpenStreetMap/Nominatim, sem chave) com fallback local ===== */
   let twGeoTimer=null;
   let twSelectedGeo=null;
+  let twSelectedMembros=[];
+  function renderSeletorEquipaTrabalho(){
+    const wrap=document.getElementById('tw-equipa-wrap');
+    if(!wrap) return;
+    if(membrosEquipa.length<=1){ wrap.style.display='none'; return; }
+    wrap.style.display='block';
+    if(!twSelectedMembros.length) twSelectedMembros=[currentUser.id];
+    document.getElementById('tw-equipa-lista').innerHTML = membrosEquipa.map(m=>{
+      const marcado=twSelectedMembros.includes(m.user_id);
+      return '<div class="struct-row" style="cursor:pointer" onclick="toggleMembroTrabalho(\''+m.user_id+'\')">'+
+        '<div class="struct-l"><div class="nm">'+escapeHtml(m.email||'')+(m.user_id===currentUser.id?' '+t('team.youTag'):'')+'</div></div>'+
+        '<div class="toggle'+(marcado?' on':'')+'"><div class="kn"></div></div></div>';
+    }).join('');
+  }
+  function toggleMembroTrabalho(userId){
+    const i=twSelectedMembros.indexOf(userId);
+    if(i>=0) twSelectedMembros.splice(i,1); else twSelectedMembros.push(userId);
+    renderSeletorEquipaTrabalho();
+  }
   let _twAddrResults=null;
   let _twAddrLocal=null;
   function onEnderecoInput(){
@@ -3699,7 +3985,7 @@
   ];
   function mostrarSugestoesLocais(q){
     const dd=document.getElementById('tw-addr-dropdown');
-    const usados=Object.values(jobsData).map(j=>j.local).filter(Boolean);
+    const usados=jobsVisiveis().map(j=>j.local).filter(Boolean);
     const all=[...new Set([...usados, ...ENDERECOS_BASE])].filter(a=>a.toLowerCase().includes(q.toLowerCase())).slice(0,8);
     if(!all.length){
       dd.innerHTML='<div class="addr-loading" style="color:var(--neutral)">'+t('wizard.noAddressMatches')+'</div>';
@@ -3813,13 +4099,14 @@
       };
     }
 
+    const clienteExistente=Object.values(clientesData).find(c=>c.nome===cliente);
     const id='job'+Date.now();
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
-      email:cliente.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z\s]/g,'').trim().replace(/\s+/g,'.')+'@exemplo.pt',
+      email:(clienteExistente&&clienteExistente.email)||'',
       date:data, dateRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
-      payments:[], milestones:[], reminders:[], history:[] };
+      payments:[], milestones:[], reminders:[], history:[], assignedTo:twSelectedMembros.slice() };
     job.milestones = gerarMilestones(job);
     job.payments = job.structure.pagamentos ? gerarPagamentos(job) : [];
     job.reminders = job.structure.lembretes ? gerarLembretes(job) : [];
@@ -3881,7 +4168,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedMembros=[];
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -3934,7 +4221,9 @@
     }, 26);
   }
 
-  const REL_MESES=[[0,2026,1800,3800],[1,2026,2100,3900],[2,2026,1950,4000],[3,2026,2600,4100],[4,2026,2300,4200],[5,2026,null,null]];
+  /* Só há dados reais do mês atual — sem histórico de meses anteriores ainda,
+     por isso não inventamos números para navegação entre meses passados. */
+  const REL_MESES=[[new Date().getMonth(), new Date().getFullYear(), null, null]];
   let relMonthIndex=REL_MESES.length-1;
   function relMonthNav(dir){
     const next=relMonthIndex+dir;
@@ -3955,8 +4244,11 @@
     document.getElementById('rel-month-label').textContent=mesLabelCompleto;
     document.getElementById('rel-next-btn').style.opacity = ehAtual ? '.35':'1';
     document.getElementById('rel-next-btn').style.pointerEvents = ehAtual ? 'none':'auto';
+    const ehPrimeiro = relMonthIndex===0;
+    document.getElementById('rel-prev-btn').style.opacity = ehPrimeiro ? '.35':'1';
+    document.getElementById('rel-prev-btn').style.pointerEvents = ehPrimeiro ? 'none':'auto';
 
-    const pct=Math.min(100, Math.round(recebido/previsto*100));
+    const pct= previsto>0 ? Math.min(100, Math.round(recebido/previsto*100)) : 0;
     const circ=2*Math.PI*52;
     const fg=document.getElementById('ring-fg');
     fg.style.transition='none';
@@ -3974,7 +4266,7 @@
     document.getElementById('rel-meta').textContent=fmtMoney(previsto);
 
     const months=REL_MESES.map((m,i)=> i===REL_MESES.length-1 ? [m[0], recebido, previsto] : [m[0], m[2], m[3]]);
-    const max=Math.max(...months.map(m=>Math.max(m[1],m[2])));
+    const max=Math.max(1, ...months.map(m=>Math.max(m[1],m[2])));
     const bc=document.getElementById('barchart');
     bc.innerHTML=months.map((m,i)=>{
       const h=Math.round(m[1]/max*100);
@@ -4138,8 +4430,8 @@
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
-    gerarLinkContrato(builderContext);
     openJob(builderContext);
+    abrirDefinirPrazoPortal(builderContext);
   }
   /* ===== Regra de negócio: contrato ↔ trabalho =====
      Um contrato já enviado ou assinado deixa de poder ser editado.
@@ -4252,6 +4544,8 @@
   const BADGE_MONEY=badge('c-pagamentos', ICON_MONEY);
   const BADGE_BELL=badge('c-lembretes', ICON_BELL);
   const BADGE_HIST=badge('c-historico', ICON_HIST);
+  const ICON_TEAM=iconWrap('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>');
+  const BADGE_TEAM=badge('c-entrega', ICON_TEAM);
   const ICON_GRIP='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg>';
   const ICON_PENCIL=iconWrap('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>');
   const ICON_LINK=iconWrap('<path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/>');
@@ -4345,7 +4639,7 @@
     if(!nome){ nomeEl.focus(); showToast(t('toast.nameRequired')); return; }
     if(!anexoContratoFile){ showToast(t('toast.uploadFileFirst')); return; }
     let ficheiroDataUrl=null;
-    try{ ficheiroDataUrl=await fileParaDataUrl(anexoContratoFile); }catch(e){}
+    try{ ficheiroDataUrl=await arquivoParaDataUrlComprimido(anexoContratoFile); }catch(e){}
     job.contract.anexo={nome, ficheiroNome:anexoContratoFile.name, ficheiroDataUrl, anexadoEm:new Date().toISOString()};
     pushHistory(job,t('toast.contractAttached')+nome);
     saveJobsData();
@@ -4383,51 +4677,162 @@
     const d=new Date();
     job.contract.lastModified=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
   }
-  async function gerarLinkContrato(jobId){
+  async function gerarLinkContrato(jobId, prazoISO){
     const job=jobsData[jobId];
     const token=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'').slice(0,20);
-    const { error } = await sb.from('portal_tokens').insert({ token, workspace_id: currentWorkspaceId, job_id: jobId });
+    const row={ token, workspace_id: currentWorkspaceId, job_id: jobId };
+    if(prazoISO) row.expires_at = prazoISO+'T23:59:59';
+    const { error } = await sb.from('portal_tokens').insert(row);
     if(error){ console.error(error); showToast('Erro ao gerar link. Tenta novamente.'); return; }
     job.contract.link = window.location.origin + '/?portal=' + token;
     job.contract.status='enviado';
     pushHistory(job,t('toast.contractGenerated'));
     saveJobsData(); updateJobCard(jobId);
     showToast(t('toast.linkGenerated'));
+    const prazoTexto = prazoISO ? new Date(prazoISO+'T00:00:00').toLocaleDateString('pt-PT') : null;
+    dispararEmailEvento(job.structure.briefing?'briefingDisponivel':'contratoEnviado', job.email, job, prazoTexto);
   }
-  function emailPreviewHtml(job, tipo){
-    const subject = tipo==='confirmacao' ? t('email.confirmationSubject') : t('email.contractReadySubject');
-    const heroTitle = tipo==='confirmacao' ? t('email.allSigned') : t('email.contractReadySubject');
-    const heroSub = tipo==='confirmacao'
-      ? t('email.thanksPrefix')+escapeHtml(job.client)+t('email.confirmSuffix')
-      : t('email.greeting')+escapeHtml(job.client)+t('email.readySuffix');
-    const signed=tipo==='confirmacao';
-    const stages=[
-      {lbl:t('modal.signature'), state: signed?'done':'now'},
-      {lbl:t('job.payment.deposit'),      state: signed?'now':''},
-      {lbl:t('email.stageEvent'),     state:''},
-      {lbl:t('job.delivery.final'),    state:''}
-    ];
-    const stepperHtml='<div class="email-stepper"><div class="email-stepper-line"></div>'+
-      stages.map(s=>'<div class="email-step '+s.state+'"><div class="dot">'+(s.state==='done'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'')+'</div><span class="lbl">'+s.lbl+'</span></div>').join('')+
+  function abrirDefinirPrazoPortal(id){
+    const daqui14=new Date(Date.now()+14*86400000).toISOString().slice(0,10);
+    openInfo('Prazo para o cliente', `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">Define até quando o cliente pode assinar o contrato e preencher o briefing. Depois deste prazo, o link deixa de funcionar.</p>
+      <div class="field"><label>Disponível até</label><input type="date" id="pp-prazo-input" value="${daqui14}"></div>
+      <button class="btn primary" style="width:100%" onclick="confirmarPrazoEGerarLink('${id}')">Gerar link</button>`);
+  }
+  function confirmarPrazoEGerarLink(id){
+    const prazo=document.getElementById('pp-prazo-input').value;
+    closeInfo();
+    gerarLinkContrato(id, prazo||null).then(()=>{
+      if(document.getElementById('v-detalhe').classList.contains('active')) renderJobDetailDynamic(id);
+      abrirCompartilharPortal(id);
+    });
+  }
+  /* ===== Template universal de email — reutilizado por todos os tipos de notificação =====
+     Branding (logo/nome/contactos da empresa) só aparece nos planos Business/Enterprise;
+     nos restantes planos essa secção fica vazia (sem inventar dados). */
+  const TIPOS_EMAIL = {
+    contratoEnviado:    { badgeKey:'email.badge.contractSent',     titleKey:'email.title.contractSent',     bodyKey:'email.body.contractSent',     ctaKey:'email.cta.signContract',   deadline:true,  doneUpTo:-1, current:0 },
+    contratoAssinado:   { badgeKey:'email.badge.contractSigned',   titleKey:'email.title.contractSigned',   bodyKey:'email.body.contractSigned',   ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:0,  current:1 },
+    briefingDisponivel: { badgeKey:'email.badge.briefingReady',    titleKey:'email.title.briefingReady',    bodyKey:'email.body.briefingReady',    ctaKey:'email.cta.fillBriefing',   deadline:true,  doneUpTo:0,  current:1 },
+    briefingPreenchido: { badgeKey:'email.badge.briefingDone',     titleKey:'email.title.briefingDone',     bodyKey:'email.body.briefingDone',     ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:1,  current:2 },
+    pagamentoPendente:  { badgeKey:'email.badge.paymentDue',       titleKey:'email.title.paymentDue',       bodyKey:'email.body.paymentDue',       ctaKey:'email.cta.payNow',         deadline:true,  doneUpTo:1,  current:2 },
+    pagamentoRecebido:  { badgeKey:'email.badge.paymentReceived',  titleKey:'email.title.paymentReceived',  bodyKey:'email.body.paymentReceived',  ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:2,  current:3 },
+    entregaDisponivel:  { badgeKey:'email.badge.deliveryReady',    titleKey:'email.title.deliveryReady',    bodyKey:'email.body.deliveryReady',    ctaKey:'email.cta.reviewDelivery', deadline:true,  doneUpTo:3,  current:4 },
+    entregaAprovada:    { badgeKey:'email.badge.deliveryApproved', titleKey:'email.title.deliveryApproved', bodyKey:'email.body.deliveryApproved', ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 },
+    projetoConcluido:   { badgeKey:'email.badge.projectDone',      titleKey:'email.title.projectDone',      bodyKey:'email.body.projectDone',      ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 }
+  };
+  const EMAIL_STAGE_KEYS=['email.stage.contract','email.stage.briefing','email.stage.payment','email.stage.execution','email.stage.delivery'];
+  function planPermiteBranding(){ return perfilData.plano==='Business' || perfilData.plano==='Enterprise'; }
+  function dadosNegocioParaEmail(){
+    if(!planPermiteBranding()) return {logoUrl:'', nome:'', subtitulo:'', email:'', telefone:'', website:''};
+    return {
+      logoUrl: perfilData.empresaFotoUrl||'',
+      nome: perfilData.empresa||'',
+      subtitulo: perfilData.categoria||'',
+      email: perfilData.empresaEmail||'',
+      telefone: perfilData.telefone||'',
+      website: perfilData.website||''
+    };
+  }
+  function emailBrandHeadHtml(){
+    const b=dadosNegocioParaEmail();
+    if(!b.nome && !b.email && !b.telefone && !b.website) return '';
+    const inicial=(b.nome||'?').charAt(0).toUpperCase();
+    const logo = b.logoUrl ? '<img src="'+b.logoUrl+'" alt="">' : inicial;
+    const contactos=[b.email, b.telefone, b.website].filter(Boolean).map(escapeHtml).join(' &nbsp;·&nbsp; ');
+    return '<div class="email-brand-head">'+
+      '<div class="email-brand-logo">'+logo+'</div>'+
+      (b.nome?'<div class="email-brand-name">'+escapeHtml(b.nome)+'</div>':'')+
+      (b.subtitulo?'<div class="email-brand-sub">'+escapeHtml(b.subtitulo)+'</div>':'')+
+      (contactos?'<div class="email-brand-contacts">'+contactos+'</div>':'')+
       '</div>';
-    const incluso=job.contract.blocks.filter(b=>b.on).map(b=>
-      '<div class="email-check-item">'+iconWrap('<path d="M20 6 9 17l-5-5"/>')+escapeHtml(blockName(b))+'</div>'
-    ).join('') || '<div style="font-size:13px;color:var(--neutral)">'+t('email.noActiveBlocks')+'</div>';
-
+  }
+  function emailDetalhesEventoHtml(job){
+    const linhas=[];
+    if(job.date) linhas.push([t('email.detail.date'), job.date]);
+    if(job.local) linhas.push([t('email.detail.location'), job.local]);
+    if(!linhas.length) return '';
+    return '<div class="email-details"><div class="ttl">'+t('email.eventDetailsTitle')+'</div>'+
+      linhas.map(l=>'<div class="email-detail-row"><span>'+escapeHtml(l[0])+'</span><span>'+escapeHtml(l[1])+'</span></div>').join('')+
+      '</div>';
+  }
+  function construirEmailUniversal(job, tipo, prazoTexto){
+    const cfg=TIPOS_EMAIL[tipo];
+    if(!cfg) return '';
+    const stepperHtml='<div class="email-stepper"><div class="email-stepper-line"></div>'+
+      EMAIL_STAGE_KEYS.map((key,i)=>{
+        const state = i<=cfg.doneUpTo ? 'done' : (i===cfg.current ? 'now' : '');
+        return '<div class="email-step '+state+'"><div class="dot">'+(state==='done'?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'')+'</div><span class="lbl">'+t(key)+'</span></div>';
+      }).join('')+
+      '</div>';
+    const deadlineHtml = (cfg.deadline && prazoTexto)
+      ? '<div class="email-deadline">'+iconWrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')+'<div>'+t('email.deadlineLabel')+'<b>'+escapeHtml(prazoTexto)+'</b></div></div>'
+      : '';
     return '<div class="email-note">'+iconWrap('<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>')+
       '<div>'+t('email.previewNote')+'</div></div>'+
       '<div class="email-mock">'+
-        '<div class="email-head">'+
-          '<div class="lm"><svg viewBox=\"0 0 36 44\" aria-hidden=\"true\" style=\"width:0.62em;height:0.85em;vertical-align:-0.14em;display:inline-block\"><path d=\"M3 22L14 36L33 4\" stroke=\"var(--done)\" stroke-width=\"9\" stroke-linecap=\"round\" stroke-linejoin=\"round\" fill=\"none\"/></svg><span>Pivot</span></div>'+
-          '<h3>'+heroTitle+'</h3><p>'+heroSub+'</p>'+
-        '</div>'+
-        '<div class="email-body">'+
+        emailBrandHeadHtml()+
+        '<div class="email-body" style="padding-top:22px">'+
+          '<div class="email-badge">'+t(cfg.badgeKey)+'</div>'+
+          '<h3 style="font-family:\'Jost\',sans-serif;font-weight:600;font-size:20px;margin:0 0 8px">'+t(cfg.titleKey)+'</h3>'+
+          '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 4px">'+t('email.greeting')+escapeHtml(job.client)+',</p>'+
+          '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 14px">'+t(cfg.bodyKey)+'</p>'+
+          deadlineHtml+
           stepperHtml+
-          '<div class="email-checklist"><div class="ttl">'+t('email.whatIncluded')+'</div>'+incluso+'</div>'+
-          '<div class="email-cta">'+(signed? t('job.contract.download') : t('job.contract.viewAndSign'))+'</div>'+
+          emailDetalhesEventoHtml(job)+
+          '<div class="email-cta">'+t(cfg.ctaKey)+'</div>'+
         '</div>'+
-        '<div class="email-foot">'+escapeHtml(perfilData.empresa||t('defaults.companyName'))+t('email.footerPrefix')+subject+'</div>'+
+        '<div class="email-foot">Pivot &nbsp;·&nbsp; '+t('email.poweredBy')+'</div>'+
       '</div>';
+  }
+  /* Versão do template com estilos inline — para envio real via Resend.
+     Clientes de email não carregam a folha de estilos da app nem entendem
+     var(--...), por isso esta versão duplica o layout com cores fixas. */
+  function construirEmailUniversalInline(job, tipo, prazoTexto){
+    const cfg=TIPOS_EMAIL[tipo];
+    if(!cfg) return '';
+    const VERDE='#15532D', VERDE_CLARO='#EAF3EC', CINZA='#6B6459', LINHA='#E7E2D6';
+    const b=dadosNegocioParaEmail();
+    const brandHead = (b.nome||b.email||b.telefone)
+      ? '<tr><td style="padding:26px 24px;border-bottom:1px solid '+LINHA+';text-align:center;font-family:Arial,sans-serif">'+
+        (b.logoUrl?'<img src="'+b.logoUrl+'" width="56" height="56" style="border-radius:50%;object-fit:cover" alt="">':'<div style="width:56px;height:56px;border-radius:50%;background:#111;color:#fff;display:inline-block;line-height:56px;font-size:20px;font-weight:bold">'+escapeHtml((b.nome||'?').charAt(0).toUpperCase())+'</div>')+
+        (b.nome?'<div style="margin-top:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:15px;color:#111">'+escapeHtml(b.nome)+'</div>':'')+
+        (b.subtitulo?'<div style="font-size:11px;color:'+CINZA+';text-transform:uppercase;letter-spacing:.05em;margin-top:2px">'+escapeHtml(b.subtitulo)+'</div>':'')+
+        ([b.email,b.telefone,b.website].filter(Boolean).length?'<div style="font-size:11.5px;color:'+CINZA+';margin-top:10px">'+[b.email,b.telefone,b.website].filter(Boolean).map(escapeHtml).join(' &nbsp;·&nbsp; ')+'</div>':'')+
+        '</td></tr>' : '';
+    const deadlineHtml = (cfg.deadline && prazoTexto)
+      ? '<tr><td style="padding:0 24px"><div style="background:'+VERDE_CLARO+';border-radius:10px;padding:12px 14px;margin:14px 0;font-size:12.5px;color:'+CINZA+';font-family:Arial,sans-serif">'+t('email.deadlineLabel')+'<b style="display:block;color:#111;font-size:13.5px">'+escapeHtml(prazoTexto)+'</b></div></td></tr>'
+      : '';
+    const detalhes=[];
+    if(job.date) detalhes.push([t('email.detail.date'), job.date]);
+    if(job.local) detalhes.push([t('email.detail.location'), job.local]);
+    const detalhesHtml = detalhes.length
+      ? '<tr><td style="padding:0 24px 18px"><div style="background:#F7F5EE;border-radius:10px;padding:14px 16px;font-family:Arial,sans-serif">'+
+        '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;color:'+CINZA+';text-transform:uppercase;margin-bottom:8px">'+t('email.eventDetailsTitle')+'</div>'+
+        detalhes.map(d=>'<div style="display:flex;justify-content:space-between;font-size:13px;color:#111;padding:3px 0"><span style="color:'+CINZA+'">'+escapeHtml(d[0])+'</span><span>'+escapeHtml(d[1])+'</span></div>').join('')+
+        '</div></td></tr>' : '';
+    return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid '+LINHA+';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">'+
+      brandHead+
+      '<tr><td style="padding:22px 24px 0">'+
+        '<span style="display:inline-block;background:'+VERDE_CLARO+';color:'+VERDE+';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">'+t(cfg.badgeKey)+'</span>'+
+        '<h2 style="font-size:20px;font-weight:700;margin:12px 0 8px;color:#111">'+t(cfg.titleKey)+'</h2>'+
+        '<p style="font-size:13px;color:'+CINZA+';margin:0 0 4px">'+t('email.greeting')+escapeHtml(job.client)+',</p>'+
+        '<p style="font-size:13px;color:'+CINZA+';margin:0 0 6px">'+t(cfg.bodyKey)+'</p>'+
+      '</td></tr>'+
+      deadlineHtml+
+      detalhesHtml+
+      '<tr><td style="padding:0 24px 26px"><a href="'+escapeHtml(job.contract&&job.contract.link||'#')+'" style="display:block;text-align:center;background:'+VERDE+';color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px;text-decoration:none">'+t(cfg.ctaKey)+'</a></td></tr>'+
+      '<tr><td style="padding:14px 24px;border-top:1px solid '+LINHA+';text-align:center;font-size:11px;color:'+CINZA+'">Pivot &nbsp;·&nbsp; '+t('email.poweredBy')+'</td></tr>'+
+      '</table>';
+  }
+  async function dispararEmailEvento(tipo, destinatario, job, prazoTexto){
+    if(!destinatario) return;
+    const cfg=TIPOS_EMAIL[tipo];
+    if(!cfg) return;
+    try{
+      await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailUniversalInline(job, tipo, prazoTexto)})});
+    }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
   }
   function copiarLinkContrato(id){
     const job=jobsData[id]; const url=job.contract.link;
@@ -4453,7 +4858,7 @@
     if(!job.contract.link){
       openInfo(t('portal.shareTitle'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('portal.shareGenerateHint')}</p>
-        <button class="btn primary" style="width:100%" onclick="gerarLinkContrato('${id}').then(()=>abrirCompartilharPortal('${id}'))">${t('job.contract.getLink')}</button>
+        <button class="btn primary" style="width:100%" onclick="abrirDefinirPrazoPortal('${id}')">${t('job.contract.getLink')}</button>
         <button class="btn ghost" style="width:100%;margin-top:8px" onclick="closeInfo();abrirComoClienteSimulado('${id}')">${t('job.preview')}</button>`);
     } else {
       openInfo(t('portal.shareTitle'), `
@@ -4473,6 +4878,7 @@
     pushHistory(job, job.payments[i].label+(viaComprovativo?t('payment.history.confirmed'):t('payment.history.marked')));
     saveJobsData(); renderJobDetailDynamic(id); updateJobCard(id); renderMonthTicker();
     showToast(viaComprovativo? t('payment.confirmed') : t('payment.markedPaid'));
+    dispararEmailEvento('pagamentoRecebido', job.email, job);
   }
 
   function renderJobDetailDynamic(id){
@@ -4540,11 +4946,11 @@
       html+=contractSummaryHtml(job);
       html+='<div style="display:flex;gap:8px;margin-top:10px">';
       html+='<button class="btn soft" style="flex:1" onclick="abrirBuilder(\''+id+'\')">'+t('action.edit')+' '+t('job.contract')+'</button>';
-      html+='<button class="btn primary" style="flex:1" onclick="gerarLinkContrato(\''+id+'\');renderJobDetailDynamic(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+      html+='<button class="btn primary" style="flex:1" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
       html+='</div>';
     } else if(job.contract.status==='enviado'){
       html+=contractSummaryHtml(job);
-      html+='<button class="btn soft" style="width:100%;margin-top:10px" onclick="gerarLinkContrato(\''+id+'\');renderJobDetailDynamic(\''+id+'\')">'+t('job.contract.newLink')+'</button>';
+      html+='<button class="btn soft" style="width:100%;margin-top:10px" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.newLink')+'</button>';
       html+='<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">';
       html+='<button class="btn ghost" style="flex:1" onclick="copiarLinkContrato(\''+id+'\')">'+ICON_LINK+' '+t('job.contract.copyLink')+'</button>';
       html+='<button class="btn ghost" style="flex:1" onclick="enviarPorEmail(\''+id+'\')">'+ICON_MAIL+' '+t('job.contract.email')+'</button>';
@@ -4640,7 +5046,10 @@
       html+='</div></div>';
     }
 
+    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body" style="display:block"><div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div></div></div>';
+
     document.getElementById('detalhe-dynamic').innerHTML=html;
+    carregarColaboradoresJob(id);
   }
   function toggleChecklistItem(jobId, i, el){
     const job=jobsData[jobId];
@@ -4660,11 +5069,307 @@
     return p==='Urgente' ? 'urgente' : p==='Importante' ? 'media' : 'normal';
   }
 
+  /* ===== Colaborador Externo — partilha granular de parte de um trabalho
+     com um utilizador já registado, sem lhe dar acesso ao workspace. Os
+     dados partilhados vivem numa cópia própria (escopo), nunca no trabalho
+     original — editar aqui não altera o trabalho real. ===== */
+  const PERMISSOES_COLAB=[
+    ['briefing','collab.perm.briefing'], ['checklist','collab.perm.checklist'], ['arquivos','collab.perm.files'],
+    ['datas','collab.perm.dates'], ['horas','collab.perm.hours'], ['contrato','collab.perm.contract'], ['financeiro','collab.perm.financial']
+  ];
+  const NIVEIS_COLAB=[
+    ['leitura','collab.level.read','collab.level.readDesc'],
+    ['colaboracao','collab.level.collab','collab.level.collabDesc'],
+    ['responsavel','collab.level.owner','collab.level.ownerDesc']
+  ];
+  function papelNomeColaborador(n){ return t(NIVEIS_COLAB.find(x=>x[0]===n)[1]); }
+  const MODELOS_ACORDO={
+    nda: {nomeKey:'collab.agreement.nda', texto:'Acordo de Não Divulgação — o Colaborador compromete-se a não divulgar nenhuma informação confidencial partilhada no âmbito deste trabalho.'},
+    confidencialidade: {nomeKey:'collab.agreement.confidentiality', texto:'Acordo de Confidencialidade — toda a informação partilhada deve ser tratada como confidencial e não pode ser usada fora do âmbito deste trabalho.'},
+    prestacao: {nomeKey:'collab.agreement.services', texto:'Acordo de Prestação de Serviços — o Colaborador presta os serviços especificados no âmbito deste trabalho, nos termos combinados com o profissional.'},
+    personalizado: {nomeKey:'collab.agreement.custom', texto:''}
+  };
+
+  let colaboradoresCache={};
+  async function carregarColaboradoresJob(jobId){
+    const { data, error } = await sb.from('external_collaborators').select('*').eq('job_id', jobId).eq('workspace_id', currentWorkspaceId).neq('status','removido');
+    colaboradoresCache[jobId] = error ? [] : (data||[]);
+    renderSecaoColaboradoresExternos(jobId);
+  }
+  function renderSecaoColaboradoresExternos(jobId){
+    const wrap=document.getElementById('colab-lista-'+jobId);
+    if(!wrap) return;
+    const lista=colaboradoresCache[jobId]||[];
+    wrap.innerHTML = lista.length ? lista.map(c=>
+      '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.email)+'</div><span class="sub">'+papelNomeColaborador(c.nivel_acesso)+(c.acordo&&c.acordo.modelo?(c.acordo.assinado?' · '+t('collab.agreementSigned'):' · '+t('collab.agreementPending')):'')+'</span></div>'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
+  }
+  async function removerColaboradorExterno(id, jobId){
+    const { error } = await sb.from('external_collaborators').update({status:'removido'}).eq('id',id);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    await carregarColaboradoresJob(jobId);
+    showToast(t('toast.personRemoved'));
+  }
+
+  let colabExternoEmailEncontrado=null, colabExternoNivel='leitura', colabExternoEscopo=null, colabExternoAcordo=null;
+  function abrirAdicionarColaboradorExterno(jobId){
+    colabExternoEmailEncontrado=null; colabExternoNivel='leitura'; colabExternoEscopo=null; colabExternoAcordo=null;
+    openInfo(t('collab.title'), `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('collab.searchHint')}</p>
+      <div class="field"><label>Email</label><input id="colab-email" placeholder="email@exemplo.pt"></div>
+      <button class="btn primary" style="width:100%" onclick="procurarColaboradorExterno('${jobId}')">${t('collab.search')}</button>`);
+  }
+  async function procurarColaboradorExterno(jobId){
+    const email=document.getElementById('colab-email').value.trim();
+    if(!email){ showToast(t('toast.writePersonName')); return; }
+    const { data:sessionData } = await sb.auth.getSession();
+    const access_token = sessionData && sessionData.session && sessionData.session.access_token;
+    try{
+      const res=await fetch('/api/team/lookup-user', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({access_token, email})});
+      const body=await res.json().catch(()=>({}));
+      if(!res.ok){ showToast(t('toast.inviteError')); return; }
+      if(!body.exists){
+        openInfo(t('collab.title'), `<p style="font-size:13.5px;color:var(--ink-soft)">${t('collab.notFound')}</p><button class="btn soft" style="width:100%;margin-top:12px" onclick="abrirAdicionarColaboradorExterno('${jobId}')">${t('action.back')}</button>`);
+        return;
+      }
+      colabExternoEmailEncontrado=body;
+      abrirConfigurarColaboradorExterno(jobId);
+    }catch(e){ showToast(t('toast.inviteError')); }
+  }
+  function abrirConfigurarColaboradorExterno(jobId){
+    const u=colabExternoEmailEncontrado;
+    const permissoesHtml=PERMISSOES_COLAB.map(([key,labelKey])=>
+      '<div class="struct-row"><div class="struct-l"><div class="nm">'+t(labelKey)+'</div></div><div class="toggle" id="colab-perm-'+key+'" onclick="this.classList.toggle(\'on\')"><div class="kn"></div></div></div>'
+    ).join('');
+    const niveisHtml=NIVEIS_COLAB.map(([key,labelKey,descKey])=>
+      '<div class="pick-row'+(colabExternoNivel===key?' selected':'')+'" onclick="selecionarNivelColaborador(\''+key+'\',\''+jobId+'\')"><div><div class="nm">'+t(labelKey)+'</div><div class="sub">'+t(descKey)+'</div></div></div>'
+    ).join('');
+    openInfo(t('collab.title'), `
+      <div class="struct-row" style="margin-bottom:12px"><div class="struct-l"><div class="nm">${escapeHtml(u.nome||u.email)}</div><span class="sub">${escapeHtml(u.email)}</span></div></div>
+      <p class="plabel" style="margin:6px 2px 9px">${t('collab.permissionsTitle')}</p>
+      ${permissoesHtml}
+      <p class="plabel" style="margin:16px 2px 9px">${t('collab.levelTitle')}</p>
+      ${niveisHtml}
+      <button class="btn ghost" style="width:100%;margin-top:14px" onclick="abrirEscopoColaboradorExterno('${jobId}')">${t('collab.customizeScope')}</button>
+      <button class="btn ghost" style="width:100%;margin-top:8px" onclick="abrirAcordoColaboradorExterno('${jobId}')">${t('collab.agreementOptional')}</button>
+      <button class="btn primary" style="width:100%;margin-top:14px" onclick="convidarColaboradorExterno('${jobId}')">${t('collab.invite')}</button>`);
+  }
+  function selecionarNivelColaborador(nivel, jobId){ colabExternoNivel=nivel; abrirConfigurarColaboradorExterno(jobId); }
+  function escopoBaseColaborador(job, jobId){
+    return colabExternoEscopo || {
+      horasPrevistas: job.duracaoHoras || (job.servico&&job.servico.horas) || null,
+      checklist: job.checklist ? job.checklist.itens.map(c=>({t:c.t, feito:false})) : [],
+      tarefas: Object.values(tarefasData).filter(tk=>tk.jobId===jobId).map(tk=>({id:tk.id, titulo:tk.titulo, feito:false})),
+      documentos: []
+    };
+  }
+  function abrirEscopoColaboradorExterno(jobId){
+    const job=jobsData[jobId];
+    colabExternoEscopo=escopoBaseColaborador(job, jobId);
+    renderEscopoColaboradorExterno(jobId);
+  }
+  function renderEscopoColaboradorExterno(jobId){
+    const esc=colabExternoEscopo;
+    openInfo(t('collab.customizeScope'), `
+      <div class="field"><label>${t('collab.hoursForThisPerson')}</label><input type="number" id="colab-escopo-horas" value="${esc.horasPrevistas||''}"></div>
+      <p class="plabel" style="margin:14px 2px 9px">${t('wizard.model.checklist')}</p>
+      <div>${esc.checklist.map((c,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.t)+'</div></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerItemEscopoChecklist('+i+',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>').join('') || '<p style="font-size:12.5px;color:var(--neutral)">—</p>'}</div>
+      <p class="plabel" style="margin:14px 2px 9px">${t('cost.tasks')}</p>
+      <div>${esc.tarefas.map((tk,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(tk.titulo)+'</div></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerItemEscopoTarefa('+i+',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>').join('') || '<p style="font-size:12.5px;color:var(--neutral)">—</p>'}</div>
+      <p class="plabel" style="margin:14px 2px 9px">${t('collab.perm.files')}</p>
+      <div id="colab-escopo-docs">${esc.documentos.map((d,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(d.nome)+'</div></div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerItemEscopoDoc('+i+',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>').join('')}</div>
+      <div class="field"><input type="file" id="colab-escopo-file-input" onchange="adicionarDocEscopo(this,'${jobId}')"></div>
+      <button class="btn primary" style="width:100%;margin-top:10px" onclick="guardarEscopoColaboradorExterno('${jobId}')">${t('action.save')}</button>`);
+  }
+  function removerItemEscopoChecklist(i,jobId){ colabExternoEscopo.checklist.splice(i,1); renderEscopoColaboradorExterno(jobId); }
+  function removerItemEscopoTarefa(i,jobId){ colabExternoEscopo.tarefas.splice(i,1); renderEscopoColaboradorExterno(jobId); }
+  function removerItemEscopoDoc(i,jobId){ colabExternoEscopo.documentos.splice(i,1); renderEscopoColaboradorExterno(jobId); }
+  async function adicionarDocEscopo(input, jobId){
+    const file=input.files[0]; if(!file) return;
+    try{
+      const dataUrl=await arquivoParaDataUrlComprimido(file);
+      colabExternoEscopo.documentos.push({nome:file.name, dataUrl});
+      renderEscopoColaboradorExterno(jobId);
+    }catch(e){ showToast(t('toast.imageError')); }
+  }
+  function guardarEscopoColaboradorExterno(jobId){
+    colabExternoEscopo.horasPrevistas=parseFloat(document.getElementById('colab-escopo-horas').value)||null;
+    showToast(t('toast.settingsSaved'));
+    abrirConfigurarColaboradorExterno(jobId);
+  }
+  function abrirAcordoColaboradorExterno(jobId){
+    if(!colabExternoAcordo) colabExternoAcordo={modelo:null, texto:''};
+    renderAcordoColaboradorExterno(jobId);
+  }
+  function renderAcordoColaboradorExterno(jobId){
+    const linhas=Object.keys(MODELOS_ACORDO).map(k=>
+      '<div class="pick-row'+(colabExternoAcordo.modelo===k?' selected':'')+'" onclick="selecionarModeloAcordo(\''+k+'\',\''+jobId+'\')"><div><div class="nm">'+t(MODELOS_ACORDO[k].nomeKey)+'</div></div></div>'
+    ).join('');
+    openInfo(t('collab.agreementOptional'), `
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">${t('collab.agreementHint')}</p>
+      ${linhas}
+      <div class="field" style="margin-top:12px"><textarea id="colab-acordo-texto" placeholder="${t('collab.agreementTextPlaceholder')}">${escapeHtml(colabExternoAcordo.texto||'')}</textarea></div>
+      <button class="btn primary" style="width:100%" onclick="guardarAcordoColaboradorExterno('${jobId}')">${t('action.save')}</button>`);
+  }
+  function selecionarModeloAcordo(k,jobId){
+    colabExternoAcordo.modelo=k;
+    colabExternoAcordo.texto=MODELOS_ACORDO[k].texto;
+    renderAcordoColaboradorExterno(jobId);
+  }
+  function guardarAcordoColaboradorExterno(jobId){
+    colabExternoAcordo.texto=document.getElementById('colab-acordo-texto').value.trim();
+    showToast(t('toast.settingsSaved'));
+    abrirConfigurarColaboradorExterno(jobId);
+  }
+  async function convidarColaboradorExterno(jobId){
+    const job=jobsData[jobId];
+    const u=colabExternoEmailEncontrado;
+    if(!u){ showToast(t('toast.inviteError')); return; }
+    const permissoes={};
+    PERMISSOES_COLAB.forEach(([key])=>{
+      const el=document.getElementById('colab-perm-'+key);
+      permissoes[key]= !!(el && el.classList.contains('on'));
+    });
+    const escopo=escopoBaseColaborador(job, jobId);
+    const briefing = permissoes.briefing && job.briefing ? {perguntas:job.briefing.perguntas||[], observacoes:job.briefing.observacoes||''} : null;
+    const datas = permissoes.datas ? {date:job.date, local:job.local} : null;
+    const contrato = permissoes.contrato && job.contract ? {status:job.contract.status} : null;
+    const financeiro = permissoes.financeiro ? {value:job.value, payments:(job.payments||[]).map(p=>({label:p.label, amount:p.amount, status:p.status}))} : null;
+    if(!permissoes.checklist) escopo.checklist=[];
+    if(!permissoes.arquivos) escopo.documentos=[];
+    if(!permissoes.horas) escopo.horasPrevistas=null;
+    const row={
+      workspace_id: currentWorkspaceId, job_id: jobId, user_id: u.userId, email: u.email,
+      nivel_acesso: colabExternoNivel, permissoes,
+      escopo: Object.assign({}, escopo, {briefing, datas, contrato, financeiro, jobNome: job.nome||job.typeLabel, jobCliente: job.client}),
+      acordo: colabExternoAcordo, entregas: [], status: 'ativo'
+    };
+    const { error } = await sb.from('external_collaborators').insert(row);
+    if(error){ console.error(error); showToast(t('toast.inviteError')); return; }
+    colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura';
+    closeInfo();
+    await carregarColaboradoresJob(jobId);
+    showToast(t('collab.invited'));
+  }
+
+  /* ===== Área do próprio colaborador externo ===== */
+  let minhasColaboracoesExternas=[];
+  async function carregarMinhasColaboracoes(){
+    if(!currentUser) return;
+    const { data, error } = await sb.from('external_collaborators').select('*').eq('user_id', currentUser.id).eq('status','ativo');
+    minhasColaboracoesExternas = error ? [] : (data||[]);
+    const navItem=document.getElementById('sb-item-colaboracoes');
+    if(navItem) navItem.style.display = minhasColaboracoesExternas.length ? 'flex' : 'none';
+  }
+  function renderColaboracoesView(){
+    const wrap=document.getElementById('colaboracoes-lista');
+    if(!wrap) return;
+    wrap.innerHTML = minhasColaboracoesExternas.length ? minhasColaboracoesExternas.map(c=>
+      '<div class="job" onclick="abrirColaboracaoExterna(\''+c.id+'\')"><div class="job-top"><div><div class="job-client">'+escapeHtml((c.escopo&&c.escopo.jobCliente)||'')+'</div><div class="job-type">'+escapeHtml((c.escopo&&c.escopo.jobNome)||'')+' · '+papelNomeColaborador(c.nivel_acesso)+'</div></div></div></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.noneAssigned')+'</p>';
+  }
+  function abrirColaboracaoExterna(id){
+    const c=minhasColaboracoesExternas.find(x=>x.id===id);
+    if(!c) return;
+    if(c.acordo && c.acordo.modelo && !c.acordo.assinado){ renderAssinarAcordoColaboracao(c); return; }
+    renderDetalheColaboracaoExterna(c);
+  }
+  function renderAssinarAcordoColaboracao(c){
+    openInfo(t('collab.agreementTitle'), `
+      <p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;margin-bottom:14px;max-height:200px;overflow-y:auto">${escapeHtml(c.acordo.texto||'')}</p>
+      <div class="field"><label>${t('field.name')}</label><input id="colab-assinar-nome" placeholder="${t('field.name')}"></div>
+      <div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">${t('signature.clear')}</span></div>
+      <button class="btn primary" style="width:100%;margin-top:10px" onclick="assinarAcordoColaboracao('${c.id}')">${t('collab.signAndAccess')}</button>`);
+    setTimeout(inicializarCanvasAssinatura, 30);
+  }
+  async function assinarAcordoColaboracao(id){
+    const nome=document.getElementById('colab-assinar-nome').value.trim();
+    if(!nome){ alert(t('toast.writePersonName')); return; }
+    const canvas=document.getElementById('sig-canvas');
+    if(!canvas || !sigHasDrawing){ alert(t('toast.drawSignatureFirst')); return; }
+    const c=minhasColaboracoesExternas.find(x=>x.id===id);
+    const acordo=Object.assign({}, c.acordo, {assinado:true, assinadoEm:new Date().toISOString(), signerName:nome, assinaturaImg:canvas.toDataURL('image/png')});
+    const { error } = await sb.from('external_collaborators').update({acordo}).eq('id',id);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    c.acordo=acordo;
+    closeInfo();
+    renderDetalheColaboracaoExterna(c);
+  }
+  function renderDetalheColaboracaoExterna(c){
+    const e=c.escopo||{};
+    let html='<h3 style="margin:0 0 4px">'+escapeHtml(e.jobNome||'')+'</h3><p style="font-size:13px;color:var(--ink-soft);margin:0 0 16px">'+escapeHtml(e.jobCliente||'')+'</p>';
+    if(e.briefing){
+      html+='<p class="plabel">'+t('job.clientInfo')+'</p>'+(e.briefing.perguntas||[]).map(p=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.q)+'</div></div><span style="font-size:12.5px">'+escapeHtml(p.r||'')+'</span></div>').join('');
+      if(e.briefing.observacoes) html+='<p style="font-size:13px;color:var(--ink-soft);margin-top:6px">'+escapeHtml(e.briefing.observacoes)+'</p>';
+    }
+    if(e.datas) html+='<p class="plabel" style="margin-top:14px">'+t('email.detail.date')+'</p><p style="font-size:13px">'+escapeHtml(e.datas.date||'')+(e.datas.local?(' · '+escapeHtml(e.datas.local)):'')+'</p>';
+    if(e.horasPrevistas) html+='<p class="plabel" style="margin-top:14px">'+t('collab.perm.hours')+'</p><p style="font-size:13px">'+e.horasPrevistas+'h</p>';
+    if(e.checklist && e.checklist.length){
+      html+='<p class="plabel" style="margin-top:14px">'+t('wizard.model.checklist')+'</p>'+e.checklist.map((ck,i)=>
+        '<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(ck.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(ck.t)+'</div></div>'+
+        (c.nivel_acesso==='responsavel'?'<div class="toggle'+(ck.feito?' on':'')+'" onclick="toggleChecklistColaboracao(\''+c.id+'\','+i+')"><div class="kn"></div></div>':'')+'</div>'
+      ).join('');
+    }
+    if(e.tarefas && e.tarefas.length){
+      html+='<p class="plabel" style="margin-top:14px">'+t('cost.tasks')+'</p>'+e.tarefas.map((tk,i)=>
+        '<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(tk.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(tk.titulo)+'</div></div>'+
+        (c.nivel_acesso==='responsavel'?'<div class="toggle'+(tk.feito?' on':'')+'" onclick="toggleTarefaColaboracao(\''+c.id+'\','+i+')"><div class="kn"></div></div>':'')+'</div>'
+      ).join('');
+    }
+    if(e.documentos && e.documentos.length){
+      html+='<p class="plabel" style="margin-top:14px">'+t('collab.perm.files')+'</p>'+e.documentos.map(d=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(d.nome||'')+'</div></div></div>').join('');
+    }
+    if(e.contrato) html+='<p class="plabel" style="margin-top:14px">'+t('job.contract')+'</p><p style="font-size:13px">'+escapeHtml(e.contrato.status||'')+'</p>';
+    if(e.financeiro) html+='<p class="plabel" style="margin-top:14px">'+t('collab.perm.financial')+'</p>'+(e.financeiro.payments||[]).map(p=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.label)+'</div></div><span style="font-size:13px">'+p.amount+'</span></div>').join('');
+    if(c.nivel_acesso!=='leitura'){
+      html+='<p class="plabel" style="margin-top:18px">'+t('collab.deliveries')+'</p><div>'+
+        (c.entregas||[]).map(en=>'<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(en.tipo)+'</div><span class="sub">'+escapeHtml(en.observacoes||'')+'</span></div></div>').join('')+'</div>'+
+        '<div style="display:flex;gap:8px;margin-top:8px">'+
+        '<button class="btn ghost" style="flex:1" onclick="abrirNovaEntregaColaboracao(\''+c.id+'\',\'link\')">Link</button>'+
+        '<button class="btn ghost" style="flex:1" onclick="abrirNovaEntregaColaboracao(\''+c.id+'\',\'arquivo\')">'+t('collab.perm.files')+'</button></div>';
+    }
+    openInfo(e.jobNome||t('nav.collaborations'), html);
+  }
+  function toggleChecklistColaboracao(id,i){
+    const c=minhasColaboracoesExternas.find(x=>x.id===id);
+    c.escopo.checklist[i].feito=!c.escopo.checklist[i].feito;
+    sb.from('external_collaborators').update({escopo:c.escopo}).eq('id',id).then(()=>renderDetalheColaboracaoExterna(c));
+  }
+  function toggleTarefaColaboracao(id,i){
+    const c=minhasColaboracoesExternas.find(x=>x.id===id);
+    c.escopo.tarefas[i].feito=!c.escopo.tarefas[i].feito;
+    sb.from('external_collaborators').update({escopo:c.escopo}).eq('id',id).then(()=>renderDetalheColaboracaoExterna(c));
+  }
+  function abrirNovaEntregaColaboracao(id, tipo){
+    openInfo(t('collab.newDelivery'), `
+      ${tipo==='link' ? '<div class="field"><label>Link</label><input id="colab-entrega-valor" placeholder="https://..."></div>' : '<div class="field"><label>'+t('collab.perm.files')+'</label><input type="file" id="colab-entrega-file"></div>'}
+      <div class="field"><textarea id="colab-entrega-obs" placeholder="${t('portal.notesPlaceholder')}"></textarea></div>
+      <button class="btn primary" style="width:100%" onclick="guardarEntregaColaboracao('${id}','${tipo}')">${t('action.add')}</button>`);
+  }
+  async function guardarEntregaColaboracao(id, tipo){
+    const c=minhasColaboracoesExternas.find(x=>x.id===id);
+    const obs=document.getElementById('colab-entrega-obs').value.trim();
+    let valor='';
+    if(tipo==='link'){
+      valor=document.getElementById('colab-entrega-valor').value.trim();
+    } else {
+      const file=document.getElementById('colab-entrega-file').files[0];
+      if(file) valor=await arquivoParaDataUrlComprimido(file);
+    }
+    c.entregas=c.entregas||[];
+    c.entregas.push({tipo, valor, observacoes:obs, criadoEm:new Date().toISOString()});
+    const { error } = await sb.from('external_collaborators').update({entregas:c.entregas}).eq('id',id);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    showToast(t('collab.deliverySaved'));
+    renderDetalheColaboracaoExterna(c);
+  }
+
   /* ===== Notificações reais — feed a partir dos dados reais ===== */
   function gerarNotificacoes(){
     const hojeISO=new Date().toISOString().slice(0,10);
     let items=[];
-    Object.values(jobsData).forEach(j=>{
+    jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach(p=>{
         if(p.status==='pago') return;
         const atrasado = p.dueDate && p.dueDate < hojeISO;
@@ -4690,7 +5395,7 @@
   }
   function gerarAtividadeCliente(){
     let items=[];
-    Object.values(jobsData).forEach(j=>{
+    jobsVisiveis().forEach(j=>{
       (j.history||[]).forEach(h=>{
         if(h.tipo==='cliente') items.push({texto:h.text+' — '+j.client, ts:h.ts, tsRaw:h.tsRaw||0, jobId:j.id});
       });
@@ -4726,9 +5431,8 @@
     openInfo(t('notif.title'), html);
   }
   function atualizarNotifDot(){
-    const dot=document.getElementById('notif-dot');
-    if(!dot) return;
-    dot.style.display = (gerarNotificacoes().length || gerarAtividadeCliente().length) ? 'block' : 'none';
+    const ativo = (gerarNotificacoes().length || gerarAtividadeCliente().length) ? 'block' : 'none';
+    document.querySelectorAll('.notif-dot').forEach(dot=>{ dot.style.display = ativo; });
   }
   function pedirComprovativo(jobId, i){
     const job=jobsData[jobId];
@@ -4820,7 +5524,7 @@
           html+='<div class="csec-label" style="margin-top:18px">'+tp('portal.clientInfo')+'</div>';
           html+='<div class="crow"><div class="ci ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div><div class="crow-b"><div class="t">'+tp('portal.answered')+'</div><div class="m">'+tp('portal.thankYou')+'</div></div></div>';
         }
-        html+=emailPreviewHtml(job,'confirmacao');
+        html+=construirEmailUniversal(job,'contratoAssinado');
         html+='<button class="btn soft" style="width:100%;margin-top:14px" onclick="descarregarCopiaContrato(\''+id+'\')">'+tp('portal.downloadContract')+'</button>';
       }
     } else {
@@ -5111,6 +5815,12 @@
     empty.parentElement.insertBefore(div, empty);
   }
   /* ===== Classificação canónica de trabalho — fonte única usada em todo o lado ===== */
+  /* Visibilidade por atribuição de equipa: Admin vê tudo; trabalhos sem
+     atribuição (ou contas sem equipa) ficam visíveis a todos, como antes. */
+  function jobVisivelParaMim(job){
+    return souAdmin() || !job.assignedTo || !job.assignedTo.length || job.assignedTo.includes(currentUser.id);
+  }
+  function jobsVisiveis(){ return Object.values(jobsData).filter(jobVisivelParaMim); }
   function classificarTrabalho(job){
     const hojeISO=new Date().toISOString().slice(0,10);
     const fechado = job.contract.status==='assinado';
@@ -5151,12 +5861,12 @@
     await loadPersisted('pivot-jobsData', d=>{
       jobsData=d;
       migrarBriefingsAntigos();
-      Object.keys(jobsData).forEach(id=>renderJobCard(jobsData[id]));
+      jobsVisiveis().forEach(job=>renderJobCard(job));
       renderMonthTicker();
     });
   }
   function migrarBriefingsAntigos(){
-    Object.values(jobsData).forEach(job=>{
+    jobsVisiveis().forEach(job=>{
       if(!job.structure || !job.structure.briefing || !job.briefing) return;
       if(job.briefing.cronograma===undefined || job.briefing.cronograma===null) job.briefing.cronograma=[];
       if(job.briefing.pessoasImportantes===undefined || job.briefing.pessoasImportantes===null) job.briefing.pessoasImportantes=[];
@@ -5206,6 +5916,27 @@
     cronograma:{label:t('model.scheduleName'), placeholder:t('model.schedulePlaceholder'), item:t('model.scheduleMilestone'),
       seed:['Assinatura','+3 dias — Sinal','[Evento]','+30 dias — Entrega']}
   };
+  const CATALOGO_EXPLORAR=[
+    {cat:'contratos', tituloKey:'wizard.template.wedding', subKey:'explore.contractBlocks', onclick:"abrirBuilder(null)"},
+    {cat:'checklists', tituloKey:'explore.deliveryChecklist', subKey:'explore.editableFlow', onclick:"openSheet();abrirListaModelo('checklist')"},
+    {cat:'briefings', tituloKey:'explore.commercialBriefing', subKey:'explore.editableModel', onclick:"openSheet();abrirListaModelo('briefing')"},
+    {cat:'cronogramas', tituloKey:'explore.sampleTimeline', subKey:'explore.editableFlow', onclick:"openSheet();abrirListaModelo('cronograma')"}
+  ];
+  let explorarFiltroAtual='todos';
+  function filterExplorar(el, cat){
+    document.querySelectorAll('#explore-filter-row .chip').forEach(c=>c.classList.remove('on'));
+    el.classList.add('on');
+    explorarFiltroAtual=cat;
+    renderExplorar();
+  }
+  function renderExplorar(){
+    const wrap=document.getElementById('explore-lista');
+    if(!wrap) return;
+    const itens=CATALOGO_EXPLORAR.filter(m=>explorarFiltroAtual==='todos'||m.cat===explorarFiltroAtual);
+    wrap.innerHTML=itens.map(m=>
+      '<div class="job" onclick="'+m.onclick+'"><div class="job-top"><div><div class="job-client">'+t(m.tituloKey)+'</div><div class="job-type">'+t(m.subKey)+'</div></div></div></div>'
+    ).join('');
+  }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
     const c=modeloListCopy[tipo];
@@ -5241,7 +5972,7 @@
      exatamente igual ao anterior. */
   const StorageAdapter = (function(){
     const KNOWN_KEYS=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
-      'pivot-colecoesData','pivot-referenciasData','pivot-equipaData','pivot-modelosUso',
+      'pivot-colecoesData','pivot-referenciasData','pivot-modelosUso',
       'pivot-perfilData','pivot-metas','pivot-lembretesPerfil','pivot-sessao','pivot-tema'];
     const memoryStore={};
     function hasClaudeStorage(){ return typeof window!=='undefined' && !!window.storage; }
@@ -5312,7 +6043,7 @@
   function saveClientesData(){ savePersisted('pivot-clientesData', ()=>clientesData); }
   function saveTarefasData(){ savePersisted('pivot-tarefasData', ()=>tarefasData); }
   async function loadClientesData(){ await loadPersisted('pivot-clientesData', d=>{ clientesData=d; }); }
-  let perfilData={nome:'', email:'', empresa:'', corMarca:'#14532D', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free'};
+  let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, corMarca:'#14532D', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR'};
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
     await loadPersisted('pivot-perfilData', d=>{ perfilData=Object.assign({}, perfilData, d); });
@@ -5340,7 +6071,7 @@
   async function onAvatarFileSelected(input){
     const file=input.files[0]; if(!file) return;
     try{
-      const dataUrl=await fileParaDataUrl(file);
+      const dataUrl=await arquivoParaDataUrlComprimido(file);
       perfilData.fotoUrl=dataUrl;
       savePerfilData();
       aplicarPerfilData();
@@ -5377,7 +6108,7 @@
   }
   async function loadTarefasData(){ await loadPersisted('pivot-tarefasData', d=>{ tarefasData=d; }); }
   function populateTrabalhoSelects(){
-    const optsReal=Object.values(jobsData).map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
+    const optsReal=jobsVisiveis().map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
     const sel2=document.getElementById('ta-trabalho'); if(sel2) sel2.innerHTML='<option value="">'+t('field.optionalDropdown')+'</option>'+optsReal;
   }
 
@@ -5529,6 +6260,38 @@
       r.readAsDataURL(file);
     });
   }
+  /* Comprime imagens antes de guardar (avatar, anexos, referências) — reduz
+     fotos de câmara/telemóvel (muitas vezes vários MB) para um tamanho razoável
+     sem depender de bibliotecas novas. Ficheiros não-imagem (PDF, docs) passam
+     tal como estão — comprimir binários arbitrários no browser não é viável
+     sem uma dependência nova, que foi pedido para evitar. */
+  function imagemComprimidaDataUrl(file, maxDim, qualidade){
+    maxDim = maxDim||1280; qualidade = qualidade||0.82;
+    return new Promise((resolve,reject)=>{
+      const img=new Image();
+      const urlObjeto=URL.createObjectURL(file);
+      img.onload=()=>{
+        URL.revokeObjectURL(urlObjeto);
+        let {width, height}=img;
+        if(width>maxDim || height>maxDim){
+          const escala=maxDim/Math.max(width,height);
+          width=Math.round(width*escala); height=Math.round(height*escala);
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=width; canvas.height=height;
+        canvas.getContext('2d').drawImage(img,0,0,width,height);
+        resolve(canvas.toDataURL('image/jpeg', qualidade));
+      };
+      img.onerror=reject;
+      img.src=urlObjeto;
+    });
+  }
+  async function arquivoParaDataUrlComprimido(file){
+    if(file.type && file.type.startsWith('image/')){
+      try{ return await imagemComprimidaDataUrl(file); }catch(e){ /* fallback abaixo */ }
+    }
+    return fileParaDataUrl(file);
+  }
   async function guardarReferenciaImportada(){
     const nomeEl=document.getElementById('imp-ref-nome');
     const nome=nomeEl.value.trim();
@@ -5539,7 +6302,7 @@
     let ficheiroNome=null, ficheiroDataUrl=null;
     if(importRefFile){
       ficheiroNome=importRefFile.name;
-      try{ ficheiroDataUrl=await fileParaDataUrl(importRefFile); }catch(e){ /* guarda só o nome se a leitura falhar */ }
+      try{ ficheiroDataUrl=await arquivoParaDataUrlComprimido(importRefFile); }catch(e){ /* guarda só o nome se a leitura falhar */ }
     }
     referenciasData[id]={id, nome, texto: texto||null, ficheiroNome, ficheiroDataUrl, criadoEm:new Date().toISOString()};
     saveReferenciasData();
@@ -5617,10 +6380,45 @@
     openInfo(t('profile.myAccount'), `
       <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
-      <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="mc-empresa"></div>
       <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
       ${linhasPlano}
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>`);
+  }
+  function infoEmpresa(){
+    if(!souAdmin()){ showToast(t('team.onlyAdminInvites')); return; }
+    openInfo(t('profile.company'), `
+      <div style="text-align:center;margin-bottom:16px">
+        <div class="p-avatar" id="empresa-avatar-preview" style="width:64px;height:64px;font-size:22px;margin:0 auto 8px;${perfilData.empresaFotoUrl?('background-image:url('+perfilData.empresaFotoUrl+');background-size:cover;background-position:center'):''}">${perfilData.empresaFotoUrl?'':escapeHtml((perfilData.empresa||'?').charAt(0).toUpperCase())}</div>
+        <label class="inline-link" style="cursor:pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" style="display:none" onchange="onEmpresaAvatarSelected(this)"></label>
+      </div>
+      <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="emp-nome"></div>
+      <div class="field"><label>${t('profile.company.category')}</label><input value="${escapeHtml(perfilData.categoria)}" id="emp-categoria" placeholder="${t('profile.company.categoryPlaceholder')}"></div>
+      <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.empresaEmail||'')}" id="emp-email"></div>
+      <div class="field"><label>${t('profile.company.phone')}</label><input value="${escapeHtml(perfilData.telefone)}" id="emp-telefone"></div>
+      <div class="field"><label>${t('profile.company.website')}</label><input value="${escapeHtml(perfilData.website)}" id="emp-website"></div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarEmpresa()">${t('profile.account.save')}</button>`);
+  }
+  async function onEmpresaAvatarSelected(input){
+    const file=input.files[0]; if(!file) return;
+    try{
+      const dataUrl=await arquivoParaDataUrlComprimido(file);
+      perfilData.empresaFotoUrl=dataUrl;
+      savePerfilData();
+      const prev=document.getElementById('empresa-avatar-preview');
+      if(prev){ prev.style.backgroundImage='url('+dataUrl+')'; prev.style.backgroundSize='cover'; prev.style.backgroundPosition='center'; prev.textContent=''; }
+      showToast(t('toast.profilePhotoUpdated'));
+    }catch(e){ showToast(t('toast.imageError')); }
+    input.value='';
+  }
+  function salvarEmpresa(){
+    perfilData.empresa=document.getElementById('emp-nome').value.trim();
+    perfilData.categoria=document.getElementById('emp-categoria').value.trim();
+    perfilData.empresaEmail=document.getElementById('emp-email').value.trim();
+    perfilData.telefone=document.getElementById('emp-telefone').value.trim();
+    perfilData.website=document.getElementById('emp-website').value.trim();
+    savePerfilData();
+    aplicarPerfilData();
+    closeInfo(); showToast(t('toast.accountDataUpdated'));
   }
   function escolherPlano(nome){
     if(nome==='Free'){
@@ -5636,7 +6434,6 @@
   function salvarMinhaConta(){
     perfilData.nome=document.getElementById('mc-nome').value.trim()||'Utilizador';
     perfilData.email=document.getElementById('mc-email').value.trim();
-    perfilData.empresa=document.getElementById('mc-empresa').value.trim();
     savePerfilData();
     aplicarPerfilData();
     closeInfo(); showToast(t('toast.accountDataUpdated'));
@@ -5713,7 +6510,7 @@
   async function onAssinaturaFileSelected(input){
     const file=input.files[0]; if(!file) return;
     try{
-      const dataUrl=await fileParaDataUrl(file);
+      const dataUrl=await arquivoParaDataUrlComprimido(file);
       perfilData.assinaturaImg=dataUrl;
       savePerfilData();
       closeInfo();
@@ -5788,12 +6585,44 @@
       }
     }).catch(()=>{ showToast(t('notif.error')); });
   }
-  function infoConfiguracoes(){
+  const LIMITE_ARMAZENAMENTO_MB={Free:25, Plus:50, Pro:100, Business:500, Enterprise:Infinity};
+  async function calcularArmazenamentoUsadoMB(){
+    const chaves=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
+      'pivot-colecoesData','pivot-referenciasData','pivot-modelosUso','pivot-perfilData'];
+    let bytes=0;
+    for(const chave of chaves){
+      const valor=await StorageAdapter.load(chave);
+      if(valor!=null) bytes += new Blob([JSON.stringify(valor)]).size;
+    }
+    return bytes/(1024*1024);
+  }
+  async function infoConfiguracoes(){
+    const usadoMB = await calcularArmazenamentoUsadoMB();
+    const limiteMB = LIMITE_ARMAZENAMENTO_MB[perfilData.plano||'Free'];
+    const limiteTexto = limiteMB===Infinity ? '∞' : limiteMB+' MB';
+    const pctUso = limiteMB===Infinity ? 0 : Math.min(100, Math.round(usadoMB/limiteMB*100));
     openInfo(t('settings.title'), `
-      <div class="field"><label>${t('field.timezone')}</label><select><option>UTC</option><option>America/New_York</option><option>America/Los_Angeles</option><option>Europe/London</option><option>Europe/Lisbon</option><option>Europe/Madrid</option><option>Asia/Tokyo</option><option>Australia/Sydney</option></select></div>
-      <div class="field"><label>${t('field.dateFormat')}</label><select><option>31/12/2026</option><option>2026-12-31</option><option>Dec 31, 2026</option></select></div>
-      <div class="field"><label>${t('field.currency')}</label><select><option>€ Euro</option><option>${t('currency.dollar')}</option><option>${t('currency.real')}</option></select></div>
-      <button class="btn primary" style="width:100%;margin-top:6px" onclick="closeInfo();showToast(t('toast.settingsSaved'))">${t('action.save')}</button>`);
+      <div class="field"><label>${t('field.timezone')}</label><select id="cfg-timezone">${['UTC','America/New_York','America/Los_Angeles','Europe/London','Europe/Lisbon','Europe/Madrid','Asia/Tokyo','Australia/Sydney'].map(tz=>'<option'+(perfilData.timezone===tz?' selected':'')+'>'+tz+'</option>').join('')}</select></div>
+      <div class="field"><label>${t('field.dateFormat')}</label><select id="cfg-dateformat">
+        <option value="DD/MM/YYYY"${perfilData.dateFormat==='DD/MM/YYYY'?' selected':''}>31/12/2026</option>
+        <option value="YYYY-MM-DD"${perfilData.dateFormat==='YYYY-MM-DD'?' selected':''}>2026-12-31</option>
+        <option value="MMM DD, YYYY"${perfilData.dateFormat==='MMM DD, YYYY'?' selected':''}>Dec 31, 2026</option></select></div>
+      <div class="field"><label>${t('field.currency')}</label><select id="cfg-moeda">
+        <option value="EUR"${perfilData.moeda==='EUR'?' selected':''}>€ Euro</option>
+        <option value="USD"${perfilData.moeda==='USD'?' selected':''}>${t('currency.dollar')}</option>
+        <option value="BRL"${perfilData.moeda==='BRL'?' selected':''}>${t('currency.real')}</option></select></div>
+      <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
+      <p class="plabel" style="margin:18px 2px 8px">${t('settings.storageTitle')}</p>
+      <div style="background:var(--paper-2);border-radius:10px;height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
+      <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${usadoMB.toFixed(1)} MB ${t('settings.storageOf')} ${limiteTexto}</p>`);
+  }
+  function guardarConfiguracoes(){
+    perfilData.timezone=document.getElementById('cfg-timezone').value;
+    perfilData.dateFormat=document.getElementById('cfg-dateformat').value;
+    perfilData.moeda=document.getElementById('cfg-moeda').value;
+    savePerfilData();
+    closeInfo();
+    showToast(t('toast.settingsSaved'));
   }
   function infoPrivacidade(){
     openInfo(t('modal.privacy'), `
@@ -5910,7 +6739,7 @@
     const res=document.getElementById('searchres');
     const box=document.getElementById('searchhits');
     if(!q){res.textContent=t('search.placeholder2');box.innerHTML='';return}
-    const jobMatches=Object.values(jobsData).filter(j=>
+    const jobMatches=jobsVisiveis().filter(j=>
       (j.client+' '+j.typeLabel+' '+(j.local||'')+' '+(j.date||'')).toLowerCase().includes(q)
     ).map(j=>'<div class="job" onclick="openJob(\''+j.id+'\')"><div class="job-top"><div class="job-top-l">'+avatarHtml(j.client,30)+
       '<div><div class="job-client">'+escapeHtml(j.client)+'</div><div class="job-type">'+escapeHtml(j.typeLabel)+' · '+escapeHtml(j.date||'data a definir')+'</div></div></div>'+
@@ -5966,7 +6795,7 @@
   }
   function dynamicEventsForMonth(year, month){
     const markers={}, info={}, agenda=[];
-    Object.values(jobsData).forEach(j=>{
+    jobsVisiveis().forEach(j=>{
       if(j.dateRaw){
         const [y,mo,da]=j.dateRaw.split('-').map(Number);
         if(y===year && mo===month){
@@ -6247,10 +7076,13 @@
   // (ver carregarWorkspace) — carregar antes disso devolve sempre null e a conta
   // parece "vazia"/com valores por defeito mesmo tendo dados guardados.
   async function carregarDadosDaConta(){
+    /* loadEquipaData primeiro: define meuPapel, do qual jobsVisiveis() depende
+       para filtrar a lista de trabalhos assim que ela é renderizada abaixo. */
+    await loadEquipaData();
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(),
       loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
-      loadReferenciasData(), loadModelosUsoData(), loadEquipaData(), loadTema()
+      loadReferenciasData(), loadModelosUsoData(), loadTema(), carregarMinhasColaboracoes()
     ]);
     renderMonthTicker();
   }
@@ -6271,6 +7103,7 @@
   staggerCards('#v-hoje .card, #v-hoje .collapse');
   renderMonthTicker();
   ajustarPaddingEcra();
+  iniciarPortalPublicoSeAplicavel();
 </script>
 </body>
 </html>
