@@ -27,15 +27,27 @@ module.exports = async (req, res) => {
       headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + access_token }
     });
     if (!userResp.ok) {
-      res.status(401).json({ error: 'Sessão inválida.' });
+      const detalhe = await userResp.text().catch(() => '');
+      res.status(401).json({ error: 'Sessão inválida.', debug_status: userResp.status, debug_body: detalhe, debug_has_url: !!SUPABASE_URL, debug_has_key: !!SERVICE_KEY });
       return;
     }
 
-    const listResp = await fetch(SUPABASE_URL + '/auth/v1/admin/users?email=' + encodeURIComponent(email), {
-      headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY }
-    });
-    const listBody = await listResp.json().catch(() => ({}));
-    const found = listBody && listBody.users && listBody.users[0];
+    const alvo = email.trim().toLowerCase();
+    let found = null;
+    let page = 1;
+    // A API admin/users da Supabase não filtra fielmente por email em todas as
+    // versões — em vez de confiar no parâmetro, paginamos e comparamos o email
+    // exato nós mesmos, para nunca devolver a conta errada.
+    while (!found && page <= 20) {
+      const listResp = await fetch(SUPABASE_URL + '/auth/v1/admin/users?page=' + page + '&per_page=200', {
+        headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + SERVICE_KEY }
+      });
+      const listBody = await listResp.json().catch(() => ({}));
+      const users = (listBody && listBody.users) || [];
+      found = users.find(u => u.email && u.email.toLowerCase() === alvo) || null;
+      if (users.length < 200) break;
+      page++;
+    }
 
     if (!found) {
       res.status(200).json({ exists: false });
