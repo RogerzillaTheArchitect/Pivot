@@ -283,7 +283,9 @@
   @keyframes fade{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
 
   /* ===== HOJE / DASHBOARD ===== */
-  .date{font-size:12px;color:rgba(255,255,255,.82);letter-spacing:.12em;font-weight:600;margin-top:14px;text-transform:uppercase}
+  .date{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:800;color:#F5F5F2;letter-spacing:.03em;margin-top:14px;margin-bottom:24px;text-transform:uppercase;display:block;text-align:left}
+  .section-label-out{font-size:12px;color:rgba(255,255,255,.82);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
+  .section-label-out:not(:first-of-type){margin-top:32px}
   .month-summary{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:2px solid rgba(255,255,255,.30);
     border-radius:22px;margin:12px 0 22px;box-shadow:0 20px 45px -12px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
     backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);overflow:hidden;
@@ -291,8 +293,6 @@
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
-  .ms-head-big{padding:18px 18px 0}
-  .card-title-big{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:16px;font-weight:800;color:var(--ink);letter-spacing:.04em;text-transform:uppercase;display:block;text-align:left;margin-bottom:14px}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.82);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:148px;flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:6px 18px 0}
@@ -353,7 +353,6 @@
     backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
     box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
     color:#F5F5F2;--ink:#F5F5F2;--ink-soft:#C9C9C2}
-  .jobs-card-title{padding:0 10px}
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;cursor:pointer;padding:0 4px;text-align:center}
   .jobs-stat-col:not(:last-child){border-right:1px solid rgba(255,255,255,.14)}
@@ -737,19 +736,6 @@
   .rel-month-nav span{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;color:var(--ink);min-width:130px;text-align:center}
   .rel-nav-btn{width:30px;height:30px;display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none}
   .rel-nav-btn svg{width:15px;height:15px}
-  .tasks-card{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);
-    border:2px solid rgba(255,255,255,.30);border-radius:20px;padding:18px;margin-top:6px;
-    backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
-    color:#F5F5F2;
-    --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
-    --c-icon-bg:rgba(255,255,255,.10); --c-date-bg-ok:rgba(79,161,137,.22); --c-date-bg-late:rgba(217,127,121,.22);
-    --c-text-green:#8FD4BC; --c-text-red:#F0A8A2}
-  .tasks-card .group:last-child{margin-bottom:0}
-  .task-row{display:flex;align-items:center;gap:10px;padding:12px 2px;border-top:1px solid rgba(255,255,255,.10);cursor:pointer}
-  .task-row:first-child{border-top:none}
-  .task-dot{width:7px;height:7px;border-radius:50%;flex:none;filter:blur(1px);animation:featherBreathe 3s ease-in-out infinite}
-  .task-text{font-size:14px;color:#fff}
   .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
   .venc-icon{width:34px;height:34px;color:#fff;display:grid;place-items:center;flex:none}
   .venc-icon svg{width:17px;height:17px}
@@ -1463,11 +1449,8 @@
       <section class="view active" id="v-hoje">
         <div class="date" id="hoje-data">Quarta, 24 de junho</div>
 
+        <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
         <div class="month-summary" onclick="abrirRelatorios('financeiro')">
-          <div class="ms-head-big">
-            <span class="card-title-big" data-t="home.financeTitle">Financeiro</span>
-          </div>
-
           <div class="ms-progress-row">
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
@@ -1492,8 +1475,8 @@
           </div>
         </div>
 
+        <span class="section-label-out" data-t="home.performanceTitle">Performance</span>
         <div class="jobs-stat-card" onclick="abrirRelatorios('performance')">
-          <span class="card-title-big jobs-card-title" data-t="home.performanceTitle">Performance</span>
           <div class="jobs-stat-row">
           <div class="jobs-stat-col">
             <div class="mini-ring-wrap">
@@ -1530,8 +1513,8 @@
           </div>
         </div>
 
-        <div id="hoje-content" class="tasks-card">
-          <span class="card-title-big" data-t="home.tasksTitle">Tarefas</span>
+        <span class="section-label-out" data-t="home.tasksTitle">Tarefas</span>
+        <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
 
@@ -3686,7 +3669,7 @@
     const itens=[];
     jobsVisiveis().forEach(j=>{
       if(j.structure && j.structure.contrato && j.contract && j.contract.status!=='assinado'){
-        itens.push({ dataISO:j.dateRaw||new Date().toISOString().slice(0,10), hora:null, nome:j.nome||j.client, jobId:j.id, tipo:'contrato', idx:null });
+        itens.push({ dataISO:j.dateRaw||new Date().toISOString().slice(0,10), hora:null, nome:j.nome||j.client, secundaria:t('tasks.contractPending'), jobId:j.id, tipo:'contrato', idx:null });
       }
       (j.payments||[]).forEach((p,i)=>{
         if(p.status==='pago' || !p.dueDate) return;
@@ -3714,25 +3697,12 @@
     if(d===1) return 'media';
     return 'normal';
   }
-  function gerarTextoTarefa(it){
-    if(it.tipo==='contrato') return t('tasks.contractPending')+' — '+it.nome;
-    const tempo=gerarLabelTemporal(it.dataISO, null).toLowerCase();
-    if(it.tipo==='pagamento') return t('tasks.paymentDue')+' '+tempo+' — '+it.nome;
-    return (it.typeLabel||it.nome)+' '+tempo+(it.typeLabel?(' — '+it.nome):'');
-  }
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
     if(!wrap) return;
     const itens=gerarItensRadar();
-    if(!itens.length){ wrap.innerHTML=''; return; }
-    wrap.innerHTML=itens.map(it=>{
-      const nivel=gerarNivelPrioridade(it.dataISO);
-      const corDot={critica:'var(--urgent)', alta:'var(--c-orange)', media:'var(--c-yellow-soft)', normal:'var(--c-green-soft)'}[nivel];
-      const isCritica=nivel==='critica';
-      const dotClass=isCritica?'task-dot urgent-dot':'task-dot';
-      const dotStyle=isCritica?'':('background:'+corDot);
-      return '<div class="task-row" onclick="openJob(\''+it.jobId+'\')"><span class="'+dotClass+'" style="'+dotStyle+'"></span><span class="task-text">'+escapeHtml(gerarTextoTarefa(it))+'</span></div>';
-    }).join('');
+    wrap.innerHTML=itens.map(construirCardRadar).join('');
+    ativarSwipeRadar();
   }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
@@ -3775,6 +3745,9 @@
     if(!job){ showToast(t('toast.jobNotFound')); return; }
     if(tipo==='pagamento'){
       marcarPagoDynamic(jobId, parseInt(idx,10));
+    } else if(tipo==='contrato'){
+      openJob(jobId);
+      return;
     } else {
       const ms=(job.milestones||[]).find(m=>m.key==='principal');
       if(ms){ ms.status='feito'; pushHistory(job,t('toast.markedDone')); saveJobsData(); }
@@ -3965,7 +3938,7 @@
 
   function updateHoje(){
     const badge=document.getElementById('nav-badge');
-    const total=document.querySelectorAll('#tasks-list .task-row').length;
+    const total=document.querySelectorAll('#tasks-list .radar-card').length;
     if(total<=0){
       document.getElementById('hoje-content').style.display='none';
       document.getElementById('hoje-empty').style.display='block';
