@@ -689,9 +689,10 @@
   .cal-nav{display:flex;gap:6px}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
-  .cal-day{aspect-ratio:1;border-radius:10px;border:1px solid var(--line-soft);display:flex;flex-direction:column;
-    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:12.5px;color:var(--ink-soft);
-    position:relative;cursor:pointer;background:var(--paper)}
+  .cal-day{aspect-ratio:1;border-radius:10px;border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:12.5px;color:rgba(255,255,255,.85);
+    position:relative;cursor:pointer;background:rgba(122,124,116,.34);
+    backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .cal-day.out{opacity:.3}
   .cal-day.today{border-color:var(--brand);font-weight:600;color:var(--ink)}
   .cal-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;justify-content:center}
@@ -756,11 +757,11 @@
   .venc-date.atrasado .m{color:var(--ink-soft)}
   .venc-info{flex:1;min-width:0}
   .venc-info .cli{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
-  .urgent-dot{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle,var(--urgent) 0%,var(--urgent) 35%,transparent 75%);
-    filter:blur(1.5px);flex:none;display:inline-block;animation:urgentBreathe 2.2s ease-in-out infinite}
+  .urgent-dot{width:7px;height:7px;border-radius:50%;background-color:#D9793F;
+    filter:blur(1px);flex:none;display:inline-block;animation:urgentBreathe 3.2s ease-in-out infinite}
   @keyframes urgentBreathe{
-    0%,100%{background:radial-gradient(circle,#F0A868 0%,#F0A868 35%,transparent 75%);transform:scale(1)}
-    50%{background:radial-gradient(circle,#B85F1E 0%,#B85F1E 35%,transparent 75%);transform:scale(1.25)}
+    0%,100%{background-color:#F5B583;box-shadow:0 0 5px 2px rgba(245,181,131,.5);transform:scale(1)}
+    50%{background-color:#A8551A;box-shadow:0 0 9px 3px rgba(168,85,26,.65);transform:scale(1.3)}
   }
   @media (prefers-reduced-motion:reduce){.urgent-dot{animation:none}}
   .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
@@ -1089,10 +1090,10 @@
   .nav button.on{color:#fff}
   .nav button.on svg{color:#fff}
   .nav .fab-wrap{flex:1;display:flex;align-items:center;justify-content:center}
-  .fab{width:46px;height:46px;border-radius:50%;color:transparent;display:grid;
+  .fab{width:34px;height:34px;border-radius:50%;color:transparent;display:grid;
     background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01MCwyIEE0OCw0OCAwIDEsMSA0OS45OSwyIFogTTQyLDIwIEg1OCBWNDIgSDgwIFY1OCBINTggVjgwIEg0MiBWNTggSDIwIFY0MiBINDIgWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=");
     background-size:100% 100%;background-position:center;background-repeat:no-repeat;
-    place-items:center;box-shadow:0 0 0 1px rgba(255,255,255,.5),0 0 16px rgba(255,255,255,.35),0 4px 14px rgba(0,0,0,.22);border:none}
+    place-items:center;box-shadow:0 0 10px 2px rgba(255,255,255,.28);border:none}
   .fab svg{width:21px;height:21px}
   .badge{position:absolute;top:1px;right:8px;background:var(--late);color:#fff;font-size:9.5px;font-weight:600;
     min-width:15px;height:15px;border-radius:8px;display:grid;place-items:center;padding:0 4px}
