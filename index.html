@@ -367,9 +367,10 @@
   .group-label .ln{flex:1;height:1px;background:var(--line)}
 
   .radar-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:11px}
-  .radar-card-wrap .card{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1;
-    background:rgb(122,124,116) !important}
-  .radar-swipe-actions{position:absolute;top:0;right:0;height:100%;width:144px;display:flex;z-index:0}
+  .radar-card-wrap .card{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
+  .radar-swipe-actions{position:absolute;top:0;right:0;height:100%;width:144px;display:flex;z-index:0;
+    opacity:0;pointer-events:none;transition:opacity .15s ease}
+  .radar-card-wrap.active .radar-swipe-actions{opacity:1;pointer-events:auto}
   .radar-swipe-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     font-size:11px;font-weight:600;color:#fff;cursor:pointer;border:none;font-family:inherit;
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
@@ -1560,27 +1561,6 @@
             </div>
           </div>
 
-          <div class="collapse" onclick="this.classList.toggle('open')">
-            <div class="collapse-head">
-              <div class="collapse-l"><div class="sec-icon sm c-pagamentos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/></svg></div> <span data-t="dashboard.pendingPayments">Pagamentos pendentes</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-pagamentos-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
-            </div>
-            <div class="collapse-body" id="resumo-pagamentos"></div>
-          </div>
-          <div class="collapse" onclick="this.classList.toggle('open')">
-            <div class="collapse-head">
-              <div class="collapse-l"><div class="sec-icon sm c-entrega"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div> <span data-t="dashboard.upcomingDeliveries">Próximas entregas</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-entregas-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
-            </div>
-            <div class="collapse-body" id="resumo-entregas"></div>
-          </div>
-          <div class="collapse" onclick="this.classList.toggle('open')">
-            <div class="collapse-head">
-              <div class="collapse-l"><div class="sec-icon sm c-historico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div> <span data-t="dashboard.recentJobs">Trabalhos recentes</span></div>
-              <div style="display:flex;align-items:center;gap:8px"><span class="collapse-n" id="resumo-recentes-n">0</span><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>
-            </div>
-            <div class="collapse-body" id="resumo-recentes"></div>
-          </div>
         </div>
 
         <div class="empty" id="hoje-empty" style="display:none">
@@ -3743,8 +3723,9 @@
     document.querySelectorAll('.radar-card').forEach(card=>{
       if(card.dataset.swipeBound) return;
       card.dataset.swipeBound='1';
+      const wrap=card.closest('.radar-card-wrap');
       let startX=0, dx=0, dragging=false;
-      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; });
+      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; if(wrap) wrap.classList.add('active'); });
       card.addEventListener('pointermove', e=>{
         if(!dragging) return;
         dx=e.clientX-startX;
@@ -3758,7 +3739,9 @@
         dragging=false;
         card.style.transition='transform .2s ease';
         card.style.transform = dx<-70 ? 'translateX(-144px)' : 'translateX(0)';
-        if(dx>=-70) setTimeout(()=>{ card.dataset.swiped='0'; }, 50);
+        if(dx>=-70){
+          setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
+        }
       };
       card.addEventListener('pointerup', fim);
       card.addEventListener('pointerleave', fim);
