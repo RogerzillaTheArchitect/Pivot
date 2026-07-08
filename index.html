@@ -16,7 +16,7 @@
     --paper:#F3F3F1; --paper-2:#E8E8E5; --ink:#191917; --ink-soft:#68685F; --ink-faint:#9C9C96;
     --line:#DFDFDA; --line-soft:#EAEAE6; --bg-ice:#DADAD4; --bg-ice-2:#CBCBC4;
     --brand:#295244; --brand-10:rgba(41,82,68,.07); --brand-dk:#191917;
-    --late:#B84B4B; --pend:#B07A34; --done:#1F7A50; --neutral:#7A7A73;
+    --late:#B84B4B; --pend:#B07A34; --done:#1F7A50; --neutral:#7A7A73; --urgent:#D97A2E;
     --shadow:0 1px 2px rgba(20,20,18,.06),0 8px 28px rgba(20,20,18,.08);
     --r:20px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:238,238,235; --glass-rgb-2:230,230,226; --btn-rgb:41,82,68;
@@ -31,7 +31,7 @@
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#A19E98; --ink-faint:#66655F;
     --line:rgba(255,255,255,.08); --line-soft:rgba(255,255,255,.045); --bg-ice:#0B0B0A; --bg-ice-2:#050504;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58;
-    --late:#D97F79; --pend:#CBA26A; --done:#4FA189; --neutral:#83837B;
+    --late:#D97F79; --pend:#CBA26A; --done:#4FA189; --neutral:#83837B; --urgent:#E08A3C;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
     --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(24,24,22,.90); --glass-55:rgba(24,24,22,.92); --glass-6:rgba(24,24,22,.93); --glass-62:rgba(24,24,22,.94); --glass-65:rgba(24,24,22,.95); --glass-7:rgba(24,24,22,.96); --glass-85:rgba(24,24,22,.98); --glass2-75:rgba(18,18,16,.95);
     --c-track-lt:rgba(79,161,137,.28); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(79,161,137,.12);
@@ -54,11 +54,10 @@
   html,body{height:100%}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:var(--bg-ice-2);color:var(--ink);
     font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-  [data-theme="dark"] .shell{
-    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA5MDAgMTYwMCc+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSdncmFpbic+CiAgICAgIDxmZVR1cmJ1bGVuY2UgdHlwZT0nZnJhY3RhbE5vaXNlJyBiYXNlRnJlcXVlbmN5PScwLjg1JyBudW1PY3RhdmVzPSczJyBzdGl0Y2hUaWxlcz0nc3RpdGNoJyByZXN1bHQ9J24nLz4KICAgICAgPGZlQ29sb3JNYXRyaXggaW49J24nIHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAgIDAgMCAwIDAgMCAgMCAwIDAgMCAwICAwIDAgMCAwLjkgMCcvPgogICAgPC9maWx0ZXI+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9J2cxJyBjeD0nNDYlJyBjeT0nNDIlJyByPSc1NSUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjM0Q0QzQwJyBzdG9wLW9wYWNpdHk9JzAuOTUnLz4KICAgICAgPHN0b3Agb2Zmc2V0PSc1NSUnIHN0b3AtY29sb3I9JyMxQjIyMUMnIHN0b3Atb3BhY2l0eT0nMC40NScvPgogICAgICA8c3RvcCBvZmZzZXQ9JzEwMCUnIHN0b3AtY29sb3I9JyMwQTBCMDknIHN0b3Atb3BhY2l0eT0nMCcvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0nZzInIGN4PSc2MCUnIGN5PSc3OCUnIHI9JzQ1JSc+CiAgICAgIDxzdG9wIG9mZnNldD0nMCUnIHN0b3AtY29sb3I9JyMyQTMyMkInIHN0b3Atb3BhY2l0eT0nMC41NScvPgogICAgICA8c3RvcCBvZmZzZXQ9JzEwMCUnIHN0b3AtY29sb3I9JyMwQTBCMDknIHN0b3Atb3BhY2l0eT0nMCcvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9JzkwMCcgaGVpZ2h0PScxNjAwJyBmaWxsPScjMEIwQzBBJy8+CiAgPHJlY3Qgd2lkdGg9JzkwMCcgaGVpZ2h0PScxNjAwJyBmaWxsPSd1cmwoI2cyKScvPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTYwMCcgZmlsbD0ndXJsKCNnMSknLz4KICA8cmVjdCB3aWR0aD0nOTAwJyBoZWlnaHQ9JzE2MDAnIGZpbHRlcj0ndXJsKCNncmFpbiknIG9wYWNpdHk9JzAuNScvPgo8L3N2Zz4K");
+  [data-theme="dark"] .shell{background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA5MDAgMTQwMCc+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScxNSUnIHkxPScwJScgeDI9Jzg1JScgeTI9JzEwMCUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjMkEyQTI2Jy8+CiAgICAgIDxzdG9wIG9mZnNldD0nNTUlJyBzdG9wLWNvbG9yPScjMTYxNjE0Jy8+CiAgICAgIDxzdG9wIG9mZnNldD0nMTAwJScgc3RvcC1jb2xvcj0nIzA3MDcwNicvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9J24nPgogICAgICA8ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcgcmVzdWx0PSdub2lzZScvPgogICAgICA8ZmVDb2xvck1hdHJpeCBpbj0nbm9pc2UnIHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAgIDAgMCAwIDAgMCAgMCAwIDAgMCAwICAwIDAgMCAwLjUgMCcvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTQwMCcgZmlsbD0ndXJsKCNnKScvPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTQwMCcgZmlsdGVyPSd1cmwoI24pJyBvcGFjaXR5PScwLjUnLz4KICA8L3N2Zz4=");
     background-size:cover;background-position:center;background-repeat:no-repeat}
   .shell{display:flex;height:100vh;width:100%;
-    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA5MDAgMTYwMCc+CiAgPGRlZnM+CiAgICA8ZmlsdGVyIGlkPSdncmFpbic+CiAgICAgIDxmZVR1cmJ1bGVuY2UgdHlwZT0nZnJhY3RhbE5vaXNlJyBiYXNlRnJlcXVlbmN5PScwLjg1JyBudW1PY3RhdmVzPSczJyBzdGl0Y2hUaWxlcz0nc3RpdGNoJyByZXN1bHQ9J24nLz4KICAgICAgPGZlQ29sb3JNYXRyaXggaW49J24nIHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAgIDAgMCAwIDAgMCAgMCAwIDAgMCAwICAwIDAgMCAwLjkgMCcvPgogICAgPC9maWx0ZXI+CiAgICA8cmFkaWFsR3JhZGllbnQgaWQ9J2cxJyBjeD0nNTYlJyBjeT0nNDAlJyByPSc1OCUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjRkZGRkZGJyBzdG9wLW9wYWNpdHk9JzAuOTUnLz4KICAgICAgPHN0b3Agb2Zmc2V0PSc1NSUnIHN0b3AtY29sb3I9JyNEOERBREEnIHN0b3Atb3BhY2l0eT0nMC41Jy8+CiAgICAgIDxzdG9wIG9mZnNldD0nMTAwJScgc3RvcC1jb2xvcj0nI0I3QkFCQScgc3RvcC1vcGFjaXR5PScwJy8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSdnMicgY3g9JzM4JScgY3k9JzgwJScgcj0nNDUlJz4KICAgICAgPHN0b3Agb2Zmc2V0PScwJScgc3RvcC1jb2xvcj0nI0U2RTdFNicgc3RvcC1vcGFjaXR5PScwLjYnLz4KICAgICAgPHN0b3Agb2Zmc2V0PScxMDAlJyBzdG9wLWNvbG9yPScjQjdCQUJBJyBzdG9wLW9wYWNpdHk9JzAnLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTYwMCcgZmlsbD0nI0M2QzlDOScvPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTYwMCcgZmlsbD0ndXJsKCNnMiknLz4KICA8cmVjdCB3aWR0aD0nOTAwJyBoZWlnaHQ9JzE2MDAnIGZpbGw9J3VybCgjZzEpJy8+CiAgPHJlY3Qgd2lkdGg9JzkwMCcgaGVpZ2h0PScxNjAwJyBmaWx0ZXI9J3VybCgjZ3JhaW4pJyBvcGFjaXR5PScwLjE2Jy8+Cjwvc3ZnPgo=");
+    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA5MDAgMTQwMCc+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9J2cnIHgxPScxNSUnIHkxPScwJScgeDI9Jzg1JScgeTI9JzEwMCUnPgogICAgICA8c3RvcCBvZmZzZXQ9JzAlJyBzdG9wLWNvbG9yPScjRjFGMUVFJy8+CiAgICAgIDxzdG9wIG9mZnNldD0nNTUlJyBzdG9wLWNvbG9yPScjQzdDN0MwJy8+CiAgICAgIDxzdG9wIG9mZnNldD0nMTAwJScgc3RvcC1jb2xvcj0nIzlBOUE5MicvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxmaWx0ZXIgaWQ9J24nPgogICAgICA8ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcgcmVzdWx0PSdub2lzZScvPgogICAgICA8ZmVDb2xvck1hdHJpeCBpbj0nbm9pc2UnIHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAgIDAgMCAwIDAgMCAgMCAwIDAgMCAwICAwIDAgMCAwLjUgMCcvPgogICAgPC9maWx0ZXI+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTQwMCcgZmlsbD0ndXJsKCNnKScvPgogIDxyZWN0IHdpZHRoPSc5MDAnIGhlaWdodD0nMTQwMCcgZmlsdGVyPSd1cmwoI24pJyBvcGFjaXR5PScwLjUnLz4KICA8L3N2Zz4=");
     background-size:cover;background-position:center;background-repeat:no-repeat;
     box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden}
   .shell::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
@@ -384,7 +383,7 @@
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
-  .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(194,69,45,.13)}
+  .dot-late{background:var(--urgent);box-shadow:0 0 0 4px rgba(217,122,46,.13)}
   .dot-pend{background:var(--pend)} .dot-event{background:var(--brand)}
   .card-body{flex:1;min-width:0}
   .card-tap{cursor:pointer}
@@ -598,9 +597,13 @@
     background:var(--brand-10);border-radius:12px;padding:13px;font-weight:500;font-size:14px;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit}
   .clientbtn svg{width:16px;height:16px}
-  .sec{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-55);border:1px solid var(--glass-6);border-radius:14px;margin:11px 0;
-    overflow:hidden;backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
-    box-shadow:0 4px 16px var(--btn-05)}
+  .sec{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:1.5px solid rgba(255,255,255,.20);border-radius:14px;margin:11px 0;
+    overflow:hidden;backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);
+    box-shadow:0 4px 16px rgba(15,20,15,.2);
+    color:#F5F5F2;
+    --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
+    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+  [data-theme="dark"] .sec{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(14,14,12,.56);border:1.5px solid rgba(255,255,255,.10)}
   .sec-head{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;cursor:pointer}
   .sec-l{display:flex;align-items:center;gap:11px}
   .sec-l svg{width:17px;height:17px;color:var(--ink-soft)}
@@ -703,9 +706,12 @@
   .p-avatar-edit svg{width:11px;height:11px}
   .p-name{font-size:17px;font-weight:600}
   .p-sub{font-size:13px;color:var(--neutral)}
-  .plist{background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-62);border:1.5px solid rgba(255,255,255,.45);border-radius:20px;overflow:hidden;margin-bottom:16px;
-    box-shadow:0 14px 32px -10px rgba(15,20,15,.18),inset 0 1px 0 rgba(255,255,255,.5);backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%)}
-  [data-theme="dark"] .plist{border:1.5px solid rgba(255,255,255,.10);box-shadow:0 14px 32px -10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+  .plist{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:1.5px solid rgba(255,255,255,.20);border-radius:20px;overflow:hidden;margin-bottom:16px;
+    box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
+    color:#F5F5F2;
+    --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
+    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+  [data-theme="dark"] .plist{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(14,14,12,.56);border:1.5px solid rgba(255,255,255,.10);box-shadow:0 14px 32px -10px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
   .prow{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--line-soft);
     cursor:pointer}
   .prow:last-child{border-bottom:none}
@@ -736,18 +742,18 @@
   .venc-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-top:1px solid var(--line-soft);cursor:pointer}
   .venc-row:first-child{border-top:none}
   .venc-date{width:42px;height:42px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;background:var(--c-date-bg-ok)}
-  .venc-date.atrasado{background:var(--c-date-bg-late)}
+  .venc-date.atrasado{background:var(--paper-2)}
   .venc-date .d{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--c-text-green);line-height:1}
-  .venc-date.atrasado .d{color:var(--c-text-red)}
+  .venc-date.atrasado .d{color:var(--ink)}
   .venc-date .m{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--c-text-green);margin-top:1px}
-  .venc-date.atrasado .m{color:var(--c-text-red)}
+  .venc-date.atrasado .m{color:var(--ink-soft)}
   .venc-info{flex:1;min-width:0}
-  .venc-info .cli{font-size:14px;font-weight:600;color:var(--ink)}
+  .venc-info .cli{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
+  .urgent-dot{width:7px;height:7px;border-radius:50%;background:var(--urgent);flex:none;display:inline-block}
   .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
   .venc-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex:none}
   .venc-amount{font-size:14.5px;font-weight:600;color:var(--ink)}
   .venc-status{font-size:11.5px;color:var(--neutral)}
-  .venc-right.atrasado .venc-amount,.venc-right.atrasado .venc-status{color:var(--c-text-red)}
   .venc-right.breve .venc-amount,.venc-right.breve .venc-status{color:var(--c-text-green)}
   .venc-chev{width:16px;height:16px;color:var(--neutral);flex:none}
   .ring-card{position:relative;width:172px;height:172px;margin:18px auto 8px}
@@ -3670,7 +3676,7 @@
   }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
-    const corDot = {critica:'var(--late)', alta:'var(--c-orange)', media:'var(--c-yellow-soft)', normal:'var(--c-green-soft)', concluido:'var(--neutral)'}[nivel];
+    const corDot = {critica:'var(--urgent)', alta:'var(--c-orange)', media:'var(--c-yellow-soft)', normal:'var(--c-green-soft)', concluido:'var(--neutral)'}[nivel];
     let card='<div class="card radar-card" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
     card+='<div class="card-kicker"><span class="priority-dot" style="background:'+corDot+';margin-right:7px"></span>'+gerarLabelTemporal(it.dataISO, it.hora)+'</div>';
     card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
@@ -3773,7 +3779,7 @@
       const tom = v.atrasado ? 'atrasado' : (v.diffDias<=7 ? 'breve' : '');
       return '<div class="venc-row"'+(v.jobId?(' onclick="openJob(\''+v.jobId+'\')"'):'')+'>'+
         '<div class="venc-date '+(v.atrasado?'atrasado':'')+'"><span class="d">'+dia+'</span><span class="m">'+mes+'</span></div>'+
-        '<div class="venc-info"><span class="cli">'+escapeHtml(v.client)+'</span></div>'+
+        '<div class="venc-info"><span class="cli">'+(v.atrasado?'<span class="urgent-dot"></span>':'')+escapeHtml(v.client)+'</span></div>'+
         '<div class="venc-desc">'+escapeHtml(v.label)+'</div>'+
         '<div class="venc-right '+tom+'"><span class="venc-amount">'+fmtMoney(v.amount)+'</span><span class="venc-status">'+statusTxt+'</span></div>'+
         '<svg class="venc-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'+
