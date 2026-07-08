@@ -39,19 +39,39 @@
   html,body{height:100%}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:var(--bg-ice-2);color:var(--ink);
     font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
-  .shell{display:flex;height:100vh;width:100%;background:#15150F;
+  .shell{display:flex;height:100vh;width:100%;background:#131310;
     box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden}
-  .shell::before{content:"";position:absolute;inset:-15%;z-index:0;pointer-events:none;
-    background:radial-gradient(circle at 30% 30%,#5C5F47 0%,transparent 55%),radial-gradient(circle at 72% 68%,#2E3226 0%,transparent 55%),radial-gradient(circle at 50% 50%,#3A3D2E 0%,transparent 70%);
-    filter:blur(70px);animation:lavaLamp 34s ease-in-out infinite alternate}
-  @keyframes lavaLamp{
-    0%{transform:translate(0,0) scale(1) rotate(0deg)}
-    25%{transform:translate(-4%,3%) scale(1.08) rotate(4deg)}
-    50%{transform:translate(3%,-4%) scale(.96) rotate(-3deg)}
-    75%{transform:translate(-2%,-3%) scale(1.05) rotate(2deg)}
-    100%{transform:translate(4%,4%) scale(1.02) rotate(-4deg)}
-  }
-  @media (prefers-reduced-motion:reduce){.shell::before{animation:none}}
+
+  /* ===== BACKGROUND ANIMADO — vidro refrativo em camadas =====
+     Fixo em tons escuros independentemente do toggle "Modo escuro": os cards/textos
+     da app estão bloqueados em vidro escuro+texto claro (ver histórico), então um
+     fundo claro os deixaria ilegíveis. Paleta clara fica pronta em .bg-blobs-light
+     (não usada) para quando os cards também ficarem theme-aware. */
+  .bg-blobs{position:absolute;inset:-20%;z-index:0;pointer-events:none;overflow:hidden;
+    --blob-1:#191A17; --blob-1b:#111210; --blob-2:#26282A; --blob-2b:#1D1F1C;
+    --blob-3:#211F1B; --blob-4:#33473C; --blob-5:#1B3B38}
+  .bg-blob{position:absolute;inset:0;will-change:transform,opacity}
+  .bg-blob-1{filter:blur(78px);opacity:.8;
+    background:radial-gradient(ellipse 56% 42% at 26% 22%,var(--blob-1) 0%,transparent 62%),radial-gradient(ellipse 40% 55% at 12% 58%,var(--blob-1b) 0%,transparent 65%);
+    animation:blobA 24s ease-in-out infinite alternate}
+  .bg-blob-2{filter:blur(82px);opacity:.72;
+    background:radial-gradient(ellipse 52% 60% at 80% 70%,var(--blob-2) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 62% 90%,var(--blob-2b) 0%,transparent 66%);
+    animation:blobB 27s ease-in-out infinite alternate;animation-delay:-8s}
+  .bg-blob-3{filter:blur(86px);opacity:.6;
+    background:radial-gradient(ellipse 66% 52% at 50% 44%,var(--blob-3) 0%,transparent 68%);
+    animation:blobC 21s ease-in-out infinite alternate;animation-delay:-13s}
+  .bg-blob-4{filter:blur(64px);opacity:.4;
+    background:radial-gradient(ellipse 36% 30% at 68% 20%,var(--blob-4) 0%,transparent 72%);
+    animation:blobD 23s ease-in-out infinite alternate;animation-delay:-4s}
+  .bg-blob-5{filter:blur(64px);opacity:.34;
+    background:radial-gradient(ellipse 32% 40% at 18% 80%,var(--blob-5) 0%,transparent 72%);
+    animation:blobE 25s ease-in-out infinite alternate;animation-delay:-17s}
+  @keyframes blobA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-3%,4%) scale(1.08,.94) rotate(6deg)}100%{transform:translate(4%,-2%) scale(.95,1.06) rotate(-5deg)}}
+  @keyframes blobB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(4%,-3%) scale(.93,1.1) rotate(-7deg)}100%{transform:translate(-3%,3%) scale(1.07,.92) rotate(5deg)}}
+  @keyframes blobC{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-2%,-3%) scale(1.05,1.05) rotate(4deg)}100%{transform:translate(3%,2%) scale(.96,.96) rotate(-4deg)}}
+  @keyframes blobD{0%{opacity:.4;transform:translate(0,0) scale(1)}50%{opacity:.55;transform:translate(3%,3%) scale(1.12)}100%{opacity:.3;transform:translate(-3%,-2%) scale(.9)}}
+  @keyframes blobE{0%{opacity:.34;transform:translate(0,0) scale(1)}50%{opacity:.48;transform:translate(-4%,2%) scale(1.1)}100%{opacity:.26;transform:translate(3%,-3%) scale(.92)}}
+  @media (prefers-reduced-motion:reduce){.bg-blob{animation:none}}
   .shell::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
 
@@ -1385,6 +1405,14 @@
 </div>
 
 <div class="shell">
+
+  <div class="bg-blobs" aria-hidden="true">
+    <div class="bg-blob bg-blob-1"></div>
+    <div class="bg-blob bg-blob-2"></div>
+    <div class="bg-blob bg-blob-3"></div>
+    <div class="bg-blob bg-blob-4"></div>
+    <div class="bg-blob bg-blob-5"></div>
+  </div>
 
   <!-- ===== DESKTOP SIDEBAR ===== -->
   <aside class="sidebar">
