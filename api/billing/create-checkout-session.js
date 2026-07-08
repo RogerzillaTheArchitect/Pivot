@@ -34,7 +34,8 @@ module.exports = async (req, res) => {
       headers: { apikey: SERVICE_KEY, Authorization: 'Bearer ' + access_token }
     });
     if (!userResp.ok) {
-      res.status(401).json({ error: 'Sessão inválida.' });
+      const detalhe = await userResp.text().catch(() => '');
+      res.status(401).json({ error: 'Sessão inválida.', debug_status: userResp.status, debug_body: detalhe, debug_has_url: !!SUPABASE_URL, debug_has_key: !!SERVICE_KEY });
       return;
     }
     const user = await userResp.json();
