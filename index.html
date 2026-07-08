@@ -42,36 +42,41 @@
   .shell{display:flex;height:100vh;width:100%;background:#131310;
     box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden}
 
-  /* ===== BACKGROUND ANIMADO — vidro refrativo em camadas =====
+  /* ===== BACKGROUND ANIMADO — refração de vidro translúcido =====
      Fixo em tons escuros independentemente do toggle "Modo escuro": os cards/textos
      da app estão bloqueados em vidro escuro+texto claro (ver histórico), então um
-     fundo claro os deixaria ilegíveis. Paleta clara fica pronta em .bg-blobs-light
-     (não usada) para quando os cards também ficarem theme-aware. */
-  .bg-blobs{position:absolute;inset:-20%;z-index:0;pointer-events:none;overflow:hidden;
-    --blob-1:#191A17; --blob-1b:#111210; --blob-2:#26282A; --blob-2b:#1D1F1C;
-    --blob-3:#211F1B; --blob-4:#33473C; --blob-5:#1B3B38}
-  .bg-blob{position:absolute;inset:0;will-change:transform,opacity}
-  .bg-blob-1{filter:blur(78px);opacity:.8;
-    background:radial-gradient(ellipse 56% 42% at 26% 22%,var(--blob-1) 0%,transparent 62%),radial-gradient(ellipse 40% 55% at 12% 58%,var(--blob-1b) 0%,transparent 65%);
-    animation:blobA 24s ease-in-out infinite alternate}
-  .bg-blob-2{filter:blur(82px);opacity:.72;
-    background:radial-gradient(ellipse 52% 60% at 80% 70%,var(--blob-2) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 62% 90%,var(--blob-2b) 0%,transparent 66%);
-    animation:blobB 27s ease-in-out infinite alternate;animation-delay:-8s}
-  .bg-blob-3{filter:blur(86px);opacity:.6;
-    background:radial-gradient(ellipse 66% 52% at 50% 44%,var(--blob-3) 0%,transparent 68%);
-    animation:blobC 21s ease-in-out infinite alternate;animation-delay:-13s}
-  .bg-blob-4{filter:blur(64px);opacity:.4;
-    background:radial-gradient(ellipse 36% 30% at 68% 20%,var(--blob-4) 0%,transparent 72%);
-    animation:blobD 23s ease-in-out infinite alternate;animation-delay:-4s}
-  .bg-blob-5{filter:blur(64px);opacity:.34;
-    background:radial-gradient(ellipse 32% 40% at 18% 80%,var(--blob-5) 0%,transparent 72%);
-    animation:blobE 25s ease-in-out infinite alternate;animation-delay:-17s}
-  @keyframes blobA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-3%,4%) scale(1.08,.94) rotate(6deg)}100%{transform:translate(4%,-2%) scale(.95,1.06) rotate(-5deg)}}
-  @keyframes blobB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(4%,-3%) scale(.93,1.1) rotate(-7deg)}100%{transform:translate(-3%,3%) scale(1.07,.92) rotate(5deg)}}
-  @keyframes blobC{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-2%,-3%) scale(1.05,1.05) rotate(4deg)}100%{transform:translate(3%,2%) scale(.96,.96) rotate(-4deg)}}
-  @keyframes blobD{0%{opacity:.4;transform:translate(0,0) scale(1)}50%{opacity:.55;transform:translate(3%,3%) scale(1.12)}100%{opacity:.3;transform:translate(-3%,-2%) scale(.9)}}
-  @keyframes blobE{0%{opacity:.34;transform:translate(0,0) scale(1)}50%{opacity:.48;transform:translate(-4%,2%) scale(1.1)}100%{opacity:.26;transform:translate(3%,-3%) scale(.92)}}
-  @media (prefers-reduced-motion:reduce){.bg-blob{animation:none}}
+     fundo claro os deixaria ilegíveis. Paleta clara (--blob-*-light, não usada)
+     fica pronta para quando os cards também ficarem theme-aware.
+     Técnica: campos de cor grandes com gradientes de 3 paradas (sem corte abrupto,
+     para não gerar anéis/faixas no blur) sobrepostos com mix-blend-mode distintos —
+     é a interação entre camadas que lê como luz atravessando vidro, não uma forma isolada.
+     feTurbulence/feDisplacementMap animado foi testado e descartado: recalcular a
+     distorção a cada frame trava o render (custo de CPU, não é GPU-compositável). */
+  .bg-blobs{position:absolute;inset:-25%;z-index:0;pointer-events:none;overflow:hidden;
+    --blob-1:#15160F; --blob-2:#1D1F1E; --blob-3:#191A15; --blob-accent:#2E4238}
+  .bg-blob{position:absolute;inset:0;will-change:transform}
+  .bg-blob-1{filter:blur(96px);opacity:.85;mix-blend-mode:normal;
+    background:radial-gradient(ellipse 88% 72% at 20% 18%,var(--blob-1) 0%,rgba(21,22,15,.5) 42%,transparent 74%);
+    animation:driftA 34s ease-in-out infinite alternate}
+  .bg-blob-2{filter:blur(102px);opacity:.75;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 92% 76% at 80% 78%,var(--blob-2) 0%,rgba(29,31,30,.45) 44%,transparent 76%);
+    animation:driftB 38s ease-in-out infinite alternate;animation-delay:-12s}
+  .bg-blob-3{filter:blur(108px);opacity:.6;mix-blend-mode:overlay;
+    background:radial-gradient(ellipse 96% 82% at 48% 48%,var(--blob-3) 0%,rgba(25,26,21,.35) 46%,transparent 80%);
+    animation:driftC 30s ease-in-out infinite alternate;animation-delay:-21s}
+  .bg-blob-4{filter:blur(78px);opacity:.18;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 42% 36% at 70% 26%,var(--blob-accent) 0%,transparent 62%);
+    animation:driftD 32s ease-in-out infinite alternate;animation-delay:-6s}
+  .bg-sheen{position:absolute;inset:-30%;z-index:0;pointer-events:none;mix-blend-mode:soft-light;opacity:.45;
+    filter:blur(60px);will-change:transform;
+    background:linear-gradient(128deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 68%);
+    animation:sheenDrift 42s ease-in-out infinite alternate}
+  @keyframes driftA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-5%,4%) scale(1.12,.94) rotate(5deg)}100%{transform:translate(4%,-5%) scale(.93,1.08) rotate(-4deg)}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(5%,-4%) scale(.92,1.1) rotate(-6deg)}100%{transform:translate(-4%,5%) scale(1.1,.9) rotate(5deg)}}
+  @keyframes driftC{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(-3%,-4%) scale(1.08) rotate(7deg)}100%{transform:translate(4%,3%) scale(.94) rotate(-6deg)}}
+  @keyframes driftD{0%{opacity:.18;transform:translate(0,0) scale(1)}50%{opacity:.28;transform:translate(-4%,4%) scale(1.18)}100%{opacity:.12;transform:translate(4%,-3%) scale(.88)}}
+  @keyframes sheenDrift{0%{transform:translate(-6%,-3%) rotate(0deg)}50%{transform:translate(5%,4%) rotate(4deg)}100%{transform:translate(-3%,5%) rotate(-3deg)}}
+  @media (prefers-reduced-motion:reduce){.bg-blob,.bg-sheen{animation:none}}
   .shell::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
 
@@ -1411,8 +1416,8 @@
     <div class="bg-blob bg-blob-2"></div>
     <div class="bg-blob bg-blob-3"></div>
     <div class="bg-blob bg-blob-4"></div>
-    <div class="bg-blob bg-blob-5"></div>
   </div>
+  <div class="bg-sheen" aria-hidden="true"></div>
 
   <!-- ===== DESKTOP SIDEBAR ===== -->
   <aside class="sidebar">
