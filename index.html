@@ -738,6 +738,8 @@
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .cal-day.out{opacity:.3}
   .cal-day.today{border-color:var(--brand);font-weight:600;color:var(--ink)}
+  .cal-day.cal-day-sel{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+  .cal-day.cal-day-sel .cd{background:#fff!important}
   .cal-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;justify-content:center}
   .cd{width:5px;height:5px;border-radius:50%}
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:12.5px;color:var(--ink-soft)}
@@ -1127,11 +1129,10 @@
   .nav button.on{color:#fff}
   .nav button.on svg{color:#fff}
   .nav .fab-wrap{flex:1;display:flex;align-items:center;justify-content:center}
-  .fab{width:34px;height:34px;border-radius:50%;color:transparent;display:grid;
-    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01MCwyIEE0OCw0OCAwIDEsMSA0OS45OSwyIFogTTQyLDIwIEg1OCBWNDIgSDgwIFY1OCBINTggVjgwIEg0MiBWNTggSDIwIFY0MiBINDIgWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=");
-    background-size:100% 100%;background-position:center;background-repeat:no-repeat;
-    place-items:center;box-shadow:0 0 10px 2px rgba(255,255,255,.28);border:none}
-  .fab svg{width:21px;height:21px}
+  .fab{width:36px;height:36px;border-radius:50%;color:#fff;display:grid;place-items:center;
+    background:var(--glass-7);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,.42);box-shadow:0 0 9px 1px rgba(255,255,255,.16)}
+  .fab svg{width:17px;height:17px}
   .badge{position:absolute;top:1px;right:8px;background:var(--late);color:#fff;font-size:9.5px;font-weight:600;
     min-width:15px;height:15px;border-radius:8px;display:grid;place-items:center;padding:0 4px}
 
@@ -1594,27 +1595,16 @@
           <div class="cal-month" id="cal-month-label">Junho 2026</div>
           <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
-        <div class="segmented" style="margin-bottom:14px">
-          <button class="on" onclick="setCalView(this,'mes')"><span data-t="calendar.month">Mês</span></button>
-          <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
-          <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
-        </div>
         <div class="cal-grid" id="calgrid"></div>
-        <div id="cal-week" style="display:none"></div>
-        <div id="cal-day" style="display:none"></div>
+        <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
 
         <div class="filter-row" style="margin-top:22px">
           <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
-          <div class="chip" data-key="fechados" onclick="filterJobs(this,'fechados')"><span data-t="home.closed">Fechados</span></div>
-          <div class="chip" data-key="realizar" onclick="filterJobs(this,'realizar')"><span data-t="jobs.filter.upcoming">A realizar</span></div>
           <div class="chip" data-key="ativos" onclick="filterJobs(this,'ativos')"><span data-t="jobs.filter.active">Ativos</span></div>
-          <div class="chip" data-key="entregar" onclick="filterJobs(this,'entregar')"><span data-t="jobs.filter.delivering">A entregar</span></div>
-          <div class="chip" data-key="assinatura" onclick="filterJobs(this,'assinatura')"><span data-t="jobs.filter.awaiting">Aguardando assinatura</span></div>
-          <div class="chip" data-key="pagamento" onclick="filterJobs(this,'pagamento')"><span data-t="jobs.filter.payment">Pagamento pendente</span></div>
+          <div class="chip" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span data-t="jobs.filter.mine">A meu cargo</span></div>
+          <div class="chip" data-key="cliente" onclick="filterJobs(this,'cliente')"><span data-t="jobs.filter.client">Com o cliente</span></div>
           <div class="chip" data-key="atrasados" onclick="filterJobs(this,'atrasados')"><span data-t="jobs.filter.overdue">Atrasados</span></div>
           <div class="chip" data-key="concluidos" onclick="filterJobs(this,'concluidos')"><span data-t="jobs.filter.done">Concluídos</span></div>
-          <div class="chip" data-key="executados" onclick="filterJobs(this,'executados')"><span data-t="home.executed">Executados</span></div>
-          <div class="chip" data-key="entregues" onclick="filterJobs(this,'entregues')"><span data-t="home.delivered">Entregues</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
@@ -1691,6 +1681,7 @@
         <div class="plist" style="margin-bottom:20px">
           <div class="prow" onclick="abrirBibliotecaJuridica()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><div class="t" data-t="profile.legalLibrary">Biblioteca jurídica</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="abrirContratosPorProfissao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><div class="t" data-t="legal.contractsByProfession">Contratos por profissão</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="openSheet();pushPanel('importar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="t" data-t="sheet.import">Importar</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" data-t="explore.templates">Seus modelos</div>
@@ -1862,7 +1853,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 5v14M5 12h14"/></svg></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
@@ -1890,17 +1881,13 @@
 
     <div class="sheet-body" id="sheetBody">
 
-      <!-- HOME -->
+      <!-- HOME — 4 cartões do mesmo tamanho -->
       <div class="panel show" data-panel="home">
-        <div class="sheet-primary" onclick="pushPanel('trabalho')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
-          <div><div class="t" data-t="sheet.job">Trabalho</div><div class="s" data-t="sheet.jobHint">gera cronograma, contrato e briefing</div></div>
-        </div>
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="wizard.client">Cliente</span></div>
+          <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
+          <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
-          <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg><span data-t="sheet.template">Modelo</span></div>
-          <div class="sheet-item" onclick="pushPanel('importar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-t="sheet.import">Importar</span></div>
+          <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span data-t="sheet.template">Modelo</span></div>
         </div>
       </div>
 
@@ -2135,6 +2122,15 @@
       <!-- 👤 CLIENTE -->
       <div class="panel" data-panel="cliente">
         <div class="field">
+          <label data-t="contact.type">Tipo de contacto</label>
+          <div class="priority-picker" id="cl-tipo-picker">
+            <div class="priority-opt on" data-val="Cliente" onclick="selecionarTipoContato(this)"><span data-t="contact.type.client">Cliente</span></div>
+            <div class="priority-opt" data-val="Colaborador" onclick="selecionarTipoContato(this)"><span data-t="contact.type.collaborator">Colaborador</span></div>
+            <div class="priority-opt" data-val="Fornecedor" onclick="selecionarTipoContato(this)"><span data-t="contact.type.supplier">Fornecedor</span></div>
+            <div class="priority-opt" data-val="Outro" onclick="selecionarTipoContato(this)"><span data-t="contact.type.other">Outro</span></div>
+          </div>
+        </div>
+        <div class="field">
           <label data-t="field.nameRequired">Nome *</label><input id="cl-nome" placeholder="Nome completo" data-t-placeholder="field.namePlaceholder">
           <div class="field-err" id="cl-nome-err" data-t="wizard.client.nameError">Precisa de um nome para continuar.</div>
         </div>
@@ -2152,7 +2148,7 @@
         <div class="field"><label><span data-t="field.company">Empresa</span> <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-empresa" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
         <div class="field"><label>Instagram <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-instagram" placeholder="@utilizador" data-t-placeholder="field.instagramPlaceholder"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="cl-obs" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-        <button class="btn primary" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createClient2">Criar cliente →</span></button>
+        <button class="btn primary" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
       </div>
 
       <!-- ✅ TAREFA -->
@@ -2637,6 +2633,8 @@
     "calendar.paymentsDue": { pt:"Pagamentos a receber", en:"Payments due", es:"Pagos por cobrar" },
     "calendar.today": { pt:"HOJE", en:"TODAY", es:"HOY" },
     "calendar.dayLabel": { pt:"Dia", en:"Day", es:"Día" },
+    "calendar.dayFilterPrefix": { pt:"A mostrar o dia", en:"Showing day", es:"Mostrando el día" },
+    "calendar.clearDay": { pt:"limpar", en:"clear", es:"limpiar" },
     "calendar.week": { pt:"Semana", en:"Week", es:"Semana" },
     // --- Informações do Cliente ---
     "clientinfo.availableUntil": { pt:"Disponível até: ", en:"Available until: ", es:"Disponible hasta: " },
@@ -2988,6 +2986,8 @@
     "jobs.emptyFilter": { pt:"Nada neste filtro.", en:"Nothing in this filter.", es:"Nada en este filtro." },
     "jobs.filter.active": { pt:"Ativos", en:"Active", es:"Activos" },
     "jobs.filter.all": { pt:"Todos", en:"All", es:"Todos" },
+    "jobs.filter.mine": { pt:"A meu cargo", en:"On me", es:"A mi cargo" },
+    "jobs.filter.client": { pt:"Com o cliente", en:"With client", es:"Con el cliente" },
     "jobs.filter.awaiting": { pt:"Aguardando assinatura", en:"Awaiting signature", es:"Esperando firma" },
     "jobs.filter.delivering": { pt:"A entregar", en:"Delivering", es:"Por entregar" },
     "jobs.filter.done": { pt:"Concluídos", en:"Completed", es:"Completados" },
@@ -3362,6 +3362,14 @@
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
     "sheet.import": { pt:"Importar", en:"Import", es:"Importar" },
+    "sheet.contact": { pt:"Contato", en:"Contact", es:"Contacto" },
+    "contact.type": { pt:"Tipo de contacto", en:"Contact type", es:"Tipo de contacto" },
+    "contact.type.client": { pt:"Cliente", en:"Client", es:"Cliente" },
+    "contact.type.collaborator": { pt:"Colaborador", en:"Collaborator", es:"Colaborador" },
+    "contact.type.supplier": { pt:"Fornecedor", en:"Supplier", es:"Proveedor" },
+    "contact.type.other": { pt:"Outro", en:"Other", es:"Otro" },
+    "wizard.createContact": { pt:"Criar contacto →", en:"Create contact →", es:"Crear contacto →" },
+    "toast.contactCreated": { pt:"Contacto criado: ", en:"Contact created: ", es:"Contacto creado: " },
     "sheet.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
@@ -4907,7 +4915,7 @@
       if(extra.telefone) cli.telefone=extra.telefone;
     } else {
       const id='cli'+Date.now();
-      cli={ id, nome, email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
+      cli={ id, nome, tipo:'Cliente', email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
       clientesData[id]=cli;
     }
     saveClientesData();
@@ -7820,6 +7828,12 @@
     document.getElementById('cl-dup').style.display='none';
     clienteDuplicadoEncontrado=null;
   }
+  let contatoTipoAtual='Cliente';
+  function selecionarTipoContato(el){
+    document.querySelectorAll('#cl-tipo-picker .priority-opt').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');
+    contatoTipoAtual=el.dataset.val;
+  }
   function criarCliente(){
     const nomeEl=document.getElementById('cl-nome');
     const nome=nomeEl.value.trim();
@@ -7827,7 +7841,7 @@
     if(!nome){ err.style.display='block'; nomeEl.focus(); return; }
     err.style.display='none';
     const id='cli'+Date.now();
-    clientesData[id]={ id, nome,
+    clientesData[id]={ id, nome, tipo:contatoTipoAtual||'Cliente',
       email:document.getElementById('cl-email').value.trim(),
       telefone:document.getElementById('cl-tel').value.trim(),
       empresa:document.getElementById('cl-empresa').value.trim(),
@@ -7836,8 +7850,11 @@
       criadoEm:new Date().toISOString() };
     saveClientesData();
     closeSheet();
-    showToast(t('toast.clientCreated')+nome+t('toast.clientCreated2'));
+    showToast(t('toast.contactCreated')+nome);
     ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    contatoTipoAtual='Cliente';
+    const picker=document.getElementById('cl-tipo-picker');
+    if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
   }
 
   /* 📅 Evento */
@@ -8590,36 +8607,76 @@
   }
 
   /* ===== Trabalhos — filtros reais ===== */
-  function filterJobs(el, key){
-    document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
-    el.classList.add('on');
+  /* aplica um filtro de estado (key) a um card, lendo os datasets já calculados
+     por updateJobCardInner. As chaves antigas (fechados/realizar/entregar/…)
+     continuam a funcionar para a navegação vinda dos cards da dashboard, mesmo
+     que já não apareçam como chips visíveis; as chaves "meucargo" e "cliente"
+     reúnem, respetivamente, tudo o que está pendente do meu lado e do lado do
+     cliente, para não haver dezenas de filtros micro. */
+  function jobPassaChipDataset(j, key){
+    switch(key){
+      case 'todos': return true;
+      case 'ativos': return j.dataset.state==='active';
+      case 'meucargo': return j.dataset.fechado==='1' && (j.dataset.realizar==='1' || j.dataset.entregar==='1');
+      case 'cliente': return j.dataset.fechado!=='1' || j.dataset.payment==='pending';
+      case 'atrasados': return j.dataset.overdue==='1';
+      case 'concluidos': return j.dataset.state==='done';
+      case 'entregar': return j.dataset.entregar==='1' || j.dataset.state==='deliver';
+      case 'assinatura': return j.dataset.signature==='pending';
+      case 'pagamento': return j.dataset.payment==='pending';
+      case 'fechados': return j.dataset.fechado==='1';
+      case 'realizar': return j.dataset.realizar==='1';
+      case 'executados': return j.dataset.executado==='1';
+      case 'entregues': return j.dataset.entregue==='1';
+      default: return true;
+    }
+  }
+  /* um trabalho "cai" num dia do mês exibido se for a data do evento ou se tiver
+     um pagamento por receber com vencimento nesse dia */
+  function jobNoDia(job, year, month, day){
+    const iso=year+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    if(job.dateRaw===iso) return true;
+    return (job.payments||[]).some(p=>p.dueDate===iso && p.status!=='pago');
+  }
+  /* filtro combinado: o chip de estado E (opcionalmente) o dia selecionado no
+     calendário. Os dois conversam entre si — calendário filtra por dia, chips
+     filtram por estado. */
+  function aplicarFiltrosTrabalhos(){
+    const m=calMonths[calIndex];
     const jobs=document.querySelectorAll('#v-trabalhos .job');
     let visible=0;
     jobs.forEach(j=>{
-      let show=true;
-      if(key==='ativos') show = j.dataset.state==='active';
-      else if(key==='entregar') show = j.dataset.entregar==='1' || j.dataset.state==='deliver';
-      else if(key==='assinatura') show = j.dataset.signature==='pending';
-      else if(key==='pagamento') show = j.dataset.payment==='pending';
-      else if(key==='atrasados') show = j.dataset.overdue==='1';
-      else if(key==='concluidos') show = j.dataset.state==='done';
-      else if(key==='fechados') show = j.dataset.fechado==='1';
-      else if(key==='realizar') show = j.dataset.realizar==='1';
-      else if(key==='executados') show = j.dataset.executado==='1';
-      else if(key==='entregues') show = j.dataset.entregue==='1';
+      let show=jobPassaChipDataset(j, calFiltroAtivo);
+      if(show && calDiaAtivo!=null){
+        const job=jobsData[j.dataset.jobId];
+        show = job ? jobNoDia(job, m.year, m.month, calDiaAtivo) : false;
+      }
       const w=j.closest('.job-card-wrap');
       if(w) w.style.display = show? 'block':'none'; else j.style.display = show? 'block':'none';
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
+    const df=document.getElementById('cal-dia-filtro');
+    if(df){
+      if(calDiaAtivo!=null){ df.style.display='block'; df.innerHTML=t('calendar.dayFilterPrefix')+' '+calDiaAtivo+' · <span class="inline-link" onclick="limparDiaCal()">'+t('calendar.clearDay')+'</span>'; }
+      else df.style.display='none';
+    }
+  }
+  function filterJobs(el, key){
+    document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
+    if(el) el.classList.add('on');
     calFiltroAtivo=key;
+    aplicarFiltrosTrabalhos();
     if(typeof renderCalendar==='function') renderCalendar();
   }
   function abrirTrabalhosFiltrados(key){
     go('trabalhos');
     setTimeout(()=>{
       const chip=document.querySelector('#v-trabalhos .filter-row .chip[data-key="'+key+'"]');
-      if(chip) filterJobs(chip, key);
+      /* se a chave não tiver chip visível (ex.: fechados/executados/entregues,
+         que agora só vivem na navegação da dashboard), aplica na mesma o filtro
+         e limpa o destaque dos chips */
+      filterJobs(chip, key);
     }, 60);
   }
 
@@ -8681,6 +8738,8 @@
       case 'realizar': return c.aRealizar;
       case 'ativos': return state==='active';
       case 'entregar': return c.aEntregar;
+      case 'meucargo': return c.fechado && (c.aRealizar || c.aEntregar);
+      case 'cliente': return !c.fechado || c.pagamentoPendente;
       case 'assinatura': return !c.fechado;
       case 'pagamento': return c.pagamentoPendente;
       case 'atrasados': return c.atrasado;
@@ -8732,8 +8791,8 @@
   }
   function mergedMonthData(m){ return dynamicEventsForMonth(m.year, m.month); }
   let calIndex=new Date().getMonth();
-  let calView='mes';
   let calFiltroAtivo='todos';
+  let calDiaAtivo=null; /* dia selecionado no calendário (número) ou null */
   function diaHojeSeForOMes(m){
     const hoje=new Date();
     return (hoje.getFullYear()===m.year && hoje.getMonth()+1===m.month) ? hoje.getDate() : null;
@@ -8751,7 +8810,7 @@
     ['S','T','Q','Q','S','S','D'].forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el)});
     for(let i=1;i<=m.days;i++){
       const day=document.createElement('div');
-      day.className='cal-day'+(i===hojeReal?' today':'');
+      day.className='cal-day'+(i===hojeReal?' today':'')+(i===calDiaAtivo?' cal-day-sel':'');
       day.innerHTML=i;
       if(merged.markers[i]){
         const dots=document.createElement('div'); dots.className='cal-dots';
@@ -8760,57 +8819,31 @@
           dots.appendChild(dot)});
         day.appendChild(dots);
       }
-      if(merged.info[i]){ day.style.cursor='pointer'; day.onclick=()=>showToast(merged.info[i]); }
+      /* só os dias com compromissos são clicáveis — clicar filtra a lista de
+         cards abaixo por esse dia (e clicar de novo limpa) */
+      if(merged.info[i]){ day.style.cursor='pointer'; day.onclick=()=>selecionarDiaCal(i); }
+      else day.style.cursor='default';
       grid.appendChild(day);
     }
-    if(calView==='semana') renderWeek();
-    if(calView==='dia') renderDay();
   }
-  function renderWeek(){
-    const m=calMonths[calIndex];
-    const hojeReal=diaHojeSeForOMes(m);
-    const merged=mergedMonthData(m);
-    const start=Math.max(1, (hojeReal||1)-3);
-    let html='<div class="cal-grid" style="grid-template-columns:repeat(7,1fr)">';
-    ['S','T','Q','Q','S','S','D'].forEach(d=>html+='<div class="cal-dow">'+d+'</div>');
-    for(let i=start;i<start+7;i++){
-      if(i>m.days){ html+='<div class="cal-day out"></div>'; continue; }
-      const isToday=i===hojeReal;
-      let dots='';
-      if(merged.markers[i]) dots='<div class="cal-dots">'+merged.markers[i].map(c=>'<div class="cd" style="background:'+corMarcadorCal(c)+'"></div>').join('')+'</div>';
-      const click=merged.info[i]? ` onclick="showToast('${escapeHtml(merged.info[i]).replace(/'/g,"\\'")}')" style="cursor:pointer"` : '';
-      html+='<div class="cal-day'+(isToday?' today':'')+'"'+click+'>'+i+dots+'</div>';
-    }
-    html+='</div>';
-    document.getElementById('cal-week').innerHTML=html;
-  }
-  function renderDay(){
-    const m=calMonths[calIndex];
-    const hojeReal=diaHojeSeForOMes(m);
-    const merged=mergedMonthData(m);
-    const d=hojeReal||1;
-    let html='<div style="font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:19px;margin-bottom:12px">'+t('calendar.dayLabel')+' '+d+' · '+calMonthLabel(m)+'</div>';
-    if(merged.info[d]){
-      html+='<div class="agenda-item"><div class="agenda-day">'+t('calendar.today')+'</div><div class="soon-text">'+escapeHtml(merged.info[d])+'</div></div>';
-    } else {
-      html+='<p style="color:var(--neutral);font-size:13.5px">'+t('calendar.nothing')+'</p>';
-    }
-    document.getElementById('cal-day').innerHTML=html;
-  }
-  function setCalView(el,view){
-    calView=view;
-    el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    el.classList.add('on');
-    document.getElementById('calgrid').style.display = view==='mes' ? 'grid':'none';
-    document.getElementById('cal-week').style.display = view==='semana' ? 'block':'none';
-    document.getElementById('cal-day').style.display = view==='dia' ? 'block':'none';
-    /* sempre repinta a partir do mês atualmente selecionado (calIndex), nunca do mês de hoje */
+  function selecionarDiaCal(i){
+    calDiaAtivo = (calDiaAtivo===i) ? null : i;
+    if(navigator.vibrate) navigator.vibrate(8);
     renderCalendar();
+    aplicarFiltrosTrabalhos();
+  }
+  function limparDiaCal(){
+    calDiaAtivo=null;
+    renderCalendar();
+    aplicarFiltrosTrabalhos();
   }
   function calNav(dir){
     const next=calIndex+dir;
     if(next<0 || next>calMonths.length-1) return;
-    calIndex=next; renderCalendar();
+    calIndex=next;
+    calDiaAtivo=null; /* o número do dia não faz sentido ao mudar de mês */
+    renderCalendar();
+    aplicarFiltrosTrabalhos();
   }
   renderCalendar();
 
