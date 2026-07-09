@@ -921,6 +921,10 @@
   .rate{display:inline-flex;align-items:center;gap:4px}
   .rate svg{width:12px;height:12px;color:var(--ink)}
 
+  .ct-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}
+  .ct-stat{background:var(--glass-7);border:1px solid var(--line-soft);border-radius:12px;padding:12px 8px;text-align:center}
+  .ct-stat .v{font-family:var(--font-numeric,inherit);font-size:15px;font-weight:700;color:var(--ink)}
+  .ct-stat .l{font-size:10.5px;color:var(--ink-soft);margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
   .segmented{display:flex;border:1px solid var(--line);border-radius:11px;padding:3px;margin-bottom:16px}
   .segmented button{flex:1;border:none;background:none;padding:8px;border-radius:9px;font-family:inherit;
     font-size:13.5px;font-weight:500;color:var(--ink-soft);cursor:pointer}
@@ -1541,10 +1545,10 @@
             <span class="ms-c-trend" id="trend-fechados"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track-outer" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress-outer" id="ring-fechados-gamify" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-contratos-num">3</span></div>
+              <div class="mini-ring-center"><span id="mt-fechados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-fechados-den">0</span></div>
             </div>
           </div>
           <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('executados')">
@@ -1696,6 +1700,28 @@
         <p style="font-size:13px;color:var(--neutral);margin-top:6px"><span data-t="explore.empty">Em crescimento. Sugere um modelo que gostarias de ver aqui.</span></p>
       </section>
 
+      <!-- ============ CONTATOS (clientes + colaboradores) ============ -->
+      <section class="view" id="v-contatos">
+        <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.title">Perfil</span></div>
+        <div class="page-head"><div class="page-title" data-t="profile.contacts">Contatos</div></div>
+        <div class="segmented" style="margin-bottom:16px">
+          <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
+          <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
+        </div>
+        <input id="ct-busca" placeholder="Procurar contacto…" data-t-placeholder="contacts.search" style="width:100%;margin-bottom:14px" oninput="renderContatos()">
+        <div id="contatos-lista"></div>
+        <div class="empty" id="contatosEmpty" style="display:none;padding:40px 16px">
+          <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/></svg></div>
+          <h3 style="font-size:18px" data-t="contacts.empty">Ainda sem contactos aqui.</h3>
+        </div>
+      </section>
+
+      <!-- ============ CONTATO — detalhe expandido ============ -->
+      <section class="view" id="v-contato-detalhe">
+        <div class="back" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.contacts">Contatos</span></div>
+        <div id="contato-detalhe-corpo"></div>
+      </section>
+
       <!-- ============ COLABORAÇÕES (colaborador externo) ============ -->
       <section class="view" id="v-colaboracoes">
         <div class="page-title" data-t="nav.collaborations">Colaborações</div>
@@ -1721,6 +1747,7 @@
           <div class="prow" data-requer-admin onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" data-t="profile.company">Empresa</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Métodos de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="t" id="lbl-equipa" data-t="profile.team">Equipe</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" id="lbl-produto-section" data-t="profile.product">Produto</div>
@@ -3310,6 +3337,24 @@
     "profile.signature": { pt:"Assinatura", en:"Signature", es:"Firma" },
     "profile.support": { pt:"Suporte", en:"Support", es:"Soporte" },
     "profile.team": { pt:"Equipe", en:"Team", es:"Equipo" },
+    "profile.title": { pt:"Perfil", en:"Profile", es:"Perfil" },
+    "profile.contacts": { pt:"Contatos", en:"Contacts", es:"Contactos" },
+    "contacts.clients": { pt:"Clientes", en:"Clients", es:"Clientes" },
+    "contacts.collaborators": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
+    "contacts.search": { pt:"Procurar contacto…", en:"Search contact…", es:"Buscar contacto…" },
+    "contacts.empty": { pt:"Ainda sem contactos aqui.", en:"No contacts here yet.", es:"Aún no hay contactos aquí." },
+    "contacts.jobsCount": { pt:"trabalhos", en:"jobs", es:"trabajos" },
+    "contacts.jobCount1": { pt:"trabalho", en:"job", es:"trabajo" },
+    "contacts.totalBilled": { pt:"Total faturado", en:"Total billed", es:"Total facturado" },
+    "contacts.received": { pt:"Recebido", en:"Received", es:"Recibido" },
+    "contacts.pending": { pt:"Por receber", en:"Outstanding", es:"Por recibir" },
+    "contacts.history": { pt:"Histórico de trabalhos", en:"Job history", es:"Historial de trabajos" },
+    "contacts.together": { pt:"Trabalhos em conjunto", en:"Jobs together", es:"Trabajos en conjunto" },
+    "contacts.noHistory": { pt:"Sem trabalhos registados com este contacto.", en:"No jobs recorded with this contact.", es:"Sin trabajos registrados con este contacto." },
+    "contacts.type": { pt:"Tipo", en:"Type", es:"Tipo" },
+    "contacts.noEmail": { pt:"Sem email", en:"No email", es:"Sin email" },
+    "contacts.openJob": { pt:"Abrir trabalho", en:"Open job", es:"Abrir trabajo" },
+    "contacts.newContact": { pt:"Novo contacto", en:"New contact", es:"Nuevo contacto" },
     // --- Lembretes (legado) ---
     "reminders.default": { pt:"Padrão", en:"Default", es:"Por defecto" },
     "reminders.minimal": { pt:"Mínimo", en:"Minimal", es:"Mínimo" },
@@ -3726,13 +3771,14 @@
     }
   }
 
-  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe'];
   function go(v){
     views.forEach(x=>{
       const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
     });
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
-      bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil'};
+      bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
+      contatos:'perfil','contato-detalhe':'perfil'};
     const active=navMap[v]||v;
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
@@ -3744,6 +3790,7 @@
     if(v==='bibliotecas') renderExplorar();
     if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
+    if(v==='contatos') abrirContatos();
   }
   let METAS={receita:0, gastos:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
@@ -3867,16 +3914,18 @@
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-    set('mt-contratos-num', s.contratosFechados);
+    /* os 3 anéis agora são frações literais: o traço enche na proporção
+       num/den (ex.: 2/4 = meio círculo). Fechados = trabalhos com contrato
+       assinado sobre o total de trabalhos criados. */
+    set('mt-fechados-num', s.contratosFechados);
+    set('mt-fechados-den', s.totalJobs);
     set('mt-realizados-num', s.trabalhosRealizados);
     set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
+    pintarAnelComVolta('ring-fechados', 25, s.contratosFechados, s.totalJobs);
     pintarAnelComVolta('ring-realizados', 25, s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
     pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
-    /* anel "Fechados": não tem meta — representa apenas o ritmo deste mês
-       face ao anterior (uma volta completa = igualou o mês passado) */
-    pintarAnelComVolta('ring-fechados-gamify', 25, s.fechadosEsteMes, s.fechadosMesAnterior||(s.fechadosEsteMes>0?s.fechadosEsteMes:1));
     /* comparação com o período anterior (mês passado), entre o nome e o anel */
     const setTrend=(id, atual, anterior)=>{
       const el=document.getElementById(id);
@@ -7855,6 +7904,142 @@
     contatoTipoAtual='Cliente';
     const picker=document.getElementById('cl-tipo-picker');
     if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
+  }
+
+  /* ===================== CONTATOS — diretório unificado =====================
+     Junta num só lugar clientes e colaboradores, com dados, histórico de
+     trabalhos e resumo financeiro. Clientes vêm de clientesData (tipo Cliente)
+     e dos nomes de cliente já usados em trabalhos; colaboradores vêm de
+     clientesData (tipo != Cliente), dos external_collaborators (por trabalho)
+     e dos membros de equipa. */
+  let contatosSubAtiva='clientes';
+  let colaboradoresExternosTodos=[];
+  async function carregarColabsExternosTodos(){
+    try{
+      if(!sb || !currentWorkspaceId){ colaboradoresExternosTodos=[]; return; }
+      const { data, error } = await sb.from('external_collaborators').select('*').eq('workspace_id', currentWorkspaceId).neq('status','removido');
+      colaboradoresExternosTodos = error ? [] : (data||[]);
+    }catch(e){ colaboradoresExternosTodos=[]; }
+  }
+  async function abrirContatos(){
+    await carregarColabsExternosTodos();
+    contatosSubAtiva='clientes';
+    document.getElementById('ct-tab-clientes').classList.add('on');
+    document.getElementById('ct-tab-colaboradores').classList.remove('on');
+    const busca=document.getElementById('ct-busca'); if(busca) busca.value='';
+    renderContatos();
+  }
+  function mudarSubContatos(sub){
+    contatosSubAtiva=sub;
+    document.getElementById('ct-tab-clientes').classList.toggle('on', sub==='clientes');
+    document.getElementById('ct-tab-colaboradores').classList.toggle('on', sub==='colaboradores');
+    renderContatos();
+  }
+  function coletarClientes(){
+    const mapa={};
+    Object.values(clientesData).forEach(c=>{
+      if((c.tipo||'Cliente')==='Cliente')
+        mapa[c.nome.toLowerCase()]={ nome:c.nome, email:c.email||'', telefone:c.telefone||'', empresa:c.empresa||'', tipo:'Cliente' };
+    });
+    jobsVisiveis().forEach(j=>{
+      if(!j.client) return;
+      const k=j.client.toLowerCase();
+      if(!mapa[k]) mapa[k]={ nome:j.client, email:j.email||'', telefone:'', empresa:'', tipo:'Cliente' };
+      else if(!mapa[k].email && j.email) mapa[k].email=j.email;
+    });
+    return Object.values(mapa).sort((a,b)=>a.nome.localeCompare(b.nome));
+  }
+  function coletarColaboradores(){
+    const mapa={};
+    const add=(nome,email,extra)=>{
+      const k=(email||nome||'').toLowerCase();
+      if(!k) return;
+      if(!mapa[k]) mapa[k]=Object.assign({ nome:nome||email, email:email||'', telefone:'', empresa:'', tipo:'Colaborador' }, extra||{});
+      else if(!mapa[k].email && email) mapa[k].email=email;
+    };
+    Object.values(clientesData).forEach(c=>{
+      if((c.tipo||'Cliente')!=='Cliente') add(c.nome, c.email, { tipo:c.tipo||'Colaborador', telefone:c.telefone||'', empresa:c.empresa||'' });
+    });
+    (colaboradoresExternosTodos||[]).forEach(c=>add(c.nome||c.email, c.email, { tipo:'Colaborador' }));
+    (membrosEquipa||[]).forEach(m=>{ if(currentUser && m.user_id===currentUser.id) return; add(m.nome||m.email, m.email, { tipo:'Equipa' }); });
+    return Object.values(mapa).sort((a,b)=>(a.nome||'').localeCompare(b.nome||''));
+  }
+  function trabalhosDoCliente(nome){
+    const k=(nome||'').toLowerCase();
+    return jobsVisiveis().filter(j=>(j.client||'').toLowerCase()===k);
+  }
+  function trabalhosDoColaborador(email){
+    const k=(email||'').toLowerCase();
+    if(!k) return [];
+    const ids=new Set((colaboradoresExternosTodos||[]).filter(c=>(c.email||'').toLowerCase()===k).map(c=>c.job_id));
+    return jobsVisiveis().filter(j=>ids.has(j.id));
+  }
+  function renderContatos(){
+    const q=(document.getElementById('ct-busca').value||'').trim().toLowerCase();
+    const lista = contatosSubAtiva==='clientes' ? coletarClientes() : coletarColaboradores();
+    const filtrada = q ? lista.filter(c=>((c.nome||'')+' '+(c.email||'')+' '+(c.empresa||'')).toLowerCase().includes(q)) : lista;
+    const wrap=document.getElementById('contatos-lista');
+    document.getElementById('contatosEmpty').style.display = filtrada.length? 'none':'block';
+    wrap.innerHTML = filtrada.map(c=>{
+      const njobs = contatosSubAtiva==='clientes' ? trabalhosDoCliente(c.nome).length : trabalhosDoColaborador(c.email).length;
+      const sub = (c.email||t('contacts.noEmail')) + (njobs? (' · '+njobs+' '+(njobs===1?t('contacts.jobCount1'):t('contacts.jobsCount'))) : '');
+      const key = contatosSubAtiva==='clientes' ? ('cli:'+c.nome) : ('col:'+(c.email||c.nome));
+      const tag = (c.tipo && c.tipo!=='Cliente') ? ' <span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft);font-size:10px">'+escapeHtml(c.tipo)+'</span>' : '';
+      return '<div class="pick-row" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
+        '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+avatarHtml(c.nome,34)+
+        '<div style="min-width:0"><div class="nm">'+escapeHtml(c.nome)+tag+'</div><div class="sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div></div></div>'+
+        '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>';
+    }).join('');
+  }
+  function linhaInfoContato(label,val){
+    return '<div class="prow" style="cursor:default"><div style="flex:1"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500">'+escapeHtml(val)+'</div></div></div>';
+  }
+  function abrirContatoDetalhe(key){
+    const sep=key.indexOf(':');
+    const tipo=key.slice(0,sep), id=key.slice(sep+1);
+    let c, jobs, together=false;
+    if(tipo==='cli'){
+      c = coletarClientes().find(x=>x.nome===id) || {nome:id,email:'',tipo:'Cliente'};
+      jobs = trabalhosDoCliente(id);
+    } else {
+      c = coletarColaboradores().find(x=>(x.email||x.nome)===id) || {nome:id,email:id,tipo:'Colaborador'};
+      jobs = trabalhosDoColaborador(c.email);
+      together=true;
+    }
+    let faturado=0, recebido=0;
+    jobs.forEach(j=>{
+      const ps=j.payments||[];
+      if(ps.length){ ps.forEach(p=>{ const v=Number(p.amount)||0; faturado+=v; if(p.status==='pago') recebido+=v; }); }
+      else if(j.value){ faturado+=Number(j.value)||0; }
+    });
+    const porReceber=Math.max(0, faturado-recebido);
+    let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52)+
+      '<div style="min-width:0"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
+      '<div style="font-size:12.5px;color:var(--ink-soft)">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div></div>';
+    html+='<div class="plist" style="margin-bottom:16px">';
+    if(c.email) html+=linhaInfoContato('Email', c.email);
+    if(c.telefone) html+=linhaInfoContato(t('profile.company.phone'), c.telefone);
+    if(c.empresa) html+=linhaInfoContato(t('field.company'), c.empresa);
+    if(!c.email && !c.telefone && !c.empresa) html+='<div class="prow" style="cursor:default"><div class="sub" style="color:var(--neutral)">'+t('contacts.noEmail')+'</div></div>';
+    html+='</div>';
+    if(tipo==='cli'){
+      html+='<div class="ct-stats">'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(faturado)+'</div><div class="l">'+t('contacts.totalBilled')+'</div></div>'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(recebido)+'</div><div class="l">'+t('contacts.received')+'</div></div>'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(porReceber)+'</div><div class="l">'+t('contacts.pending')+'</div></div></div>';
+    }
+    html+='<div class="plabel" style="margin:18px 2px 10px">'+(together?t('contacts.together'):t('contacts.history'))+' ('+jobs.length+')</div>';
+    if(jobs.length){
+      html+=jobs.map(j=>{
+        const ccl=classificarTrabalho(j);
+        const estado=ccl.concluido?t('jobs.filter.done'):(ccl.fechado?t('jobs.status.active'):t('jobs.status.waiting'));
+        return '<div class="pick-row" onclick="openJob(\''+j.id+'\')"><div style="flex:1;min-width:0"><div class="nm">'+escapeHtml(j.typeLabel||j.nome||'Trabalho')+'</div><div class="sub">'+escapeHtml(j.date||'')+' · '+estado+'</div></div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>';
+      }).join('');
+    } else {
+      html+='<p style="font-size:13px;color:var(--neutral)">'+t('contacts.noHistory')+'</p>';
+    }
+    document.getElementById('contato-detalhe-corpo').innerHTML=html;
+    go('contato-detalhe');
   }
 
   /* 📅 Evento */
