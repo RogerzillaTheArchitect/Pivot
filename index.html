@@ -1651,6 +1651,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
           <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
         </button>
+        <button class="clientbtn" style="margin-top:8px" onclick="abrirNotificarCliente(currentJobId)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+          <span data-t="job.notifyClient">Notificar cliente</span>
+        </button>
 
         <div id="detalhe-dynamic"></div>
       </section>
@@ -2725,6 +2729,104 @@
     "email.title.projectDone": { pt:"O seu projeto foi concluído", en:"Your project has been completed", es:"Su proyecto ha sido completado" },
     "email.body.projectDone": { pt:"Foi um prazer trabalhar consigo. Esperamos que tenha gostado do resultado final.", en:"It was a pleasure working with you. We hope you love the final result.", es:"Fue un placer trabajar con usted. Esperamos que le encante el resultado final." },
     "email.cta.viewProject": { pt:"Ver projeto", en:"View project", es:"Ver proyecto" },
+    "email.badge.portalAccess": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
+    "email.title.portalAccess": { pt:"O seu portal está pronto", en:"Your portal is ready", es:"Su portal está listo" },
+    "email.body.portalAccess": { pt:"Criámos um espaço só para si, onde pode acompanhar tudo sobre o seu projeto — contrato, prazos, pagamentos e entregas, num só lugar.", en:"We've created a space just for you, where you can follow everything about your project — contract, deadlines, payments and deliveries, all in one place.", es:"Creamos un espacio solo para usted, donde puede seguir todo sobre su proyecto — contrato, plazos, pagos y entregas, todo en un solo lugar." },
+    "email.cta.openPortal": { pt:"Aceder ao portal", en:"Open portal", es:"Acceder al portal" },
+    "email.badge.projectUpdate": { pt:"Atualização do projeto", en:"Project update", es:"Actualización del proyecto" },
+    "email.title.projectUpdate": { pt:"Há novidades no seu projeto", en:"There's news on your project", es:"Hay novedades en su proyecto" },
+    "email.body.projectUpdate": { pt:"O andamento do seu projeto foi atualizado. Veja o que mudou no portal do cliente.", en:"Your project's progress has been updated. See what changed in the client portal.", es:"El avance de su proyecto fue actualizado. Vea qué cambió en el portal del cliente." },
+    "email.cta.viewUpdate": { pt:"Ver atualização", en:"View update", es:"Ver actualización" },
+    "email.badge.actionNeeded": { pt:"Ação necessária", en:"Action needed", es:"Acción necesaria" },
+    "email.title.actionNeeded": { pt:"Precisamos de si para continuar", en:"We need you to move forward", es:"Necesitamos de usted para continuar" },
+    "email.body.actionNeeded": { pt:"Existe uma pendência que depende da sua participação para o projeto avançar. Resolva assim que puder.", en:"There's a pending item that needs your input for the project to move forward. Please handle it when you can.", es:"Hay una pendiente que depende de su participación para que el proyecto avance. Resuélvala en cuanto pueda." },
+    "email.cta.resolveNow": { pt:"Resolver agora", en:"Resolve now", es:"Resolver ahora" },
+    "email.badge.eventScheduled": { pt:"Evento agendado", en:"Event scheduled", es:"Evento programado" },
+    "email.title.eventScheduled": { pt:"O seu evento foi agendado", en:"Your event has been scheduled", es:"Su evento ha sido programado" },
+    "email.body.eventScheduled": { pt:"Aqui estão os detalhes do próximo evento do seu projeto. Guarde a data.", en:"Here are the details for your project's upcoming event. Save the date.", es:"Aquí están los detalles del próximo evento de su proyecto. Guarde la fecha." },
+    "email.cta.viewEvent": { pt:"Ver detalhes", en:"View details", es:"Ver detalles" },
+    "email.badge.documentAvailable": { pt:"Novo documento", en:"New document", es:"Nuevo documento" },
+    "email.title.documentAvailable": { pt:"Um novo documento está disponível", en:"A new document is available", es:"Hay un nuevo documento disponible" },
+    "email.body.documentAvailable": { pt:"Disponibilizámos um novo ficheiro para si no portal do cliente.", en:"We've made a new file available for you in the client portal.", es:"Pusimos a su disposición un nuevo archivo en el portal del cliente." },
+    "email.cta.viewDocument": { pt:"Ver documento", en:"View document", es:"Ver documento" },
+    "email.badge.reviewRequest": { pt:"A sua opinião importa", en:"Your opinion matters", es:"Su opinión importa" },
+    "email.title.reviewRequest": { pt:"Como foi a sua experiência?", en:"How was your experience?", es:"¿Cómo fue su experiencia?" },
+    "email.body.reviewRequest": { pt:"O seu projeto foi concluído e gostaríamos muito de saber a sua opinião. Leva menos de um minuto.", en:"Your project has been completed and we'd love to hear your feedback. It takes less than a minute.", es:"Su proyecto fue completado y nos encantaría conocer su opinión. Toma menos de un minuto." },
+    "email.cta.leaveReview": { pt:"Deixar avaliação", en:"Leave a review", es:"Dejar reseña" },
+    // --- Emails de conta / plataforma (sem trabalho associado) ---
+    "email.badge.accountCreated": { pt:"Conta criada", en:"Account created", es:"Cuenta creada" },
+    "email.title.accountCreated": { pt:"Bem-vindo ao Pivot", en:"Welcome to Pivot", es:"Bienvenido a Pivot" },
+    "email.body.accountCreated": { pt:"A sua conta foi criada com sucesso. Está tudo pronto para organizar os seus contratos, clientes e pagamentos num só lugar.", en:"Your account has been created successfully. Everything's ready to organize your contracts, clients and payments in one place.", es:"Su cuenta fue creada con éxito. Todo listo para organizar sus contratos, clientes y pagos en un solo lugar." },
+    "email.cta.accountCreated": { pt:"Começar a usar", en:"Get started", es:"Empezar a usar" },
+    "email.badge.confirmEmail": { pt:"Confirmar email", en:"Confirm email", es:"Confirmar email" },
+    "email.title.confirmEmail": { pt:"Confirme o seu endereço de email", en:"Confirm your email address", es:"Confirme su dirección de email" },
+    "email.body.confirmEmail": { pt:"Falta só um passo. Confirme o seu email para ativar a sua conta Pivot.", en:"Just one more step. Confirm your email to activate your Pivot account.", es:"Falta solo un paso. Confirme su email para activar su cuenta Pivot." },
+    "email.cta.confirmEmail": { pt:"Confirmar email", en:"Confirm email", es:"Confirmar email" },
+    "email.badge.resetPassword": { pt:"Redefinir palavra-passe", en:"Reset password", es:"Restablecer contraseña" },
+    "email.title.resetPassword": { pt:"Pediu para redefinir a sua palavra-passe", en:"You asked to reset your password", es:"Solicitó restablecer su contraseña" },
+    "email.body.resetPassword": { pt:"Clique no botão abaixo para escolher uma nova palavra-passe. Se não foi você, pode ignorar este email com segurança.", en:"Click the button below to choose a new password. If this wasn't you, you can safely ignore this email.", es:"Haga clic en el botón de abajo para elegir una nueva contraseña. Si no fue usted, puede ignorar este email con seguridad." },
+    "email.cta.resetPassword": { pt:"Escolher nova palavra-passe", en:"Choose new password", es:"Elegir nueva contraseña" },
+    "email.hint.resetPassword": { pt:"Este link expira em 1 hora.", en:"This link expires in 1 hour.", es:"Este enlace caduca en 1 hora." },
+    "email.badge.passwordChanged": { pt:"Palavra-passe alterada", en:"Password changed", es:"Contraseña cambiada" },
+    "email.title.passwordChanged": { pt:"A sua palavra-passe foi alterada", en:"Your password has been changed", es:"Su contraseña ha sido cambiada" },
+    "email.body.passwordChanged": { pt:"Confirmamos que a sua palavra-passe foi alterada com sucesso. Se não foi você, contacte-nos imediatamente.", en:"We confirm your password was changed successfully. If this wasn't you, contact us immediately.", es:"Confirmamos que su contraseña fue cambiada con éxito. Si no fue usted, contáctenos de inmediato." },
+    "email.cta.passwordChanged": { pt:"Rever atividade da conta", en:"Review account activity", es:"Revisar actividad de la cuenta" },
+    "email.badge.recoverAccess": { pt:"Recuperar acesso", en:"Recover access", es:"Recuperar acceso" },
+    "email.title.recoverAccess": { pt:"O seu código de verificação", en:"Your verification code", es:"Su código de verificación" },
+    "email.body.recoverAccess": { pt:"Use o código abaixo para recuperar o acesso à sua conta.", en:"Use the code below to recover access to your account.", es:"Use el código de abajo para recuperar el acceso a su cuenta." },
+    "email.badge.subscriptionActive": { pt:"Assinatura ativa", en:"Subscription active", es:"Suscripción activa" },
+    "email.title.subscriptionActive": { pt:"A sua assinatura está ativa", en:"Your subscription is active", es:"Su suscripción está activa" },
+    "email.body.subscriptionActive": { pt:"Obrigado por assinar o Pivot. O seu plano já está ativo e pronto a usar.", en:"Thanks for subscribing to Pivot. Your plan is now active and ready to use.", es:"Gracias por suscribirse a Pivot. Su plan ya está activo y listo para usar." },
+    "email.cta.subscriptionActive": { pt:"Ver plano", en:"View plan", es:"Ver plan" },
+    "email.badge.renewalUpcoming": { pt:"Renovação próxima", en:"Renewal coming up", es:"Renovación próxima" },
+    "email.title.renewalUpcoming": { pt:"A sua assinatura renova-se em breve", en:"Your subscription renews soon", es:"Su suscripción se renueva pronto" },
+    "email.body.renewalUpcoming": { pt:"A sua assinatura Pivot vai renovar-se automaticamente. Reveja os detalhes se quiser fazer alguma alteração.", en:"Your Pivot subscription will renew automatically. Review the details if you'd like to make any changes.", es:"Su suscripción Pivot se renovará automáticamente. Revise los detalles si desea hacer algún cambio." },
+    "email.cta.renewalUpcoming": { pt:"Rever assinatura", en:"Review subscription", es:"Revisar suscripción" },
+    "email.badge.paymentFailed": { pt:"Pagamento falhou", en:"Payment failed", es:"Pago fallido" },
+    "email.title.paymentFailed": { pt:"Não conseguimos processar o seu pagamento", en:"We couldn't process your payment", es:"No pudimos procesar su pago" },
+    "email.body.paymentFailed": { pt:"Houve um problema ao cobrar a sua assinatura. Atualize o seu método de pagamento para evitar interrupções.", en:"There was a problem charging your subscription. Update your payment method to avoid any interruption.", es:"Hubo un problema al cobrar su suscripción. Actualice su método de pago para evitar interrupciones." },
+    "email.cta.paymentFailed": { pt:"Atualizar pagamento", en:"Update payment", es:"Actualizar pago" },
+    "email.badge.planChanged": { pt:"Plano alterado", en:"Plan changed", es:"Plan cambiado" },
+    "email.title.planChanged": { pt:"O seu plano foi alterado", en:"Your plan has changed", es:"Su plan ha cambiado" },
+    "email.body.planChanged": { pt:"Confirmamos a alteração do seu plano Pivot. Veja o que muda a partir de agora.", en:"We confirm your Pivot plan has changed. See what's different from now on.", es:"Confirmamos el cambio de su plan Pivot. Vea qué cambia a partir de ahora." },
+    "email.cta.planChanged": { pt:"Ver novo plano", en:"View new plan", es:"Ver nuevo plan" },
+    "email.badge.subscriptionCancelled": { pt:"Assinatura cancelada", en:"Subscription cancelled", es:"Suscripción cancelada" },
+    "email.title.subscriptionCancelled": { pt:"A sua assinatura foi cancelada", en:"Your subscription has been cancelled", es:"Su suscripción ha sido cancelada" },
+    "email.body.subscriptionCancelled": { pt:"Confirmamos o cancelamento. Vai continuar a ter acesso até ao fim do período já pago.", en:"We confirm the cancellation. You'll keep access until the end of your paid period.", es:"Confirmamos la cancelación. Seguirá teniendo acceso hasta el final del período ya pagado." },
+    "email.cta.subscriptionCancelled": { pt:"Reativar assinatura", en:"Reactivate subscription", es:"Reactivar suscripción" },
+    "email.badge.teamInvite": { pt:"Convite para equipa", en:"Team invite", es:"Invitación al equipo" },
+    "email.title.teamInvite": { pt:"Convidaram-no para uma equipa no Pivot", en:"You've been invited to a team on Pivot", es:"Le invitaron a un equipo en Pivot" },
+    "email.body.teamInvite": { pt:"Foi convidado a colaborar no espaço de trabalho da equipa. Aceite o convite para começar.", en:"You've been invited to collaborate in the team's workspace. Accept the invite to get started.", es:"Fue invitado a colaborar en el espacio de trabajo del equipo. Acepte la invitación para empezar." },
+    "email.cta.teamInvite": { pt:"Aceitar convite", en:"Accept invite", es:"Aceptar invitación" },
+    "email.badge.inviteAccepted": { pt:"Convite aceito", en:"Invite accepted", es:"Invitación aceptada" },
+    "email.title.inviteAccepted": { pt:"Um novo membro juntou-se à equipa", en:"A new member joined the team", es:"Un nuevo miembro se unió al equipo" },
+    "email.body.inviteAccepted": { pt:"O convite que enviou foi aceite. Já pode atribuir trabalhos e permissões.", en:"The invite you sent has been accepted. You can now assign jobs and permissions.", es:"La invitación que envió fue aceptada. Ya puede asignar trabajos y permisos." },
+    "email.cta.inviteAccepted": { pt:"Ver equipa", en:"View team", es:"Ver equipo" },
+    "email.badge.newLogin": { pt:"Novo início de sessão", en:"New sign-in", es:"Nuevo inicio de sesión" },
+    "email.title.newLogin": { pt:"Detetámos um novo início de sessão", en:"We detected a new sign-in", es:"Detectamos un nuevo inicio de sesión" },
+    "email.body.newLogin": { pt:"A sua conta foi acedida a partir de um dispositivo que não reconhecemos. Se foi você, não precisa de fazer nada.", en:"Your account was accessed from a device we don't recognize. If this was you, no action is needed.", es:"Se accedió a su cuenta desde un dispositivo que no reconocemos. Si fue usted, no necesita hacer nada." },
+    "email.cta.newLogin": { pt:"Não fui eu", en:"This wasn't me", es:"No fui yo" },
+    "email.badge.criticalChange": { pt:"Alteração crítica", en:"Critical change", es:"Cambio crítico" },
+    "email.title.criticalChange": { pt:"Uma alteração importante foi feita na sua conta", en:"An important change was made to your account", es:"Se realizó un cambio importante en su cuenta" },
+    "email.body.criticalChange": { pt:"O email ou a palavra-passe da sua conta foram alterados. Se não reconhece esta ação, contacte-nos já.", en:"Your account's email or password was changed. If you don't recognize this, contact us right away.", es:"Se cambió el email o la contraseña de su cuenta. Si no reconoce esta acción, contáctenos de inmediato." },
+    "email.cta.criticalChange": { pt:"Rever segurança da conta", en:"Review account security", es:"Revisar seguridad de la cuenta" },
+    "email.badge.suspiciousActivity": { pt:"Atividade suspeita", en:"Suspicious activity", es:"Actividad sospechosa" },
+    "email.title.suspiciousActivity": { pt:"Detetámos atividade suspeita na sua conta", en:"We detected suspicious activity on your account", es:"Detectamos actividad sospechosa en su cuenta" },
+    "email.body.suspiciousActivity": { pt:"Por segurança, verifique a atividade recente da sua conta e confirme que foi você.", en:"For your safety, please review your account's recent activity and confirm it was you.", es:"Por seguridad, revise la actividad reciente de su cuenta y confirme que fue usted." },
+    "email.cta.suspiciousActivity": { pt:"Rever atividade", en:"Review activity", es:"Revisar actividad" },
+    "email.badge.platformNews": { pt:"Novidade no Pivot", en:"New on Pivot", es:"Novedad en Pivot" },
+    "email.title.platformNews": { pt:"Há uma novidade no Pivot", en:"There's something new on Pivot", es:"Hay una novedad en Pivot" },
+    "email.body.platformNews": { pt:"Lançámos uma nova funcionalidade que pode tornar o seu dia a dia mais simples. Venha conhecer.", en:"We've launched a new feature that could make your day-to-day easier. Come take a look.", es:"Lanzamos una nueva función que puede simplificar su día a día. Venga a conocerla." },
+    "email.cta.platformNews": { pt:"Ver novidade", en:"See what's new", es:"Ver novedad" },
+    "email.badge.maintenance": { pt:"Manutenção programada", en:"Scheduled maintenance", es:"Mantenimiento programado" },
+    "email.title.maintenance": { pt:"Manutenção programada no Pivot", en:"Scheduled maintenance on Pivot", es:"Mantenimiento programado en Pivot" },
+    "email.body.maintenance": { pt:"Vamos realizar uma manutenção programada. O Pivot pode ficar indisponível por um curto período.", en:"We'll be performing scheduled maintenance. Pivot may be briefly unavailable during this time.", es:"Realizaremos un mantenimiento programado. Pivot puede quedar brevemente no disponible." },
+    "email.badge.termsChange": { pt:"Termos atualizados", en:"Terms updated", es:"Términos actualizados" },
+    "email.title.termsChange": { pt:"Atualizámos os nossos termos", en:"We've updated our terms", es:"Actualizamos nuestros términos" },
+    "email.body.termsChange": { pt:"Fizemos alterações aos nossos termos de serviço ou política de privacidade. Reveja o que mudou.", en:"We've made changes to our terms of service or privacy policy. Review what's changed.", es:"Hicimos cambios en nuestros términos de servicio o política de privacidad. Revise qué cambió." },
+    "email.cta.termsChange": { pt:"Ver alterações", en:"View changes", es:"Ver cambios" },
+    "email.greetingGeneric": { pt:"Olá", en:"Hi", es:"Hola" },
+    "email.footer.autoNotice": { pt:"Este é um email automático — não é necessário responder.", en:"This is an automated email — no reply needed.", es:"Este es un email automático — no es necesario responder." },
     // --- Explorar ---
     "explore.browseLibrary": { pt:"Explorar Biblioteca →", en:"Browse Library →", es:"Explorar biblioteca →" },
     "explore.checklist": { pt:"Checklist", en:"Checklist", es:"Lista de verificación" },
@@ -2853,6 +2955,7 @@
     "job.payments.requestProof": { pt:"Pedir comprovante", en:"Request proof", es:"Pedir justificante" },
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
+    "job.notifyClient": { pt:"Notificar cliente", en:"Notify client", es:"Notificar cliente" },
     "portal.shareTitle": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing y firme el contrato." },
     "portal.shareViaMessage": { pt:"Compartilhar", en:"Share", es:"Compartir" },
@@ -2870,6 +2973,7 @@
     "history.jobArchivedDone": { pt:"Trabalho concluído e arquivado", en:"Job completed and archived", es:"Trabajo concluido y archivado" },
     "history.jobArchivedDeleted": { pt:"Trabalho deletado", en:"Job deleted", es:"Trabajo eliminado" },
     "history.jobRestored": { pt:"Trabalho restaurado do histórico", en:"Job restored from history", es:"Trabajo restaurado del historial" },
+    "history.clientNotified": { pt:"Cliente notificado por email", en:"Client notified by email", es:"Cliente notificado por email" },
     "history.deleteConfirm": { pt:"Deletar o trabalho de {client}? Vai para o Histórico e pode ser restaurado depois.", en:"Delete {client}'s job? It moves to History and can be restored later.", es:"¿Eliminar el trabajo de {client}? Va al Historial y se puede restaurar después." },
     "job.timeline": { pt:"Timeline", en:"Timeline", es:"Línea de tiempo" },
     "job.typeDefault": { pt:"Trabalho", en:"Job", es:"Trabajo" },
@@ -3400,6 +3504,7 @@
     "toast.jobRestored": { pt:"Trabalho restaurado.", en:"Job restored.", es:"Trabajo restaurado." },
     "toast.linkCopied": { pt:"Link copiado.", en:"Link copied.", es:"Enlace copiado." },
     "toast.linkGenerated": { pt:"Link gerado.", en:"Link generated.", es:"Enlace generado." },
+    "toast.clientNotified": { pt:"Cliente notificado por email.", en:"Client notified by email.", es:"Cliente notificado por email." },
     "toast.linkPrefix": { pt:"Link: ", en:"Link: ", es:"Enlace: " },
     "toast.markedDone": { pt:"Marcado como concluído", en:"Marked as done", es:"Marcado como completado" },
     "toast.moreComponentsSoon": { pt:"Mais tipos de componente em breve", en:"More component types coming soon", es:"Más tipos de componente próximamente" },
@@ -3890,6 +3995,8 @@
     updateJobCard(jobId);
     renderMonthTicker();
     showToast(t('toast.done'));
+    /* entrega marcada como feita = o cliente já pode ver o resultado final */
+    if(key==='entrega') dispararEmailEvento('entregaDisponivel', job.email, job);
   }
   function ativarSwipeRadar(){
     document.querySelectorAll('.radar-card').forEach(card=>{
@@ -5855,7 +5962,13 @@
     pagamentoRecebido:  { badgeKey:'email.badge.paymentReceived',  titleKey:'email.title.paymentReceived',  bodyKey:'email.body.paymentReceived',  ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:2,  current:3 },
     entregaDisponivel:  { badgeKey:'email.badge.deliveryReady',    titleKey:'email.title.deliveryReady',    bodyKey:'email.body.deliveryReady',    ctaKey:'email.cta.reviewDelivery', deadline:true,  doneUpTo:3,  current:4 },
     entregaAprovada:    { badgeKey:'email.badge.deliveryApproved', titleKey:'email.title.deliveryApproved', bodyKey:'email.body.deliveryApproved', ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 },
-    projetoConcluido:   { badgeKey:'email.badge.projectDone',      titleKey:'email.title.projectDone',      bodyKey:'email.body.projectDone',      ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 }
+    projetoConcluido:   { badgeKey:'email.badge.projectDone',      titleKey:'email.title.projectDone',      bodyKey:'email.body.projectDone',      ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 },
+    acessoPortal:       { badgeKey:'email.badge.portalAccess',     titleKey:'email.title.portalAccess',     bodyKey:'email.body.portalAccess',     ctaKey:'email.cta.openPortal',     deadline:false, doneUpTo:-1, current:-1 },
+    atualizacaoProjeto: { badgeKey:'email.badge.projectUpdate',    titleKey:'email.title.projectUpdate',    bodyKey:'email.body.projectUpdate',    ctaKey:'email.cta.viewUpdate',     deadline:false, doneUpTo:-1, current:-1 },
+    acaoNecessaria:     { badgeKey:'email.badge.actionNeeded',     titleKey:'email.title.actionNeeded',     bodyKey:'email.body.actionNeeded',     ctaKey:'email.cta.resolveNow',     deadline:true,  doneUpTo:-1, current:-1 },
+    eventoAgendado:     { badgeKey:'email.badge.eventScheduled',   titleKey:'email.title.eventScheduled',   bodyKey:'email.body.eventScheduled',   ctaKey:'email.cta.viewEvent',      deadline:false, doneUpTo:1,  current:2 },
+    documentoDisponivel:{ badgeKey:'email.badge.documentAvailable',titleKey:'email.title.documentAvailable',bodyKey:'email.body.documentAvailable',ctaKey:'email.cta.viewDocument',   deadline:false, doneUpTo:-1, current:-1 },
+    avaliacaoSolicitada:{ badgeKey:'email.badge.reviewRequest',    titleKey:'email.title.reviewRequest',    bodyKey:'email.body.reviewRequest',    ctaKey:'email.cta.leaveReview',    deadline:false, doneUpTo:4,  current:-1 }
   };
   const EMAIL_STAGE_KEYS=['email.stage.contract','email.stage.briefing','email.stage.payment','email.stage.execution','email.stage.delivery'];
   function planPermiteBranding(){ return perfilData.plano==='Business' || perfilData.plano==='Enterprise'; }
@@ -5970,6 +6083,87 @@
         body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailUniversalInline(job, tipo, prazoTexto)})});
     }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
   }
+
+  /* ===== Emails de conta / plataforma — sem trabalho associado =====
+     Cobre: Conta e Acesso, Plano e Assinatura, Convite para Equipa,
+     Segurança e Auditoria, Comunicação da Plataforma. Layout mais simples
+     que o universal (sem stepper, sem detalhes de evento) — cabeçalho com
+     a marca do próprio Pivot (não a do freelancer, como nos emails de
+     trabalho), badge, título, corpo, bloco de detalhes opcional (ex.
+     dispositivo/local num alerta de segurança, ou o código de recuperação),
+     botão de ação opcional e rodapé. */
+  const TIPOS_EMAIL_CONTA = {
+    contaCriada:          { badgeKey:'email.badge.accountCreated',        titleKey:'email.title.accountCreated',        bodyKey:'email.body.accountCreated',        ctaKey:'email.cta.accountCreated' },
+    confirmarEmail:       { badgeKey:'email.badge.confirmEmail',          titleKey:'email.title.confirmEmail',          bodyKey:'email.body.confirmEmail',          ctaKey:'email.cta.confirmEmail' },
+    redefinirSenha:       { badgeKey:'email.badge.resetPassword',         titleKey:'email.title.resetPassword',         bodyKey:'email.body.resetPassword',         ctaKey:'email.cta.resetPassword', hintKey:'email.hint.resetPassword' },
+    senhaAlterada:        { badgeKey:'email.badge.passwordChanged',       titleKey:'email.title.passwordChanged',       bodyKey:'email.body.passwordChanged',       ctaKey:'email.cta.passwordChanged', alerta:true },
+    recuperarAcesso:      { badgeKey:'email.badge.recoverAccess',         titleKey:'email.title.recoverAccess',         bodyKey:'email.body.recoverAccess',         codigo:true },
+    assinaturaAtiva:      { badgeKey:'email.badge.subscriptionActive',    titleKey:'email.title.subscriptionActive',    bodyKey:'email.body.subscriptionActive',    ctaKey:'email.cta.subscriptionActive' },
+    renovacaoProxima:     { badgeKey:'email.badge.renewalUpcoming',       titleKey:'email.title.renewalUpcoming',       bodyKey:'email.body.renewalUpcoming',       ctaKey:'email.cta.renewalUpcoming' },
+    pagamentoFalhouConta: { badgeKey:'email.badge.paymentFailed',         titleKey:'email.title.paymentFailed',         bodyKey:'email.body.paymentFailed',         ctaKey:'email.cta.paymentFailed', alerta:true },
+    planoAlterado:        { badgeKey:'email.badge.planChanged',          titleKey:'email.title.planChanged',           bodyKey:'email.body.planChanged',           ctaKey:'email.cta.planChanged' },
+    assinaturaCancelada:  { badgeKey:'email.badge.subscriptionCancelled', titleKey:'email.title.subscriptionCancelled', bodyKey:'email.body.subscriptionCancelled', ctaKey:'email.cta.subscriptionCancelled' },
+    conviteEquipe:        { badgeKey:'email.badge.teamInvite',           titleKey:'email.title.teamInvite',            bodyKey:'email.body.teamInvite',            ctaKey:'email.cta.teamInvite' },
+    conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted' },
+    novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true },
+    alteracaoCritica:     { badgeKey:'email.badge.criticalChange',       titleKey:'email.title.criticalChange',        bodyKey:'email.body.criticalChange',        ctaKey:'email.cta.criticalChange', alerta:true },
+    atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true },
+    novidadePlataforma:   { badgeKey:'email.badge.platformNews',         titleKey:'email.title.platformNews',          bodyKey:'email.body.platformNews',          ctaKey:'email.cta.platformNews' },
+    manutencaoProgramada: { badgeKey:'email.badge.maintenance',          titleKey:'email.title.maintenance',           bodyKey:'email.body.maintenance' },
+    alteracaoTermos:      { badgeKey:'email.badge.termsChange',          titleKey:'email.title.termsChange',           bodyKey:'email.body.termsChange',           ctaKey:'email.cta.termsChange' }
+  };
+  /* dados = { nome, ctaUrl, codigo, detalhes:[[label,valor],...] } — todos opcionais */
+  function construirEmailContaInline(tipo, dados){
+    dados=dados||{};
+    const cfg=TIPOS_EMAIL_CONTA[tipo];
+    if(!cfg) return '';
+    const VERDE='#15532D', VERDE_CLARO='#EAF3EC', CINZA='#6B6459', LINHA='#E7E2D6', CREME='#F7F5EE';
+    const ALERTA='#B23A2E', ALERTA_CLARO='#FBEAE7';
+    const corBadgeFundo = cfg.alerta ? ALERTA_CLARO : VERDE_CLARO;
+    const corBadgeTexto = cfg.alerta ? ALERTA : VERDE;
+    const corBotao = cfg.alerta ? ALERTA : VERDE;
+    const nome = dados.nome ? escapeHtml(dados.nome) : t('email.greetingGeneric');
+    const cabecalho='<tr><td style="padding:28px 24px;text-align:center;background:'+VERDE+';font-family:Arial,sans-serif">'+
+      '<div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Pivot</div>'+
+      '</td></tr>';
+    const codigoHtml = (cfg.codigo && dados.codigo)
+      ? '<tr><td style="padding:6px 24px 20px;text-align:center"><div style="display:inline-block;background:'+CREME+';border:1px solid '+LINHA+';border-radius:12px;padding:16px 28px;font-family:Arial,sans-serif;font-size:28px;font-weight:700;letter-spacing:.28em;color:#111">'+escapeHtml(String(dados.codigo))+'</div></td></tr>'
+      : '';
+    const detalhesHtml = (dados.detalhes && dados.detalhes.length)
+      ? '<tr><td style="padding:0 24px 18px"><div style="background:'+CREME+';border-radius:10px;padding:14px 16px;font-family:Arial,sans-serif">'+
+        dados.detalhes.map(d=>'<div style="display:flex;justify-content:space-between;font-size:13px;color:#111;padding:3px 0"><span style="color:'+CINZA+'">'+escapeHtml(d[0])+'</span><span>'+escapeHtml(d[1])+'</span></div>').join('')+
+        '</div></td></tr>' : '';
+    const ctaHtml = cfg.ctaKey
+      ? '<tr><td style="padding:6px 24px 8px"><a href="'+escapeHtml(dados.ctaUrl||'#')+'" style="display:block;text-align:center;background:'+corBotao+';color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px;text-decoration:none">'+t(cfg.ctaKey)+'</a></td></tr>'
+      : '';
+    const hintHtml = cfg.hintKey
+      ? '<tr><td style="padding:0 24px 22px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:'+CINZA+'">'+t(cfg.hintKey)+'</td></tr>'
+      : '<tr><td style="padding:0 24px 22px"></td></tr>';
+    return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid '+LINHA+';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">'+
+      cabecalho+
+      '<tr><td style="padding:22px 24px 0">'+
+        '<span style="display:inline-block;background:'+corBadgeFundo+';color:'+corBadgeTexto+';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">'+t(cfg.badgeKey)+'</span>'+
+        '<h2 style="font-size:20px;font-weight:700;margin:12px 0 8px;color:#111">'+t(cfg.titleKey)+'</h2>'+
+        '<p style="font-size:13px;color:'+CINZA+';margin:0 0 4px">'+t('email.greetingGeneric')+', '+nome+'.</p>'+
+        '<p style="font-size:13px;color:'+CINZA+';margin:0 0 6px">'+t(cfg.bodyKey)+'</p>'+
+      '</td></tr>'+
+      codigoHtml+
+      detalhesHtml+
+      ctaHtml+
+      hintHtml+
+      '<tr><td style="padding:14px 24px;border-top:1px solid '+LINHA+';text-align:center;font-size:11px;color:'+CINZA+'">Pivot &nbsp;·&nbsp; '+t('email.footer.autoNotice')+'</td></tr>'+
+      '</table>';
+  }
+  async function dispararEmailConta(tipo, destinatario, dados){
+    if(!destinatario) return;
+    const cfg=TIPOS_EMAIL_CONTA[tipo];
+    if(!cfg) return;
+    try{
+      await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailContaInline(tipo, dados)})});
+    }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
+  }
+
   function copiarLinkContrato(id){
     const job=jobsData[id]; const url=job.contract.link;
     if(navigator.clipboard && navigator.clipboard.writeText){
@@ -6012,6 +6206,37 @@
         <button class="btn soft" style="width:100%;margin-bottom:8px" onclick="compartilharPortal('${id}')">${t('portal.shareViaMessage')}</button>
         <button class="btn ghost" style="width:100%" onclick="copiarLinkContrato('${id}')">${t('job.contract.copyLink')}</button>`);
     }
+  }
+  /* painel manual de notificações — para os tipos de email cujo melhor
+     momento de envio depende do julgamento do próprio freelancer (não há
+     um único evento do sistema que os dispare sozinho, ao contrário de
+     "pagamento recebido" ou "contrato assinado") */
+  function abrirNotificarCliente(id){
+    const job=jobsData[id];
+    if(!job){ showToast(t('toast.jobNotFound')); return; }
+    if(!job.email){ showToast(t('toast.writePersonName')); return; }
+    const opcoes=[
+      ['acessoPortal', 'email.badge.portalAccess'],
+      ['atualizacaoProjeto', 'email.badge.projectUpdate'],
+      ['acaoNecessaria', 'email.badge.actionNeeded'],
+      ['eventoAgendado', 'email.badge.eventScheduled'],
+      ['documentoDisponivel', 'email.badge.documentAvailable'],
+      ['avaliacaoSolicitada', 'email.badge.reviewRequest']
+    ];
+    const html=opcoes.map(([tipo,labelKey])=>
+      '<div class="pick-row" onclick="enviarNotificacaoCliente(\''+id+'\',\''+tipo+'\')"><div><div class="nm">'+t(labelKey)+'</div><div class="sub">'+t(TIPOS_EMAIL[tipo].titleKey)+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+    ).join('');
+    openInfo(t('job.notifyClient'), html);
+  }
+  function enviarNotificacaoCliente(id, tipo){
+    const job=jobsData[id];
+    if(!job) return;
+    dispararEmailEvento(tipo, job.email, job);
+    pushHistory(job, t('history.clientNotified')+' — '+t(TIPOS_EMAIL[tipo].badgeKey));
+    saveJobsData();
+    closeInfo();
+    showToast(t('toast.clientNotified'));
   }
 
   function marcarPagoDynamic(id,i){
@@ -7071,6 +7296,10 @@
     if(typeof renderCalendar==='function') renderCalendar();
     if(typeof renderHistorico==='function') renderHistorico();
     showToast(motivo==='concluido' ? t('toast.jobArchivedDone') : t('toast.jobArchivedDeleted'));
+    /* a solicitação de avaliação fica de fora — pedir logo a seguir a concluir
+       pode soar apressado; o freelancer decide a altura certa no painel
+       "Notificar cliente" da página do trabalho */
+    if(motivo==='concluido') dispararEmailEvento('projetoConcluido', job.email, job);
   }
   function confirmarDeletarTrabalho(id){
     const job=jobsData[id];
