@@ -1545,10 +1545,10 @@
             <span class="ms-c-trend" id="trend-fechados"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track-outer" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress-outer" id="ring-fechados-gamify" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-contratos-num">3</span></div>
+              <div class="mini-ring-center"><span id="mt-fechados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-fechados-den">0</span></div>
             </div>
           </div>
           <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('executados')">
@@ -3914,16 +3914,18 @@
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-    set('mt-contratos-num', s.contratosFechados);
+    /* os 3 anéis agora são frações literais: o traço enche na proporção
+       num/den (ex.: 2/4 = meio círculo). Fechados = trabalhos com contrato
+       assinado sobre o total de trabalhos criados. */
+    set('mt-fechados-num', s.contratosFechados);
+    set('mt-fechados-den', s.totalJobs);
     set('mt-realizados-num', s.trabalhosRealizados);
     set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
+    pintarAnelComVolta('ring-fechados', 25, s.contratosFechados, s.totalJobs);
     pintarAnelComVolta('ring-realizados', 25, s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
     pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
-    /* anel "Fechados": não tem meta — representa apenas o ritmo deste mês
-       face ao anterior (uma volta completa = igualou o mês passado) */
-    pintarAnelComVolta('ring-fechados-gamify', 25, s.fechadosEsteMes, s.fechadosMesAnterior||(s.fechadosEsteMes>0?s.fechadosEsteMes:1));
     /* comparação com o período anterior (mês passado), entre o nome e o anel */
     const setTrend=(id, atual, anterior)=>{
       const el=document.getElementById(id);
