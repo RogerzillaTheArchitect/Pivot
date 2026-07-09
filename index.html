@@ -42,36 +42,41 @@
   .shell{display:flex;height:100vh;width:100%;background:#131310;
     box-shadow:0 0 0 1px var(--line-soft);position:relative;overflow:hidden}
 
-  /* ===== BACKGROUND ANIMADO — vidro refrativo em camadas =====
+  /* ===== BACKGROUND ANIMADO — refração de vidro translúcido =====
      Fixo em tons escuros independentemente do toggle "Modo escuro": os cards/textos
      da app estão bloqueados em vidro escuro+texto claro (ver histórico), então um
-     fundo claro os deixaria ilegíveis. Paleta clara fica pronta em .bg-blobs-light
-     (não usada) para quando os cards também ficarem theme-aware. */
-  .bg-blobs{position:absolute;inset:-20%;z-index:0;pointer-events:none;overflow:hidden;
-    --blob-1:#191A17; --blob-1b:#111210; --blob-2:#26282A; --blob-2b:#1D1F1C;
-    --blob-3:#211F1B; --blob-4:#33473C; --blob-5:#1B3B38}
-  .bg-blob{position:absolute;inset:0;will-change:transform,opacity}
-  .bg-blob-1{filter:blur(78px);opacity:.8;
-    background:radial-gradient(ellipse 56% 42% at 26% 22%,var(--blob-1) 0%,transparent 62%),radial-gradient(ellipse 40% 55% at 12% 58%,var(--blob-1b) 0%,transparent 65%);
-    animation:blobA 24s ease-in-out infinite alternate}
-  .bg-blob-2{filter:blur(82px);opacity:.72;
-    background:radial-gradient(ellipse 52% 60% at 80% 70%,var(--blob-2) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 62% 90%,var(--blob-2b) 0%,transparent 66%);
-    animation:blobB 27s ease-in-out infinite alternate;animation-delay:-8s}
-  .bg-blob-3{filter:blur(86px);opacity:.6;
-    background:radial-gradient(ellipse 66% 52% at 50% 44%,var(--blob-3) 0%,transparent 68%);
-    animation:blobC 21s ease-in-out infinite alternate;animation-delay:-13s}
-  .bg-blob-4{filter:blur(64px);opacity:.4;
-    background:radial-gradient(ellipse 36% 30% at 68% 20%,var(--blob-4) 0%,transparent 72%);
-    animation:blobD 23s ease-in-out infinite alternate;animation-delay:-4s}
-  .bg-blob-5{filter:blur(64px);opacity:.34;
-    background:radial-gradient(ellipse 32% 40% at 18% 80%,var(--blob-5) 0%,transparent 72%);
-    animation:blobE 25s ease-in-out infinite alternate;animation-delay:-17s}
-  @keyframes blobA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-3%,4%) scale(1.08,.94) rotate(6deg)}100%{transform:translate(4%,-2%) scale(.95,1.06) rotate(-5deg)}}
-  @keyframes blobB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(4%,-3%) scale(.93,1.1) rotate(-7deg)}100%{transform:translate(-3%,3%) scale(1.07,.92) rotate(5deg)}}
-  @keyframes blobC{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-2%,-3%) scale(1.05,1.05) rotate(4deg)}100%{transform:translate(3%,2%) scale(.96,.96) rotate(-4deg)}}
-  @keyframes blobD{0%{opacity:.4;transform:translate(0,0) scale(1)}50%{opacity:.55;transform:translate(3%,3%) scale(1.12)}100%{opacity:.3;transform:translate(-3%,-2%) scale(.9)}}
-  @keyframes blobE{0%{opacity:.34;transform:translate(0,0) scale(1)}50%{opacity:.48;transform:translate(-4%,2%) scale(1.1)}100%{opacity:.26;transform:translate(3%,-3%) scale(.92)}}
-  @media (prefers-reduced-motion:reduce){.bg-blob{animation:none}}
+     fundo claro os deixaria ilegíveis. Paleta clara (--blob-*-light, não usada)
+     fica pronta para quando os cards também ficarem theme-aware.
+     Técnica: campos de cor grandes com gradientes de 3 paradas (sem corte abrupto,
+     para não gerar anéis/faixas no blur) sobrepostos com mix-blend-mode distintos —
+     é a interação entre camadas que lê como luz atravessando vidro, não uma forma isolada.
+     feTurbulence/feDisplacementMap animado foi testado e descartado: recalcular a
+     distorção a cada frame trava o render (custo de CPU, não é GPU-compositável). */
+  .bg-blobs{position:absolute;inset:-25%;z-index:0;pointer-events:none;overflow:hidden;
+    --blob-1:#15160F; --blob-2:#1D1F1E; --blob-3:#191A15; --blob-accent:#2E4238}
+  .bg-blob{position:absolute;inset:0;will-change:transform}
+  .bg-blob-1{filter:blur(96px);opacity:.85;mix-blend-mode:normal;
+    background:radial-gradient(ellipse 88% 72% at 20% 18%,var(--blob-1) 0%,rgba(21,22,15,.5) 42%,transparent 74%);
+    animation:driftA 34s ease-in-out infinite alternate}
+  .bg-blob-2{filter:blur(102px);opacity:.75;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 92% 76% at 80% 78%,var(--blob-2) 0%,rgba(29,31,30,.45) 44%,transparent 76%);
+    animation:driftB 38s ease-in-out infinite alternate;animation-delay:-12s}
+  .bg-blob-3{filter:blur(108px);opacity:.6;mix-blend-mode:overlay;
+    background:radial-gradient(ellipse 96% 82% at 48% 48%,var(--blob-3) 0%,rgba(25,26,21,.35) 46%,transparent 80%);
+    animation:driftC 30s ease-in-out infinite alternate;animation-delay:-21s}
+  .bg-blob-4{filter:blur(78px);opacity:.18;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 42% 36% at 70% 26%,var(--blob-accent) 0%,transparent 62%);
+    animation:driftD 32s ease-in-out infinite alternate;animation-delay:-6s}
+  .bg-sheen{position:absolute;inset:-30%;z-index:0;pointer-events:none;mix-blend-mode:soft-light;opacity:.45;
+    filter:blur(60px);will-change:transform;
+    background:linear-gradient(128deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 68%);
+    animation:sheenDrift 42s ease-in-out infinite alternate}
+  @keyframes driftA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-5%,4%) scale(1.12,.94) rotate(5deg)}100%{transform:translate(4%,-5%) scale(.93,1.08) rotate(-4deg)}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(5%,-4%) scale(.92,1.1) rotate(-6deg)}100%{transform:translate(-4%,5%) scale(1.1,.9) rotate(5deg)}}
+  @keyframes driftC{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(-3%,-4%) scale(1.08) rotate(7deg)}100%{transform:translate(4%,3%) scale(.94) rotate(-6deg)}}
+  @keyframes driftD{0%{opacity:.18;transform:translate(0,0) scale(1)}50%{opacity:.28;transform:translate(-4%,4%) scale(1.18)}100%{opacity:.12;transform:translate(4%,-3%) scale(.88)}}
+  @keyframes sheenDrift{0%{transform:translate(-6%,-3%) rotate(0deg)}50%{transform:translate(5%,4%) rotate(4deg)}100%{transform:translate(-3%,5%) rotate(-3deg)}}
+  @media (prefers-reduced-motion:reduce){.bg-blob,.bg-sheen{animation:none}}
   .shell::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
 
@@ -588,6 +593,18 @@
   .priority-opt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
   .priority-opt.on .priority-dot{box-shadow:0 0 0 1.5px var(--paper)}
 
+  .job-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:11px}
+  .job-card-wrap .job{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
+  .job-swipe-actions{position:absolute;top:0;right:0;height:100%;width:204px;display:flex;z-index:0;
+    opacity:0;pointer-events:none;transition:opacity .15s ease}
+  .job-card-wrap.active .job-swipe-actions{opacity:1;pointer-events:auto}
+  .job-swipe-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    font-size:10.5px;font-weight:600;color:#fff;cursor:pointer;border:none;font-family:inherit;
+    backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+  .job-swipe-btn svg{width:16px;height:16px}
+  .job-swipe-btn.editar{background:rgba(200,200,196,.42)}
+  .job-swipe-btn.concluir{background:rgba(79,161,137,.42)}
+  .job-swipe-btn.deletar{background:rgba(217,127,121,.42)}
   .job{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease;
     background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);
     border:2px solid rgba(255,255,255,.30);border-radius:var(--r);padding:15px 16px;
@@ -708,9 +725,8 @@
   .save-tpl{font-size:13.5px;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap}
 
   /* ===== CALENDÁRIO ===== */
-  .cal-head{display:flex;align-items:center;justify-content:space-between;margin:14px 0 16px}
-  .cal-month{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px}
-  .cal-nav{display:flex;gap:6px}
+  .cal-head{display:grid;grid-template-columns:32px 1fr 32px;align-items:center;margin:14px 0 16px}
+  .cal-month{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;text-align:center}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
   .cal-day{aspect-ratio:1;border-radius:10px;border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
@@ -723,12 +739,6 @@
   .cd{width:5px;height:5px;border-radius:50%}
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:12.5px;color:var(--ink-soft)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
-  .cal-year-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
-  .cal-year-tile{border-radius:14px;border:1.5px solid rgba(255,255,255,.20);padding:12px 10px;cursor:pointer;
-    background:rgba(122,124,116,.34);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
-  .cal-year-tile.current{border-color:var(--brand)}
-  .cal-year-tile-name{font-size:13px;font-weight:600;color:var(--ink);text-transform:capitalize}
-  .cal-year-tile-dots{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap;min-height:6px}
   .legend .cd{width:7px;height:7px}
   .agenda-item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-bottom:1px solid var(--line-soft)}
   .agenda-day{width:34px;text-align:center;font-size:11px;color:var(--neutral);flex:none}
@@ -1417,8 +1427,8 @@
     <div class="bg-blob bg-blob-2"></div>
     <div class="bg-blob bg-blob-3"></div>
     <div class="bg-blob bg-blob-4"></div>
-    <div class="bg-blob bg-blob-5"></div>
   </div>
+  <div class="bg-sheen" aria-hidden="true"></div>
 
   <!-- ===== DESKTOP SIDEBAR ===== -->
   <aside class="sidebar">
@@ -1500,9 +1510,10 @@
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
-                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="60" stroke-width="14"/>
-                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="14"/>
-                  <circle class="mr-ring mr-gastos" id="mr-gastos" cx="75" cy="75" r="60" stroke-width="14"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="60" stroke-width="11"/>
+                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="11"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="46" stroke-width="11"/>
+                  <circle class="mr-ring mr-gastos" id="mr-gastos" cx="75" cy="75" r="46" stroke-width="11"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
@@ -1516,18 +1527,19 @@
         <div class="jobs-stat-card" onclick="abrirRelatorios('performance')">
           <div class="jobs-stat-row">
           <div class="jobs-stat-col">
+            <span class="ms-c-label" data-t="home.closed">Fechados</span>
+            <span class="ms-c-trend" id="trend-fechados"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track-outer" cx="30" cy="30" r="27" stroke-width="3"/>
-                <circle class="mini-ring-progress-outer" id="ring-fechados-gamify" cx="30" cy="30" r="27" stroke-width="3"/>
-                <circle class="mini-ring-track" cx="30" cy="30" r="22" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="22" stroke-width="6"/>
+                <circle class="mini-ring-track-outer" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress-outer" id="ring-fechados-gamify" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-contratos-num">3</span><span class="mini-ring-slash">/</span><span id="mt-contratos-den">12</span></div>
+              <div class="mini-ring-center"><span id="mt-contratos-num">3</span></div>
             </div>
-            <span class="ms-c-label" data-t="home.closed">Fechados</span>
           </div>
           <div class="jobs-stat-col">
+            <span class="ms-c-label" data-t="home.executed">Executados</span>
+            <span class="ms-c-trend" id="trend-realizados"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
                 <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
@@ -1535,9 +1547,10 @@
               </svg>
               <div class="mini-ring-center"><span id="mt-realizados-num">1</span><span class="mini-ring-slash">/</span><span id="mt-realizar-den">5</span></div>
             </div>
-            <span class="ms-c-label" data-t="home.executed">Executados</span>
           </div>
           <div class="jobs-stat-col">
+            <span class="ms-c-label" data-t="home.delivered">Entregues</span>
+            <span class="ms-c-trend" id="trend-entregues"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
                 <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
@@ -1545,7 +1558,6 @@
               </svg>
               <div class="mini-ring-center"><span id="mt-entregues-num">3</span><span class="mini-ring-slash">/</span><span id="mt-entregar-den">5</span></div>
             </div>
-            <span class="ms-c-label" data-t="home.delivered">Entregues</span>
           </div>
           </div>
         </div>
@@ -1563,31 +1575,29 @@
 
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
-        <div class="page-head"><div class="page-title" data-t="nav.jobs">Trabalhos</div></div>
+        <div class="page-head">
+          <div class="page-title" data-t="nav.jobs">Trabalhos</div>
+          <span class="inline-link" style="font-size:12.5px" onclick="go('historico')" data-t="jobs.history">Histórico</span>
+        </div>
 
         <div class="cal-head">
+          <div class="icon-btn" id="cal-prev" style="width:32px;height:32px" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
           <div class="cal-month" id="cal-month-label">Junho 2026</div>
-          <div class="cal-nav">
-            <div class="icon-btn" id="cal-prev" style="width:32px;height:32px" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
-            <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          </div>
+          <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
         <div class="segmented" style="margin-bottom:14px">
           <button class="on" onclick="setCalView(this,'mes')"><span data-t="calendar.month">Mês</span></button>
           <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
           <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
-          <button onclick="setCalView(this,'ano')"><span data-t="calendar.year">Ano</span></button>
         </div>
         <div class="legend" id="cal-legend">
-          <span><span class="cd" style="background:var(--brand)"></span><span data-t="calendar.jobs">Eventos</span></span>
-          <span><span class="cd" style="background:var(--late)"></span><span data-t="job.payments">Pagamentos</span></span>
-          <span><span class="cd" style="background:var(--done)"></span><span data-t="calendar.deliveries">Entregas</span></span>
-          <span><span class="cd" style="background:var(--pend)"></span><span data-t="calendar.clientInfo">Informações do Cliente/assinaturas</span></span>
+          <span><span class="cd" style="background:var(--brand)"></span><span data-t="calendar.events">Sessões e eventos</span></span>
+          <span><span class="cd" style="background:var(--late)"></span><span data-t="calendar.paymentsDue">Pagamentos a receber</span></span>
+          <span><span class="cd" style="background:var(--pend)"></span><span data-t="calendar.contractsPending">Contratos por assinar</span></span>
         </div>
         <div class="cal-grid" id="calgrid"></div>
         <div id="cal-week" style="display:none"></div>
         <div id="cal-day" style="display:none"></div>
-        <div id="cal-year" class="cal-year-grid" style="display:none"></div>
 
         <div class="filter-row" style="margin-top:22px">
           <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
@@ -1604,6 +1614,17 @@
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
           <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div>
           <h3 style="font-size:19px" data-t="jobs.emptyFilter">Nada neste filtro.</h3><p><span data-t="home.tryAll">Tenta "Todos" para ver a carteira completa.</span></p>
+        </div>
+      </section>
+
+      <!-- ============ HISTÓRICO (trabalhos concluídos/deletados) ============ -->
+      <section class="view" id="v-historico">
+        <div class="back" onclick="go('trabalhos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="nav.jobs">Trabalhos</span></div>
+        <div class="page-title" style="font-size:25px" data-t="jobs.history">Histórico</div>
+        <div id="historico-lista"></div>
+        <div class="empty" id="historicoEmpty" style="display:none;padding:46px 16px">
+          <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
+          <h3 style="font-size:19px" data-t="jobs.historyEmpty">Ainda sem trabalhos no histórico.</h3>
         </div>
       </section>
 
@@ -1726,6 +1747,7 @@
         <div class="filter-row" style="margin:14px 0 4px">
           <div class="chip" id="rel-tab-btn-financeiro" onclick="mudarAbaRelatorios('financeiro')"><span data-t="home.financeTitle">Financeiro</span></div>
           <div class="chip" id="rel-tab-btn-performance" onclick="mudarAbaRelatorios('performance')"><span data-t="home.performanceTitle">Performance</span></div>
+          <div class="chip" id="rel-tab-btn-custos" onclick="mudarAbaRelatorios('custos')"><span data-t="cost.month">Custos</span></div>
         </div>
 
         <div id="rel-tab-financeiro">
@@ -1737,9 +1759,6 @@
           <div class="field-row" style="margin:12px 0 18px">
             <button class="btn soft" style="flex:1" onclick="abrirDefinirMetas()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v20M2 12h20"/></svg> <span data-t="reports.setMonthGoals">Definir metas</span>
-            </button>
-            <button class="btn soft" style="flex:1" onclick="abrirCustos()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2"/></svg> <span data-t="cost.add">Adicionar despesa</span>
             </button>
           </div>
 
@@ -1759,22 +1778,36 @@
           <div class="barchart" id="barchart"></div>
           <div class="rel-summary" id="rel-summary"><span data-t="reports.projected.prefix">Previsto: </span>4.300 €<span data-t="reports.received.prefix"> · Recebido: </span>2.450 €<span data-t="reports.diff.prefix"> · Diferença: </span>−1.850 €</div>
 
-          <div class="plist" style="margin-top:14px">
-            <div class="prow"><div class="t"><span data-t="home.pendingPayments">Pagamentos pendentes</span></div><div class="v">4</div></div>
-            <div class="prow"><div class="t"><span data-t="reports.activeJobs">Trabalhos ativos</span></div><div class="v">5</div></div>
-            <div class="prow"><div class="t"><span data-t="reports.completedJobs">Trabalhos concluídos</span></div><div class="v">1</div></div>
-            <div class="prow"><div class="t"><span data-t="reports.completedDeliveries">Entregas concluídas</span></div><div class="v">3</div></div>
-          </div>
+          <div class="group-label" style="margin-top:24px"><span data-t="reports.portfolio">Carteira este mês</span> <span class="ln"></span></div>
+          <div class="jobs-stat-row" id="rel-fin-rings" style="margin-top:10px"></div>
         </div>
 
         <div id="rel-tab-performance" style="display:none">
           <div class="group-label" style="margin-top:14px"><span data-t="reports.performanceChart">Desempenho do mês atual</span> <span class="ln"></span></div>
-          <div class="plist" style="margin-top:10px">
-            <div class="prow"><div class="t"><span data-t="home.closed">Fechados</span></div><div class="v" id="rel-perf-fechados">0 / 0</div></div>
-            <div class="prow"><div class="t"><span data-t="home.executed">Executados</span></div><div class="v" id="rel-perf-executados">0 / 0</div></div>
-            <div class="prow"><div class="t"><span data-t="home.delivered">Entregues</span></div><div class="v" id="rel-perf-entregues">0 / 0</div></div>
+          <div class="jobs-stat-row" id="rel-perf-rings" style="margin-top:10px"></div>
+          <div class="rel-summary" id="rel-perf-comparativo" style="margin-top:20px"></div>
+        </div>
+
+        <div id="rel-tab-custos" style="display:none">
+          <div class="ring-card">
+            <svg class="ring-svg" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="52"/>
+              <circle class="ring-fg" id="ring-custos-fg" cx="60" cy="60" r="52"/>
+            </svg>
+            <div class="ring-center">
+              <div class="ring-pct" id="ring-custos-pct">0%</div>
+              <div class="ring-label" data-t="reports.ofCeiling">do teto</div>
+            </div>
           </div>
-          <div class="rel-summary" id="rel-perf-comparativo" style="margin-top:14px"></div>
+          <div class="ring-legend"><span><b id="rel-custos-total">0 €</b> <span data-t="cost.thisMonth">gastos este mês</span></span><span><b id="rel-custos-teto">0 €</b> <span data-t="home.ceiling">Teto</span></span></div>
+
+          <div class="field-row" style="margin:18px 0 6px">
+            <button class="btn soft" style="flex:1" onclick="abrirCustos()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg> <span data-t="cost.add">Adicionar despesa</span>
+            </button>
+          </div>
+          <div class="group-label" style="margin-top:18px"><span data-t="cost.registered">Custos registados</span> <span class="ln"></span></div>
+          <div id="rel-custos-lista" style="margin-top:8px"></div>
         </div>
       </section>
 
@@ -1802,7 +1835,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
           <input placeholder="Cliente, email, local, data, trabalho…" id="searchin" oninput="fakeSearch()" data-t-placeholder="search.inputHint">
         </div>
-        <div class="res" id="searchres" data-t="search.placeholder2">Procura por qualquer coisa. Sofia, Riverside, 14 ago, 1.200 €…</div>
+        <div class="res" id="searchres" data-t="search.placeholder2">Pesquisa por cliente, local, data ou trabalho.</div>
         <div id="searchhits"></div>
       </section>
 
@@ -2551,7 +2584,11 @@
     "action.activate": { pt:"Ativar", en:"Activate", es:"Activar" },
     "action.add": { pt:"Adicionar", en:"Add", es:"Añadir" },
     "action.attach": { pt:"Anexar", en:"Attach", es:"Adjuntar" },
+    "action.complete": { pt:"Concluir", en:"Complete", es:"Concluir" },
     "action.contactSupport": { pt:"Falar com o suporte", en:"Contact support", es:"Hablar con soporte" },
+    "action.markDone": { pt:"Marcar como feito", en:"Mark as done", es:"Marcar como hecho" },
+    "action.restore": { pt:"Restaurar", en:"Restore", es:"Restaurar" },
+    "action.delete": { pt:"Deletar", en:"Delete", es:"Eliminar" },
     "action.deleteAccount": { pt:"Apagar conta e dados", en:"Delete account and data", es:"Eliminar cuenta y datos" },
     "action.duplicate": { pt:"Duplicar", en:"Duplicate", es:"Duplicar" },
     "action.edit": { pt:"Editar", en:"Edit", es:"Editar" },
@@ -2582,22 +2619,15 @@
     "builder.blocksCount": { pt:"blocos", en:"blocks", es:"bloques" },
     "builder.usedPrefix": { pt:"usado", en:"used", es:"usado" },
     // --- Calendário ---
-    "calendar.agenda": { pt:"AGENDA", en:"AGENDA", es:"AGENDA" },
-    "calendar.clientInfo": { pt:"Informações do Cliente/assinaturas", en:"Client info / signatures", es:"Datos del cliente / firmas" },
+    "calendar.contractsPending": { pt:"Contratos por assinar", en:"Contracts awaiting signature", es:"Contratos por firmar" },
     "calendar.day": { pt:"Dia", en:"Day", es:"Día" },
-    "calendar.deliveries": { pt:"Entregas", en:"Deliveries", es:"Entregas" },
-    "calendar.jobs": { pt:"Eventos", en:"Events", es:"Eventos" },
+    "calendar.events": { pt:"Sessões e eventos", en:"Sessions & events", es:"Sesiones y eventos" },
     "calendar.month": { pt:"Mês", en:"Month", es:"Mes" },
     "calendar.nothing": { pt:"Sem nada agendado para este dia.", en:"Nothing scheduled for this day.", es:"Nada programado para este día." },
-    "calendar.session": { pt:"Sessão", en:"Session", es:"Sesión" },
-    "calendar.finalPayment": { pt:"Pagamento final", en:"Final payment", es:"Pago final" },
-    "calendar.briefingPending": { pt:"Briefing por confirmar", en:"Briefing pending confirmation", es:"Briefing pendiente de confirmar" },
-    "calendar.deliveryConfirmed": { pt:"Entrega confirmada", en:"Delivery confirmed", es:"Entrega confirmada" },
+    "calendar.paymentsDue": { pt:"Pagamentos a receber", en:"Payments due", es:"Pagos por cobrar" },
     "calendar.today": { pt:"HOJE", en:"TODAY", es:"HOY" },
-    "calendar.eventFallback": { pt:"evento", en:"event", es:"evento" },
     "calendar.dayLabel": { pt:"Dia", en:"Day", es:"Día" },
     "calendar.week": { pt:"Semana", en:"Week", es:"Semana" },
-    "calendar.year": { pt:"Ano", en:"Year", es:"Año" },
     // --- Informações do Cliente ---
     "clientinfo.availableUntil": { pt:"Disponível até: ", en:"Available until: ", es:"Disponible hasta: " },
     // --- Coleções ---
@@ -2629,6 +2659,9 @@
     // --- Custos ---
     "cost.add": { pt:"Adicionar custo", en:"Add cost", es:"Añadir coste" },
     "cost.empty": { pt:"Ainda sem custos registados.", en:"No costs logged yet.", es:"Sin costes registrados." },
+    "cost.month": { pt:"Custos", en:"Costs", es:"Costes" },
+    "cost.thisMonth": { pt:"gastos este mês", en:"spent this month", es:"gastado este mes" },
+    "cost.registered": { pt:"Custos registados", en:"Logged costs", es:"Costes registrados" },
     "cost.tasks": { pt:"Tarefas", en:"Tasks", es:"Tareas" },
     // --- Moeda ---
     "currency.dollar": { pt:"$ Dólar", en:"$ Dollar", es:"$ Dólar" },
@@ -2827,6 +2860,10 @@
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
     "history.receiptRequested": { pt:"Comprovante solicitado: ", en:"Receipt requested: ", es:"Comprobante solicitado: " },
     "history.clientSentReceipt": { pt:"Cliente enviou comprovante: ", en:"Client sent a receipt: ", es:"El cliente envió un comprobante: " },
+    "history.jobArchivedDone": { pt:"Trabalho concluído e arquivado", en:"Job completed and archived", es:"Trabajo concluido y archivado" },
+    "history.jobArchivedDeleted": { pt:"Trabalho deletado", en:"Job deleted", es:"Trabajo eliminado" },
+    "history.jobRestored": { pt:"Trabalho restaurado do histórico", en:"Job restored from history", es:"Trabajo restaurado del historial" },
+    "history.deleteConfirm": { pt:"Deletar o trabalho de {client}? Vai para o Histórico e pode ser restaurado depois.", en:"Delete {client}'s job? It moves to History and can be restored later.", es:"¿Eliminar el trabajo de {client}? Va al Historial y se puede restaurar después." },
     "job.timeline": { pt:"Timeline", en:"Timeline", es:"Línea de tiempo" },
     "job.typeDefault": { pt:"Trabalho", en:"Job", es:"Trabajo" },
     // --- Trabalhos — lista e filtros ---
@@ -2844,6 +2881,10 @@
     "jobs.filter.overdue": { pt:"Atrasados", en:"Overdue", es:"Vencidos" },
     "jobs.filter.payment": { pt:"Pagamento pendente", en:"Payment due", es:"Pago pendiente" },
     "jobs.filter.upcoming": { pt:"A realizar", en:"Upcoming", es:"Por realizar" },
+    "jobs.history": { pt:"Histórico", en:"History", es:"Historial" },
+    "jobs.historyEmpty": { pt:"Ainda sem trabalhos no histórico.", en:"No jobs in history yet.", es:"Aún no hay trabajos en el historial." },
+    "jobs.history.done": { pt:"Concluído", en:"Completed", es:"Concluido" },
+    "jobs.history.deleted": { pt:"Deletado", en:"Deleted", es:"Eliminado" },
     "jobs.status.active": { pt:"Ativo", en:"Active", es:"Activo" },
     "jobs.status.done": { pt:"Concluído", en:"Completed", es:"Completado" },
     "jobs.sessionToday": { pt:"Sessão hoje", en:"Session today", es:"Sesión hoy" },
@@ -2970,6 +3011,7 @@
     "milestone.contractSigned": { pt:"Assinatura do contrato", en:"Contract signed", es:"Contrato firmado" },
     "milestone.delivery": { pt:"Entrega · ", en:"Delivery · ", es:"Entrega · " },
     "milestone.finalDelivery": { pt:"Entrega final", en:"Final delivery", es:"Entrega final" },
+    "milestone.deliveryPending": { pt:"por entregar", en:"not delivered yet", es:"por entregar" },
     "milestone.finalPayment": { pt:"Pagamento final · ", en:"Final payment · ", es:"Pago final · " },
     "milestone.signal": { pt:"Sinal · ", en:"Deposit · ", es:"Señal · " },
     // --- Modais — títulos ---
@@ -3173,6 +3215,8 @@
     "reports.completedJobs": { pt:"Trabalhos concluídos", en:"Completed jobs", es:"Trabajos completados" },
     "reports.diff.prefix": { pt:" · Diferença: ", en:" · Difference: ", es:" · Diferencia: " },
     "reports.ofProjected": { pt:"do previsto", en:"of projected", es:"de lo previsto" },
+    "reports.ofCeiling": { pt:"do teto", en:"of ceiling", es:"del techo" },
+    "reports.portfolio": { pt:"Carteira este mês", en:"Portfolio this month", es:"Cartera este mes" },
     "reports.projected": { pt:"previstos", en:"projected", es:"previsto" },
     "reports.projected.prefix": { pt:"Previsto: ", en:"Projected: ", es:"Previsto: " },
     "reports.received": { pt:"recebidos", en:"received", es:"recibido" },
@@ -3185,7 +3229,7 @@
     "role.viewer.name": { pt:"Visualizador", en:"Viewer", es:"Visualizador" },
     // --- Pesquisa ---
     "search.inputHint": { pt:"Cliente, email, local, data, trabalho…", en:"Client, email, location, date, job…", es:"Cliente, email, ubicación, fecha, trabajo…" },
-    "search.placeholder2": { pt:"Procura por qualquer coisa. Sofia, Riverside, 14 ago, 1.200 €…", en:"Search for anything. Sofia, Riverside, Aug 14, 1,200 €…", es:"Busca lo que quieras. Sofia, Riverside, 14 ago, 1.200 €…" },
+    "search.placeholder2": { pt:"Pesquisa por cliente, local, data ou trabalho.", en:"Search by client, place, date or job.", es:"Busca por cliente, lugar, fecha o trabajo." },
     "search.title": { pt:"Pesquisa", en:"Search", es:"Búsqueda" },
     // --- Configurações ---
     "settings.costsMonth": { pt:"Custos do mês", en:"Monthly costs", es:"Costes del mes" },
@@ -3344,6 +3388,9 @@
     "toast.imageError": { pt:"Não foi possível carregar a imagem.", en:"Could not load the image.", es:"No se pudo cargar la imagen." },
     "toast.jobCreated": { pt:"Trabalho criado", en:"Job created", es:"Trabajo creado" },
     "toast.jobNotFound": { pt:"Trabalho não encontrado.", en:"Job not found.", es:"Trabajo no encontrado." },
+    "toast.jobArchivedDone": { pt:"Trabalho concluído — movido para o Histórico.", en:"Job completed — moved to History.", es:"Trabajo concluido — movido al Historial." },
+    "toast.jobArchivedDeleted": { pt:"Trabalho deletado — movido para o Histórico.", en:"Job deleted — moved to History.", es:"Trabajo eliminado — movido al Historial." },
+    "toast.jobRestored": { pt:"Trabalho restaurado.", en:"Job restored.", es:"Trabajo restaurado." },
     "toast.linkCopied": { pt:"Link copiado.", en:"Link copied.", es:"Enlace copiado." },
     "toast.linkGenerated": { pt:"Link gerado.", en:"Link generated.", es:"Enlace generado." },
     "toast.linkPrefix": { pt:"Link: ", en:"Link: ", es:"Enlace: " },
@@ -3543,12 +3590,12 @@
     }
   }
 
-  const views = ['hoje','trabalhos','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa'];
   function go(v){
     views.forEach(x=>{
       const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
     });
-    const navMap={hoje:'hoje',trabalhos:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
+    const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil'};
     const active=navMap[v]||v;
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
@@ -3559,6 +3606,7 @@
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); }
     if(v==='equipa') renderEquipaView();
     if(v==='bibliotecas') renderExplorar();
+    if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
   }
   let METAS={receita:0, gastos:0};
@@ -3586,8 +3634,9 @@
   }
   function renderRingsDashboard(recebido, custos){
     const meta=METAS.receita, limiteGastos=METAS.gastos||1;
+    /* anel externo (maior, sempre ao fundo): Recebido em relação à Meta.
+       anel interno (menor, sempre à frente): Despesas em relação ao Teto. */
     const pctRecebido= meta>0 ? Math.min(100, recebido/meta*100) : 0;
-    const pctGastosNoAnel= meta>0 ? Math.min(pctRecebido, custos/meta*100) : 0;
     const pctGastosLimite = Math.min(100, custos/limiteGastos*100);
     const configurarAnel=(id, r, pctFinal)=>{
       const el=document.getElementById(id);
@@ -3601,37 +3650,41 @@
       setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pctFinal/100); }, 60);
     };
     configurarAnel('mr-recebido', 60, pctRecebido);
-    configurarAnel('mr-gastos', 60, pctGastosNoAnel);
+    configurarAnel('mr-gastos', 46, pctGastosLimite);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-receb', fmtMoney(recebido));
     set('mrl-gastos', fmtMoney(custos));
     set('mrl-teto', fmtMoney(limiteGastos));
-    const saldo=recebido-meta;
+    /* saldo real do mês até agora: o que entrou menos o que já saiu */
+    const saldo=recebido-custos;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-    const pctMeta= meta>0 ? Math.round(Math.min(100, recebido/meta*100)) : 0;
-    const pctEl=document.getElementById('mt-pct-meta');
-    if(pctEl) pctEl.textContent=pctMeta+'%';
-    const pctGastosEl=document.getElementById('mt-pct-gastos');
-    if(pctGastosEl) pctGastosEl.textContent=Math.round(pctGastosLimite)+'%';
   }
   function calcularEstatisticasMes(){
     let recebido=0, porReceber=0;
     let contratosFechados=0, trabalhosRealizar=0, trabalhosRealizados=0, trabalhosEntregar=0, trabalhosEntregues=0;
+    let pagamentosPendentesCount=0, pagamentosTotalCount=0, trabalhosAtivos=0, trabalhosConcluidos=0;
     const hoje=new Date();
     const mesAtualISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
     const mesAnt=new Date(hoje.getFullYear(), hoje.getMonth()-1, 1);
     const mesAnteriorISO=mesAnt.getFullYear()+'-'+String(mesAnt.getMonth()+1).padStart(2,'0');
     let fechadosEsteMes=0, fechadosMesAnterior=0;
-    const todos=jobsVisiveis();
+    let realizadosEsteMes=0, realizadosMesAnterior=0;
+    let entreguesEsteMes=0, entreguesMesAnterior=0;
+    /* trabalhos deletados (descartados) não entram em nenhuma estatística;
+       trabalhos concluídos e arquivados continuam a contar — aconteceram de facto */
+    const todos=jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado');
     todos.forEach(j=>{
       (j.payments||[]).forEach(p=>{
         const val=Number(p.amount)||0;
-        if(p.status==='pago') recebido+=val; else porReceber+=val;
+        pagamentosTotalCount++;
+        if(p.status==='pago') recebido+=val; else { porReceber+=val; pagamentosPendentesCount++; }
       });
       const c=classificarTrabalho(j);
       if(c.fechado) contratosFechados++;
+      if(c.concluido) trabalhosConcluidos++;
+      else if(c.fechado && !c.aEntregar) trabalhosAtivos++;
       const assinadoISO=j.contract&&j.contract.signedAtISO;
       if(assinadoISO){
         if(assinadoISO.slice(0,7)===mesAtualISO) fechadosEsteMes++;
@@ -3639,21 +3692,37 @@
       }
       const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
       const msEntrega=(j.milestones||[]).find(m=>m.key==='entrega');
-      if(msEvento){ if(msEvento.status!=='feito') trabalhosRealizar++; else trabalhosRealizados++; }
-      if(msEntrega){ if(msEntrega.status!=='feito') trabalhosEntregar++; else trabalhosEntregues++; }
+      if(msEvento){
+        if(msEvento.status!=='feito') trabalhosRealizar++;
+        else{
+          trabalhosRealizados++;
+          const mm=msEvento.feitoEm&&msEvento.feitoEm.slice(0,7);
+          if(mm===mesAtualISO) realizadosEsteMes++; else if(mm===mesAnteriorISO) realizadosMesAnterior++;
+        }
+      }
+      if(msEntrega){
+        if(msEntrega.status!=='feito') trabalhosEntregar++;
+        else{
+          trabalhosEntregues++;
+          const mm=msEntrega.feitoEm&&msEntrega.feitoEm.slice(0,7);
+          if(mm===mesAtualISO) entreguesEsteMes++; else if(mm===mesAnteriorISO) entreguesMesAnterior++;
+        }
+      }
     });
-    return {recebido, porReceber, contratosFechados, totalJobs:todos.length, fechadosEsteMes, fechadosMesAnterior, trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues, custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
+    return {recebido, porReceber, contratosFechados, totalJobs:todos.length,
+      fechadosEsteMes, fechadosMesAnterior, realizadosEsteMes, realizadosMesAnterior, entreguesEsteMes, entreguesMesAnterior,
+      trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
+      pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
+      custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
     set('mt-contratos-num', s.contratosFechados);
-    set('mt-contratos-den', s.totalJobs);
     set('mt-realizados-num', s.trabalhosRealizados);
     set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    document.querySelectorAll('.ms-c-trend').forEach(el=>{ el.style.display='none'; });
     const configurarMiniAnel=(id, num, den, r)=>{
       const el=document.getElementById(id);
       if(!el) return;
@@ -3663,12 +3732,13 @@
       el.style.strokeDasharray=circ;
       setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pct/100); }, 60);
     };
-    configurarMiniAnel('ring-fechados', s.contratosFechados, s.totalJobs, 22);
     configurarMiniAnel('ring-realizados', s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
     configurarMiniAnel('ring-entregues', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
+    /* anel "Fechados": não tem meta — representa apenas o ritmo deste mês
+       face ao anterior (uma volta completa = igualou o mês passado) */
     const gamifyEl=document.getElementById('ring-fechados-gamify');
     if(gamifyEl){
-      const r=27, circ=2*Math.PI*r;
+      const r=25, circ=2*Math.PI*r;
       const ratio = s.fechadosMesAnterior>0 ? (s.fechadosEsteMes/s.fechadosMesAnterior) : (s.fechadosEsteMes>0?1:0);
       const laps=Math.floor(ratio);
       const pctAtual=(ratio-laps)*100;
@@ -3676,6 +3746,18 @@
       gamifyEl.classList.toggle('lapped', laps>0);
       setTimeout(()=>{ gamifyEl.style.strokeDashoffset=circ*(1-(laps>0?100:pctAtual)/100); }, 60);
     }
+    /* comparação com o período anterior (mês passado), entre o nome e o anel */
+    const setTrend=(id, atual, anterior)=>{
+      const el=document.getElementById(id);
+      if(!el) return;
+      if(atual===0 && anterior===0){ el.textContent=''; return; }
+      const pct = anterior>0 ? Math.round((atual-anterior)/anterior*100) : 100;
+      el.textContent=(pct>0?'+':'')+pct+'%';
+      el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
+    };
+    setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
+    setTrend('trend-realizados', s.realizadosEsteMes, s.realizadosMesAnterior);
+    setTrend('trend-entregues', s.entreguesEsteMes, s.entreguesMesAnterior);
     renderRingsDashboard(s.recebido, s.custos);
     atualizarNotifDot();
     const nomesMesesPt=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
@@ -3707,7 +3789,7 @@
   }
   function gerarItensRadar(){
     const itens=[];
-    jobsVisiveis().forEach(j=>{
+    jobsVisiveis().filter(j=>!j.arquivado).forEach(j=>{
       if(j.structure && j.structure.contrato && j.contract && j.contract.status!=='assinado'){
         itens.push({ dataISO:j.dateRaw||new Date().toISOString().slice(0,10), hora:null, nome:j.nome||j.client, secundaria:t('tasks.contractPending'), jobId:j.id, tipo:'contrato', idx:null });
       }
@@ -3790,9 +3872,23 @@
       return;
     } else {
       const ms=(job.milestones||[]).find(m=>m.key==='principal');
-      if(ms){ ms.status='feito'; pushHistory(job,t('toast.markedDone')); saveJobsData(); }
+      if(ms){ ms.status='feito'; ms.feitoEm=new Date().toISOString(); pushHistory(job,t('toast.markedDone')); saveJobsData(); }
     }
     card.closest('.radar-card-wrap').style.display='none';
+    renderMonthTicker();
+    showToast(t('toast.done'));
+  }
+  function marcarMilestoneFeito(jobId, key){
+    const job=jobsData[jobId];
+    if(!job) return;
+    const ms=(job.milestones||[]).find(m=>m.key===key);
+    if(!ms || ms.status==='feito') return;
+    ms.status='feito';
+    ms.feitoEm=new Date().toISOString();
+    pushHistory(job, t('toast.markedDone')+' — '+ms.t);
+    saveJobsData();
+    renderJobDetailDynamic(jobId);
+    updateJobCard(jobId);
     renderMonthTicker();
     showToast(t('toast.done'));
   }
@@ -3802,14 +3898,20 @@
       card.dataset.swipeBound='1';
       const wrap=card.closest('.radar-card-wrap');
       let startX=0, dx=0, dragging=false;
-      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; if(wrap) wrap.classList.add('active'); });
+      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; });
       card.addEventListener('pointermove', e=>{
         if(!dragging) return;
         dx=e.clientX-startX;
         if(dx>0) dx=0;
         if(dx<-144) dx=-144;
-        card.style.transform='translateX('+dx+'px)';
-        if(Math.abs(dx)>8) card.dataset.swiped='1';
+        /* só revela as ações (e movimenta o card) depois de um arrasto real —
+           um simples toque ou o início de um scroll vertical não deve mostrar
+           as abas por baixo do vidro */
+        if(Math.abs(dx)>12){
+          card.dataset.swiped='1';
+          if(wrap) wrap.classList.add('active');
+          card.style.transform='translateX('+dx+'px)';
+        }
       });
       const fim=()=>{
         if(!dragging) return;
@@ -3927,10 +4029,7 @@
     html+='<button class="btn primary" style="width:100%;margin-bottom:16px" onclick="guardarCusto()">'+t('cost.add')+'</button>';
     html+='<div class="sheet-divider"></div><p class="plabel" style="margin:6px 2px 8px">Custos registados</p>';
     if(!lista.length){ html+='<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>'; }
-    lista.forEach(c=>{
-      html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.descricao)+'</div><span class="sub">'+escapeHtml(c.categoria||'')+(c.data?(' · '+c.data.split('-').reverse().slice(0,2).join('/')):'')+'</span></div>'+
-        '<div style="display:flex;align-items:center;gap:12px"><b style="font-size:13.5px">'+fmtMoney(c.valor)+'</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--neutral);cursor:pointer" onclick="removerCusto(\''+c.id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div></div>';
-    });
+    lista.forEach(c=>{ html+=custoRowHTML(c); });
     openInfo(t('settings.costsMonth'), html);
   }
   function guardarCusto(){
@@ -3941,14 +4040,16 @@
     custosData[id]={ id, descricao:desc, valor, categoria:document.getElementById('cst-cat').value, data:document.getElementById('cst-data').value||null };
     saveCustosData();
     renderMonthTicker();
-    abrirCustos();
+    if(document.getElementById('infoSheet').classList.contains('show')) abrirCustos();
+    if(document.getElementById('v-relatorios').classList.contains('active') && relatoriosTab==='custos') renderRelatoriosCustos();
     showToast(t('toast.costAdded'));
   }
   function removerCusto(id){
     delete custosData[id];
     saveCustosData();
     renderMonthTicker();
-    abrirCustos();
+    if(document.getElementById('infoSheet').classList.contains('show')) abrirCustos();
+    if(document.getElementById('v-relatorios').classList.contains('active') && relatoriosTab==='custos') renderRelatoriosCustos();
     showToast(t('toast.costRemoved'));
   }
 
@@ -4666,7 +4767,15 @@
     document.getElementById('tw-criar-cliente').style.display='none';
     showToast(t('toast.clientAddedPrefix')+nome+t('toast.clientAddedSuffix'));
   }
+  let criandoTrabalho=false;
   function trabalhoCreate(){
+    /* guarda contra duplo-toque/duplo-clique — sem isto, um toque duplo no botão
+       "Criar trabalho" (comum em ecrãs touch, sobretudo com alguma lentidão de rede)
+       criava dois registos quase idênticos, cada um com o seu próprio card e as
+       suas próprias notificações de pagamento/entrega */
+    if(criandoTrabalho) return;
+    criandoTrabalho=true;
+    setTimeout(()=>{ criandoTrabalho=false; }, 1500);
     const cliente=document.getElementById('tw-cliente').value.trim()||'Novo cliente';
     const nomeTrabalho=document.getElementById('tw-nome').value.trim()||cliente;
     const dateRaw=document.getElementById('tw-data').value||null;
@@ -4867,16 +4976,62 @@
     relatoriosTab=tab;
     document.getElementById('rel-tab-financeiro').style.display = tab==='financeiro' ? 'block':'none';
     document.getElementById('rel-tab-performance').style.display = tab==='performance' ? 'block':'none';
+    document.getElementById('rel-tab-custos').style.display = tab==='custos' ? 'block':'none';
     document.getElementById('rel-tab-btn-financeiro').classList.toggle('on', tab==='financeiro');
     document.getElementById('rel-tab-btn-performance').classList.toggle('on', tab==='performance');
+    document.getElementById('rel-tab-btn-custos').classList.toggle('on', tab==='custos');
+    if(tab==='financeiro') renderRelatoriosFinanceiroExtra();
     if(tab==='performance') renderRelatoriosPerformance();
+    if(tab==='custos') renderRelatoriosCustos();
+  }
+  /* pequenos anéis reutilizáveis para as abas de Relatórios — cada "tile" é
+     {id, label, num, den, pct, trend}: den define o rácio normal (num/den);
+     pct substitui esse cálculo quando o anel representa outra coisa (ex.
+     ritmo face ao mês anterior); trend é o +X%/-X% mostrado entre o nome e o anel */
+  function construirMiniAneis(container, tiles){
+    if(!container) return;
+    const r=25;
+    container.innerHTML=tiles.map(tl=>{
+      const centro = tl.den!=null ? ('<span>'+tl.num+'</span><span class="mini-ring-slash">/</span><span>'+tl.den+'</span>') : ('<span>'+tl.num+'</span>');
+      const trendHtml = tl.trend!=null ? '<span class="ms-c-trend" style="color:'+(tl.trend<0?'var(--late)':'var(--brand)')+'">'+(tl.trend>0?'+':'')+tl.trend+'%</span>' : '';
+      return '<div class="jobs-stat-col">'+
+        '<span class="ms-c-label">'+escapeHtml(tl.label)+'</span>'+trendHtml+
+        '<div class="mini-ring-wrap"><svg class="mini-ring" viewBox="0 0 60 60">'+
+          '<circle class="mini-ring-track" cx="30" cy="30" r="'+r+'" stroke-width="6"/>'+
+          '<circle class="mini-ring-progress" id="'+tl.id+'" cx="30" cy="30" r="'+r+'" stroke-width="6"/>'+
+        '</svg><div class="mini-ring-center">'+centro+'</div></div>'+
+      '</div>';
+    }).join('');
+    tiles.forEach(tl=>{
+      const el=document.getElementById(tl.id);
+      if(!el) return;
+      const circ=2*Math.PI*r;
+      const pct = tl.pct!=null ? tl.pct : (tl.den>0 ? Math.min(100, tl.num/tl.den*100) : 0);
+      el.style.strokeDasharray=circ;
+      setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pct/100); }, 60);
+    });
+  }
+  function pctTendencia(atual, anterior){
+    if(atual===0 && anterior===0) return null;
+    return anterior>0 ? Math.round((atual-anterior)/anterior*100) : 100;
+  }
+  function renderRelatoriosFinanceiroExtra(){
+    const s=calcularEstatisticasMes();
+    construirMiniAneis(document.getElementById('rel-fin-rings'), [
+      {id:'rel-ring-pendentes', label:t('home.pendingPayments'), num:s.pagamentosPendentesCount, den:s.pagamentosTotalCount},
+      {id:'rel-ring-ativos', label:t('reports.activeJobs'), num:s.trabalhosAtivos, den:s.totalJobs},
+      {id:'rel-ring-concluidos', label:t('reports.completedJobs'), num:s.trabalhosConcluidos, den:s.totalJobs},
+      {id:'rel-ring-entregas', label:t('reports.completedDeliveries'), num:s.trabalhosEntregues, den:s.trabalhosEntregues+s.trabalhosEntregar},
+    ]);
   }
   function renderRelatoriosPerformance(){
     const s=calcularEstatisticasMes();
-    const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-    set('rel-perf-fechados', s.contratosFechados+' / '+s.totalJobs);
-    set('rel-perf-executados', s.trabalhosRealizados+' / '+(s.trabalhosRealizados+s.trabalhosRealizar));
-    set('rel-perf-entregues', s.trabalhosEntregues+' / '+(s.trabalhosEntregues+s.trabalhosEntregar));
+    const pctFechadosRitmo = s.fechadosMesAnterior>0 ? Math.min(100, s.fechadosEsteMes/s.fechadosMesAnterior*100) : (s.fechadosEsteMes>0?100:0);
+    construirMiniAneis(document.getElementById('rel-perf-rings'), [
+      {id:'rel-ring-fechados', label:t('home.closed'), num:s.contratosFechados, den:null, pct:pctFechadosRitmo, trend:pctTendencia(s.fechadosEsteMes,s.fechadosMesAnterior)},
+      {id:'rel-ring-executados', label:t('home.executed'), num:s.trabalhosRealizados, den:s.trabalhosRealizados+s.trabalhosRealizar, trend:pctTendencia(s.realizadosEsteMes,s.realizadosMesAnterior)},
+      {id:'rel-ring-entregues2', label:t('home.delivered'), num:s.trabalhosEntregues, den:s.trabalhosEntregues+s.trabalhosEntregar, trend:pctTendencia(s.entreguesEsteMes,s.entreguesMesAnterior)},
+    ]);
     const cmp=document.getElementById('rel-perf-comparativo');
     if(cmp){
       if(s.fechadosMesAnterior>0 || s.fechadosEsteMes>0){
@@ -4885,6 +5040,32 @@
         cmp.textContent=t('reports.noHistoryYet');
       }
     }
+  }
+  function custoRowHTML(c){
+    return '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.descricao)+'</div><span class="sub">'+escapeHtml(c.categoria||'')+(c.data?(' · '+c.data.split('-').reverse().slice(0,2).join('/')):'')+'</span></div>'+
+      '<div style="display:flex;align-items:center;gap:12px"><b style="font-size:13.5px">'+fmtMoney(c.valor)+'</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:var(--neutral);cursor:pointer" onclick="removerCusto(\''+c.id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div></div>';
+  }
+  function renderRelatoriosCustos(){
+    const s=calcularEstatisticasMes();
+    const limiteGastos=s.limiteGastos||1;
+    const pct=Math.min(100, Math.round(s.custos/limiteGastos*100));
+    const circ=2*Math.PI*52;
+    const fg=document.getElementById('ring-custos-fg');
+    if(fg){
+      fg.style.transition='none';
+      fg.style.strokeDasharray=circ;
+      fg.style.strokeDashoffset=circ;
+      void fg.offsetWidth;
+      fg.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)';
+      const pctEl=document.getElementById('ring-custos-pct');
+      pctEl.textContent='0%';
+      setTimeout(()=>{ fg.style.strokeDashoffset=circ*(1-pct/100); countUp(pctEl, pct, '%'); }, 60);
+    }
+    document.getElementById('rel-custos-total').textContent=fmtMoney(s.custos);
+    document.getElementById('rel-custos-teto').textContent=fmtMoney(s.limiteGastos);
+    const lista=Object.values(custosData).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    const wrap=document.getElementById('rel-custos-lista');
+    wrap.innerHTML = lista.length ? lista.map(custoRowHTML).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>';
   }
   function renderRelatorios(){
     mudarAbaRelatorios(relatoriosTab);
@@ -4947,7 +5128,12 @@
     if(job.structure.pagamentos) ms.push({key:'sinal', t:t('milestone.signal')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.afterSignature')});
     ms.push({key:'principal', t:labelPrincipal+' — '+job.typeLabel, status:'futuro', m:(job.date||'data a definir')+(job.local?(' · '+job.local):'')});
     if(job.structure.pagamentos) ms.push({key:'pagamento_final', t:t('milestone.finalPayment')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.after')+(labelPrincipal==='Evento'?'o evento':('a '+labelPrincipal.toLowerCase()))});
-    if(job.structure.checklist) ms.push({key:'entrega', t:t('milestone.finalDelivery'), status:'futuro', m:'checklist gerada'});
+    /* a entrega é uma etapa universal do trabalho (tal como o evento principal),
+       não depende de o job ter ou não uma checklist de entrega ativada — antes
+       disto, "checklist:false" era o valor fixo de todo job novo, e como esta
+       marca nunca ficava "true", a etapa de entrega nunca existia e o anel
+       "Entregues" do card Performance ficava sempre a 0/0 */
+    ms.push({key:'entrega', t:t('milestone.finalDelivery'), status:'futuro', m:t('milestone.deliveryPending')});
     return ms;
   }
   function gerarPagamentos(job){
@@ -5973,7 +6159,9 @@
       job.milestones.forEach(ms=>{
         const dotClass= ms.status==='feito'?'tl-dot done':(ms.status==='pendente'?'tl-dot now':'tl-dot');
         const inner= ms.status==='feito'? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'';
-        html+='<div class="tl"><div class="tl-line"></div><div class="'+dotClass+'">'+inner+'</div><div class="tl-body"><div class="t">'+ms.t+'</div><div class="m">'+ms.m+'</div></div></div>';
+        const podeMarcar = ms.status!=='feito' && (ms.key==='principal' || ms.key==='entrega');
+        const acao = podeMarcar ? '<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:5px" onclick="marcarMilestoneFeito(\''+id+'\',\''+ms.key+'\')">'+t('action.markDone')+'</button>' : '';
+        html+='<div class="tl"><div class="tl-line"></div><div class="'+dotClass+'">'+inner+'</div><div class="tl-body"><div class="t">'+ms.t+'</div><div class="m">'+ms.m+'</div>'+acao+'</div></div>';
       });
       html+='</div></div>';
     }
@@ -6812,14 +7000,111 @@
 
   function renderJobCard(job){
     const existente=document.querySelector('.job[data-job-id="'+job.id+'"]');
-    if(existente) existente.remove();
+    if(existente){ const w=existente.closest('.job-card-wrap'); (w||existente).remove(); }
+    if(job.arquivado) return;
+    const wrap=document.createElement('div');
+    wrap.className='job-card-wrap';
+    wrap.innerHTML='<div class="job-swipe-actions">'+
+      '<button class="job-swipe-btn editar" onclick="event.stopPropagation();openJob(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>'+t('action.edit')+'</button>'+
+      '<button class="job-swipe-btn concluir" onclick="event.stopPropagation();arquivarTrabalho(\''+job.id+'\',\'concluido\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>'+t('action.complete')+'</button>'+
+      '<button class="job-swipe-btn deletar" onclick="event.stopPropagation();confirmarDeletarTrabalho(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>'+t('action.delete')+'</button>'+
+    '</div>';
     const div=document.createElement('div');
     div.className='job';
     div.dataset.jobId=job.id;
-    div.setAttribute('onclick',"openJob('"+job.id+"')");
+    div.setAttribute('onclick',"onJobCardClick(event,this)");
     updateJobCardInner(div, job);
+    wrap.appendChild(div);
     const empty=document.getElementById('jobsEmpty');
-    empty.parentElement.insertBefore(div, empty);
+    empty.parentElement.insertBefore(wrap, empty);
+    ativarSwipeJobs();
+  }
+  function onJobCardClick(e, card){
+    if(card.dataset.swiped==='1'){ e.preventDefault(); e.stopPropagation(); return; }
+    openJob(card.dataset.jobId);
+  }
+  function ativarSwipeJobs(){
+    document.querySelectorAll('.job-card-wrap .job').forEach(card=>{
+      if(card.dataset.swipeBound) return;
+      card.dataset.swipeBound='1';
+      const wrap=card.closest('.job-card-wrap');
+      let startX=0, dx=0, dragging=false;
+      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; });
+      card.addEventListener('pointermove', e=>{
+        if(!dragging) return;
+        dx=e.clientX-startX;
+        if(dx>0) dx=0;
+        if(dx<-204) dx=-204;
+        if(Math.abs(dx)>12){
+          card.dataset.swiped='1';
+          if(wrap) wrap.classList.add('active');
+          card.style.transform='translateX('+dx+'px)';
+        }
+      });
+      const fim=()=>{
+        if(!dragging) return;
+        dragging=false;
+        card.style.transition='transform .2s ease';
+        card.style.transform = dx<-100 ? 'translateX(-204px)' : 'translateX(0)';
+        if(dx>=-100){
+          setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
+        }
+      };
+      card.addEventListener('pointerup', fim);
+      card.addEventListener('pointerleave', fim);
+    });
+  }
+  /* arquivo de trabalhos: Concluir e Deletar são ações distintas, ambas reversíveis —
+     o trabalho sai da lista ativa (e do calendário) e passa a viver no Histórico,
+     de onde pode ser restaurado a qualquer momento. */
+  function arquivarTrabalho(id, motivo){
+    const job=jobsData[id];
+    if(!job) return;
+    job.arquivado={ motivo, em:new Date().toISOString() };
+    pushHistory(job, motivo==='concluido' ? t('history.jobArchivedDone') : t('history.jobArchivedDeleted'));
+    saveJobsData();
+    const existente=document.querySelector('.job[data-job-id="'+id+'"]');
+    if(existente){ const w=existente.closest('.job-card-wrap'); (w||existente).remove(); }
+    const empty=document.getElementById('jobsEmpty');
+    if(empty) empty.style.display = document.querySelectorAll('#v-trabalhos .job').length===0 ? 'block':'none';
+    if(typeof renderCalendar==='function') renderCalendar();
+    if(typeof renderHistorico==='function') renderHistorico();
+    showToast(motivo==='concluido' ? t('toast.jobArchivedDone') : t('toast.jobArchivedDeleted'));
+  }
+  function confirmarDeletarTrabalho(id){
+    const job=jobsData[id];
+    if(!job) return;
+    if(confirm(t('history.deleteConfirm').replace('{client}', job.client))){
+      arquivarTrabalho(id, 'deletado');
+    }
+  }
+  function restaurarTrabalho(id){
+    const job=jobsData[id];
+    if(!job) return;
+    job.arquivado=null;
+    pushHistory(job, t('history.jobRestored'));
+    saveJobsData();
+    renderJobCard(job);
+    if(typeof renderCalendar==='function') renderCalendar();
+    if(typeof renderHistorico==='function') renderHistorico();
+    showToast(t('toast.jobRestored'));
+  }
+  function renderHistorico(){
+    const wrap=document.getElementById('historico-lista');
+    if(!wrap) return;
+    const itens=jobsVisiveis().filter(j=>j.arquivado).sort((a,b)=> new Date(b.arquivado.em)-new Date(a.arquivado.em));
+    wrap.innerHTML=itens.map(job=>{
+      const done=job.arquivado.motivo==='concluido';
+      const dataFmt=new Date(job.arquivado.em).toLocaleDateString(jsLocale(),{day:'2-digit',month:'short',year:'numeric'});
+      return '<div class="job" style="cursor:default">'+
+        '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
+        '<div class="state '+(done?'s-active':'s-wait')+'">'+(done?t('jobs.history.done'):t('jobs.history.deleted'))+'</div></div>'+
+        '<div class="job-next"><div class="nd" style="background:'+(done?'var(--brand)':'var(--late)')+'"></div><span>'+dataFmt+'</span></div>'+
+        '<button class="btn soft" style="width:100%;margin-top:10px" onclick="restaurarTrabalho(\''+job.id+'\')">'+t('action.restore')+'</button>'+
+      '</div>';
+    }).join('');
+    const empty=document.getElementById('historicoEmpty');
+    if(empty) empty.style.display = itens.length===0 ? 'block':'none';
   }
   /* ===== Classificação canónica de trabalho — fonte única usada em todo o lado ===== */
   /* Visibilidade por atribuição de equipa: Admin vê tudo; trabalhos sem
@@ -6869,9 +7154,24 @@
       jobsData=d;
       migrarBriefingsAntigos();
       migrarPagamentosAntigos();
+      migrarMilestoneEntrega();
       jobsVisiveis().forEach(job=>renderJobCard(job));
       renderMonthTicker();
     });
+  }
+  /* trabalhos criados antes da etapa "entrega" passar a ser universal (ver
+     gerarMilestones) não têm essa milestone — sem isto, ficariam presos para
+     sempre fora da contagem do anel "Entregues" do card Performance. */
+  function migrarMilestoneEntrega(){
+    let alterou=false;
+    jobsVisiveis().forEach(job=>{
+      if(!job.milestones) return;
+      if(!job.milestones.some(m=>m.key==='entrega')){
+        job.milestones.push({key:'entrega', t:t('milestone.finalDelivery'), status:'futuro', m:t('milestone.deliveryPending')});
+        alterou=true;
+      }
+    });
+    if(alterou) saveJobsData();
   }
   function migrarBriefingsAntigos(){
     jobsVisiveis().forEach(job=>{
@@ -7942,7 +8242,8 @@
       else if(key==='concluidos') show = j.dataset.state==='done';
       else if(key==='fechados') show = j.dataset.fechado==='1';
       else if(key==='realizar') show = j.dataset.realizar==='1';
-      j.style.display = show? 'block':'none';
+      const w=j.closest('.job-card-wrap');
+      if(w) w.style.display = show? 'block':'none'; else j.style.display = show? 'block':'none';
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
@@ -7998,32 +8299,12 @@
     const y0=new Date().getFullYear();
     const months=[];
     for(let mm=1; mm<=12; mm++){
-      months.push({ year:y0, month:mm, days:new Date(y0,mm,0).getDate(), markers:{}, events:{} });
+      months.push({ year:y0, month:mm, days:new Date(y0,mm,0).getDate() });
     }
     return months;
   }
   const calMonths=buildCalMonths();
-  function calEventText(ev){
-    switch(ev.kind){
-      case 'session': return {title:t('calendar.session'), sub:ev.client+' · '+ev.time+' · '+ev.place};
-      case 'finalPayment': return {title:t('calendar.finalPayment'), sub:ev.client+' · '+fmtMoney(ev.amount)};
-      case 'briefingPending': return {title:t('calendar.briefingPending'), sub:ev.client};
-      case 'podcast': return {title:t('jobtype.podcast'), sub:ev.client};
-      case 'deliveryConfirmed': return {title:t('calendar.deliveryConfirmed'), sub:ev.client};
-      case 'wedding': return {title:t('jobtype.wedding'), sub:ev.client+(ev.place?(' · '+ev.place):'')};
-      default: return {title:'', sub:''};
-    }
-  }
   function calMonthLabel(m){ return mesCompleto(m.month-1)+' '+m.year; }
-  function calMonthInfoAgenda(m){
-    const info={}, agenda=[];
-    Object.keys(m.events).sort((a,b)=>a-b).forEach(day=>{
-      const {title,sub}=calEventText(m.events[day]);
-      info[day]=title+' · '+sub;
-      agenda.push([mesAbrev(m.month-1).toUpperCase(), String(day).padStart(2,'0'), title, sub]);
-    });
-    return {info, agenda};
-  }
   /* filtragem do calendário: espelha a classificação usada nos chips de Trabalhos,
      para que o calendário mostre sempre os mesmos trabalhos que a lista abaixo */
   function jobPassaFiltroCal(job, key){
@@ -8042,41 +8323,45 @@
       default: return true;
     }
   }
+  /* cor de cada tipo de compromisso — usada tanto na grelha (mês) como na semana */
+  function corMarcadorCal(kind){
+    return kind==='evento' ? 'var(--brand)' : kind==='pagamento' ? 'var(--late)' : 'var(--pend)';
+  }
+  /* os três tipos de compromisso que existem de facto nos dados: evento (data do
+     trabalho), pagamento (parcela com vencimento) e contrato (assinatura pendente,
+     mostrado na data do evento — mesma lógica usada nas Tarefas do dashboard) */
   function dynamicEventsForMonth(year, month){
-    const markers={}, info={}, agenda=[];
-    jobsVisiveis().filter(j=>jobPassaFiltroCal(j, calFiltroAtivo)).forEach(j=>{
+    const markers={}, info={};
+    jobsVisiveis().filter(j=>!j.arquivado && jobPassaFiltroCal(j, calFiltroAtivo)).forEach(j=>{
       if(j.dateRaw){
+        const msEvento=(j.milestones||[]).find(x=>x.key==='principal');
         const [y,mo,da]=j.dateRaw.split('-').map(Number);
         if(y===year && mo===month){
-          markers[da]=[...(markers[da]||[]),'brand'];
-          const label=j.typeLabel+' · '+j.client+(j.local?(' · '+j.local):'');
-          info[da]=info[da]? (info[da]+' · '+label) : label;
-          agenda.push([mesAbrev(month-1).toUpperCase(), String(da).padStart(2,'0'), j.typeLabel+' · '+j.client, j.local||t('calendar.eventFallback')]);
+          if(msEvento && msEvento.status!=='feito'){
+            markers[da]=[...(markers[da]||[]),'evento'];
+            const label=j.typeLabel+' · '+j.client+(j.local?(' · '+j.local):'');
+            info[da]=info[da]? (info[da]+' · '+label) : label;
+          }
+          if(j.structure && j.structure.contrato && j.contract && j.contract.status!=='assinado'){
+            markers[da]=[...(markers[da]||[]),'contrato'];
+            const clabel=t('tasks.contractPending')+' · '+j.client;
+            info[da]=info[da]? (info[da]+' · '+clabel) : clabel;
+          }
         }
       }
       (j.payments||[]).forEach(p=>{
         if(!p.dueDate || p.status==='pago') return;
         const [py,pm,pd]=p.dueDate.split('-').map(Number);
         if(py===year && pm===month){
-          markers[pd]=[...(markers[pd]||[]),'late'];
+          markers[pd]=[...(markers[pd]||[]),'pagamento'];
           const plabel=p.label+' · '+j.client;
           info[pd]=info[pd]? (info[pd]+' · '+plabel) : plabel;
-          agenda.push([mesAbrev(month-1).toUpperCase(), String(pd).padStart(2,'0'), p.label, j.client+' · '+fmtMoney(p.amount)]);
         }
       });
     });
-    return {markers, info, agenda};
+    return {markers, info};
   }
-  function mergedMonthData(m){
-    const dyn=dynamicEventsForMonth(m.year, m.month);
-    const staticData=calMonthInfoAgenda(m);
-    const markers={...m.markers};
-    Object.keys(dyn.markers).forEach(d=>{ markers[d]=[...(markers[d]||[]), ...dyn.markers[d]]; });
-    const info={...staticData.info};
-    Object.keys(dyn.info).forEach(d=>{ info[d]= info[d]? (info[d]+' · '+dyn.info[d]) : dyn.info[d]; });
-    const agenda=[...staticData.agenda, ...dyn.agenda].sort((a,b)=>(+a[1])-(+b[1]));
-    return {markers, info, agenda};
-  }
+  function mergedMonthData(m){ return dynamicEventsForMonth(m.year, m.month); }
   let calIndex=new Date().getMonth();
   let calView='mes';
   let calFiltroAtivo='todos';
@@ -8102,7 +8387,7 @@
       if(merged.markers[i]){
         const dots=document.createElement('div'); dots.className='cal-dots';
         merged.markers[i].forEach(c=>{const dot=document.createElement('div');dot.className='cd';
-          dot.style.background= c==='brand'?'var(--brand)':c==='late'?'var(--late)':c==='done'?'var(--done)':'var(--pend)';
+          dot.style.background=corMarcadorCal(c);
           dots.appendChild(dot)});
         day.appendChild(dots);
       }
@@ -8111,7 +8396,6 @@
     }
     if(calView==='semana') renderWeek();
     if(calView==='dia') renderDay();
-    if(calView==='ano') renderYear();
   }
   function renderWeek(){
     const m=calMonths[calIndex];
@@ -8124,7 +8408,7 @@
       if(i>m.days){ html+='<div class="cal-day out"></div>'; continue; }
       const isToday=i===hojeReal;
       let dots='';
-      if(merged.markers[i]) dots='<div class="cal-dots">'+merged.markers[i].map(c=>'<div class="cd" style="background:var(--'+c+')"></div>').join('')+'</div>';
+      if(merged.markers[i]) dots='<div class="cal-dots">'+merged.markers[i].map(c=>'<div class="cd" style="background:'+corMarcadorCal(c)+'"></div>').join('')+'</div>';
       const click=merged.info[i]? ` onclick="showToast('${escapeHtml(merged.info[i]).replace(/'/g,"\\'")}')" style="cursor:pointer"` : '';
       html+='<div class="cal-day'+(isToday?' today':'')+'"'+click+'>'+i+dots+'</div>';
     }
@@ -8144,25 +8428,6 @@
     }
     document.getElementById('cal-day').innerHTML=html;
   }
-  function renderYear(){
-    const hoje=new Date();
-    let html='';
-    calMonths.forEach((m,idx)=>{
-      const dyn=dynamicEventsForMonth(m.year, m.month);
-      const temEventos=Object.keys(dyn.markers).length>0;
-      const isCurrent = m.year===hoje.getFullYear() && m.month===hoje.getMonth()+1;
-      html+='<div class="cal-year-tile'+(isCurrent?' current':'')+'" onclick="calGoToMonth('+idx+')">'+
-        '<div class="cal-year-tile-name">'+mesCompleto(m.month-1)+'</div>'+
-        '<div class="cal-year-tile-dots">'+(temEventos? Object.values(dyn.markers).flat().slice(0,10).map(c=>'<div class="cd" style="background:var(--'+c+')"></div>').join('') : '')+'</div>'+
-      '</div>';
-    });
-    document.getElementById('cal-year').innerHTML=html;
-  }
-  function calGoToMonth(idx){
-    calIndex=idx;
-    const btn=document.querySelector('.segmented button[onclick*="\'mes\'"]');
-    if(btn) setCalView(btn,'mes'); else { calView='mes'; renderCalendar(); }
-  }
   function setCalView(el,view){
     calView=view;
     el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
@@ -8171,10 +8436,8 @@
     document.getElementById('calgrid').style.display = view==='mes' ? 'grid':'none';
     document.getElementById('cal-week').style.display = view==='semana' ? 'block':'none';
     document.getElementById('cal-day').style.display = view==='dia' ? 'block':'none';
-    document.getElementById('cal-year').style.display = view==='ano' ? 'grid':'none';
-    if(view==='semana') renderWeek();
-    if(view==='dia') renderDay();
-    if(view==='ano') renderYear();
+    /* sempre repinta a partir do mês atualmente selecionado (calIndex), nunca do mês de hoje */
+    renderCalendar();
   }
   function calNav(dir){
     const next=calIndex+dir;
