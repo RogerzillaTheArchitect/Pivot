@@ -1129,11 +1129,10 @@
   .nav button.on{color:#fff}
   .nav button.on svg{color:#fff}
   .nav .fab-wrap{flex:1;display:flex;align-items:center;justify-content:center}
-  .fab{width:34px;height:34px;border-radius:50%;color:transparent;display:grid;
-    background-image:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik01MCwyIEE0OCw0OCAwIDEsMSA0OS45OSwyIFogTTQyLDIwIEg1OCBWNDIgSDgwIFY1OCBINTggVjgwIEg0MiBWNTggSDIwIFY0MiBINDIgWiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=");
-    background-size:100% 100%;background-position:center;background-repeat:no-repeat;
-    place-items:center;box-shadow:0 0 10px 2px rgba(255,255,255,.28);border:none}
-  .fab svg{width:21px;height:21px}
+  .fab{width:36px;height:36px;border-radius:50%;color:#fff;display:grid;place-items:center;
+    background:var(--glass-7);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
+    border:1px solid rgba(255,255,255,.42);box-shadow:0 0 9px 1px rgba(255,255,255,.16)}
+  .fab svg{width:17px;height:17px}
   .badge{position:absolute;top:1px;right:8px;background:var(--late);color:#fff;font-size:9.5px;font-weight:600;
     min-width:15px;height:15px;border-radius:8px;display:grid;place-items:center;padding:0 4px}
 
@@ -1682,6 +1681,7 @@
         <div class="plist" style="margin-bottom:20px">
           <div class="prow" onclick="abrirBibliotecaJuridica()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><div class="t" data-t="profile.legalLibrary">Biblioteca jurídica</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="abrirContratosPorProfissao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><div class="t" data-t="legal.contractsByProfession">Contratos por profissão</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="openSheet();pushPanel('importar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="t" data-t="sheet.import">Importar</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" data-t="explore.templates">Seus modelos</div>
@@ -1853,7 +1853,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 5v14M5 12h14"/></svg></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
@@ -1881,17 +1881,13 @@
 
     <div class="sheet-body" id="sheetBody">
 
-      <!-- HOME -->
+      <!-- HOME — 4 cartões do mesmo tamanho -->
       <div class="panel show" data-panel="home">
-        <div class="sheet-primary" onclick="pushPanel('trabalho')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
-          <div><div class="t" data-t="sheet.job">Trabalho</div><div class="s" data-t="sheet.jobHint">gera cronograma, contrato e briefing</div></div>
-        </div>
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="wizard.client">Cliente</span></div>
+          <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
+          <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
-          <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg><span data-t="sheet.template">Modelo</span></div>
-          <div class="sheet-item" onclick="pushPanel('importar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span data-t="sheet.import">Importar</span></div>
+          <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span data-t="sheet.template">Modelo</span></div>
         </div>
       </div>
 
@@ -2126,6 +2122,15 @@
       <!-- 👤 CLIENTE -->
       <div class="panel" data-panel="cliente">
         <div class="field">
+          <label data-t="contact.type">Tipo de contacto</label>
+          <div class="priority-picker" id="cl-tipo-picker">
+            <div class="priority-opt on" data-val="Cliente" onclick="selecionarTipoContato(this)"><span data-t="contact.type.client">Cliente</span></div>
+            <div class="priority-opt" data-val="Colaborador" onclick="selecionarTipoContato(this)"><span data-t="contact.type.collaborator">Colaborador</span></div>
+            <div class="priority-opt" data-val="Fornecedor" onclick="selecionarTipoContato(this)"><span data-t="contact.type.supplier">Fornecedor</span></div>
+            <div class="priority-opt" data-val="Outro" onclick="selecionarTipoContato(this)"><span data-t="contact.type.other">Outro</span></div>
+          </div>
+        </div>
+        <div class="field">
           <label data-t="field.nameRequired">Nome *</label><input id="cl-nome" placeholder="Nome completo" data-t-placeholder="field.namePlaceholder">
           <div class="field-err" id="cl-nome-err" data-t="wizard.client.nameError">Precisa de um nome para continuar.</div>
         </div>
@@ -2143,7 +2148,7 @@
         <div class="field"><label><span data-t="field.company">Empresa</span> <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-empresa" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
         <div class="field"><label>Instagram <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-instagram" placeholder="@utilizador" data-t-placeholder="field.instagramPlaceholder"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="cl-obs" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-        <button class="btn primary" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createClient2">Criar cliente →</span></button>
+        <button class="btn primary" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
       </div>
 
       <!-- ✅ TAREFA -->
@@ -3357,6 +3362,14 @@
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
     "sheet.import": { pt:"Importar", en:"Import", es:"Importar" },
+    "sheet.contact": { pt:"Contato", en:"Contact", es:"Contacto" },
+    "contact.type": { pt:"Tipo de contacto", en:"Contact type", es:"Tipo de contacto" },
+    "contact.type.client": { pt:"Cliente", en:"Client", es:"Cliente" },
+    "contact.type.collaborator": { pt:"Colaborador", en:"Collaborator", es:"Colaborador" },
+    "contact.type.supplier": { pt:"Fornecedor", en:"Supplier", es:"Proveedor" },
+    "contact.type.other": { pt:"Outro", en:"Other", es:"Otro" },
+    "wizard.createContact": { pt:"Criar contacto →", en:"Create contact →", es:"Crear contacto →" },
+    "toast.contactCreated": { pt:"Contacto criado: ", en:"Contact created: ", es:"Contacto creado: " },
     "sheet.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
@@ -4902,7 +4915,7 @@
       if(extra.telefone) cli.telefone=extra.telefone;
     } else {
       const id='cli'+Date.now();
-      cli={ id, nome, email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
+      cli={ id, nome, tipo:'Cliente', email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
       clientesData[id]=cli;
     }
     saveClientesData();
@@ -7815,6 +7828,12 @@
     document.getElementById('cl-dup').style.display='none';
     clienteDuplicadoEncontrado=null;
   }
+  let contatoTipoAtual='Cliente';
+  function selecionarTipoContato(el){
+    document.querySelectorAll('#cl-tipo-picker .priority-opt').forEach(o=>o.classList.remove('on'));
+    el.classList.add('on');
+    contatoTipoAtual=el.dataset.val;
+  }
   function criarCliente(){
     const nomeEl=document.getElementById('cl-nome');
     const nome=nomeEl.value.trim();
@@ -7822,7 +7841,7 @@
     if(!nome){ err.style.display='block'; nomeEl.focus(); return; }
     err.style.display='none';
     const id='cli'+Date.now();
-    clientesData[id]={ id, nome,
+    clientesData[id]={ id, nome, tipo:contatoTipoAtual||'Cliente',
       email:document.getElementById('cl-email').value.trim(),
       telefone:document.getElementById('cl-tel').value.trim(),
       empresa:document.getElementById('cl-empresa').value.trim(),
@@ -7831,8 +7850,11 @@
       criadoEm:new Date().toISOString() };
     saveClientesData();
     closeSheet();
-    showToast(t('toast.clientCreated')+nome+t('toast.clientCreated2'));
+    showToast(t('toast.contactCreated')+nome);
     ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    contatoTipoAtual='Cliente';
+    const picker=document.getElementById('cl-tipo-picker');
+    if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
   }
 
   /* 📅 Evento */
