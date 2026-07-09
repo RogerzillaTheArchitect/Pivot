@@ -723,6 +723,12 @@
   .cd{width:5px;height:5px;border-radius:50%}
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:12.5px;color:var(--ink-soft)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
+  .cal-year-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+  .cal-year-tile{border-radius:14px;border:1.5px solid rgba(255,255,255,.20);padding:12px 10px;cursor:pointer;
+    background:rgba(122,124,116,.34);backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
+  .cal-year-tile.current{border-color:var(--brand)}
+  .cal-year-tile-name{font-size:13px;font-weight:600;color:var(--ink);text-transform:capitalize}
+  .cal-year-tile-dots{display:flex;gap:3px;margin-top:8px;flex-wrap:wrap;min-height:6px}
   .legend .cd{width:7px;height:7px}
   .agenda-item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-bottom:1px solid var(--line-soft)}
   .agenda-day{width:34px;text-align:center;font-size:11px;color:var(--neutral);flex:none}
@@ -1434,11 +1440,11 @@
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </div>
-    <div class="sb-item" data-nav="calendario" onclick="go('calendario')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg> <span id="sb-label-calendario" data-t="nav.calendar">Calendário</span>
+    <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </div>
-    <div class="sb-item" data-nav="explorar" onclick="go('explorar')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg> <span id="sb-label-explorar" data-t="nav.explore">Explorar</span>
+    <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <span data-t="profile.notifications">Notificações</span>
@@ -1467,6 +1473,9 @@
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações" style="position:relative">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
           <span class="notif-dot" style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--urgent);display:none"></span>
+        </div>
+        <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
         </div>
       </div>
     </div>
@@ -1555,7 +1564,32 @@
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
         <div class="page-head"><div class="page-title" data-t="nav.jobs">Trabalhos</div></div>
-        <div class="filter-row">
+
+        <div class="cal-head">
+          <div class="cal-month" id="cal-month-label">Junho 2026</div>
+          <div class="cal-nav">
+            <div class="icon-btn" id="cal-prev" style="width:32px;height:32px" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
+            <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          </div>
+        </div>
+        <div class="segmented" style="margin-bottom:14px">
+          <button class="on" onclick="setCalView(this,'mes')"><span data-t="calendar.month">Mês</span></button>
+          <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
+          <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
+          <button onclick="setCalView(this,'ano')"><span data-t="calendar.year">Ano</span></button>
+        </div>
+        <div class="legend" id="cal-legend">
+          <span><span class="cd" style="background:var(--brand)"></span><span data-t="calendar.jobs">Eventos</span></span>
+          <span><span class="cd" style="background:var(--late)"></span><span data-t="job.payments">Pagamentos</span></span>
+          <span><span class="cd" style="background:var(--done)"></span><span data-t="calendar.deliveries">Entregas</span></span>
+          <span><span class="cd" style="background:var(--pend)"></span><span data-t="calendar.clientInfo">Informações do Cliente/assinaturas</span></span>
+        </div>
+        <div class="cal-grid" id="calgrid"></div>
+        <div id="cal-week" style="display:none"></div>
+        <div id="cal-day" style="display:none"></div>
+        <div id="cal-year" class="cal-year-grid" style="display:none"></div>
+
+        <div class="filter-row" style="margin-top:22px">
           <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
           <div class="chip" data-key="fechados" onclick="filterJobs(this,'fechados')"><span data-t="home.closed">Fechados</span></div>
           <div class="chip" data-key="realizar" onclick="filterJobs(this,'realizar')"><span data-t="jobs.filter.upcoming">A realizar</span></div>
@@ -1618,37 +1652,17 @@
         <p style="font-size:12.5px;color:var(--neutral);margin-top:18px" id="lbl-modelos-editaveis" data-t="builder.disclaimer">Modelos editáveis, não aconselhamento jurídico.</p>
       </section>
 
-      <!-- ============ CALENDÁRIO ============ -->
-      <section class="view" id="v-calendario">
-        <div class="cal-head">
-          <div class="cal-month" id="cal-month-label">Junho 2026</div>
-          <div class="cal-nav">
-            <div class="icon-btn" id="cal-prev" style="width:32px;height:32px" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
-            <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          </div>
-        </div>
-        <div class="segmented" style="margin-bottom:14px">
-          <button class="on" onclick="setCalView(this,'mes')"><span data-t="calendar.month">Mês</span></button>
-          <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
-          <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
-        </div>
-        <div class="legend" id="cal-legend">
-          <span><span class="cd" style="background:var(--brand)"></span><span data-t="calendar.jobs">Eventos</span></span>
-          <span><span class="cd" style="background:var(--late)"></span><span data-t="job.payments">Pagamentos</span></span>
-          <span><span class="cd" style="background:var(--done)"></span><span data-t="calendar.deliveries">Entregas</span></span>
-          <span><span class="cd" style="background:var(--pend)"></span><span data-t="calendar.clientInfo">Informações do Cliente/assinaturas</span></span>
-        </div>
-        <div class="cal-grid" id="calgrid"></div>
-        <div id="cal-week" style="display:none"></div>
-        <div id="cal-day" style="display:none"></div>
 
-        <div class="group-label" style="margin-top:6px"><span data-t="calendar.agenda">Agenda</span> <span class="ln"></span></div>
-        <div id="agendaList"></div>
-      </section>
+      <!-- ============ BIBLIOTECAS ============ -->
+      <section class="view" id="v-bibliotecas">
+        <div class="page-head"><div class="page-title" data-t="nav.libraries">Bibliotecas</div></div>
 
-      <!-- ============ EXPLORAR ============ -->
-      <section class="view" id="v-explorar">
-        <div class="page-title" data-t="explore.title">Explorar</div>
+        <div class="plist" style="margin-bottom:20px">
+          <div class="prow" onclick="abrirBibliotecaJuridica()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><div class="t" data-t="profile.legalLibrary">Biblioteca jurídica</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="abrirContratosPorProfissao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><div class="t" data-t="legal.contractsByProfession">Contratos por profissão</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+
+        <div class="plabel" data-t="explore.templates">Seus modelos</div>
         <div class="filter-row" id="explore-filter-row">
           <div class="chip on" data-cat="todos" onclick="filterExplorar(this,'todos')"><span data-t="explore.filter.all">Todos</span></div>
           <div class="chip" data-cat="contratos" onclick="filterExplorar(this,'contratos')"><span data-t="explore.filter.contracts">Contratos</span></div>
@@ -1684,14 +1698,11 @@
           <div class="prow" onclick="infoMinhaConta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" id="lbl-minha-conta" data-t="profile.myAccount">Minha conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" data-requer-admin onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" data-t="profile.company">Empresa</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Métodos de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="abrirBibliotecaJuridica()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><div class="t" data-t="profile.legalLibrary">Biblioteca jurídica</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="abrirContratosPorProfissao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><div class="t" data-t="legal.contractsByProfession">Contratos por profissão</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="t" id="lbl-equipa" data-t="profile.team">Equipe</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" id="lbl-produto-section" data-t="profile.product">Produto</div>
         <div class="plist">
-          <div class="prow" onclick="go('relatorios')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg><div class="t" id="lbl-relatorios" data-t="profile.reports">Relatórios</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoNotificacoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 8v4l3 2"/></svg><div class="t" id="lbl-notificacoes" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="abrirPerfisLembretes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><div class="t" id="lbl-perfil-lembretes" data-t="profile.reminders">Perfil de lembretes</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" style="cursor:default"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></svg><div class="t" id="lbl-modo-escuro" data-t="profile.darkMode">Modo escuro</div><div class="toggle" id="toggle-dark-mode" onclick="alternarModoEscuro(this)"><div class="kn"></div></div></div>
@@ -1710,8 +1721,7 @@
 
       <!-- ============ RELATÓRIOS ============ -->
       <section class="view" id="v-relatorios">
-        <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="nav.profile">Perfil</span></div>
-        <div class="page-title" style="font-size:25px" data-t="reports.title">Relatórios</div>
+        <div class="page-head"><div class="page-title" data-t="reports.title">Relatórios</div></div>
 
         <div class="filter-row" style="margin:14px 0 4px">
           <div class="chip" id="rel-tab-btn-financeiro" onclick="mudarAbaRelatorios('financeiro')"><span data-t="home.financeTitle">Financeiro</span></div>
@@ -1810,13 +1820,13 @@
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
     <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 5v14M5 12h14"/></svg></div></div>
-    <button id="n-calendario" onclick="go('calendario')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-      <span id="nav-label-calendario" data-t="nav.calendar">Calendário</span>
+    <button id="n-bibliotecas" onclick="go('bibliotecas')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg>
+      <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </button>
-    <button id="n-perfil" onclick="go('perfil')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-      <span id="nav-label-perfil" data-t="nav.profile">Perfil</span>
+    <button id="n-relatorios" onclick="go('relatorios')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>
+      <span id="nav-label-relatorios" data-t="reports.title">Relatórios</span>
     </button>
   </nav>
 
@@ -2587,6 +2597,7 @@
     "calendar.eventFallback": { pt:"evento", en:"event", es:"evento" },
     "calendar.dayLabel": { pt:"Dia", en:"Day", es:"Día" },
     "calendar.week": { pt:"Semana", en:"Week", es:"Semana" },
+    "calendar.year": { pt:"Ano", en:"Year", es:"Año" },
     // --- Informações do Cliente ---
     "clientinfo.availableUntil": { pt:"Disponível até: ", en:"Available until: ", es:"Disponible hasta: " },
     // --- Coleções ---
@@ -2984,6 +2995,7 @@
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
     "nav.home": { pt:"Início", en:"Home", es:"Inicio" },
     "nav.jobs": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
+    "nav.libraries": { pt:"Bibliotecas", en:"Libraries", es:"Bibliotecas" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
     "nav.search": { pt:"Pesquisar", en:"Search", es:"Buscar" },
     // --- Notificações ---
@@ -3519,7 +3531,7 @@
       if(vid==='detalhe'&&typeof currentJobId!=='undefined'&&currentJobId&&typeof jobsData!=='undefined'&&jobsData[currentJobId]&&typeof renderJobDetailDynamic==='function')renderJobDetailDynamic(currentJobId);
       if(vid==='builder'&&typeof renderBuilder==='function')renderBuilder();
       if(vid==='equipa'&&typeof renderEquipaView==='function')renderEquipaView();
-      if(vid==='calendario'&&typeof renderCalendar==='function')renderCalendar();
+      if(vid==='bibliotecas'&&typeof renderExplorar==='function')renderExplorar();
       if(vid==='relatorios'&&typeof renderRelatorios==='function')renderRelatorios();
     }
     if(document.getElementById('v-trabalhos').classList.contains('active')){
@@ -3527,26 +3539,26 @@
         const job=typeof jobsData!=='undefined'?jobsData[div.dataset.jobId]:null;
         if(job&&typeof updateJobCardInner==='function')updateJobCardInner(div,job);
       });
+      if(typeof renderCalendar==='function')renderCalendar();
     }
   }
 
-  const views = ['hoje','trabalhos','detalhe','builder','calendario','explorar','perfil','relatorios','pesquisa','equipa'];
+  const views = ['hoje','trabalhos','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa'];
   function go(v){
     views.forEach(x=>{
       const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
     });
     const navMap={hoje:'hoje',trabalhos:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
-      calendario:'calendario',explorar:'explorar',perfil:'perfil',relatorios:'perfil',pesquisa:'trabalhos',equipa:'perfil'};
+      bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil'};
     const active=navMap[v]||v;
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
     if(v==='relatorios') renderRelatorios();
-    if(v==='trabalhos') staggerCards('#v-trabalhos .job');
+    if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); }
-    if(v==='calendario') renderCalendar();
     if(v==='equipa') renderEquipaView();
-    if(v==='explorar') renderExplorar();
+    if(v==='bibliotecas') renderExplorar();
     if(v==='colaboracoes') renderColaboracoesView();
   }
   let METAS={receita:0, gastos:0};
@@ -7934,6 +7946,8 @@
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
+    calFiltroAtivo=key;
+    if(typeof renderCalendar==='function') renderCalendar();
   }
   function abrirTrabalhosFiltrados(key){
     go('trabalhos');
@@ -7981,13 +7995,10 @@
   });
 
   function buildCalMonths(){
-    const hoje=new Date();
-    const y0=hoje.getFullYear(), m0=hoje.getMonth()+1;
+    const y0=new Date().getFullYear();
     const months=[];
-    for(let offset=-1; offset<=1; offset++){
-      let mm=m0+offset, yy=y0;
-      if(mm<1){ mm+=12; yy--; } else if(mm>12){ mm-=12; yy++; }
-      months.push({ year:yy, month:mm, days:new Date(yy,mm,0).getDate(), markers:{}, events:{} });
+    for(let mm=1; mm<=12; mm++){
+      months.push({ year:y0, month:mm, days:new Date(y0,mm,0).getDate(), markers:{}, events:{} });
     }
     return months;
   }
@@ -8013,9 +8024,27 @@
     });
     return {info, agenda};
   }
+  /* filtragem do calendário: espelha a classificação usada nos chips de Trabalhos,
+     para que o calendário mostre sempre os mesmos trabalhos que a lista abaixo */
+  function jobPassaFiltroCal(job, key){
+    if(key==='todos') return true;
+    const c=classificarTrabalho(job);
+    const state = c.concluido?'done':(c.aEntregar?'deliver':(c.fechado?'active':'wait'));
+    switch(key){
+      case 'fechados': return c.fechado;
+      case 'realizar': return c.aRealizar;
+      case 'ativos': return state==='active';
+      case 'entregar': return c.aEntregar;
+      case 'assinatura': return !c.fechado;
+      case 'pagamento': return c.pagamentoPendente;
+      case 'atrasados': return c.atrasado;
+      case 'concluidos': return c.concluido;
+      default: return true;
+    }
+  }
   function dynamicEventsForMonth(year, month){
     const markers={}, info={}, agenda=[];
-    jobsVisiveis().forEach(j=>{
+    jobsVisiveis().filter(j=>jobPassaFiltroCal(j, calFiltroAtivo)).forEach(j=>{
       if(j.dateRaw){
         const [y,mo,da]=j.dateRaw.split('-').map(Number);
         if(y===year && mo===month){
@@ -8048,8 +8077,9 @@
     const agenda=[...staticData.agenda, ...dyn.agenda].sort((a,b)=>(+a[1])-(+b[1]));
     return {markers, info, agenda};
   }
-  let calIndex=1;
+  let calIndex=new Date().getMonth();
   let calView='mes';
+  let calFiltroAtivo='todos';
   function diaHojeSeForOMes(m){
     const hoje=new Date();
     return (hoje.getFullYear()===m.year && hoje.getMonth()+1===m.month) ? hoje.getDate() : null;
@@ -8079,11 +8109,9 @@
       if(merged.info[i]){ day.style.cursor='pointer'; day.onclick=()=>showToast(merged.info[i]); }
       grid.appendChild(day);
     }
-    document.getElementById('agendaList').innerHTML = merged.agenda.length? merged.agenda.map(a=>
-      '<div class="agenda-item"><div class="agenda-day">'+a[0]+'<b>'+a[1]+'</b></div><div class="soon-text"><b>'+escapeHtml(a[2])+'</b> '+escapeHtml(a[3])+'</div></div>'
-    ).join('') : '<p style="color:var(--neutral);font-size:13px;padding:6px 2px">'+t('calendar.nothing')+'</p>';
     if(calView==='semana') renderWeek();
     if(calView==='dia') renderDay();
+    if(calView==='ano') renderYear();
   }
   function renderWeek(){
     const m=calMonths[calIndex];
@@ -8116,6 +8144,25 @@
     }
     document.getElementById('cal-day').innerHTML=html;
   }
+  function renderYear(){
+    const hoje=new Date();
+    let html='';
+    calMonths.forEach((m,idx)=>{
+      const dyn=dynamicEventsForMonth(m.year, m.month);
+      const temEventos=Object.keys(dyn.markers).length>0;
+      const isCurrent = m.year===hoje.getFullYear() && m.month===hoje.getMonth()+1;
+      html+='<div class="cal-year-tile'+(isCurrent?' current':'')+'" onclick="calGoToMonth('+idx+')">'+
+        '<div class="cal-year-tile-name">'+mesCompleto(m.month-1)+'</div>'+
+        '<div class="cal-year-tile-dots">'+(temEventos? Object.values(dyn.markers).flat().slice(0,10).map(c=>'<div class="cd" style="background:var(--'+c+')"></div>').join('') : '')+'</div>'+
+      '</div>';
+    });
+    document.getElementById('cal-year').innerHTML=html;
+  }
+  function calGoToMonth(idx){
+    calIndex=idx;
+    const btn=document.querySelector('.segmented button[onclick*="\'mes\'"]');
+    if(btn) setCalView(btn,'mes'); else { calView='mes'; renderCalendar(); }
+  }
   function setCalView(el,view){
     calView=view;
     el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
@@ -8124,8 +8171,10 @@
     document.getElementById('calgrid').style.display = view==='mes' ? 'grid':'none';
     document.getElementById('cal-week').style.display = view==='semana' ? 'block':'none';
     document.getElementById('cal-day').style.display = view==='dia' ? 'block':'none';
+    document.getElementById('cal-year').style.display = view==='ano' ? 'grid':'none';
     if(view==='semana') renderWeek();
     if(view==='dia') renderDay();
+    if(view==='ano') renderYear();
   }
   function calNav(dir){
     const next=calIndex+dir;
