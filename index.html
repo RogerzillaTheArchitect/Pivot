@@ -4917,10 +4917,16 @@
     /* guarda contra duplo-toque/duplo-clique — sem isto, um toque duplo no botão
        "Criar trabalho" (comum em ecrãs touch, sobretudo com alguma lentidão de rede)
        criava dois registos quase idênticos, cada um com o seu próprio card e as
-       suas próprias notificações de pagamento/entrega */
+       suas próprias notificações de pagamento/entrega. Reforçado com o próprio
+       botão desativado visualmente (não só uma flag em JS) — se o browser alguma
+       vez disparar o evento de clique duas vezes por outra via (ex.: um segundo
+       ponteiro/toque simultâneo), o atributo disabled já impede o segundo clique
+       de sequer chegar ao handler. */
     if(criandoTrabalho) return;
     criandoTrabalho=true;
-    setTimeout(()=>{ criandoTrabalho=false; }, 1500);
+    const btnCriar=document.querySelector('.panel[data-panel="trabalho"] button[onclick="trabalhoCreate()"]');
+    if(btnCriar) btnCriar.disabled=true;
+    setTimeout(()=>{ criandoTrabalho=false; if(btnCriar) btnCriar.disabled=false; }, 1500);
     const cliente=document.getElementById('tw-cliente').value.trim()||'Novo cliente';
     const nomeTrabalho=document.getElementById('tw-nome').value.trim()||cliente;
     const dateRaw=document.getElementById('tw-data').value||null;
@@ -4961,7 +4967,7 @@
     const emailInline=(emailInlineEl&&emailInlineEl.value||'').trim();
     const telInline=(telInlineEl&&telInlineEl.value||'').trim();
     const clienteExistente=upsertClientePorNome(cliente, {email:emailInline, telefone:telInline});
-    const id='job'+Date.now();
+    const id='job'+Date.now()+Math.random().toString(36).slice(2,7);
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
       date:data, dateRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
