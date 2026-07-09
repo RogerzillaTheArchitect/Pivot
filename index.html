@@ -738,6 +738,8 @@
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .cal-day.out{opacity:.3}
   .cal-day.today{border-color:var(--brand);font-weight:600;color:var(--ink)}
+  .cal-day.cal-day-sel{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:700}
+  .cal-day.cal-day-sel .cd{background:#fff!important}
   .cal-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;justify-content:center}
   .cd{width:5px;height:5px;border-radius:50%}
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:12.5px;color:var(--ink-soft)}
@@ -1594,27 +1596,16 @@
           <div class="cal-month" id="cal-month-label">Junho 2026</div>
           <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
-        <div class="segmented" style="margin-bottom:14px">
-          <button class="on" onclick="setCalView(this,'mes')"><span data-t="calendar.month">Mês</span></button>
-          <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
-          <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
-        </div>
         <div class="cal-grid" id="calgrid"></div>
-        <div id="cal-week" style="display:none"></div>
-        <div id="cal-day" style="display:none"></div>
+        <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
 
         <div class="filter-row" style="margin-top:22px">
           <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
-          <div class="chip" data-key="fechados" onclick="filterJobs(this,'fechados')"><span data-t="home.closed">Fechados</span></div>
-          <div class="chip" data-key="realizar" onclick="filterJobs(this,'realizar')"><span data-t="jobs.filter.upcoming">A realizar</span></div>
           <div class="chip" data-key="ativos" onclick="filterJobs(this,'ativos')"><span data-t="jobs.filter.active">Ativos</span></div>
-          <div class="chip" data-key="entregar" onclick="filterJobs(this,'entregar')"><span data-t="jobs.filter.delivering">A entregar</span></div>
-          <div class="chip" data-key="assinatura" onclick="filterJobs(this,'assinatura')"><span data-t="jobs.filter.awaiting">Aguardando assinatura</span></div>
-          <div class="chip" data-key="pagamento" onclick="filterJobs(this,'pagamento')"><span data-t="jobs.filter.payment">Pagamento pendente</span></div>
+          <div class="chip" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span data-t="jobs.filter.mine">A meu cargo</span></div>
+          <div class="chip" data-key="cliente" onclick="filterJobs(this,'cliente')"><span data-t="jobs.filter.client">Com o cliente</span></div>
           <div class="chip" data-key="atrasados" onclick="filterJobs(this,'atrasados')"><span data-t="jobs.filter.overdue">Atrasados</span></div>
           <div class="chip" data-key="concluidos" onclick="filterJobs(this,'concluidos')"><span data-t="jobs.filter.done">Concluídos</span></div>
-          <div class="chip" data-key="executados" onclick="filterJobs(this,'executados')"><span data-t="home.executed">Executados</span></div>
-          <div class="chip" data-key="entregues" onclick="filterJobs(this,'entregues')"><span data-t="home.delivered">Entregues</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
@@ -2637,6 +2628,8 @@
     "calendar.paymentsDue": { pt:"Pagamentos a receber", en:"Payments due", es:"Pagos por cobrar" },
     "calendar.today": { pt:"HOJE", en:"TODAY", es:"HOY" },
     "calendar.dayLabel": { pt:"Dia", en:"Day", es:"Día" },
+    "calendar.dayFilterPrefix": { pt:"A mostrar o dia", en:"Showing day", es:"Mostrando el día" },
+    "calendar.clearDay": { pt:"limpar", en:"clear", es:"limpiar" },
     "calendar.week": { pt:"Semana", en:"Week", es:"Semana" },
     // --- Informações do Cliente ---
     "clientinfo.availableUntil": { pt:"Disponível até: ", en:"Available until: ", es:"Disponible hasta: " },
@@ -2988,6 +2981,8 @@
     "jobs.emptyFilter": { pt:"Nada neste filtro.", en:"Nothing in this filter.", es:"Nada en este filtro." },
     "jobs.filter.active": { pt:"Ativos", en:"Active", es:"Activos" },
     "jobs.filter.all": { pt:"Todos", en:"All", es:"Todos" },
+    "jobs.filter.mine": { pt:"A meu cargo", en:"On me", es:"A mi cargo" },
+    "jobs.filter.client": { pt:"Com o cliente", en:"With client", es:"Con el cliente" },
     "jobs.filter.awaiting": { pt:"Aguardando assinatura", en:"Awaiting signature", es:"Esperando firma" },
     "jobs.filter.delivering": { pt:"A entregar", en:"Delivering", es:"Por entregar" },
     "jobs.filter.done": { pt:"Concluídos", en:"Completed", es:"Completados" },
@@ -8590,36 +8585,76 @@
   }
 
   /* ===== Trabalhos — filtros reais ===== */
-  function filterJobs(el, key){
-    document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
-    el.classList.add('on');
+  /* aplica um filtro de estado (key) a um card, lendo os datasets já calculados
+     por updateJobCardInner. As chaves antigas (fechados/realizar/entregar/…)
+     continuam a funcionar para a navegação vinda dos cards da dashboard, mesmo
+     que já não apareçam como chips visíveis; as chaves "meucargo" e "cliente"
+     reúnem, respetivamente, tudo o que está pendente do meu lado e do lado do
+     cliente, para não haver dezenas de filtros micro. */
+  function jobPassaChipDataset(j, key){
+    switch(key){
+      case 'todos': return true;
+      case 'ativos': return j.dataset.state==='active';
+      case 'meucargo': return j.dataset.fechado==='1' && (j.dataset.realizar==='1' || j.dataset.entregar==='1');
+      case 'cliente': return j.dataset.fechado!=='1' || j.dataset.payment==='pending';
+      case 'atrasados': return j.dataset.overdue==='1';
+      case 'concluidos': return j.dataset.state==='done';
+      case 'entregar': return j.dataset.entregar==='1' || j.dataset.state==='deliver';
+      case 'assinatura': return j.dataset.signature==='pending';
+      case 'pagamento': return j.dataset.payment==='pending';
+      case 'fechados': return j.dataset.fechado==='1';
+      case 'realizar': return j.dataset.realizar==='1';
+      case 'executados': return j.dataset.executado==='1';
+      case 'entregues': return j.dataset.entregue==='1';
+      default: return true;
+    }
+  }
+  /* um trabalho "cai" num dia do mês exibido se for a data do evento ou se tiver
+     um pagamento por receber com vencimento nesse dia */
+  function jobNoDia(job, year, month, day){
+    const iso=year+'-'+String(month).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+    if(job.dateRaw===iso) return true;
+    return (job.payments||[]).some(p=>p.dueDate===iso && p.status!=='pago');
+  }
+  /* filtro combinado: o chip de estado E (opcionalmente) o dia selecionado no
+     calendário. Os dois conversam entre si — calendário filtra por dia, chips
+     filtram por estado. */
+  function aplicarFiltrosTrabalhos(){
+    const m=calMonths[calIndex];
     const jobs=document.querySelectorAll('#v-trabalhos .job');
     let visible=0;
     jobs.forEach(j=>{
-      let show=true;
-      if(key==='ativos') show = j.dataset.state==='active';
-      else if(key==='entregar') show = j.dataset.entregar==='1' || j.dataset.state==='deliver';
-      else if(key==='assinatura') show = j.dataset.signature==='pending';
-      else if(key==='pagamento') show = j.dataset.payment==='pending';
-      else if(key==='atrasados') show = j.dataset.overdue==='1';
-      else if(key==='concluidos') show = j.dataset.state==='done';
-      else if(key==='fechados') show = j.dataset.fechado==='1';
-      else if(key==='realizar') show = j.dataset.realizar==='1';
-      else if(key==='executados') show = j.dataset.executado==='1';
-      else if(key==='entregues') show = j.dataset.entregue==='1';
+      let show=jobPassaChipDataset(j, calFiltroAtivo);
+      if(show && calDiaAtivo!=null){
+        const job=jobsData[j.dataset.jobId];
+        show = job ? jobNoDia(job, m.year, m.month, calDiaAtivo) : false;
+      }
       const w=j.closest('.job-card-wrap');
       if(w) w.style.display = show? 'block':'none'; else j.style.display = show? 'block':'none';
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
+    const df=document.getElementById('cal-dia-filtro');
+    if(df){
+      if(calDiaAtivo!=null){ df.style.display='block'; df.innerHTML=t('calendar.dayFilterPrefix')+' '+calDiaAtivo+' · <span class="inline-link" onclick="limparDiaCal()">'+t('calendar.clearDay')+'</span>'; }
+      else df.style.display='none';
+    }
+  }
+  function filterJobs(el, key){
+    document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
+    if(el) el.classList.add('on');
     calFiltroAtivo=key;
+    aplicarFiltrosTrabalhos();
     if(typeof renderCalendar==='function') renderCalendar();
   }
   function abrirTrabalhosFiltrados(key){
     go('trabalhos');
     setTimeout(()=>{
       const chip=document.querySelector('#v-trabalhos .filter-row .chip[data-key="'+key+'"]');
-      if(chip) filterJobs(chip, key);
+      /* se a chave não tiver chip visível (ex.: fechados/executados/entregues,
+         que agora só vivem na navegação da dashboard), aplica na mesma o filtro
+         e limpa o destaque dos chips */
+      filterJobs(chip, key);
     }, 60);
   }
 
@@ -8681,6 +8716,8 @@
       case 'realizar': return c.aRealizar;
       case 'ativos': return state==='active';
       case 'entregar': return c.aEntregar;
+      case 'meucargo': return c.fechado && (c.aRealizar || c.aEntregar);
+      case 'cliente': return !c.fechado || c.pagamentoPendente;
       case 'assinatura': return !c.fechado;
       case 'pagamento': return c.pagamentoPendente;
       case 'atrasados': return c.atrasado;
@@ -8732,8 +8769,8 @@
   }
   function mergedMonthData(m){ return dynamicEventsForMonth(m.year, m.month); }
   let calIndex=new Date().getMonth();
-  let calView='mes';
   let calFiltroAtivo='todos';
+  let calDiaAtivo=null; /* dia selecionado no calendário (número) ou null */
   function diaHojeSeForOMes(m){
     const hoje=new Date();
     return (hoje.getFullYear()===m.year && hoje.getMonth()+1===m.month) ? hoje.getDate() : null;
@@ -8751,7 +8788,7 @@
     ['S','T','Q','Q','S','S','D'].forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el)});
     for(let i=1;i<=m.days;i++){
       const day=document.createElement('div');
-      day.className='cal-day'+(i===hojeReal?' today':'');
+      day.className='cal-day'+(i===hojeReal?' today':'')+(i===calDiaAtivo?' cal-day-sel':'');
       day.innerHTML=i;
       if(merged.markers[i]){
         const dots=document.createElement('div'); dots.className='cal-dots';
@@ -8760,57 +8797,31 @@
           dots.appendChild(dot)});
         day.appendChild(dots);
       }
-      if(merged.info[i]){ day.style.cursor='pointer'; day.onclick=()=>showToast(merged.info[i]); }
+      /* só os dias com compromissos são clicáveis — clicar filtra a lista de
+         cards abaixo por esse dia (e clicar de novo limpa) */
+      if(merged.info[i]){ day.style.cursor='pointer'; day.onclick=()=>selecionarDiaCal(i); }
+      else day.style.cursor='default';
       grid.appendChild(day);
     }
-    if(calView==='semana') renderWeek();
-    if(calView==='dia') renderDay();
   }
-  function renderWeek(){
-    const m=calMonths[calIndex];
-    const hojeReal=diaHojeSeForOMes(m);
-    const merged=mergedMonthData(m);
-    const start=Math.max(1, (hojeReal||1)-3);
-    let html='<div class="cal-grid" style="grid-template-columns:repeat(7,1fr)">';
-    ['S','T','Q','Q','S','S','D'].forEach(d=>html+='<div class="cal-dow">'+d+'</div>');
-    for(let i=start;i<start+7;i++){
-      if(i>m.days){ html+='<div class="cal-day out"></div>'; continue; }
-      const isToday=i===hojeReal;
-      let dots='';
-      if(merged.markers[i]) dots='<div class="cal-dots">'+merged.markers[i].map(c=>'<div class="cd" style="background:'+corMarcadorCal(c)+'"></div>').join('')+'</div>';
-      const click=merged.info[i]? ` onclick="showToast('${escapeHtml(merged.info[i]).replace(/'/g,"\\'")}')" style="cursor:pointer"` : '';
-      html+='<div class="cal-day'+(isToday?' today':'')+'"'+click+'>'+i+dots+'</div>';
-    }
-    html+='</div>';
-    document.getElementById('cal-week').innerHTML=html;
-  }
-  function renderDay(){
-    const m=calMonths[calIndex];
-    const hojeReal=diaHojeSeForOMes(m);
-    const merged=mergedMonthData(m);
-    const d=hojeReal||1;
-    let html='<div style="font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:19px;margin-bottom:12px">'+t('calendar.dayLabel')+' '+d+' · '+calMonthLabel(m)+'</div>';
-    if(merged.info[d]){
-      html+='<div class="agenda-item"><div class="agenda-day">'+t('calendar.today')+'</div><div class="soon-text">'+escapeHtml(merged.info[d])+'</div></div>';
-    } else {
-      html+='<p style="color:var(--neutral);font-size:13.5px">'+t('calendar.nothing')+'</p>';
-    }
-    document.getElementById('cal-day').innerHTML=html;
-  }
-  function setCalView(el,view){
-    calView=view;
-    el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    el.classList.add('on');
-    document.getElementById('calgrid').style.display = view==='mes' ? 'grid':'none';
-    document.getElementById('cal-week').style.display = view==='semana' ? 'block':'none';
-    document.getElementById('cal-day').style.display = view==='dia' ? 'block':'none';
-    /* sempre repinta a partir do mês atualmente selecionado (calIndex), nunca do mês de hoje */
+  function selecionarDiaCal(i){
+    calDiaAtivo = (calDiaAtivo===i) ? null : i;
+    if(navigator.vibrate) navigator.vibrate(8);
     renderCalendar();
+    aplicarFiltrosTrabalhos();
+  }
+  function limparDiaCal(){
+    calDiaAtivo=null;
+    renderCalendar();
+    aplicarFiltrosTrabalhos();
   }
   function calNav(dir){
     const next=calIndex+dir;
     if(next<0 || next>calMonths.length-1) return;
-    calIndex=next; renderCalendar();
+    calIndex=next;
+    calDiaAtivo=null; /* o número do dia não faz sentido ao mudar de mês */
+    renderCalendar();
+    aplicarFiltrosTrabalhos();
   }
   renderCalendar();
 
