@@ -3288,6 +3288,14 @@
     "plan.checkoutError": { pt:"Não foi possível abrir o checkout. Tenta novamente.", en:"Couldn't open checkout. Try again.", es:"No se pudo abrir el checkout. Inténtalo de nuevo." },
     "plan.contactSales": { pt:"Vamos combinar os detalhes contigo. Escreve para o suporte para receberes um orçamento.", en:"Let's work out the details together. Contact support to get a quote.", es:"Vamos a acordar los detalles contigo. Escribe a soporte para recibir un presupuesto." },
     "toast.planChangedFree": { pt:"Mudaste para o plano Free.", en:"Switched to the Free plan.", es:"Cambiaste al plan Free." },
+    "profile.account.redeemLabel": { pt:"Tens um código de resgate?", en:"Have a redemption code?", es:"¿Tienes un código de canje?" },
+    "profile.account.redeemPlaceholder": { pt:"Código de resgate", en:"Redemption code", es:"Código de canje" },
+    "profile.account.redeemBtn": { pt:"Resgatar", en:"Redeem", es:"Canjear" },
+    "toast.redeemEmptyCode": { pt:"Escreve o código.", en:"Enter the code.", es:"Escribe el código." },
+    "toast.redeemInvalid": { pt:"Código inválido ou já usado.", en:"Invalid or already used code.", es:"Código inválido o ya usado." },
+    "toast.redeemError": { pt:"Não foi possível resgatar o código. Tenta novamente.", en:"Couldn't redeem the code. Try again.", es:"No se pudo canjear el código. Inténtalo de nuevo." },
+    "toast.redeemSuccessPrefix": { pt:"Código resgatado — plano ", en:"Code redeemed — ", es:"Código canjeado — plan " },
+    "toast.redeemSuccessSuffix": { pt:" ativado.", en:" plan activated.", es:" activado." },
     "profile.darkMode": { pt:"Modo escuro", en:"Dark mode", es:"Modo oscuro" },
     "profile.help": { pt:"Ajuda", en:"Help", es:"Ayuda" },
     "profile.language": { pt:"Idioma da interface", en:"Interface language", es:"Idioma de la interfaz" },
@@ -8089,7 +8097,30 @@
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
       <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
       ${linhasPlano}
-      <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>`);
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
+      <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
+      <div style="display:flex;gap:8px">
+        <input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="flex:1;text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()">
+        <button class="btn soft" style="flex:none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
+      </div>`);
+  }
+  async function resgatarCodigoPlano(){
+    const input=document.getElementById('mc-codigo');
+    const code=input.value.trim();
+    if(!code){ showToast(t('toast.redeemEmptyCode')); return; }
+    try{
+      const { data:sessionData } = await sb.auth.getSession();
+      const access_token = sessionData && sessionData.session && sessionData.session.access_token;
+      const res=await fetch('/api/billing/redeem', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({access_token, workspace_id:currentWorkspaceId, code})});
+      const body=await res.json().catch(()=>({}));
+      if(!res.ok || !body.ok){ showToast(res.status===404?t('toast.redeemInvalid'):t('toast.redeemError')); return; }
+      perfilData.plano=body.plano;
+      savePerfilData();
+      aplicarPerfilData();
+      closeInfo();
+      showToast(t('toast.redeemSuccessPrefix')+body.plano+t('toast.redeemSuccessSuffix'));
+    }catch(e){ showToast(t('toast.redeemError')); }
   }
   function infoEmpresa(){
     if(!souAdmin()){ showToast(t('team.onlyAdminInvites')); return; }
