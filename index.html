@@ -1626,7 +1626,7 @@
       <!-- ============ HISTÓRICO (trabalhos concluídos/deletados) ============ -->
       <section class="view" id="v-historico">
         <div class="back" onclick="go('trabalhos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="nav.jobs">Trabalhos</span></div>
-        <div class="page-title" style="font-size:25px" data-t="jobs.history">Histórico</div>
+        <div class="page-title" style="font-size:25px;text-transform:uppercase" data-t="jobs.history">Histórico</div>
         <div id="historico-lista"></div>
         <div class="empty" id="historicoEmpty" style="display:none;padding:46px 16px">
           <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
@@ -1855,7 +1855,7 @@
   <!-- ===== MOBILE NAV ===== -->
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
-      <div style="position:relative"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg><span class="badge" id="nav-badge">3</span></div>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg>
       <span id="nav-label-hoje" data-t="nav.home">Início</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
@@ -3779,7 +3779,10 @@
     const circ=2*Math.PI*r;
     const ratioReal = den>0 ? num/den : (num>0?1:0);
     const laps=Math.floor(ratioReal);
-    const pctAtual=(ratioReal-laps)*100;
+    /* quando o progresso cai exatamente numa volta completa (100%, 200%...), o resto
+       da divisão é 0 — sem este ajuste o anel ficava com o traço todo recolhido
+       (invisível) em vez de mostrar a volta cheia. */
+    const pctAtual=(laps>0 && ratioReal===laps) ? 100 : (ratioReal-laps)*100;
     const trackEl=el.previousElementSibling;
     el.classList.toggle('ring-lapped-progress', laps>0);
     if(trackEl) trackEl.classList.toggle('ring-lapped-track', laps>0);
