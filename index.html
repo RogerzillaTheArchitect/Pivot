@@ -2956,6 +2956,8 @@
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "job.notifyClient": { pt:"Notificar cliente", en:"Notify client", es:"Notificar cliente" },
+    "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
+    "job.clientEmailHint": { pt:"{client} ainda não tem email registado. Adiciona um para poder enviar as notificações por email.", en:"{client} has no email on file yet. Add one so email notifications can be sent.", es:"{client} aún no tiene email registrado. Añade uno para poder enviar las notificaciones por email." },
     "portal.shareTitle": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing y firme el contrato." },
     "portal.shareViaMessage": { pt:"Compartilhar", en:"Share", es:"Compartir" },
@@ -3458,6 +3460,7 @@
     "collab.deliverySaved": { pt:"Entrega enviada.", en:"Delivery sent.", es:"Entrega enviada." },
     "action.back": { pt:"Voltar", en:"Back", es:"Volver" },
     "toast.inviteError": { pt:"Não foi possível concluir. Tenta novamente.", en:"Couldn't complete this. Try again.", es:"No se pudo completar. Inténtalo de nuevo." },
+    "toast.memberAddedNoEmail": { pt:"Membro adicionado, mas o email de convite não foi enviado.", en:"Member added, but the invite email wasn't sent.", es:"Miembro añadido, pero el email de invitación no se envió." },
     "team.viewerDesc": { pt:"Só pode ver trabalhos e relatórios", en:"Read-only access to jobs and reports", es:"Solo puede ver trabajos e informes" },
     // --- Notificações toast ---
     "toast.accountDataUpdated": { pt:"Dados da conta atualizados.", en:"Account data updated.", es:"Datos de la cuenta actualizados." },
@@ -3542,6 +3545,11 @@
     "toast.usingExistingClientPrefix": { pt:"A usar cliente existente: ", en:"Using existing client: ", es:"Usando cliente existente: " },
     "toast.writeAtLeastOneDay": { pt:"Escreve pelo menos um dia.", en:"Write at least one day.", es:"Escribe al menos un día." },
     "toast.writePersonName": { pt:"Escreve o nome da pessoa.", en:"Write the person's name.", es:"Escribe el nombre de la persona." },
+    "toast.writeClientName": { pt:"Escreve o nome do cliente.", en:"Write the client's name.", es:"Escribe el nombre del cliente." },
+    "toast.writeEmail": { pt:"Escreve um email.", en:"Enter an email.", es:"Escribe un email." },
+    "toast.invalidEmail": { pt:"Email inválido.", en:"Invalid email.", es:"Email no válido." },
+    "toast.emailSent": { pt:"Email enviado ao cliente.", en:"Email sent to the client.", es:"Email enviado al cliente." },
+    "toast.emailFailed": { pt:"Não foi possível enviar o email. Verifica a configuração de envio.", en:"Couldn't send the email. Check the sending setup.", es:"No se pudo enviar el email. Revisa la configuración de envío." },
     "toast.writeResourceName": { pt:"Escreve o nome do recurso.", en:"Write the resource name.", es:"Escribe el nombre del recurso." },
     "toast.writeTaskDescription": { pt:"Escreve o que precisa de ser feito.", en:"Write what needs to be done.", es:"Escribe lo que hay que hacer." },
     // --- Upload ---
@@ -4521,7 +4529,7 @@
   async function guardarNovoMembro(){
     const emailEl=document.getElementById('eq-email');
     const email=emailEl.value.trim();
-    if(!email){ emailEl.focus(); showToast(t('toast.writePersonName')); return; }
+    if(!email || !email.includes('@')){ emailEl.focus(); showToast(t('toast.writeEmail')); return; }
     const papel=document.getElementById('eq-papel').value;
     const { data:sessionData } = await sb.auth.getSession();
     const access_token = sessionData && sessionData.session && sessionData.session.access_token;
@@ -4533,7 +4541,9 @@
       await loadEquipaData();
       closeInfo();
       renderEquipaView();
-      showToast(email+t('team.memberAdded'));
+      /* o membro fica associado mesmo que o email não saia; avisamos se falhou
+         para o admin poder partilhar o convite por outro meio */
+      showToast(body.emailEnviado===false ? t('toast.memberAddedNoEmail') : (email+t('team.memberAdded')));
     }catch(e){ showToast(t('toast.inviteError')); }
   }
   function abrirAlterarPapel(userId){
@@ -4874,8 +4884,30 @@
     document.getElementById('tw-criar-cliente').style.display='none';
   }
   function revelarNovoCliente(){ document.getElementById('tw-novo-cliente-fields').style.display='block'; }
+  /* Cria ou atualiza um cliente pelo nome, guardando email/telefone. Fonte única
+     usada tanto pelo botão "Guardar cliente" do wizard como pela criação do
+     trabalho — para que o email nunca se perca. Devolve o registo do cliente. */
+  function upsertClientePorNome(nome, extra){
+    extra=extra||{};
+    if(!nome) return null;
+    let cli=Object.values(clientesData).find(c=>c.nome===nome);
+    if(cli){
+      if(extra.email) cli.email=extra.email;
+      if(extra.telefone) cli.telefone=extra.telefone;
+    } else {
+      const id='cli'+Date.now();
+      cli={ id, nome, email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
+      clientesData[id]=cli;
+    }
+    saveClientesData();
+    return cli;
+  }
   function guardarNovoClienteInline(){
     const nome=document.getElementById('tw-cliente').value.trim();
+    if(!nome){ showToast(t('toast.writeClientName')); return; }
+    const email=(document.getElementById('tw-novo-email').value||'').trim();
+    const telefone=(document.getElementById('tw-novo-tel').value||'').trim();
+    upsertClientePorNome(nome, {email, telefone});
     document.getElementById('tw-novo-cliente-fields').style.display='none';
     document.getElementById('tw-criar-cliente').style.display='none';
     showToast(t('toast.clientAddedPrefix')+nome+t('toast.clientAddedSuffix'));
@@ -4920,10 +4952,18 @@
       };
     }
 
-    const clienteExistente=Object.values(clientesData).find(c=>c.nome===cliente);
+    /* captura o email/telefone digitados no wizard mesmo que o utilizador não
+       tenha clicado em "Guardar cliente" — e persiste o cliente para reutilização.
+       Sem isto, o email era descartado e o trabalho ficava sem destinatário,
+       fazendo com que nenhum email automático ao cliente chegasse a ser enviado. */
+    const emailInlineEl=document.getElementById('tw-novo-email');
+    const telInlineEl=document.getElementById('tw-novo-tel');
+    const emailInline=(emailInlineEl&&emailInlineEl.value||'').trim();
+    const telInline=(telInlineEl&&telInlineEl.value||'').trim();
+    const clienteExistente=upsertClientePorNome(cliente, {email:emailInline, telefone:telInline});
     const id='job'+Date.now();
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
-      email:(clienteExistente&&clienteExistente.email)||'',
+      email:emailInline||(clienteExistente&&clienteExistente.email)||'',
       date:data, dateRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
@@ -5017,7 +5057,7 @@
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
-    ['tw-cliente','tw-nome','tw-data','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-horas','tw-equipa'].forEach(id=>{
+    ['tw-cliente','tw-nome','tw-data','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-horas','tw-equipa','tw-novo-email','tw-novo-tel'].forEach(id=>{
       const el=document.getElementById(id); if(el) el.value='';
     });
     const durCalc=document.getElementById('tw-duracao-calc'); if(durCalc) durCalc.textContent='';
@@ -6074,14 +6114,21 @@
       '<tr><td style="padding:14px 24px;border-top:1px solid '+LINHA+';text-align:center;font-size:11px;color:'+CINZA+'">Pivot &nbsp;·&nbsp; '+t('email.poweredBy')+'</td></tr>'+
       '</table>';
   }
-  async function dispararEmailEvento(tipo, destinatario, job, prazoTexto){
-    if(!destinatario) return;
+  /* devolve true se o email foi aceite pelo servidor, false caso contrário.
+     Antes engolia qualquer erro em silêncio — o utilizador via "enviado" mas
+     nada chegava (ex.: RESEND_API_KEY em falta no servidor). Agora o chamador
+     pode avisar quando o envio realmente falha. `silencioso` evita o aviso nos
+     disparos automáticos onde não queremos interromper o fluxo. */
+  async function dispararEmailEvento(tipo, destinatario, job, prazoTexto, silencioso){
+    if(!destinatario) return false;
     const cfg=TIPOS_EMAIL[tipo];
-    if(!cfg) return;
+    if(!cfg) return false;
     try{
-      await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
+      const r=await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailUniversalInline(job, tipo, prazoTexto)})});
-    }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
+      if(!r.ok){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
+      return true;
+    }catch(e){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
   }
 
   /* ===== Emails de conta / plataforma — sem trabalho associado =====
@@ -6154,14 +6201,16 @@
       '<tr><td style="padding:14px 24px;border-top:1px solid '+LINHA+';text-align:center;font-size:11px;color:'+CINZA+'">Pivot &nbsp;·&nbsp; '+t('email.footer.autoNotice')+'</td></tr>'+
       '</table>';
   }
-  async function dispararEmailConta(tipo, destinatario, dados){
-    if(!destinatario) return;
+  async function dispararEmailConta(tipo, destinatario, dados, silencioso){
+    if(!destinatario) return false;
     const cfg=TIPOS_EMAIL_CONTA[tipo];
-    if(!cfg) return;
+    if(!cfg) return false;
     try{
-      await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
+      const r=await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailContaInline(tipo, dados)})});
-    }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
+      if(!r.ok){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
+      return true;
+    }catch(e){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
   }
 
   function copiarLinkContrato(id){
@@ -6170,15 +6219,41 @@
       navigator.clipboard.writeText(url).then(()=>showToast(t('toast.linkCopied'))).catch(()=>showToast(t('toast.linkPrefix')+url));
     } else showToast(t('toast.linkPrefix')+url);
   }
+  /* Pede (ou corrige) o email do cliente deste trabalho quando ele falta.
+     Guarda no trabalho E no registo do cliente, para que da próxima vez já
+     esteja preenchido. Continua a ação original (aposGuardar) a seguir. */
+  function pedirEmailCliente(id, aposGuardar){
+    const job=jobsData[id];
+    if(!job) return;
+    openInfo(t('job.clientEmailTitle'), `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('job.clientEmailHint').replace('{client}', escapeHtml(job.client))}</p>
+      <div class="field"><label>Email</label><input id="ce-email" type="email" value="${escapeHtml(job.email||'')}" placeholder="email@exemplo.pt"></div>
+      <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarEmailCliente('${id}')">${t('action.save')}</button>`);
+    _aposGuardarEmail = aposGuardar || null;
+    setTimeout(()=>{ const el=document.getElementById('ce-email'); if(el) el.focus(); }, 60);
+  }
+  let _aposGuardarEmail=null;
+  function guardarEmailCliente(id){
+    const job=jobsData[id];
+    if(!job) return;
+    const email=(document.getElementById('ce-email').value||'').trim();
+    if(!email || !email.includes('@')){ showToast(t('toast.invalidEmail')); return; }
+    job.email=email;
+    upsertClientePorNome(job.client, {email});
+    saveJobsData();
+    closeInfo();
+    const cb=_aposGuardarEmail; _aposGuardarEmail=null;
+    if(typeof cb==='function') setTimeout(cb, 60);
+  }
   async function enviarPorEmail(id){
     const job=jobsData[id];
-    if(!job.email){ showToast(t('toast.writePersonName')); return; }
+    if(!job.email){ pedirEmailCliente(id, ()=>enviarPorEmail(id)); return; }
     const tipo = job.structure.briefing ? 'briefingDisponivel' : 'contratoEnviado';
-    await dispararEmailEvento(tipo, job.email, job);
+    const ok=await dispararEmailEvento(tipo, job.email, job);
     pushHistory(job,t('history.emailClientOpened'));
     saveJobsData();
     closeInfo();
-    showToast(t('toast.linkGenerated'));
+    if(ok) showToast(t('toast.emailSent'));
   }
   function compartilharPortal(id){
     const job=jobsData[id];
@@ -6214,7 +6289,7 @@
   function abrirNotificarCliente(id){
     const job=jobsData[id];
     if(!job){ showToast(t('toast.jobNotFound')); return; }
-    if(!job.email){ showToast(t('toast.writePersonName')); return; }
+    if(!job.email){ pedirEmailCliente(id, ()=>abrirNotificarCliente(id)); return; }
     const opcoes=[
       ['acessoPortal', 'email.badge.portalAccess'],
       ['atualizacaoProjeto', 'email.badge.projectUpdate'],
@@ -6229,10 +6304,11 @@
     ).join('');
     openInfo(t('job.notifyClient'), html);
   }
-  function enviarNotificacaoCliente(id, tipo){
+  async function enviarNotificacaoCliente(id, tipo){
     const job=jobsData[id];
     if(!job) return;
-    dispararEmailEvento(tipo, job.email, job);
+    const ok=await dispararEmailEvento(tipo, job.email, job);
+    if(!ok){ return; } /* dispararEmailEvento já mostrou o aviso de falha */
     pushHistory(job, t('history.clientNotified')+' — '+t(TIPOS_EMAIL[tipo].badgeKey));
     saveJobsData();
     closeInfo();
