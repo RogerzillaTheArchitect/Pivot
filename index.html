@@ -16,7 +16,7 @@
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
     --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.08); --bg-ice:#0B0B0A; --bg-ice-2:#050504;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58;
-    --late:#D97F79; --pend:#CBA26A; --done:#4FA189; --neutral:#B9B9B1; --urgent:#E08A3C;
+    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --neutral:#B9B9B1; --urgent:#E8C547;
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
     --r:20px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
@@ -338,11 +338,12 @@
   .mrl-item:first-child{color:#EAF3EF}
   .mrl-item:last-child{border-bottom:none}
   .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:15px}
-  .mrl-dot{width:9px;height:9px;border-radius:50%;flex:none}
-  .mr-meta-c{background:var(--c-track-lt)}
-  .mr-recebido-c{background:var(--c-dark-green)}
-  .mr-gastos-c{background:var(--c-yellow)}
-  .mr-teto-c{background:var(--late)}
+  .mr-meta-c{color:rgba(234,243,239,.75)}
+  .mr-recebido-c{color:var(--c-dark-green)}
+  .mr-gastos-c{color:var(--c-yellow)}
+  .ms-teto-note{font-family:var(--font-subtitle),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:12px;color:var(--ink-faint);padding:12px 18px 16px;border-top:1px solid var(--btn-09);text-align:center}
+  .ms-teto-note b{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;color:var(--ink-soft);margin-left:4px}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}
@@ -389,7 +390,9 @@
   .mini-ring-progress{fill:none;stroke:var(--brand);stroke-linecap:round;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
   .mini-ring-track-outer{fill:none;stroke:rgba(255,255,255,.10)}
   .mini-ring-progress-outer{fill:none;stroke:var(--urgent);stroke-linecap:round;stroke-dasharray:170;stroke-dashoffset:170;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
-  .mini-ring-progress-outer.lapped{stroke:var(--c-dark-green);filter:drop-shadow(0 0 4px rgba(79,161,137,.7))}
+  /* qualquer anel que já completou pelo menos uma volta: arco com brilho, pista mais clara */
+  .ring-lapped-progress{filter:drop-shadow(0 0 4px rgba(79,161,137,.65))}
+  .ring-lapped-track{opacity:.6}
   .mini-ring-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;font-weight:400;color:#fff}
   .mini-ring-slash{color:rgba(255,255,255,.5);margin:0 1px;font-weight:400;font-size:.8em}
   .greeting{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:6px 0 2px;letter-spacing:.04em;text-transform:uppercase}
@@ -423,7 +426,7 @@
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
-  .dot-late{background:var(--urgent);box-shadow:0 0 0 4px rgba(217,122,46,.13)}
+  .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(217,86,76,.13)}
   .dot-pend{background:var(--pend)} .dot-event{background:var(--brand)}
   .card-body{flex:1;min-width:0}
   .card-tap{cursor:pointer}
@@ -786,14 +789,20 @@
   .venc-date.atrasado .m{color:var(--ink-soft)}
   .venc-info{flex:1;min-width:0}
   .venc-info .cli{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
-  .urgent-dot{width:7px;height:7px;border-radius:50%;background-color:var(--urgent);flex:none;display:inline-block}
-  .mrl-dot,.priority-dot,.dot-late,.notif-dot,.cd,.urgent-dot{
-    filter:blur(1px);animation:featherBreathe 3s ease-in-out infinite}
+  .urgent-dot{width:7px;height:7px;border-radius:50%;background-color:var(--late);flex:none;display:inline-block}
+  .notif-dot{min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--urgent);
+    color:#1B1B16;font-size:9.5px;font-weight:700;line-height:1;box-sizing:border-box;
+    align-items:center;justify-content:center}
+  .priority-dot,.dot-late,.notif-dot,.urgent-dot{
+    filter:blur(.4px);animation:featherBreathe 3s ease-in-out infinite}
   @keyframes featherBreathe{
-    0%,100%{filter:blur(1px) brightness(1.3);transform:scale(1)}
-    50%{filter:blur(1px) brightness(0.7);transform:scale(1.28)}
+    0%,100%{filter:blur(.4px) brightness(1.3);transform:scale(1)}
+    50%{filter:blur(.4px) brightness(0.7);transform:scale(1.28)}
   }
-  @media (prefers-reduced-motion:reduce){.mrl-dot,.priority-dot,.dot-late,.notif-dot,.cd,.urgent-dot{animation:none}}
+  @media (prefers-reduced-motion:reduce){.priority-dot,.dot-late,.notif-dot,.urgent-dot{animation:none}}
+  /* pontos simples, estáticos: dias do calendário e legenda financeira (não pulsam) */
+  .cd{background:rgba(255,255,255,.85)}
+  .mrl-dot{width:9px;height:9px;border-radius:50%;flex:none;background:transparent;border:1.5px solid currentColor}
   .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
   .venc-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex:none}
   .venc-amount{font-size:14.5px;font-weight:600;color:var(--ink)}
@@ -1451,14 +1460,14 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </div>
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </div>
     <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <span data-t="profile.notifications">Notificações</span>
-      <span class="notif-dot" style="position:absolute;left:21px;top:9px;width:8px;height:8px;border-radius:50%;background:var(--urgent);display:none"></span>
+      <span class="notif-dot" style="position:absolute;left:19px;top:6px;display:none"></span>
     </div>
     <div class="sb-item" id="sb-item-colaboracoes" data-nav="colaboracoes" style="display:none" onclick="go('colaboracoes')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-t="nav.collaborations">Colaborações</span>
@@ -1482,7 +1491,7 @@
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações" style="position:relative">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
-          <span class="notif-dot" style="position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--urgent);display:none"></span>
+          <span class="notif-dot" style="position:absolute;top:4px;right:4px;display:none"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
@@ -1504,7 +1513,6 @@
                 <div class="mrl-item"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
-                <div class="mrl-item"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceiling">Teto</span> <b id="mrl-teto">500 €</b></div>
               </div>
             </div>
             <div class="ms-rings-wrap-outer">
@@ -1521,12 +1529,13 @@
               </div>
             </div>
           </div>
+          <div class="ms-teto-note"><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
         </div>
 
         <span class="section-label-out" data-t="home.performanceTitle">Performance</span>
         <div class="jobs-stat-card" onclick="abrirRelatorios('performance')">
           <div class="jobs-stat-row">
-          <div class="jobs-stat-col">
+          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('fechados')">
             <span class="ms-c-label" data-t="home.closed">Fechados</span>
             <span class="ms-c-trend" id="trend-fechados"></span>
             <div class="mini-ring-wrap">
@@ -1537,7 +1546,7 @@
               <div class="mini-ring-center"><span id="mt-contratos-num">3</span></div>
             </div>
           </div>
-          <div class="jobs-stat-col">
+          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('executados')">
             <span class="ms-c-label" data-t="home.executed">Executados</span>
             <span class="ms-c-trend" id="trend-realizados"></span>
             <div class="mini-ring-wrap">
@@ -1548,7 +1557,7 @@
               <div class="mini-ring-center"><span id="mt-realizados-num">1</span><span class="mini-ring-slash">/</span><span id="mt-realizar-den">5</span></div>
             </div>
           </div>
-          <div class="jobs-stat-col">
+          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
             <span class="ms-c-label" data-t="home.delivered">Entregues</span>
             <span class="ms-c-trend" id="trend-entregues"></span>
             <div class="mini-ring-wrap">
@@ -1590,11 +1599,6 @@
           <button onclick="setCalView(this,'semana')"><span data-t="calendar.week">Semana</span></button>
           <button onclick="setCalView(this,'dia')"><span data-t="calendar.day">Dia</span></button>
         </div>
-        <div class="legend" id="cal-legend">
-          <span><span class="cd" style="background:var(--brand)"></span><span data-t="calendar.events">Sessões e eventos</span></span>
-          <span><span class="cd" style="background:var(--late)"></span><span data-t="calendar.paymentsDue">Pagamentos a receber</span></span>
-          <span><span class="cd" style="background:var(--pend)"></span><span data-t="calendar.contractsPending">Contratos por assinar</span></span>
-        </div>
         <div class="cal-grid" id="calgrid"></div>
         <div id="cal-week" style="display:none"></div>
         <div id="cal-day" style="display:none"></div>
@@ -1609,6 +1613,8 @@
           <div class="chip" data-key="pagamento" onclick="filterJobs(this,'pagamento')"><span data-t="jobs.filter.payment">Pagamento pendente</span></div>
           <div class="chip" data-key="atrasados" onclick="filterJobs(this,'atrasados')"><span data-t="jobs.filter.overdue">Atrasados</span></div>
           <div class="chip" data-key="concluidos" onclick="filterJobs(this,'concluidos')"><span data-t="jobs.filter.done">Concluídos</span></div>
+          <div class="chip" data-key="executados" onclick="filterJobs(this,'executados')"><span data-t="home.executed">Executados</span></div>
+          <div class="chip" data-key="entregues" onclick="filterJobs(this,'entregues')"><span data-t="home.delivered">Entregues</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
@@ -1854,7 +1860,7 @@
     </button>
     <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="m9 15 6-2 2-6-6 2z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </button>
     <button id="n-relatorios" onclick="go('relatorios')">
@@ -2786,6 +2792,7 @@
     "home.target": { pt:"Meta", en:"Target", es:"Meta" },
     "home.expenses": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "home.ceiling": { pt:"Teto", en:"Ceiling", es:"Techo" },
+    "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
     "home.performanceTitle": { pt:"Performance", en:"Performance", es:"Rendimiento" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
     "home.tasksTitle": { pt:"Tarefas", en:"Tasks", es:"Tareas" },
@@ -3635,22 +3642,10 @@
   function renderRingsDashboard(recebido, custos){
     const meta=METAS.receita, limiteGastos=METAS.gastos||1;
     /* anel externo (maior, sempre ao fundo): Recebido em relação à Meta.
-       anel interno (menor, sempre à frente): Despesas em relação ao Teto. */
-    const pctRecebido= meta>0 ? Math.min(100, recebido/meta*100) : 0;
-    const pctGastosLimite = Math.min(100, custos/limiteGastos*100);
-    const configurarAnel=(id, r, pctFinal)=>{
-      const el=document.getElementById(id);
-      if(!el) return;
-      const circ=2*Math.PI*r;
-      el.style.transition='none';
-      el.style.strokeDasharray=circ;
-      el.style.strokeDashoffset=circ;
-      void el.offsetWidth;
-      el.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)';
-      setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pctFinal/100); }, 60);
-    };
-    configurarAnel('mr-recebido', 60, pctRecebido);
-    configurarAnel('mr-gastos', 46, pctGastosLimite);
+       anel interno (menor, sempre à frente): Despesas em relação ao Teto.
+       Ambos continuam a girar (com sombreado) se ultrapassarem 100%. */
+    pintarAnelComVolta('mr-recebido', 60, recebido, meta);
+    pintarAnelComVolta('mr-gastos', 46, custos, limiteGastos);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-receb', fmtMoney(recebido));
@@ -3660,6 +3655,28 @@
     const saldo=recebido-custos;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
+  }
+  /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não fica
+     preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco como
+     a pista (o círculo imediatamente anterior no SVG) ganham um brilho/sombreado
+     para indicar que pelo menos uma volta já foi completada */
+  function pintarAnelComVolta(elId, r, num, den){
+    const el=document.getElementById(elId);
+    if(!el) return null;
+    const circ=2*Math.PI*r;
+    const ratioReal = den>0 ? num/den : (num>0?1:0);
+    const laps=Math.floor(ratioReal);
+    const pctAtual=(ratioReal-laps)*100;
+    const trackEl=el.previousElementSibling;
+    el.classList.toggle('ring-lapped-progress', laps>0);
+    if(trackEl) trackEl.classList.toggle('ring-lapped-track', laps>0);
+    el.style.transition='none';
+    el.style.strokeDasharray=circ;
+    el.style.strokeDashoffset=circ;
+    void el.offsetWidth;
+    el.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)';
+    setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pctAtual/100); }, 60);
+    return { laps, pctAtual, pctTotal:Math.round(ratioReal*100) };
   }
   function calcularEstatisticasMes(){
     let recebido=0, porReceber=0;
@@ -3723,36 +3740,18 @@
     set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    const configurarMiniAnel=(id, num, den, r)=>{
-      const el=document.getElementById(id);
-      if(!el) return;
-      r = r || 25;
-      const circ=2*Math.PI*r;
-      const pct = den>0 ? Math.min(100, num/den*100) : 0;
-      el.style.strokeDasharray=circ;
-      setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pct/100); }, 60);
-    };
-    configurarMiniAnel('ring-realizados', s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
-    configurarMiniAnel('ring-entregues', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
+    pintarAnelComVolta('ring-realizados', 25, s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
+    pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
     /* anel "Fechados": não tem meta — representa apenas o ritmo deste mês
        face ao anterior (uma volta completa = igualou o mês passado) */
-    const gamifyEl=document.getElementById('ring-fechados-gamify');
-    if(gamifyEl){
-      const r=25, circ=2*Math.PI*r;
-      const ratio = s.fechadosMesAnterior>0 ? (s.fechadosEsteMes/s.fechadosMesAnterior) : (s.fechadosEsteMes>0?1:0);
-      const laps=Math.floor(ratio);
-      const pctAtual=(ratio-laps)*100;
-      gamifyEl.style.strokeDasharray=circ;
-      gamifyEl.classList.toggle('lapped', laps>0);
-      setTimeout(()=>{ gamifyEl.style.strokeDashoffset=circ*(1-(laps>0?100:pctAtual)/100); }, 60);
-    }
+    pintarAnelComVolta('ring-fechados-gamify', 25, s.fechadosEsteMes, s.fechadosMesAnterior||(s.fechadosEsteMes>0?s.fechadosEsteMes:1));
     /* comparação com o período anterior (mês passado), entre o nome e o anel */
     const setTrend=(id, atual, anterior)=>{
       const el=document.getElementById(id);
       if(!el) return;
       if(atual===0 && anterior===0){ el.textContent=''; return; }
       const pct = anterior>0 ? Math.round((atual-anterior)/anterior*100) : 100;
-      el.textContent=(pct>0?'+':'')+pct+'%';
+      el.textContent=(pct>=0?'↑':'↓')+Math.abs(pct)+'%';
       el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
     };
     setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
@@ -3828,7 +3827,7 @@
   }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
-    const corDot = {critica:'var(--urgent)', alta:'var(--c-orange)', media:'var(--c-yellow-soft)', normal:'var(--c-green-soft)', concluido:'var(--neutral)'}[nivel];
+    const corDot = {critica:'var(--late)', alta:'var(--urgent)', media:'var(--c-yellow-soft)', normal:'var(--c-green-soft)', concluido:'var(--neutral)'}[nivel];
     const isCritica = nivel==='critica';
     const dotClass = isCritica ? 'priority-dot urgent-dot' : 'priority-dot';
     const dotStyle = isCritica ? 'margin-right:7px' : ('background:'+corDot+';margin-right:7px');
@@ -3897,10 +3896,14 @@
       if(card.dataset.swipeBound) return;
       card.dataset.swipeBound='1';
       const wrap=card.closest('.radar-card-wrap');
-      let startX=0, dx=0, dragging=false;
-      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; });
+      let startX=0, dx=0, dragging=false, pointerId=null;
+      card.addEventListener('pointerdown', e=>{
+        startX=e.clientX; dx=0; dragging=true; pointerId=e.pointerId;
+        card.style.transition='none'; card.dataset.swiped='0';
+        try{ card.setPointerCapture(pointerId); }catch(err){}
+      });
       card.addEventListener('pointermove', e=>{
-        if(!dragging) return;
+        if(!dragging || e.pointerId!==pointerId) return;
         dx=e.clientX-startX;
         if(dx>0) dx=0;
         if(dx<-144) dx=-144;
@@ -3908,22 +3911,25 @@
            um simples toque ou o início de um scroll vertical não deve mostrar
            as abas por baixo do vidro */
         if(Math.abs(dx)>12){
+          if(card.dataset.swiped!=='1') haptic('tick');
           card.dataset.swiped='1';
           if(wrap) wrap.classList.add('active');
           card.style.transform='translateX('+dx+'px)';
         }
       });
-      const fim=()=>{
-        if(!dragging) return;
+      const fim=e=>{
+        if(!dragging || (e && e.pointerId!==pointerId)) return;
         dragging=false;
+        if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
         card.style.transition='transform .2s ease';
         card.style.transform = dx<-70 ? 'translateX(-144px)' : 'translateX(0)';
+        if(dx<-70) haptic('snap');
         if(dx>=-70){
           setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
         }
       };
       card.addEventListener('pointerup', fim);
-      card.addEventListener('pointerleave', fim);
+      card.addEventListener('pointercancel', fim);
     });
   }
   function gerarProximosVencimentos(){
@@ -4993,8 +4999,8 @@
     const r=25;
     container.innerHTML=tiles.map(tl=>{
       const centro = tl.den!=null ? ('<span>'+tl.num+'</span><span class="mini-ring-slash">/</span><span>'+tl.den+'</span>') : ('<span>'+tl.num+'</span>');
-      const trendHtml = tl.trend!=null ? '<span class="ms-c-trend" style="color:'+(tl.trend<0?'var(--late)':'var(--brand)')+'">'+(tl.trend>0?'+':'')+tl.trend+'%</span>' : '';
-      return '<div class="jobs-stat-col">'+
+      const trendHtml = tl.trend!=null ? '<span class="ms-c-trend" style="color:'+(tl.trend<0?'var(--late)':'var(--brand)')+'">'+(tl.trend>=0?'↑':'↓')+Math.abs(tl.trend)+'%</span>' : '';
+      return '<div class="jobs-stat-col"'+(tl.onclick?(' onclick="'+tl.onclick+'"'):'')+'>'+
         '<span class="ms-c-label">'+escapeHtml(tl.label)+'</span>'+trendHtml+
         '<div class="mini-ring-wrap"><svg class="mini-ring" viewBox="0 0 60 60">'+
           '<circle class="mini-ring-track" cx="30" cy="30" r="'+r+'" stroke-width="6"/>'+
@@ -5003,12 +5009,8 @@
       '</div>';
     }).join('');
     tiles.forEach(tl=>{
-      const el=document.getElementById(tl.id);
-      if(!el) return;
-      const circ=2*Math.PI*r;
-      const pct = tl.pct!=null ? tl.pct : (tl.den>0 ? Math.min(100, tl.num/tl.den*100) : 0);
-      el.style.strokeDasharray=circ;
-      setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pct/100); }, 60);
+      if(tl.pct!=null) pintarAnelComVolta(tl.id, r, tl.pct, 100);
+      else pintarAnelComVolta(tl.id, r, tl.num, tl.den);
     });
   }
   function pctTendencia(atual, anterior){
@@ -5026,11 +5028,11 @@
   }
   function renderRelatoriosPerformance(){
     const s=calcularEstatisticasMes();
-    const pctFechadosRitmo = s.fechadosMesAnterior>0 ? Math.min(100, s.fechadosEsteMes/s.fechadosMesAnterior*100) : (s.fechadosEsteMes>0?100:0);
+    const pctFechadosRitmo = s.fechadosMesAnterior>0 ? (s.fechadosEsteMes/s.fechadosMesAnterior*100) : (s.fechadosEsteMes>0?100:0);
     construirMiniAneis(document.getElementById('rel-perf-rings'), [
-      {id:'rel-ring-fechados', label:t('home.closed'), num:s.contratosFechados, den:null, pct:pctFechadosRitmo, trend:pctTendencia(s.fechadosEsteMes,s.fechadosMesAnterior)},
-      {id:'rel-ring-executados', label:t('home.executed'), num:s.trabalhosRealizados, den:s.trabalhosRealizados+s.trabalhosRealizar, trend:pctTendencia(s.realizadosEsteMes,s.realizadosMesAnterior)},
-      {id:'rel-ring-entregues2', label:t('home.delivered'), num:s.trabalhosEntregues, den:s.trabalhosEntregues+s.trabalhosEntregar, trend:pctTendencia(s.entreguesEsteMes,s.entreguesMesAnterior)},
+      {id:'rel-ring-fechados', label:t('home.closed'), num:s.contratosFechados, den:null, pct:pctFechadosRitmo, trend:pctTendencia(s.fechadosEsteMes,s.fechadosMesAnterior), onclick:"event.stopPropagation();abrirTrabalhosFiltrados('fechados')"},
+      {id:'rel-ring-executados', label:t('home.executed'), num:s.trabalhosRealizados, den:s.trabalhosRealizados+s.trabalhosRealizar, trend:pctTendencia(s.realizadosEsteMes,s.realizadosMesAnterior), onclick:"event.stopPropagation();abrirTrabalhosFiltrados('executados')"},
+      {id:'rel-ring-entregues2', label:t('home.delivered'), num:s.trabalhosEntregues, den:s.trabalhosEntregues+s.trabalhosEntregar, trend:pctTendencia(s.entreguesEsteMes,s.entreguesMesAnterior), onclick:"event.stopPropagation();abrirTrabalhosFiltrados('entregues')"},
     ]);
     const cmp=document.getElementById('rel-perf-comparativo');
     if(cmp){
@@ -5048,18 +5050,11 @@
   function renderRelatoriosCustos(){
     const s=calcularEstatisticasMes();
     const limiteGastos=s.limiteGastos||1;
-    const pct=Math.min(100, Math.round(s.custos/limiteGastos*100));
-    const circ=2*Math.PI*52;
-    const fg=document.getElementById('ring-custos-fg');
-    if(fg){
-      fg.style.transition='none';
-      fg.style.strokeDasharray=circ;
-      fg.style.strokeDashoffset=circ;
-      void fg.offsetWidth;
-      fg.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)';
+    const info=pintarAnelComVolta('ring-custos-fg', 52, s.custos, limiteGastos);
+    if(info){
       const pctEl=document.getElementById('ring-custos-pct');
       pctEl.textContent='0%';
-      setTimeout(()=>{ fg.style.strokeDashoffset=circ*(1-pct/100); countUp(pctEl, pct, '%'); }, 60);
+      setTimeout(()=>{ countUp(pctEl, info.pctTotal, '%'); }, 60);
     }
     document.getElementById('rel-custos-total').textContent=fmtMoney(s.custos);
     document.getElementById('rel-custos-teto').textContent=fmtMoney(s.limiteGastos);
@@ -5081,20 +5076,12 @@
     document.getElementById('rel-prev-btn').style.opacity = ehPrimeiro ? '.35':'1';
     document.getElementById('rel-prev-btn').style.pointerEvents = ehPrimeiro ? 'none':'auto';
 
-    const pct= previsto>0 ? Math.min(100, Math.round(recebido/previsto*100)) : 0;
-    const circ=2*Math.PI*52;
-    const fg=document.getElementById('ring-fg');
-    fg.style.transition='none';
-    fg.style.strokeDasharray=circ;
-    fg.style.strokeDashoffset=circ;
-    void fg.offsetWidth;
-    fg.style.transition='stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)';
-    const pctEl=document.getElementById('ring-pct');
-    pctEl.textContent='0%';
-    setTimeout(()=>{
-      fg.style.strokeDashoffset=circ*(1-pct/100);
-      countUp(pctEl, pct, '%');
-    }, 60);
+    const info=pintarAnelComVolta('ring-fg', 52, recebido, previsto);
+    if(info){
+      const pctEl=document.getElementById('ring-pct');
+      pctEl.textContent='0%';
+      setTimeout(()=>{ countUp(pctEl, info.pctTotal, '%'); }, 60);
+    }
     document.getElementById('rel-recebido').textContent=fmtMoney(recebido);
     document.getElementById('rel-meta').textContent=fmtMoney(previsto);
 
@@ -6608,7 +6595,8 @@
       });
     });
     items.sort((a,b)=>b.tsRaw-a.tsRaw);
-    return items.slice(0,8);
+    const seteDiasAtras=Date.now()-7*86400000;
+    return items.filter(it=>it.tsRaw>=seteDiasAtras);
   }
   function abrirNotificacoes(){
     const items=gerarNotificacoes();
@@ -6638,8 +6626,11 @@
     openInfo(t('notif.title'), html);
   }
   function atualizarNotifDot(){
-    const ativo = (gerarNotificacoes().length || gerarAtividadeCliente().length) ? 'block' : 'none';
-    document.querySelectorAll('.notif-dot').forEach(dot=>{ dot.style.display = ativo; });
+    const total = gerarNotificacoes().length + gerarAtividadeCliente().length;
+    document.querySelectorAll('.notif-dot').forEach(dot=>{
+      dot.style.display = total>0 ? 'flex' : 'none';
+      dot.textContent = total>99 ? '99+' : String(total);
+    });
   }
   function pedirComprovativo(jobId, i){
     const job=jobsData[jobId];
@@ -7028,30 +7019,40 @@
       if(card.dataset.swipeBound) return;
       card.dataset.swipeBound='1';
       const wrap=card.closest('.job-card-wrap');
-      let startX=0, dx=0, dragging=false;
-      card.addEventListener('pointerdown', e=>{ startX=e.clientX; dragging=true; card.style.transition='none'; card.dataset.swiped='0'; });
+      let startX=0, dx=0, dragging=false, pointerId=null;
+      card.addEventListener('pointerdown', e=>{
+        startX=e.clientX; dx=0; dragging=true; pointerId=e.pointerId;
+        card.style.transition='none'; card.dataset.swiped='0';
+        /* prende o ponteiro ao card: sem isto, como o card se desloca por
+           baixo do dedo durante o arrasto, o ponteiro "sai" do elemento a
+           meio do gesto (dispara pointerleave) e o swipe cancela sozinho */
+        try{ card.setPointerCapture(pointerId); }catch(err){}
+      });
       card.addEventListener('pointermove', e=>{
-        if(!dragging) return;
+        if(!dragging || e.pointerId!==pointerId) return;
         dx=e.clientX-startX;
         if(dx>0) dx=0;
         if(dx<-204) dx=-204;
         if(Math.abs(dx)>12){
+          if(card.dataset.swiped!=='1') haptic('tick');
           card.dataset.swiped='1';
           if(wrap) wrap.classList.add('active');
           card.style.transform='translateX('+dx+'px)';
         }
       });
-      const fim=()=>{
-        if(!dragging) return;
+      const fim=e=>{
+        if(!dragging || (e && e.pointerId!==pointerId)) return;
         dragging=false;
+        if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
         card.style.transition='transform .2s ease';
         card.style.transform = dx<-100 ? 'translateX(-204px)' : 'translateX(0)';
+        if(dx<-100) haptic('snap');
         if(dx>=-100){
           setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
         }
       };
       card.addEventListener('pointerup', fim);
-      card.addEventListener('pointerleave', fim);
+      card.addEventListener('pointercancel', fim);
     });
   }
   /* arquivo de trabalhos: Concluir e Deletar são ações distintas, ambas reversíveis —
@@ -7120,10 +7121,12 @@
     const msEntrega=(job.milestones||[]).find(m=>m.key==='entrega');
     const aRealizar = !!(msEvento && msEvento.status!=='feito');
     const aEntregar = !!(msEntrega && msEntrega.status!=='feito');
+    const executado = !!(msEvento && msEvento.status==='feito');
+    const entregue = !!(msEntrega && msEntrega.status==='feito');
     const atrasado = (job.payments||[]).some(p=>p.status!=='pago' && p.dueDate && p.dueDate<hojeISO);
     const pagamentoPendente = (job.payments||[]).some(p=>p.status!=='pago');
     const concluido = fechado && !aRealizar && !aEntregar && !pagamentoPendente;
-    return {fechado, aRealizar, aEntregar, atrasado, pagamentoPendente, concluido};
+    return {fechado, aRealizar, aEntregar, executado, entregue, atrasado, pagamentoPendente, concluido};
   }
   function updateJobCardInner(div, job){
     const c=classificarTrabalho(job);
@@ -7135,6 +7138,8 @@
     div.dataset.fechado= c.fechado?'1':'0';
     div.dataset.realizar= c.aRealizar?'1':'0';
     div.dataset.entregar= c.aEntregar?'1':'0';
+    div.dataset.executado= c.executado?'1':'0';
+    div.dataset.entregue= c.entregue?'1':'0';
     const signed=c.fechado;
     div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+' · '+escapeHtml(job.date||'data a definir')+'</div></div></div><div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div>'+
       '<div class="job-next"><div class="nd" style="background:'+(signed?'var(--brand)':'var(--pend)')+'"></div><span>'+(signed?t('jobs.status.signed'):t('jobs.filter.awaiting'))+'</span></div>';
@@ -7714,7 +7719,20 @@
   }
 
   let toastT;
+  /* feedback háptico — só funciona em Android/Chrome (a Vibration API nunca foi
+     implementada no Safari/iOS, não há alternativa puramente web para isso);
+     em iOS esta função não faz nada, silenciosamente, sem quebrar a interação */
+  function haptic(style){
+    if(!('vibrate' in navigator)) return;
+    try{
+      if(style==='tick') navigator.vibrate(8);
+      else if(style==='snap') navigator.vibrate(15);
+      else if(style==='success') navigator.vibrate([12,40,12]);
+      else navigator.vibrate(10);
+    }catch(e){}
+  }
   function showToast(m){
+    haptic('success');
     const t=document.getElementById('toast'); t.textContent=m; t.classList.add('show');
     clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),1900);
   }
@@ -8242,6 +8260,8 @@
       else if(key==='concluidos') show = j.dataset.state==='done';
       else if(key==='fechados') show = j.dataset.fechado==='1';
       else if(key==='realizar') show = j.dataset.realizar==='1';
+      else if(key==='executados') show = j.dataset.executado==='1';
+      else if(key==='entregues') show = j.dataset.entregue==='1';
       const w=j.closest('.job-card-wrap');
       if(w) w.style.display = show? 'block':'none'; else j.style.display = show? 'block':'none';
       if(show) visible++;
@@ -8320,12 +8340,16 @@
       case 'pagamento': return c.pagamentoPendente;
       case 'atrasados': return c.atrasado;
       case 'concluidos': return c.concluido;
+      case 'executados': return c.executado;
+      case 'entregues': return c.entregue;
       default: return true;
     }
   }
   /* cor de cada tipo de compromisso — usada tanto na grelha (mês) como na semana */
-  function corMarcadorCal(kind){
-    return kind==='evento' ? 'var(--brand)' : kind==='pagamento' ? 'var(--late)' : 'var(--pend)';
+  /* pontos do calendário são todos iguais (brancos, simples) — o dia guarda o
+     tipo de compromisso só para o texto que aparece ao tocar, não para a cor */
+  function corMarcadorCal(){
+    return 'rgba(255,255,255,.85)';
   }
   /* os três tipos de compromisso que existem de facto nos dados: evento (data do
      trabalho), pagamento (parcela com vencimento) e contrato (assinatura pendente,
@@ -8432,7 +8456,6 @@
     calView=view;
     el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
     el.classList.add('on');
-    document.getElementById('cal-legend').style.display = view==='mes' ? 'flex':'none';
     document.getElementById('calgrid').style.display = view==='mes' ? 'grid':'none';
     document.getElementById('cal-week').style.display = view==='semana' ? 'block':'none';
     document.getElementById('cal-day').style.display = view==='dia' ? 'block':'none';
