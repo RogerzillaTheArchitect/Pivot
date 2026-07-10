@@ -3529,6 +3529,9 @@
     "collab.nameOrEmail": { pt:"Nome ou email", en:"Name or email", es:"Nombre o email" },
     "collab.nameOrEmailPlaceholder": { pt:"Nome da equipa ou email@exemplo.pt", en:"Team member name or email@example.com", es:"Nombre del equipo o email@ejemplo.com" },
     "collab.fromTeam": { pt:"da tua equipa", en:"from your team", es:"de tu equipo" },
+    "collab.fromHistory": { pt:"colaborou antes", en:"worked with before", es:"colaboró antes" },
+    "collab.addNew": { pt:"Adicionar novo colaborador", en:"Add new collaborator", es:"Añadir nuevo colaborador" },
+    "collab.startTyping": { pt:"Começa a escrever para ver sugestões, ou escreve um email completo para adicionar alguém novo.", en:"Start typing to see suggestions, or type a full email to add someone new.", es:"Empieza a escribir para ver sugerencias, o escribe un email completo para añadir a alguien nuevo." },
     "collab.linkHint": { pt:"Esta pessoa ainda não tem conta no Pivot. Envia-lhe este link — ela acede diretamente, sem precisar de se registar.", en:"This person doesn't have a Pivot account yet. Send them this link — they get direct access, no sign-up needed.", es:"Esta persona aún no tiene cuenta en Pivot. Envíale este enlace — accede directamente, sin necesidad de registrarse." },
     "action.copyLink": { pt:"Copiar link", en:"Copy link", es:"Copiar enlace" },
     "collab.permissionsTitle": { pt:"O que pode ver", en:"What they can see", es:"Qué puede ver" },
@@ -6801,28 +6804,61 @@
   }
 
   let colabExternoEmailEncontrado=null, colabExternoNivel='leitura', colabExternoEscopo=null, colabExternoAcordo=null, colabExternoPermissoes={};
-  function abrirAdicionarColaboradorExterno(jobId){
+  async function abrirAdicionarColaboradorExterno(jobId){
     colabExternoEmailEncontrado=null; colabExternoNivel='leitura'; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoPermissoes={};
     openInfo(t('collab.title'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('collab.searchHint')}</p>
       <div class="field"><label>${t('collab.nameOrEmail')}</label><input id="colab-email" placeholder="${t('collab.nameOrEmailPlaceholder')}" oninput="renderSugestoesColab('${jobId}')" autocomplete="off"></div>
-      <div id="colab-sugestoes"></div>
-      <div class="inline-link" style="display:block;margin-top:10px" onclick="abrirConvidarExternoDireto('${jobId}')">${t('collab.addExternalOption')}</div>`);
+      <div id="colab-sugestoes"></div>`);
     renderSugestoesColab(jobId);
+    /* carrega o histórico de colaboradores (external_collaborators) para sugerir
+       também quem já trabalhou contigo antes, não só a equipa atual */
+    await carregarColabsExternosTodos();
+    renderSugestoesColab(jobId);
+  }
+  /* fonte única das sugestões: equipa atual + histórico de colaboradores
+     (external_collaborators + contactos do tipo Colaborador), deduplicado por email */
+  function coletarColabSugestoes(){
+    const mapa={};
+    (membrosEquipa||[]).forEach(m=>{
+      if(currentUser && m.user_id===currentUser.id) return;
+      const k=(m.email||'').toLowerCase(); if(!k) return;
+      mapa[k]={ nome:m.nome||m.email, email:m.email, userId:m.user_id, origem:'team' };
+    });
+    (colaboradoresExternosTodos||[]).forEach(c=>{
+      const k=(c.email||'').toLowerCase(); if(!k || mapa[k]) return;
+      mapa[k]={ nome:c.nome||c.email, email:c.email, userId:c.user_id||null, origem:'history' };
+    });
+    Object.values(clientesData).forEach(c=>{
+      if((c.tipo||'Cliente')==='Cliente') return;
+      const k=(c.email||'').toLowerCase(); if(!k || mapa[k]) return;
+      mapa[k]={ nome:c.nome, email:c.email, userId:null, origem:'history' };
+    });
+    return Object.values(mapa);
   }
   function renderSugestoesColab(jobId){
     const wrap=document.getElementById('colab-sugestoes');
     if(!wrap) return;
     const q=(document.getElementById('colab-email').value||'').trim().toLowerCase();
-    const membros=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser.id &&
-      (!q || (m.email||'').toLowerCase().includes(q) || (m.nome||'').toLowerCase().includes(q)));
-    wrap.innerHTML = membros.map(m=>
-      '<div class="pick-row" onclick="selecionarMembroInternoComoColab(\''+jobId+'\',\''+m.user_id+'\',\''+escapeHtml(m.email||'').replace(/'/g,"\\'")+'\')">'+
-      '<div><div class="nm">'+escapeHtml(m.nome||m.email||'')+'</div><span class="sub">'+escapeHtml(m.email||'')+' · '+t('collab.fromTeam')+'</span></div></div>'
-    ).join('') || ('<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('collab.none')+'</p>');
+    const todos=coletarColabSugestoes();
+    const filtrados = q ? todos.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.nome||'').toLowerCase().includes(q)) : todos;
+    let html=filtrados.map(c=>{
+      const tag = c.origem==='team' ? t('collab.fromTeam') : t('collab.fromHistory');
+      return '<div class="pick-row" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
+        '<div><div class="nm">'+escapeHtml(c.nome||c.email||'')+'</div><span class="sub">'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
+    }).join('');
+    /* email completo digitado que não corresponde a ninguém → oferecer adicionar novo */
+    const ehEmail=/^\S+@\S+\.\S+$/.test(q);
+    const exato=todos.some(c=>(c.email||'').toLowerCase()===q);
+    if(ehEmail && !exato){
+      html+='<div class="pick-row" style="border:1px dashed var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
+        '<div><div class="nm">'+t('collab.addNew')+'</div><span class="sub">'+escapeHtml(q)+'</span></div></div>';
+    }
+    if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('collab.startTyping')+'</p>';
+    wrap.innerHTML=html;
   }
-  function selecionarMembroInternoComoColab(jobId, userId, email){
-    colabExternoEmailEncontrado={ userId, email, nome:email };
+  function selecionarColabSugestao(jobId, email, userId, nome){
+    colabExternoEmailEncontrado={ userId:userId||null, email, nome:nome||email };
     abrirConfigurarColaboradorExterno(jobId);
   }
   function abrirConvidarExternoDireto(jobId){
