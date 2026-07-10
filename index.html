@@ -6591,9 +6591,17 @@
   function emailShellHtml(opts){
     opts=opts||{};
     const cor = opts.alerta ? EMAIL_ALERTA : EMAIL_VERDE;
-    const avatarBlock = opts.avatarLetras ? (
+    // Mostra a foto real de quem despoletou a ação quando existir (opts.avatarFoto
+    // = URL http, nunca data URI — Gmail bloqueia data URI em email); só cai
+    // para o círculo de iniciais quando não há foto guardada no perfil.
+    const avatarCirculo = opts.avatarFoto
+      ? '<img src="'+opts.avatarFoto+'" width="68" height="68" alt="" style="width:68px;height:68px;border-radius:50%;object-fit:cover;display:inline-block;border:4px solid #fff">'
+      : '<td style="width:68px;height:68px;border-radius:50%;background:'+(opts.avatarCor||EMAIL_TINTA)+';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#fff">'+escapeHtml(opts.avatarLetras||'')+'</td>';
+    const avatarBlock = (opts.avatarLetras||opts.avatarFoto) ? (
       '<tr><td style="background:'+cor+';padding:0;text-align:center;line-height:0;font-size:0">'+
-        '<table role="presentation" align="center" style="margin:0 auto -34px"><tr><td style="width:68px;height:68px;border-radius:50%;background:'+(opts.avatarCor||EMAIL_TINTA)+';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#fff">'+escapeHtml(opts.avatarLetras)+'</td></tr></table>'+
+        (opts.avatarFoto
+          ? '<table role="presentation" align="center" style="margin:0 auto -34px"><tr><td>'+avatarCirculo+'</td></tr></table>'
+          : '<table role="presentation" align="center" style="margin:0 auto -34px"><tr>'+avatarCirculo+'</tr></table>')+
       '</td></tr>'
     ) : '';
     const eyebrowHtml = opts.eyebrow
@@ -6831,6 +6839,7 @@
       body: corpo,
       avatarLetras: dados.avatarLetras || null,
       avatarCor: dados.avatarCor || null,
+      avatarFoto: dados.avatarFoto || null,
       features: cfg.features ? cfg.features.map(icon=>({icon, titulo:t('email.feature.'+(icon==='team'?'team':icon==='folder'?'projects':'notify')+'.title'), desc:t('email.feature.'+(icon==='team'?'team':icon==='folder'?'projects':'notify')+'.desc')})) : null,
       detalhes: dados.detalhes || null,
       codigo: cfg.codigo ? dados.codigo : null,
@@ -7407,10 +7416,13 @@
        mesmo sistema de templates dos outros emails de conta (Pivots, badge,
        botão de ação), com o trabalho e quem convidou nos detalhes. */
     const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+    // perfilData.fotoUrl só é usado se for um URL real (enviarImagemParaStorage);
+    // contas antigas que ainda tenham um data URI guardado caem para iniciais.
+    const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
     if(semConta){
       const link=window.location.origin+'/?colab='+token;
       dispararEmailConta('colaboradorJobConvite', u.email, { nome:u.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, ctaUrl:link,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
         bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
       openInfo(t('collab.invited'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:12px">${t('collab.emailSent')}</p>
@@ -7418,7 +7430,7 @@
         <button class="btn primary" style="width:100%;margin-top:10px" onclick="navigator.clipboard.writeText('${link}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>`);
     } else {
       dispararEmailConta('colaboradorJobAdicionado', u.email, { nome:u.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, ctaUrl:window.location.origin,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
         bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
       showToast(t('collab.notifiedInApp'));
     }
@@ -8608,11 +8620,27 @@
     aplicarPerfilData();
     aplicarTraducaoCompleta();
   }
+  /* Sobe uma imagem (já como data URL comprimido) para o bucket público
+     public-assets e devolve o URL http estável. Path fixo por utilizador+nome
+     (upsert) para o link não mudar a cada re-upload. Usado sempre que a
+     imagem precisa de aparecer fora da app (ex.: emails) — data URIs em
+     base64 funcionam dentro da app mas o Gmail e outros clientes bloqueiam
+     <img src="data:..."> por segurança. */
+  async function enviarImagemParaStorage(dataUrl, nomeBase){
+    if(!currentUser) throw new Error('sem sessão');
+    const blob = await (await fetch(dataUrl)).blob();
+    const ext = (blob.type.split('/')[1]||'jpg').replace('jpeg','jpg');
+    const path = currentUser.id+'/'+nomeBase+'.'+ext;
+    const { error } = await sb.storage.from('public-assets').upload(path, blob, { upsert:true, contentType: blob.type });
+    if(error) throw error;
+    const { data } = sb.storage.from('public-assets').getPublicUrl(path);
+    return data.publicUrl + '?v=' + Date.now();
+  }
   async function onAvatarFileSelected(input){
     const file=input.files[0]; if(!file) return;
     try{
       const dataUrl=await arquivoParaDataUrlComprimido(file);
-      perfilData.fotoUrl=dataUrl;
+      perfilData.fotoUrl=await enviarImagemParaStorage(dataUrl, 'avatar');
       savePerfilData();
       aplicarPerfilData();
       showToast(t('toast.profilePhotoUpdated'));
@@ -9134,10 +9162,11 @@
     const file=input.files[0]; if(!file) return;
     try{
       const dataUrl=await arquivoParaDataUrlComprimido(file);
-      perfilData.empresaFotoUrl=dataUrl;
+      const url=await enviarImagemParaStorage(dataUrl, 'empresa-logo');
+      perfilData.empresaFotoUrl=url;
       savePerfilData();
       const prev=document.getElementById('empresa-avatar-preview');
-      if(prev){ prev.style.backgroundImage='url('+dataUrl+')'; prev.style.backgroundSize='cover'; prev.style.backgroundPosition='center'; prev.textContent=''; }
+      if(prev){ prev.style.backgroundImage='url('+url+')'; prev.style.backgroundSize='cover'; prev.style.backgroundPosition='center'; prev.textContent=''; }
       showToast(t('toast.profilePhotoUpdated'));
     }catch(e){ showToast(t('toast.imageError')); }
     input.value='';
