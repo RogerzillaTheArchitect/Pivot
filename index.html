@@ -2929,7 +2929,7 @@
     "email.cta.viewProject": { pt:"Ver projeto", en:"View project", es:"Ver proyecto" },
     "email.badge.portalAccess": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
     "email.title.portalAccess": { pt:"O seu portal está pronto", en:"Your portal is ready", es:"Su portal está listo" },
-    "email.body.portalAccess": { pt:"Criámos um espaço só para si, onde pode acompanhar tudo sobre o seu projeto — contrato, prazos, pagamentos e entregas, num só lugar.", en:"We've created a space just for you, where you can follow everything about your project — contract, deadlines, payments and deliveries, all in one place.", es:"Creamos un espacio solo para usted, donde puede seguir todo sobre su proyecto — contrato, plazos, pagos y entregas, todo en un solo lugar." },
+    "email.body.portalAccess": { pt:"Criámos um espaço só para si, onde pode acompanhar tudo sobre o seu projeto: contrato, prazos, pagamentos e entregas, num só lugar.", en:"We've created a space just for you, where you can follow everything about your project: contract, deadlines, payments and deliveries, all in one place.", es:"Creamos un espacio solo para usted, donde puede seguir todo sobre su proyecto: contrato, plazos, pagos y entregas, todo en un solo lugar." },
     "email.cta.openPortal": { pt:"Aceder ao portal", en:"Open portal", es:"Acceder al portal" },
     "email.badge.projectUpdate": { pt:"Atualização do projeto", en:"Project update", es:"Actualización del proyecto" },
     "email.title.projectUpdate": { pt:"Novidades sobre o seu projeto", en:"An update on your project", es:"Novedades sobre su proyecto" },
@@ -3024,7 +3024,7 @@
     "email.body.termsChange": { pt:"Fizemos alterações aos nossos termos de serviço ou política de privacidade. Reveja o que mudou.", en:"We've made changes to our terms of service or privacy policy. Review what's changed.", es:"Hicimos cambios en nuestros términos de servicio o política de privacidad. Revise qué cambió." },
     "email.cta.termsChange": { pt:"Ver alterações", en:"View changes", es:"Ver cambios" },
     "email.greetingGeneric": { pt:"Olá", en:"Hi", es:"Hola" },
-    "email.footer.autoNotice": { pt:"Este é um email automático — não é necessário responder.", en:"This is an automated email — no reply needed.", es:"Este es un email automático — no es necesario responder." },
+    "email.footer.autoNotice": { pt:"Este é um email automático, não é necessário responder.", en:"This is an automated email, no reply needed.", es:"Este es un email automático, no es necesario responder." },
     // --- Explorar ---
     "explore.browseLibrary": { pt:"Explorar Biblioteca →", en:"Browse Library →", es:"Explorar biblioteca →" },
     "explore.checklist": { pt:"Checklist", en:"Checklist", es:"Lista de verificación" },
@@ -6565,100 +6565,166 @@
      despoletou a ação a sobrepor a fronteira, quando aplicável + grelha de
      funcionalidades opcional + botão em pílula + rodapé com aviso legal. */
   const EMAIL_LOGO_URL="https://pivots.app/email/logo-square.png";
-  const EMAIL_CREME="#F3F1EA", EMAIL_VERDE="#15532D", EMAIL_VERDE_CLARO="#EAF3EC",
-    EMAIL_CINZA="#6B6459", EMAIL_TINTA="#161614", EMAIL_LINHA="#E7E2D6",
-    EMAIL_ALERTA="#B23A2E", EMAIL_ALERTA_CLARO="#FBEAE7";
-  const EMAIL_ICONS={
-    team: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAADDUlEQVR4nO2cUY7bMAxEncVeQcfoaXrOnqbH4CG2CIoA/egGTixyhtJ7vwksmSOaFEX7OAAAAAAAAAAAAAAAAAAAAAAAAAAA4Dhu6gl0ZPz88fXdb/Hrt5VNrSbTVVRnseUTWFFYJ6E/VAPvIu7M67wDHlwsSLU348HF3lbtzQi8OAgs8K5KL24Xg88Y5504NwSJUEU8/jwa8Krx//1/JBnxf9dVZsstPXimweKJ0K+Mc2bBzL7ecjH4bqDZ3jAmXPOsGA4VLFuBXbcp8aJoLiJ/7J7FDnHczB7fRuBqQ4+COOngxRYCq7xoGGa9ywm8g5GVSPfBGQkPC6ZhoeOVmPb4D0L/RZYEVBUDxiShM8ufmcmYPAZn33wYZLLbVbKqV3ZMuM6VergSew92YpwUzUXcO7eVjvxmjFt5mrTkcaHT6t7hPiwf0ZVnuCqq5mIp8OpE4UJD4MVB4GKqw0SrUmUVkVDuVMV/PLhJoeVd8OBEb3bI2ssnoCzAj0lj835w40pWmAm0bAzOaJs9NsRWYNjkwL/yqC8mvbXg9Ji3F7iyoyOS3jdSCi5daZnHa1evPRJitkLoVgJndlVGYbNepdDyWOGQ3YagE3Ob40J1QhKiNtuq8eQCK0UOcQ91xbgWAitEDpMG+W3eLqwUOUzEfZA5D3mSpfoQ2bgwRta7URkL3FLgB1kH7qPo6M/hiNFa4AyvGILeZWW/dAuBZ9aCh+gLOKpx2wl8hSH+vJFi/DYtO5XxLBIb76szd0sPVm5fomCrVnlUauPBLnvS1Wh5mrRCNW0UebHsBXA3ce84zqmVB3cyYJjE4qvzsHsk7STy+MYmrfbBHYWtEvphm8yFJFmhHQmjTslXuHUR1+Ez/dFQ5NRHzxXUpcJVRLYyouM+tLvIFpUshcHCrKsji6mGdfxO1A5zf0b7887ZjEXuQ1aqdDdKmM9PIrDDZ3NnEifn2SF+T0mydklYOi7Wsn1wF4M8u4+O95CyTbraoupGNBQWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAOC4wB9Ab+rGvjlI/gAAAABJRU5ErkJggg==",
-    folder: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAABSUlEQVR4nO3d0U3DMBRA0bRihYzBNMzJNIzhIUAR4reCpkHp9Tkb1DcvsSLFXRYAAAAAAAAAAAAAAAAAAAAA4JbL8iDr2+vncgLj/eNhv6ngusSc5UI7i1zgjcjxwBuRv13qCzgmfyZnJ5hJAq9Pcqc5Sj7w7JGnCDxz5EM3Wf+1wflLvDHZpisRuDyhY+caZm7R1clcd164mcAbkeOBy5HvlQtctd45xcnApjgeeCNyPPBmiNwO/BN55tAvyyTGySMf9aImP8GzEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4wSOEzhO4DiB4w79ALx6+twzMcFxAscJHCdwnMDxU4Ku1WOJSsaOtd41wSIfb+8a5/67sGQYIAAAAAAAAAAAAABYfuELuhZPvltvVnQAAAAASUVORK5CYII=",
-    bell: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAACi0lEQVR4nO2c0U3EMBAFQ0QLWwbVUCfVUIaLACHxAYiDixN73z7PfJ8S705e1gnHbRsAAAAAAAAAAAAAAAAAAAAAAABcxcNmTjw/vf33mfbyatuHhxWFriTcppArxDqKLl/ACLFOovetMDPkzjzPCEpemZkNb8XSXC7B2WmKYmkuJViluSGyDivBak0NsfXcosQ8OdvM9sfcHHlsBaQXd0ZAT+Nj4rlmIbuw3oZf0exIOu8IHjcTrmxw+zxWlTlbcpN1pLmj0tMOHFf1YpAUrCDXRbKkYLW510Tna0nBiimovH45waqpakVTvFe8+rOa3e48r1KKpQSDsWD19FZNsYxgGEMpwdnpVVuHnWAoKlhlXjnWJSG44m2xia2nvGDoA8HmpAtWmFPO9aULrjzvmui6ygmGfhBsDoLN2VfbdGQzu/6Ub1WuJjkS65X82myF3emttapdvFNv0WrFZzGzD3KbrErprbB+OcFwLQg2Z5pg5m9OP6QSrDa/HOqQEgzXg2Bzpghm/ub1RSbBSnPLqR4ZwTAGBJszXDDzN7c/EglWmVeOdUkIhnEg2Jyhgpm/+X1KT7DCnHKuL10wjAXB5gwTzPzV6Ne+8nxaoU5u0eYg2Jwhgpm/On1LS/Aq8ze73rR/XSHlc2AGm3O5YJKp1T8SbM7wwU+iczdgJNgcBJuDYHMQDFCZZV4Xxi+7+RVel9oXGHc8pjmLtp7BceczuPOzuq3go9LCVLKl4F5ZYSjZUjAYCz6bwjBLseRvVY6ifdktu4lcJsHwHQSbs9QtOha5LVsn+OxbqWb2VstOMCwguDeFzSy9toJ7ZDVDudaCj0hrpnI/sC3sJ7Ho34MBAAAAAAAAAAAAtnzeAXQtAIgC2k2uAAAAAElFTkSuQmCC",
-    shield: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAAC+0lEQVR4nO3c0W2rQBSEYWylhVNGqkmdqSZlbBGJkPIQRU4M9tk9M3Pmf7y6CgufgQWMt80555xzzjnnnHPOOeecc84555wTKN5eP7dGXbbGsOP9Q3795VcwDuyxytCSK/bMYXiIYUutTOb5dYhAS6zEzInTIIemHvzKGfEghaYbNMJlziDCphkoAiwj9KXrxCmaTMhgB7YKIMShL8qH4XFig1cue2YQg0DauAE0loxKF45+eAzw8R2pZKFsGy7IxvuzZQtTOPQF4TpQffoRzmls6/SyEYSAuuJ6uh0wGux/Y0SFhgRmgGWBhgJmhEWHhgBWgEWFvlYu3M3PwE9UvXceycBP4qIjG/iBfqMiIxv4ZH9hoiIb+ET3EBGRDZwcGrKBJ8AhIRt4AhjSjRsDC+PuGVgYd8/Awrh7BhbG3TMw8Aw4IwM/iYu89+4ZWBh3z8APxoBLC5x9ngyhSRU9cPZz2BDGpQPOfg4b4rhUwNnPYaMBLg1w9nPYaIJLAXwUI/v/KeDCA2fvmSF2l4oG+K8Nn7n3RMGNDIQPFARwJvKtvxNNcaGA/ysDudN5dylw1i/dPIocBZOqM8uc/WGC/AmHVb9rpY679BBdtSd3xl1+DkZFHqK4JZOsyl+f64ZLMYueeY08FuNWdGW+7Km+nAmC255le3A18lh8I6Pqw1h6iK5CHk1wIc7BWSt/9O+MxRu7+jRSDrzi8ml8/7v6jPlW5QNg2ngBPj7YPRj1GpkdFw4YFTlIcSGB0ZCDGBcW+GyzkAP8LhU18OqH/MzXupTAlcghggsPXIEcQrgUwMgbcYCOiw541cw6yGfM1MCzkUMQlw54FnKI4lICZyOHMC4tcBZyiONSAyv/iHdm1MBMbztURTtwprcdKqPegxnedqhOAhj1bQeEZIArvsDHkBRwBs4QwpUErvwyPGKSwBVfhkdNFhj5y/ArkwZ2DYDHnb1Tee9tAXzklRblWgDfwuyA27Jo8hTJOeecc84555xzzjnnnHPOObd17wvogCz8/LEUKgAAAABJRU5ErkJggg==",
-    card: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAABLUlEQVR4nO3dwVHDQBAAQUGRgsMgGuIkGsJwEJABn9uT5KnuAPTYqbWtk10+DgAAAAAAAAAAAAAAAAAA4FW87brw4+vzd9e1q57fP+M9xi8o7L1Cvx+DxL3fHMcCiztrap4jgcXdY2Kuoy/R3M9yYNu71+p8bXCcwHEfr3oDX/HY/BZng+MEjhM4TuC4Uz5kuVe+jg2OEzhO4DiB4wSOEzhO4DiB4zxNupinSSwROE7gOIHjBI4TOE7gOIHjBI4TOO6Uo8qrvqf1dERqg+sEjhM4TuA4geMEjhM4TuC4yw46HEKcwwbHCRwncJzAcX7hH2eD4wSOWw7sfnav1fna4LiRwLZ4j4m5jm2wyLOm5jn6Ei3y/ebof5NuxIIAAAAAAAAAAAAAAAAAAHD87w857j4QPrp80QAAAABJRU5ErkJggg==",
-    doc: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAABnUlEQVR4nO3bC3HCQBRA0bRTC8hADTqrpjIQQR10OmHYz+UcBWFvHiFZchwAAAAAAPBaH8ckl9v1cWzo/v0zbc3O+Jx9ALu53K6PnU5OgU/aJbLA8cjDric7LEbxumyC4yevwPHIAscjCxyPvNSPrJV+rFyeDLXKZzHB8UkWOB5Z4HhkgeORBY5HFjgeWeDBt0KjIwscjyzwpM3/UZEFnmhEZIHjBI4TOP41LXCcwItv9z1L4Hhkgf8ReefQX7MPYBf3k5FtF/JSAscJHCdwnMBxAscJHCdwnMBxAscJHCdwnMBxAsdts104e9vtLyvvF5vgOIHjBI4TOE7gOIHjBI4TOG6bBx0rP0xYmQmOEzhO4DiB4wSOEzhum9sk+8HnmOA4geMEjhM4TuA4geMEjhM4bpsHHSs/TFiZCY4TOE7gOIHjBI4TOE7gOIHjBI4TOE7gOIHjBI4TOE7gOIHjBI4TOE7gOIHjlvrT3cpvEO7KBMcJHCdwnMBxAsff2BgW2Ksnc9Zk6ASLPH4tpi34O9/z3p3oAAAAAMDxVn4Bf8li/8VbqU4AAAAASUVORK5CYII=",
-  };
+  const EMAIL_ASSET_BASE="https://pivots.app/email";
+  const EMAIL_PAGE="#F5F3EE", EMAIL_CARD="#FFFFFF", EMAIL_FOOT="#F8F6F1",
+    EMAIL_HEADBG="#0A2F1D", EMAIL_CTA="#15532D", EMAIL_ALERTA="#B23A2E",
+    EMAIL_TINTA="#0E1D16", EMAIL_CINZA="#6B6459", EMAIL_LINHA="#E7E2D6", EMAIL_LINHA_SUAVE="#ECE8DF",
+    EMAIL_EYEBROW="#BFD8C6", EMAIL_CHIP="#FBFAF6", EMAIL_VERDE_CLARO="#EAF3EC";
+  // Só estas duas fontes (Cal Sans nos títulos — único peso disponível no
+  // Google Fonts, já é um display font "pesado" por desenho — e Lexend Deca
+  // em tudo o resto). @font-face embutido em cada email; clientes sem suporte
+  // caem no fallback do sistema.
+  const EMAIL_FONT_DISPLAY="'Cal Sans','Helvetica Neue',Helvetica,Arial,sans-serif";
+  const EMAIL_FONT="'Lexend Deca','Helvetica Neue',Helvetica,Arial,sans-serif";
+  const EMAIL_FONT_FACES='<style>'+
+    "@font-face{font-family:'Cal Sans';font-style:normal;font-weight:400;font-display:swap;src:url(https://fonts.gstatic.com/s/calsans/v2/fdN99sWUv3gWqXxqqSBb.ttf) format('truetype');}"+
+    "@font-face{font-family:'Lexend Deca';font-style:normal;font-weight:400;font-display:swap;src:url(https://fonts.gstatic.com/s/lexenddeca/v25/K2FifZFYk-dHSE0UPPuwQ7CrD94i-NCKm-U48M1ArA.ttf) format('truetype');}"+
+    "@font-face{font-family:'Lexend Deca';font-style:normal;font-weight:600;font-display:swap;src:url(https://fonts.gstatic.com/s/lexenddeca/v25/K2FifZFYk-dHSE0UPPuwQ7CrD94i-NCKm-U4LspArA.ttf) format('truetype');}"+
+    "@font-face{font-family:'Lexend Deca';font-style:normal;font-weight:700;font-display:swap;src:url(https://fonts.gstatic.com/s/lexenddeca/v25/K2FifZFYk-dHSE0UPPuwQ7CrD94i-NCKm-U4F8pArA.ttf) format('truetype');}"+
+    '</style>';
+  // Trava o email em modo claro sempre — sem isso, Outlook.com/Edge Mail e o
+  // Gmail app aplicam dark mode automático que reescreve fundo/texto sozinhos,
+  // apagando o traço dos ícones (PNG com fundo transparente). meta color-scheme
+  // cobre clientes modernos; [data-ogsc]/[data-ogsb] cobrem Outlook.com/Windows
+  // Mail, que ignoram a meta tag e só respeitam atributo injetado no dark mode.
+  function emailDarkModeLockHtml(){
+    return '<meta name="color-scheme" content="light only">'+
+      '<meta name="supported-color-schemes" content="light only">'+
+      '<style>:root{color-scheme:light only;supported-color-schemes:light only}'+
+      '[data-ogsc] .pv-bg-page,[data-ogsb] .pv-bg-page{background:'+EMAIL_PAGE+' !important}'+
+      '[data-ogsc] .pv-bg-card,[data-ogsb] .pv-bg-card{background:'+EMAIL_CARD+' !important}'+
+      '[data-ogsc] .pv-bg-head,[data-ogsb] .pv-bg-head{background:'+EMAIL_HEADBG+' !important}'+
+      '[data-ogsc] .pv-bg-foot,[data-ogsb] .pv-bg-foot{background:'+EMAIL_FOOT+' !important}'+
+      '[data-ogsc] .pv-bg-chip,[data-ogsb] .pv-bg-chip{background:'+EMAIL_CHIP+' !important}'+
+      '[data-ogsc] .pv-bg-tint,[data-ogsb] .pv-bg-tint{background:'+EMAIL_VERDE_CLARO+' !important}'+
+      '[data-ogsc] .pv-bg-cta,[data-ogsb] .pv-bg-cta{background:'+EMAIL_CTA+' !important}'+
+      '[data-ogsc] .pv-line,[data-ogsb] .pv-line{border-color:'+EMAIL_LINHA_SUAVE+' !important}'+
+      '[data-ogsc] .pv-ink,[data-ogsb] .pv-ink{color:'+EMAIL_TINTA+' !important}'+
+      '[data-ogsc] .pv-soft,[data-ogsb] .pv-soft{color:'+EMAIL_CINZA+' !important}'+
+      '[data-ogsc] .pv-white,[data-ogsb] .pv-white{color:#ffffff !important}'+
+      '</style>';
+  }
+  // Envolve o fragmento (uma <table> só) num documento HTML completo com
+  // <head> — nada mais faz isso antes de mandar para o Resend, e sem <head>
+  // as metas de modo claro e os @font-face não são respeitados de forma fiável.
+  function emailDocWrap(innerHtml){
+    return '<!doctype html><html><head><meta charset="utf-8">'+
+      '<meta name="viewport" content="width=device-width,initial-scale=1">'+
+      emailDarkModeLockHtml()+EMAIL_FONT_FACES+
+      '</head><body style="margin:0;padding:0">'+innerHtml+'</body></html>';
+  }
+  const EMAIL_ICON_FILE={team:'sm-people', folder:'sm-folder', bell:'sm-bell'};
   function emailFeatureCellHtml(icone, titulo, desc){
+    const arquivo = EMAIL_ICON_FILE[icone]||icone;
     return '<td width="33%" style="padding:0 6px;text-align:center;vertical-align:top">'+
       '<table role="presentation" width="100%"><tr><td style="text-align:center;padding-bottom:8px">'+
-      '<div style="width:46px;height:46px;border-radius:50%;background:'+EMAIL_VERDE_CLARO+';margin:0 auto;line-height:46px;text-align:center">'+
-        '<img src="'+EMAIL_ICONS[icone]+'" width="20" height="20" style="vertical-align:middle;display:inline-block" alt="">'+
+      '<div bgcolor="'+EMAIL_VERDE_CLARO+'" class="pv-bg-tint" style="width:46px;height:46px;border-radius:50%;background:'+EMAIL_VERDE_CLARO+';margin:0 auto;line-height:46px;text-align:center">'+
+        '<img src="'+EMAIL_ASSET_BASE+'/'+arquivo+'.png" width="20" height="20" style="vertical-align:middle;display:inline-block" alt="">'+
       '</div></td></tr>'+
-      '<tr><td style="text-align:center;font-family:Arial,sans-serif;font-size:11.5px;font-weight:700;color:'+EMAIL_TINTA+';padding-bottom:3px">'+escapeHtml(titulo)+'</td></tr>'+
-      '<tr><td style="text-align:center;font-family:Arial,sans-serif;font-size:10px;color:'+EMAIL_CINZA+';line-height:1.4">'+escapeHtml(desc)+'</td></tr>'+
+      '<tr><td class="pv-ink" style="text-align:center;font-family:'+EMAIL_FONT+';font-size:11.5px;font-weight:700;color:'+EMAIL_TINTA+';padding-bottom:3px">'+escapeHtml(titulo)+'</td></tr>'+
+      '<tr><td class="pv-soft" style="text-align:center;font-family:'+EMAIL_FONT+';font-size:10px;color:'+EMAIL_CINZA+';line-height:1.4">'+escapeHtml(desc)+'</td></tr>'+
       '</table></td>';
   }
-  /* opts: alerta, eyebrow, heading, body, avatarLetras, avatarCor, features:[{icon,titulo,desc}],
-     detalhes:[[label,valor]], codigo, ctaText, ctaUrl, hint, footerNote, footerReason (obrigatório) */
+  /* opts: alerta, headerLabel (texto no canto do cabeçalho verde, ex.: "Ação
+     necessária"), heroIcon (nome do ficheiro em /email, ex.: "hero-folder" —
+     ignorado se houver avatar), eyebrow (nome de quem despoletou a ação,
+     mostrado por cima do título quando há avatar), heading, body,
+     avatarLetras, avatarCor, avatarFoto (URL http real; tem prioridade sobre
+     avatarLetras), features:[{icon,titulo,desc}], detalhes:[[label,valor]],
+     codigo, ctaText, ctaUrl, hint, footerNote */
   function emailShellHtml(opts){
     opts=opts||{};
-    const cor = opts.alerta ? EMAIL_ALERTA : EMAIL_VERDE;
+    const cor = opts.alerta ? EMAIL_ALERTA : EMAIL_CTA;
+    const temAvatar = !!(opts.avatarLetras||opts.avatarFoto);
     // Mostra a foto real de quem despoletou a ação quando existir (opts.avatarFoto
     // = URL http, nunca data URI — Gmail bloqueia data URI em email); só cai
     // para o círculo de iniciais quando não há foto guardada no perfil.
     const avatarCirculo = opts.avatarFoto
       ? '<img src="'+opts.avatarFoto+'" width="68" height="68" alt="" style="width:68px;height:68px;border-radius:50%;object-fit:cover;display:inline-block;border:4px solid #fff">'
-      : '<td style="width:68px;height:68px;border-radius:50%;background:'+(opts.avatarCor||EMAIL_TINTA)+';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#fff">'+escapeHtml(opts.avatarLetras||'')+'</td>';
-    const avatarBlock = (opts.avatarLetras||opts.avatarFoto) ? (
-      '<tr><td style="background:'+cor+';padding:0;text-align:center;line-height:0;font-size:0">'+
+      : '<td style="width:68px;height:68px;border-radius:50%;background:'+(opts.avatarCor||EMAIL_TINTA)+';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:'+EMAIL_FONT+';font-size:22px;font-weight:700;color:#fff">'+escapeHtml(opts.avatarLetras||'')+'</td>';
+    const avatarBlock = temAvatar ? (
+      '<tr><td bgcolor="'+cor+'" class="pv-bg-head" style="background:'+cor+';padding:0;text-align:center;line-height:0;font-size:0">'+
         (opts.avatarFoto
           ? '<table role="presentation" align="center" style="margin:0 auto -34px"><tr><td>'+avatarCirculo+'</td></tr></table>'
           : '<table role="presentation" align="center" style="margin:0 auto -34px"><tr>'+avatarCirculo+'</tr></table>')+
       '</td></tr>'
     ) : '';
+    const heroHtml = (!temAvatar && opts.heroIcon)
+      ? '<tr><td align="center" style="padding:6px 0 26px"><img src="'+EMAIL_ASSET_BASE+'/'+opts.heroIcon+'.png" width="96" height="96" alt="" style="display:block;margin:0 auto;border:0"></td></tr>' : '';
     const eyebrowHtml = opts.eyebrow
-      ? '<div style="font-size:13px;font-weight:700;color:'+cor+';margin:0 0 6px;font-family:Arial,sans-serif">'+escapeHtml(opts.eyebrow)+'</div>' : '';
+      ? '<div class="pv-ink" style="font-size:13px;font-weight:700;color:'+cor+';margin:0 0 6px;font-family:'+EMAIL_FONT+'">'+escapeHtml(opts.eyebrow)+'</div>' : '';
     const featuresHtml = (opts.features && opts.features.length)
-      ? '<tr><td style="padding:8px 18px 2px"><table role="presentation" width="100%"><tr>'+
+      ? '<tr><td style="padding:2px 0 6px"><table role="presentation" width="100%"><tr>'+
           opts.features.map(f=>emailFeatureCellHtml(f.icon, f.titulo, f.desc)).join('')+
         '</tr></table></td></tr>' : '';
     const detalhesHtml = (opts.detalhes && opts.detalhes.length)
-      ? '<tr><td style="padding:6px 26px 4px"><div style="background:#F7F5EE;border-radius:10px;padding:14px 16px;font-family:Arial,sans-serif">'+
-        opts.detalhes.map(d=>'<div style="display:flex;justify-content:space-between;font-size:12.5px;color:'+EMAIL_TINTA+';padding:3px 0"><span style="color:'+EMAIL_CINZA+'">'+escapeHtml(d[0])+'</span><span>'+escapeHtml(d[1])+'</span></div>').join('')+
-        '</div></td></tr>' : '';
+      ? '<tr><td style="padding:0 0 20px"><table role="presentation" width="100%" bgcolor="'+EMAIL_CHIP+'" class="pv-bg-chip pv-line" style="background:'+EMAIL_CHIP+';border:1px solid '+EMAIL_LINHA+';border-radius:12px"><tr><td style="padding:14px 16px;font-family:'+EMAIL_FONT+'">'+
+        opts.detalhes.map(d=>'<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:3px 0"><span class="pv-soft" style="color:'+EMAIL_CINZA+'">'+escapeHtml(d[0])+'</span><span class="pv-ink" style="color:'+EMAIL_TINTA+';font-weight:700">'+escapeHtml(d[1])+'</span></div>').join('')+
+        '</td></tr></table></td></tr>' : '';
     const codigoHtml = opts.codigo
-      ? '<tr><td style="padding:8px 26px 8px;text-align:center"><div style="display:inline-block;background:#F7F5EE;border:1px solid '+EMAIL_LINHA+';border-radius:12px;padding:16px 28px;font-family:Arial,sans-serif;font-size:26px;font-weight:700;letter-spacing:.26em;color:'+EMAIL_TINTA+'">'+escapeHtml(String(opts.codigo))+'</div></td></tr>' : '';
+      ? '<tr><td style="padding:4px 0 20px;text-align:center"><div bgcolor="'+EMAIL_CHIP+'" class="pv-bg-chip pv-line pv-ink" style="display:inline-block;background:'+EMAIL_CHIP+';border:1px solid '+EMAIL_LINHA+';border-radius:12px;padding:16px 28px;font-family:'+EMAIL_FONT+';font-size:26px;font-weight:700;letter-spacing:.26em;color:'+EMAIL_TINTA+'">'+escapeHtml(String(opts.codigo))+'</div></td></tr>' : '';
     const ctaHtml = opts.ctaText
-      ? '<tr><td style="padding:16px 32px 4px"><a href="'+escapeHtml(opts.ctaUrl||'#')+'" style="display:block;text-align:center;background:'+cor+';color:#fff;font-weight:700;font-size:14.5px;padding:15px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif">'+escapeHtml(opts.ctaText)+'</a></td></tr>' : '';
+      ? '<tr><td style="padding:2px 0 '+((opts.hint||opts.footerNote)?'14px':'2px')+'"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="'+cor+'" class="pv-bg-cta" style="border-radius:11px"><a href="'+escapeHtml(opts.ctaUrl||'#')+'" class="pv-white" style="display:block;padding:16px 24px;font-family:'+EMAIL_FONT+';font-size:15px;font-weight:700;color:#ffffff;text-decoration:none;border-radius:11px">'+escapeHtml(opts.ctaText)+'</a></td></tr></table></td></tr>' : '';
     const hintHtml = opts.hint
-      ? '<tr><td style="padding:0 26px 4px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:'+EMAIL_CINZA+'">'+escapeHtml(opts.hint)+'</td></tr>' : '';
+      ? '<tr><td align="center" class="pv-soft" style="font-family:'+EMAIL_FONT+';font-size:12.5px;color:'+EMAIL_CINZA+';padding:0 0 2px">'+escapeHtml(opts.hint)+'</td></tr>' : '';
     const footerNoteHtml = opts.footerNote
-      ? '<tr><td style="padding:14px 30px 4px;text-align:center;font-family:Arial,sans-serif;font-size:12px;color:'+EMAIL_CINZA+';line-height:1.6">'+opts.footerNote+'</td></tr>' : '';
-    return '<table role="presentation" width="100%" style="background:'+EMAIL_CREME+';border-collapse:collapse"><tr><td style="padding:32px 16px">'+
-      '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse">'+
-        '<tr><td style="text-align:center;padding-bottom:20px;font-family:Arial,sans-serif"><span style="font-size:19px;font-weight:800;letter-spacing:.05em;color:'+EMAIL_VERDE+'">PIVOTS</span></td></tr>'+
-        '<tr><td><table role="presentation" width="100%" style="border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden">'+
-          '<tr><td style="background:'+cor+';padding:26px 24px '+(opts.avatarLetras?'40px':'26px')+';text-align:center"><img src="'+EMAIL_LOGO_URL+'" width="72" height="72" style="border-radius:16px;background:#fff;display:inline-block" alt="Pivots"></td></tr>'+
-          avatarBlock+
-          '<tr><td style="padding:'+(opts.avatarLetras?'34px 28px 4px':'24px 28px 4px')+';text-align:center">'+
-            eyebrowHtml+
-            '<h2 style="font-size:20px;font-weight:800;margin:0 0 10px;color:'+EMAIL_TINTA+';font-family:Arial,sans-serif;line-height:1.32">'+opts.heading+'</h2>'+
-            (opts.body ? '<p style="font-size:13.5px;color:'+EMAIL_CINZA+';margin:0 0 4px;line-height:1.6;font-family:Arial,sans-serif">'+opts.body+'</p>' : '')+
+      ? '<tr><td align="center" class="pv-soft" style="padding:14px 4px 0;font-family:'+EMAIL_FONT+';font-size:12px;color:'+EMAIL_CINZA+';line-height:1.6">'+opts.footerNote+'</td></tr>' : '';
+    const inner = '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="'+EMAIL_PAGE+'" class="pv-bg-page" style="background:'+EMAIL_PAGE+'">'+
+      '<tr><td align="center" style="padding:30px 12px">'+
+        '<table role="presentation" width="480" cellpadding="0" cellspacing="0" border="0" bgcolor="'+EMAIL_CARD+'" class="pv-bg-card" style="width:480px;max-width:480px;background:'+EMAIL_CARD+';border:1px solid '+EMAIL_LINHA_SUAVE+';border-radius:18px;overflow:hidden">'+
+          '<tr><td bgcolor="'+cor+'" class="pv-bg-head" style="background:'+cor+';padding:22px 26px">'+
+            '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>'+
+              '<td align="left" valign="middle" width="40"><img src="'+EMAIL_LOGO_URL+'" width="34" height="34" alt="Pivots" style="display:block;border-radius:8px"></td>'+
+              '<td align="right" valign="middle" style="font-family:'+EMAIL_FONT+';font-size:13px;color:'+EMAIL_EYEBROW+';font-weight:600">'+escapeHtml(opts.headerLabel||'')+'</td>'+
+            '</tr></table>'+
           '</td></tr>'+
-          featuresHtml+ detalhesHtml+ codigoHtml+ ctaHtml+ hintHtml+ footerNoteHtml+
-          '<tr><td style="height:22px;line-height:22px;font-size:1px">&nbsp;</td></tr>'+
-        '</table></td></tr>'+
-        '<tr><td style="padding:22px 20px 0;text-align:center;font-family:Arial,sans-serif;font-size:11px;color:'+EMAIL_CINZA+';line-height:1.7">Pivots &copy; '+new Date().getFullYear()+' &nbsp;·&nbsp; Todos os direitos reservados<br>'+(opts.footerReason||'')+'</td></tr>'+
-      '</table>'+
-    '</td></tr></table>';
+          (opts.extraTop||'')+
+          avatarBlock+
+          '<tr><td bgcolor="'+EMAIL_CARD+'" class="pv-bg-card" style="padding:'+(temAvatar?'34px 34px 4px':'40px 34px 4px')+'" align="center">'+
+            '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">'+
+              heroHtml+
+              '<tr><td align="center">'+eyebrowHtml+'</td></tr>'+
+              '<tr><td align="center" class="pv-ink" style="font-family:'+EMAIL_FONT_DISPLAY+';font-size:24px;line-height:1.28;font-weight:400;letter-spacing:-.01em;color:'+EMAIL_TINTA+';padding:0 0 12px">'+opts.heading+'</td></tr>'+
+              (opts.body ? '<tr><td align="center" class="pv-soft" style="font-family:'+EMAIL_FONT+';font-size:14px;line-height:1.6;color:'+EMAIL_CINZA+';padding:0 0 22px">'+opts.body+'</td></tr>' : '')+
+              featuresHtml+ detalhesHtml+ codigoHtml+ ctaHtml+ hintHtml+ footerNoteHtml+
+              '<tr><td style="height:22px;line-height:22px;font-size:1px">&nbsp;</td></tr>'+
+            '</table>'+
+          '</td></tr>'+
+        '</table>'+
+        '<table role="presentation" width="480" cellpadding="0" cellspacing="0" border="0" style="width:480px;max-width:480px"><tr>'+
+          '<td bgcolor="'+EMAIL_FOOT+'" class="pv-bg-foot" style="background:'+EMAIL_FOOT+';padding:26px 20px" align="center">'+
+            '<img src="'+EMAIL_LOGO_URL+'" width="30" height="30" alt="Pivots" style="display:block;margin:0 auto 12px;border-radius:7px">'+
+            '<div class="pv-ink" style="font-family:'+EMAIL_FONT_DISPLAY+';font-size:14px;font-weight:400;color:'+EMAIL_TINTA+';margin-bottom:6px">Your contacts, into contracts.</div>'+
+            '<div class="pv-soft" style="font-family:'+EMAIL_FONT+';font-size:12px;color:'+EMAIL_CINZA+';margin-bottom:14px">'+
+              '<a href="#" class="pv-soft" style="color:'+EMAIL_CINZA+';text-decoration:none">Central de Ajuda</a> &nbsp;&middot;&nbsp; '+
+              '<a href="#" class="pv-soft" style="color:'+EMAIL_CINZA+';text-decoration:none">Privacidade</a> &nbsp;&middot;&nbsp; '+
+              '<a href="#" class="pv-soft" style="color:'+EMAIL_CINZA+';text-decoration:none">Termos</a>'+
+            '</div>'+
+            '<div class="pv-soft" style="font-family:'+EMAIL_FONT+';font-size:11px;color:#A8A296">&copy; '+new Date().getFullYear()+' Pivots. Todos os direitos reservados.'+(opts.footerReason?'<br>'+opts.footerReason:'')+'</div>'+
+          '</td>'+
+        '</tr></table>'+
+      '</td></tr></table>';
+    return emailDocWrap(inner);
   }
   /* ===== Template universal de email — reutilizado por todos os tipos de notificação =====
      Branding (logo/nome/contactos da empresa) só aparece nos planos Business/Enterprise;
      nos restantes planos essa secção fica vazia (sem inventar dados). */
   const TIPOS_EMAIL = {
-    contratoEnviado:    { badgeKey:'email.badge.contractSent',     titleKey:'email.title.contractSent',     bodyKey:'email.body.contractSent',     ctaKey:'email.cta.signContract',   deadline:true,  doneUpTo:-1, current:0 },
-    contratoAssinado:   { badgeKey:'email.badge.contractSigned',   titleKey:'email.title.contractSigned',   bodyKey:'email.body.contractSigned',   ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:0,  current:1 },
-    briefingDisponivel: { badgeKey:'email.badge.briefingReady',    titleKey:'email.title.briefingReady',    bodyKey:'email.body.briefingReady',    ctaKey:'email.cta.fillBriefing',   deadline:true,  doneUpTo:0,  current:1 },
-    briefingPreenchido: { badgeKey:'email.badge.briefingDone',     titleKey:'email.title.briefingDone',     bodyKey:'email.body.briefingDone',     ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:1,  current:2 },
-    pagamentoPendente:  { badgeKey:'email.badge.paymentDue',       titleKey:'email.title.paymentDue',       bodyKey:'email.body.paymentDue',       ctaKey:'email.cta.payNow',         deadline:true,  doneUpTo:1,  current:2 },
-    pagamentoRecebido:  { badgeKey:'email.badge.paymentReceived',  titleKey:'email.title.paymentReceived',  bodyKey:'email.body.paymentReceived',  ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:2,  current:3 },
-    entregaDisponivel:  { badgeKey:'email.badge.deliveryReady',    titleKey:'email.title.deliveryReady',    bodyKey:'email.body.deliveryReady',    ctaKey:'email.cta.reviewDelivery', deadline:true,  doneUpTo:3,  current:4 },
-    entregaAprovada:    { badgeKey:'email.badge.deliveryApproved', titleKey:'email.title.deliveryApproved', bodyKey:'email.body.deliveryApproved', ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 },
-    projetoConcluido:   { badgeKey:'email.badge.projectDone',      titleKey:'email.title.projectDone',      bodyKey:'email.body.projectDone',      ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1 },
-    acessoPortal:       { badgeKey:'email.badge.portalAccess',     titleKey:'email.title.portalAccess',     bodyKey:'email.body.portalAccess',     ctaKey:'email.cta.openPortal',     deadline:false, doneUpTo:-1, current:-1 },
-    atualizacaoProjeto: { badgeKey:'email.badge.projectUpdate',    titleKey:'email.title.projectUpdate',    bodyKey:'email.body.projectUpdate',    ctaKey:'email.cta.viewUpdate',     deadline:false, doneUpTo:-1, current:-1 },
-    acaoNecessaria:     { badgeKey:'email.badge.actionNeeded',     titleKey:'email.title.actionNeeded',     bodyKey:'email.body.actionNeeded',     ctaKey:'email.cta.resolveNow',     deadline:true,  doneUpTo:-1, current:-1 },
-    eventoAgendado:     { badgeKey:'email.badge.eventScheduled',   titleKey:'email.title.eventScheduled',   bodyKey:'email.body.eventScheduled',   ctaKey:'email.cta.viewEvent',      deadline:false, doneUpTo:1,  current:2 },
-    documentoDisponivel:{ badgeKey:'email.badge.documentAvailable',titleKey:'email.title.documentAvailable',bodyKey:'email.body.documentAvailable',ctaKey:'email.cta.viewDocument',   deadline:false, doneUpTo:-1, current:-1 },
-    avaliacaoSolicitada:{ badgeKey:'email.badge.reviewRequest',    titleKey:'email.title.reviewRequest',    bodyKey:'email.body.reviewRequest',    ctaKey:'email.cta.leaveReview',    deadline:false, doneUpTo:4,  current:-1 }
+    contratoEnviado:    { badgeKey:'email.badge.contractSent',     titleKey:'email.title.contractSent',     bodyKey:'email.body.contractSent',     ctaKey:'email.cta.signContract',   deadline:true,  doneUpTo:-1, current:0, heroIcon:'hero-folder' },
+    contratoAssinado:   { badgeKey:'email.badge.contractSigned',   titleKey:'email.title.contractSigned',   bodyKey:'email.body.contractSigned',   ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:0,  current:1, heroIcon:'hero-check' },
+    briefingDisponivel: { badgeKey:'email.badge.briefingReady',    titleKey:'email.title.briefingReady',    bodyKey:'email.body.briefingReady',    ctaKey:'email.cta.fillBriefing',   deadline:true,  doneUpTo:0,  current:1, heroIcon:'hero-alert' },
+    briefingPreenchido: { badgeKey:'email.badge.briefingDone',     titleKey:'email.title.briefingDone',     bodyKey:'email.body.briefingDone',     ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:1,  current:2, heroIcon:'hero-check' },
+    pagamentoPendente:  { badgeKey:'email.badge.paymentDue',       titleKey:'email.title.paymentDue',       bodyKey:'email.body.paymentDue',       ctaKey:'email.cta.payNow',         deadline:true,  doneUpTo:1,  current:2, heroIcon:'hero-alert' },
+    pagamentoRecebido:  { badgeKey:'email.badge.paymentReceived',  titleKey:'email.title.paymentReceived',  bodyKey:'email.body.paymentReceived',  ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:2,  current:3, heroIcon:'hero-check' },
+    entregaDisponivel:  { badgeKey:'email.badge.deliveryReady',    titleKey:'email.title.deliveryReady',    bodyKey:'email.body.deliveryReady',    ctaKey:'email.cta.reviewDelivery', deadline:true,  doneUpTo:3,  current:4, heroIcon:'hero-box' },
+    entregaAprovada:    { badgeKey:'email.badge.deliveryApproved', titleKey:'email.title.deliveryApproved', bodyKey:'email.body.deliveryApproved', ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1, heroIcon:'hero-check' },
+    projetoConcluido:   { badgeKey:'email.badge.projectDone',      titleKey:'email.title.projectDone',      bodyKey:'email.body.projectDone',      ctaKey:'email.cta.viewProject',    deadline:false, doneUpTo:4,  current:-1, heroIcon:'hero-check' },
+    acessoPortal:       { badgeKey:'email.badge.portalAccess',     titleKey:'email.title.portalAccess',     bodyKey:'email.body.portalAccess',     ctaKey:'email.cta.openPortal',     deadline:false, doneUpTo:-1, current:-1, heroIcon:'hero-folder' },
+    atualizacaoProjeto: { badgeKey:'email.badge.projectUpdate',    titleKey:'email.title.projectUpdate',    bodyKey:'email.body.projectUpdate',    ctaKey:'email.cta.viewUpdate',     deadline:false, doneUpTo:-1, current:-1, heroIcon:'hero-folder' },
+    acaoNecessaria:     { badgeKey:'email.badge.actionNeeded',     titleKey:'email.title.actionNeeded',     bodyKey:'email.body.actionNeeded',     ctaKey:'email.cta.resolveNow',     deadline:true,  doneUpTo:-1, current:-1, heroIcon:'hero-alert' },
+    eventoAgendado:     { badgeKey:'email.badge.eventScheduled',   titleKey:'email.title.eventScheduled',   bodyKey:'email.body.eventScheduled',   ctaKey:'email.cta.viewEvent',      deadline:false, doneUpTo:1,  current:2, heroIcon:'hero-folder' },
+    documentoDisponivel:{ badgeKey:'email.badge.documentAvailable',titleKey:'email.title.documentAvailable',bodyKey:'email.body.documentAvailable',ctaKey:'email.cta.viewDocument',   deadline:false, doneUpTo:-1, current:-1, heroIcon:'hero-folder' },
+    avaliacaoSolicitada:{ badgeKey:'email.badge.reviewRequest',    titleKey:'email.title.reviewRequest',    bodyKey:'email.body.reviewRequest',    ctaKey:'email.cta.leaveReview',    deadline:false, doneUpTo:4,  current:-1, heroIcon:'hero-check' }
   };
   const EMAIL_STAGE_KEYS=['email.stage.contract','email.stage.briefing','email.stage.payment','email.stage.execution','email.stage.delivery'];
   function planPermiteBranding(){ return perfilData.plano==='Business' || perfilData.plano==='Enterprise'; }
@@ -6736,44 +6802,34 @@
   function construirEmailUniversalInline(job, tipo, prazoTexto){
     const cfg=TIPOS_EMAIL[tipo];
     if(!cfg) return '';
-    const VERDE='#15532D', VERDE_CLARO='#EAF3EC', CINZA='#6B6459', LINHA='#E7E2D6';
     const b=dadosNegocioParaEmail();
-    const brandHead = (b.nome||b.email||b.telefone)
-      ? '<tr><td style="padding:26px 24px;border-bottom:1px solid '+LINHA+';text-align:center;font-family:Arial,sans-serif">'+
-        (b.logoUrl?'<img src="'+b.logoUrl+'" width="56" height="56" style="border-radius:50%;object-fit:cover" alt="">':'<div style="width:56px;height:56px;border-radius:50%;background:#111;color:#fff;display:inline-block;line-height:56px;font-size:20px;font-weight:bold">'+escapeHtml((b.nome||'?').charAt(0).toUpperCase())+'</div>')+
-        (b.nome?'<div style="margin-top:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;font-size:15px;color:#111">'+escapeHtml(b.nome)+'</div>':'')+
-        (b.subtitulo?'<div style="font-size:11px;color:'+CINZA+';text-transform:uppercase;letter-spacing:.05em;margin-top:2px">'+escapeHtml(b.subtitulo)+'</div>':'')+
-        ([b.email,b.telefone,b.website].filter(Boolean).length?'<div style="font-size:11.5px;color:'+CINZA+';margin-top:10px">'+[b.email,b.telefone,b.website].filter(Boolean).map(escapeHtml).join(' &nbsp;·&nbsp; ')+'</div>':'')+
+    // Quando o freelancer tem marca própria (plano Business/Enterprise), o
+    // nome/logo dele aparece num bloco de identidade logo abaixo do
+    // cabeçalho — a logo do Pivots continua no cabeçalho verde e no rodapé,
+    // discreta, mantendo a marca da plataforma sempre visível.
+    const brandBlock = (b.nome||b.email||b.telefone)
+      ? '<tr><td style="padding:24px 26px 4px;text-align:center;border-bottom:1px solid '+EMAIL_LINHA_SUAVE+'">'+
+        (b.logoUrl?'<img src="'+b.logoUrl+'" width="52" height="52" style="border-radius:50%;object-fit:cover;display:inline-block" alt="">':'<div class="pv-ink" style="width:52px;height:52px;border-radius:50%;background:'+EMAIL_TINTA+';color:#fff;display:inline-block;line-height:52px;font-size:19px;font-weight:700;font-family:'+EMAIL_FONT+'">'+escapeHtml((b.nome||'?').charAt(0).toUpperCase())+'</div>')+
+        (b.nome?'<div class="pv-ink" style="margin-top:10px;font-weight:700;letter-spacing:.02em;font-size:14px;color:'+EMAIL_TINTA+';font-family:'+EMAIL_FONT+'">'+escapeHtml(b.nome)+'</div>':'')+
+        (b.subtitulo?'<div class="pv-soft" style="font-size:11px;color:'+EMAIL_CINZA+';letter-spacing:.03em;margin-top:2px;font-family:'+EMAIL_FONT+'">'+escapeHtml(b.subtitulo)+'</div>':'')+
+        ([b.email,b.telefone,b.website].filter(Boolean).length?'<div class="pv-soft" style="font-size:11px;color:'+EMAIL_CINZA+';margin-top:10px;padding-bottom:18px;font-family:'+EMAIL_FONT+'">'+[b.email,b.telefone,b.website].filter(Boolean).map(escapeHtml).join(' &nbsp;&middot;&nbsp; ')+'</div>':'<div style="padding-bottom:18px"></div>')+
         '</td></tr>' : '';
-    const deadlineHtml = (cfg.deadline && prazoTexto)
-      ? '<tr><td style="padding:0 24px"><div style="background:'+VERDE_CLARO+';border-radius:10px;padding:12px 14px;margin:14px 0;font-size:12.5px;color:'+CINZA+';font-family:Arial,sans-serif">'+t('email.deadlineLabel')+'<b style="display:block;color:#111;font-size:13.5px">'+escapeHtml(prazoTexto)+'</b></div></td></tr>'
-      : '';
     const detalhes=[];
+    if(cfg.deadline && prazoTexto) detalhes.push([t('email.deadlineLabel').replace(/\s+$/,''), prazoTexto]);
     if(job.date) detalhes.push([t('email.detail.date'), job.date]);
     if(job.local) detalhes.push([t('email.detail.location'), job.local]);
-    const detalhesHtml = detalhes.length
-      ? '<tr><td style="padding:0 24px 18px"><div style="background:#F7F5EE;border-radius:10px;padding:14px 16px;font-family:Arial,sans-serif">'+
-        '<div style="font-size:10.5px;font-weight:700;letter-spacing:.06em;color:'+CINZA+';text-transform:uppercase;margin-bottom:8px">'+t('email.eventDetailsTitle')+'</div>'+
-        detalhes.map(d=>'<div style="display:flex;justify-content:space-between;font-size:13px;color:#111;padding:3px 0"><span style="color:'+CINZA+'">'+escapeHtml(d[0])+'</span><span>'+escapeHtml(d[1])+'</span></div>').join('')+
-        '</div></td></tr>' : '';
-    return '<table role="presentation" width="100%" style="background:'+EMAIL_CREME+';border-collapse:collapse"><tr><td style="padding:32px 16px">'+
-      '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse">'+
-      '<tr><td><table role="presentation" width="100%" style="border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden">'+
-      brandHead+
-      '<tr><td style="padding:26px 28px 4px'+(brandHead?'':' 34px')+'">'+
-        '<span style="display:inline-block;background:'+VERDE_CLARO+';color:'+VERDE+';font-size:11px;font-weight:700;padding:5px 11px;border-radius:999px;font-family:Arial,sans-serif">'+t(cfg.badgeKey)+'</span>'+
-        '<h2 style="font-size:20px;font-weight:800;margin:12px 0 8px;color:'+EMAIL_TINTA+';font-family:Arial,sans-serif;line-height:1.32">'+t(cfg.titleKey)+'</h2>'+
-        '<p style="font-size:13.5px;color:'+CINZA+';margin:0 0 4px;line-height:1.6;font-family:Arial,sans-serif">'+t('email.greeting')+escapeHtml(job.client)+',</p>'+
-        '<p style="font-size:13.5px;color:'+CINZA+';margin:0 0 6px;line-height:1.6;font-family:Arial,sans-serif">'+t(cfg.bodyKey)+'</p>'+
-      '</td></tr>'+
-      deadlineHtml+
-      detalhesHtml+
-      '<tr><td style="padding:16px 32px 4px"><a href="'+escapeHtml(job.contract&&job.contract.link||'#')+'" style="display:block;text-align:center;background:'+VERDE+';color:#fff;font-weight:700;font-size:14.5px;padding:15px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif">'+t(cfg.ctaKey)+'</a></td></tr>'+
-      '<tr><td style="height:22px;line-height:22px;font-size:1px">&nbsp;</td></tr>'+
-      '</table></td></tr>'+
-      '<tr><td style="padding:22px 20px 0;text-align:center;font-family:Arial,sans-serif;font-size:11px;color:'+CINZA+';line-height:1.7">Pivots &nbsp;·&nbsp; '+t('email.poweredBy')+'</td></tr>'+
-      '</table>'+
-      '</td></tr></table>';
+    return emailShellHtml({
+      alerta: false,
+      headerLabel: t(cfg.badgeKey),
+      heroIcon: cfg.heroIcon,
+      extraTop: brandBlock,
+      heading: t(cfg.titleKey),
+      body: t('email.greeting')+escapeHtml(job.client)+'. '+t(cfg.bodyKey),
+      detalhes: detalhes.length ? detalhes : null,
+      ctaText: t(cfg.ctaKey),
+      ctaUrl: (job.contract&&job.contract.link)||'#',
+      footerReason: t('email.poweredBy')
+    });
   }
   /* devolve true se o email foi aceite pelo servidor, false caso contrário.
      Antes engolia qualquer erro em silêncio — o utilizador via "enviado" mas
@@ -6801,26 +6857,26 @@
      dispositivo/local num alerta de segurança, ou o código de recuperação),
      botão de ação opcional e rodapé. */
   const TIPOS_EMAIL_CONTA = {
-    contaCriada:          { badgeKey:'email.badge.accountCreated',        titleKey:'email.title.accountCreated',        bodyKey:'email.body.accountCreated',        ctaKey:'email.cta.accountCreated' },
-    confirmarEmail:       { badgeKey:'email.badge.confirmEmail',          titleKey:'email.title.confirmEmail',          bodyKey:'email.body.confirmEmail',          ctaKey:'email.cta.confirmEmail' },
-    redefinirSenha:       { badgeKey:'email.badge.resetPassword',         titleKey:'email.title.resetPassword',         bodyKey:'email.body.resetPassword',         ctaKey:'email.cta.resetPassword', hintKey:'email.hint.resetPassword' },
-    senhaAlterada:        { badgeKey:'email.badge.passwordChanged',       titleKey:'email.title.passwordChanged',       bodyKey:'email.body.passwordChanged',       ctaKey:'email.cta.passwordChanged', alerta:true },
-    recuperarAcesso:      { badgeKey:'email.badge.recoverAccess',         titleKey:'email.title.recoverAccess',         bodyKey:'email.body.recoverAccess',         codigo:true },
-    assinaturaAtiva:      { badgeKey:'email.badge.subscriptionActive',    titleKey:'email.title.subscriptionActive',    bodyKey:'email.body.subscriptionActive',    ctaKey:'email.cta.subscriptionActive' },
-    renovacaoProxima:     { badgeKey:'email.badge.renewalUpcoming',       titleKey:'email.title.renewalUpcoming',       bodyKey:'email.body.renewalUpcoming',       ctaKey:'email.cta.renewalUpcoming' },
-    pagamentoFalhouConta: { badgeKey:'email.badge.paymentFailed',         titleKey:'email.title.paymentFailed',         bodyKey:'email.body.paymentFailed',         ctaKey:'email.cta.paymentFailed', alerta:true },
-    planoAlterado:        { badgeKey:'email.badge.planChanged',          titleKey:'email.title.planChanged',           bodyKey:'email.body.planChanged',           ctaKey:'email.cta.planChanged' },
-    assinaturaCancelada:  { badgeKey:'email.badge.subscriptionCancelled', titleKey:'email.title.subscriptionCancelled', bodyKey:'email.body.subscriptionCancelled', ctaKey:'email.cta.subscriptionCancelled' },
+    contaCriada:          { badgeKey:'email.badge.accountCreated',        titleKey:'email.title.accountCreated',        bodyKey:'email.body.accountCreated',        ctaKey:'email.cta.accountCreated', heroIcon:'hero-check' },
+    confirmarEmail:       { badgeKey:'email.badge.confirmEmail',          titleKey:'email.title.confirmEmail',          bodyKey:'email.body.confirmEmail',          ctaKey:'email.cta.confirmEmail', heroIcon:'hero-mailcheck' },
+    redefinirSenha:       { badgeKey:'email.badge.resetPassword',         titleKey:'email.title.resetPassword',         bodyKey:'email.body.resetPassword',         ctaKey:'email.cta.resetPassword', hintKey:'email.hint.resetPassword', heroIcon:'hero-lock' },
+    senhaAlterada:        { badgeKey:'email.badge.passwordChanged',       titleKey:'email.title.passwordChanged',       bodyKey:'email.body.passwordChanged',       ctaKey:'email.cta.passwordChanged', alerta:true, heroIcon:'hero-alert' },
+    recuperarAcesso:      { badgeKey:'email.badge.recoverAccess',         titleKey:'email.title.recoverAccess',         bodyKey:'email.body.recoverAccess',         codigo:true, heroIcon:'hero-lock' },
+    assinaturaAtiva:      { badgeKey:'email.badge.subscriptionActive',    titleKey:'email.title.subscriptionActive',    bodyKey:'email.body.subscriptionActive',    ctaKey:'email.cta.subscriptionActive', heroIcon:'hero-check' },
+    renovacaoProxima:     { badgeKey:'email.badge.renewalUpcoming',       titleKey:'email.title.renewalUpcoming',       bodyKey:'email.body.renewalUpcoming',       ctaKey:'email.cta.renewalUpcoming', heroIcon:'hero-folder' },
+    pagamentoFalhouConta: { badgeKey:'email.badge.paymentFailed',         titleKey:'email.title.paymentFailed',         bodyKey:'email.body.paymentFailed',         ctaKey:'email.cta.paymentFailed', alerta:true, heroIcon:'hero-alert' },
+    planoAlterado:        { badgeKey:'email.badge.planChanged',          titleKey:'email.title.planChanged',           bodyKey:'email.body.planChanged',           ctaKey:'email.cta.planChanged', heroIcon:'hero-check' },
+    assinaturaCancelada:  { badgeKey:'email.badge.subscriptionCancelled', titleKey:'email.title.subscriptionCancelled', bodyKey:'email.body.subscriptionCancelled', ctaKey:'email.cta.subscriptionCancelled', heroIcon:'hero-folder' },
     conviteEquipe:        { badgeKey:'email.badge.teamInvite',           titleKey:'email.title.teamInvite',            bodyKey:'email.body.teamInvite',            ctaKey:'email.cta.teamInvite', features:['team','folder','bell'] },
-    conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted' },
+    conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted', heroIcon:'hero-check' },
     colaboradorJobConvite:  { badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabInvite', bodyKey:'email.body.jobCollabInvite', ctaKey:'email.cta.jobCollabInvite', features:['team','folder','bell'] },
     colaboradorJobAdicionado:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabAdded',  bodyKey:'email.body.jobCollabAdded',  ctaKey:'email.cta.jobCollabAdded', features:['team','folder','bell'] },
-    novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true },
-    alteracaoCritica:     { badgeKey:'email.badge.criticalChange',       titleKey:'email.title.criticalChange',        bodyKey:'email.body.criticalChange',        ctaKey:'email.cta.criticalChange', alerta:true },
-    atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true },
-    novidadePlataforma:   { badgeKey:'email.badge.platformNews',         titleKey:'email.title.platformNews',          bodyKey:'email.body.platformNews',          ctaKey:'email.cta.platformNews' },
-    manutencaoProgramada: { badgeKey:'email.badge.maintenance',          titleKey:'email.title.maintenance',           bodyKey:'email.body.maintenance' },
-    alteracaoTermos:      { badgeKey:'email.badge.termsChange',          titleKey:'email.title.termsChange',           bodyKey:'email.body.termsChange',           ctaKey:'email.cta.termsChange' }
+    novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true, heroIcon:'hero-alert' },
+    alteracaoCritica:     { badgeKey:'email.badge.criticalChange',       titleKey:'email.title.criticalChange',        bodyKey:'email.body.criticalChange',        ctaKey:'email.cta.criticalChange', alerta:true, heroIcon:'hero-alert' },
+    atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true, heroIcon:'hero-alert' },
+    novidadePlataforma:   { badgeKey:'email.badge.platformNews',         titleKey:'email.title.platformNews',          bodyKey:'email.body.platformNews',          ctaKey:'email.cta.platformNews', heroIcon:'hero-folder' },
+    manutencaoProgramada: { badgeKey:'email.badge.maintenance',          titleKey:'email.title.maintenance',           bodyKey:'email.body.maintenance', heroIcon:'hero-alert' },
+    alteracaoTermos:      { badgeKey:'email.badge.termsChange',          titleKey:'email.title.termsChange',           bodyKey:'email.body.termsChange',           ctaKey:'email.cta.termsChange', heroIcon:'hero-folder' }
   };
   /* dados = { nome, eyebrow, avatarLetras, avatarCor, bodyOverride, ctaUrl, codigo,
      detalhes:[[label,valor],...] } — todos opcionais. eyebrow/avatarLetras normalmente
@@ -6834,6 +6890,8 @@
     const corpo = dados.bodyOverride || (t('email.greetingGeneric')+', '+nomeSaudacao+'. '+t(cfg.bodyKey));
     return emailShellHtml({
       alerta: !!cfg.alerta,
+      headerLabel: t(cfg.badgeKey),
+      heroIcon: cfg.heroIcon,
       eyebrow: dados.eyebrow || null,
       heading: t(cfg.titleKey),
       body: corpo,
