@@ -8,7 +8,7 @@
  * Entrega do email: em vez de deixar o Supabase enviar o convite pelo seu SMTP
  * embutido (que só funciona se houver SMTP personalizado configurado no projeto
  * Supabase — caso contrário os convites simplesmente não chegam), geramos o link
- * de convite com a admin API e enviamos nós mesmos o email, com marca Pivot,
+ * de convite com a admin API e enviamos nós mesmos o email, com marca Pivots,
  * pelo Resend — o mesmo canal já usado para lembretes e emails ao cliente.
  * Usa fetch nativo — sem dependências novas.
  */
@@ -31,53 +31,56 @@ function escaparHtml(s) {
   return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
+// Mesmo sistema visual partilhado com os emails da app (ver emailShellHtml em
+// index.html): logo do Pivots sempre no cabeçalho verde, avatar de quem
+// convidou a sobrepor a fronteira, botão em pílula, rodapé com aviso legal.
+const EMAIL_LOGO_URL = 'https://pivots.app/email/logo-square.png';
+const EMAIL_CREME = '#F3F1EA', EMAIL_VERDE = '#15532D', EMAIL_VERDE_CLARO = '#EAF3EC',
+  EMAIL_CINZA = '#6B6459', EMAIL_TINTA = '#161614', EMAIL_LINHA = '#E7E2D6';
+
 function construirEmailConviteHtml(actionLink, papel, quemConvidou, empresa) {
-  const VERDE = '#15532D', VERDE_CLARO = '#EAF3EC', CINZA = '#6B6459', LINHA = '#E7E2D6', PAPEL_FUNDO = '#FAF9F6';
   const papelLabel = papel === 'Editor' ? 'Editor' : papel === 'Viewer' ? 'Visualizador' : papel;
   const nomeConvidador = quemConvidou || 'Um administrador';
   const nomeEmpresa = empresa || null;
   const fraseConvite = nomeEmpresa
-    ? '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa da <b>' + escaparHtml(nomeEmpresa) + '</b> no Pivot, como <b>' + papelLabel + '</b>.'
-    : '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa dele/dela no Pivot, como <b>' + papelLabel + '</b>.';
+    ? '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa da <b>' + escaparHtml(nomeEmpresa) + '</b> no Pivots, como <b>' + papelLabel + '</b>.'
+    : '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa dele/dela no Pivots, como <b>' + papelLabel + '</b>.';
   const avatarCorConvidador = corAvatar(nomeConvidador);
   const avatarLetrasConvidador = iniciais(nomeConvidador);
-  const avatarHtml = (cor, letras, legenda) =>
-    '<td style="text-align:center;padding:0 12px">' +
-      '<div style="width:52px;height:52px;border-radius:50%;background:' + cor + ';color:#fff;font-size:18px;font-weight:700;line-height:52px;text-align:center;margin:0 auto 6px;font-family:Arial,sans-serif">' + escaparHtml(letras) + '</div>' +
-      '<div style="font-size:10px;color:' + CINZA + ';max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escaparHtml(legenda) + '</div>' +
-    '</td>';
-  // quando há empresa, mostra os dois avatares (empresa → quem convidou) para
-  // deixar claro quem está por trás do convite; sem empresa, só o de quem convidou.
-  const blocoAvatares = nomeEmpresa
-    ? avatarHtml(corAvatar(nomeEmpresa), iniciais(nomeEmpresa), nomeEmpresa) +
-      '<td style="text-align:center;padding:0 4px;font-size:15px;color:' + CINZA + ';vertical-align:middle;padding-bottom:22px">→</td>' +
-      avatarHtml(avatarCorConvidador, avatarLetrasConvidador, nomeConvidador)
-    : avatarHtml(avatarCorConvidador, avatarLetrasConvidador, nomeConvidador);
 
-  return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid ' + LINHA + ';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">' +
-    '<tr><td style="padding:24px 24px;text-align:center;background:' + VERDE + '">' +
-      '<div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Pivot</div>' +
-      '<div style="color:' + VERDE_CLARO + ';font-size:11px;margin-top:3px;letter-spacing:.03em">Gestão de trabalhos, contratos e pagamentos</div>' +
-    '</td></tr>' +
-    '<tr><td style="padding:26px 24px 0;text-align:center">' +
-      '<table role="presentation" style="margin:0 auto"><tr>' + blocoAvatares + '</tr></table>' +
-    '</td></tr>' +
-    '<tr><td style="padding:0 24px 0;text-align:center">' +
-      '<span style="display:inline-block;background:' + VERDE_CLARO + ';color:' + VERDE + ';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">Convite para equipa</span>' +
-      '<h2 style="font-size:19px;font-weight:700;margin:12px 0 8px;color:#111">Foi convidado para uma equipa no Pivot</h2>' +
-      '<p style="font-size:13.5px;color:' + CINZA + ';margin:0 0 6px;line-height:1.55">' + fraseConvite + '</p>' +
-    '</td></tr>' +
-    '<tr><td style="padding:18px 24px 8px"><a href="' + actionLink + '" style="display:block;text-align:center;background:' + VERDE + ';color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px;text-decoration:none">Aceitar convite e criar acesso</a></td></tr>' +
-    '<tr><td style="padding:4px 24px 22px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:' + CINZA + '">O link confirma o seu email automaticamente. Se não esperava este convite, pode ignorar esta mensagem com segurança — nenhuma conta é criada sem clicar no link.</td></tr>' +
-    '<tr><td style="padding:16px 24px;background:' + PAPEL_FUNDO + ';border-top:1px solid ' + LINHA + '">' +
-      '<table role="presentation" width="100%"><tr>' +
-        '<td style="font-size:11px;color:' + CINZA + ';line-height:1.6">' +
-          '<b style="color:#111">Pivot</b> — plataforma de gestão de trabalhos para profissionais autónomos e agências.<br>' +
-          'Este é um email automático de convite de equipa; não é necessário responder.' +
-        '</td>' +
-      '</tr></table>' +
-    '</td></tr>' +
-    '</table>';
+  // avatar único sobreposto quando não há empresa; par empresa→convidador
+  // dentro do mesmo círculo sobreposto quando há, para deixar claro quem
+  // está por trás do convite sem fugir ao estilo dos outros emails.
+  const avatarBlock = nomeEmpresa
+    ? '<tr><td style="background:' + EMAIL_VERDE + ';padding:0;text-align:center;line-height:0;font-size:0">' +
+        '<table role="presentation" align="center" style="margin:0 auto -34px"><tr>' +
+          '<td style="width:56px;height:56px;border-radius:50%;background:' + corAvatar(nomeEmpresa) + ';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#fff">' + escaparHtml(iniciais(nomeEmpresa)) + '</td>' +
+          '<td style="width:20px;text-align:center;vertical-align:middle;color:#fff;font-size:13px">&rarr;</td>' +
+          '<td style="width:56px;height:56px;border-radius:50%;background:' + avatarCorConvidador + ';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:18px;font-weight:700;color:#fff">' + escaparHtml(avatarLetrasConvidador) + '</td>' +
+        '</tr></table>' +
+      '</td></tr>'
+    : '<tr><td style="background:' + EMAIL_VERDE + ';padding:0;text-align:center;line-height:0;font-size:0">' +
+        '<table role="presentation" align="center" style="margin:0 auto -34px"><tr><td style="width:68px;height:68px;border-radius:50%;background:' + avatarCorConvidador + ';border:4px solid #fff;text-align:center;vertical-align:middle;font-family:Arial,sans-serif;font-size:22px;font-weight:700;color:#fff">' + escaparHtml(avatarLetrasConvidador) + '</td></tr></table>' +
+      '</td></tr>';
+
+  return '<table role="presentation" width="100%" style="background:' + EMAIL_CREME + ';border-collapse:collapse"><tr><td style="padding:32px 16px">' +
+    '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse">' +
+      '<tr><td style="text-align:center;padding-bottom:20px;font-family:Arial,sans-serif"><span style="font-size:19px;font-weight:800;letter-spacing:.05em;color:' + EMAIL_VERDE + '">PIVOTS</span></td></tr>' +
+      '<tr><td><table role="presentation" width="100%" style="border-collapse:collapse;background:#fff;border-radius:18px;overflow:hidden">' +
+        '<tr><td style="background:' + EMAIL_VERDE + ';padding:26px 24px 40px;text-align:center"><img src="' + EMAIL_LOGO_URL + '" width="72" height="72" style="border-radius:16px;background:#fff;display:inline-block" alt="Pivots"></td></tr>' +
+        avatarBlock +
+        '<tr><td style="padding:34px 28px 4px;text-align:center">' +
+          '<div style="font-size:13px;font-weight:700;color:' + EMAIL_VERDE + ';margin:0 0 6px;font-family:Arial,sans-serif">' + escaparHtml(nomeConvidador) + '</div>' +
+          '<h2 style="font-size:20px;font-weight:800;margin:0 0 10px;color:' + EMAIL_TINTA + ';font-family:Arial,sans-serif;line-height:1.32">Você foi convidado para uma equipa no Pivots</h2>' +
+          '<p style="font-size:13.5px;color:' + EMAIL_CINZA + ';margin:0 0 4px;line-height:1.6;font-family:Arial,sans-serif">' + fraseConvite + '</p>' +
+        '</td></tr>' +
+        '<tr><td style="padding:16px 32px 4px"><a href="' + actionLink + '" style="display:block;text-align:center;background:' + EMAIL_VERDE + ';color:#fff;font-weight:700;font-size:14.5px;padding:15px;border-radius:999px;text-decoration:none;font-family:Arial,sans-serif">Aceitar convite</a></td></tr>' +
+        '<tr><td style="padding:0 26px 4px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:' + EMAIL_CINZA + '">O link confirma o seu email automaticamente. Se não esperava este convite, pode ignorar esta mensagem com segurança.</td></tr>' +
+        '<tr><td style="height:22px;line-height:22px;font-size:1px">&nbsp;</td></tr>' +
+      '</table></td></tr>' +
+      '<tr><td style="padding:22px 20px 0;text-align:center;font-family:Arial,sans-serif;font-size:11px;color:' + EMAIL_CINZA + ';line-height:1.7">Pivots &copy; ' + new Date().getFullYear() + ' &nbsp;&middot;&nbsp; Todos os direitos reservados<br>Este é um email automático de convite de equipa, não é necessário responder.</td></tr>' +
+    '</table>' +
+  '</td></tr></table>';
 }
 
 module.exports = async (req, res) => {
@@ -206,7 +209,7 @@ module.exports = async (req, res) => {
           body: JSON.stringify({
             from: FROM_EMAIL,
             to: email,
-            subject: (quemConvidou ? quemConvidou + ' convidou-o' : 'Convidaram-no') + ' para uma equipa no Pivot',
+            subject: (quemConvidou ? quemConvidou + ' convidou-o' : 'Convidaram-no') + ' para uma equipa no Pivots',
             html: construirEmailConviteHtml(actionLink, papel, quemConvidou, nomeEmpresa)
           })
         });
