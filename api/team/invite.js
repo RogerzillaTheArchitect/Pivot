@@ -39,8 +39,20 @@ function construirEmailConviteHtml(actionLink, papel, quemConvidou, empresa) {
   const fraseConvite = nomeEmpresa
     ? '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa da <b>' + escaparHtml(nomeEmpresa) + '</b> no Pivot, como <b>' + papelLabel + '</b>.'
     : '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa dele/dela no Pivot, como <b>' + papelLabel + '</b>.';
-  const avatarCor = corAvatar(nomeConvidador);
-  const avatarLetras = iniciais(nomeConvidador);
+  const avatarCorConvidador = corAvatar(nomeConvidador);
+  const avatarLetrasConvidador = iniciais(nomeConvidador);
+  const avatarHtml = (cor, letras, legenda) =>
+    '<td style="text-align:center;padding:0 12px">' +
+      '<div style="width:52px;height:52px;border-radius:50%;background:' + cor + ';color:#fff;font-size:18px;font-weight:700;line-height:52px;text-align:center;margin:0 auto 6px;font-family:Arial,sans-serif">' + escaparHtml(letras) + '</div>' +
+      '<div style="font-size:10px;color:' + CINZA + ';max-width:96px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + escaparHtml(legenda) + '</div>' +
+    '</td>';
+  // quando há empresa, mostra os dois avatares (empresa → quem convidou) para
+  // deixar claro quem está por trás do convite; sem empresa, só o de quem convidou.
+  const blocoAvatares = nomeEmpresa
+    ? avatarHtml(corAvatar(nomeEmpresa), iniciais(nomeEmpresa), nomeEmpresa) +
+      '<td style="text-align:center;padding:0 4px;font-size:15px;color:' + CINZA + ';vertical-align:middle;padding-bottom:22px">→</td>' +
+      avatarHtml(avatarCorConvidador, avatarLetrasConvidador, nomeConvidador)
+    : avatarHtml(avatarCorConvidador, avatarLetrasConvidador, nomeConvidador);
 
   return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid ' + LINHA + ';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">' +
     '<tr><td style="padding:24px 24px;text-align:center;background:' + VERDE + '">' +
@@ -48,7 +60,7 @@ function construirEmailConviteHtml(actionLink, papel, quemConvidou, empresa) {
       '<div style="color:' + VERDE_CLARO + ';font-size:11px;margin-top:3px;letter-spacing:.03em">Gestão de trabalhos, contratos e pagamentos</div>' +
     '</td></tr>' +
     '<tr><td style="padding:26px 24px 0;text-align:center">' +
-      '<div style="width:56px;height:56px;border-radius:50%;background:' + avatarCor + ';color:#fff;font-size:20px;font-weight:700;line-height:56px;text-align:center;margin:0 auto 14px;font-family:Arial,sans-serif">' + escaparHtml(avatarLetras) + '</div>' +
+      '<table role="presentation" style="margin:0 auto"><tr>' + blocoAvatares + '</tr></table>' +
     '</td></tr>' +
     '<tr><td style="padding:0 24px 0;text-align:center">' +
       '<span style="display:inline-block;background:' + VERDE_CLARO + ';color:' + VERDE + ';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">Convite para equipa</span>' +
