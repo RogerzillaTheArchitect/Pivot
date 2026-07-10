@@ -869,6 +869,31 @@
   .exp-card .val .fx{display:flex;gap:10px}
   .exp-card .val .fx svg{width:15px;height:15px;color:var(--neutral);cursor:pointer}
 
+  /* ===== BIBLIOTECA — filtros sanfona + cards ===== */
+  .bib-acc{border:1px solid var(--line-soft);border-radius:12px;margin-bottom:8px;overflow:hidden;background:var(--glass-7)}
+  .bib-acc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink)}
+  .bib-acc-head .cnt{font-size:11px;color:var(--brand);font-weight:600;margin-left:auto;margin-right:8px}
+  .bib-acc-head svg{width:16px;height:16px;transition:transform .2s;flex:none}
+  .bib-acc.open .bib-acc-head svg{transform:rotate(180deg)}
+  .bib-acc-body{display:none;flex-wrap:wrap;gap:7px;padding:0 14px 13px}
+  .bib-acc.open .bib-acc-body{display:flex}
+  .bib-fchip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;transition:all .15s}
+  .bib-fchip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .bib-card{position:relative;border:1px solid var(--line-soft);border-radius:13px;padding:14px;margin-bottom:9px;background:var(--paper);cursor:pointer;transition:border-color .15s}
+  .bib-card:hover{border-color:var(--brand)}
+  .bib-card .bc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .bib-card .bc-title{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .bib-card .bc-desc{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.45}
+  .bib-card .bc-meta{display:flex;align-items:center;gap:12px;margin-top:9px;font-size:11.5px;color:var(--neutral);flex-wrap:wrap}
+  .bib-card .bc-meta .star{color:#E0A93B}
+  .bib-fav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--neutral)}
+  .bib-fav svg{width:17px;height:17px}
+  .bib-fav.on{color:#E0A93B}
+  .bib-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
+  .bib-tag.tipo{background:var(--btn-06);color:var(--ink-soft)}
+  .bib-tag.verif{background:#E7F3EC;color:#15532D;display:inline-flex;align-items:center;gap:3px}
+  .bib-tag.verif svg{width:10px;height:10px}
+
   /* ===== PESQUISA ===== */
   .searchbox{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);
     border-radius:13px;padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
@@ -1719,24 +1744,27 @@
 
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
-        <div class="page-head"><div class="page-title" data-t="nav.libraries">Bibliotecas</div></div>
-
-        <div class="plist" style="margin-bottom:20px">
-          <div class="prow" onclick="abrirBibliotecaJuridica()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><div class="t" data-t="profile.legalLibrary">Biblioteca jurídica</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="abrirContratosPorProfissao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg><div class="t" data-t="legal.contractsByProfession">Contratos por profissão</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="openSheet();pushPanel('importar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div class="t" data-t="sheet.import">Importar</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="page-head">
+          <div class="page-title" data-t="nav.libraries">Bibliotecas</div>
+          <span class="inline-link" style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px" onclick="abrirCriarModeloBiblioteca()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M12 5v14M5 12h14"/></svg><span data-t="library.create">criar</span></span>
         </div>
 
-        <div class="plabel" data-t="explore.templates">Seus modelos</div>
-        <div class="filter-row" id="explore-filter-row">
-          <div class="chip on" data-cat="todos" onclick="filterExplorar(this,'todos')"><span data-t="explore.filter.all">Todos</span></div>
-          <div class="chip" data-cat="contratos" onclick="filterExplorar(this,'contratos')"><span data-t="explore.filter.contracts">Contratos</span></div>
-          <div class="chip" data-cat="cronogramas" onclick="filterExplorar(this,'cronogramas')"><span data-t="explore.filter.timelines">Cronogramas</span></div>
-          <div class="chip" data-cat="checklists" onclick="filterExplorar(this,'checklists')"><span data-t="explore.filter.checklists">Checklists</span></div>
-          <div class="chip" data-cat="briefings" onclick="filterExplorar(this,'briefings')"><span data-t="explore.filter.briefings">Briefings</span></div>
+        <div class="searchbox" style="margin:8px 0 12px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+          <input id="bib-busca" placeholder="Explorar biblioteca…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
         </div>
-        <div id="explore-lista"></div>
-        <p style="font-size:13px;color:var(--neutral);margin-top:6px"><span data-t="explore.empty">Em crescimento. Sugere um modelo que gostarias de ver aqui.</span></p>
+
+        <div class="filter-row" id="bib-origem-row" style="margin-bottom:8px">
+          <div class="chip on" data-org="todos" onclick="setBibOrigem(this,'todos')"><span data-t="library.origin.all">Todos</span></div>
+          <div class="chip" data-org="oficial" onclick="setBibOrigem(this,'oficial')"><span data-t="library.origin.official">Oficial Pivot</span></div>
+          <div class="chip" data-org="comunidade" onclick="setBibOrigem(this,'comunidade')"><span data-t="library.origin.community">Comunidade</span></div>
+          <div class="chip" data-org="populares" onclick="setBibOrigem(this,'populares')"><span data-t="library.origin.popular">Populares</span></div>
+          <div class="chip" data-org="favoritos" onclick="setBibOrigem(this,'favoritos')"><span data-t="library.origin.saved">Favoritos ★</span></div>
+        </div>
+
+        <div id="bib-accordions" style="margin-bottom:12px"></div>
+        <div id="bib-lista"></div>
+        <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
       </section>
 
       <!-- ============ CONTATOS (clientes + colaboradores) ============ -->
@@ -2901,6 +2929,35 @@
     "explore.editableModel": { pt:"Modelo · editável", en:"Template · editable", es:"Modelo · editable" },
     "explore.empty": { pt:"Em crescimento. Sugere um modelo que gostarias de ver aqui.", en:"Growing. Suggest a template you’d like to see here.", es:"En crecimiento. Sugiere una plantilla que te gustaría ver aquí." },
     "explore.library": { pt:"Biblioteca Pivot", en:"Pivot Library", es:"Biblioteca Pivot" },
+    "library.create": { pt:"criar", en:"create", es:"crear" },
+    "library.searchPlaceholder": { pt:"Explorar biblioteca…", en:"Explore library…", es:"Explorar biblioteca…" },
+    "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
+    "library.origin.official": { pt:"Oficial Pivot", en:"Official Pivot", es:"Oficial Pivot" },
+    "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
+    "library.origin.popular": { pt:"Populares", en:"Popular", es:"Populares" },
+    "library.origin.saved": { pt:"Favoritos ★", en:"Saved ★", es:"Favoritos ★" },
+    "library.empty": { pt:"Nada encontrado. Tenta outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
+    "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
+    "library.facet.profession": { pt:"Profissão", en:"Profession", es:"Profesión" },
+    "library.facet.event": { pt:"Evento", en:"Event", es:"Evento" },
+    "library.facet.section": { pt:"Seções", en:"Sections", es:"Secciones" },
+    "library.verified": { pt:"Verificado", en:"Verified", es:"Verificado" },
+    "library.uses": { pt:"usos", en:"uses", es:"usos" },
+    "library.by": { pt:"por ", en:"by ", es:"por " },
+    "library.use": { pt:"Usar este modelo", en:"Use this template", es:"Usar esta plantilla" },
+    "library.favorited": { pt:"Guardado nos teus favoritos", en:"Saved to your favorites", es:"Guardado en tus favoritos" },
+    "library.unfavorited": { pt:"Removido dos favoritos", en:"Removed from favorites", es:"Eliminado de favoritos" },
+    "library.verifiedNote": { pt:"Este contrato tem validação de advogados reais.", en:"This contract has been validated by real lawyers.", es:"Este contrato tiene validación de abogados reales." },
+    "library.builderTitle": { pt:"Criar modelo", en:"Create template", es:"Crear plantilla" },
+    "library.builderIntro": { pt:"Começa em branco ou importa blocos e modelos da biblioteca para montar o teu contrato.", en:"Start blank or import blocks and templates from the library to build your contract.", es:"Empieza en blanco o importa bloques y modelos de la biblioteca para montar tu contrato." },
+    "library.builderBlocks": { pt:"Importar blocos", en:"Import blocks", es:"Importar bloques" },
+    "library.builderModels": { pt:"Importar modelo completo", en:"Import full template", es:"Importar plantilla completa" },
+    "library.builderName": { pt:"Nome do modelo", en:"Template name", es:"Nombre de la plantilla" },
+    "library.builderEmpty": { pt:"Ainda sem blocos. Usa a busca acima para adicionar.", en:"No blocks yet. Use the search above to add.", es:"Aún sin bloques. Usa la búsqueda de arriba para añadir." },
+    "library.builderSave": { pt:"Guardar na minha biblioteca", en:"Save to my library", es:"Guardar en mi biblioteca" },
+    "library.savedTemplate": { pt:"Modelo guardado na tua biblioteca.", en:"Template saved to your library.", es:"Plantilla guardada en tu biblioteca." },
+    "library.addFav": { pt:"☆ Favoritar", en:"☆ Save", es:"☆ Guardar" },
+    "library.removeFav": { pt:"★ Remover dos favoritos", en:"★ Remove from saved", es:"★ Quitar de guardados" },
     "explore.libraryHint": { pt:"Modelos partilhados por outros profissionais", en:"Templates shared by other professionals", es:"Plantillas compartidas por otros profesionales" },
     "explore.saveCollection": { pt:"Guardar coleção", en:"Save collection", es:"Guardar colección" },
     "explore.saveTemplate": { pt:"Guardar modelo →", en:"Save template →", es:"Guardar plantilla →" },
@@ -3818,7 +3875,7 @@
       if(vid==='detalhe'&&typeof currentJobId!=='undefined'&&currentJobId&&typeof jobsData!=='undefined'&&jobsData[currentJobId]&&typeof renderJobDetailDynamic==='function')renderJobDetailDynamic(currentJobId);
       if(vid==='builder'&&typeof renderBuilder==='function')renderBuilder();
       if(vid==='equipa'&&typeof renderEquipaView==='function')renderEquipaView();
-      if(vid==='bibliotecas'&&typeof renderExplorar==='function')renderExplorar();
+      if(vid==='bibliotecas'&&typeof renderBiblioteca==='function')renderBiblioteca();
       if(vid==='relatorios'&&typeof renderRelatorios==='function')renderRelatorios();
     }
     if(document.getElementById('v-trabalhos').classList.contains('active')){
@@ -3846,7 +3903,7 @@
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); }
     if(v==='equipa') renderEquipaView();
-    if(v==='bibliotecas') renderExplorar();
+    if(v==='bibliotecas') renderBiblioteca();
     if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
@@ -7856,20 +7913,159 @@
     {cat:'briefings', tituloKey:'explore.commercialBriefing', subKey:'explore.editableModel', onclick:"openSheet();abrirListaModelo('briefing')"},
     {cat:'cronogramas', tituloKey:'explore.sampleTimeline', subKey:'explore.editableFlow', onclick:"openSheet();abrirListaModelo('cronograma')"}
   ];
-  let explorarFiltroAtual='todos';
-  function filterExplorar(el, cat){
-    document.querySelectorAll('#explore-filter-row .chip').forEach(c=>c.classList.remove('on'));
-    el.classList.add('on');
-    explorarFiltroAtual=cat;
-    renderExplorar();
+  /* ===================== BIBLIOTECA UNIFICADA =====================
+     Junta numa só busca tudo o que já existia disperso: os contratos da
+     Biblioteca Pivot (BIBLIOTECA_OFICIAL, autoria da comunidade), os blocos
+     jurídicos (LEGAL_BLOCKS) e os modelos de checklist/briefing/cronograma
+     (CATALOGO_EXPLORAR). A pessoa busca por texto e afina por facetas. */
+  const SECAO_BLOCO_NOMES={objeto:'Objeto',pagamento:'Pagamento',prazo:'Prazo',cancelamento:'Cancelamento',
+    propriedade:'Direitos de imagem',confidencialidade:'Confidencialidade',responsabilidade:'Responsabilidade',
+    entrega:'Entrega',garantia:'Garantia',foro:'Foro e lei',geral:'Cláusulas gerais'};
+  function bibNomeSecaoBloco(cat){ return SECAO_BLOCO_NOMES[cat] || (cat? cat.charAt(0).toUpperCase()+cat.slice(1) : 'Cláusulas'); }
+  function bibProfissao(it){
+    const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))).toLowerCase();
+    if(/vídeo|video|drone|aftermovie|videoclipe|podcast/.test(s)) return 'Videomaker';
+    if(/casamento|wedding/.test(s)) return 'Wedding planner';
+    if(/design|conteúdo|social/.test(s)) return 'Designer';
+    if(/fotograf|retrato|imobili/.test(s)) return 'Fotógrafo';
+    return null;
   }
-  function renderExplorar(){
-    const wrap=document.getElementById('explore-lista');
+  function bibEvento(it){
+    const s=((it.titulo||'')+' '+((it.tags||[]).join(' '))+' '+(it.categoria||'')).toLowerCase();
+    if(/boudoir/.test(s)) return 'Boudoir';
+    if(/pré wedding|pre wedding|noivado/.test(s)) return 'Pré wedding';
+    if(/casamento|wedding|elopement/.test(s)) return 'Casamento';
+    if(/podcast/.test(s)) return 'Podcast';
+    if(/palestra|conferência|conferencia|talk/.test(s)) return 'Palestra';
+    if(/corporativo|workshop|empresa|conferência|evento/.test(s)) return 'Corporativo';
+    if(/sessão|sessao|ensaio|retrato|família|familia|produto/.test(s)) return 'Sessão fotográfica';
+    return null;
+  }
+  let _catalogoBibCache=null;
+  function catalogoBiblioteca(){
+    if(_catalogoBibCache) return _catalogoBibCache;
+    const out=[];
+    BIBLIOTECA_OFICIAL.forEach(b=>out.push({
+      id:'of:'+b.id, titulo:b.titulo, tipo:b.tipo, categoria:b.categoria, autor:b.autor,
+      avaliacao:b.avaliacao, usos:b.usos, desc:b.desc, tags:b.tags||[], origem:'comunidade',
+      verificado:(b.avaliacao||0)>=4.7,
+      profissao:bibProfissao(b), evento:bibEvento(b),
+      secao: b.tipo==='Informações do Cliente' ? 'Informações do cliente' : null
+    }));
+    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>out.push({
+      id:'bl:'+bl.id, titulo:lbl3(bl.nome), tipo:'Bloco', categoria:'Cláusulas', autor:'Pivot Legal',
+      avaliacao:null, usos:null, desc:lbl3(bl.resumo), tags:bl.industry_tags||[], origem:'oficial',
+      verificado: !bl.requires_local_review, texto:lbl3(bl.texto),
+      profissao:null, evento:null, secao: bibNomeSecaoBloco(bl.categoria)
+    }));
+    CATALOGO_EXPLORAR.forEach(m=>{
+      const tipo = m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Briefing':m.cat==='cronogramas'?'Cronograma':'Contrato';
+      out.push({
+        id:'ex:'+m.cat, titulo:t(m.tituloKey), tipo, categoria:'Modelos', autor:'Pivot',
+        avaliacao:null, usos:null, desc:t(m.subKey), tags:[], origem:'oficial', verificado:false, onclick:m.onclick,
+        profissao:null, evento:null,
+        secao: m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Informações do cliente':m.cat==='cronogramas'?'Cronograma':null
+      });
+    });
+    _catalogoBibCache=out;
+    return out;
+  }
+  let bibOrigem='todos';
+  let bibFacetSel={categoria:null, profissao:null, evento:null, secao:null};
+  let bibFavoritos=new Set();
+  function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
+  async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
+  function setBibOrigem(el, org){
+    document.querySelectorAll('#bib-origem-row .chip').forEach(c=>c.classList.remove('on'));
+    el.classList.add('on');
+    bibOrigem=org;
+    renderBiblioteca();
+  }
+  function toggleBibFacet(faceta, valor){
+    bibFacetSel[faceta] = bibFacetSel[faceta]===valor ? null : valor;
+    renderBiblioteca();
+  }
+  function toggleBibAcc(el){ el.classList.toggle('open'); }
+  function bibItensFiltradosPorOrigem(){
+    const todos=catalogoBiblioteca();
+    if(bibOrigem==='favoritos') return todos.filter(i=>bibFavoritos.has(i.id));
+    if(bibOrigem==='populares') return todos.filter(i=>(i.usos||0)>=150);
+    if(bibOrigem==='oficial'||bibOrigem==='comunidade') return todos.filter(i=>i.origem===bibOrigem);
+    return todos;
+  }
+  function renderBibAccordions(){
+    const wrap=document.getElementById('bib-accordions');
     if(!wrap) return;
-    const itens=CATALOGO_EXPLORAR.filter(m=>explorarFiltroAtual==='todos'||m.cat===explorarFiltroAtual);
-    wrap.innerHTML=itens.map(m=>
-      '<div class="job" onclick="'+m.onclick+'"><div class="job-top"><div><div class="job-client">'+t(m.tituloKey)+'</div><div class="job-type">'+t(m.subKey)+'</div></div></div></div>'
-    ).join('');
+    const base=bibItensFiltradosPorOrigem();
+    const facetas=[
+      ['categoria','library.facet.category'],
+      ['profissao','library.facet.profession'],
+      ['evento','library.facet.event'],
+      ['secao','library.facet.section']
+    ];
+    wrap.innerHTML=facetas.map(([fac,labelKey])=>{
+      const valores=[...new Set(base.map(i=>i[fac]).filter(Boolean))].sort();
+      if(!valores.length) return '';
+      const sel=bibFacetSel[fac];
+      const chips=valores.map(v=>'<span class="bib-fchip'+(sel===v?' on':'')+'" onclick="event.stopPropagation();toggleBibFacet(\''+fac+'\',\''+escapeHtml(v).replace(/'/g,"\\'")+'\')">'+escapeHtml(v)+'</span>').join('');
+      return '<div class="bib-acc'+(sel?' open':'')+'"><div class="bib-acc-head" onclick="toggleBibAcc(this.parentElement)"><span>'+t(labelKey)+'</span>'+(sel?'<span class="cnt">'+escapeHtml(sel)+'</span>':'')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div><div class="bib-acc-body">'+chips+'</div></div>';
+    }).join('');
+  }
+  function renderBiblioteca(){
+    renderBibAccordions();
+    const wrap=document.getElementById('bib-lista');
+    if(!wrap) return;
+    const q=(document.getElementById('bib-busca').value||'').trim().toLowerCase();
+    let itens=bibItensFiltradosPorOrigem();
+    ['categoria','profissao','evento','secao'].forEach(fac=>{ if(bibFacetSel[fac]) itens=itens.filter(i=>i[fac]===bibFacetSel[fac]); });
+    if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
+    document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
+    wrap.innerHTML=itens.map(i=>{
+      const fav=bibFavoritos.has(i.id);
+      const verif = i.verificado ? '<span class="bib-tag verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>'+t('library.verified')+'</span>' : '';
+      const meta=[];
+      if(i.avaliacao) meta.push('<span class="star">★</span> '+i.avaliacao);
+      if(i.usos) meta.push(i.usos+' '+t('library.uses'));
+      if(i.autor) meta.push(t('library.by')+escapeHtml(i.autor));
+      return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
+        '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+' <span class="bib-tag tipo">'+escapeHtml(i.tipo)+'</span>'+verif+'</div>'+
+        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
+        '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div></div>'+
+        (meta.length?'<div class="bc-meta">'+meta.join('<span>·</span>')+'</div>':'')+
+      '</div>';
+    }).join('');
+  }
+  function toggleFavBiblioteca(id){
+    if(bibFavoritos.has(id)){ bibFavoritos.delete(id); showToast(t('library.unfavorited')); }
+    else { bibFavoritos.add(id); showToast(t('library.favorited')); if(navigator.vibrate)navigator.vibrate(6); }
+    saveBibFavoritos();
+    renderBiblioteca();
+  }
+  function abrirItemBiblioteca(id){
+    const it=catalogoBiblioteca().find(i=>i.id===id);
+    if(!it) return;
+    const fav=bibFavoritos.has(id);
+    let html='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'+
+      '<span class="bib-tag tipo">'+escapeHtml(it.tipo)+'</span>'+
+      (it.verificado?'<span class="bib-tag verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>'+t('library.verified')+'</span>':'')+
+      (it.categoria?'<span class="bib-tag tipo">'+escapeHtml(it.categoria)+'</span>':'')+'</div>';
+    if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
+    const meta=[];
+    if(it.avaliacao) meta.push('★ '+it.avaliacao);
+    if(it.usos) meta.push(it.usos+' '+t('library.uses'));
+    if(it.autor) meta.push(t('library.by')+it.autor);
+    if(meta.length) html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:10px">'+escapeHtml(meta.join(' · '))+'</p>';
+    if(it.verificado) html+='<div class="warn-box" style="background:#E7F3EC;border-color:#B8DBC4;color:#15532D;margin-bottom:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg><div style="font-size:12.5px">'+t('library.verifiedNote')+'</div></div>';
+    if(it.texto) html+='<div style="font-size:13px;line-height:1.6;color:var(--ink);white-space:pre-wrap;max-height:240px;overflow:auto;padding:12px;background:var(--paper-2);border-radius:10px;margin-bottom:12px">'+escapeHtml(it.texto)+'</div>';
+    if(it.tags&&it.tags.length) html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">'+it.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
+    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
+    const usarOnclick = it.onclick ? it.onclick : "abrirBuilder(null)";
+    html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.use')+'</button>';
+    openInfo(it.titulo, html);
+  }
+  /* construtor de modelo por blocos — reaproveita o builder de contrato existente */
+  function abrirCriarModeloBiblioteca(){
+    abrirBuilder(null);
   }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
@@ -9404,7 +9600,7 @@
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(),
       loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
-      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes()
+      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos()
     ]);
     renderMonthTicker();
   }
