@@ -217,9 +217,12 @@
     .lp-pains{grid-template-columns:1fr}
     .lp-footer{justify-content:center;text-align:center}
   }
-  #login-screen{position:fixed;inset:0;z-index:998;background:var(--bg-ice);display:flex;align-items:center;justify-content:center;
-    padding:24px;transition:opacity .35s ease, visibility .35s}
-  #login-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+  #login-screen,#completar-convite-screen{position:fixed;inset:0;z-index:998;background:var(--bg-ice);display:flex;align-items:center;justify-content:center;
+    padding:24px;transition:opacity .35s ease, visibility .35s;overflow-y:auto}
+  #login-screen.hide,#completar-convite-screen.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .cc-check{display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--ink-soft);margin:0 0 12px;line-height:1.5}
+  .cc-check input{margin-top:2px;flex:none}
+  .cc-check b{color:var(--ink);font-weight:600}
   .login-card{width:100%;max-width:360px}
   .login-logo{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:24px;letter-spacing:.01em;color:var(--ink);
     display:flex;justify-content:center;margin-bottom:6px}
@@ -1500,6 +1503,25 @@
   </div>
 </div>
 
+<!-- Ecrã de conclusão de cadastro para convites de equipa — o link do convite já
+     autentica a pessoa (isso serve de verificação do email), mas falta definir
+     nome/password e aceitar termos antes de entrar na app. -->
+<div id="completar-convite-screen" style="display:none">
+  <div class="login-card">
+    <div class="login-logo"><span class="pivot-logo-full" role="img" aria-label="Pivot"></span></div>
+    <p class="login-tag" data-t="invite.completeTitle">Falta pouco para começares</p>
+    <p style="font-size:13px;color:var(--ink-soft);text-align:center;margin:-16px 0 20px" data-t="invite.completeHint">Foste convidado para uma equipa no Pivot. Conclui o teu registo para continuares.</p>
+    <div class="field"><label data-t="login.email">Email</label><input id="cc-email" type="email" disabled></div>
+    <div class="field"><label data-t="field.name">Nome</label><input id="cc-nome" type="text" placeholder="O teu nome" data-t-placeholder="signup.namePlaceholder" autocomplete="name"></div>
+    <div class="field"><label data-t="login.password">Password</label><input id="cc-pass" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
+    <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="cc-pass2" type="password" autocomplete="new-password"></div>
+    <label class="cc-check"><input type="checkbox" id="cc-termos"><span><span data-t="invite.acceptTermsPrefix">Li e aceito os </span><b data-t="invite.termsLink">Termos de Uso</b>.</span></label>
+    <label class="cc-check"><input type="checkbox" id="cc-cookies"><span><span data-t="invite.acceptCookiesPrefix">Li e aceito a </span><b data-t="invite.cookiesLink">Política de Privacidade e Cookies</b>.</span></label>
+    <p class="field-err" id="cc-err" style="display:none"><span data-t="invite.fillError">Preenche tudo e aceita os termos para continuares.</span></p>
+    <button class="btn primary" style="width:100%" id="cc-btn" onclick="concluirCadastroConvite()"><span data-t="invite.completeBtn">Concluir cadastro</span></button>
+  </div>
+</div>
+
 <div class="shell">
 
   <div class="bg-blobs" aria-hidden="true">
@@ -2390,11 +2412,6 @@
   let currentWorkspaceId = null;
   let currentUser = null;
 
-  async function pivotSignUp(email, password, nome){
-    const { data, error } = await sb.auth.signUp({ email, password, options:{ data:{ nome } } });
-    if (error) throw error;
-    return data;
-  }
   async function pivotSignIn(email, password){
     // NÃO chamamos onAuthReady aqui. O onAuthStateChange (abaixo) é a ÚNICA
     // fonte de verdade que reage ao login — evita disparar onAuthReady duas vezes
@@ -2478,6 +2495,9 @@
           if (tela) tela.classList.add('hide');
           const landing=document.getElementById('landing-page');
           if (landing) landing.style.display='none';
+          if (precisaCompletarConvite) {
+            abrirCompletarConvite(session);
+          }
         }
       } finally {
         aProcessarAuth = false;
@@ -2516,12 +2536,18 @@
   }
   let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null;
   let colabToken=null, colabData=null;
+  /* convite de equipa: o link gerado por api/team/invite.js aponta para
+     APP_URL+"?convite=1" — a própria Supabase já autentica a pessoa ao seguir
+     o link (isso serve de verificação do email), mas falta definir nome e
+     password antes de entrar na app. Ver concluirCadastroConvite(). */
+  let precisaCompletarConvite=false;
   (function checkPortalAccess(){
     const params = new URLSearchParams(window.location.search);
     const token = params.get('portal');
     if (token){ window.PIVOT_PORTAL_TOKEN = token; ppToken = token; }
     const ctoken = params.get('colab');
     if (ctoken){ colabToken = ctoken; }
+    if (params.get('convite')==='1'){ precisaCompletarConvite = true; }
   })();
   async function iniciarColabPublicoSeAplicavel(){
     if (!colabToken) return;
@@ -3226,6 +3252,16 @@
     "signup.weakPassword": { pt:"A password precisa de pelo menos 8 caracteres, com letras e números.", en:"The password needs at least 8 characters, with letters and numbers.", es:"La contraseña necesita al menos 8 caracteres, con letras y números." },
     "signup.passwordMismatch": { pt:"As passwords não coincidem.", en:"Passwords don't match.", es:"Las contraseñas no coinciden." },
     "signup.creating": { pt:"A criar…", en:"Creating…", es:"Creando…" },
+    "invite.completeTitle": { pt:"Falta pouco para começares", en:"Almost there", es:"Ya casi está" },
+    "invite.completeHint": { pt:"Foste convidado para uma equipa no Pivot. Conclui o teu registo para continuares.", en:"You've been invited to a team on Pivot. Finish setting up your account to continue.", es:"Te invitaron a un equipo en Pivot. Completa tu registro para continuar." },
+    "invite.acceptTermsPrefix": { pt:"Li e aceito os ", en:"I've read and accept the ", es:"Leí y acepto los " },
+    "invite.termsLink": { pt:"Termos de Uso", en:"Terms of Use", es:"Términos de Uso" },
+    "invite.acceptCookiesPrefix": { pt:"Li e aceito a ", en:"I've read and accept the ", es:"Leí y acepto la " },
+    "invite.cookiesLink": { pt:"Política de Privacidade e Cookies", en:"Privacy and Cookies Policy", es:"Política de Privacidad y Cookies" },
+    "invite.fillError": { pt:"Preenche tudo e aceita os termos para continuares.", en:"Fill in everything and accept the terms to continue.", es:"Completa todo y acepta los términos para continuar." },
+    "invite.completeBtn": { pt:"Concluir cadastro", en:"Complete signup", es:"Completar registro" },
+    "invite.completing": { pt:"A concluir…", en:"Completing…", es:"Completando…" },
+    "toast.inviteCompleted": { pt:"Conta concluída — bem-vindo à equipa!", en:"Account completed — welcome to the team!", es:"Cuenta completada — ¡bienvenido al equipo!" },
     "signup.rateLimited": { pt:"Espera cerca de um minuto antes de tentares novamente (proteção contra spam de emails).", en:"Wait about a minute before trying again (protection against email spam).", es:"Espera un minuto antes de intentarlo de nuevo (protección contra spam de emails)." },
     "signup.genericError": { pt:"Erro ao criar conta.", en:"Error creating account.", es:"Error al crear la cuenta." },
     "signup.confirmEmailTitle": { pt:"Confirma o teu email", en:"Confirm your email", es:"Confirma tu email" },
@@ -3236,6 +3272,7 @@
     "signup.resendWait": { pt:"Espera um pouco antes de tentares reenviar.", en:"Wait a bit before trying to resend.", es:"Espera un poco antes de intentar reenviar." },
     "signup.resendDone": { pt:"Email reenviado.", en:"Email resent.", es:"Email reenviado." },
     "signup.resendError": { pt:"Erro ao reenviar email.", en:"Error resending email.", es:"Error al reenviar el email." },
+    "signup.emailTaken": { pt:"Já existe uma conta com este email.", en:"An account with this email already exists.", es:"Ya existe una cuenta con este email." },
     "signup.backToLogin": { pt:"Voltar ao login", en:"Back to login", es:"Volver al login" },
     "toast.accountCreatedPrefix": { pt:"Conta criada. Bem-vindo(a), ", en:"Account created. Welcome, ", es:"Cuenta creada. Bienvenido/a, " },
     "toast.accountCreatedSuffix": { pt:"!", en:"!", es:"!" },
@@ -9825,18 +9862,23 @@
     btn.disabled=true; btn.textContent=t('signup.creating');
 
     try{
-      const data = await pivotSignUp(email, pass, nome);
-      if(data.session){
-        // Conta já vem ativa (confirmação de email desligada): o onAuthStateChange
-        // trata de carregar o workspace e esconder o ecrã de login automaticamente.
-        showToast(t('toast.accountCreatedPrefix')+nome+t('toast.accountCreatedSuffix'));
-      } else {
-        // Confirmação de email exigida: mostra ecrã claro de "verifica o teu email", não um toast que passa despercebido.
-        ultimoEmailRegistado = email;
-        document.getElementById('signup-email-enviado').textContent = email;
-        document.getElementById('signup-form-fields').style.display='none';
-        document.getElementById('signup-aguardando').style.display='block';
+      /* Em vez de sb.auth.signUp() (que depende do SMTP embutido da Supabase
+         para o email de confirmação sair — o mesmo problema já resolvido para
+         convites de equipa), a conta é criada no servidor e o email de
+         confirmação sai pelo Resend, com o template Pivot. Ver
+         api/auth/signup.js. */
+      const res=await fetch('/api/auth/signup', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email, password:pass, nome})});
+      const body=await res.json().catch(()=>({}));
+      if(!res.ok || !body.ok){
+        throw new Error(res.status===409 ? t('signup.emailTaken') : (body.error || t('signup.genericError')));
       }
+      // Confirmação de email exigida: mostra ecrã claro de "verifica o teu email", não um toast que passa despercebido.
+      ultimoEmailRegistado = email;
+      document.getElementById('signup-email-enviado').textContent = email;
+      document.getElementById('signup-form-fields').style.display='none';
+      document.getElementById('signup-aguardando').style.display='block';
+      if(body.emailEnviado===false) showToast(t('toast.emailFailed'));
     }catch(e){
       const rateLimited = /security purposes|rate limit/i.test(e.message||'');
       err.querySelector('span').textContent = rateLimited ? t('signup.rateLimited') : (e.message || t('signup.genericError'));
@@ -9850,12 +9892,75 @@
     if(!ultimoEmailRegistado) return;
     btn.disabled=true; btn.textContent=t('signup.sending');
     try{
-      const { error } = await sb.auth.resend({ type:'signup', email: ultimoEmailRegistado });
-      showToast(error ? t('signup.resendWait') : t('signup.resendDone'));
+      const res=await fetch('/api/auth/resend', {method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({email: ultimoEmailRegistado})});
+      const body=await res.json().catch(()=>({}));
+      showToast((res.ok && body.ok && body.emailEnviado!==false) ? t('signup.resendDone') : t('signup.resendWait'));
     }catch(e){
       showToast(t('signup.resendError'));
     }finally{
       btn.disabled=false; btn.textContent=t('signup.resendEmail');
+    }
+  }
+  /* ===== Conclusão de convite de equipa =====
+     O link do convite (api/team/invite.js) já autentica a pessoa ao ser
+     aberto — a Supabase confirma o email como parte da verificação do token,
+     por isso não precisamos de um passo de confirmação à parte. O que falta
+     é a pessoa escolher a password e o nome, e aceitar os termos, antes de
+     entrar na app — sem isto, ficava logo dentro de uma conta em branco
+     (sem nome, sem password própria), parecendo uma conta de amostra. */
+  function abrirCompletarConvite(session){
+    const email = session && session.user && session.user.email;
+    const emailEl=document.getElementById('cc-email');
+    if(emailEl) emailEl.value = email||'';
+    const tela=document.getElementById('completar-convite-screen');
+    if(tela) tela.style.display='flex';
+  }
+  async function concluirCadastroConvite(){
+    const nome=document.getElementById('cc-nome').value.trim();
+    const pass=document.getElementById('cc-pass').value;
+    const pass2=document.getElementById('cc-pass2').value;
+    const termos=document.getElementById('cc-termos').checked;
+    const cookies=document.getElementById('cc-cookies').checked;
+    const err=document.getElementById('cc-err');
+    const btn=document.getElementById('cc-btn');
+
+    if(!nome || !pass || !pass2 || !termos || !cookies){
+      err.querySelector('span').textContent=t('invite.fillError'); err.style.display='block'; return;
+    }
+    if(!senhaForte(pass)){
+      err.querySelector('span').textContent=t('signup.weakPassword'); err.style.display='block'; return;
+    }
+    if(pass!==pass2){
+      err.querySelector('span').textContent=t('signup.passwordMismatch'); err.style.display='block'; return;
+    }
+    err.style.display='none';
+    btn.disabled=true; btn.textContent=t('invite.completing');
+
+    try{
+      const { error } = await sb.auth.updateUser({ password: pass, data:{ nome } });
+      if(error) throw error;
+      if(typeof perfilData!=='undefined' && perfilData){
+        perfilData.nome = nome;
+        perfilData.termosAceitesEm = new Date().toISOString();
+        perfilData.cookiesAceitesEm = new Date().toISOString();
+        if(typeof savePerfilData==='function') savePerfilData();
+        if(typeof aplicarPerfilData==='function') aplicarPerfilData();
+      }
+      precisaCompletarConvite=false;
+      /* limpa o ?convite=1 da barra de endereço — sem isto, um recarregar da
+         página voltaria a mostrar este ecrã mesmo já com a conta concluída */
+      const url=new URL(window.location.href);
+      url.searchParams.delete('convite');
+      history.replaceState({}, '', url.toString());
+      const tela=document.getElementById('completar-convite-screen');
+      if(tela) tela.style.display='none';
+      showToast(t('toast.inviteCompleted'));
+    }catch(e){
+      err.querySelector('span').textContent = e.message || t('signup.genericError');
+      err.style.display='block';
+    }finally{
+      btn.disabled=false; btn.textContent=t('invite.completeBtn');
     }
   }
   function terminarSessao(){

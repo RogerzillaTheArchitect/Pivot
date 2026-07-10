@@ -13,19 +13,58 @@
  * Usa fetch nativo — sem dependências novas.
  */
 
-function construirEmailConviteHtml(actionLink, papel) {
-  const VERDE = '#15532D', VERDE_CLARO = '#EAF3EC', CINZA = '#6B6459', LINHA = '#E7E2D6';
+// Mesma paleta usada nos avatares de iniciais dentro da app (avatarColor em
+// index.html) — escolhida por um hash simples do nome, para o convite ter a
+// mesma "cara" do resto do produto em vez de parecer um email genérico.
+const AVATAR_COLORS = ['#B23A1E', '#5C4A1E', '#1F6E66', '#A8631A', '#B8466E', '#4C7A3D'];
+function corAvatar(nome) {
+  let h = 0;
+  for (let i = 0; i < nome.length; i++) h = (h * 31 + nome.charCodeAt(i)) >>> 0;
+  return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+function iniciais(nome) {
+  const partes = (nome || '?').trim().split(/\s+/).filter(Boolean);
+  if (partes.length >= 2) return (partes[0][0] + partes[1][0]).toUpperCase();
+  return (nome || '?').slice(0, 2).toUpperCase();
+}
+function escaparHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function construirEmailConviteHtml(actionLink, papel, quemConvidou, empresa) {
+  const VERDE = '#15532D', VERDE_CLARO = '#EAF3EC', CINZA = '#6B6459', LINHA = '#E7E2D6', PAPEL_FUNDO = '#FAF9F6';
   const papelLabel = papel === 'Editor' ? 'Editor' : papel === 'Viewer' ? 'Visualizador' : papel;
+  const nomeConvidador = quemConvidou || 'Um administrador';
+  const nomeEmpresa = empresa || null;
+  const fraseConvite = nomeEmpresa
+    ? '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa da <b>' + escaparHtml(nomeEmpresa) + '</b> no Pivot, como <b>' + papelLabel + '</b>.'
+    : '<b>' + escaparHtml(nomeConvidador) + '</b> convidou-o a colaborar na equipa dele/dela no Pivot, como <b>' + papelLabel + '</b>.';
+  const avatarCor = corAvatar(nomeConvidador);
+  const avatarLetras = iniciais(nomeConvidador);
+
   return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid ' + LINHA + ';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">' +
-    '<tr><td style="padding:28px 24px;text-align:center;background:' + VERDE + '"><div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Pivot</div></td></tr>' +
-    '<tr><td style="padding:22px 24px 0">' +
-      '<span style="display:inline-block;background:' + VERDE_CLARO + ';color:' + VERDE + ';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">Convite para equipa</span>' +
-      '<h2 style="font-size:20px;font-weight:700;margin:12px 0 8px;color:#111">Convidaram-no para uma equipa no Pivot</h2>' +
-      '<p style="font-size:13px;color:' + CINZA + ';margin:0 0 6px">Foi convidado a colaborar no espaço de trabalho da equipa como <b>' + papelLabel + '</b>. Aceite o convite para começar.</p>' +
+    '<tr><td style="padding:24px 24px;text-align:center;background:' + VERDE + '">' +
+      '<div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Pivot</div>' +
+      '<div style="color:' + VERDE_CLARO + ';font-size:11px;margin-top:3px;letter-spacing:.03em">Gestão de trabalhos, contratos e pagamentos</div>' +
     '</td></tr>' +
-    '<tr><td style="padding:6px 24px 8px"><a href="' + actionLink + '" style="display:block;text-align:center;background:' + VERDE + ';color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px;text-decoration:none">Aceitar convite</a></td></tr>' +
-    '<tr><td style="padding:0 24px 22px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:' + CINZA + '">Se não esperava este convite, pode ignorar este email com segurança.</td></tr>' +
-    '<tr><td style="padding:14px 24px;border-top:1px solid ' + LINHA + ';text-align:center;font-size:11px;color:' + CINZA + '">Pivot &nbsp;·&nbsp; Este é um email automático — não é necessário responder.</td></tr>' +
+    '<tr><td style="padding:26px 24px 0;text-align:center">' +
+      '<div style="width:56px;height:56px;border-radius:50%;background:' + avatarCor + ';color:#fff;font-size:20px;font-weight:700;line-height:56px;text-align:center;margin:0 auto 14px;font-family:Arial,sans-serif">' + escaparHtml(avatarLetras) + '</div>' +
+    '</td></tr>' +
+    '<tr><td style="padding:0 24px 0;text-align:center">' +
+      '<span style="display:inline-block;background:' + VERDE_CLARO + ';color:' + VERDE + ';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">Convite para equipa</span>' +
+      '<h2 style="font-size:19px;font-weight:700;margin:12px 0 8px;color:#111">Foi convidado para uma equipa no Pivot</h2>' +
+      '<p style="font-size:13.5px;color:' + CINZA + ';margin:0 0 6px;line-height:1.55">' + fraseConvite + '</p>' +
+    '</td></tr>' +
+    '<tr><td style="padding:18px 24px 8px"><a href="' + actionLink + '" style="display:block;text-align:center;background:' + VERDE + ';color:#fff;font-weight:700;font-size:14px;padding:13px;border-radius:10px;text-decoration:none">Aceitar convite e criar acesso</a></td></tr>' +
+    '<tr><td style="padding:4px 24px 22px;text-align:center;font-family:Arial,sans-serif;font-size:11.5px;color:' + CINZA + '">O link confirma o seu email automaticamente. Se não esperava este convite, pode ignorar esta mensagem com segurança — nenhuma conta é criada sem clicar no link.</td></tr>' +
+    '<tr><td style="padding:16px 24px;background:' + PAPEL_FUNDO + ';border-top:1px solid ' + LINHA + '">' +
+      '<table role="presentation" width="100%"><tr>' +
+        '<td style="font-size:11px;color:' + CINZA + ';line-height:1.6">' +
+          '<b style="color:#111">Pivot</b> — plataforma de gestão de trabalhos para profissionais autónomos e agências.<br>' +
+          'Este é um email automático de convite de equipa; não é necessário responder.' +
+        '</td>' +
+      '</tr></table>' +
+    '</td></tr>' +
     '</table>';
 }
 
@@ -67,9 +106,14 @@ module.exports = async (req, res) => {
   // Gera um link de autenticação com a admin API. type='invite' cria o utilizador
   // se ainda não existir; type='magiclink' serve para quem já tem conta.
   async function gerarLink(type) {
+    // Só o convite para gente NOVA (type='invite') leva ao ecrã de conclusão
+    // de cadastro (nome, password, termos) — quem já tem conta (magiclink,
+    // convidado para mais um workspace) já passou por isso e só precisa de
+    // entrar; mandá-lo para lá pediria password de novo sem necessidade.
+    const redirectTo = type === 'invite' ? (APP_URL + '/?convite=1') : APP_URL;
     return sbFetch('/auth/v1/admin/generate_link', {
       method: 'POST',
-      body: JSON.stringify({ type, email, options: { redirect_to: APP_URL } })
+      body: JSON.stringify({ type, email, options: { redirect_to: redirectTo } })
     });
   }
 
@@ -127,6 +171,20 @@ module.exports = async (req, res) => {
     // 4) Enviar o email de convite pelo Resend (canal fiável). Se não houver
     //    RESEND configurado ou o link não vier, devolvemos ok na mesma — o membro
     //    já ficou associado — mas sinalizamos que o email não foi enviado.
+    // Busca o nome de quem convida + nome da empresa (perfilData do workspace)
+    // para o email deixar de ser genérico — "X convidou-o para a equipa da Y"
+    // em vez de "foi convidado", que é o que dava aspeto pouco confiável.
+    let quemConvidou = requester.user_metadata && (requester.user_metadata.nome || requester.user_metadata.full_name);
+    let nomeEmpresa = null;
+    try {
+      const perfil = await sbFetch('/rest/v1/kv_store?workspace_id=eq.' + workspace_id + '&key=eq.pivot-perfilData&select=value');
+      const perfilData = perfil.ok && perfil.body && perfil.body[0] && perfil.body[0].value;
+      if (perfilData) {
+        if (!quemConvidou && perfilData.nome) quemConvidou = perfilData.nome;
+        if (perfilData.empresa) nomeEmpresa = perfilData.empresa;
+      }
+    } catch (e) { /* segue sem personalização se falhar */ }
+
     let emailEnviado = false;
     if (RESEND_KEY && FROM_EMAIL && actionLink) {
       try {
@@ -136,8 +194,8 @@ module.exports = async (req, res) => {
           body: JSON.stringify({
             from: FROM_EMAIL,
             to: email,
-            subject: 'Convidaram-no para uma equipa no Pivot',
-            html: construirEmailConviteHtml(actionLink, papel)
+            subject: (quemConvidou ? quemConvidou + ' convidou-o' : 'Convidaram-no') + ' para uma equipa no Pivot',
+            html: construirEmailConviteHtml(actionLink, papel, quemConvidou, nomeEmpresa)
           })
         });
         emailEnviado = r.ok;
