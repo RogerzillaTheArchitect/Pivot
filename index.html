@@ -6656,8 +6656,14 @@
   function planPermiteBranding(){ return perfilData.plano==='Business' || perfilData.plano==='Enterprise'; }
   function dadosNegocioParaEmail(){
     if(!planPermiteBranding()) return {logoUrl:'', nome:'', subtitulo:'', email:'', telefone:'', website:''};
+    // empresaFotoUrl costuma ser um data URI (upload local guardado direto no
+    // perfil, sem passar por storage) — funciona dentro da app mas o Gmail e
+    // outros clientes bloqueiam <img src="data:..."> em emails por segurança,
+    // resultando em imagem quebrada. Nesse caso cai para as iniciais, que
+    // sempre carregam.
+    const fotoUrl = perfilData.empresaFotoUrl||'';
     return {
-      logoUrl: perfilData.empresaFotoUrl||'',
+      logoUrl: /^data:/i.test(fotoUrl) ? '' : fotoUrl,
       nome: perfilData.empresa||'',
       subtitulo: perfilData.categoria||'',
       email: perfilData.empresaEmail||'',
