@@ -380,6 +380,8 @@
     box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
     color:#F5F5F2;--ink:#F5F5F2;--ink-soft:#C9C9C2}
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
+  .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 4px}
+  .jobs-stat-grid6 .jobs-stat-col{border-right:none}
   .jobs-stat-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;cursor:pointer;padding:0 4px;text-align:center}
   .jobs-stat-col:not(:last-child){border-right:1px solid rgba(255,255,255,.14)}
   .jobs-stat-col:active{transform:scale(.96)}
@@ -1603,39 +1605,72 @@
 
         <span class="section-label-out" data-t="home.performanceTitle">Performance</span>
         <div class="jobs-stat-card" onclick="abrirRelatorios('performance')">
-          <div class="jobs-stat-row">
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('fechados')">
-            <span class="ms-c-label" data-t="home.closed">Fechados</span>
-            <span class="ms-c-trend" id="trend-fechados"></span>
+          <div class="jobs-stat-grid6">
+          <div class="jobs-stat-col">
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
                 <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
                 <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-fechados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-fechados-den">0</span></div>
+              <div class="mini-ring-center"><span id="mt-fechados-num">0</span></div>
             </div>
+            <span class="ms-c-trend" id="trend-fechados"></span>
+            <span class="ms-c-label" data-t="home.closed">Fechados</span>
           </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('executados')">
-            <span class="ms-c-label" data-t="home.executed">Executados</span>
-            <span class="ms-c-trend" id="trend-realizados"></span>
+          <div class="jobs-stat-col" onclick="event.stopPropagation();go('historico')">
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
                 <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-realizados" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-executados" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-realizados-num">1</span><span class="mini-ring-slash">/</span><span id="mt-realizar-den">5</span></div>
+              <div class="mini-ring-center"><span id="mt-executados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-executados-den">0</span></div>
             </div>
+            <span class="ms-c-trend" id="trend-executados"></span>
+            <span class="ms-c-label" data-t="home.executed">Executados</span>
+          </div>
+          <div class="jobs-stat-col">
+            <div class="mini-ring-wrap">
+              <svg class="mini-ring" viewBox="0 0 60 60">
+                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-horas" cx="30" cy="30" r="25" stroke-width="6"/>
+              </svg>
+              <div class="mini-ring-center" style="font-size:10px"><span id="mt-horas-num">0h</span></div>
+            </div>
+            <span class="ms-c-trend" id="trend-horas"></span>
+            <span class="ms-c-label" data-t="home.hours">Horas</span>
           </div>
           <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
-            <span class="ms-c-label" data-t="home.delivered">Entregues</span>
-            <span class="ms-c-trend" id="trend-entregues"></span>
             <div class="mini-ring-wrap">
               <svg class="mini-ring" viewBox="0 0 60 60">
                 <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
                 <circle class="mini-ring-progress" id="ring-entregues" cx="30" cy="30" r="25" stroke-width="6"/>
               </svg>
-              <div class="mini-ring-center"><span id="mt-entregues-num">3</span><span class="mini-ring-slash">/</span><span id="mt-entregar-den">5</span></div>
+              <div class="mini-ring-center"><span id="mt-entregues-num">0</span><span class="mini-ring-slash">/</span><span id="mt-entregar-den">0</span></div>
             </div>
+            <span class="ms-c-trend" id="trend-entregues"></span>
+            <span class="ms-c-label" data-t="home.delivered">Entregues</span>
+          </div>
+          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
+            <div class="mini-ring-wrap">
+              <svg class="mini-ring" viewBox="0 0 60 60">
+                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-aguardando" cx="30" cy="30" r="25" stroke-width="6"/>
+              </svg>
+              <div class="mini-ring-center"><span id="mt-aguardando-num">0</span><span class="mini-ring-slash">/</span><span id="mt-aguardando-den">0</span></div>
+            </div>
+            <span class="ms-c-trend" id="trend-aguardando"></span>
+            <span class="ms-c-label" data-t="home.awaiting">Aguardando</span>
+          </div>
+          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
+            <div class="mini-ring-wrap">
+              <svg class="mini-ring" viewBox="0 0 60 60">
+                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
+                <circle class="mini-ring-progress" id="ring-demandas" cx="30" cy="30" r="25" stroke-width="6"/>
+              </svg>
+              <div class="mini-ring-center"><span id="mt-demandas-num">0</span><span class="mini-ring-slash">/</span><span id="mt-demandas-den">0</span></div>
+            </div>
+            <span class="ms-c-trend" id="trend-demandas"></span>
+            <span class="ms-c-label" data-t="home.demands">Demandas</span>
           </div>
           </div>
         </div>
@@ -3020,6 +3055,9 @@
     "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
     "home.performanceTitle": { pt:"Performance", en:"Performance", es:"Rendimiento" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
+    "home.hours": { pt:"Horas", en:"Worktime", es:"Horas" },
+    "home.awaiting": { pt:"Aguardando", en:"Awaiting", es:"Esperando" },
+    "home.demands": { pt:"Demandas", en:"Demands", es:"Demandas" },
     "home.tasksTitle": { pt:"Tarefas", en:"Tasks", es:"Tareas" },
     "tasks.contractPending": { pt:"Contrato aguardando assinatura", en:"Contract awaiting signature", es:"Contrato pendiente de firma" },
     "tasks.paymentDue": { pt:"Pagamento vence", en:"Payment due", es:"Pago vence" },
@@ -3995,6 +4033,15 @@
     let fechadosEsteMes=0, fechadosMesAnterior=0;
     let realizadosEsteMes=0, realizadosMesAnterior=0;
     let entreguesEsteMes=0, entreguesMesAnterior=0;
+    /* "Executados" (card Performance) = trabalhos que a pessoa marcou como
+       concluído (arquivarTrabalho, motivo 'concluido'), não o estado
+       automático classificarTrabalho().concluido — são conceitos diferentes:
+       um é uma ação manual da pessoa, o outro é calculado a partir do estado
+       do trabalho. */
+    let executadosCount=0, executadosEsteMes=0, executadosMesAnterior=0;
+    /* soma das horas dos trabalhos com data neste mês / mês anterior, a partir
+       da duração calculada (hora início/fim) — anel "Horas" do card Performance */
+    let horasEsteMes=0, horasMesAnterior=0;
     /* trabalhos deletados (descartados) não entram em nenhuma estatística;
        trabalhos concluídos e arquivados continuam a contar — aconteceram de facto */
     const todos=jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado');
@@ -4012,6 +4059,16 @@
       if(assinadoISO){
         if(assinadoISO.slice(0,7)===mesAtualISO) fechadosEsteMes++;
         else if(assinadoISO.slice(0,7)===mesAnteriorISO) fechadosMesAnterior++;
+      }
+      if(j.arquivado && j.arquivado.motivo==='concluido'){
+        executadosCount++;
+        const mm=(j.arquivado.em||'').slice(0,7);
+        if(mm===mesAtualISO) executadosEsteMes++; else if(mm===mesAnteriorISO) executadosMesAnterior++;
+      }
+      if(j.duracaoHoras && j.dateRaw){
+        const mm=j.dateRaw.slice(0,7);
+        if(mm===mesAtualISO) horasEsteMes+=j.duracaoHoras;
+        else if(mm===mesAnteriorISO) horasMesAnterior+=j.duracaoHoras;
       }
       const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
       const msEntrega=(j.milestones||[]).find(m=>m.key==='entrega');
@@ -4032,28 +4089,36 @@
         }
       }
     });
+    /* "Aguardando" (pendências do lado do cliente) e "Demandas" (pendências do
+       meu lado) — contagem viva (não é um evento datado), por isso a
+       tendência é aproximada por mês do trabalho a que cada pendência
+       pertence (dateRaw), consistente com o resto do cartão. */
+    const bucketPorMesDoJob=itens=>{
+      let esteMes=0, mesAnterior=0;
+      itens.forEach(it=>{
+        const mm=(it.job.dateRaw||'').slice(0,7);
+        if(mm===mesAtualISO) esteMes++; else if(mm===mesAnteriorISO) mesAnterior++;
+      });
+      return {esteMes, mesAnterior};
+    };
+    const pendCliente=opPendenciasCliente();
+    const pendMeu=opPendenciasMinhas();
+    const pendClienteBucket=bucketPorMesDoJob(pendCliente);
+    const pendMeuBucket=bucketPorMesDoJob(pendMeu);
     return {recebido, porReceber, contratosFechados, totalJobs:todos.length,
       fechadosEsteMes, fechadosMesAnterior, realizadosEsteMes, realizadosMesAnterior, entreguesEsteMes, entreguesMesAnterior,
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
+      executadosCount, executadosEsteMes, executadosMesAnterior,
+      horasEsteMes, horasMesAnterior,
+      pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
+      pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
       custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     const set=(id,val)=>{ const el=document.getElementById(id); if(el) el.textContent=val; };
-    /* os 3 anéis agora são frações literais: o traço enche na proporção
-       num/den (ex.: 2/4 = meio círculo). Fechados = trabalhos com contrato
-       assinado sobre o total de trabalhos criados. */
-    set('mt-fechados-num', s.contratosFechados);
-    set('mt-fechados-den', s.totalJobs);
-    set('mt-realizados-num', s.trabalhosRealizados);
-    set('mt-realizar-den', s.trabalhosRealizados+s.trabalhosRealizar);
-    set('mt-entregues-num', s.trabalhosEntregues);
-    set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    pintarAnelComVolta('ring-fechados', 25, s.contratosFechados, s.totalJobs);
-    pintarAnelComVolta('ring-realizados', 25, s.trabalhosRealizados, s.trabalhosRealizados+s.trabalhosRealizar);
-    pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
-    /* comparação com o período anterior (mês passado), entre o nome e o anel */
+    /* comparação com o período anterior (mês passado), abaixo do anel */
     const setTrend=(id, atual, anterior)=>{
       const el=document.getElementById(id);
       if(!el) return;
@@ -4062,9 +4127,41 @@
       el.textContent=(pct>=0?'↑':'↓')+Math.abs(pct)+'%';
       el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
     };
+    /* Fechados: sem meta — mostra só a contagem de trabalhos fechados este mês,
+       anel decorativo sempre cheio (não há "0/N" possível sem alvo). */
+    set('mt-fechados-num', s.fechadosEsteMes);
+    pintarAnelComVolta('ring-fechados', 25, 1, 1);
     setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
-    setTrend('trend-realizados', s.realizadosEsteMes, s.realizadosMesAnterior);
+    /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
+    set('mt-executados-num', s.executadosCount);
+    set('mt-executados-den', s.totalJobs);
+    pintarAnelComVolta('ring-executados', 25, s.executadosCount, s.totalJobs);
+    setTrend('trend-executados', s.executadosEsteMes, s.executadosMesAnterior);
+    /* Horas: soma da duração dos trabalhos deste mês — também sem meta.
+       Formato compacto (18h / 18h30) para caber no centro do anel pequeno. */
+    const horasCompacto=v=>{
+      v=v||0;
+      const h=Math.floor(v), m=Math.round((v-h)*60);
+      return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
+    };
+    set('mt-horas-num', horasCompacto(s.horasEsteMes));
+    pintarAnelComVolta('ring-horas', 25, 1, 1);
+    setTrend('trend-horas', s.horasEsteMes, s.horasMesAnterior);
+    /* Entregues: já era uma fração real (entregues / entregues+a entregar) */
+    set('mt-entregues-num', s.trabalhosEntregues);
+    set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
+    pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
     setTrend('trend-entregues', s.entreguesEsteMes, s.entreguesMesAnterior);
+    /* Aguardando: pendências do lado do cliente sobre o total de trabalhos */
+    set('mt-aguardando-num', s.pendClienteCount);
+    set('mt-aguardando-den', s.totalJobs);
+    pintarAnelComVolta('ring-aguardando', 25, s.pendClienteCount, s.totalJobs);
+    setTrend('trend-aguardando', s.pendClienteEsteMes, s.pendClienteMesAnterior);
+    /* Demandas: pendências do meu lado sobre o total de trabalhos */
+    set('mt-demandas-num', s.pendMeuCount);
+    set('mt-demandas-den', s.totalJobs);
+    pintarAnelComVolta('ring-demandas', 25, s.pendMeuCount, s.totalJobs);
+    setTrend('trend-demandas', s.pendMeuEsteMes, s.pendMeuMesAnterior);
     renderRingsDashboard(s.recebido, s.custos);
     atualizarNotifDot();
     const nomesMesesPt=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
