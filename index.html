@@ -2879,6 +2879,15 @@
     "email.eventDetailsTitle": { pt:"Detalhes do Evento", en:"Event Details", es:"Detalles del Evento" },
     "email.detail.date": { pt:"Data", en:"Date", es:"Fecha" },
     "email.detail.location": { pt:"Local", en:"Location", es:"Lugar" },
+    "email.detail.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
+    "email.detail.invitedBy": { pt:"Convidado por", en:"Invited by", es:"Invitado por" },
+    "email.badge.jobCollab": { pt:"Colaborador em trabalho", en:"Job collaborator", es:"Colaborador en trabajo" },
+    "email.title.jobCollabInvite": { pt:"Convidaram-no para colaborar num trabalho", en:"You've been invited to collaborate on a job", es:"Le invitaron a colaborar en un trabajo" },
+    "email.body.jobCollabInvite": { pt:"Foi convidado a colaborar num trabalho no Pivot. Aceite o convite para aceder aos detalhes.", en:"You've been invited to collaborate on a job on Pivot. Accept the invite to see the details.", es:"Fue invitado a colaborar en un trabajo en Pivot. Acepte la invitación para ver los detalles." },
+    "email.cta.jobCollabInvite": { pt:"Aceitar convite", en:"Accept invite", es:"Aceptar invitación" },
+    "email.title.jobCollabAdded": { pt:"Foi adicionado como colaborador", en:"You've been added as a collaborator", es:"Fue añadido como colaborador" },
+    "email.body.jobCollabAdded": { pt:"Foi adicionado como colaborador num trabalho no Pivot. Entre na app para ver os detalhes.", en:"You've been added as a collaborator on a job on Pivot. Open the app to see the details.", es:"Fue añadido como colaborador en un trabajo en Pivot. Entre en la app para ver los detalles." },
+    "email.cta.jobCollabAdded": { pt:"Abrir no Pivot", en:"Open Pivot", es:"Abrir Pivot" },
     "email.poweredBy": { pt:"Projeto gerido através do Pivot", en:"Project managed with Pivot", es:"Proyecto gestionado con Pivot" },
     "email.badge.contractSent": { pt:"Contrato enviado", en:"Contract sent", es:"Contrato enviado" },
     "email.title.contractSent": { pt:"O seu contrato está pronto para assinatura", en:"Your contract is ready to sign", es:"Su contrato está listo para firmar" },
@@ -6706,6 +6715,8 @@
     assinaturaCancelada:  { badgeKey:'email.badge.subscriptionCancelled', titleKey:'email.title.subscriptionCancelled', bodyKey:'email.body.subscriptionCancelled', ctaKey:'email.cta.subscriptionCancelled' },
     conviteEquipe:        { badgeKey:'email.badge.teamInvite',           titleKey:'email.title.teamInvite',            bodyKey:'email.body.teamInvite',            ctaKey:'email.cta.teamInvite' },
     conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted' },
+    colaboradorJobConvite:  { badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabInvite', bodyKey:'email.body.jobCollabInvite', ctaKey:'email.cta.jobCollabInvite' },
+    colaboradorJobAdicionado:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabAdded',  bodyKey:'email.body.jobCollabAdded',  ctaKey:'email.cta.jobCollabAdded' },
     novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true },
     alteracaoCritica:     { badgeKey:'email.badge.criticalChange',       titleKey:'email.title.criticalChange',        bodyKey:'email.body.criticalChange',        ctaKey:'email.cta.criticalChange', alerta:true },
     atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true },
@@ -7317,23 +7328,23 @@
     await carregarColaboradoresJob(jobId);
     const jobNome = job.nome||job.typeLabel;
     const remetente = perfilData.nome||t('defaults.userName');
+    /* Antes estes dois avisos iam por enviarEmailColaborador() com HTML cru
+       (uns <p> soltos, sem marca nem botão) — pareciam spam. Agora usam o
+       mesmo sistema de templates dos outros emails de conta (Pivot, badge,
+       botão de ação), com o trabalho e quem convidou nos detalhes. */
     if(semConta){
       const link=window.location.origin+'/?colab='+token;
-      enviarEmailColaborador(u.email, remetente+' — '+jobNome, '<p>'+remetente+' convidou-o(a) para colaborar em "'+escapeHtml(jobNome)+'".</p><p><a href="'+link+'">'+link+'</a></p>');
+      dispararEmailConta('colaboradorJobConvite', u.email, { nome:u.email, ctaUrl:link,
+        detalhes:[[t('email.detail.job'), jobNome], [t('email.detail.invitedBy'), remetente]] }, true);
       openInfo(t('collab.invited'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:12px">${t('collab.emailSent')}</p>
         <div class="field"><label>${t('collab.linkHint')}</label><input readonly value="${escapeHtml(link)}" onclick="this.select()"></div>
         <button class="btn primary" style="width:100%;margin-top:10px" onclick="navigator.clipboard.writeText('${link}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>`);
     } else {
-      enviarEmailColaborador(u.email, remetente+' — '+jobNome, '<p>'+remetente+' adicionou-o(a) como colaborador em "'+escapeHtml(jobNome)+'". Entre na app para ver os detalhes.</p>');
+      dispararEmailConta('colaboradorJobAdicionado', u.email, { nome:u.email, ctaUrl:window.location.origin,
+        detalhes:[[t('email.detail.job'), jobNome], [t('email.detail.invitedBy'), remetente]] }, true);
       showToast(t('collab.notifiedInApp'));
     }
-  }
-  async function enviarEmailColaborador(destinatario, assunto, corpoHtml){
-    if(!destinatario) return;
-    try{
-      await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({to:destinatario, subject:assunto, html:corpoHtml})});
-    }catch(e){ /* falha de envio não deve travar a ação do utilizador */ }
   }
 
   /* ===== Área do próprio colaborador externo ===== */
