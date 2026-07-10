@@ -834,16 +834,16 @@
 
   /* ===== RELATÓRIOS — página unificada ===== */
   .rel-dual{display:flex;gap:10px;margin:16px 0 4px}
-  .rel-ring-box{flex:1;position:relative;display:flex;flex-direction:column;align-items:center}
+  .rel-ring-box{flex:1;min-width:0;position:relative;display:flex;flex-direction:column;align-items:center}
   .rel-ring-box .ring-svg{width:132px;height:132px}
   .rel-ring-box .ring-center{inset:0 0 auto 0;height:132px}
   .rel-ring-box .ring-pct{font-size:19px}
   .rel-ring-cap{font-size:11.5px;color:var(--ink-soft);text-align:center;margin-top:4px;min-height:16px}
   .rel-ring-cap b{font-weight:600}
   .rel-counters{display:flex;gap:10px;margin:10px 0 4px}
-  .rel-counter{flex:1;background:var(--glass-7);border:1px solid var(--line-soft);border-radius:13px;padding:11px}
+  .rel-counter{flex:1;min-width:0;background:var(--glass-7);border:1px solid var(--line-soft);border-radius:13px;padding:11px}
   .rel-counter-label{font-size:11px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.03em;margin-bottom:8px;text-align:center}
-  .rel-counter-ctrl{display:flex;align-items:center;gap:6px}
+  .rel-counter-ctrl{display:flex;align-items:center;gap:6px;min-width:0}
   .rel-counter-ctrl button{width:30px;height:30px;flex:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:9px;font-size:18px;line-height:1;cursor:pointer;font-family:inherit}
   .rel-counter-ctrl input{flex:1;min-width:0;text-align:center;border:none;background:none;outline:none;font-family:var(--font-numeric),inherit;font-size:15px;font-weight:600;color:var(--ink)}
   .rel-line-legend{display:flex;justify-content:center;gap:16px;font-size:11.5px;color:var(--ink-soft);margin-top:8px}
@@ -1998,7 +1998,7 @@
       <div class="sheet-back" id="sheetBack" style="display:none" onclick="panelBack()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
       </div>
-      <h3 id="sheetTitle" data-t="nav.create">Criar</h3>
+      <h3 id="sheetTitle">Criar</h3>
       <div class="sheet-x" onclick="closeSheet()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </div>
@@ -2372,7 +2372,7 @@
     <div class="sheet-grab"></div>
     <div class="sheet-header">
       <div style="width:30px;flex:none"></div>
-      <h3 id="infoTitle" data-t="common.title">Título</h3>
+      <h3 id="infoTitle">Título</h3>
       <div class="sheet-x" onclick="closeInfo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
     </div>
     <div class="sheet-body" id="infoBody"></div>
@@ -2436,8 +2436,34 @@
   // FONTE ÚNICA DE VERDADE para reação à autenticação.
   // Dispara no arranque (se já há sessão), no login por email/password, e no regresso do Google.
   let aProcessarAuth = false;
+  /* auth pronta = já sabemos se há sessão ou não, seguro esconder o splash.
+     Ligado ao próprio temporizador do splash mais abaixo, para nunca mostrar
+     a landing page/ecrã de login por baixo do logo só porque o splash tinha
+     um tempo fixo mais curto do que a verificação de sessão demorou. */
+  let authPronta = false;
+  function tentarEsconderSplash(){
+    if(!authPronta) return;
+    const el=document.getElementById('splash');
+    if(el && !el.classList.contains('hide')){ el.classList.add('hide'); if(typeof ajustarPaddingEcra==='function') ajustarPaddingEcra(); }
+  }
   sb.auth.onAuthStateChange((_event, session) => {
-    if (!session || aProcessarAuth) return;
+    /* TOKEN_REFRESHED (e outros eventos que não mudam quem está autenticado)
+       disparam sozinhos, silenciosamente, a cada hora e sempre que a aba volta
+       a ficar ativa — sem isto, cada um desses eventos recarregava TODOS os
+       dados da conta (trabalhos, clientes, perfil, traduções…) e re-renderizava
+       tudo, mesmo a meio de uma interação da pessoa. Isso causava sintomas
+       espalhados: título de folhas abertas a voltar para o texto genérico,
+       ecrãs a "misturar-se" a meio de um clique, listas a re-renderizar do
+       nada. Só reagimos aos eventos que realmente significam início/fim de
+       sessão. */
+    const eventosRelevantes = ['INITIAL_SESSION', 'SIGNED_IN', 'SIGNED_OUT'];
+    if (!eventosRelevantes.includes(_event)) return;
+    if (_event === 'SIGNED_OUT' || !session) {
+      authPronta = true;
+      tentarEsconderSplash();
+      return;
+    }
+    if (aProcessarAuth) return;
     aProcessarAuth = true;
     // IMPORTANTE: o supabase-js@2 mantém um lock de autenticação enquanto este
     // callback corre. Qualquer chamada sb.* aqui dentro (ex.: sb.from(...) em
@@ -2455,6 +2481,8 @@
         }
       } finally {
         aProcessarAuth = false;
+        authPronta = true;
+        tentarEsconderSplash();
       }
     }, 0);
   });
@@ -9703,12 +9731,19 @@
   }
   if(document.fonts && document.fonts.ready){ document.fonts.ready.then(ajustarPaddingEcra); }
 
-  /* ===== SPLASH ===== */
+  /* ===== SPLASH =====
+     Antes escondia num temporizador fixo (1050ms), independente de a
+     verificação de sessão já ter terminado — se a rede estivesse mais lenta
+     que isso, o splash saía antes da hora e expunha a landing page/ecrã de
+     login por baixo durante uma fração de segundo antes de entrar na app,
+     dando a impressão de "repetir os passos" a cada recarregamento. Agora só
+     esconde quando authPronta (definido no onAuthStateChange) confirma que já
+     sabemos se há sessão — com um tempo máximo de segurança para nunca
+     prender a pessoa no logo se a rede/Supabase estiver mesmo lenta. */
   (function splash(){
-    const el=document.getElementById('splash');
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const delay = reduced ? 150 : 1050;
-    setTimeout(()=>{ el.classList.add('hide'); ajustarPaddingEcra(); }, delay);
+    const maxDelay = reduced ? 150 : 3000;
+    setTimeout(()=>{ authPronta=true; tentarEsconderSplash(); }, maxDelay);
   })();
 
   /* ===== LOGIN (Supabase Auth real) ===== */
