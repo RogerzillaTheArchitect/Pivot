@@ -4050,6 +4050,26 @@
     setTimeout(()=>{ el.style.strokeDashoffset=circ*(1-pctAtual/100); }, 60);
     return { laps, pctAtual, pctTotal:Math.round(ratioReal*100) };
   }
+  /* Réplicas exatas dos filtros "Com o cliente" / "A meu cargo" de Trabalhos
+     (jobPassaChipDataset) — usadas pelos anéis "Aguardando"/"Demandas" do card
+     Performance, para que o número do anel bata sempre 1:1 com o que aparece
+     ao clicar. Antes disto, os anéis usavam opPendenciasCliente()/
+     opPendenciasMinhas() (pensadas para a lista de Relatórios, com critérios
+     mais estreitos — ex.: "Demandas" exigia só aRealizar/aEntregar, sem exigir
+     contrato fechado), o que podia mostrar "6/7" no anel e nada na lista ao
+     clicar, porque o filtro real exige o contrato já assinado. */
+  function pendenciasClienteParaAnel(){
+    return jobsVisiveis().filter(j=>!j.arquivado).filter(j=>{
+      const c=classificarTrabalho(j);
+      return !c.fechado || c.pagamentoPendente;
+    });
+  }
+  function pendenciasMinhasParaAnel(){
+    return jobsVisiveis().filter(j=>!j.arquivado).filter(j=>{
+      const c=classificarTrabalho(j);
+      return c.fechado && (c.aRealizar || c.aEntregar);
+    });
+  }
   function calcularEstatisticasMes(){
     let recebido=0, porReceber=0;
     let contratosFechados=0, trabalhosRealizar=0, trabalhosRealizados=0, trabalhosEntregar=0, trabalhosEntregues=0;
@@ -4121,16 +4141,16 @@
        meu lado) — contagem viva (não é um evento datado), por isso a
        tendência é aproximada por mês do trabalho a que cada pendência
        pertence (dateRaw), consistente com o resto do cartão. */
-    const bucketPorMesDoJob=itens=>{
+    const bucketPorMesDoJob=jobs=>{
       let esteMes=0, mesAnterior=0;
-      itens.forEach(it=>{
-        const mm=(it.job.dateRaw||'').slice(0,7);
+      jobs.forEach(j=>{
+        const mm=(j.dateRaw||'').slice(0,7);
         if(mm===mesAtualISO) esteMes++; else if(mm===mesAnteriorISO) mesAnterior++;
       });
       return {esteMes, mesAnterior};
     };
-    const pendCliente=opPendenciasCliente();
-    const pendMeu=opPendenciasMinhas();
+    const pendCliente=pendenciasClienteParaAnel();
+    const pendMeu=pendenciasMinhasParaAnel();
     const pendClienteBucket=bucketPorMesDoJob(pendCliente);
     const pendMeuBucket=bucketPorMesDoJob(pendMeu);
     return {recebido, porReceber, contratosFechados, totalJobs:todos.length,
@@ -5483,11 +5503,15 @@
   /* a dashboard leva para a secção correspondente da página única de Relatórios */
   function abrirRelatorios(tab){
     go('relatorios');
+    /* a view tem uma animação de entrada de 0.45s (fade + translateY) — rolar
+       antes disso terminar faz o scrollIntoView mirar um alvo que ainda está
+       a mover-se e falha silenciosamente (o ecrã fica preso no topo). Espera
+       a animação acabar antes de rolar. */
     setTimeout(()=>{
       const alvo = tab==='performance' ? 'rel-anchor-performance' : 'rel-anchor-financeiro';
       const el=document.getElementById(alvo);
       if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
-    }, 80);
+    }, 480);
   }
   /* pequenos anéis reutilizáveis — cada "tile" é {id, label, num, den, pct, trend} */
   function construirMiniAneis(container, tiles){
