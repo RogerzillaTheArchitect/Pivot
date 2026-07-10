@@ -2049,7 +2049,12 @@
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.keyPeople"><span data-t="wizard.keyPeople">Pessoas Importantes</span></div></div><div class="toggle on" id="envio-pessoas" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.importantNotes"><span data-t="wizard.importantNotes">Observações Importantes</span></div></div><div class="toggle on" id="envio-observacoes" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm"><span data-t="wizard.clientPortal">Portal do Cliente</span></div></div><div class="toggle on" id="envio-portal" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="toggleEnvioPagamentosWizard(this)"><div class="kn"></div></div></div>
+          <div id="tw-parcelas-wrap" style="margin:6px 0 4px">
+            <p class="plabel" style="margin:9px 2px 9px" data-t="wizard.installments">Parcelas</p>
+            <div id="tw-parcelas-lista"></div>
+            <span class="inline-link" onclick="addParcelaWizard()"><span data-t="wizard.addInstallment">+ Adicionar parcela</span></span>
+          </div>
           <p style="font-size:12px;color:var(--neutral);margin:10px 2px 0"><span data-t="wizard.clientReceives">Isto define só o que o cliente recebe e preenche — pode mudar depois.</span></p>
           <div id="tw-equipa-wrap" style="display:none;margin-top:18px">
             <p class="plabel" style="margin:0 0 9px" data-t="wizard.assignTeam">Quem fica responsável por este trabalho?</p>
@@ -3247,6 +3252,12 @@
     "milestone.deliveryPending": { pt:"por entregar", en:"not delivered yet", es:"por entregar" },
     "milestone.finalPayment": { pt:"Pagamento final · ", en:"Final payment · ", es:"Pago final · " },
     "milestone.signal": { pt:"Sinal · ", en:"Deposit · ", es:"Señal · " },
+    "wizard.installments": { pt:"Parcelas", en:"Installments", es:"Cuotas" },
+    "wizard.addInstallment": { pt:"+ Adicionar parcela", en:"+ Add installment", es:"+ Añadir cuota" },
+    "wizard.installmentDesc": { pt:"Descrição", en:"Description", es:"Descripción" },
+    "payment.depositLabel": { pt:"Sinal", en:"Deposit", es:"Señal" },
+    "payment.finalLabel": { pt:"Pagamento final", en:"Final payment", es:"Pago final" },
+    "payment.installmentDefault": { pt:"Parcela", en:"Installment", es:"Cuota" },
     // --- Modais — títulos ---
     "modal.changeRolePrefix": { pt:"Alterar papel: ", en:"Change role: ", es:"Cambiar rol: " },
     "modal.help": { pt:"Ajuda", en:"Help", es:"Ayuda" },
@@ -4777,9 +4788,59 @@
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
     if(n===2) renderModelosSugeridos();
-    if(n===3) renderSeletorEquipaTrabalho();
+    if(n===3){ renderSeletorEquipaTrabalho(); seedParcelasWizardSeVazio(); }
     if(n===4) renderReview();
     syncChrome();
+  }
+  /* ===== Parcelas de pagamento — configuração manual no wizard =====
+     Antes disto, o valor era sempre dividido automaticamente 50/50 (sinal +
+     pagamento final) sem qualquer forma de mudar datas, valores ou número de
+     parcelas na criação do trabalho. Agora o wizard mostra as parcelas como
+     linhas editáveis, pré-preenchidas com o 50/50 de sempre (para não mudar o
+     comportamento por omissão), mas totalmente ajustáveis antes de criar. */
+  function toggleEnvioPagamentosWizard(el){
+    el.classList.toggle('on');
+    const on=el.classList.contains('on');
+    document.getElementById('tw-parcelas-wrap').style.display = on ? 'block':'none';
+    if(on) seedParcelasWizardSeVazio();
+  }
+  function parcelaWizardRowHtml(i, p){
+    return '<div class="field-row" data-parc-row="'+i+'" style="align-items:flex-end;margin-bottom:8px">'+
+      '<div class="field" style="flex:1.4"><label style="font-size:11px" data-t="wizard.installmentDesc">Descrição</label><input class="tw-parc-label" value="'+escapeHtml(p.label||'')+'"></div>'+
+      '<div class="field" style="flex:1"><label style="font-size:11px" data-t="wizard.fee">Valor</label><input class="tw-parc-valor" type="number" min="0" step="0.01" value="'+(p.amount||0)+'"></div>'+
+      '<div class="field" style="flex:1"><label style="font-size:11px" data-t="wizard.date">Data</label><input class="tw-parc-data" type="date" value="'+(p.dueDate||'')+'"></div>'+
+      '<div style="flex:none;padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerParcelaWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
+    '</div>';
+  }
+  function seedParcelasWizardSeVazio(){
+    const lista=document.getElementById('tw-parcelas-lista');
+    if(!lista || lista.children.length) return;
+    const valorTxt=(document.getElementById('tw-valor').value||'').trim();
+    const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
+    const half=valorNum*0.5;
+    const hojeIso=new Date().toISOString().slice(0,10);
+    const dataEvento=document.getElementById('tw-data').value||null;
+    lista.innerHTML=[
+      parcelaWizardRowHtml(0, {label:t('payment.depositLabel'), amount:half, dueDate:hojeIso}),
+      parcelaWizardRowHtml(1, {label:t('payment.finalLabel'), amount:half, dueDate:dataEvento})
+    ].join('');
+  }
+  function addParcelaWizard(){
+    const lista=document.getElementById('tw-parcelas-lista');
+    const i=lista.children.length;
+    lista.insertAdjacentHTML('beforeend', parcelaWizardRowHtml(i, {label:t('payment.installmentDefault'), amount:0, dueDate:null}));
+  }
+  function removerParcelaWizard(btn){
+    btn.closest('[data-parc-row]').remove();
+  }
+  function lerParcelasWizard(){
+    return [...document.querySelectorAll('#tw-parcelas-lista [data-parc-row]')].map(row=>({
+      label: row.querySelector('.tw-parc-label').value.trim() || 'Parcela',
+      amount: parseFloat(row.querySelector('.tw-parc-valor').value)||0,
+      status:'pendente',
+      dueDate: row.querySelector('.tw-parc-data').value || null,
+      comprovativo:null
+    }));
   }
   function setModoTrabalho(el,modo){
     trabalhoModo=modo;
@@ -5138,7 +5199,10 @@
       payments:[], milestones:[], reminders:[], history:[], assignedTo:twSelectedMembros.slice(),
       teamPermissions: Object.assign({}, twMembroPermissoes) };
     job.milestones = gerarMilestones(job);
-    job.payments = job.structure.pagamentos ? gerarPagamentos(job) : [];
+    const parcelasListaEl=document.getElementById('tw-parcelas-lista');
+    job.payments = job.structure.pagamentos
+      ? ((parcelasListaEl && parcelasListaEl.children.length) ? lerParcelasWizard() : gerarPagamentos(job))
+      : [];
     job.reminders = job.structure.lembretes ? gerarLembretes(job) : [];
     job.briefing = job.structure.briefing ? gerarBriefing(job) : null;
     job.checklist = job.structure.checklist ? gerarChecklist(job) : null;
@@ -5240,6 +5304,9 @@
     const valOpc=document.getElementById('tw-valor-opcional'); if(valOpc) valOpc.style.display='none';
     const link=document.getElementById('tw-criar-cliente'); if(link) link.style.display='none';
     const nf=document.getElementById('tw-novo-cliente-fields'); if(nf) nf.style.display='none';
+    const parcLista=document.getElementById('tw-parcelas-lista'); if(parcLista) parcLista.innerHTML='';
+    const parcWrap=document.getElementById('tw-parcelas-wrap'); if(parcWrap) parcWrap.style.display='block';
+    const envioPag=document.getElementById('envio-pagamentos'); if(envioPag) envioPag.classList.add('on');
   }
 
   /* ===== MOTOR DE DADOS REAL — trabalhos criados, contratos, assinatura ===== */
@@ -7800,9 +7867,60 @@
       migrarBriefingsAntigos();
       migrarPagamentosAntigos();
       migrarMilestoneEntrega();
+      limparTrabalhosDuplicados();
       jobsVisiveis().forEach(job=>renderJobCard(job));
       renderMonthTicker();
     });
+  }
+  /* limpeza de trabalhos duplicados por criação em duplo-clique/duplo-toque
+     (bug já bloqueado na origem, mas contas que criaram trabalhos duplicados
+     antes da correção continuam com os registos antigos — e cada duplicado
+     gera as suas próprias notificações/tarefas na dashboard, dando a
+     impressão de que tudo aparece a dobrar). Só remove quando os dois
+     trabalhos são praticamente idênticos (mesmo cliente, tipo, data e valor,
+     criados a poucos segundos um do outro) E nenhum dos dois foi tocado desde
+     então (sem assinatura, sem pagamento recebido, sem etapa concluída) —
+     nesse caso é seguro assumir que é o mesmo clique a duplicar-se, nunca
+     dois trabalhos reais que a pessoa quis mesmo criar separadamente. */
+  function idTimestampJob(jobId){
+    const m=String(jobId||'').match(/^job(\d+)/);
+    return m ? parseInt(m[1],10) : null;
+  }
+  function jobIntocadoDesdeCriacao(j){
+    const semAssinatura = !j.contract || j.contract.status!=='assinado';
+    const semPagoAlgum = !(j.payments||[]).some(p=>p.status==='pago');
+    const semMilestoneFeito = !(j.milestones||[]).some(m=>m.status==='feito');
+    return semAssinatura && semPagoAlgum && semMilestoneFeito;
+  }
+  function limparTrabalhosDuplicados(){
+    const jobs=jobsVisiveis().filter(j=>!j.arquivado);
+    const remover=new Set();
+    for(let i=0;i<jobs.length;i++){
+      const a=jobs[i];
+      if(remover.has(a.id)) continue;
+      const ta=idTimestampJob(a.id);
+      if(ta==null) continue;
+      for(let k=i+1;k<jobs.length;k++){
+        const b=jobs[k];
+        if(remover.has(b.id)) continue;
+        const tb=idTimestampJob(b.id);
+        if(tb==null) continue;
+        const mesmoCliente=(a.client||'').trim().toLowerCase()===(b.client||'').trim().toLowerCase();
+        const mesmoTipo=(a.typeLabel||'').trim().toLowerCase()===(b.typeLabel||'').trim().toLowerCase();
+        const mesmaData=(a.dateRaw||null)===(b.dateRaw||null);
+        const mesmoValor=(a.value||0)===(b.value||0);
+        const pertoNoTempo=Math.abs(ta-tb)<=5000;
+        if(mesmoCliente && mesmoTipo && mesmaData && mesmoValor && pertoNoTempo &&
+           jobIntocadoDesdeCriacao(a) && jobIntocadoDesdeCriacao(b)){
+          remover.add(b.id);
+        }
+      }
+    }
+    if(remover.size>0){
+      remover.forEach(id=>delete jobsData[id]);
+      saveJobsData();
+    }
+    return remover.size;
   }
   /* trabalhos criados antes da etapa "entrega" passar a ser universal (ver
      gerarMilestones) não têm essa milestone — sem isto, ficariam presos para
