@@ -2612,12 +2612,12 @@
     }
   };
 
-  async function abrirPortalPorToken(token){
-    const { data, error } = await sb.rpc('portal_get_job', { p_token: token });
+  async function abrirPortalPorToken(token, codigo){
+    const { data, error } = await sb.rpc('portal_get_job', { p_token: token, p_codigo: codigo||null });
     if (error || !data) return null;
     return data;
   }
-  let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null;
+  let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null, ppCodigo=null;
   let colabToken=null, colabData=null;
   /* convite de equipa: o link gerado por api/team/invite.js aponta para
      APP_URL+"?convite=1" — a própria Supabase já autentica a pessoa ao seguir
@@ -2715,6 +2715,31 @@
     el.style.display='block';
     const data = await abrirPortalPorToken(ppToken);
     if (!data){ renderPortalPublicoEstado('<h3>Link inválido</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link não é válido ou já não existe.</p>'); return; }
+    if (data.needsCode){ renderPortalCodigoAcessoForm(); return; }
+    if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
+    ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
+    renderPortalPublicoPrincipal();
+  }
+  /* O link sozinho não basta — o portal também exige um código de acesso de
+     6 dígitos (ver gerarCodigoAcessoPortal). Isto reduz o risco de alguém
+     que intercete só o link conseguir ver informações do projeto. */
+  function renderPortalCodigoAcessoForm(){
+    renderPortalPublicoEstado(`
+      <h3 style="margin:0 0 6px">${t('portal.codeTitle')}</h3>
+      <p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 16px">${t('portal.codeHint')}</p>
+      <div class="field"><input id="pp-codigo-input" inputmode="numeric" maxlength="6" placeholder="000000" style="letter-spacing:4px;font-size:18px;text-align:center"></div>
+      <p id="pp-codigo-erro" style="color:#B23A2E;font-size:12.5px;display:none;margin:4px 2px 0">${t('portal.codeWrong')}</p>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarCodigoAcessoPortal()">${t('portal.codeConfirm')}</button>`);
+    setTimeout(()=>{ const el=document.getElementById('pp-codigo-input'); if(el) el.focus(); }, 60);
+  }
+  async function confirmarCodigoAcessoPortal(){
+    const codigo=(document.getElementById('pp-codigo-input').value||'').trim();
+    const data = await abrirPortalPorToken(ppToken, codigo);
+    if (!data || data.needsCode){
+      const erro=document.getElementById('pp-codigo-erro'); if(erro) erro.style.display='block';
+      return;
+    }
+    ppCodigo=codigo;
     if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
     ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
     renderPortalPublicoPrincipal();
@@ -2824,7 +2849,7 @@
     const signatureImg=canvas.toDataURL('image/png');
     const { data, error } = await sb.rpc('portal_sign_contract', { p_token: ppToken, p_signer_name: nome, p_signature_data_url: signatureImg });
     if (error || !data || !data.ok){ alert('Não foi possível assinar. Tenta novamente.'); return; }
-    const data2 = await abrirPortalPorToken(ppToken);
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
     if (data2 && data2.ownerEmail) dispararEmailEvento('contratoAssinado', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
@@ -2840,7 +2865,7 @@
     const briefing = { observacoes: texto, cronograma, pessoasImportantes: ppPessoasTemp };
     const { data, error } = await sb.rpc('portal_submit_briefing', { p_token: ppToken, p_briefing: briefing });
     if (error || !data || !data.ok){ alert('Não foi possível enviar. Tenta novamente.'); return; }
-    const data2 = await abrirPortalPorToken(ppToken);
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
     if (data2 && data2.ownerEmail) dispararEmailEvento('briefingPreenchido', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
@@ -3337,6 +3362,10 @@
     "portal.shareMessageLinkLabel": { pt:"Link:", en:"Link:", es:"Enlace:" },
     "portal.shareMessageCodeLabel": { pt:"Código de acesso:", en:"Access code:", es:"Código de acceso:" },
     "portal.shareMessageSecurity": { pt:"Por segurança, mantenha estas informações em sigilo. Qualquer pessoa com o link e o código poderá acessar informações deste projeto.", en:"For your security, keep this information confidential. Anyone with the link and the code will be able to access this project's information.", es:"Por seguridad, mantenga esta información en secreto. Cualquier persona con el enlace y el código podrá acceder a la información de este proyecto." },
+    "portal.codeTitle": { pt:"Código de acesso", en:"Access code", es:"Código de acceso" },
+    "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
+    "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
+    "portal.codeConfirm": { pt:"Entrar", en:"Enter", es:"Entrar" },
     "job.resources": { pt:"Recursos adicionais", en:"Additional resources", es:"Recursos adicionales" },
     "job.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
     "job.status.paid": { pt:"pago", en:"paid", es:"pagado" },
