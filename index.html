@@ -934,9 +934,15 @@
     display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none}
   .sheet-back svg,.sheet-x svg{width:15px;height:15px}
   .sheet-header h3{flex:1;font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:600;margin:0}
-  .sheet-progress{display:flex;gap:5px;margin:12px 2px 16px}
-  .sheet-progress span{flex:1;height:3px;border-radius:2px;background:var(--line);transition:background .2s}
+  .sheet-header.wiz h3{text-align:center}
+  .sheet-progress{display:flex;justify-content:center;align-items:center;gap:8px;margin:12px 2px 18px}
+  .sheet-progress span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s,width .2s}
   .sheet-progress span.on{background:var(--brand)}
+  .sheet-progress span.current{width:9px;height:9px}
+  .resumo-grid{display:flex;flex-direction:column;gap:8px}
+  .resumo-card{background:var(--paper-2);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+  .resumo-label{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--neutral);margin-bottom:3px}
+  .resumo-value{font-size:14px;color:var(--ink);line-height:1.45}
   .sheet-body{overflow-y:auto;overflow-x:hidden;padding:2px 2px 4px;max-width:100%}
   .sheet-body::-webkit-scrollbar{width:6px}
   .sheet-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
@@ -2016,7 +2022,7 @@
   <div class="overlay" id="overlay" onclick="closeSheet()"></div>
   <div class="sheet" id="sheet">
     <div class="sheet-grab"></div>
-    <div class="sheet-header">
+    <div class="sheet-header" id="sheetHeader">
       <div class="sheet-back" id="sheetBack" style="display:none" onclick="panelBack()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
       </div>
@@ -2025,7 +2031,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </div>
     </div>
-    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span></div>
+    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="sheet-body" id="sheetBody">
 
@@ -2039,14 +2045,12 @@
         </div>
       </div>
 
-      <!-- ✨ TRABALHO — 3 momentos numa folha contínua -->
+      <!-- ✨ TRABALHO — 5 etapas + resumo numa folha contínua -->
       <div class="panel" data-panel="trabalho">
+
+        <!-- ETAPA 1 — Informações do Trabalho -->
         <div class="moment" data-moment="1">
-          <div class="segmented" id="tw-modo" style="margin-bottom:10px">
-            <button class="on" onclick="setModoTrabalho(this,'completo')"><span data-t="wizard.fullMode">Completo</span></button>
-            <button onclick="setModoTrabalho(this,'rapido')"><span data-t="wizard.quickMode">Rápido</span></button>
-          </div>
-          <p style="font-size:12px;color:var(--neutral);margin:-2px 0 16px" id="tw-modo-hint"><span data-t="wizard.fullHint"><span data-t="wizard.fullHint">Gera contrato, briefing, cronograma e pagamentos automaticamente.</span></span></p>
+          <div class="field"><label data-t="wizard.jobTitle">Título</label><input id="tw-nome" placeholder="Ex: Casamento Sofia &amp; João" data-t-placeholder="wizard.jobNamePlaceholder"></div>
 
           <div class="field" style="position:relative">
             <label data-t="wizard.client">Cliente</label>
@@ -2055,60 +2059,39 @@
             <span class="inline-link" id="tw-criar-cliente" style="display:none;margin-top:8px" onclick="revelarNovoCliente()"><span data-t="wizard.createAsNewPrefix">+ Criar “</span><span id="tw-novo-nome"></span><span data-t="wizard.createAsNewSuffix">” como novo cliente</span></span>
             <div id="tw-novo-cliente-fields" style="display:none;margin-top:10px">
               <div class="field-row">
-                <div class="field"><input id="tw-novo-email" placeholder="email (opcional)" data-t-placeholder="field.emailOptional"></div>
-                <div class="field"><input id="tw-novo-tel" placeholder="telefone (opcional)" data-t-placeholder="field.phoneOptional"></div>
+                <div class="field"><input id="tw-novo-email" placeholder="email" data-t-placeholder="field.email"></div>
+                <div class="field"><input id="tw-novo-tel" placeholder="telefone" data-t-placeholder="field.phone"></div>
               </div>
               <button class="btn soft" style="width:100%" onclick="guardarNovoClienteInline()"><span data-t="wizard.saveClient">Guardar cliente</span></button>
             </div>
           </div>
-          <div class="field"><label><span data-t="wizard.jobName">Nome do trabalho</span></label><input id="tw-nome" placeholder="Ex: Casamento Sofia &amp; João" data-t-placeholder="wizard.jobNamePlaceholder"></div>
-          <div class="field"><label data-t="wizard.date">Data</label><input type="date" id="tw-data"></div>
+
+          <div class="field">
+            <label data-t="wizard.date">Data</label>
+            <div class="field-row" style="gap:10px;margin-bottom:0">
+              <div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.dateStart">Data de início</label><input type="date" id="tw-data"></div>
+              <div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.dateEnd">Data de fim</label><input type="date" id="tw-data-fim"></div>
+            </div>
+          </div>
           <div class="horario-card">
             <div class="horario-row">
               <div class="horario-col"><label data-t="wizard.start">Início</label><input type="time" id="tw-hora" onchange="atualizarDuracaoCalculada()"></div>
               <div class="horario-divider"></div>
-              <div class="horario-col"><label><span data-t="wizard.end">Fim</span> <span style="color:var(--neutral);font-weight:400"><span data-t="wizard.optional">(opcional)</span></span></label><input type="time" id="tw-hora-fim" onchange="atualizarDuracaoCalculada()"></div>
+              <div class="horario-col"><label data-t="wizard.end">Fim</label><input type="time" id="tw-hora-fim" onchange="atualizarDuracaoCalculada()"></div>
             </div>
             <div class="horario-duracao" id="tw-duracao-calc" style="display:none"></div>
           </div>
+
           <div class="field" style="position:relative">
-            <label><span data-t="wizard.address">Endereço</span> <span style="color:var(--neutral);font-weight:400">(opcional)</span></label>
+            <label data-t="wizard.address">Local</label>
             <input id="tw-local" placeholder="Rua, número, cidade…" data-t-placeholder="wizard.addressPlaceholder" autocomplete="off" oninput="onEnderecoInput()" onfocus="onEnderecoInput()">
             <div class="addr-dropdown" id="tw-addr-dropdown" style="display:none"></div>
           </div>
-          <div class="field"><label><span data-t="wizard.fee">Valor</span> <span id="tw-valor-opcional" style="color:var(--neutral);font-weight:400;display:none">(opcional)</span></label><input id="tw-valor" placeholder="2.400 €"></div>
 
-          <div style="margin:2px 0 16px">
-            <label style="font-size:12px;font-weight:600;color:var(--ink-soft);display:block;margin-bottom:8px"><span data-t="job.resources">Recursos adicionais</span> <span style="color:var(--neutral);font-weight:400">(opcional)</span></label>
-            <div id="tw-recursos-lista"></div>
-            <span class="inline-link" onclick="abrirModalRecurso()"><span data-t="wizard.addResource">+ Adicionar recurso</span></span>
-          </div>
+          <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €"></div>
 
-          <button class="btn primary" style="width:100%" onclick="trabalhoNext()"><span data-t="wizard.continue"><span data-t="wizard.continue">Continuar</span></span></button>
-        </div>
-
-
-        <div class="moment" data-moment="2" style="display:none">
-          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px"><span data-t="wizard.suggestedFor">Modelos sugeridos para</span> <b id="sugestao-nome-trabalho" style="color:var(--ink)"></b></p>
-          <div id="modelos-sugeridos-lista"></div>
-          <div id="tw-modelo-escolhido-status"></div>
-          <div style="display:flex;gap:8px;margin:10px 0 4px">
-            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('contrato-usar')"><span data-t="wizard.searchManually">Pesquisar manualmente</span></button>
-            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></button>
-          </div>
-          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue.btn">Continuar</span></button>
-        </div>
-
-        <div class="moment" data-moment="3" style="display:none">
-          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px"><span data-t="wizard.whatToSend">O que deseja enviar ao cliente?</span></p>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.contract">Contrato</div></div><div class="toggle on" id="envio-contrato" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.schedule"><span data-t="wizard.schedule">Cronograma</span></div></div><div class="toggle on" id="envio-cronograma" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.keyPeople"><span data-t="wizard.keyPeople">Pessoas Importantes</span></div></div><div class="toggle on" id="envio-pessoas" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.importantNotes"><span data-t="wizard.importantNotes">Observações Importantes</span></div></div><div class="toggle on" id="envio-observacoes" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm"><span data-t="wizard.clientPortal">Portal do Cliente</span></div></div><div class="toggle on" id="envio-portal" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="toggleEnvioPagamentosWizard(this)"><div class="kn"></div></div></div>
-          <div id="tw-recorrencia-row" class="struct-row" style="display:none"><div class="struct-l"><div class="nm" data-t="recur.toggle">Contrato recorrente</div><span class="sub" data-t="recur.toggleHint">Para mensalidades, avenças e retainers.</span></div><div class="toggle" id="envio-recorrencia" onclick="toggleRecorrenciaWizard(this)"><div class="kn"></div></div></div>
-          <div id="tw-recorrencia-config" style="display:none;margin:2px 0 4px">
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="recur.toggle">Contrato recorrente</div><span class="sub" data-t="recur.toggleHint">Para mensalidades, avenças e retainers.</span></div><div class="toggle" id="envio-recorrencia" onclick="toggleRecorrenciaWizard(this)"><div class="kn"></div></div></div>
+          <div id="tw-recorrencia-config" style="display:none;margin:4px 0 6px">
             <div class="field"><label data-t="recur.frequency">Frequência</label>
               <select id="tw-recur-freq" class="tw-recur-input">
                 <option value="mensal" data-t="recur.freq.monthly">Mensal</option>
@@ -2118,32 +2101,71 @@
                 <option value="semestral" data-t="recur.freq.biannual">Semestral</option>
                 <option value="anual" data-t="recur.freq.yearly">Anual</option>
               </select></div>
-            <div class="field-row" style="gap:8px">
-              <div class="field" style="flex:1"><label data-t="recur.perCycle">Valor por ciclo</label><input id="tw-recur-valor" type="number" min="0" step="0.01" placeholder="300"></div>
-              <div class="field" style="flex:1"><label data-t="recur.start">Primeira cobrança</label><input id="tw-recur-inicio" type="date"></div>
-            </div>
-            <div class="field"><label data-t="recur.end">Termina em (opcional)</label><input id="tw-recur-fim" type="date"></div>
+            <div class="struct-row"><div class="struct-l"><div class="nm" data-t="recur.autoRenew">Renovação automática</div><span class="sub" data-t="recur.autoRenewHint">Renova indefinidamente até você terminar.</span></div><div class="toggle on" id="tw-recur-renova" onclick="toggleRenovacaoAutoWizard(this)"><div class="kn"></div></div></div>
+            <div class="field" id="tw-recur-fim-wrap" style="display:none"><label data-t="recur.endDate">Termina em</label><input id="tw-recur-fim" type="date"></div>
           </div>
-          <div id="tw-parcelas-wrap" style="margin:6px 0 4px">
-            <p class="plabel" style="margin:9px 2px 9px" data-t="wizard.installments">Parcelas</p>
+
+          <button class="btn primary" style="width:100%;margin-top:10px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- ETAPA 2 — Recursos e Equipe -->
+        <div class="moment" data-moment="2" style="display:none">
+          <div style="margin:2px 0 20px">
+            <p class="plabel" style="margin:0 0 9px" data-t="job.resources">Recursos adicionais</p>
+            <div id="tw-recursos-lista"></div>
+            <span class="inline-link" onclick="abrirModalRecurso()"><span data-t="wizard.addResource">+ Adicionar recurso</span></span>
+          </div>
+          <div id="tw-equipa-wrap">
+            <p class="plabel" style="margin:0 0 3px" data-t="wizard.responsibles">Responsáveis pelo trabalho</p>
+            <p style="font-size:12px;color:var(--neutral);margin:0 0 10px" data-t="wizard.responsiblesHint">Adicione quem participa neste trabalho. Cada pessoa só vê este trabalho.</p>
+            <div id="tw-equipa-lista"></div>
+            <div id="tw-colab-externo-status"></div>
+            <button class="btn ghost" style="width:100%;margin-top:8px" onclick="abrirColaboradorExternoNoWizard()"><span data-t="wizard.addCollaborator">+ Adicionar colaborador</span></button>
+          </div>
+          <button class="btn primary" style="width:100%;margin-top:18px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- ETAPA 3 — Portal do Cliente -->
+        <div class="moment" data-moment="3" style="display:none">
+          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.whatClientReceives">O que o cliente recebe?</p>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.contract">Contrato</div></div><div class="toggle on" id="envio-contrato" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.schedule">Cronograma</div></div><div class="toggle on" id="envio-cronograma" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.keyPeople">Pessoas Importantes</div></div><div class="toggle on" id="envio-pessoas" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.importantNotes">Observações Importantes</div></div><div class="toggle on" id="envio-observacoes" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
+          <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- ETAPA 4 — Pagamentos -->
+        <div class="moment" data-moment="4" style="display:none">
+          <div id="tw-pag-recorrente-nota" class="warn-box" style="display:none;background:var(--btn-06);border-color:var(--btn-14);color:var(--ink-soft)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg>
+            <div data-t="wizard.paymentsRecurringNote">Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.</div>
+          </div>
+          <div id="tw-parcelas-wrap">
+            <p class="plabel" style="margin:0 2px 10px" data-t="wizard.installments">Parcelas</p>
             <div id="tw-parcelas-lista"></div>
             <span class="inline-link" onclick="addParcelaWizard()"><span data-t="wizard.addInstallment">+ Adicionar parcela</span></span>
           </div>
-          <p style="font-size:12px;color:var(--neutral);margin:10px 2px 0"><span data-t="wizard.clientReceives">Isto define só o que o cliente recebe e preenche — pode mudar depois.</span></p>
-          <div id="tw-equipa-wrap" style="display:none;margin-top:18px">
-            <p class="plabel" style="margin:0 0 9px" data-t="wizard.assignTeam">Quem fica responsável por este trabalho?</p>
-            <p style="font-size:12px;color:var(--neutral);margin:0 0 9px" data-t="wizard.teamPermissionsHint">Toque no ícone ao lado de cada pessoa para escolher o que ela vê.</p>
-            <div id="tw-equipa-lista"></div>
-            <div id="tw-colab-externo-status"></div>
-            <button class="btn ghost" style="width:100%;margin-top:8px" onclick="abrirColaboradorExternoNoWizard()"><span data-t="wizard.addExternalCollaborator">+ Colaborador externo</span></button>
-          </div>
-          <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue.btn">Continuar</span></button>
+          <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <div class="moment" data-moment="4" style="display:none">
-          <div id="trabalho-review-summary" style="font-size:14.5px;line-height:1.7;margin-bottom:6px"></div>
-          <p style="font-size:13px;color:var(--neutral);margin-bottom:18px"><span data-t="wizard.canChangeAfter">Pode editar tudo depois de criado.</span></p>
-          <button class="btn primary" style="width:100%" onclick="trabalhoCreate()"><span data-t="wizard.createJob">Criar trabalho →</span></button>
+        <!-- ETAPA 5 — Contrato -->
+        <div class="moment" data-moment="5" style="display:none">
+          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px"><span data-t="wizard.suggestedFor">Modelos sugeridos para</span> <b id="sugestao-nome-trabalho" style="color:var(--ink)"></b></p>
+          <div id="modelos-sugeridos-lista"></div>
+          <div id="tw-modelo-escolhido-status"></div>
+          <div style="display:flex;gap:8px;margin:10px 0 4px">
+            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('contrato-usar')"><span data-t="wizard.searchManually">Pesquisar</span></button>
+            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></button>
+          </div>
+          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- RESUMO -->
+        <div class="moment" data-moment="6" style="display:none">
+          <div id="trabalho-review-summary" style="margin-bottom:14px"></div>
+          <button class="btn primary" style="width:100%" onclick="trabalhoCreate()"><span data-t="wizard.createJob">Criar trabalho</span></button>
         </div>
       </div>
 
@@ -2848,6 +2870,37 @@
     "common.title": { pt:"Título", en:"Title", es:"Título" },
     "sheet.create": { pt:"Criar", en:"Create", es:"Crear" },
     "wizard.newJob": { pt:"Novo trabalho", en:"New job", es:"Nuevo trabajo" },
+    "wizard.step1": { pt:"Informações do trabalho", en:"Job details", es:"Datos del trabajo" },
+    "wizard.step2": { pt:"Recursos e equipe", en:"Resources & team", es:"Recursos y equipo" },
+    "wizard.step3": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
+    "wizard.step4": { pt:"Pagamentos", en:"Payments", es:"Pagos" },
+    "wizard.step5": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "wizard.step6": { pt:"Resumo", en:"Summary", es:"Resumen" },
+    "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
+    "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
+    "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
+    "wizard.responsibles": { pt:"Responsáveis pelo trabalho", en:"Responsible for this job", es:"Responsables del trabajo" },
+    "wizard.responsiblesHint": { pt:"Adicione quem participa neste trabalho. Cada pessoa só vê este trabalho.", en:"Add who works on this job. Each person only sees this job.", es:"Añade quién participa en este trabajo. Cada persona solo ve este trabajo." },
+    "wizard.addCollaborator": { pt:"+ Adicionar colaborador", en:"+ Add collaborator", es:"+ Añadir colaborador" },
+    "wizard.whatClientReceives": { pt:"O que o cliente recebe?", en:"What does the client receive?", es:"¿Qué recibe el cliente?" },
+    "wizard.paymentsRecurringNote": { pt:"Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.", en:"This contract is recurring. Charges are generated automatically each cycle, based on the chosen frequency.", es:"Este contrato es recurrente. Los cobros se generan automáticamente cada ciclo, según la frecuencia elegida." },
+    "wizard.installmentOne": { pt:"parcela", en:"installment", es:"cuota" },
+    "wizard.installmentMany": { pt:"parcelas", en:"installments", es:"cuotas" },
+    "recur.autoRenew": { pt:"Renovação automática", en:"Auto-renew", es:"Renovación automática" },
+    "recur.autoRenewHint": { pt:"Renova indefinidamente até você terminar.", en:"Renews indefinitely until you end it.", es:"Renueva indefinidamente hasta que la termines." },
+    "recur.endDate": { pt:"Termina em", en:"Ends on", es:"Termina en" },
+    "resumo.client": { pt:"Cliente", en:"Client", es:"Cliente" },
+    "resumo.title": { pt:"Título", en:"Title", es:"Título" },
+    "resumo.dates": { pt:"Datas", en:"Dates", es:"Fechas" },
+    "resumo.location": { pt:"Local", en:"Location", es:"Lugar" },
+    "resumo.responsibles": { pt:"Responsáveis", en:"Responsible", es:"Responsables" },
+    "resumo.clientReceives": { pt:"O cliente recebe", en:"Client receives", es:"El cliente recibe" },
+    "resumo.contractTemplate": { pt:"Modelo de contrato", en:"Contract template", es:"Plantilla de contrato" },
+    "resumo.noTemplate": { pt:"Nenhum selecionado", en:"None selected", es:"Ninguno seleccionado" },
+    "resumo.none": { pt:"Sem pagamentos", en:"No payments", es:"Sin pagos" },
+    "resumo.toDefine": { pt:"a definir", en:"to define", es:"por definir" },
+    "field.email": { pt:"email", en:"email", es:"email" },
+    "field.phone": { pt:"telefone", en:"phone", es:"teléfono" },
     "wizard.newContract": { pt:"Novo contrato", en:"New contract", es:"Nuevo contrato" },
     "wizard.duplicateContract": { pt:"Duplicar contrato", en:"Duplicate contract", es:"Duplicar contrato" },
     "wizard.newTemplate": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
@@ -4662,16 +4715,29 @@
     document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
   }
+  const WIZARD_STEP_KEYS=['wizard.step1','wizard.step2','wizard.step3','wizard.step4','wizard.step5','wizard.step6'];
   function syncChrome(){
     const current=panelStack[panelStack.length-1];
     const back=document.getElementById('sheetBack');
     const showBack = panelStack.length>1 || (current==='trabalho' && trabalhoMoment>1);
     back.style.display = showBack? 'grid':'none';
     const prog=document.getElementById('sheetProgress');
+    const header=document.getElementById('sheetHeader');
     if(current==='trabalho'){
+      // 5 pontos para as 5 etapas; o resumo (momento 6) mantém os 5 pontos
+      // preenchidos com o último marcado como atual.
+      const passo=Math.min(trabalhoMoment,5);
       prog.style.display='flex';
-      prog.querySelectorAll('span').forEach((s,i)=>s.classList.toggle('on', i<trabalhoMoment));
-    } else { prog.style.display='none'; }
+      prog.querySelectorAll('span').forEach((s,i)=>{
+        s.classList.toggle('on', i<passo);
+        s.classList.toggle('current', i===passo-1);
+      });
+      header.classList.add('wiz');
+      document.getElementById('sheetTitle').textContent=t(WIZARD_STEP_KEYS[trabalhoMoment-1]||'wizard.step1');
+    } else {
+      prog.style.display='none';
+      header.classList.remove('wiz');
+    }
   }
   function pushPanel(name){
     panelStack.push(name);
@@ -5088,10 +5154,21 @@
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
-    if(n===2) renderModelosSugeridos();
-    if(n===3){ renderSeletorEquipaTrabalho(); seedParcelasWizardSeVazio(); }
-    if(n===4) renderReview();
+    if(n===2) renderSeletorEquipaTrabalho();
+    if(n===4) prepararEtapaPagamentos();
+    if(n===5) renderModelosSugeridos();
+    if(n===6) renderReview();
+    document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
+  }
+  /* Etapa 4 (Pagamentos): recorrência é definida na Etapa 1 — aqui, se estiver
+     ligada, escondemos as parcelas manuais e mostramos a nota de cobrança
+     automática; caso contrário, semeamos as parcelas por omissão. */
+  function prepararEtapaPagamentos(){
+    const recorrente=document.getElementById('envio-recorrencia').classList.contains('on');
+    document.getElementById('tw-pag-recorrente-nota').style.display = recorrente?'flex':'none';
+    document.getElementById('tw-parcelas-wrap').style.display = recorrente?'none':'block';
+    if(!recorrente) seedParcelasWizardSeVazio();
   }
   /* ===== Parcelas de pagamento — configuração manual no wizard =====
      Antes disto, o valor era sempre dividido automaticamente 50/50 (sinal +
@@ -5099,41 +5176,24 @@
      parcelas na criação do trabalho. Agora o wizard mostra as parcelas como
      linhas editáveis, pré-preenchidas com o 50/50 de sempre (para não mudar o
      comportamento por omissão), mas totalmente ajustáveis antes de criar. */
-  function toggleEnvioPagamentosWizard(el){
-    el.classList.toggle('on');
-    const on=el.classList.contains('on');
-    const recorrOn=document.getElementById('envio-recorrencia').classList.contains('on');
-    document.getElementById('tw-recorrencia-row').style.display = on ? 'flex':'none';
-    document.getElementById('tw-parcelas-wrap').style.display = (on && !recorrOn) ? 'block':'none';
-    document.getElementById('tw-recorrencia-config').style.display = (on && recorrOn) ? 'block':'none';
-    if(on && !recorrOn) seedParcelasWizardSeVazio();
-  }
-  /* Recorrência e parcelas one-off são mutuamente exclusivas — ligar uma
-     esconde a outra. Ao ligar, pré-preenche valor (do campo Valor do trabalho)
-     e primeira cobrança (data do evento, ou hoje). */
+  /* Recorrência (Etapa 1): só mostra/esconde a configuração de frequência e
+     renovação. Valor por ciclo = campo Valor; primeira cobrança = data de
+     início — lidos no momento de criar o trabalho. */
   function toggleRecorrenciaWizard(el){
     el.classList.toggle('on');
-    const on=el.classList.contains('on');
-    document.getElementById('tw-recorrencia-config').style.display = on ? 'block':'none';
-    document.getElementById('tw-parcelas-wrap').style.display = on ? 'none':'block';
-    if(on){
-      const vIn=document.getElementById('tw-recur-valor');
-      if(vIn && !vIn.value){
-        const valorTxt=(document.getElementById('tw-valor').value||'').trim();
-        const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
-        if(valorNum) vIn.value=valorNum;
-      }
-      const iIn=document.getElementById('tw-recur-inicio');
-      if(iIn && !iIn.value) iIn.value=document.getElementById('tw-data').value||new Date().toISOString().slice(0,10);
-    } else {
-      seedParcelasWizardSeVazio();
-    }
+    document.getElementById('tw-recorrencia-config').style.display = el.classList.contains('on') ? 'block':'none';
+  }
+  /* Renovação automática ligada = recorrência indefinida (sem data de fim).
+     Desligada = exige uma data de fim, que aparece por baixo. */
+  function toggleRenovacaoAutoWizard(el){
+    el.classList.toggle('on');
+    document.getElementById('tw-recur-fim-wrap').style.display = el.classList.contains('on') ? 'none':'block';
   }
   function parcelaWizardRowHtml(i, p){
-    return '<div class="field-row" data-parc-row="'+i+'" style="align-items:flex-end;margin-bottom:8px">'+
-      '<div class="field" style="flex:1.4"><label style="font-size:11px" data-t="wizard.installmentDesc">Descrição</label><input class="tw-parc-label" value="'+escapeHtml(p.label||'')+'"></div>'+
-      '<div class="field" style="flex:1"><label style="font-size:11px" data-t="wizard.fee">Valor</label><input class="tw-parc-valor" type="number" min="0" step="0.01" value="'+(p.amount||0)+'"></div>'+
-      '<div class="field" style="flex:1"><label style="font-size:11px" data-t="wizard.date">Data</label><input class="tw-parc-data" type="date" value="'+(p.dueDate||'')+'"></div>'+
+    return '<div class="field-row" data-parc-row="'+i+'" style="align-items:flex-end;gap:10px;margin-bottom:8px">'+
+      '<div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.fee">Valor</label><input class="tw-parc-valor" type="number" min="0" step="0.01" placeholder="0" value="'+(p.amount||0)+'"></div>'+
+      '<input type="hidden" class="tw-parc-label" value="'+escapeHtml(p.label||'')+'">'+
+      '<div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.date">Data</label><input class="tw-parc-data" type="date" value="'+(p.dueDate||'')+'"></div>'+
       '<div style="flex:none;padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerParcelaWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
     '</div>';
   }
@@ -5167,18 +5227,8 @@
       comprovativo:null
     }));
   }
-  function setModoTrabalho(el,modo){
-    trabalhoModo=modo;
-    el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    el.classList.add('on');
-    document.getElementById('tw-modo-hint').textContent = modo==='rapido'
-      ? 'Fica só na sua agenda, com lembrete na data. Sem contrato nem informações do cliente.'
-      : 'Sugere um contrato e prepara o que você vai enviar ao cliente.';
-    document.getElementById('tw-valor-opcional').style.display = modo==='rapido' ? 'inline':'none';
-  }
   function trabalhoNext(){
-    if(trabalhoMoment===1 && trabalhoModo==='rapido'){ trabalhoGoto(4); return; }
-    trabalhoGoto(Math.min(4, trabalhoMoment+1));
+    trabalhoGoto(Math.min(6, trabalhoMoment+1));
   }
   let modeloContratoSelecionado=null;
   function renderModelosSugeridos(){
@@ -5383,28 +5433,70 @@
     if(!e.target.closest('#tw-local') && !e.target.closest('#tw-addr-dropdown')) dd.style.display='none';
   });
   function populateEnderecoSuggestions(){ /* sugestões agora carregam ao digitar — ver onEnderecoInput() */ }
+  /* Resumo final em cartões — junta e apresenta tudo o que foi definido no
+     wizard antes da criação. Escreve em frases limpas, sem listas coridas com
+     travessões. */
   function renderReview(){
-    const cliente=document.getElementById('tw-cliente').value.trim()||'cliente a definir';
-    const nomeTrabalho=document.getElementById('tw-nome').value.trim()||'trabalho sem nome';
-    const data=formatDataHora()||'data a definir';
-    const local=lerEndereco()||'local a definir';
-    const valor=document.getElementById('tw-valor').value.trim();
-    let html='<div style="font-size:16.5px;font-weight:700;color:var(--ink);margin-bottom:4px">'+escapeHtml(nomeTrabalho)+'</div>';
-    html+='<div style="color:var(--ink-soft);margin-bottom:8px">'+escapeHtml(cliente)+'</div>';
-    html+='<div>'+data+'</div>';
-    html+='<div>'+escapeHtml(local)+'</div>';
-    if(valor) html+='<div>'+escapeHtml(valor)+'</div>';
-    if(recursosAdicionaisAtuais.length) html+='<div style="margin-top:8px;color:var(--ink-soft)">'+recursosAdicionaisAtuais.map(r=>escapeHtml(r.nome)).join(' · ')+'</div>';
-    if(trabalhoModo==='rapido'){
-      html+='<div style="margin-top:14px;color:var(--neutral)">Modo rápido: só fica na sua agenda, com lembrete na data. Sem contrato, sem informações do cliente.</div>';
+    const cliente=document.getElementById('tw-cliente').value.trim();
+    const nomeTrabalho=document.getElementById('tw-nome').value.trim();
+    const valorTxt=document.getElementById('tw-valor').value.trim();
+    const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
+    const inicioIso=document.getElementById('tw-data').value||null;
+    const fimIso=document.getElementById('tw-data-fim').value||null;
+    const hora=document.getElementById('tw-hora').value||null;
+    const horaFim=document.getElementById('tw-hora-fim').value||null;
+    const local=lerEndereco();
+    const recorrente=document.getElementById('envio-recorrencia').classList.contains('on');
+
+    const fmtIso=iso=> iso ? iso.split('-').reverse().join('/') : null;
+    let datasTxt='';
+    if(inicioIso && fimIso && inicioIso!==fimIso) datasTxt=fmtIso(inicioIso)+' a '+fmtIso(fimIso);
+    else if(inicioIso) datasTxt=fmtIso(inicioIso);
+    if(hora){ datasTxt+=(datasTxt?', ':'')+hora+(horaFim?(' às '+horaFim):''); }
+
+    // responsáveis
+    const nomesResp=(twSelectedMembros||[]).map(uid=>{
+      const m=(membrosEquipa||[]).find(x=>x.user_id===uid);
+      return m ? (m.nome||m.email) : null;
+    }).filter(Boolean);
+    if(twColaboradorExternoPendente) nomesResp.push(twColaboradorExternoPendente.email);
+
+    // conteúdo enviado ao cliente
+    const conteudo=[];
+    if(document.getElementById('envio-contrato').classList.contains('on')) conteudo.push(t('job.contract'));
+    if(document.getElementById('envio-cronograma').classList.contains('on')) conteudo.push(t('wizard.schedule'));
+    if(document.getElementById('envio-pessoas').classList.contains('on')) conteudo.push(t('wizard.keyPeople'));
+    if(document.getElementById('envio-observacoes').classList.contains('on')) conteudo.push(t('wizard.importantNotes'));
+    if(document.getElementById('envio-pagamentos').classList.contains('on')) conteudo.push(t('job.payments'));
+
+    // pagamentos
+    let pagTxt;
+    if(recorrente){
+      const freqLabel=t((RECORRENCIA_FREQ[document.getElementById('tw-recur-freq').value]||{}).labelKey||'recur.freq.monthly');
+      pagTxt=t('recur.badge')+' · '+freqLabel+(valorNum?(' · '+fmtMoney(valorNum)+t((RECORRENCIA_FREQ[document.getElementById('tw-recur-freq').value]||{}).sufixoKey||'recur.per.month')):'');
     } else {
-      let incl=[];
-      ['envio-contrato','envio-cronograma','envio-pessoas','envio-observacoes','envio-portal','envio-pagamentos'].forEach(id2=>{
-        const tg=document.getElementById(id2);
-        if(tg && tg.classList.contains('on')) incl.push(tg.closest('.struct-row').querySelector('.nm').textContent.toLowerCase());
-      });
-      html+='<div style="margin-top:14px;color:var(--neutral)">'+t('job.clientRespondsViaLink')+': '+(incl.length? incl.join(' · ') : 'nada — liga pelo menos uma opção')+'</div>';
+      const linhas=[...document.querySelectorAll('#tw-parcelas-lista [data-parc-row]')];
+      if(linhas.length){
+        const soma=linhas.reduce((s,r)=>s+(parseFloat(r.querySelector('.tw-parc-valor').value)||0),0);
+        pagTxt=linhas.length+' '+(linhas.length===1?t('wizard.installmentOne'):t('wizard.installmentMany'))+' · '+fmtMoney(soma);
+      } else {
+        pagTxt=valorNum?fmtMoney(valorNum):t('resumo.none');
+      }
     }
+
+    const modelo = twModeloEscolhido ? twModeloEscolhido.nome : t('resumo.noTemplate');
+
+    const card=(label,valor)=> valor ? '<div class="resumo-card"><div class="resumo-label">'+escapeHtml(label)+'</div><div class="resumo-value">'+escapeHtml(valor)+'</div></div>' : '';
+    let html='<div class="resumo-grid">';
+    html+=card(t('resumo.client'), cliente||t('resumo.toDefine'));
+    html+=card(t('resumo.title'), nomeTrabalho||t('resumo.toDefine'));
+    if(datasTxt) html+=card(t('resumo.dates'), datasTxt);
+    if(local) html+=card(t('resumo.location'), local);
+    if(nomesResp.length) html+=card(t('resumo.responsibles'), nomesResp.join(', '));
+    html+=card(t('job.payments'), pagTxt);
+    if(conteudo.length) html+=card(t('resumo.clientReceives'), conteudo.join(', '));
+    html+=card(t('resumo.contractTemplate'), modelo);
+    html+='</div>';
     document.getElementById('trabalho-review-summary').innerHTML=html;
   }
   function checkNovoCliente(){
@@ -5478,6 +5570,7 @@
     const cliente=document.getElementById('tw-cliente').value.trim()||'Novo cliente';
     const nomeTrabalho=document.getElementById('tw-nome').value.trim()||cliente;
     const dateRaw=document.getElementById('tw-data').value||null;
+    const dateFimRaw=document.getElementById('tw-data-fim').value||null;
     const horaIni=document.getElementById('tw-hora').value||null;
     const horaFim=document.getElementById('tw-hora-fim').value||null;
     const duracaoHoras=calcularDuracaoHoras(horaIni, horaFim);
@@ -5489,22 +5582,20 @@
     const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
     const typeLabel=nomeTrabalho||t('job.typeDefault');
 
-    let structure;
-    if(trabalhoModo==='rapido'){
-      structure={contrato:false, briefing:false, cronograma:false, pagamentos:false, checklist:false, lembretes:true, portal:false};
-    } else {
-      const ligado=id2=>{ const el=document.getElementById(id2); return !!(el && el.classList.contains('on')); };
-      const envioCronograma=ligado('envio-cronograma'), envioPessoas=ligado('envio-pessoas'), envioObservacoes=ligado('envio-observacoes');
-      structure={
-        contrato: ligado('envio-contrato'),
-        briefing: envioCronograma || envioPessoas || envioObservacoes,
-        cronograma: true,
-        pagamentos: ligado('envio-pagamentos'),
-        checklist: false,
-        lembretes: true,
-        portal: ligado('envio-portal')
-      };
-    }
+    // Portal do Cliente é agora sempre parte da estrutura (deixou de ser um
+    // toggle manual). "cronograma:true" mantém-se porque o cronograma faz parte
+    // do trabalho independentemente do que o cliente recebe.
+    const ligado=id2=>{ const el=document.getElementById(id2); return !!(el && el.classList.contains('on')); };
+    const envioPessoas=ligado('envio-pessoas'), envioObservacoes=ligado('envio-observacoes');
+    const structure={
+      contrato: ligado('envio-contrato'),
+      briefing: ligado('envio-cronograma') || envioPessoas || envioObservacoes,
+      cronograma: true,
+      pagamentos: ligado('envio-pagamentos'),
+      checklist: false,
+      lembretes: true,
+      portal: true
+    };
 
     /* captura o email/telefone digitados no wizard mesmo que o utilizador não
        tenha clicado em "Guardar cliente" — e persiste o cliente para reutilização.
@@ -5518,18 +5609,22 @@
     const id='job'+Date.now()+Math.random().toString(36).slice(2,7);
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
-      date:data, dateRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
+      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
       payments:[], milestones:[], reminders:[], history:[], assignedTo:twSelectedMembros.slice(),
       teamPermissions: Object.assign({}, twMembroPermissoes) };
-    const recorrLigada = job.structure.pagamentos && document.getElementById('envio-recorrencia') && document.getElementById('envio-recorrencia').classList.contains('on');
+    // Recorrência (definida na Etapa 1): valor por ciclo = campo Valor;
+    // primeira cobrança = data de início; renovação automática ligada => sem
+    // data de fim (renova indefinidamente); desligada => usa a data de fim.
+    const recorrLigada = document.getElementById('envio-recorrencia').classList.contains('on');
     if(recorrLigada){
       const freq=document.getElementById('tw-recur-freq').value;
-      const valorCiclo=parseFloat(document.getElementById('tw-recur-valor').value)||valorNum||0;
-      const inicio=document.getElementById('tw-recur-inicio').value || new Date().toISOString().slice(0,10);
-      const fim=document.getElementById('tw-recur-fim').value || null;
+      const valorCiclo=valorNum||0;
+      const inicio=dateRaw || new Date().toISOString().slice(0,10);
+      const renovaAuto=document.getElementById('tw-recur-renova').classList.contains('on');
+      const fim=renovaAuto ? null : (document.getElementById('tw-recur-fim').value || null);
       iniciarRecorrencia(job, freq, valorCiclo, inicio, fim);
     } else {
       const parcelasListaEl=document.getElementById('tw-parcelas-lista');
@@ -5627,29 +5722,24 @@
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
-    ['tw-cliente','tw-nome','tw-data','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-horas','tw-equipa','tw-novo-email','tw-novo-tel'].forEach(id=>{
+    ['tw-cliente','tw-nome','tw-data','tw-data-fim','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-novo-email','tw-novo-tel'].forEach(id=>{
       const el=document.getElementById(id); if(el) el.value='';
     });
     const durCalc=document.getElementById('tw-duracao-calc'); if(durCalc) durCalc.textContent='';
     recursosAdicionaisAtuais=[]; renderRecursosLista();
-    document.querySelectorAll('#tw-servicos .chip-custom, #tw-equip .chip-custom').forEach(c=>c.remove());
-    document.querySelectorAll('#tw-servicos .chip, #tw-equip .chip').forEach(c=>c.classList.remove('on'));
     const dd=document.getElementById('tw-addr-dropdown'); if(dd) dd.style.display='none';
-    const modoBtns=document.querySelectorAll('#tw-modo button');
-    if(modoBtns.length){ modoBtns.forEach(b=>b.classList.remove('on')); modoBtns[0].classList.add('on'); }
-    const hint=document.getElementById('tw-modo-hint');
-    if(hint) hint.textContent='Gera contrato, briefing, cronograma e pagamentos automaticamente.';
-    const valOpc=document.getElementById('tw-valor-opcional'); if(valOpc) valOpc.style.display='none';
     const link=document.getElementById('tw-criar-cliente'); if(link) link.style.display='none';
     const nf=document.getElementById('tw-novo-cliente-fields'); if(nf) nf.style.display='none';
     const parcLista=document.getElementById('tw-parcelas-lista'); if(parcLista) parcLista.innerHTML='';
     const parcWrap=document.getElementById('tw-parcelas-wrap'); if(parcWrap) parcWrap.style.display='block';
-    const envioPag=document.getElementById('envio-pagamentos'); if(envioPag) envioPag.classList.add('on');
-    // recorrência começa desligada; a linha do toggle aparece porque pagamentos começa ligado
+    // Portal do Cliente deixou de ser toggle; as opções "o que o cliente recebe"
+    // começam todas ligadas.
+    ['envio-contrato','envio-cronograma','envio-pessoas','envio-observacoes','envio-pagamentos'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.add('on'); });
     const envioRec=document.getElementById('envio-recorrencia'); if(envioRec) envioRec.classList.remove('on');
-    const recRow=document.getElementById('tw-recorrencia-row'); if(recRow) recRow.style.display='flex';
     const recCfg=document.getElementById('tw-recorrencia-config'); if(recCfg) recCfg.style.display='none';
-    ['tw-recur-valor','tw-recur-inicio','tw-recur-fim'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    const recRenova=document.getElementById('tw-recur-renova'); if(recRenova) recRenova.classList.add('on');
+    const recFimWrap=document.getElementById('tw-recur-fim-wrap'); if(recFimWrap) recFimWrap.style.display='none';
+    const recFimEl=document.getElementById('tw-recur-fim'); if(recFimEl) recFimEl.value='';
     const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
   }
 
