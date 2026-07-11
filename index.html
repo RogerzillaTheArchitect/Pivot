@@ -974,6 +974,8 @@
   .horario-col input{border:none;background:none;font-size:21px;font-weight:600;color:var(--ink);text-align:center;
     width:100%;padding:2px 0;font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;outline:none}
   .horario-divider{width:1px;height:34px;background:var(--line);flex:none}
+  .horario-card.dates{margin-bottom:13px}
+  .horario-card.dates .horario-col input{font-size:15px;font-weight:600}
   .horario-duracao{text-align:center;font-size:12.5px;color:var(--neutral);margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
   .field-row .field{flex:1;min-width:0}
   .field-err{font-size:12px;color:var(--ink);margin-top:5px;display:none}
@@ -2066,11 +2068,11 @@
             </div>
           </div>
 
-          <div class="field">
-            <label data-t="wizard.date">Data</label>
-            <div class="field-row" style="gap:10px;margin-bottom:0">
-              <div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.dateStart">Data de início</label><input type="date" id="tw-data"></div>
-              <div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.dateEnd">Data de fim</label><input type="date" id="tw-data-fim"></div>
+          <div class="horario-card dates">
+            <div class="horario-row">
+              <div class="horario-col"><label data-t="wizard.dateStart">Data de início</label><input type="date" id="tw-data" onchange="atualizarDuracaoCalculada()"></div>
+              <div class="horario-divider"></div>
+              <div class="horario-col"><label data-t="wizard.dateEnd">Data de fim</label><input type="date" id="tw-data-fim" onchange="atualizarDuracaoCalculada()"></div>
             </div>
           </div>
           <div class="horario-card">
@@ -2118,7 +2120,6 @@
           <div id="tw-equipa-wrap">
             <p class="plabel" style="margin:0 0 3px" data-t="wizard.responsibles">Responsáveis pelo trabalho</p>
             <p style="font-size:12px;color:var(--neutral);margin:0 0 10px" data-t="wizard.responsiblesHint">Adicione quem participa neste trabalho. Cada pessoa só vê este trabalho.</p>
-            <div id="tw-equipa-lista"></div>
             <div id="tw-colab-externo-status"></div>
             <button class="btn ghost" style="width:100%;margin-top:8px" onclick="abrirColaboradorExternoNoWizard()"><span data-t="wizard.addCollaborator">+ Adicionar colaborador</span></button>
           </div>
@@ -2152,11 +2153,10 @@
 
         <!-- ETAPA 5 — Contrato -->
         <div class="moment" data-moment="5" style="display:none">
-          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px"><span data-t="wizard.suggestedFor">Modelos sugeridos para</span> <b id="sugestao-nome-trabalho" style="color:var(--ink)"></b></p>
+          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.suggestedFor">Modelos sugeridos da biblioteca</p>
           <div id="modelos-sugeridos-lista"></div>
           <div id="tw-modelo-escolhido-status"></div>
           <div style="display:flex;gap:8px;margin:10px 0 4px">
-            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('contrato-usar')"><span data-t="wizard.searchManually">Pesquisar</span></button>
             <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></button>
           </div>
           <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
@@ -2197,6 +2197,8 @@
       </div>
 
       <div class="panel" data-panel="comunidade-contratos">
+        <div class="field"><input id="bib-contratos-busca" oninput="renderBibliotecaPanel('contratos')" placeholder="Explorar biblioteca…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
+        <div class="comm-tabs" id="bib-contratos-origem"></div>
         <div class="comm-tabs" id="bib-contratos-tabs"></div>
         <div id="bib-contratos-lista"></div>
       </div>
@@ -2307,6 +2309,8 @@
       </div>
 
       <div class="panel" data-panel="comunidade-modelos">
+        <div class="field"><input id="bib-modelos-busca" oninput="renderBibliotecaPanel('modelos')" placeholder="Explorar biblioteca…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
+        <div class="comm-tabs" id="bib-modelos-origem"></div>
         <div class="comm-tabs" id="bib-modelos-tabs"></div>
         <div id="bib-modelos-lista"></div>
       </div>
@@ -3115,7 +3119,8 @@
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.popular": { pt:"Populares", en:"Popular", es:"Populares" },
     "library.origin.saved": { pt:"Favoritos ★", en:"Saved ★", es:"Favoritos ★" },
-    "library.empty": { pt:"Nada encontrado. Tenta outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
+    "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
+    "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "library.facet.profession": { pt:"Profissão", en:"Profession", es:"Profesión" },
     "library.facet.event": { pt:"Evento", en:"Event", es:"Evento" },
@@ -3338,7 +3343,7 @@
     "signup.passwordMismatch": { pt:"As passwords não coincidem.", en:"Passwords don't match.", es:"Las contraseñas no coinciden." },
     "signup.creating": { pt:"A criar…", en:"Creating…", es:"Creando…" },
     "invite.completeTitle": { pt:"Falta pouco para começares", en:"Almost there", es:"Ya casi está" },
-    "invite.completeHint": { pt:"Foste convidado para uma equipa no Pivots. Conclui o teu registo para continuares.", en:"You've been invited to a team on Pivots. Finish setting up your account to continue.", es:"Te invitaron a un equipo en Pivots. Completa tu registro para continuar." },
+    "invite.completeHint": { pt:"Você foi convidado para uma equipe no Pivots. Conclua seu cadastro para continuar.", en:"You've been invited to a team on Pivots. Finish setting up your account to continue.", es:"Te invitaron a un equipo en Pivots. Completa tu registro para continuar." },
     "invite.acceptTermsPrefix": { pt:"Li e aceito os ", en:"I've read and accept the ", es:"Leí y acepto los " },
     "invite.termsLink": { pt:"Termos de Uso", en:"Terms of Use", es:"Términos de Uso" },
     "invite.acceptCookiesPrefix": { pt:"Li e aceito a ", en:"I've read and accept the ", es:"Leí y acepto la " },
@@ -3346,7 +3351,7 @@
     "invite.fillError": { pt:"Preenche tudo e aceita os termos para continuares.", en:"Fill in everything and accept the terms to continue.", es:"Completa todo y acepta los términos para continuar." },
     "invite.completeBtn": { pt:"Concluir cadastro", en:"Complete signup", es:"Completar registro" },
     "invite.completing": { pt:"A concluir…", en:"Completing…", es:"Completando…" },
-    "toast.inviteCompleted": { pt:"Conta concluída — bem-vindo à equipa!", en:"Account completed — welcome to the team!", es:"Cuenta completada — ¡bienvenido al equipo!" },
+    "toast.inviteCompleted": { pt:"Conta concluída. Bem-vindo à equipe!", en:"Account completed — welcome to the team!", es:"Cuenta completada — ¡bienvenido al equipo!" },
     "signup.rateLimited": { pt:"Espera cerca de um minuto antes de tentares novamente (proteção contra spam de emails).", en:"Wait about a minute before trying again (protection against email spam).", es:"Espera un minuto antes de intentarlo de nuevo (protección contra spam de emails)." },
     "signup.genericError": { pt:"Erro ao criar conta.", en:"Error creating account.", es:"Error al crear la cuenta." },
     "signup.confirmEmailTitle": { pt:"Confirma o teu email", en:"Confirm your email", es:"Confirma tu email" },
@@ -3405,8 +3410,8 @@
     "landing.feat4Sub": { pt:"Organize prazos, responsáveis e o estado de cada trabalho.", en:"Organize deadlines, owners and the status of every job.", es:"Organice plazos, responsables y el estado de cada trabajo." },
     "landing.feat5Title": { pt:"Financeiro", en:"Finances", es:"Finanzas" },
     "landing.feat5Sub": { pt:"Acompanhe receitas, despesas e pagamentos pendentes.", en:"Track revenue, expenses and pending payments.", es:"Controle ingresos, gastos y pagos pendientes." },
-    "landing.feat6Title": { pt:"Equipa e colaboradores", en:"Team and collaborators", es:"Equipo y colaboradores" },
-    "landing.feat6Sub": { pt:"Atribua trabalhos à equipa ou convide colaboradores externos com acesso controlado.", en:"Assign jobs to your team or invite external collaborators with controlled access.", es:"Asigne trabajos a su equipo o invite a colaboradores externos con acceso controlado." },
+    "landing.feat6Title": { pt:"Equipe e colaboradores", en:"Team and collaborators", es:"Equipo y colaboradores" },
+    "landing.feat6Sub": { pt:"Atribua trabalhos à equipe ou convide colaboradores externos com acesso controlado.", en:"Assign jobs to your team or invite external collaborators with controlled access.", es:"Asigne trabajos a su equipo o invite a colaboradores externos con acceso controlado." },
     "landing.audienceTitle": { pt:"Feito para quem trabalha por projeto", en:"Built for people who work project by project", es:"Hecho para quienes trabajan por proyecto" },
     "landing.audienceLead": { pt:"Qualquer profissional que precise de organizar contratos, clientes e prazos sem depender de várias ferramentas soltas.", en:"Any professional who needs to organize contracts, clients and deadlines without juggling several separate tools.", es:"Cualquier profesional que necesite organizar contratos, clientes y plazos sin depender de varias herramientas sueltas." },
     "landing.audience.chip1": { pt:"Fotógrafos", en:"Photographers", es:"Fotógrafos" },
@@ -3447,7 +3452,7 @@
     "payment.finalLabel": { pt:"Pagamento final", en:"Final payment", es:"Pago final" },
     "payment.installmentDefault": { pt:"Parcela", en:"Installment", es:"Cuota" },
     "recur.toggle": { pt:"Contrato recorrente", en:"Recurring contract", es:"Contrato recurrente" },
-    "recur.toggleHint": { pt:"Para mensalidades, avenças e retainers — cobra automaticamente a cada período.", en:"For monthly fees, retainers and subscriptions — bills automatically each period.", es:"Para mensualidades, iguales y retainers — cobra automáticamente cada período." },
+    "recur.toggleHint": { pt:"Para mensalidades, avenças e retainers, cobra automaticamente a cada período.", en:"For monthly fees, retainers and subscriptions, bills automatically each period.", es:"Para mensualidades, iguales y retainers, cobra automáticamente cada período." },
     "recur.frequency": { pt:"Frequência", en:"Frequency", es:"Frecuencia" },
     "recur.perCycle": { pt:"Valor por ciclo", en:"Amount per cycle", es:"Importe por ciclo" },
     "recur.start": { pt:"Primeira cobrança", en:"First charge", es:"Primer cobro" },
@@ -3792,7 +3797,7 @@
     "team.roles": { pt:"Papéis e privilégios", en:"Roles & permissions", es:"Roles y permisos" },
     "team.seats": { pt:"de {n} lugar usado", en:"of {n} seat used", es:"de {n} plaza usada" },
     "team.seatsFullPrefix": { pt:"Usaste todos os ", en:"You've used all ", es:"Has usado las " },
-    "team.seatsFullSuffix": { pt:" lugares do teu plano. Muda para um plano superior para adicionares mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
+    "team.seatsFullSuffix": { pt:" lugares do seu plano. Mude para um plano superior para adicionar mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
     "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
     "collab.sectionTitle": { pt:"Colaboradores Externos", en:"External Collaborators", es:"Colaboradores Externos" },
@@ -3800,20 +3805,20 @@
     "collab.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
     "collab.none": { pt:"Sem colaboradores externos neste trabalho.", en:"No external collaborators on this job.", es:"Sin colaboradores externos en este trabajo." },
     "collab.title": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
-    "collab.addExternalOption": { pt:"+ Colaborador externo (fora da equipa)", en:"+ External collaborator (outside your team)", es:"+ Colaborador externo (fuera del equipo)" },
+    "collab.addExternalOption": { pt:"+ Colaborador externo (fora da equipe)", en:"+ External collaborator (outside your team)", es:"+ Colaborador externo (fuera del equipo)" },
     "collab.externalEmailPrompt": { pt:"Email do colaborador externo", en:"External collaborator's email", es:"Email del colaborador externo" },
-    "collab.notifiedInApp": { pt:"convidado — vai ver isto na próxima vez que entrar na app.", en:"invited — they'll see this next time they log in.", es:"invitado — lo verá la próxima vez que entre en la app." },
+    "collab.notifiedInApp": { pt:"convidado. Vai ver isso na próxima vez que entrar no app.", en:"invited — they'll see this next time they log in.", es:"invitado — lo verá la próxima vez que entre en la app." },
     "collab.emailSent": { pt:"convidado por email.", en:"invited by email.", es:"invitado por email." },
-    "collab.searchHint": { pt:"Escreve o nome de alguém da tua equipa, ou o email de um colaborador externo.", en:"Type a team member's name, or an external collaborator's email.", es:"Escribe el nombre de alguien de tu equipo, o el email de un colaborador externo." },
+    "collab.searchHint": { pt:"Digite o nome de alguém da sua equipe, ou o email de um colaborador externo.", en:"Type a team member's name, or an external collaborator's email.", es:"Escribe el nombre de alguien de tu equipo, o el email de un colaborador externo." },
     "collab.search": { pt:"Procurar", en:"Search", es:"Buscar" },
-    "collab.notFound": { pt:"Não encontrámos nenhuma conta Pivots com este email.", en:"We couldn't find a Pivots account with this email.", es:"No encontramos ninguna cuenta Pivots con este email." },
+    "collab.notFound": { pt:"Não encontramos nenhuma conta Pivots com este email.", en:"We couldn't find a Pivots account with this email.", es:"No encontramos ninguna cuenta Pivots con este email." },
     "collab.nameOrEmail": { pt:"Nome ou email", en:"Name or email", es:"Nombre o email" },
-    "collab.nameOrEmailPlaceholder": { pt:"Nome da equipa ou email@exemplo.pt", en:"Team member name or email@example.com", es:"Nombre del equipo o email@ejemplo.com" },
-    "collab.fromTeam": { pt:"da tua equipa", en:"from your team", es:"de tu equipo" },
+    "collab.nameOrEmailPlaceholder": { pt:"Nome do contato ou email@exemplo.com", en:"Team member name or email@example.com", es:"Nombre del contacto o email@ejemplo.com" },
+    "collab.fromTeam": { pt:"da sua equipe", en:"from your team", es:"de tu equipo" },
     "collab.fromHistory": { pt:"colaborou antes", en:"worked with before", es:"colaboró antes" },
     "collab.addNew": { pt:"Adicionar novo colaborador", en:"Add new collaborator", es:"Añadir nuevo colaborador" },
-    "collab.startTyping": { pt:"Começa a escrever para ver sugestões, ou escreve um email completo para adicionar alguém novo.", en:"Start typing to see suggestions, or type a full email to add someone new.", es:"Empieza a escribir para ver sugerencias, o escribe un email completo para añadir a alguien nuevo." },
-    "collab.linkHint": { pt:"Esta pessoa ainda não tem conta no Pivots. Envia-lhe este link e ela acede diretamente, sem precisar de se registar.", en:"This person doesn't have a Pivots account yet. Send them this link so they get direct access, no sign-up needed.", es:"Esta persona aún no tiene cuenta en Pivots. Envíale este enlace y accede directamente, sin necesidad de registrarse." },
+    "collab.startTyping": { pt:"Digite pelo menos 3 letras para ver sugestões, ou digite um email completo para adicionar alguém novo.", en:"Type at least 3 letters to see suggestions, or type a full email to add someone new.", es:"Escribe al menos 3 letras para ver sugerencias, o escribe un email completo para añadir a alguien nuevo." },
+    "collab.linkHint": { pt:"Esta pessoa ainda não tem conta no Pivots. Envie este link e ela acessa direto, sem precisar se cadastrar.", en:"This person doesn't have a Pivots account yet. Send them this link so they get direct access, no sign-up needed.", es:"Esta persona aún no tiene cuenta en Pivots. Envíale este enlace y accede directamente, sin necesidad de registrarse." },
     "action.copyLink": { pt:"Copiar link", en:"Copy link", es:"Copiar enlace" },
     "collab.permissionsTitle": { pt:"O que pode ver", en:"What they can see", es:"Qué puede ver" },
     "collab.perm.briefing": { pt:"Briefing", en:"Briefing", es:"Briefing" },
@@ -4002,23 +4007,23 @@
     "wizard.keyPeople": { pt:"Pessoas Importantes", en:"Key People", es:"Personas Clave" },
     "wizard.model.checklist": { pt:"Checklist", en:"Checklist", es:"Lista de verificación" },
     "wizard.model.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
-    "wizard.noMatchesFor": { pt:"Sem correspondências para \"", en:"No matches for \"", es:"Sin coincidencias para \"" },
+    "wizard.noMatchesFor": { pt:"Nenhum resultado para \"", en:"No matches for \"", es:"Sin coincidencias para \"" },
     "wizard.optional": { pt:"(opcional)", en:"(optional)", es:"(opcional)" },
     "wizard.quickHint": { pt:"Sem contrato nem informações do cliente.", en:"No contract or client brief.", es:"Sin contrato ni información del cliente." },
     "wizard.quickMode": { pt:"Rápido", en:"Quick mode", es:"Modo rápido" },
     "wizard.saveClient": { pt:"Guardar cliente", en:"Save client", es:"Guardar cliente" },
     "wizard.saveReference": { pt:"Guardar como referência", en:"Save as reference", es:"Guardar como referencia" },
     "wizard.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
-    "wizard.noAddressMatches": { pt:"Sem correspondências — continua a escrever, fica como escreveste.", en:"No matches — keep typing, it'll stay exactly as you wrote it.", es:"Sin coincidencias — sigue escribiendo, se queda tal como lo escribiste." },
+    "wizard.noAddressMatches": { pt:"Nenhum endereço encontrado. Continue digitando ou preencha manualmente.", en:"No address found. Keep typing or fill it in manually.", es:"No se encontró ninguna dirección. Siga escribiendo o complete manualmente." },
     "field.phonePlaceholder": { pt:"Número de telefone", en:"Phone number", es:"Número de teléfono" },
     "field.emailPlaceholder": { pt:"email@email.com", en:"email@email.com", es:"email@email.com" },
     "field.instagramPlaceholder": { pt:"@usuário", en:"@username", es:"@usuario" },
     "wizard.searchByClientJob": { pt:"Procurar por cliente ou trabalho", en:"Search by client or job", es:"Buscar por cliente o trabajo" },
-    "wizard.searchManually": { pt:"Pesquisar manualmente", en:"Search manually", es:"Buscar manualmente" },
     "wizard.searchOrCreate": { pt:"Procurar ou criar…", en:"Search or create…", es:"Buscar o crear…" },
     "wizard.searchTemplates": { pt:"Procurar nos seus modelos", en:"Search your templates", es:"Buscar en tus plantillas" },
     "wizard.start": { pt:"Início", en:"Start", es:"Inicio" },
-    "wizard.suggestedFor": { pt:"Modelos sugeridos para", en:"Suggested for", es:"Sugerencias para" },
+    "wizard.suggestedFor": { pt:"Modelos sugeridos da biblioteca", en:"Suggested templates from the library", es:"Modelos sugeridos de la biblioteca" },
+    "wizard.noSuggestionsYet": { pt:"Escreva um título para o trabalho para ver sugestões, ou explore a biblioteca completa.", en:"Type a job title to see suggestions, or browse the full library.", es:"Escribe un título para el trabajo para ver sugerencias, o explora la biblioteca completa." },
     "wizard.template.commercial": { pt:"Comercial simples", en:"Simple commercial", es:"Comercial simple" },
     "wizard.template.wedding": { pt:"Casamento completo", en:"Complete wedding", es:"Boda completa" },
     "wizard.thisJob": { pt:"este trabalho", en:"this job", es:"este trabajo" },
@@ -4911,39 +4916,84 @@
     'Outros':'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
   };
   let bibFiltroAtual={contratos:'populares', modelos:'populares'};
+  /* Origem: comunidade (biblioteca pública) / favoritos (compartilha o mesmo
+     Set bibFavoritos da página Bibliotecas do menu — sem sistema paralelo) /
+     meus (modelosContratoData — modelos que o próprio utilizador criou,
+     importou ou editou). Junto com a barra de pesquisa, substitui a versão
+     anterior que só tinha populares/avaliados/categoria, sem forma de achar
+     favoritos ou modelos próprios dentro desta biblioteca. */
+  let bibOrigemAtual={contratos:'comunidade', modelos:'comunidade'};
+  function selecionarOrigemBiblioteca(escopo, origem){
+    bibOrigemAtual[escopo]=origem;
+    renderBibliotecaPanel(escopo);
+  }
   function renderBibliotecaPanel(escopo){
+    const origem=bibOrigemAtual[escopo];
+    const origens=[
+      {key:'comunidade', labelKey:'library.origin.community'},
+      {key:'favoritos', labelKey:'library.origin.saved'},
+      {key:'meus', labelKey:'library.origin.mine'}
+    ];
+    document.getElementById('bib-'+escopo+'-origem').innerHTML=origens.map(o=>
+      '<div class="chip'+(o.key===origem?' on':'')+'" onclick="selecionarOrigemBiblioteca(\''+escopo+'\',\''+o.key+'\')">'+t(o.labelKey)+'</div>'
+    ).join('');
+    const q=(document.getElementById('bib-'+escopo+'-busca').value||'').trim().toLowerCase();
+    const wrap=document.getElementById('bib-'+escopo+'-lista');
+
+    if(origem==='meus'){
+      document.getElementById('bib-'+escopo+'-tabs').innerHTML='';
+      const meus=Object.values(modelosContratoData).filter(m=>!q || m.nome.toLowerCase().includes(q));
+      wrap.innerHTML = meus.length ? meus.map(meuModeloCardHtml).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
+      return;
+    }
+
     const tipoFiltro = escopo==='contratos' ? 'Contrato' : null;
-    const base = tipoFiltro ? BIBLIOTECA_OFICIAL.filter(m=>m.tipo===tipoFiltro) : BIBLIOTECA_OFICIAL;
+    let base = tipoFiltro ? BIBLIOTECA_OFICIAL.filter(m=>m.tipo===tipoFiltro) : BIBLIOTECA_OFICIAL;
+    if(origem==='favoritos') base = base.filter(m=>bibFavoritos.has('of:'+m.id));
+    if(q) base = base.filter(m=>((m.titulo||'')+' '+(m.desc||'')+' '+(m.tags||[]).join(' ')+' '+(m.categoria||'')+' '+(m.autor||'')).toLowerCase().includes(q));
     const categorias=[...new Set(base.map(m=>m.categoria))];
     const filtro=bibFiltroAtual[escopo];
     const tabs=[
       {key:'populares', label:'Populares', icon:'<path d="M12 2c1 3-3 4-3 8a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5 5 0 0 1 7 14.5C7 9 12 7 12 2Z"/>'},
       {key:'avaliados', label:'Avaliados', icon:'<path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6Z"/>'}
     ].concat(categorias.map(c=>({key:c, label:c, icon:BIB_CATEGORIA_ICONS[c]||BIB_CATEGORIA_ICONS['Outros']})));
-    document.getElementById('bib-'+escopo+'-tabs').innerHTML=tabs.map(t=>
-      '<div class="chip chip-ic'+(t.key===filtro?' on':'')+'" onclick="selecionarFiltroBiblioteca(\''+escopo+'\',\''+t.key+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+t.icon+'</svg> '+escapeHtml(t.label)+'</div>'
+    document.getElementById('bib-'+escopo+'-tabs').innerHTML=tabs.map(tb=>
+      '<div class="chip chip-ic'+(tb.key===filtro?' on':'')+'" onclick="selecionarFiltroBiblioteca(\''+escopo+'\',\''+tb.key+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+tb.icon+'</svg> '+escapeHtml(tb.label)+'</div>'
     ).join('');
     let itens;
     if(filtro==='populares') itens=[...base].sort((a,b)=>b.usos-a.usos);
     else if(filtro==='avaliados') itens=[...base].sort((a,b)=>b.avaliacao-a.avaliacao);
     else itens=base.filter(m=>m.categoria===filtro);
-    const wrap=document.getElementById('bib-'+escopo+'-lista');
-    wrap.innerHTML = itens.length ? itens.map(bibCardHtml).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">Sem modelos nesta categoria.</p>';
+    wrap.innerHTML = itens.length ? itens.map(m=>bibCardHtml(m,escopo)).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
   }
   function selecionarFiltroBiblioteca(escopo,key){
     bibFiltroAtual[escopo]=key;
     renderBibliotecaPanel(escopo);
   }
-  function bibCardHtml(m){
-    return '<div class="model-card" onclick="abrirDetalheBiblioteca(\''+m.id+'\')">'+
-      '<div class="model-card-head"><div class="model-card-name">'+escapeHtml(m.titulo)+'</div><span class="model-card-type-pill">'+escapeHtml(m.tipo)+'</span></div>'+
-      '<div class="model-card-desc">'+escapeHtml(m.desc)+'</div>'+
+  function bibCardHtml(m, escopo){
+    const fav=bibFavoritos.has('of:'+m.id);
+    return '<div class="model-card">'+
+      '<div class="model-card-head" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer"><div class="model-card-name">'+escapeHtml(m.titulo)+'</div><span class="model-card-type-pill">'+escapeHtml(m.tipo)+'</span></div>'+
+      '<div class="model-card-desc" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer">'+escapeHtml(m.desc)+'</div>'+
       '<div class="model-card-foot">'+
         '<span class="model-card-author">por '+escapeHtml(m.autor)+'</span>'+
         '<span class="model-card-rating">'+ICON_ESTRELA+m.avaliacao.toFixed(1)+'</span>'+
         '<span class="model-card-usage">Usado '+m.usos+' vezes</span>'+
+        '<span class="bib-fav'+(fav?' on':'')+'" style="margin-left:auto;cursor:pointer" onclick="event.stopPropagation();toggleFavBibliotecaWizard(\''+m.id+'\',\''+escopo+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:16px;height:16px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></span>'+
       '</div>'+
     '</div>';
+  }
+  function toggleFavBibliotecaWizard(id, escopo){
+    const key='of:'+id;
+    if(bibFavoritos.has(key)){ bibFavoritos.delete(key); showToast(t('library.unfavorited')); }
+    else { bibFavoritos.add(key); showToast(t('library.favorited')); if(navigator.vibrate)navigator.vibrate(6); }
+    saveBibFavoritos();
+    renderBibliotecaPanel(escopo);
+  }
+  function meuModeloCardHtml(m){
+    return '<div class="pick-row" onclick="usarModeloContrato(\''+m.id+'\')">'+
+      '<div><div class="nm">'+escapeHtml(m.nome)+'</div><div class="sub">'+m.blocks.length+' '+t('builder.blocksCount')+(m.usos?(' · '+t('builder.usedPrefix')+' '+m.usos+'x'):'')+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
   }
   function abrirDetalheBiblioteca(id){
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
@@ -5154,7 +5204,7 @@
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
-    if(n===2) renderSeletorEquipaTrabalho();
+    if(n===2) renderColaboradoresPendentesWizard();
     if(n===4) prepararEtapaPagamentos();
     if(n===5) renderModelosSugeridos();
     if(n===6) renderReview();
@@ -5190,11 +5240,11 @@
     document.getElementById('tw-recur-fim-wrap').style.display = el.classList.contains('on') ? 'none':'block';
   }
   function parcelaWizardRowHtml(i, p){
-    return '<div class="field-row" data-parc-row="'+i+'" style="align-items:flex-end;gap:10px;margin-bottom:8px">'+
-      '<div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.fee">Valor</label><input class="tw-parc-valor" type="number" min="0" step="0.01" placeholder="0" value="'+(p.amount||0)+'"></div>'+
+    return '<div class="field-row" data-parc-row="'+i+'" style="display:grid;grid-template-columns:1fr 1fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
+      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="wizard.fee">Valor</label><input class="tw-parc-valor" type="number" min="0" step="0.01" placeholder="0" value="'+(p.amount||0)+'"></div>'+
       '<input type="hidden" class="tw-parc-label" value="'+escapeHtml(p.label||'')+'">'+
-      '<div class="field" style="flex:1;margin-bottom:0"><label style="font-size:11px" data-t="wizard.date">Data</label><input class="tw-parc-data" type="date" value="'+(p.dueDate||'')+'"></div>'+
-      '<div style="flex:none;padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerParcelaWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
+      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="wizard.date">Data</label><input class="tw-parc-data" type="date" value="'+(p.dueDate||'')+'"></div>'+
+      '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerParcelaWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
     '</div>';
   }
   function seedParcelasWizardSeVazio(){
@@ -5202,13 +5252,8 @@
     if(!lista || lista.children.length) return;
     const valorTxt=(document.getElementById('tw-valor').value||'').trim();
     const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
-    const half=valorNum*0.5;
-    const hojeIso=new Date().toISOString().slice(0,10);
     const dataEvento=document.getElementById('tw-data').value||null;
-    lista.innerHTML=[
-      parcelaWizardRowHtml(0, {label:t('payment.depositLabel'), amount:half, dueDate:hojeIso}),
-      parcelaWizardRowHtml(1, {label:t('payment.finalLabel'), amount:half, dueDate:dataEvento})
-    ].join('');
+    lista.innerHTML=parcelaWizardRowHtml(0, {label:t('payment.installmentDefault'), amount:valorNum, dueDate:dataEvento});
   }
   function addParcelaWizard(){
     const lista=document.getElementById('tw-parcelas-lista');
@@ -5233,11 +5278,10 @@
   let modeloContratoSelecionado=null;
   function renderModelosSugeridos(){
     const nome=document.getElementById('tw-nome').value.trim();
-    document.getElementById('sugestao-nome-trabalho').textContent=nome||t('wizard.thisJob');
     const sugestoes=sugerirModelos(nome);
     const wrap=document.getElementById('modelos-sugeridos-lista');
     if(!sugestoes.length){
-      wrap.innerHTML='<p style="font-size:13px;color:var(--neutral);padding:4px 2px 10px">'+(nome? t('wizard.noMatchesFor')+escapeHtml(nome)+'".' : t('wizard.suggestedFor'))+'</p>';
+      wrap.innerHTML='<p style="font-size:13px;color:var(--neutral);padding:4px 2px 10px">'+(nome? t('wizard.noMatchesFor')+escapeHtml(nome)+'".' : t('wizard.noSuggestionsYet'))+'</p>';
       return;
     }
     wrap.innerHTML=sugestoes.map(m=>modelCardHtml(m, m.id===modeloContratoSelecionado)).join('');
@@ -5263,13 +5307,45 @@
     const h=Math.floor(horas), m=Math.round((horas-h)*60);
     return h+'h'+String(m).padStart(2,'0');
   }
+  const DUR_UNITS={
+    pt:{day:'dia',days:'dias',hour:'hora',hours:'horas',min:'min',and:'e'},
+    en:{day:'day',days:'days',hour:'hour',hours:'hours',min:'min',and:'and'},
+    es:{day:'día',days:'días',hour:'hora',hours:'horas',min:'min',and:'y'}
+  };
+  /* Duração total do trabalho: considera data de início, data de fim, hora de
+     início e hora de fim — não só as horas. Ex.: 01/07 14:00 → 25/07 15:00
+     dá "24 dias e 1 hora". Sem data de fim, cai para o cálculo de horas do dia
+     (que já lida com virar a meia-noite). */
+  function formatarDuracaoTrabalho(dIni,dFim,hIni,hFim){
+    if(!dIni) return formatarDuracao(calcularDuracaoHoras(hIni,hFim));
+    const toMs=(d,h)=>{ const [Y,M,D]=d.split('-').map(Number); const [hh,mm]=(h||'00:00').split(':').map(Number); return Date.UTC(Y,M-1,D,hh,mm); };
+    const startMs=toMs(dIni, hIni);
+    let endMs=toMs(dFim||dIni, hFim||hIni||'00:00');
+    if(endMs<=startMs){
+      if(!dFim && hIni && hFim) return formatarDuracao(calcularDuracaoHoras(hIni,hFim));
+      return '';
+    }
+    let mins=Math.round((endMs-startMs)/60000);
+    const dias=Math.floor(mins/1440); mins-=dias*1440;
+    const horas=Math.floor(mins/60); mins-=horas*60;
+    const u=DUR_UNITS[LANG]||DUR_UNITS.pt;
+    const parts=[];
+    if(dias>0) parts.push(dias+' '+(dias===1?u.day:u.days));
+    if(horas>0) parts.push(horas+' '+(horas===1?u.hour:u.hours));
+    if(dias===0 && horas===0 && mins>0) parts.push(mins+' '+u.min);
+    if(!parts.length) return '';
+    return parts.length>1 ? parts.slice(0,-1).join(', ')+' '+u.and+' '+parts[parts.length-1] : parts[0];
+  }
   function atualizarDuracaoCalculada(){
-    const ini=document.getElementById('tw-hora').value;
-    const fim=document.getElementById('tw-hora-fim').value;
-    const dur=calcularDuracaoHoras(ini,fim);
     const el=document.getElementById('tw-duracao-calc');
     if(!el) return;
-    if(dur!=null){ el.textContent=t('job.duration.prefix')+formatarDuracao(dur); el.style.display='block'; }
+    const txt=formatarDuracaoTrabalho(
+      document.getElementById('tw-data').value,
+      document.getElementById('tw-data-fim').value,
+      document.getElementById('tw-hora').value,
+      document.getElementById('tw-hora-fim').value
+    );
+    if(txt){ el.textContent=t('job.duration.prefix')+txt; el.style.display='block'; }
     else { el.style.display='none'; }
   }
   function formatDataHora(){
@@ -5297,10 +5373,7 @@
   /* ===== Endereço — um único campo, geocodificação real (OpenStreetMap/Nominatim, sem chave) com fallback local ===== */
   let twGeoTimer=null;
   let twSelectedGeo=null;
-  let twSelectedMembros=[];
-  let twColaboradorExternoPendente=null;
-  let twMembroPermissoes={};
-  let twPermissaoMembroAtual=null;
+  let twColaboradoresExternosPendentes=[];
   let twEmWizard=false;
   let twModeloEscolhido=null;
   function abrirColaboradorExternoNoWizard(){ abrirAdicionarColaboradorExterno('__wizard__'); }
@@ -5310,52 +5383,17 @@
     wrap.innerHTML = twModeloEscolhido ? ('<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(twModeloEscolhido.nome||'')+'</div></div>'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="twModeloEscolhido=null;renderModeloEscolhidoWizard()"><path d="M18 6 6 18M6 6l12 12"/></svg></div>') : '';
   }
+  /* Substitui a antiga lista de toda a organização com toggles: agora cada
+     colaborador é adicionado explicitamente via busca (abrirColaboradorExternoNoWizard)
+     e aparece aqui como uma linha removível. Ninguém é pré-selecionado. */
+  function renderColaboradoresPendentesWizard(){ renderColaboradorExternoPendenteWizard(); }
   function renderColaboradorExternoPendenteWizard(){
     const wrap=document.getElementById('tw-colab-externo-status');
     if(!wrap) return;
-    const p=twColaboradorExternoPendente;
-    wrap.innerHTML = p ? ('<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.email)+'</div><span class="sub">'+papelNomeColaborador(p.nivel_acesso)+'</span></div>'+
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="twColaboradorExternoPendente=null;renderColaboradorExternoPendenteWizard()"><path d="M18 6 6 18M6 6l12 12"/></svg></div>') : '';
-  }
-  function renderSeletorEquipaTrabalho(){
-    const wrap=document.getElementById('tw-equipa-wrap');
-    if(!wrap) return;
-    wrap.style.display='block';
-    if(membrosEquipa.length<=1){ document.getElementById('tw-equipa-lista').innerHTML=''; return; }
-    if(!twSelectedMembros.length) twSelectedMembros=[currentUser.id];
-    document.getElementById('tw-equipa-lista').innerHTML = membrosEquipa.map(m=>{
-      const marcado=twSelectedMembros.includes(m.user_id);
-      const custom=twMembroPermissoes[m.user_id];
-      const gear=marcado?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;color:'+(custom?'var(--brand)':'var(--neutral)')+';cursor:pointer;margin-right:6px" onclick="event.stopPropagation();abrirPermissoesMembroTrabalho(\''+m.user_id+'\')"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>':'';
-      return '<div class="struct-row" style="cursor:pointer" onclick="toggleMembroTrabalho(\''+m.user_id+'\')">'+
-        '<div class="struct-l"><div class="nm">'+escapeHtml(m.email||'')+(m.user_id===currentUser.id?' '+t('team.youTag'):'')+'</div></div>'+
-        '<div style="display:flex;align-items:center">'+gear+'<div class="toggle'+(marcado?' on':'')+'"><div class="kn"></div></div></div></div>';
-    }).join('');
-  }
-  function toggleMembroTrabalho(userId){
-    const i=twSelectedMembros.indexOf(userId);
-    if(i>=0){ twSelectedMembros.splice(i,1); delete twMembroPermissoes[userId]; } else twSelectedMembros.push(userId);
-    renderSeletorEquipaTrabalho();
-  }
-  function abrirPermissoesMembroTrabalho(userId){
-    twPermissaoMembroAtual=userId;
-    if(!twMembroPermissoes[userId]){
-      const p={}; PERMISSOES_COLAB.forEach(([key])=>{ p[key]=true; });
-      twMembroPermissoes[userId]=p;
-    }
-    renderPermissoesMembroTrabalho();
-  }
-  function renderPermissoesMembroTrabalho(){
-    const userId=twPermissaoMembroAtual;
-    const perms=twMembroPermissoes[userId];
-    const m=membrosEquipa.find(x=>x.user_id===userId);
-    const permissoesHtml=PERMISSOES_COLAB.map(([key,labelKey])=>
-      '<div class="struct-row"><div class="struct-l"><div class="nm">'+t(labelKey)+'</div></div><div class="toggle'+(perms[key]?' on':'')+'" onclick="this.classList.toggle(\'on\');twMembroPermissoes[\''+userId+'\'][\''+key+'\']=this.classList.contains(\'on\')"><div class="kn"></div></div></div>'
+    wrap.innerHTML = twColaboradoresExternosPendentes.map((p,i)=>
+      '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.nome||p.email)+'</div><span class="sub">'+papelNomeColaborador(p.nivel_acesso)+'</span></div>'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="twColaboradoresExternosPendentes.splice('+i+',1);renderColaboradorExternoPendenteWizard()"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
     ).join('');
-    openInfo(t('collab.permissionsTitle'), `
-      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:12px">${escapeHtml((m&&m.email)||'')}</p>
-      ${permissoesHtml}
-      <button class="btn primary" style="width:100%;margin-top:14px" onclick="closeInfo();renderSeletorEquipaTrabalho()">${t('action.save')}</button>`);
   }
   let _twAddrResults=null;
   let _twAddrLocal=null;
@@ -5455,11 +5493,7 @@
     if(hora){ datasTxt+=(datasTxt?', ':'')+hora+(horaFim?(' às '+horaFim):''); }
 
     // responsáveis
-    const nomesResp=(twSelectedMembros||[]).map(uid=>{
-      const m=(membrosEquipa||[]).find(x=>x.user_id===uid);
-      return m ? (m.nome||m.email) : null;
-    }).filter(Boolean);
-    if(twColaboradorExternoPendente) nomesResp.push(twColaboradorExternoPendente.email);
+    const nomesResp=twColaboradoresExternosPendentes.map(p=>p.nome||p.email);
 
     // conteúdo enviado ao cliente
     const conteudo=[];
@@ -5613,8 +5647,8 @@
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
-      payments:[], milestones:[], reminders:[], history:[], assignedTo:twSelectedMembros.slice(),
-      teamPermissions: Object.assign({}, twMembroPermissoes) };
+      payments:[], milestones:[], reminders:[], history:[], assignedTo:[],
+      teamPermissions: {} };
     // Recorrência (definida na Etapa 1): valor por ciclo = campo Valor;
     // primeira cobrança = data de início; renovação automática ligada => sem
     // data de fim (renova indefinidamente); desligada => usa a data de fim.
@@ -5647,28 +5681,43 @@
     jobsData[id]=job;
     renderJobCard(job);
     saveJobsData();
-    if(twColaboradorExternoPendente) finalizarColaboradorExternoPendente(job);
+    twColaboradoresExternosPendentes.forEach(p=>finalizarColaboradorExternoPendente(job, p));
     closeSheet();
     showToast(t('toast.jobCreated')+' '+nomeTrabalho+'.');
     openJob(id);
     resetTrabalho();
   }
-  function finalizarColaboradorExternoPendente(job){
-    const p=twColaboradorExternoPendente;
+  function finalizarColaboradorExternoPendente(job, p){
     const briefing = p.permissoes.briefing && job.briefing ? {perguntas:job.briefing.perguntas||[], observacoes:''} : null;
     const datas = p.permissoes.datas ? {date:job.date, local:job.local} : null;
     const contrato = p.permissoes.contrato ? {status:job.contract.status} : null;
     const financeiro = p.permissoes.financeiro ? {value:job.value, payments:[]} : null;
+    const semConta = !p.userId;
+    const token = semConta ? (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'') : null;
     const row={
-      workspace_id: currentWorkspaceId, job_id: job.id, user_id: p.userId, email: p.email,
+      workspace_id: currentWorkspaceId, job_id: job.id, user_id: p.userId, email: p.email, token,
       nivel_acesso: p.nivel_acesso, permissoes: p.permissoes,
       escopo: { briefing, datas, contrato, financeiro, horasPrevistas: job.duracaoHoras||null,
         checklist: job.checklist?job.checklist.itens.map(c=>({t:c.t,feito:false})):[], tarefas:[], documentos:[],
         jobNome: job.nome||job.typeLabel, jobCliente: job.client },
-      acordo: p.acordo, entregas: [], status: 'ativo'
+      acordo: p.acordo, entregas: [], status: semConta?'convidado':'ativo'
     };
     sb.from('external_collaborators').insert(row).then(({error})=>{
-      if(error) console.error('Erro ao convidar colaborador externo:', error);
+      if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
+      const jobNome = job.nome||job.typeLabel;
+      const remetente = perfilData.nome||t('defaults.userName');
+      const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+      const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+      if(semConta){
+        const link=window.location.origin+'/?colab='+token;
+        dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
+          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
+          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+      } else {
+        dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
+          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
+          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
+      }
     });
   }
   function gerarDatasEventoICS(job){
@@ -5718,7 +5767,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedMembros=[]; twColaboradorExternoPendente=null; twMembroPermissoes={}; twModeloEscolhido=null; twEmWizard=false;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -7673,21 +7722,28 @@
     const wrap=document.getElementById('colab-sugestoes');
     if(!wrap) return;
     const q=(document.getElementById('colab-email').value||'').trim().toLowerCase();
+    const ehEmail=/^\S+@\S+\.\S+$/.test(q);
+    /* só sugere a partir de 3 letras — evita despejar todos os utilizadores da
+       organização assim que o campo é focado, importante para organizações
+       com dezenas ou centenas de pessoas */
+    if(q.length<3 && !ehEmail){
+      wrap.innerHTML='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('collab.startTyping')+'</p>';
+      return;
+    }
     const todos=coletarColabSugestoes();
-    const filtrados = q ? todos.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.nome||'').toLowerCase().includes(q)) : todos;
+    const filtrados = todos.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.nome||'').toLowerCase().includes(q));
     let html=filtrados.map(c=>{
       const tag = c.origem==='team' ? t('collab.fromTeam') : t('collab.fromHistory');
       return '<div class="pick-row" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
         '<div><div class="nm">'+escapeHtml(c.nome||c.email||'')+'</div><span class="sub">'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
     }).join('');
     /* email completo digitado que não corresponde a ninguém → oferecer adicionar novo */
-    const ehEmail=/^\S+@\S+\.\S+$/.test(q);
     const exato=todos.some(c=>(c.email||'').toLowerCase()===q);
     if(ehEmail && !exato){
       html+='<div class="pick-row" style="border:1px dashed var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
         '<div><div class="nm">'+t('collab.addNew')+'</div><span class="sub">'+escapeHtml(q)+'</span></div></div>';
     }
-    if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('collab.startTyping')+'</p>';
+    if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('wizard.noMatchesFor')+escapeHtml(q)+'"</p>';
     wrap.innerHTML=html;
   }
   function selecionarColabSugestao(jobId, email, userId, nome){
@@ -7810,7 +7866,7 @@
     if(jobId==='__wizard__'){
       // O trabalho ainda não existe (estamos no assistente de criação) — guarda a
       // configuração e só cria o registo real depois do trabalho ser criado.
-      twColaboradorExternoPendente={ email:u.email, userId:u.userId, nivel_acesso:colabExternoNivel, permissoes, acordo:colabExternoAcordo };
+      twColaboradoresExternosPendentes.push({ email:u.email, nome:u.nome||u.email, userId:u.userId, nivel_acesso:colabExternoNivel, permissoes, acordo:colabExternoAcordo });
       colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura';
       closeInfo();
       renderColaboradorExternoPendenteWizard();
