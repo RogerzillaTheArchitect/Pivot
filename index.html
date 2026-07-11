@@ -2107,6 +2107,23 @@
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.importantNotes"><span data-t="wizard.importantNotes">Observações Importantes</span></div></div><div class="toggle on" id="envio-observacoes" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm"><span data-t="wizard.clientPortal">Portal do Cliente</span></div></div><div class="toggle on" id="envio-portal" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.payments">Pagamentos</div></div><div class="toggle on" id="envio-pagamentos" onclick="toggleEnvioPagamentosWizard(this)"><div class="kn"></div></div></div>
+          <div id="tw-recorrencia-row" class="struct-row" style="display:none"><div class="struct-l"><div class="nm" data-t="recur.toggle">Contrato recorrente</div><span class="sub" data-t="recur.toggleHint">Para mensalidades, avenças e retainers.</span></div><div class="toggle" id="envio-recorrencia" onclick="toggleRecorrenciaWizard(this)"><div class="kn"></div></div></div>
+          <div id="tw-recorrencia-config" style="display:none;margin:2px 0 4px">
+            <div class="field"><label data-t="recur.frequency">Frequência</label>
+              <select id="tw-recur-freq" class="tw-recur-input">
+                <option value="mensal" data-t="recur.freq.monthly">Mensal</option>
+                <option value="semanal" data-t="recur.freq.weekly">Semanal</option>
+                <option value="quinzenal" data-t="recur.freq.biweekly">Quinzenal</option>
+                <option value="trimestral" data-t="recur.freq.quarterly">Trimestral</option>
+                <option value="semestral" data-t="recur.freq.biannual">Semestral</option>
+                <option value="anual" data-t="recur.freq.yearly">Anual</option>
+              </select></div>
+            <div class="field-row" style="gap:8px">
+              <div class="field" style="flex:1"><label data-t="recur.perCycle">Valor por ciclo</label><input id="tw-recur-valor" type="number" min="0" step="0.01" placeholder="300"></div>
+              <div class="field" style="flex:1"><label data-t="recur.start">Primeira cobrança</label><input id="tw-recur-inicio" type="date"></div>
+            </div>
+            <div class="field"><label data-t="recur.end">Termina em (opcional)</label><input id="tw-recur-fim" type="date"></div>
+          </div>
           <div id="tw-parcelas-wrap" style="margin:6px 0 4px">
             <p class="plabel" style="margin:9px 2px 9px" data-t="wizard.installments">Parcelas</p>
             <div id="tw-parcelas-lista"></div>
@@ -3376,6 +3393,31 @@
     "payment.depositLabel": { pt:"Sinal", en:"Deposit", es:"Señal" },
     "payment.finalLabel": { pt:"Pagamento final", en:"Final payment", es:"Pago final" },
     "payment.installmentDefault": { pt:"Parcela", en:"Installment", es:"Cuota" },
+    "recur.toggle": { pt:"Contrato recorrente", en:"Recurring contract", es:"Contrato recurrente" },
+    "recur.toggleHint": { pt:"Para mensalidades, avenças e retainers — cobra automaticamente a cada período.", en:"For monthly fees, retainers and subscriptions — bills automatically each period.", es:"Para mensualidades, iguales y retainers — cobra automáticamente cada período." },
+    "recur.frequency": { pt:"Frequência", en:"Frequency", es:"Frecuencia" },
+    "recur.perCycle": { pt:"Valor por ciclo", en:"Amount per cycle", es:"Importe por ciclo" },
+    "recur.start": { pt:"Primeira cobrança", en:"First charge", es:"Primer cobro" },
+    "recur.end": { pt:"Termina em (opcional)", en:"Ends on (optional)", es:"Termina en (opcional)" },
+    "recur.endNever": { pt:"Sem data de fim", en:"No end date", es:"Sin fecha de fin" },
+    "recur.freq.weekly": { pt:"Semanal", en:"Weekly", es:"Semanal" },
+    "recur.freq.biweekly": { pt:"Quinzenal", en:"Every 2 weeks", es:"Quincenal" },
+    "recur.freq.monthly": { pt:"Mensal", en:"Monthly", es:"Mensual" },
+    "recur.freq.quarterly": { pt:"Trimestral", en:"Quarterly", es:"Trimestral" },
+    "recur.freq.biannual": { pt:"Semestral", en:"Every 6 months", es:"Semestral" },
+    "recur.freq.yearly": { pt:"Anual", en:"Yearly", es:"Anual" },
+    "recur.per.week": { pt:"/semana", en:"/week", es:"/semana" },
+    "recur.per.biweek": { pt:"/quinzena", en:"/2 weeks", es:"/quincena" },
+    "recur.per.month": { pt:"/mês", en:"/month", es:"/mes" },
+    "recur.per.quarter": { pt:"/trimestre", en:"/quarter", es:"/trimestre" },
+    "recur.per.semester": { pt:"/semestre", en:"/6 months", es:"/semestre" },
+    "recur.per.year": { pt:"/ano", en:"/year", es:"/año" },
+    "recur.cycleLabel": { pt:"Mensalidade", en:"Cycle", es:"Cuota" },
+    "recur.badge": { pt:"Recorrente", en:"Recurring", es:"Recurrente" },
+    "recur.nextCharge": { pt:"Próxima cobrança", en:"Next charge", es:"Próximo cobro" },
+    "recur.ended": { pt:"Recorrência terminada", en:"Recurrence ended", es:"Recurrencia terminada" },
+    "recur.stop": { pt:"Terminar recorrência", en:"End recurrence", es:"Terminar recurrencia" },
+    "recur.stopped": { pt:"Recorrência terminada — não serão geradas novas cobranças.", en:"Recurrence ended — no new charges will be generated.", es:"Recurrencia terminada — no se generarán nuevos cobros." },
     // --- Modais — títulos ---
     "modal.changeRolePrefix": { pt:"Alterar papel: ", en:"Change role: ", es:"Cambiar rol: " },
     "modal.help": { pt:"Ajuda", en:"Help", es:"Ayuda" },
@@ -5060,8 +5102,32 @@
   function toggleEnvioPagamentosWizard(el){
     el.classList.toggle('on');
     const on=el.classList.contains('on');
-    document.getElementById('tw-parcelas-wrap').style.display = on ? 'block':'none';
-    if(on) seedParcelasWizardSeVazio();
+    const recorrOn=document.getElementById('envio-recorrencia').classList.contains('on');
+    document.getElementById('tw-recorrencia-row').style.display = on ? 'flex':'none';
+    document.getElementById('tw-parcelas-wrap').style.display = (on && !recorrOn) ? 'block':'none';
+    document.getElementById('tw-recorrencia-config').style.display = (on && recorrOn) ? 'block':'none';
+    if(on && !recorrOn) seedParcelasWizardSeVazio();
+  }
+  /* Recorrência e parcelas one-off são mutuamente exclusivas — ligar uma
+     esconde a outra. Ao ligar, pré-preenche valor (do campo Valor do trabalho)
+     e primeira cobrança (data do evento, ou hoje). */
+  function toggleRecorrenciaWizard(el){
+    el.classList.toggle('on');
+    const on=el.classList.contains('on');
+    document.getElementById('tw-recorrencia-config').style.display = on ? 'block':'none';
+    document.getElementById('tw-parcelas-wrap').style.display = on ? 'none':'block';
+    if(on){
+      const vIn=document.getElementById('tw-recur-valor');
+      if(vIn && !vIn.value){
+        const valorTxt=(document.getElementById('tw-valor').value||'').trim();
+        const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
+        if(valorNum) vIn.value=valorNum;
+      }
+      const iIn=document.getElementById('tw-recur-inicio');
+      if(iIn && !iIn.value) iIn.value=document.getElementById('tw-data').value||new Date().toISOString().slice(0,10);
+    } else {
+      seedParcelasWizardSeVazio();
+    }
   }
   function parcelaWizardRowHtml(i, p){
     return '<div class="field-row" data-parc-row="'+i+'" style="align-items:flex-end;margin-bottom:8px">'+
@@ -5455,13 +5521,26 @@
       date:data, dateRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
+      recorrencia:null,
       payments:[], milestones:[], reminders:[], history:[], assignedTo:twSelectedMembros.slice(),
       teamPermissions: Object.assign({}, twMembroPermissoes) };
+    const recorrLigada = job.structure.pagamentos && document.getElementById('envio-recorrencia') && document.getElementById('envio-recorrencia').classList.contains('on');
+    if(recorrLigada){
+      const freq=document.getElementById('tw-recur-freq').value;
+      const valorCiclo=parseFloat(document.getElementById('tw-recur-valor').value)||valorNum||0;
+      const inicio=document.getElementById('tw-recur-inicio').value || new Date().toISOString().slice(0,10);
+      const fim=document.getElementById('tw-recur-fim').value || null;
+      iniciarRecorrencia(job, freq, valorCiclo, inicio, fim);
+    } else {
+      const parcelasListaEl=document.getElementById('tw-parcelas-lista');
+      job.payments = job.structure.pagamentos
+        ? ((parcelasListaEl && parcelasListaEl.children.length) ? lerParcelasWizard() : gerarPagamentos(job))
+        : [];
+    }
+    // milestones depois da recorrência: um contrato recorrente não tem
+    // "sinal + pagamento final", tem ciclos — as etapas de meia-parcela são
+    // suprimidas em gerarMilestones quando job.recorrencia existe.
     job.milestones = gerarMilestones(job);
-    const parcelasListaEl=document.getElementById('tw-parcelas-lista');
-    job.payments = job.structure.pagamentos
-      ? ((parcelasListaEl && parcelasListaEl.children.length) ? lerParcelasWizard() : gerarPagamentos(job))
-      : [];
     job.reminders = job.structure.lembretes ? gerarLembretes(job) : [];
     job.briefing = job.structure.briefing ? gerarBriefing(job) : null;
     job.checklist = job.structure.checklist ? gerarChecklist(job) : null;
@@ -5566,6 +5645,12 @@
     const parcLista=document.getElementById('tw-parcelas-lista'); if(parcLista) parcLista.innerHTML='';
     const parcWrap=document.getElementById('tw-parcelas-wrap'); if(parcWrap) parcWrap.style.display='block';
     const envioPag=document.getElementById('envio-pagamentos'); if(envioPag) envioPag.classList.add('on');
+    // recorrência começa desligada; a linha do toggle aparece porque pagamentos começa ligado
+    const envioRec=document.getElementById('envio-recorrencia'); if(envioRec) envioRec.classList.remove('on');
+    const recRow=document.getElementById('tw-recorrencia-row'); if(recRow) recRow.style.display='flex';
+    const recCfg=document.getElementById('tw-recorrencia-config'); if(recCfg) recCfg.style.display='none';
+    ['tw-recur-valor','tw-recur-inicio','tw-recur-fim'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
   }
 
   /* ===== MOTOR DE DADOS REAL — trabalhos criados, contratos, assinatura ===== */
@@ -5889,10 +5974,11 @@
   function gerarMilestones(job){
     const ms=[];
     const labelPrincipal='Evento';
+    const recorrente = !!(job.recorrencia);
     if(job.structure.contrato) ms.push({key:'contrato', t:t('milestone.contractSigned'), status:'pendente', m:'aguarda envio'});
-    if(job.structure.pagamentos) ms.push({key:'sinal', t:t('milestone.signal')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.afterSignature')});
+    if(job.structure.pagamentos && !recorrente) ms.push({key:'sinal', t:t('milestone.signal')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.afterSignature')});
     ms.push({key:'principal', t:labelPrincipal+' — '+job.typeLabel, status:'futuro', m:(job.date||'data a definir')+(job.local?(' · '+job.local):'')});
-    if(job.structure.pagamentos) ms.push({key:'pagamento_final', t:t('milestone.finalPayment')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.after')+(labelPrincipal==='Evento'?'o evento':('a '+labelPrincipal.toLowerCase()))});
+    if(job.structure.pagamentos && !recorrente) ms.push({key:'pagamento_final', t:t('milestone.finalPayment')+fmtMoney(job.value*0.5), status:'futuro', m:t('milestone.after')+(labelPrincipal==='Evento'?'o evento':('a '+labelPrincipal.toLowerCase()))});
     /* a entrega é uma etapa universal do trabalho (tal como o evento principal),
        não depende de o job ter ou não uma checklist de entrega ativada — antes
        disto, "checklist:false" era o valor fixo de todo job novo, e como esta
@@ -5908,6 +5994,86 @@
       {label:'Sinal', amount:half, status:'pendente', dueDate:hojeIso, comprovativo:null},
       {label:'Pagamento final', amount:half, status:'pendente', dueDate:job.dateRaw||null, comprovativo:null}
     ];
+  }
+
+  /* ============================================================
+     CONTRATOS RECORRENTES — mensalidades, avenças, retainers.
+     job.recorrencia = null (trabalho único, comportamento normal) ou:
+       { ativa, frequencia, valorPorCiclo, inicio, fim|null,
+         proximaCobranca, ciclosGerados }
+     Cada ciclo vira uma parcela em job.payments (mesma estrutura de sempre —
+     assim toda a UI de pagamentos, os anéis e os lembretes já funcionam sem
+     alteração). avancarRecorrencias() corre ao carregar os dados e vai
+     acrescentando o próximo ciclo à medida que a data chega, sem o
+     utilizador recriar o trabalho. O dia do vencimento é o dia da data de
+     início (ex.: início a 05/08 → cobra dia 5 de cada mês/trimestre/etc.). */
+  const RECORRENCIA_FREQ = {
+    semanal:    { labelKey:'recur.freq.weekly',    unidade:'dia', passo:7,  sufixoKey:'recur.per.week' },
+    quinzenal:  { labelKey:'recur.freq.biweekly',  unidade:'dia', passo:14, sufixoKey:'recur.per.biweek' },
+    mensal:     { labelKey:'recur.freq.monthly',   unidade:'mes', passo:1,  sufixoKey:'recur.per.month' },
+    trimestral: { labelKey:'recur.freq.quarterly', unidade:'mes', passo:3,  sufixoKey:'recur.per.quarter' },
+    semestral:  { labelKey:'recur.freq.biannual',  unidade:'mes', passo:6,  sufixoKey:'recur.per.semester' },
+    anual:      { labelKey:'recur.freq.yearly',    unidade:'mes', passo:12, sufixoKey:'recur.per.year' }
+  };
+  /* Avança uma data ISO segundo a frequência. Para 'mes' preserva o dia
+     original, ajustando para o último dia quando o mês de destino é mais
+     curto (ex.: dia 31 → 30 de abril, 28/29 de fevereiro). */
+  function avancarDataRecorrencia(freq, iso){
+    const cfg = RECORRENCIA_FREQ[freq]; if(!cfg) return iso;
+    const [y,m,d] = iso.split('-').map(Number);
+    if(cfg.unidade==='dia'){
+      const dt = new Date(Date.UTC(y, m-1, d)); dt.setUTCDate(dt.getUTCDate()+cfg.passo);
+      return dt.toISOString().slice(0,10);
+    }
+    let nm = (m-1)+cfg.passo, ny = y + Math.floor(nm/12); nm = nm%12;
+    const ultimoDia = new Date(Date.UTC(ny, nm+1, 0)).getUTCDate();
+    const dia = Math.min(d, ultimoDia);
+    return new Date(Date.UTC(ny, nm, dia)).toISOString().slice(0,10);
+  }
+  function labelCicloRecorrencia(job, iso){
+    const dt = new Date(iso+'T00:00:00');
+    return t('recur.cycleLabel')+' '+dt.toLocaleDateString(jsLocale(), {month:'long', year:'numeric'});
+  }
+  /* Cria a recorrência a partir dos dados do wizard e devolve a primeira
+     parcela (ciclo inicial) já pendente. */
+  function iniciarRecorrencia(job, freq, valorPorCiclo, inicioIso, fimIso){
+    job.recorrencia = {
+      ativa:true, frequencia:freq, valorPorCiclo:valorPorCiclo,
+      inicio:inicioIso, fim:fimIso||null,
+      proximaCobranca:inicioIso, ciclosGerados:0
+    };
+    return avancarRecorrencias(job, true);
+  }
+  /* Gera os ciclos em atraso/vencidos de UM job (ou de todos, se chamada sem
+     argumento a partir do load). devolve o nº de parcelas criadas. Gera o
+     ciclo inicial mesmo que a data seja futura (forcarPrimeiro), para o
+     trabalho já nascer com a primeira cobrança visível; os seguintes só
+     entram quando a sua data chega. Cap de segurança de 60 ciclos por
+     passagem, para uma recorrência antiga nunca gerar milhares de parcelas. */
+  function avancarRecorrencias(job, forcarPrimeiro){
+    if(!job){
+      let total=0; Object.values(jobsData).forEach(j=>{ total+=avancarRecorrencias(j,false)||0; });
+      if(total) saveJobsData();
+      return total;
+    }
+    const r=job.recorrencia; if(!r || !r.ativa) return 0;
+    const hojeIso=new Date().toISOString().slice(0,10);
+    let criadas=0, guarda=0;
+    while(guarda++ < 60){
+      if(r.fim && r.proximaCobranca > r.fim){ r.ativa=false; break; }
+      const venceHojeOuAntes = r.proximaCobranca <= hojeIso;
+      if(!(forcarPrimeiro && r.ciclosGerados===0) && !venceHojeOuAntes) break;
+      job.payments = job.payments || [];
+      job.payments.push({
+        label: labelCicloRecorrencia(job, r.proximaCobranca),
+        amount: r.valorPorCiclo, status:'pendente',
+        dueDate: r.proximaCobranca, comprovativo:null, recorrente:true
+      });
+      r.ciclosGerados++; criadas++;
+      r.proximaCobranca = avancarDataRecorrencia(r.frequencia, r.proximaCobranca);
+      forcarPrimeiro=false;
+    }
+    return criadas;
   }
   function addDiasISO(iso, delta){
     const d=new Date(iso+'T00:00:00');
@@ -7122,6 +7288,16 @@
     showToast(viaComprovativo? t('payment.confirmed') : t('payment.markedPaid'));
     dispararEmailEvento('pagamentoRecebido', job.email, job);
   }
+  /* Termina a recorrência: não gera mais ciclos, mas mantém as cobranças já
+     criadas (incluindo pendentes) para não apagar histórico financeiro. */
+  function terminarRecorrenciaJob(id){
+    const job=jobsData[id];
+    if(!job || !job.recorrencia) return;
+    job.recorrencia.ativa=false;
+    pushHistory(job, t('recur.stopped'));
+    saveJobsData(); renderJobDetailDynamic(id);
+    showToast(t('recur.stopped'));
+  }
 
   function renderJobDetailDynamic(id){
     const job=jobsData[id];
@@ -7255,6 +7431,20 @@
     if(job.payments.length){
       const pend=job.payments.filter(p=>p.status!=='pago').length;
       html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? pend+' pendente'+(pend>1?'s':'') : 'tudo pago')+'</div></div><div class="sec-body" style="display:block">';
+      const rec=job.recorrencia;
+      if(rec){
+        const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
+        const sufixo=t((RECORRENCIA_FREQ[rec.frequencia]||{}).sufixoKey||'recur.per.month');
+        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:6px;padding:12px 2px;background:var(--paper-2);border-radius:10px;margin-bottom:8px">';
+        html+='<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6"/><path d="M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg><span class="sig-tag" style="background:var(--btn-14);color:rgb(var(--btn-rgb))">'+t('recur.badge')+'</span> '+freqLabel+'</span><b style="font-size:14px">'+fmtMoney(rec.valorPorCiclo)+sufixo+'</b></div>';
+        if(rec.ativa){
+          html+='<div style="font-size:12.5px;color:var(--ink-soft)">'+t('recur.nextCharge')+': '+rec.proximaCobranca.split('-').reverse().join('/')+(rec.fim?(' · até '+rec.fim.split('-').reverse().join('/')):'')+'</div>';
+          html+='<button class="btn ghost" style="padding:6px 10px;font-size:11.5px;align-self:flex-start" onclick="terminarRecorrenciaJob(\''+id+'\')">'+t('recur.stop')+'</button>';
+        } else {
+          html+='<div style="font-size:12.5px;color:var(--neutral)">'+t('recur.ended')+'</div>';
+        }
+        html+='</div>';
+      }
       job.payments.forEach((p,i)=>{
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):t('payment.statusPending'));
         const statusCor = p.status==='pago'?'var(--done)':(p.status==='a_confirmar'?'var(--pend)':'var(--late)');
@@ -8303,6 +8493,7 @@
       migrarPagamentosAntigos();
       migrarMilestoneEntrega();
       limparTrabalhosDuplicados();
+      avancarRecorrencias();
       jobsVisiveis().forEach(job=>renderJobCard(job));
       renderMonthTicker();
     });
