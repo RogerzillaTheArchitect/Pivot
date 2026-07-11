@@ -4704,6 +4704,66 @@
     {id:'b38', titulo:'Coleção Corporativo Essencial', tipo:'Coleção', categoria:'Corporativo', autor:'Inês Ramos', avaliacao:4.9, usos:67, desc:'Contrato + cronograma para eventos de empresa.', tags:['corporativo','evento','coleção']},
     {id:'b39', titulo:'Coleção Sessão Fotográfica', tipo:'Coleção', categoria:'Fotografia', autor:'Marta Dias', avaliacao:4.8, usos:156, desc:'Contrato + informações do cliente para sessões de retrato ou casal.', tags:['fotografia','retrato','sessão','coleção']}
   ];
+  /* Composição real de cada modelo "Contrato"/"Coleção" da Biblioteca — cada
+     entrada é a lista de blocos (chave de blocoTextos + parâmetros próprios)
+     que dá a esse modelo o seu conteúdo distinto. Antes, TODOS os 39 modelos
+     geravam o mesmo esqueleto genérico (blocosModeloPadrao) — agora cada um
+     reflete o contexto real do serviço: prazos de entrega, % de sinal, janela
+     de cancelamento e se os direitos ficam com o prestador (uso de portfólio,
+     comum em trabalho pessoal/eventos) ou são cedidos ao cliente (comum em
+     trabalho B2B/corporativo, onde a empresa precisa de usar o material
+     livremente). Modelos "Informações do Cliente"/"Cronograma"/"Checklist"
+     não estão aqui — ainda não têm gerador de conteúdo próprio, ver nota em
+     blocosParaModeloBiblioteca. */
+  const BIBLIOTECA_BLOCOS = {
+    // ---- Casamentos ----
+    b1: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:45}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'} ],
+    b2: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:40}}, {key:'entrega', params:{prazoEntregaDias:60, formatoEntrega:'por galeria online e álbum físico'}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
+    b3: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:75}}, {key:'cancelamento', params:{diasCancelamento:45, percentReembolso:30}}, {key:'direitos'}, {key:'forcaMaior'}, {key:'alteracaoEscopo'} ],
+    b4: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, marcoEntrega:'a cerimónia'}}, {key:'cancelamento', params:{diasCancelamento:20, percentReembolso:50}}, {key:'direitos'} ],
+    b5: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'} ],
+    // ---- Fotografia ----
+    b6: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:15, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'} ],
+    b7: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ],
+    b8: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ],
+    b9: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
+    b11: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'alteracaoEscopo'} ],
+    // ---- Imobiliário ----
+    b10: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
+    // ---- Vídeo ----
+    b12: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:21, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'alteracaoEscopo'}, {key:'garantias'} ],
+    b13: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:21, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
+    b14: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiro digital, pronto para redes sociais'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
+    b15: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiro de áudio/vídeo editado', marcoEntrega:'a gravação'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
+    b16: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'garantias'} ],
+    b17: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:7, formatoEntrega:'por ficheiros digitais, prontos para redes sociais'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
+    // ---- Corporativo ----
+    b18: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:14, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'}, {key:'forcaMaior'} ],
+    b19: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
+    b20: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por galeria digital'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
+    b21: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:7, formatoEntrega:'por ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
+    // ---- Drone ----
+    b22: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
+    b23: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'forcaMaior'} ],
+    // ---- Outros ----
+    b24: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
+    b25: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:15, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'} ],
+    b26: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'}, {key:'garantias'} ],
+    // ---- Coleções ----
+    b37: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:40}}, {key:'entrega', params:{prazoEntregaDias:60, formatoEntrega:'por galeria online e álbum físico'}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'}, {key:'confidencialidade'} ],
+    b38: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:14, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
+    b39: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ]
+  };
+  /* Gera os blocos reais de um modelo da Biblioteca. Modelos "Contrato"/
+     "Coleção" usam a composição de BIBLIOTECA_BLOCOS; qualquer id sem entrada
+     (ou tipos ainda sem gerador próprio — Informações do Cliente, Cronograma,
+     Checklist) cai no esqueleto genérico anterior, para nunca deixar o
+     wizard sem blocos. */
+  function blocosParaModeloBiblioteca(m){
+    const composicao = m && BIBLIOTECA_BLOCOS[m.id];
+    if(!composicao) return blocosModeloPadrao();
+    return composicao.map((c,i)=>({ id:'lb'+i, key:c.key, customText:null, on:true, params:c.params||null }));
+  }
   function sugerirModelos(nomeTrabalho){
     const q=(nomeTrabalho||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
     const palavras=q.split(/\s+/).filter(w=>w.length>2);
@@ -4799,7 +4859,7 @@
   function selecionarModeloBibliotecaNoWizard(id){
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    twModeloEscolhido={ nome:m.titulo, blocks:blocosModeloPadrao() };
+    twModeloEscolhido={ nome:m.titulo, blocks:blocosParaModeloBiblioteca(m) };
     twEmWizard=false;
     while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
     showPanel('trabalho');
@@ -4808,8 +4868,9 @@
   }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
+    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null);
+    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -4819,8 +4880,9 @@
   }
   function importarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
+    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null);
+    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -5931,14 +5993,43 @@
     return {itens};
   }
 
-  const blocoNomes={identificacao:'Identificação das partes',pagamento:'Pagamento',entrega:'Entrega',cancelamento:'Cancelamento',direitos:'Direitos de imagem',confidencialidade:'Confidencialidade'};
+  const blocoNomes={
+    identificacao:'Identificação das partes', pagamento:'Pagamento', entrega:'Entrega',
+    cancelamento:'Cancelamento', direitos:'Direitos de imagem', confidencialidade:'Confidencialidade',
+    forcaMaior:'Força maior', alteracaoEscopo:'Alteração de âmbito',
+    propriedadeIntelectual:'Materiais de trabalho', garantias:'Garantias e revisões'
+  };
+  /* Cada função aceita (job, params) — params vem de b.params, definido por
+     modelo na Biblioteca (ver BIBLIOTECA_BLOCOS), e permanece opcional: sem
+     params, o comportamento é o mesmo de antes (genérico, valores por
+     omissão). O texto continua a reagir a alterações no job (valor, data,
+     local) porque só é calculado no momento de renderizar. */
   const blocoTextos={
-    identificacao: job=>t('contract.between').replace('{company}',perfilData.empresa||'Pivot').replace('{client}',job.client).replace('{job}',job.typeLabel).toLowerCase()+(job.date?(' em '+job.date):'')+(job.local?(', em '+job.local):'')+'.',
-    pagamento: job=>'O valor total é de '+fmtMoney(job.value)+', dividido em sinal de '+fmtMoney(job.value*0.5)+' à assinatura e '+fmtMoney(job.value*0.5)+' até à data do evento.',
-    entrega: job=>'O material final é entregue por galeria online, em até 60 dias após o evento.',
-    cancelamento: job=>'Em caso de cancelamento pelo cliente com mais de 30 dias de antecedência, o sinal é reembolsável a 50%. Após esse prazo, não é reembolsável.',
-    direitos: job=>'O prestador detém os direitos de imagem para fins de portfólio e divulgação, salvo acordo escrito em contrário.',
-    confidencialidade: job=>'Ambas as partes comprometem-se a não divulgar informação confidencial trocada no âmbito deste trabalho.'
+    identificacao: (job,p)=>t('contract.between').replace('{company}',perfilData.empresa||'Pivot').replace('{client}',job.client).replace('{job}',job.typeLabel).toLowerCase()+(job.date?(' em '+job.date):'')+(job.local?(', em '+job.local):'')+'.',
+    pagamento: (job,p)=>{
+      const sinal = (p&&p.percentSinal!=null) ? p.percentSinal : 50;
+      const prazoSaldo = (p&&p.prazoSaldo) || 'à data do evento';
+      return 'O valor total é de '+fmtMoney(job.value)+', dividido em sinal de '+fmtMoney(job.value*sinal/100)+' ('+sinal+'%) à assinatura e '+fmtMoney(job.value*(100-sinal)/100)+' até '+prazoSaldo+'.';
+    },
+    entrega: (job,p)=>{
+      const dias = (p&&p.prazoEntregaDias!=null) ? p.prazoEntregaDias : 60;
+      const formato = (p&&p.formatoEntrega) || 'por galeria online';
+      const marco = (p&&p.marcoEntrega) || 'o evento';
+      return 'O material final é entregue '+formato+', em até '+dias+' dias após '+marco+'.';
+    },
+    cancelamento: (job,p)=>{
+      const dias = (p&&p.diasCancelamento!=null) ? p.diasCancelamento : 30;
+      const pct = (p&&p.percentReembolso!=null) ? p.percentReembolso : 50;
+      return 'Em caso de cancelamento pelo cliente com mais de '+dias+' dias de antecedência, o sinal é reembolsável a '+pct+'%. Após esse prazo, não é reembolsável.';
+    },
+    direitos: (job,p)=> (p&&p.cessaoTotal)
+      ? 'Os direitos de utilização dos materiais finais são cedidos ao Cliente após o pagamento integral, incluindo uso comercial, promocional e institucional.'
+      : 'O prestador detém os direitos de imagem para fins de portfólio e divulgação, salvo acordo escrito em contrário.',
+    confidencialidade: (job,p)=>'Ambas as partes comprometem-se a não divulgar informação confidencial trocada no âmbito deste trabalho.',
+    forcaMaior: (job,p)=>'Nenhuma das partes é responsável por atrasos ou incumprimentos causados por circunstâncias fora do seu controlo razoável (condições climatéricas extremas, falhas de equipamento de terceiros, restrições de última hora), devendo a data ser remarcada de comum acordo assim que possível.',
+    alteracaoEscopo: (job,p)=>'Qualquer alteração ao âmbito acordado (serviços adicionais, extensão de duração, entregas extra) só é válida mediante confirmação escrita e o correspondente ajuste de preço e prazo.',
+    propriedadeIntelectual: (job,p)=>'O prestador mantém a titularidade dos ficheiros de trabalho, métodos e materiais preliminares, que não integram a entrega final.',
+    garantias: (job,p)=>'O prestador compromete-se a corrigir, sem custo adicional, quaisquer erros técnicos que lhe sejam imputáveis, identificados até 15 dias após a entrega.'
   };
   function genId(){ return 'b'+Math.random().toString(36).slice(2,9); }
   function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -6170,7 +6261,7 @@
     }
   );
   function blockName(b){ return b.key ? blocoNomes[b.key] : (b.name||'Bloco'); }
-  function blockText(job,b){ return (b.customText!=null) ? b.customText : (b.key ? blocoTextos[b.key](job) : ''); }
+  function blockText(job,b){ return (b.customText!=null) ? b.customText : (b.key ? blocoTextos[b.key](job,b.params) : ''); }
   function contractSummaryHtml(job){
     let html='<div style="font-size:13.5px;line-height:1.85;margin-bottom:4px">';
     html+='<div><span style="color:var(--neutral)">Modelo:</span> '+escapeHtml(job.contract.templateName||'Personalizado')+'</div>';
@@ -6196,7 +6287,7 @@
     return { id:'__template__', client:(builderModeloOrigem&&builderModeloOrigem.client)||'', typeLabel:'', value:0, date:null, local:'', email:'',
       contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || blocosModeloPadrao() } };
   }
-  function abrirBuilder(jobId){ builderContext=jobId||null; builderModeloOrigem=null; renderBuilder(); go('builder'); }
+  function abrirBuilder(jobId, modeloOrigem){ builderContext=jobId||null; builderModeloOrigem=modeloOrigem||null; renderBuilder(); go('builder'); }
   function renderListaDuplicarContrato(){
     const wrap=document.getElementById('dup-contrato-lista');
     if(!wrap) return;
