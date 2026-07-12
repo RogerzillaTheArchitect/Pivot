@@ -698,6 +698,8 @@
   .tl-line{position:absolute;left:8.5px;top:22px;bottom:-9px;width:1.5px;background:var(--line)}
   .tl:last-child .tl-line{display:none}
   .tl-body .t{font-size:14px;font-weight:500} .tl-body .m{font-size:12.5px;color:var(--neutral)}
+  .tl-dot-status{width:18px;height:18px;flex:none;display:grid;place-items:center;font-size:11px;line-height:1;z-index:2}
+  .tl-date{font-size:11.5px;color:var(--ink-faint);margin-top:2px}
   .sec.open .chev{transform:rotate(180deg)}
   .sec-body{display:none;padding:0 16px 16px}
   .sec.open .sec-body{display:block}
@@ -2981,26 +2983,61 @@
      cada lado conclui a sua parte. Só entram passos cujas funcionalidades
      estão realmente ativas neste trabalho (contrato, pagamentos, triagem,
      seleção, ajustes, entrega final). */
+  /* Cada passo ganha: status (done/progress/pending/late — usado para o
+     ícone colorido 🟢🔵🟡🔴 em toda a aplicação), desc (contexto do que está
+     a acontecer) e data quando existir. acaoLabel/acaoFn só aparecem em
+     passos que a EQUIPA pode concluir diretamente por aqui — ações do
+     cliente (assinar, pagar, selecionar) não têm botão, porque acontecem no
+     Portal do Cliente. */
   function construirTimelineBidirecional(job){
     const e=job.entrega||{};
     const pagos=(job.payments||[]).filter(p=>p.status==='pago').length;
     const enviados=(job.payments||[]).filter(p=>p.status==='pago'||p.status==='a_confirmar').length;
+    const hoje=new Date().toISOString().slice(0,10);
+    const atrasado=(job.payments||[]).some(p=>p.status!=='pago' && p.dueDate && p.dueDate<hoje);
     const passos=[];
-    if (job.structure && job.structure.contrato) passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito: job.contract && job.contract.status==='assinado'});
-    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
-      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0});
-      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0});
+    if (job.structure && job.structure.contrato){
+      const feito=job.contract && job.contract.status==='assinado';
+      passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito, status: feito?'done':'pending',
+        desc: feito ? (t('job.contract.signedByPrefix2')+(job.contract.signerName||'')) : t('timeline.desc.awaitingSignature'),
+        data: feito ? job.contract.signedAt : null});
     }
-    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida});
-    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida});
+    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
+      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0, status: enviados>0?'done':(atrasado?'late':'pending'),
+        desc: enviados>0 ? t('timeline.desc.paymentReceived') : t('timeline.desc.awaitingPayment'), data:null});
+      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0, status: pagos>0?'done':(enviados>0?'progress':'pending'),
+        desc: pagos>0 ? t('timeline.desc.paymentConfirmed') : t('timeline.desc.awaitingConfirmation'), data:null});
+    }
+    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida, status: e.triagemConcluida?'done':'progress',
+      desc: e.triagemConcluida ? t('timeline.desc.doneByClient') : t('timeline.desc.clientSelecting'), data:null});
+    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida, status: e.selecaoConcluida?'done':'progress',
+      desc: e.selecaoConcluida ? t('timeline.desc.doneByClient') : t('timeline.desc.clientSelecting'), data:null});
     if (e.permiteAjustes && e.ajustes && e.ajustes.length){
       const utilizados=e.ajustes.filter(a=>a.status==='utilizado'||a.status==='concluido').length;
       const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
-      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0});
-      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: concluidos>0 && concluidos===utilizados});
+      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0, status: utilizados>0?'done':'pending',
+        desc: utilizados>0 ? (utilizados+' '+t('entrega.allowAdjustments').toLowerCase()) : t('timeline.desc.noRequestsYet'), data:null});
+      const pendentes=utilizados-concluidos;
+      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: utilizados>0 && pendentes===0, status: (utilizados>0 && pendentes===0)?'done':(utilizados>0?'progress':'pending'),
+        desc: concluidos+'/'+utilizados, data:null,
+        acaoLabel: pendentes>0 ? t('action.complete') : null,
+        acaoFn: pendentes>0 ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
     }
-    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: (job.milestones||[]).some(m=>m.key==='entrega' && m.status==='concluido')});
+    const entregaMs=(job.milestones||[]).find(m=>m.key==='entrega');
+    const entregaFeita = entregaMs && entregaMs.status==='feito';
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita, status: entregaFeita?'done':'pending',
+      desc: entregaFeita ? t('timeline.desc.delivered') : t('timeline.desc.deliveryPending'),
+      data: e.dataEntrega ? e.dataEntrega.split('-').reverse().join('/') : null,
+      acaoLabel: !entregaFeita ? t('action.complete') : null,
+      acaoFn: !entregaFeita ? ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')') : null});
     return passos;
+  }
+  function concluirAjustesPendentesJob(jobId){
+    const job=jobsData[jobId]; if(!job || !job.entrega) return;
+    (job.entrega.ajustes||[]).forEach(a=>{ if(a.status==='utilizado') a.status='concluido'; });
+    pushHistory(job, t('toast.done'));
+    saveJobsData(); renderJobDetailDynamic(jobId);
+    showToast(t('toast.done'));
   }
   function renderTimelinePublicoHtml(job){
     const passos=construirTimelineBidirecional(job);
@@ -3010,7 +3047,7 @@
     html += passos.map(p=>
       '<div class="pp-timeline-step'+(p.feito?' done':'')+'">'+
         '<div class="pp-timeline-dot"></div>'+
-        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+(p.quem==='cliente'?t('timeline.you'):t('timeline.team'))+(p.feito?(' · '+t('timeline.done')):(' · '+t('timeline.pending')))+'</span></div>'+
+        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+escapeHtml(p.desc||'')+(p.data?(' · '+escapeHtml(p.data)):'')+'</span></div>'+
       '</div>'
     ).join('');
     html += '</div></div>';
@@ -3090,7 +3127,6 @@
     "action.attach": { pt:"Anexar", en:"Attach", es:"Adjuntar" },
     "action.complete": { pt:"Concluir", en:"Complete", es:"Concluir" },
     "action.contactSupport": { pt:"Falar com o suporte", en:"Contact support", es:"Hablar con soporte" },
-    "action.markDone": { pt:"Marcar como feito", en:"Mark as done", es:"Marcar como hecho" },
     "action.restore": { pt:"Restaurar", en:"Restore", es:"Restaurar" },
     "action.delete": { pt:"Deletar", en:"Delete", es:"Eliminar" },
     "action.deleteAccount": { pt:"Apagar conta e dados", en:"Delete account and data", es:"Eliminar cuenta y datos" },
@@ -3188,6 +3224,18 @@
     "timeline.team": { pt:"Equipe", en:"Team", es:"Equipo" },
     "timeline.done": { pt:"concluído", en:"done", es:"completado" },
     "timeline.pending": { pt:"pendente", en:"pending", es:"pendiente" },
+    "timeline.desc.awaitingSignature": { pt:"Aguardando assinatura do cliente", en:"Awaiting the client's signature", es:"Esperando la firma del cliente" },
+    "timeline.desc.paymentReceived": { pt:"Recebido do cliente", en:"Received from the client", es:"Recibido del cliente" },
+    "timeline.desc.awaitingPayment": { pt:"Aguardando pagamento", en:"Awaiting payment", es:"Esperando el pago" },
+    "timeline.desc.paymentConfirmed": { pt:"Confirmado", en:"Confirmed", es:"Confirmado" },
+    "timeline.desc.awaitingConfirmation": { pt:"Aguardando confirmação do comprovante", en:"Awaiting receipt confirmation", es:"Esperando confirmación del comprobante" },
+    "timeline.desc.doneByClient": { pt:"Concluído pelo cliente", en:"Done by the client", es:"Completado por el cliente" },
+    "timeline.desc.clientSelecting": { pt:"Cliente está selecionando arquivos", en:"Client is selecting files", es:"El cliente está seleccionando archivos" },
+    "timeline.desc.noRequestsYet": { pt:"Nenhum ajuste solicitado ainda", en:"No adjustment requested yet", es:"Aún no se solicitó ningún ajuste" },
+    "timeline.desc.delivered": { pt:"Entregue", en:"Delivered", es:"Entregado" },
+    "timeline.desc.deliveryPending": { pt:"Entrega pendente", en:"Delivery pending", es:"Entrega pendiente" },
+    "timeline.status.progress": { pt:"Em andamento", en:"In progress", es:"En curso" },
+    "timeline.status.late": { pt:"Atrasado", en:"Late", es:"Atrasado" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
     "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
     "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
@@ -7810,6 +7858,32 @@
     showToast(t('recur.stopped'));
   }
 
+  /* Indicador de status único para toda a aplicação — Contrato, Briefing,
+     Timeline, Pagamentos, Entregas, Aprovações usam sempre os mesmos 4
+     estados. */
+  const STATUS_EMOJI={done:'🟢', progress:'🔵', pending:'🟡', late:'🔴'};
+  function statusEmoji(status){ return STATUS_EMOJI[status]||STATUS_EMOJI.pending; }
+  /* Card de Timeline do Portal Operacional — mesmo motor da timeline
+     bidirecional do Portal do Cliente (construirTimelineBidirecional), para
+     nunca haver duas versões divergentes do mesmo progresso. Cada item
+     segue sempre a ordem: Status, Título, Descrição, Data, Ação. */
+  function timelineCardHtml(job){
+    const passos=construirTimelineBidirecional(job);
+    if(!passos.length) return '';
+    let html='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
+    passos.forEach((p,i)=>{
+      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line"></div>':'')+
+        '<div class="tl-dot-status">'+statusEmoji(p.status)+'</div>'+
+        '<div class="tl-body">'+
+          '<div class="t">'+escapeHtml(p.label)+'</div>'+
+          (p.desc?'<div class="m">'+escapeHtml(p.desc)+'</div>':'')+
+          (p.data?'<div class="tl-date">'+escapeHtml(p.data)+'</div>':'')+
+          (p.acaoLabel?'<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
+        '</div></div>';
+    });
+    html+='</div></div>';
+    return html;
+  }
   function renderJobDetailDynamic(id){
     const job=jobsData[id];
     document.getElementById('d-title').textContent=job.nome||job.typeLabel;
@@ -7910,17 +7984,7 @@
       html+='</div></div>';
     }
 
-    if(job.milestones.length){
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
-      job.milestones.forEach(ms=>{
-        const dotClass= ms.status==='feito'?'tl-dot done':(ms.status==='pendente'?'tl-dot now':'tl-dot');
-        const inner= ms.status==='feito'? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'';
-        const podeMarcar = ms.status!=='feito' && (ms.key==='principal' || ms.key==='entrega');
-        const acao = podeMarcar ? '<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:5px" onclick="marcarMilestoneFeito(\''+id+'\',\''+ms.key+'\')">'+t('action.markDone')+'</button>' : '';
-        html+='<div class="tl"><div class="tl-line"></div><div class="'+dotClass+'">'+inner+'</div><div class="tl-body"><div class="t">'+ms.t+'</div><div class="m">'+ms.m+'</div>'+acao+'</div></div>';
-      });
-      html+='</div></div>';
-    }
+    html+=timelineCardHtml(job);
 
     if(job.payments.length){
       const pend=job.payments.filter(p=>p.status!=='pago').length;
