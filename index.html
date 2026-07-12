@@ -4182,7 +4182,7 @@
     "team.seatsFullSuffix": { pt:" lugares do seu plano. Mude para um plano superior para adicionar mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
     "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
-    "collab.sectionTitle": { pt:"Colaboradores Externos", en:"External Collaborators", es:"Colaboradores Externos" },
+    "collab.sectionTitle": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
     "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
     "collab.bulkApply": { pt:"Aplicar em massa", en:"Apply in bulk", es:"Aplicar en masa" },
     "collab.role": { pt:"Função", en:"Role", es:"Función" },
@@ -4193,7 +4193,7 @@
     "collab.permLevel.reader": { pt:"Leitor", en:"Reader", es:"Lector" },
     "collab.permLevel.editor": { pt:"Editor", en:"Editor", es:"Editor" },
     "collab.permLevel.admin": { pt:"Administrador", en:"Administrator", es:"Administrador" },
-    "collab.add": { pt:"Convidar colaborador", en:"Invite collaborator", es:"Invitar colaborador" },
+    "collab.add": { pt:"+ Adicionar", en:"+ Add", es:"+ Añadir" },
     "collab.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
     "collab.none": { pt:"Sem colaboradores externos neste trabalho.", en:"No external collaborators on this job.", es:"Sin colaboradores externos en este trabajo." },
     "collab.title": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
@@ -6075,7 +6075,7 @@
     showToast(t('toast.clientAddedPrefix')+nome+t('toast.clientAddedSuffix'));
   }
   let criandoTrabalho=false;
-  function trabalhoCreate(){
+  async function trabalhoCreate(){
     /* guarda contra duplo-toque/duplo-clique — sem isto, um toque duplo no botão
        "Criar trabalho" (comum em ecrãs touch, sobretudo com alguma lentidão de rede)
        criava dois registos quase idênticos, cada um com o seu próprio card e as
@@ -6169,13 +6169,18 @@
     jobsData[id]=job;
     renderJobCard(job);
     saveJobsData();
-    twColaboradoresExternosPendentes.forEach(p=>finalizarColaboradorExternoPendente(job, p));
+    /* Espera as inserções de colaboradores terminarem ANTES de abrir o
+       Portal Operacional — sem isto, o card de Colaboradores fazia a sua
+       leitura antes das linhas existirem no Supabase (condição de corrida)
+       e mostrava "sem colaboradores" mesmo tendo sido adicionados na
+       criação do trabalho. */
+    await Promise.all(twColaboradoresExternosPendentes.map(p=>finalizarColaboradorExternoPendente(job, p)));
     closeSheet();
     showToast(t('toast.jobCreated')+' '+nomeTrabalho+'.');
     openJob(id);
     resetTrabalho();
   }
-  function finalizarColaboradorExternoPendente(job, p){
+  async function finalizarColaboradorExternoPendente(job, p){
     const briefing = p.permissoes.briefing && job.briefing ? {perguntas:job.briefing.perguntas||[], observacoes:''} : null;
     const datas = p.permissoes.datas ? {date:job.date, local:job.local} : null;
     const contrato = p.permissoes.contrato ? {status:job.contract.status} : null;
@@ -6190,23 +6195,22 @@
         jobNome: job.nome||job.typeLabel, jobCliente: job.client },
       acordo: p.acordo, entregas: [], status: semConta?'convidado':'ativo'
     };
-    sb.from('external_collaborators').insert(row).then(({error})=>{
-      if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
-      const jobNome = job.nome||job.typeLabel;
-      const remetente = perfilData.nome||t('defaults.userName');
-      const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
-      const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
-      if(semConta){
-        const link=window.location.origin+'/?colab='+token;
-        dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
-          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
-          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
-      } else {
-        dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
-          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
-          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
-      }
-    });
+    const { error } = await sb.from('external_collaborators').insert(row);
+    if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
+    const jobNome = job.nome||job.typeLabel;
+    const remetente = perfilData.nome||t('defaults.userName');
+    const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+    const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+    if(semConta){
+      const link=window.location.origin+'/?colab='+token;
+      dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+    } else {
+      dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
+    }
   }
   function gerarDatasEventoICS(job){
     if(!job.dateRaw) return null;
@@ -8093,10 +8097,12 @@
     const wrap=document.getElementById('colab-lista-'+jobId);
     if(!wrap) return;
     const lista=colaboradoresCache[jobId]||[];
-    wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.email)+'</div><span class="sub">'+papelNomeColaborador(c.nivel_acesso)+(c.acordo&&c.acordo.modelo?(c.acordo.assinado?' · '+t('collab.agreementSigned'):' · '+t('collab.agreementPending')):'')+'</span></div>'+
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
+    wrap.innerHTML = lista.length ? lista.map(c=>{
+      const permissaoLabel = (PERMISSOES_CONTRATO_COLAB.find(x=>x[0]===(c.permissao||'leitor'))||[])[1];
+      const linhas=[t('collab.role')+': '+(c.funcao||'—'), t('collab.permission')+': '+(permissaoLabel?t(permissaoLabel):'—')];
+      return '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.email)+'</div><span class="sub">'+linhas.join(' · ')+(c.acordo&&c.acordo.modelo?(c.acordo.assinado?' · '+t('collab.agreementSigned'):' · '+t('collab.agreementPending')):'')+'</span></div>'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
   }
   async function removerColaboradorExterno(id, jobId){
     const { error } = await sb.from('external_collaborators').update({status:'removido'}).eq('id',id);
