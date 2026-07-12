@@ -4292,7 +4292,7 @@
     "collab.level.ownerDesc": { pt:"Visualiza, envia entregas e atualiza o estado das tarefas.", en:"Views, submits deliveries and updates task status.", es:"Visualiza, envía entregas y actualiza el estado de las tareas." },
     "collab.customizeScope": { pt:"Personalizar o que é partilhado", en:"Customize what's shared", es:"Personalizar lo que se comparte" },
     "collab.hoursForThisPerson": { pt:"Horas previstas para este colaborador", en:"Estimated hours for this collaborator", es:"Horas previstas para este colaborador" },
-    "collab.agreementOptional": { pt:"Acordo de Colaboração (opcional)", en:"Collaboration Agreement (optional)", es:"Acuerdo de Colaboración (opcional)" },
+    "collab.agreementOptional": { pt:"Contrato de Colaborador", en:"Collaborator Contract", es:"Contrato de Colaborador" },
     "collab.agreementHint": { pt:"Escolhe um modelo ou escreve o teu próprio texto. O colaborador tem de assinar antes de aceder ao que foi partilhado.", en:"Choose a template or write your own text. The collaborator must sign before accessing what was shared.", es:"Elige una plantilla o escribe tu propio texto. El colaborador debe firmar antes de acceder a lo compartido." },
     "collab.agreementTextPlaceholder": { pt:"Texto do acordo…", en:"Agreement text…", es:"Texto del acuerdo…" },
     "collab.agreement.nda": { pt:"NDA", en:"NDA", es:"NDA" },
@@ -4303,7 +4303,7 @@
     "collab.roleRequired": { pt:"Preencha a função do colaborador.", en:"Fill in the collaborator's role.", es:"Complete la función del colaborador." },
     "action.remove": { pt:"Remover", en:"Remove", es:"Quitar" },
     "action.done": { pt:"Concluir", en:"Done", es:"Listo" },
-    "collab.invite": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
+    "collab.invite": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "collab.invited": { pt:"Colaborador adicionado.", en:"Collaborator added.", es:"Colaborador añadido." },
     "collab.agreementSigned": { pt:"acordo assinado", en:"agreement signed", es:"acuerdo firmado" },
     "collab.agreementPending": { pt:"acordo por assinar", en:"agreement pending", es:"acuerdo por firmar" },
@@ -5486,6 +5486,11 @@
     if(contratoParaColaboradorJobId){
       const jobId=contratoParaColaboradorJobId;
       contratoParaColaboradorJobId=null;
+      // Se estivermos a meio do wizard de criação (__wizard__), a folha
+      // (sheet) tem de continuar aberta — fechar aqui devolvia o utilizador
+      // ao dashboard e "encerrava" a criação do trabalho. Fora do wizard
+      // (Portal Operacional), a folha só serviu para mostrar a biblioteca.
+      if(jobId!=='__wizard__') closeSheet();
       aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem||{blocks:[]});
       return;
     }
@@ -5494,14 +5499,31 @@
     closeSheet();
     abrirBuilder(alvo, modeloOrigem);
   }
+  /* Abre o painel da biblioteca de contratos SEM destruir o que já estava
+     aberto. openSheet() chama resetSheet() -> resetTrabalho(), que apaga
+     todos os campos já preenchidos do wizard — chamá-lo enquanto o utilizador
+     está a meio da criação de um trabalho (ex.: a escolher um contrato para
+     um colaborador na Etapa 2) apagava o trabalho inteiro em segundo plano,
+     e ao voltar não havia "trabalho" na pilha de painéis para onde regressar,
+     então closeSheet() fechava tudo — esse era o bug de "encerra a criação". */
+  function abrirPainelBibliotecaContrato(){
+    if(!document.getElementById('sheet').classList.contains('show')) openSheet();
+    pushPanel('contrato');
+  }
+  /* Contrato de Colaborador vai direto à Biblioteca — sem passar pela tela
+     antiga "Novo Contrato" (Do zero / Duplicar existente / Usar modelo
+     guardado), que não faz sentido neste fluxo. */
+  function abrirPainelBibliotecaContratoDireto(){
+    if(!document.getElementById('sheet').classList.contains('show')) openSheet();
+    pushPanel('comunidade-contratos');
+  }
   /* Card de Contrato do Portal Operacional: sem contrato, o único ponto de
      entrada é escolher um modelo da biblioteca/próprio — nunca "criar vazio"
      ou "anexar arquivo" (isso já é decidido na criação do trabalho). */
   function abrirSelecionarContratoJob(id){
     contratoParaJobId=id;
     twEmWizard=false;
-    openSheet();
-    pushPanel('contrato');
+    abrirPainelBibliotecaContrato();
   }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
@@ -8281,8 +8303,7 @@
   function abrirBibliotecaContratoColaboradoresMassa(jobId){
     contratoParaColaboradoresMassaJobId=jobId;
     twEmWizard=false;
-    openSheet();
-    pushPanel('contrato');
+    abrirPainelBibliotecaContratoDireto();
   }
   function abrirAplicarContratoMassa(jobId, modeloOrigem){
     modeloEscolhidoParaMassa=modeloOrigem;
@@ -8483,8 +8504,7 @@
   function abrirSelecionarContratoColaborador(jobId){
     contratoParaColaboradorJobId=jobId;
     twEmWizard=false;
-    openSheet();
-    pushPanel('contrato');
+    abrirPainelBibliotecaContratoDireto();
   }
   function renderizarTextoModeloParaColaborador(job, blocks){
     return blocks.filter(b=>b.on!==false).map(b=>blockName(b)+'\n'+blockText(job,b)).join('\n\n');
@@ -8492,7 +8512,6 @@
   function aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem){
     const job=jobsData[jobId] || {};
     colabExternoAcordo = { modelo:'biblioteca', nome:modeloOrigem.nome||null, texto: renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks), assinado:false };
-    closeSheet();
     abrirConfigurarColaboradorExterno(jobId);
   }
   async function convidarColaboradorExterno(jobId){
@@ -8509,7 +8528,12 @@
       twColaboradoresExternosPendentes.push({ email:u.email, nome:u.nome||u.email, userId:u.userId, nivel_acesso:colabExternoNivel, permissoes, acordo:colabExternoAcordo, funcao });
       colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura'; colabExternoFuncao='';
       closeInfo();
-      renderColaboradorExternoPendenteWizard();
+      // Se o utilizador passou pela biblioteca de contratos (Contrato de
+      // Colaborador), a folha pode ter ficado no painel da biblioteca —
+      // garantir que volta à Etapa 2 do wizard, não onde a biblioteca ficou.
+      while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
+      showPanel('trabalho');
+      if(trabalhoMoment!==2) trabalhoGoto(2); else renderColaboradorExternoPendenteWizard();
       return;
     }
     const job=jobsData[jobId];
