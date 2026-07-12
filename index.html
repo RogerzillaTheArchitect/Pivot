@@ -2191,7 +2191,7 @@
 
           <p class="plabel" style="margin:20px 2px 9px" data-t="entrega.deliveryFormat">Formato de Entrega</p>
           <div class="field">
-            <select id="entrega-formato" onchange="atualizarEntregaFormato()">
+            <select id="entrega-formato">
               <option value="digital" data-t="entrega.format.digital">Download Digital</option>
               <option value="galeria" data-t="entrega.format.gallery">Galeria Online</option>
               <option value="pendrive" data-t="entrega.format.pendrive">Pen Drive</option>
@@ -2200,10 +2200,6 @@
               <option value="impressao" data-t="entrega.format.print">Impressão</option>
               <option value="outro" data-t="entrega.format.other">Outro</option>
             </select>
-          </div>
-          <div class="field" id="entrega-download-link-wrap" style="display:none">
-            <label data-t="entrega.downloadLink">Link de Download</label>
-            <input id="entrega-download-link" placeholder="https://…">
           </div>
           <div class="field">
             <label data-t="entrega.deliveryDate">Data de Entrega</label>
@@ -3022,20 +3018,66 @@
       const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
       passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0, status: utilizados>0?'done':'pending',
         desc: utilizados>0 ? (utilizados+' '+t('entrega.allowAdjustments').toLowerCase()) : t('timeline.desc.noRequestsYet'), data:null});
+      // Cada ajuste solicitado e ainda sem link precisa que a equipe
+      // disponibilize o material revisado antes de poder ser concluído —
+      // o link só é pedido agora, nunca na criação do trabalho.
+      e.ajustes.forEach((a,idx)=>{
+        if (a.status==='utilizado' && !a.link){
+          passos.push({label:a.nome||(t('entrega.adjustmentDefault')+' '+(idx+1)), quem:'equipe', feito:false, status:'progress',
+            desc: t('timeline.desc.awaitingAdjustmentMaterial'), data:null,
+            acaoLabel: t('entrega.attachMaterialLink'),
+            acaoFn: ('abrirAnexarLinkAjuste(\''+job.id+'\','+idx+')')});
+        }
+      });
       const pendentes=utilizados-concluidos;
+      const todosComLink = e.ajustes.filter(a=>a.status==='utilizado').every(a=>a.link);
       passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: utilizados>0 && pendentes===0, status: (utilizados>0 && pendentes===0)?'done':(utilizados>0?'progress':'pending'),
         desc: concluidos+'/'+utilizados, data:null,
-        acaoLabel: pendentes>0 ? t('action.complete') : null,
-        acaoFn: pendentes>0 ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
+        acaoLabel: (pendentes>0 && todosComLink) ? t('action.complete') : null,
+        acaoFn: (pendentes>0 && todosComLink) ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
     }
     const entregaMs=(job.milestones||[]).find(m=>m.key==='entrega');
     const entregaFeita = entregaMs && entregaMs.status==='feito';
-    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita, status: entregaFeita?'done':'pending',
-      desc: entregaFeita ? t('timeline.desc.delivered') : t('timeline.desc.deliveryPending'),
+    const precisaLinkEntrega = e.formatoEntrega==='digital' && !e.linkDownload;
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita,
+      status: entregaFeita?'done':(precisaLinkEntrega?'progress':'pending'),
+      desc: entregaFeita ? t('timeline.desc.delivered') : (precisaLinkEntrega ? t('timeline.desc.awaitingDeliveryMaterial') : t('timeline.desc.deliveryPending')),
       data: e.dataEntrega ? e.dataEntrega.split('-').reverse().join('/') : null,
-      acaoLabel: !entregaFeita ? t('action.complete') : null,
-      acaoFn: !entregaFeita ? ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')') : null});
+      acaoLabel: entregaFeita ? null : (precisaLinkEntrega ? t('entrega.attachDeliveryLink') : t('action.complete')),
+      acaoFn: entregaFeita ? null : (precisaLinkEntrega ? ('abrirAnexarLinkEntrega(\''+job.id+'\')') : ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')'))});
     return passos;
+  }
+  function abrirAnexarLinkAjuste(jobId, idx){
+    const job=jobsData[jobId]; const a=job.entrega.ajustes[idx];
+    openInfo(t('entrega.attachMaterialLink'), `
+      <div class="field"><label>${t('entrega.materialLink')}</label><input id="link-ajuste-input" placeholder="https://…" value="${escapeHtml(a.link||'')}"></div>
+      <button class="btn primary" style="width:100%" onclick="salvarLinkAjuste('${jobId}',${idx})">${t('action.save')}</button>`);
+  }
+  function salvarLinkAjuste(jobId, idx){
+    const link=(document.getElementById('link-ajuste-input').value||'').trim();
+    if(!link) return;
+    const job=jobsData[jobId];
+    job.entrega.ajustes[idx].link=link;
+    saveJobsData();
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
+  }
+  function abrirAnexarLinkEntrega(jobId){
+    const job=jobsData[jobId];
+    openInfo(t('entrega.attachDeliveryLink'), `
+      <div class="field"><label>${t('entrega.downloadLink')}</label><input id="link-entrega-input" placeholder="https://…" value="${escapeHtml((job.entrega&&job.entrega.linkDownload)||'')}"></div>
+      <button class="btn primary" style="width:100%" onclick="salvarLinkEntrega('${jobId}')">${t('action.save')}</button>`);
+  }
+  function salvarLinkEntrega(jobId){
+    const link=(document.getElementById('link-entrega-input').value||'').trim();
+    if(!link) return;
+    const job=jobsData[jobId];
+    job.entrega.linkDownload=link;
+    saveJobsData();
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
   }
   function concluirAjustesPendentesJob(jobId){
     const job=jobsData[jobId]; if(!job || !job.entrega) return;
@@ -3201,8 +3243,6 @@
     "entrega.allowAdjustments": { pt:"Permitir Ajustes", en:"Allow Adjustments", es:"Permitir Ajustes" },
     "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar alterações nos materiais entregues.", en:"The client can request changes to the delivered materials.", es:"El cliente puede solicitar cambios en los materiales entregados." },
     "entrega.addAdjustment": { pt:"+ Adicionar Ajuste", en:"+ Add Adjustment", es:"+ Añadir Ajuste" },
-    "entrega.adjustmentName": { pt:"Nome do Ajuste", en:"Adjustment Name", es:"Nombre del Ajuste" },
-    "entrega.adjustmentLinkShort": { pt:"Link", en:"Link", es:"Enlace" },
     "entrega.extraDaysShort": { pt:"Dias", en:"Days", es:"Días" },
     "entrega.adjustmentDefault": { pt:"Ajuste", en:"Adjustment", es:"Ajuste" },
     "entrega.deliveryFormat": { pt:"Formato de Entrega", en:"Delivery Format", es:"Formato de Entrega" },
@@ -3214,6 +3254,8 @@
     "entrega.format.print": { pt:"Impressão", en:"Print", es:"Impresión" },
     "entrega.format.other": { pt:"Outro", en:"Other", es:"Otro" },
     "entrega.downloadLink": { pt:"Link de Download", en:"Download Link", es:"Enlace de Descarga" },
+    "entrega.attachMaterialLink": { pt:"Anexar Link do Material", en:"Attach Material Link", es:"Adjuntar Enlace del Material" },
+    "entrega.attachDeliveryLink": { pt:"Anexar Link da Entrega", en:"Attach Delivery Link", es:"Adjuntar Enlace de la Entrega" },
     "entrega.deliveryDate": { pt:"Data de Entrega", en:"Delivery Date", es:"Fecha de Entrega" },
     "entrega.observations": { pt:"Observações", en:"Notes", es:"Observaciones" },
     "entrega.observationsPlaceholder": { pt:"Ex: trocar foto da capa, corrigir cor da cena 4, remover pessoa do fundo…", en:"E.g.: swap the cover photo, fix the color in scene 4, remove a person from the background…", es:"Ej.: cambiar la foto de portada, corregir el color de la escena 4, quitar a una persona del fondo…" },
@@ -3239,6 +3281,8 @@
     "timeline.desc.noRequestsYet": { pt:"Nenhum ajuste solicitado ainda", en:"No adjustment requested yet", es:"Aún no se solicitó ningún ajuste" },
     "timeline.desc.delivered": { pt:"Entregue", en:"Delivered", es:"Entregado" },
     "timeline.desc.deliveryPending": { pt:"Entrega pendente", en:"Delivery pending", es:"Entrega pendiente" },
+    "timeline.desc.awaitingAdjustmentMaterial": { pt:"Aguardando envio do material revisado", en:"Awaiting the revised material", es:"Esperando el material revisado" },
+    "timeline.desc.awaitingDeliveryMaterial": { pt:"Aguardando envio da entrega", en:"Awaiting delivery upload", es:"Esperando el envío de la entrega" },
     "timeline.status.progress": { pt:"Em andamento", en:"In progress", es:"En curso" },
     "timeline.status.late": { pt:"Atrasado", en:"Late", es:"Atrasado" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
@@ -5693,7 +5737,6 @@
      depois em job.entrega para preencher automaticamente os contratos
      (ver blocoTextos.entrega em integrarEntregaNoBloco). */
   function prepararEtapaEntrega(){
-    atualizarEntregaFormato();
     if(!document.getElementById('entrega-ajustes-lista').children.length) addAjusteWizard();
   }
   function toggleEntregaFase(el, fase){
@@ -5704,14 +5747,13 @@
     el.classList.toggle('on');
     document.getElementById('entrega-ajustes-wrap').style.display = el.classList.contains('on') ? 'block':'none';
   }
-  function atualizarEntregaFormato(){
-    const formato=document.getElementById('entrega-formato').value;
-    document.getElementById('entrega-download-link-wrap').style.display = formato==='digital' ? 'block':'none';
-  }
+  /* Na criação, o ajuste só pede Dias Adicionais — o proprietário ainda não
+     tem material pronto, então Nome (auto "Ajuste N") e Link não fazem
+     sentido aqui. O link só é pedido depois, quando a timeline chegar
+     "Aguardando envio para Ajuste N" (ver anexarLinkAjusteJob). */
   function ajusteWizardRowHtml(i, a){
-    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1.4fr 1.4fr 0.7fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
-      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentName">Nome do Ajuste</label><input class="tw-ajuste-nome" placeholder="'+t('entrega.adjustmentDefault')+' '+(i+1)+'" value="'+escapeHtml(a.nome||'')+'"></div>'+
-      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentLinkShort">Link</label><input class="tw-ajuste-link" placeholder="https://…" value="'+escapeHtml(a.link||'')+'"></div>'+
+    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1fr 0.8fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
+      '<div style="padding-bottom:12px"><span style="font-weight:600;font-size:14px">'+t('entrega.adjustmentDefault')+' '+(i+1)+'</span></div>'+
       '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.extraDaysShort">Dias</label><input class="tw-ajuste-dias" type="number" min="0" step="1" value="'+(a.diasAdicionais!=null?a.diasAdicionais:0)+'"></div>'+
       '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerAjusteWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
     '</div>';
@@ -5719,15 +5761,26 @@
   function addAjusteWizard(){
     const lista=document.getElementById('entrega-ajustes-lista');
     const i=lista.children.length;
-    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {nome:t('entrega.adjustmentDefault')+' '+(i+1), link:'', diasAdicionais:0}));
+    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {diasAdicionais:0}));
+    renumerarAjustesWizard();
   }
   function removerAjusteWizard(btn){
     btn.closest('[data-ajuste-row]').remove();
+    renumerarAjustesWizard();
+  }
+  /* Os rótulos "Ajuste N" têm de acompanhar a posição após remover uma
+     linha do meio — senão ficava "Ajuste 1, Ajuste 3" com um buraco. */
+  function renumerarAjustesWizard(){
+    [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].forEach((row,i)=>{
+      row.dataset.ajusteRow=i;
+      const lbl=row.querySelector('span');
+      if(lbl) lbl.textContent=t('entrega.adjustmentDefault')+' '+(i+1);
+    });
   }
   function lerAjustesWizard(){
     return [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].map((row,i)=>({
-      nome: row.querySelector('.tw-ajuste-nome').value.trim() || (t('entrega.adjustmentDefault')+' '+(i+1)),
-      link: row.querySelector('.tw-ajuste-link').value.trim() || null,
+      nome: t('entrega.adjustmentDefault')+' '+(i+1),
+      link: null,
       diasAdicionais: parseInt(row.querySelector('.tw-ajuste-dias').value,10)||0,
       status:'pendente', observacoes:null
     }));
@@ -5748,7 +5801,8 @@
       ajustes,
       formatoEntrega: document.getElementById('entrega-formato').value,
       dataEntrega: document.getElementById('entrega-data').value || null,
-      linkDownload: document.getElementById('entrega-formato').value==='digital' ? (document.getElementById('entrega-download-link').value.trim()||null) : null
+      linkDownload: null,
+      entregaFinalConcluida:false
     };
   }
   /* Soma os dias adicionais de todos os ajustes já utilizados — usado tanto
@@ -6300,8 +6354,8 @@
     const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
     // Etapa 5 — Entrega e Aprovação: toggles desligados por padrão, campos limpos.
     ['entrega-triagem','entrega-selecao','entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
-    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap','entrega-download-link-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
-    ['entrega-triagem-link','entrega-selecao-link','entrega-download-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+    ['entrega-triagem-link','entrega-selecao-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
     const ajustesLista=document.getElementById('entrega-ajustes-lista'); if(ajustesLista) ajustesLista.innerHTML='';
     const entregaFormato=document.getElementById('entrega-formato'); if(entregaFormato) entregaFormato.value='digital';
   }
