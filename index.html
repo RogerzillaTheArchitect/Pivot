@@ -509,6 +509,14 @@
   .pp-block:last-child{border-bottom:none}
   .pp-block h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
   .pp-block p{margin:0;font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.55}
+  .pp-timeline{position:relative;padding-left:6px}
+  .pp-timeline-step{position:relative;padding:0 0 18px 22px;border-left:2px solid var(--line-soft)}
+  .pp-timeline-step:last-child{border-left-color:transparent;padding-bottom:0}
+  .pp-timeline-dot{position:absolute;left:-7px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--line-soft)}
+  .pp-timeline-step.done .pp-timeline-dot{background:var(--brand);border-color:var(--brand)}
+  .pp-timeline-step .nm{font-size:13.5px;color:var(--ink);font-weight:600}
+  .pp-timeline-step .sub{font-size:12px;color:var(--neutral)}
+  .pp-timeline-step.done .sub{color:var(--brand)}
 
   /* ===== CARTÃO DE LOCALIZAÇÃO — mapa estilizado (não é mapa real) + pin + link real ===== */
   .map-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;background:var(--paper);
@@ -2807,9 +2815,111 @@
       html += '<button class="btn primary" style="width:100%;margin-top:14px" onclick="enviarBriefingPublico()">Enviar briefing</button></div>';
     }
 
+    html += renderEntregaAprovacaoPublico(job);
+    html += renderTimelinePublicoHtml(job);
+
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
     if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+  }
+  /* ===== Triagem / Seleção / Ajustes no Portal do Cliente =====
+     Cada fase só aparece se o proprietário a ligou na Etapa 5 do wizard.
+     O cliente marca como concluída, o que atualiza a timeline e (via
+     dispararEmailEvento) avisa o proprietário. */
+  function renderEntregaAprovacaoPublico(job){
+    const e=job.entrega;
+    if (!e || (!e.triagem && !e.selecao && !e.permiteAjustes)) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('wizard.step5')+'</h4>';
+    if (e.triagem){
+      html += '<div class="pp-block"><h4>'+t('entrega.screening')+'</h4>'+
+        (e.triagemLink ? '<p><a href="'+escapeHtml(e.triagemLink)+'" target="_blank" rel="noopener">'+escapeHtml(e.triagemLink)+'</a></p>' : '')+
+        (e.triagemConcluida
+          ? '<p style="color:var(--c-text-green);font-weight:600;font-size:13px">✓ '+t('entrega.markedDone')+'</p>'
+          : '<button class="btn soft" style="width:100%;margin-top:8px" onclick="marcarFaseEntregaPublico(\'triagemConcluida\')">'+t('entrega.markDone')+'</button>')+
+      '</div>';
+    }
+    if (e.selecao){
+      html += '<div class="pp-block" style="margin-top:10px"><h4>'+t('entrega.selection')+'</h4>'+
+        (e.selecaoLink ? '<p><a href="'+escapeHtml(e.selecaoLink)+'" target="_blank" rel="noopener">'+escapeHtml(e.selecaoLink)+'</a></p>' : '')+
+        (e.selecaoConcluida
+          ? '<p style="color:var(--c-text-green);font-weight:600;font-size:13px">✓ '+t('entrega.markedDone')+'</p>'
+          : '<button class="btn soft" style="width:100%;margin-top:8px" onclick="marcarFaseEntregaPublico(\'selecaoConcluida\')">'+t('entrega.markDone')+'</button>')+
+      '</div>';
+    }
+    if (e.permiteAjustes && e.ajustes && e.ajustes.length){
+      html += '<div class="pp-block" style="margin-top:10px"><h4>'+t('entrega.allowAdjustments')+'</h4>';
+      html += e.ajustes.map((a,i)=>{
+        if (a.status==='utilizado' || a.status==='concluido'){
+          return '<div style="margin-bottom:10px"><b style="font-size:13px">'+escapeHtml(a.nome)+'</b><p style="font-size:12.5px;color:var(--ink-soft);margin:2px 0 0">'+escapeHtml(a.observacoes||'')+'</p></div>';
+        }
+        return '<div style="margin-bottom:10px"><b style="font-size:13px">'+escapeHtml(a.nome)+'</b>'+
+          (a.link ? '<p style="margin:2px 0 6px"><a href="'+escapeHtml(a.link)+'" target="_blank" rel="noopener">'+escapeHtml(a.link)+'</a></p>' : '')+
+          '<div class="field" style="margin-bottom:6px"><textarea id="pp-ajuste-obs-'+i+'" placeholder="'+t('entrega.observationsPlaceholder')+'"></textarea></div>'+
+          '<button class="btn soft" style="width:100%" onclick="enviarObservacaoAjustePublico('+i+')">'+t('entrega.observations')+'</button></div>';
+      }).join('');
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+  async function marcarFaseEntregaPublico(campo){
+    const { data, error } = await sb.rpc('portal_update_entrega', { p_token: ppToken, p_patch: { [campo]: true } });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('atualizacaoProjeto', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
+  async function enviarObservacaoAjustePublico(index){
+    const texto=(document.getElementById('pp-ajuste-obs-'+index).value||'').trim();
+    if (!texto){ alert(t('entrega.observationsPlaceholder')); return; }
+    const { data, error } = await sb.rpc('portal_request_ajuste', { p_token: ppToken, p_index: index, p_observacoes: texto });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
+  /* ===== Timeline bidirecional =====
+     Cada passo é do cliente ou da equipe — o projeto avança à medida que
+     cada lado conclui a sua parte. Só entram passos cujas funcionalidades
+     estão realmente ativas neste trabalho (contrato, pagamentos, triagem,
+     seleção, ajustes, entrega final). */
+  function construirTimelineBidirecional(job){
+    const e=job.entrega||{};
+    const pagos=(job.payments||[]).filter(p=>p.status==='pago').length;
+    const enviados=(job.payments||[]).filter(p=>p.status==='pago'||p.status==='a_confirmar').length;
+    const passos=[];
+    if (job.structure && job.structure.contrato) passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito: job.contract && job.contract.status==='assinado'});
+    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
+      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0});
+      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0});
+    }
+    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida});
+    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida});
+    if (e.permiteAjustes && e.ajustes && e.ajustes.length){
+      const utilizados=e.ajustes.filter(a=>a.status==='utilizado'||a.status==='concluido').length;
+      const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
+      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0});
+      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: concluidos>0 && concluidos===utilizados});
+    }
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: (job.milestones||[]).some(m=>m.key==='entrega' && m.status==='concluido')});
+    return passos;
+  }
+  function renderTimelinePublicoHtml(job){
+    const passos=construirTimelineBidirecional(job);
+    if (!passos.length) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('timeline.title')+'</h4><div class="pp-timeline">';
+    html += passos.map(p=>
+      '<div class="pp-timeline-step'+(p.feito?' done':'')+'">'+
+        '<div class="pp-timeline-dot"></div>'+
+        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+(p.quem==='cliente'?t('timeline.you'):t('timeline.team'))+(p.feito?(' · '+t('timeline.done')):(' · '+t('timeline.pending')))+'</span></div>'+
+      '</div>'
+    ).join('');
+    html += '</div></div>';
+    return html;
   }
   let ppPessoasTemp = [];
   function renderPessoasImportantesPublico(){
@@ -2971,6 +3081,18 @@
     "entrega.deliveryDate": { pt:"Data de Entrega", en:"Delivery Date", es:"Fecha de Entrega" },
     "entrega.observations": { pt:"Observações", en:"Notes", es:"Observaciones" },
     "entrega.observationsPlaceholder": { pt:"Ex: trocar foto da capa, corrigir cor da cena 4, remover pessoa do fundo…", en:"E.g.: swap the cover photo, fix the color in scene 4, remove a person from the background…", es:"Ej.: cambiar la foto de portada, corregir el color de la escena 4, quitar a una persona del fondo…" },
+    "entrega.markDone": { pt:"Marcar como concluída", en:"Mark as done", es:"Marcar como completada" },
+    "entrega.markedDone": { pt:"Concluída", en:"Done", es:"Completada" },
+    "timeline.title": { pt:"Timeline", en:"Timeline", es:"Timeline" },
+    "timeline.contractSigned": { pt:"Contrato assinado", en:"Contract signed", es:"Contrato firmado" },
+    "timeline.paymentSent": { pt:"Pagamento enviado", en:"Payment sent", es:"Pago enviado" },
+    "timeline.paymentValidated": { pt:"Pagamento validado", en:"Payment validated", es:"Pago validado" },
+    "timeline.adjustmentRequested": { pt:"Ajuste solicitado", en:"Adjustment requested", es:"Ajuste solicitado" },
+    "timeline.adjustmentDone": { pt:"Ajuste concluído", en:"Adjustment done", es:"Ajuste completado" },
+    "timeline.you": { pt:"Você", en:"You", es:"Usted" },
+    "timeline.team": { pt:"Equipe", en:"Team", es:"Equipo" },
+    "timeline.done": { pt:"concluído", en:"done", es:"completado" },
+    "timeline.pending": { pt:"pendente", en:"pending", es:"pendiente" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
     "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
     "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
