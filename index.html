@@ -3455,6 +3455,10 @@
     "email.title.passwordChanged": { pt:"A sua palavra-passe foi atualizada", en:"Your password has been updated", es:"Su contraseña fue actualizada" },
     "email.body.passwordChanged": { pt:"Confirmamos que a sua palavra-passe foi alterada com sucesso. Se não foi você, contacte-nos imediatamente.", en:"We confirm your password was changed successfully. If this wasn't you, contact us immediately.", es:"Confirmamos que su contraseña fue cambiada con éxito. Si no fue usted, contáctenos de inmediato." },
     "email.cta.passwordChanged": { pt:"Rever atividade da conta", en:"Review account activity", es:"Revisar actividad de la cuenta" },
+    "email.badge.portalCreated": { pt:"Acesso ao projeto", en:"Project access", es:"Acceso al proyecto" },
+    "email.title.portalCreated": { pt:"Você recebeu acesso ao seu projeto", en:"You've received access to your project", es:"Recibió acceso a su proyecto" },
+    "email.body.portalCreated": { pt:"Seu projeto foi criado com sucesso. Acesse seu portal através do link abaixo. Por segurança, mantenha estas informações em sigilo.", en:"Your project was created successfully. Access your portal through the link below. For your security, keep this information confidential.", es:"Su proyecto fue creado con éxito. Acceda a su portal a través del enlace de abajo. Por seguridad, mantenga esta información en secreto." },
+    "email.cta.portalCreated": { pt:"Acessar meu portal", en:"Access my portal", es:"Acceder a mi portal" },
     "email.badge.recoverAccess": { pt:"Recuperar acesso", en:"Recover access", es:"Recuperar acceso" },
     "email.title.recoverAccess": { pt:"Aqui está o seu código de verificação", en:"Here's your verification code", es:"Aquí tiene su código de verificación" },
     "email.body.recoverAccess": { pt:"Use o código abaixo para recuperar o acesso à sua conta.", en:"Use the code below to recover access to your account.", es:"Use el código de abajo para recuperar el acceso a su cuenta." },
@@ -6271,10 +6275,28 @@
        e mostrava "sem colaboradores" mesmo tendo sido adicionados na
        criação do trabalho. */
     await Promise.all(twColaboradoresExternosPendentes.map(p=>finalizarColaboradorExternoPendente(job, p)));
+    // Portal do Cliente + código de acesso + email são automáticos assim que
+    // o trabalho é criado — o utilizador não precisa de gerar o link à mão
+    // depois. "Reenviar Email" no Portal Operacional continua disponível
+    // para reenviar o mesmo acesso caso o cliente não tenha recebido.
+    await gerarPortalClienteAutomatico(job);
     closeSheet();
     showToast(t('toast.jobCreated')+' '+nomeTrabalho+'.');
     openJob(id);
     resetTrabalho();
+  }
+  async function gerarPortalClienteAutomatico(job){
+    try{
+      const token=(crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'').slice(0,20);
+      const { error } = await sb.from('portal_tokens').insert({ token, workspace_id: currentWorkspaceId, job_id: job.id });
+      if(error){ console.error('Erro ao gerar portal automático:', error); return; }
+      job.contract.link = window.location.origin + '/?portal=' + token;
+      job.contract.codigoAcesso = gerarCodigoAcessoPortal();
+      saveJobsData();
+      if(job.email){
+        dispararEmailConta('portalCriado', job.email, { nome: job.client, ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso }, true);
+      }
+    }catch(e){ console.error('Erro ao gerar portal automático:', e); }
   }
   async function finalizarColaboradorExternoPendente(job, p){
     const briefing = p.permissoes.briefing && job.briefing ? {perguntas:job.briefing.perguntas||[], observacoes:''} : null;
@@ -7827,7 +7849,8 @@
     atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true, heroIcon:'hero-alert' },
     novidadePlataforma:   { badgeKey:'email.badge.platformNews',         titleKey:'email.title.platformNews',          bodyKey:'email.body.platformNews',          ctaKey:'email.cta.platformNews', heroIcon:'hero-folder' },
     manutencaoProgramada: { badgeKey:'email.badge.maintenance',          titleKey:'email.title.maintenance',           bodyKey:'email.body.maintenance', heroIcon:'hero-alert' },
-    alteracaoTermos:      { badgeKey:'email.badge.termsChange',          titleKey:'email.title.termsChange',           bodyKey:'email.body.termsChange',           ctaKey:'email.cta.termsChange', heroIcon:'hero-folder' }
+    alteracaoTermos:      { badgeKey:'email.badge.termsChange',          titleKey:'email.title.termsChange',           bodyKey:'email.body.termsChange',           ctaKey:'email.cta.termsChange', heroIcon:'hero-folder' },
+    portalCriado:         { badgeKey:'email.badge.portalCreated',        titleKey:'email.title.portalCreated',         bodyKey:'email.body.portalCreated',         ctaKey:'email.cta.portalCreated', codigo:true, heroIcon:'hero-mailcheck' }
   };
   /* dados = { nome, eyebrow, avatarLetras, avatarCor, bodyOverride, ctaUrl, codigo,
      detalhes:[[label,valor],...] } — todos opcionais. eyebrow/avatarLetras normalmente
@@ -7902,11 +7925,16 @@
     const cb=_aposGuardarEmail; _aposGuardarEmail=null;
     if(typeof cb==='function') setTimeout(cb, 60);
   }
+  /* "Reenviar Email" só reenvia o MESMO email de acesso ao portal já
+     enviado automaticamente na criação do trabalho (link + código) — não
+     dispara um novo tipo de notificação. Se por algum motivo o job ainda
+     não tiver link/código (jobs antigos, criados antes desta automação),
+     gera-os agora antes de reenviar. */
   async function enviarPorEmail(id){
     const job=jobsData[id];
     if(!job.email){ pedirEmailCliente(id, ()=>enviarPorEmail(id)); return; }
-    const tipo = job.structure.briefing ? 'briefingDisponivel' : 'contratoEnviado';
-    const ok=await dispararEmailEvento(tipo, job.email, job);
+    if(!job.contract.link || !job.contract.codigoAcesso) await gerarPortalClienteAutomatico(job);
+    const ok=await dispararEmailConta('portalCriado', job.email, { nome: job.client, ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso });
     pushHistory(job,t('history.emailClientOpened'));
     saveJobsData();
     closeInfo();
