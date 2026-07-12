@@ -8164,7 +8164,10 @@
       html+='</div></div>';
     }
 
-    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><div style="display:flex;gap:6px"><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div></div><div class="sec-body" style="display:block"><div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div></div></div>';
+    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body" style="display:block">'+
+      '<div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div>'+
+      '<button class="btn ghost" style="width:100%;margin-top:12px;border-top:1px solid var(--line-soft);padding-top:14px;border-radius:0 0 var(--r) var(--r)" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button>'+
+    '</div></div>';
 
     document.getElementById('detalhe-dynamic').innerHTML=html;
     carregarColaboradoresJob(id);
