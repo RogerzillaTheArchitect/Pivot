@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
@@ -518,11 +520,11 @@
   .pp-timeline-step .sub{font-size:12px;color:var(--neutral)}
   .pp-timeline-step.done .sub{color:var(--brand)}
 
-  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa estilizado (não é mapa real) + pin + link real ===== */
+  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa real minimalista (CartoDB, tons de cinza) + pin + rota inteligente ===== */
   .map-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;background:var(--paper);
     box-shadow:0 6px 20px var(--btn-06)}
-  .map-visual{position:relative;height:104px;background:linear-gradient(135deg,#EDEAE2,#E2E8E5);overflow:hidden}
-  .map-visual svg.bg{width:100%;height:100%;display:block}
+  .map-visual{position:relative;height:104px;background:#E7E7E4;overflow:hidden}
+  [data-theme="dark"] .map-visual{background:#232320}
   .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-95%)}
   .map-pin svg{width:28px;height:28px;color:var(--ink);filter:drop-shadow(0 3px 5px rgba(0,0,0,.22))}
   .map-tag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-85);backdrop-filter:blur(6px);
@@ -531,7 +533,12 @@
   .map-info{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
   .map-addr{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35}
   .map-link{font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap;flex:none}
-  .map-real{filter:saturate(1.05)}
+  .map-leaflet{width:100%;height:148px;background:#E7E7E4}
+  [data-theme="dark"] .map-leaflet{background:#1A1A18}
+  /* Atribuição legal obrigatória, mas discreta — sem os links técnicos
+     (Report a problem / Donate / Terms) que o embed.html do OSM sempre trazia */
+  .map-leaflet .leaflet-control-attribution{font-size:9px;background:var(--glass-85);color:var(--ink-faint);padding:1px 5px;border-radius:4px 0 0 0}
+  .map-leaflet .leaflet-control-attribution a{color:var(--ink-faint)}
 
   .addr-dropdown{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--paper);
     border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px var(--btn-14);
@@ -2868,6 +2875,7 @@
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
     if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+    setTimeout(inicializarMapasCard, 30);
   }
   /* ===== Pagamentos no Portal do Cliente =====
      O cliente vê cada parcela (paga/pendente/aguardando confirmação) e pode
@@ -3582,6 +3590,7 @@
     "portal.copyAccess": { pt:"Copiar Acesso", en:"Copy Access", es:"Copiar Acceso" },
     "portal.createdOn": { pt:"Criado em", en:"Created on", es:"Creado el" },
     "portal.openRoute": { pt:"Abrir Rota →", en:"Open Route →", es:"Abrir Ruta →" },
+    "portal.location": { pt:"Localização", en:"Location", es:"Ubicación" },
     "portal.signedOn": { pt:"Assinado em", en:"Signed on", es:"Firmado el" },
     "portal.briefingAnswered": { pt:"Respostas preenchidas", en:"Answers filled in", es:"Respuestas completadas" },
     "portal.briefingPending": { pt:"Ainda por preencher", en:"Not filled in yet", es:"Aún sin completar" },
@@ -7239,35 +7248,44 @@
   const ICON_LINK=iconWrap('<path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/>');
   const ICON_MAIL=iconWrap('<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>');
   const ICON_PIN='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.6 2 4 5.6 4 10c0 6.2 7 11.4 7.5 11.8a.8.8 0 0 0 1 0C13 21.4 20 16.2 20 10c0-4.4-3.6-8-8-8Z"/><circle cx="12" cy="10" r="2.7" fill="#fff"/></svg>';
-  function mapVisualSvg(){
-    return '<svg class="bg" viewBox="0 0 320 104" preserveAspectRatio="none">'+
-      '<path d="M-10 78 C 50 50, 110 92, 180 64 S 300 30, 340 50" stroke="#CFC8B8" stroke-width="9" fill="none"/>'+
-      '<path d="M30 -10 C 55 35, 20 70, 70 114" stroke="#CFC8B8" stroke-width="6" fill="none"/>'+
-      '<path d="M240 -10 C 230 30, 270 50, 250 104" stroke="#D8D2C4" stroke-width="5" fill="none"/>'+
-      '<circle cx="252" cy="26" r="2.6" fill="#BDB6A4"/><circle cx="272" cy="80" r="2.6" fill="#BDB6A4"/>'+
-      '<circle cx="58" cy="30" r="2.6" fill="#BDB6A4"/><circle cx="110" cy="20" r="2.6" fill="#BDB6A4"/>'+
-      '</svg>';
-  }
+  /* Mapa minimalista (CartoDB Positron/Dark Matter — tons de cinza, sem
+     cores vivas), via Leaflet carregado por CDN. Substitui o antigo iframe
+     do embed.html do OpenStreetMap, que trazia sempre o "Report a problem" /
+     "Make a donation" / "OpenStreetMap terms" — chrome técnico da API que
+     não faz sentido dentro do produto. A atribuição legal (obrigatória)
+     fica, mas reduzida a um texto discreto no canto do mapa. */
   function mapCardHtml(job){
     const local=job.local;
     if(!local) return '';
     const enderecoBusca=job.localCompleto||local;
     const rotaUrl=linkRotaInteligente(job);
-    if(job.geo && job.geo.lat){
-      const lat=job.geo.lat, lon=job.geo.lon, d=0.0035;
-      const bbox=(lon-d)+'%2C'+(lat-d)+'%2C'+(lon+d)+'%2C'+(lat+d);
-      const embedUrl='https://www.openstreetmap.org/export/embed.html?bbox='+bbox+'&layer=mapnik&marker='+lat+'%2C'+lon;
-      return '<div class="map-card">'+
-        '<iframe class="map-real" src="'+embedUrl+'" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:148px;border:0;display:block"></iframe>'+
-        '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
-        '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
-      '</div>';
-    }
+    const mapId='mapa-card-'+Math.random().toString(36).slice(2,9);
+    const temGeo = job.geo && job.geo.lat!=null;
     return '<div class="map-card">'+
-      '<div class="map-visual">'+mapVisualSvg()+'<div class="map-tag">Localização</div><div class="map-pin">'+ICON_PIN+'</div></div>'+
-      '<div class="map-info"><div class="map-addr">'+escapeHtml(local)+'</div>'+
+      (temGeo
+        ? '<div class="map-leaflet" id="'+mapId+'" data-lat="'+job.geo.lat+'" data-lon="'+job.geo.lon+'"></div>'
+        : '<div class="map-visual"><div class="map-tag">'+t('portal.location')+'</div><div class="map-pin">'+ICON_PIN+'</div></div>')+
+      '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
       '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
     '</div>';
+  }
+  /* Chamar depois de inserir HTML com mapCardHtml() no DOM (mesmo padrão de
+     setTimeout(inicializarCanvasAssinatura,30) já usado no resto do app). */
+  function inicializarMapasCard(){
+    if(typeof L==='undefined') return;
+    document.querySelectorAll('.map-leaflet:not([data-init])').forEach(el=>{
+      el.setAttribute('data-init','1');
+      const lat=parseFloat(el.dataset.lat), lon=parseFloat(el.dataset.lon);
+      if(isNaN(lat)||isNaN(lon)) return;
+      const escuro=document.documentElement.getAttribute('data-theme')==='dark';
+      const map=L.map(el, {zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false, touchZoom:false, attributionControl:true});
+      map.setView([lat,lon], 15);
+      L.marker([lat,lon]).addTo(map);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/'+(escuro?'dark_all':'light_all')+'/{z}/{x}/{y}{r}.png', {
+        maxZoom:19, attribution:'© OpenStreetMap, © CARTO'
+      }).addTo(map);
+      map.attributionControl.setPrefix(false);
+    });
   }
 
   function contractStatusTagHtml(job){
@@ -7960,6 +7978,7 @@
 
     document.getElementById('detalhe-dynamic').innerHTML=html;
     carregarColaboradoresJob(id);
+    setTimeout(inicializarMapasCard, 30);
   }
   function toggleChecklistItem(jobId, i, el){
     const job=jobsData[jobId];
