@@ -2755,6 +2755,22 @@
   function renderPortalPublicoEstado(html){
     document.getElementById('pp-card').innerHTML = html;
   }
+  /* Data de criação: jobs novos já guardam criadoEm; jobs antigos extraem a
+     data do próprio id ('job'+Date.now()+...), sem precisar de migração. */
+  function dataCriacaoJob(job){
+    if (job.criadoEm) return new Date(job.criadoEm);
+    const m=String(job.id||'').match(/^job(\d+)/);
+    return m ? new Date(parseInt(m[1],10)) : null;
+  }
+  /* Um único link — o dispositivo decide qual app abrir (Google Maps na
+     maioria dos casos; em iOS/Android com Waze ou Apple Maps instalados, o
+     próprio sistema costuma oferecer a escolha ao abrir um link de rota do
+     Google Maps). Evita ter de detectar user-agent e apontar para apps
+     diferentes manualmente. */
+  function linkRotaInteligente(job){
+    const destino = job.geo && job.geo.lat ? (job.geo.lat+','+job.geo.lon) : (job.localCompleto||job.local||'');
+    return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destino);
+  }
   function renderPortalPublicoPrincipal(){
     const job=ppJob;
     const jaAssinado = job.contract && job.contract.status==='assinado';
@@ -2762,9 +2778,29 @@
     let html = '<div class="pp-badge">'+(jaAssinado?'Contrato assinado':'Portal do Cliente')+'</div>';
     html += '<h2 style="font-family:\'Jost\',sans-serif;font-weight:600;margin:0 0 4px">'+escapeHtml(job.client||'')+'</h2>';
     html += '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 16px">'+escapeHtml(job.typeLabel||'')+(job.date?(' · '+escapeHtml(job.date)):'')+(job.local?(' · '+escapeHtml(job.local)):'')+'</p>';
+
+    // Cabeçalho: contacto, data de criação, valor total
+    const criadoEm=dataCriacaoJob(job);
+    const cabecalhoBits=[];
+    if (job.email) cabecalhoBits.push(escapeHtml(job.email));
+    if (criadoEm) cabecalhoBits.push(t('portal.createdOn')+' '+criadoEm.toLocaleDateString(jsLocale(),{day:'2-digit',month:'2-digit',year:'numeric'}));
+    if (job.value) cabecalhoBits.push(t('job.value')+': '+fmtMoney(job.value));
+    if (cabecalhoBits.length) html += '<p style="font-size:12.5px;color:var(--neutral);margin:-10px 0 16px">'+cabecalhoBits.join(' · ')+'</p>';
+
     if (ppExpiresAt && !jaAssinado){
       const d=new Date(ppExpiresAt);
       html += '<div class="pp-deadline">Disponível até<b>'+d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'})+'</b></div>';
+    }
+
+    // Local — mapa real (via geocodificação) com rota inteligente
+    if (job.local) html += mapCardHtml(job);
+
+    // Contrato — status claro (pendente/assinado), modelo usado, sem edição pós-envio
+    if (job.structure && job.structure.contrato){
+      html += '<div class="pp-block" style="margin-bottom:4px"><h4>'+t('job.contract')+' '+contractStatusTagHtml(job)+'</h4>'+
+        (job.contract.templateName ? '<p>'+t('resumo.contractTemplate')+': '+escapeHtml(job.contract.templateName)+'</p>' : '')+
+        (jaAssinado ? '<p>'+t('portal.signedOn')+' '+escapeHtml(job.contract.signedAt||'')+'</p>' : '')+
+        '</div>';
     }
 
     if (job.contract && job.contract.blocks && job.contract.blocks.length){
@@ -2776,6 +2812,15 @@
     if (job.paymentMethods && job.paymentMethods.length){
       html += '<div class="pp-block" style="margin-bottom:18px"><h4>'+t('payment.method.howToPay')+'</h4>'+
         job.paymentMethods.filter(m=>m.valor).map(m=>'<p><b>'+escapeHtml(m.label)+':</b> '+escapeHtml(m.valor)+'</p>').join('')+
+        '</div>';
+    }
+
+    if (job.structure && job.structure.briefing && job.briefing){
+      const nQ=(job.briefing.perguntas||[]).length;
+      const nRespondidas=job.briefing.respondido ? nQ : (job.briefing.perguntas||[]).filter(p=>p.resposta).length;
+      html += '<div class="pp-block" style="margin-bottom:4px"><h4>'+t('job.briefing')+'</h4>'+
+        (nQ ? '<p>'+t('portal.briefingAnswered')+': '+nRespondidas+'/'+nQ+'</p>' : '')+
+        (job.briefing.respondido ? '<p style="color:var(--c-text-green);font-weight:600">'+t('entrega.markedDone')+'</p>' : ('<p>'+t('portal.briefingPending')+(ppExpiresAt?(' · '+t('portal.deadline')+' '+new Date(ppExpiresAt).toLocaleDateString(jsLocale())):'')+'</p>'))+
         '</div>';
     }
 
@@ -2818,9 +2863,51 @@
     html += renderEntregaAprovacaoPublico(job);
     html += renderTimelinePublicoHtml(job);
 
+    html += renderPagamentosPublico(job);
+
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
     if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+  }
+  /* ===== Pagamentos no Portal do Cliente =====
+     O cliente vê cada parcela (paga/pendente/aguardando confirmação) e pode
+     marcar como paga anexando um comprovante — que é comprimido e limitado
+     de tamanho antes do envio. O proprietário confirma depois (mesmo fluxo
+     de marcarPagoDynamic já usado internamente para o status "a_confirmar"). */
+  const COMPROVANTE_TAMANHO_MAX=15*1024*1024; // 15MB — antes de comprimir
+  function renderPagamentosPublico(job){
+    if (!job.structure || !job.structure.pagamentos || !(job.payments||[]).length) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('job.payments')+'</h4>';
+    html += job.payments.map((p,i)=>{
+      const statusTxt = p.status==='pago' ? t('payment.statusPaid') : (p.status==='a_confirmar' ? t('payment.statusReceiptReceived') : t('payment.statusPending'));
+      let acao='';
+      if (p.status==='pendente'){
+        acao = '<div class="field" style="margin:8px 0 6px"><input type="file" accept="image/*,.pdf" id="pp-comprovante-'+i+'"></div>'+
+          '<button class="btn soft" style="width:100%" onclick="enviarComprovantePublico('+i+')">'+t('payment.markPaid')+'</button>';
+      } else if (p.comprovativo){
+        acao = '<a href="'+p.comprovativo+'" target="_blank" rel="noopener" style="font-size:12.5px">'+t('payment.viewReceipt')+'</a>';
+      }
+      return '<div class="pp-block"><h4>'+escapeHtml(p.label||t('payment.installmentDefault'))+' — '+fmtMoney(p.amount||0)+'</h4>'+
+        '<p>'+statusTxt+(p.dueDate?(' · '+p.dueDate.split('-').reverse().join('/')):'')+'</p>'+acao+'</div>';
+    }).join('');
+    html += '</div>';
+    return html;
+  }
+  async function enviarComprovantePublico(index){
+    const fileEl=document.getElementById('pp-comprovante-'+index);
+    const file=fileEl && fileEl.files[0];
+    if (!file){ showToast(t('payment.chooseFileFirst')); return; }
+    if (file.size>COMPROVANTE_TAMANHO_MAX){ showToast(t('payment.fileTooLarge')); return; }
+    let dataUrl;
+    try{ dataUrl=await arquivoParaDataUrlComprimido(file); }catch(e){ showToast(t('toast.uploadFileFirst')); return; }
+    const { data, error } = await sb.rpc('portal_submit_payment_receipt', { p_token: ppToken, p_index: index, p_comprovante_data_url: dataUrl });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
+    showToast(t('payment.receiptSent'));
+    renderPortalPublicoPrincipal();
   }
   /* ===== Triagem / Seleção / Ajustes no Portal do Cliente =====
      Cada fase só aparece se o proprietário a ligou na Etapa 5 do wizard.
@@ -3488,6 +3575,12 @@
     "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
     "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
     "portal.codeConfirm": { pt:"Entrar", en:"Enter", es:"Entrar" },
+    "portal.createdOn": { pt:"Criado em", en:"Created on", es:"Creado el" },
+    "portal.openRoute": { pt:"Abrir Rota →", en:"Open Route →", es:"Abrir Ruta →" },
+    "portal.signedOn": { pt:"Assinado em", en:"Signed on", es:"Firmado el" },
+    "portal.briefingAnswered": { pt:"Respostas preenchidas", en:"Answers filled in", es:"Respuestas completadas" },
+    "portal.briefingPending": { pt:"Ainda por preencher", en:"Not filled in yet", es:"Aún sin completar" },
+    "portal.deadline": { pt:"prazo:", en:"deadline:", es:"plazo:" },
     "job.resources": { pt:"Recursos adicionais", en:"Additional resources", es:"Recursos adicionales" },
     "job.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
     "job.status.paid": { pt:"pago", en:"paid", es:"pagado" },
@@ -3495,6 +3588,11 @@
     "payment.statusReceiptReceived": { pt:"Comprovante recebido", en:"Receipt received", es:"Comprobante recibido" },
     "payment.statusPending": { pt:"Pendente", en:"Pending", es:"Pendiente" },
     "payment.overdue": { pt:"em atraso", en:"overdue", es:"atrasado" },
+    "payment.markPaid": { pt:"Marcar como paga", en:"Mark as paid", es:"Marcar como pagada" },
+    "payment.viewReceipt": { pt:"Ver comprovante", en:"View receipt", es:"Ver comprobante" },
+    "payment.chooseFileFirst": { pt:"Escolha um arquivo primeiro.", en:"Choose a file first.", es:"Elija un archivo primero." },
+    "payment.fileTooLarge": { pt:"Arquivo muito grande. O limite é 15 MB.", en:"File too large. The limit is 15 MB.", es:"Archivo demasiado grande. El límite es 15 MB." },
+    "payment.receiptSent": { pt:"Comprovante enviado. Aguardando confirmação.", en:"Receipt sent. Awaiting confirmation.", es:"Comprobante enviado. Esperando confirmación." },
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
     "history.receiptRequested": { pt:"Comprovante solicitado: ", en:"Receipt requested: ", es:"Comprobante solicitado: " },
     "history.clientSentReceipt": { pt:"Cliente enviou comprovante: ", en:"Client sent a receipt: ", es:"El cliente envió un comprobante: " },
@@ -5947,7 +6045,7 @@
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
       payments:[], milestones:[], reminders:[], history:[], assignedTo:[],
-      teamPermissions: {}, entrega: lerEntregaWizard() };
+      teamPermissions: {}, entrega: lerEntregaWizard(), criadoEm:new Date().toISOString() };
     // Recorrência (definida na Etapa 1): valor por ciclo = campo Valor;
     // primeira cobrança = data de início; renovação automática ligada => sem
     // data de fim (renova indefinidamente); desligada => usa a data de fim.
@@ -7127,7 +7225,7 @@
     const local=job.local;
     if(!local) return '';
     const enderecoBusca=job.localCompleto||local;
-    const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(enderecoBusca);
+    const rotaUrl=linkRotaInteligente(job);
     if(job.geo && job.geo.lat){
       const lat=job.geo.lat, lon=job.geo.lon, d=0.0035;
       const bbox=(lon-d)+'%2C'+(lat-d)+'%2C'+(lon+d)+'%2C'+(lat+d);
@@ -7135,13 +7233,13 @@
       return '<div class="map-card">'+
         '<iframe class="map-real" src="'+embedUrl+'" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:148px;border:0;display:block"></iframe>'+
         '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
-        '<a class="map-link" href="'+mapsUrl+'" target="_blank" rel="noopener">Abrir →</a></div>'+
+        '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
       '</div>';
     }
     return '<div class="map-card">'+
       '<div class="map-visual">'+mapVisualSvg()+'<div class="map-tag">Localização</div><div class="map-pin">'+ICON_PIN+'</div></div>'+
       '<div class="map-info"><div class="map-addr">'+escapeHtml(local)+'</div>'+
-      '<a class="map-link" href="'+mapsUrl+'" target="_blank" rel="noopener">Abrir no Maps →</a></div>'+
+      '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
     '</div>';
   }
 
