@@ -18,7 +18,7 @@
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
     --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.08); --bg-ice:#0B0B0A; --bg-ice-2:#050504;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58;
-    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --neutral:#B9B9B1; --urgent:#E8C547;
+    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
     --r:20px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
@@ -7974,9 +7974,19 @@
 
   /* Indicador de status único para toda a aplicação — Contrato, Briefing,
      Timeline, Pagamentos, Entregas, Aprovações usam sempre os mesmos 4
-     estados. */
-  const STATUS_EMOJI={done:'🟢', progress:'🔵', pending:'🟡', late:'🔴'};
-  function statusEmoji(status){ return STATUS_EMOJI[status]||STATUS_EMOJI.pending; }
+     estados. Ícones reais (mesma linguagem visual do resto do app —
+     stroke, viewBox 24x24), não emojis. */
+  const STATUS_ICONS={
+    done: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.6 2.6L16 9.3"/></svg>',
+    progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3.2 1.8"/></svg>',
+    pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l-2.6 1.8"/></svg>',
+    late: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>'
+  };
+  const STATUS_COLORS={done:'var(--done)', progress:'var(--progress)', pending:'var(--pend)', late:'var(--late)'};
+  function statusEmoji(status){
+    const s=STATUS_ICONS[status]?status:'pending';
+    return '<span style="display:inline-flex;vertical-align:-3px;width:15px;height:15px;color:'+STATUS_COLORS[s]+'">'+STATUS_ICONS[s]+'</span>';
+  }
   /* Card de Timeline do Portal Operacional — mesmo motor da timeline
      bidirecional do Portal do Cliente (construirTimelineBidirecional), para
      nunca haver duas versões divergentes do mesmo progresso. Cada item
