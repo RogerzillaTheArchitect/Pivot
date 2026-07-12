@@ -2224,7 +2224,7 @@
           <div><div class="t"><span data-t="wizard.useTemplate">Usar um modelo</span></div><div class="s"><span data-t="wizard.fromSaved">dos seus modelos guardados</span></div></div>
         </div>
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Do zero</span></span></div>
+          <div class="sheet-item" onclick="abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Do zero</span></span></div>
           <div class="sheet-item" onclick="pushPanel('contrato-duplicar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span><span data-t="wizard.duplicate">Duplicar existente</span></span></div>
         </div>
         <div class="sheet-outline" onclick="pushPanel('comunidade-contratos')">
@@ -3531,6 +3531,10 @@
     "job.contract.missing": { pt:"Contrato em falta.", en:"No contract yet.", es:"Sin contrato aún." },
     "job.contract.newLink": { pt:"Gerar novo link", en:"New link", es:"Nuevo enlace" },
     "job.contract.replace": { pt:"Substituir anexo", en:"Replace attachment", es:"Reemplazar adjunto" },
+    "job.contract.select": { pt:"Selecionar Contrato", en:"Select Contract", es:"Seleccionar Contrato" },
+    "job.contract.custom": { pt:"Personalizado", en:"Custom", es:"Personalizado" },
+    "job.contract.sentOn": { pt:"Enviado em", en:"Sent on", es:"Enviado el" },
+    "job.contract.view": { pt:"Ver Contrato", en:"View Contract", es:"Ver Contrato" },
     "job.contract.sent": { pt:"Contrato já enviado — não pode ser editado.", en:"Contract already sent — editing is locked.", es:"Contrato ya enviado — no se puede editar." },
     "job.contract.signedByPrefix": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
     "job.contract.signedByPrefix2": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
@@ -3575,6 +3579,7 @@
     "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
     "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
     "portal.codeConfirm": { pt:"Entrar", en:"Enter", es:"Entrar" },
+    "portal.copyAccess": { pt:"Copiar Acesso", en:"Copy Access", es:"Copiar Acceso" },
     "portal.createdOn": { pt:"Criado em", en:"Created on", es:"Creado el" },
     "portal.openRoute": { pt:"Abrir Rota →", en:"Open Route →", es:"Abrir Ruta →" },
     "portal.signedOn": { pt:"Assinado em", en:"Signed on", es:"Firmado el" },
@@ -5353,11 +5358,31 @@
     trabalhoGoto(2);
     renderModeloEscolhidoWizard();
   }
+  /* Job para o qual estamos escolhendo um contrato a partir do card
+     "Selecionar Contrato" (Portal Operacional) — ver abrirSelecionarContratoJob.
+     Quando definido, os fluxos de biblioteca/modelo/duplicar geram o
+     contrato diretamente neste trabalho em vez de um modelo solto. */
+  let contratoParaJobId=null;
+  function abrirBuilderParaSelecao(modeloOrigem){
+    const alvo=contratoParaJobId;
+    contratoParaJobId=null;
+    closeSheet();
+    abrirBuilder(alvo, modeloOrigem);
+  }
+  /* Card de Contrato do Portal Operacional: sem contrato, o único ponto de
+     entrada é escolher um modelo da biblioteca/próprio — nunca "criar vazio"
+     ou "anexar arquivo" (isso já é decidido na criação do trabalho). */
+  function abrirSelecionarContratoJob(id){
+    contratoParaJobId=id;
+    twEmWizard=false;
+    openSheet();
+    pushPanel('contrato');
+  }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -5369,7 +5394,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -7042,11 +7067,7 @@
   function duplicarContratoDoTrabalho(jobId){
     const origem=jobsData[jobId];
     if(!origem) return;
-    builderContext=null;
-    builderModeloOrigem={ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) };
-    closeSheet();
-    renderBuilder();
-    go('builder');
+    abrirBuilderParaSelecao({ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
   function guardarBuilderContexto(){
@@ -7093,11 +7114,7 @@
       showToast(t('toast.templateImported'));
       return;
     }
-    builderContext=null;
-    builderModeloOrigem={ client:'', blocks };
-    closeSheet();
-    renderBuilder();
-    go('builder');
+    abrirBuilderParaSelecao({ client:'', blocks });
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
@@ -7262,88 +7279,6 @@
     jobsData[jobId].contract.forceShow=true;
     renderJobDetailDynamic(jobId);
   }
-  function criarContratoVazioParaJob(id){
-    const job=jobsData[id];
-    job.contract.blocks=Object.keys(blocoNomes).map(key=>({id:genId(), key, customText:null, on:true}));
-    job.contract.templateName=null;
-    job.contract.status='rascunho';
-    marcarContratoAlterado(job);
-    pushHistory(job,t('toast.contractStarted'));
-    saveJobsData();
-    abrirBuilder(id);
-    showToast(t('toast.contractCreated'));
-  }
-  let anexoContratoFile=null;
-  function abrirAnexarContratoJob(id){
-    anexoContratoFile=null;
-    const refs=Object.values(referenciasData);
-    let html='';
-    if(refs.length){
-      html+='<p style="font-size:12.5px;color:var(--neutral);margin-bottom:10px">'+t('wizard.useReferenceOrUpload')+'</p>';
-      html+=refs.map(r=>'<div class="pick-row" onclick="anexarReferenciaAoJob(\''+id+'\',\''+r.id+'\')"><div><div class="nm">'+escapeHtml(r.nome)+'</div></div></div>').join('');
-      html+='<div class="sheet-divider"></div>';
-    }
-    html+='<div class="field"><label>'+t('field.name')+'</label><input id="anexo-nome" placeholder="'+t('upload.placeholder')+'"></div>';
-    html+='<input type="file" id="anexo-file-input" accept="image/*,.pdf,application/pdf,.txt,text/plain" style="display:none" onchange="onAnexoFileSelected(this)">';
-    html+='<div class="dropzone" id="anexo-dropzone" onclick="document.getElementById(\'anexo-file-input\').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg><div class="t">'+t('upload.clickToUploadFile')+'</div><div class="s">'+t('upload.fileTypesImgPdfTxt')+'</div></div>';
-    html+='<div class="filechip" id="anexo-filechip" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="nm" id="anexo-filename"></span><span class="x" onclick="resetAnexoFile()">✕</span></div>';
-    html+='<button class="btn primary" style="width:100%;margin-top:10px" onclick="guardarAnexoContratoJob(\''+id+'\')">'+t('action.attach')+'</button>';
-    openInfo(t('job.contract.attach'), html);
-  }
-  function onAnexoFileSelected(input){
-    const file=input.files[0]; if(!file) return;
-    anexoContratoFile=file;
-    document.getElementById('anexo-dropzone').style.display='none';
-    document.getElementById('anexo-filename').textContent=file.name;
-    document.getElementById('anexo-filechip').style.display='flex';
-  }
-  function resetAnexoFile(){
-    anexoContratoFile=null;
-    document.getElementById('anexo-file-input').value='';
-    document.getElementById('anexo-filechip').style.display='none';
-    document.getElementById('anexo-dropzone').style.display='block';
-  }
-  async function guardarAnexoContratoJob(id){
-    const job=jobsData[id];
-    const nomeEl=document.getElementById('anexo-nome');
-    const nome=nomeEl.value.trim();
-    if(!nome){ nomeEl.focus(); showToast(t('toast.nameRequired')); return; }
-    if(!anexoContratoFile){ showToast(t('toast.uploadFileFirst')); return; }
-    let ficheiroDataUrl=null;
-    try{ ficheiroDataUrl=await arquivoParaDataUrlComprimido(anexoContratoFile); }catch(e){}
-    job.contract.anexo={nome, ficheiroNome:anexoContratoFile.name, ficheiroDataUrl, anexadoEm:new Date().toISOString()};
-    pushHistory(job,t('toast.contractAttached')+nome);
-    saveJobsData();
-    closeInfo();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.contractAttached2'));
-  }
-  function anexarReferenciaAoJob(id, refId){
-    const job=jobsData[id]; const r=referenciasData[refId];
-    if(!r) return;
-    job.contract.anexo={nome:r.nome, ficheiroNome:r.ficheiroNome||null, texto:r.texto||null, ficheiroDataUrl:r.ficheiroDataUrl||null, anexadoEm:new Date().toISOString()};
-    pushHistory(job,t('toast.contractAttached')+r.nome);
-    saveJobsData();
-    closeInfo();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.contractAttached2'));
-  }
-  function verAnexoContratoJob(id){
-    const a=jobsData[id].contract.anexo;
-    if(!a) return;
-    let body='';
-    if(a.texto) body+='<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.6">'+escapeHtml(a.texto)+'</p>';
-    if(a.ficheiroDataUrl && a.ficheiroDataUrl.startsWith('data:image/')) body+='<img src="'+a.ficheiroDataUrl+'" style="width:100%;border-radius:11px;margin-top:'+(a.texto?'12px':'0')+'">';
-    else if(a.ficheiroNome) body+='<p style="font-size:13px;color:var(--neutral);margin-top:'+(a.texto?'12px':'0')+'">Arquivo: '+escapeHtml(a.ficheiroNome)+'</p>';
-    if(!body) body='<p style="font-size:13px;color:var(--neutral)">Sem conteúdo.</p>';
-    openInfo(a.nome, body);
-  }
-  function removerAnexoContratoJob(id){
-    delete jobsData[id].contract.anexo;
-    saveJobsData();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.attachmentRemoved'));
-  }
   function marcarContratoAlterado(job){
     const d=new Date();
     job.contract.lastModified=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
@@ -7358,6 +7293,7 @@
     job.contract.link = window.location.origin + '/?portal=' + token;
     job.contract.codigoAcesso = gerarCodigoAcessoPortal();
     job.contract.status='enviado';
+    job.contract.enviadoEm = new Date().toLocaleDateString(jsLocale(), {day:'2-digit',month:'2-digit',year:'numeric'});
     job.paymentMethods = metodosSelecionados || [];
     pushHistory(job,t('toast.contractGenerated'));
     saveJobsData(); updateJobCard(jobId);
@@ -7816,14 +7752,14 @@
     } else {
       openInfo(t('portal.shareTitle'), `
         <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('portal.resendEmail')}</button>
-        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('job.contract.copyLink')}</button>`);
+        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('portal.copyAccess')}</button>`);
     }
   }
   function abrirCopiarMensagemPortal(id){
     const job=jobsData[id];
     if(!job) return;
     const msg=construirMensagemPortalCliente(job);
-    openInfo(t('job.contract.copyLink'), `
+    openInfo(t('portal.copyAccess'), `
       <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
       <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical">${escapeHtml(msg)}</textarea>
       <button class="btn primary" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
@@ -7906,35 +7842,18 @@
         html+='<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'+t('wizard.quickHint')+'</p>';
         html+='<button class="btn ghost" onclick="forcarContratoJob(\''+id+'\')">'+t('job.contract.addAnyway')+'</button>';
       } else {
-        html+='<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'+t('job.contract.missing')+'</p>';
-        if(job.contract.anexo){
-          const a=job.contract.anexo;
-          html+='<div class="struct-row"><div class="struct-l" style="cursor:pointer" onclick="verAnexoContratoJob(\''+id+'\')"><div class="nm">'+escapeHtml(a.nome)+'</div><span class="sub">'+(a.ficheiroNome?escapeHtml(a.ficheiroNome):'texto colado')+'</span></div>'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="event.stopPropagation();removerAnexoContratoJob(\''+id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>';
-        }
-        html+='<div style="display:flex;gap:8px;margin-top:10px">';
-        html+='<button class="btn soft" style="flex:1" onclick="criarContratoVazioParaJob(\''+id+'\')">'+t('job.contract.create')+'</button>';
-        html+='<button class="btn soft" style="flex:1" onclick="abrirAnexarContratoJob(\''+id+'\')">'+(job.contract.anexo?t('job.contract.replace'):t('job.contract.attach'))+'</button>';
-        html+='</div>';
+        html+='<button class="btn primary" style="width:100%" onclick="abrirSelecionarContratoJob(\''+id+'\')">'+t('job.contract.select')+'</button>';
       }
-    } else if(job.contract.status==='rascunho'){
-      html+=contractSummaryHtml(job);
-      html+='<div style="display:flex;gap:8px;margin-top:10px">';
-      html+='<button class="btn soft" style="flex:1" onclick="abrirBuilder(\''+id+'\')">'+t('action.edit')+' '+t('job.contract')+'</button>';
-      html+='<button class="btn primary" style="flex:1" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+    } else {
+      // rascunho / enviado / assinado: resumo único (modelo, status, datas) + Ver Contrato
+      html+='<div style="font-size:13.5px;line-height:1.85;margin-bottom:10px">';
+      html+='<div><span style="color:var(--neutral)">'+t('resumo.contractTemplate')+':</span> '+escapeHtml(job.contract.templateName||t('job.contract.custom'))+'</div>';
+      if(job.contract.enviadoEm) html+='<div><span style="color:var(--neutral)">'+t('job.contract.sentOn')+':</span> '+job.contract.enviadoEm+'</div>';
+      if(job.contract.signedAt) html+='<div><span style="color:var(--neutral)">'+t('portal.signedOn')+':</span> '+job.contract.signedAt+'</div>';
       html+='</div>';
-    } else if(job.contract.status==='enviado'){
-      html+=contractSummaryHtml(job);
-      html+='<button class="btn soft" style="width:100%;margin-top:10px" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.newLink')+'</button>';
-      html+='<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">';
-      html+='<button class="btn ghost" style="flex:1" onclick="copiarLinkContrato(\''+id+'\')">'+ICON_LINK+' '+t('job.contract.copyLink')+'</button>';
-      html+='<button class="btn ghost" style="flex:1" onclick="enviarPorEmail(\''+id+'\')">'+ICON_MAIL+' '+t('job.contract.email')+'</button>';
-      html+='</div>';
-      html+='<button class="btn ghost" style="width:100%;margin-top:8px;text-align:center" onclick="abrirComoClienteSimulado(\''+id+'\')">'+t('job.preview')+'</button>';
-    } else if(job.contract.status==='assinado'){
-      html+=contractSummaryHtml(job);
-      html+='<p style="font-size:13px;color:var(--ink);margin:10px 0 6px">'+t('job.contract.signedByPrefix2')+escapeHtml(job.contract.signerName)+' · '+job.contract.signedAt+'</p>';
-      html+='<button class="btn soft" style="width:100%;margin-top:4px" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
+      html+='<button class="btn soft" style="width:100%" onclick="abrirBuilder(\''+id+'\')">'+t('job.contract.view')+'</button>';
+      if(job.contract.status==='rascunho') html+='<button class="btn primary" style="width:100%;margin-top:8px" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+      if(job.contract.status==='assinado') html+='<button class="btn ghost" style="width:100%;margin-top:8px" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
     }
     html+='</div></div>';
 
