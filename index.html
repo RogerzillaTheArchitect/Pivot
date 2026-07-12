@@ -6784,11 +6784,11 @@
     return { perguntas:[], respondido:false, pessoasImportantes:[], cronograma:[], observacoes:'', prazo: job.dateRaw||null };
   }
   function gerarEstadoInformacoesCliente(job){
-    if(job.contract.status!=='assinado' && job.contract.status!=='enviado') return 'Não enviado';
-    if(job.briefing.respondido) return 'Concluído';
-    if(job.briefing.prazo && diasEntre(job.briefing.prazo)<0) return 'Prazo expirado';
+    if(job.contract.status!=='assinado' && job.contract.status!=='enviado') return statusEmoji('pending')+' Não enviado';
+    if(job.briefing.respondido) return statusEmoji('done')+' Concluído';
+    if(job.briefing.prazo && diasEntre(job.briefing.prazo)<0) return statusEmoji('late')+' Prazo expirado';
     const temAlgo = (job.briefing.cronograma&&job.briefing.cronograma.length) || (job.briefing.pessoasImportantes&&job.briefing.pessoasImportantes.length) || (job.briefing.observacoes&&job.briefing.observacoes.trim());
-    return temAlgo ? 'Parcialmente preenchido' : 'Aguardando preenchimento';
+    return temAlgo ? (statusEmoji('progress')+' Parcialmente preenchido') : (statusEmoji('pending')+' Aguardando preenchimento');
   }
   const CHECKLIST_ITENS_DEFAULT=['checklist.item.finalMaterial','checklist.item.sendToClient','checklist.item.confirmReceipt'];
   function gerarChecklist(job){
@@ -7341,7 +7341,7 @@
 
   function contractStatusTagHtml(job){
     const assinado = job.contract.status==='assinado';
-    return '<span class="sig-tag '+(assinado?'green':'yellow')+'">'+(assinado?t('contract.tagSigned'):t('contract.tagPending'))+'</span>';
+    return '<span class="sig-tag '+(assinado?'green':'yellow')+'">'+statusEmoji(assinado?'done':'pending')+' '+(assinado?t('contract.tagSigned'):t('contract.tagPending'))+'</span>';
   }
 
   function forcarContratoJob(jobId){
@@ -7991,7 +7991,7 @@
 
     if(job.payments.length){
       const pend=job.payments.filter(p=>p.status!=='pago').length;
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? pend+' pendente'+(pend>1?'s':'') : 'tudo pago')+'</div></div><div class="sec-body" style="display:block">';
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? (statusEmoji('pending')+' '+pend+' pendente'+(pend>1?'s':'')) : (statusEmoji('done')+' tudo pago'))+'</div></div><div class="sec-body" style="display:block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
