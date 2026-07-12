@@ -509,6 +509,14 @@
   .pp-block:last-child{border-bottom:none}
   .pp-block h4{margin:0 0 4px;font-size:13.5px;color:var(--ink)}
   .pp-block p{margin:0;font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.55}
+  .pp-timeline{position:relative;padding-left:6px}
+  .pp-timeline-step{position:relative;padding:0 0 18px 22px;border-left:2px solid var(--line-soft)}
+  .pp-timeline-step:last-child{border-left-color:transparent;padding-bottom:0}
+  .pp-timeline-dot{position:absolute;left:-7px;top:1px;width:12px;height:12px;border-radius:50%;background:var(--paper);border:2px solid var(--line-soft)}
+  .pp-timeline-step.done .pp-timeline-dot{background:var(--brand);border-color:var(--brand)}
+  .pp-timeline-step .nm{font-size:13.5px;color:var(--ink);font-weight:600}
+  .pp-timeline-step .sub{font-size:12px;color:var(--neutral)}
+  .pp-timeline-step.done .sub{color:var(--brand)}
 
   /* ===== CARTÃO DE LOCALIZAÇÃO — mapa estilizado (não é mapa real) + pin + link real ===== */
   .map-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;background:var(--paper);
@@ -1774,10 +1782,6 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
           <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
         </button>
-        <button class="clientbtn" style="margin-top:8px" onclick="abrirNotificarCliente(currentJobId)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
-          <span data-t="job.notifyClient">Notificar cliente</span>
-        </button>
 
         <div id="detalhe-dynamic"></div>
       </section>
@@ -2033,7 +2037,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </div>
     </div>
-    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="sheet-body" id="sheetBody">
 
@@ -2151,8 +2155,52 @@
           <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <!-- ETAPA 5 — Contrato -->
+        <!-- ETAPA 5 — Entrega e Aprovação -->
         <div class="moment" data-moment="5" style="display:none">
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="entrega.screening">Triagem</div><span class="sub" data-t="entrega.screeningHint">O cliente faz uma primeira triagem dos materiais (fotos RAW, vídeos brutos, áudios, outros arquivos).</span></div><div class="toggle" id="entrega-triagem" onclick="toggleEntregaFase(this,'triagem')"><div class="kn"></div></div></div>
+          <div class="field" id="entrega-triagem-link-wrap" style="display:none;margin-top:8px">
+            <label data-t="entrega.materialLink">Link do Material</label>
+            <input id="entrega-triagem-link" placeholder="Pixieset, Frame.io, Drive, Dropbox…" data-t-placeholder="entrega.materialLinkPlaceholder">
+          </div>
+
+          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.selection">Seleção</div><span class="sub" data-t="entrega.selectionHint">O cliente seleciona os materiais que seguem para edição ou entrega.</span></div><div class="toggle" id="entrega-selecao" onclick="toggleEntregaFase(this,'selecao')"><div class="kn"></div></div></div>
+          <div class="field" id="entrega-selecao-link-wrap" style="display:none;margin-top:8px">
+            <label data-t="entrega.materialLink">Link do Material</label>
+            <input id="entrega-selecao-link" placeholder="Pixieset, Frame.io, Drive, Dropbox…" data-t-placeholder="entrega.materialLinkPlaceholder">
+          </div>
+
+          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Permitir Ajustes</div><span class="sub" data-t="entrega.allowAdjustmentsHint">O cliente pode solicitar alterações nos materiais entregues.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
+          <div id="entrega-ajustes-wrap" style="display:none;margin-top:8px">
+            <div id="entrega-ajustes-lista"></div>
+            <span class="inline-link" onclick="addAjusteWizard()"><span data-t="entrega.addAdjustment">+ Adicionar Ajuste</span></span>
+          </div>
+
+          <p class="plabel" style="margin:20px 2px 9px" data-t="entrega.deliveryFormat">Formato de Entrega</p>
+          <div class="field">
+            <select id="entrega-formato" onchange="atualizarEntregaFormato()">
+              <option value="digital" data-t="entrega.format.digital">Download Digital</option>
+              <option value="galeria" data-t="entrega.format.gallery">Galeria Online</option>
+              <option value="pendrive" data-t="entrega.format.pendrive">Pen Drive</option>
+              <option value="hd" data-t="entrega.format.hd">HD Externo</option>
+              <option value="album" data-t="entrega.format.album">Álbum</option>
+              <option value="impressao" data-t="entrega.format.print">Impressão</option>
+              <option value="outro" data-t="entrega.format.other">Outro</option>
+            </select>
+          </div>
+          <div class="field" id="entrega-download-link-wrap" style="display:none">
+            <label data-t="entrega.downloadLink">Link de Download</label>
+            <input id="entrega-download-link" placeholder="https://…">
+          </div>
+          <div class="field">
+            <label data-t="entrega.deliveryDate">Data de Entrega</label>
+            <input type="date" id="entrega-data">
+          </div>
+
+          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- ETAPA 6 — Contrato -->
+        <div class="moment" data-moment="6" style="display:none">
           <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.suggestedFor">Modelos sugeridos da biblioteca</p>
           <div id="modelos-sugeridos-lista"></div>
           <div id="tw-modelo-escolhido-status"></div>
@@ -2163,7 +2211,7 @@
         </div>
 
         <!-- RESUMO -->
-        <div class="moment" data-moment="6" style="display:none">
+        <div class="moment" data-moment="7" style="display:none">
           <div id="trabalho-review-summary" style="margin-bottom:14px"></div>
           <button class="btn primary" style="width:100%" onclick="trabalhoCreate()"><span data-t="wizard.createJob">Criar trabalho</span></button>
         </div>
@@ -2572,12 +2620,12 @@
     }
   };
 
-  async function abrirPortalPorToken(token){
-    const { data, error } = await sb.rpc('portal_get_job', { p_token: token });
+  async function abrirPortalPorToken(token, codigo){
+    const { data, error } = await sb.rpc('portal_get_job', { p_token: token, p_codigo: codigo||null });
     if (error || !data) return null;
     return data;
   }
-  let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null;
+  let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null, ppCodigo=null;
   let colabToken=null, colabData=null;
   /* convite de equipa: o link gerado por api/team/invite.js aponta para
      APP_URL+"?convite=1" — a própria Supabase já autentica a pessoa ao seguir
@@ -2675,12 +2723,53 @@
     el.style.display='block';
     const data = await abrirPortalPorToken(ppToken);
     if (!data){ renderPortalPublicoEstado('<h3>Link inválido</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link não é válido ou já não existe.</p>'); return; }
+    if (data.needsCode){ renderPortalCodigoAcessoForm(); return; }
+    if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
+    ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
+    renderPortalPublicoPrincipal();
+  }
+  /* O link sozinho não basta — o portal também exige um código de acesso de
+     6 dígitos (ver gerarCodigoAcessoPortal). Isto reduz o risco de alguém
+     que intercete só o link conseguir ver informações do projeto. */
+  function renderPortalCodigoAcessoForm(){
+    renderPortalPublicoEstado(`
+      <h3 style="margin:0 0 6px">${t('portal.codeTitle')}</h3>
+      <p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 16px">${t('portal.codeHint')}</p>
+      <div class="field"><input id="pp-codigo-input" inputmode="numeric" maxlength="6" placeholder="000000" style="letter-spacing:4px;font-size:18px;text-align:center"></div>
+      <p id="pp-codigo-erro" style="color:#B23A2E;font-size:12.5px;display:none;margin:4px 2px 0">${t('portal.codeWrong')}</p>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarCodigoAcessoPortal()">${t('portal.codeConfirm')}</button>`);
+    setTimeout(()=>{ const el=document.getElementById('pp-codigo-input'); if(el) el.focus(); }, 60);
+  }
+  async function confirmarCodigoAcessoPortal(){
+    const codigo=(document.getElementById('pp-codigo-input').value||'').trim();
+    const data = await abrirPortalPorToken(ppToken, codigo);
+    if (!data || data.needsCode){
+      const erro=document.getElementById('pp-codigo-erro'); if(erro) erro.style.display='block';
+      return;
+    }
+    ppCodigo=codigo;
     if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
     ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
     renderPortalPublicoPrincipal();
   }
   function renderPortalPublicoEstado(html){
     document.getElementById('pp-card').innerHTML = html;
+  }
+  /* Data de criação: jobs novos já guardam criadoEm; jobs antigos extraem a
+     data do próprio id ('job'+Date.now()+...), sem precisar de migração. */
+  function dataCriacaoJob(job){
+    if (job.criadoEm) return new Date(job.criadoEm);
+    const m=String(job.id||'').match(/^job(\d+)/);
+    return m ? new Date(parseInt(m[1],10)) : null;
+  }
+  /* Um único link — o dispositivo decide qual app abrir (Google Maps na
+     maioria dos casos; em iOS/Android com Waze ou Apple Maps instalados, o
+     próprio sistema costuma oferecer a escolha ao abrir um link de rota do
+     Google Maps). Evita ter de detectar user-agent e apontar para apps
+     diferentes manualmente. */
+  function linkRotaInteligente(job){
+    const destino = job.geo && job.geo.lat ? (job.geo.lat+','+job.geo.lon) : (job.localCompleto||job.local||'');
+    return 'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(destino);
   }
   function renderPortalPublicoPrincipal(){
     const job=ppJob;
@@ -2689,9 +2778,29 @@
     let html = '<div class="pp-badge">'+(jaAssinado?'Contrato assinado':'Portal do Cliente')+'</div>';
     html += '<h2 style="font-family:\'Jost\',sans-serif;font-weight:600;margin:0 0 4px">'+escapeHtml(job.client||'')+'</h2>';
     html += '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 16px">'+escapeHtml(job.typeLabel||'')+(job.date?(' · '+escapeHtml(job.date)):'')+(job.local?(' · '+escapeHtml(job.local)):'')+'</p>';
+
+    // Cabeçalho: contacto, data de criação, valor total
+    const criadoEm=dataCriacaoJob(job);
+    const cabecalhoBits=[];
+    if (job.email) cabecalhoBits.push(escapeHtml(job.email));
+    if (criadoEm) cabecalhoBits.push(t('portal.createdOn')+' '+criadoEm.toLocaleDateString(jsLocale(),{day:'2-digit',month:'2-digit',year:'numeric'}));
+    if (job.value) cabecalhoBits.push(t('job.value')+': '+fmtMoney(job.value));
+    if (cabecalhoBits.length) html += '<p style="font-size:12.5px;color:var(--neutral);margin:-10px 0 16px">'+cabecalhoBits.join(' · ')+'</p>';
+
     if (ppExpiresAt && !jaAssinado){
       const d=new Date(ppExpiresAt);
       html += '<div class="pp-deadline">Disponível até<b>'+d.toLocaleDateString('pt-PT',{day:'2-digit',month:'2-digit',year:'numeric'})+'</b></div>';
+    }
+
+    // Local — mapa real (via geocodificação) com rota inteligente
+    if (job.local) html += mapCardHtml(job);
+
+    // Contrato — status claro (pendente/assinado), modelo usado, sem edição pós-envio
+    if (job.structure && job.structure.contrato){
+      html += '<div class="pp-block" style="margin-bottom:4px"><h4>'+t('job.contract')+' '+contractStatusTagHtml(job)+'</h4>'+
+        (job.contract.templateName ? '<p>'+t('resumo.contractTemplate')+': '+escapeHtml(job.contract.templateName)+'</p>' : '')+
+        (jaAssinado ? '<p>'+t('portal.signedOn')+' '+escapeHtml(job.contract.signedAt||'')+'</p>' : '')+
+        '</div>';
     }
 
     if (job.contract && job.contract.blocks && job.contract.blocks.length){
@@ -2703,6 +2812,15 @@
     if (job.paymentMethods && job.paymentMethods.length){
       html += '<div class="pp-block" style="margin-bottom:18px"><h4>'+t('payment.method.howToPay')+'</h4>'+
         job.paymentMethods.filter(m=>m.valor).map(m=>'<p><b>'+escapeHtml(m.label)+':</b> '+escapeHtml(m.valor)+'</p>').join('')+
+        '</div>';
+    }
+
+    if (job.structure && job.structure.briefing && job.briefing){
+      const nQ=(job.briefing.perguntas||[]).length;
+      const nRespondidas=job.briefing.respondido ? nQ : (job.briefing.perguntas||[]).filter(p=>p.resposta).length;
+      html += '<div class="pp-block" style="margin-bottom:4px"><h4>'+t('job.briefing')+'</h4>'+
+        (nQ ? '<p>'+t('portal.briefingAnswered')+': '+nRespondidas+'/'+nQ+'</p>' : '')+
+        (job.briefing.respondido ? '<p style="color:var(--c-text-green);font-weight:600">'+t('entrega.markedDone')+'</p>' : ('<p>'+t('portal.briefingPending')+(ppExpiresAt?(' · '+t('portal.deadline')+' '+new Date(ppExpiresAt).toLocaleDateString(jsLocale())):'')+'</p>'))+
         '</div>';
     }
 
@@ -2742,9 +2860,153 @@
       html += '<button class="btn primary" style="width:100%;margin-top:14px" onclick="enviarBriefingPublico()">Enviar briefing</button></div>';
     }
 
+    html += renderEntregaAprovacaoPublico(job);
+    html += renderTimelinePublicoHtml(job);
+
+    html += renderPagamentosPublico(job);
+
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
     if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+  }
+  /* ===== Pagamentos no Portal do Cliente =====
+     O cliente vê cada parcela (paga/pendente/aguardando confirmação) e pode
+     marcar como paga anexando um comprovante — que é comprimido e limitado
+     de tamanho antes do envio. O proprietário confirma depois (mesmo fluxo
+     de marcarPagoDynamic já usado internamente para o status "a_confirmar"). */
+  const COMPROVANTE_TAMANHO_MAX=15*1024*1024; // 15MB — antes de comprimir
+  function renderPagamentosPublico(job){
+    if (!job.structure || !job.structure.pagamentos || !(job.payments||[]).length) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('job.payments')+'</h4>';
+    html += job.payments.map((p,i)=>{
+      const statusTxt = p.status==='pago' ? t('payment.statusPaid') : (p.status==='a_confirmar' ? t('payment.statusReceiptReceived') : t('payment.statusPending'));
+      let acao='';
+      if (p.status==='pendente'){
+        acao = '<div class="field" style="margin:8px 0 6px"><input type="file" accept="image/*,.pdf" id="pp-comprovante-'+i+'"></div>'+
+          '<button class="btn soft" style="width:100%" onclick="enviarComprovantePublico('+i+')">'+t('payment.markPaid')+'</button>';
+      } else if (p.comprovativo){
+        acao = '<a href="'+p.comprovativo+'" target="_blank" rel="noopener" style="font-size:12.5px">'+t('payment.viewReceipt')+'</a>';
+      }
+      return '<div class="pp-block"><h4>'+escapeHtml(p.label||t('payment.installmentDefault'))+' — '+fmtMoney(p.amount||0)+'</h4>'+
+        '<p>'+statusTxt+(p.dueDate?(' · '+p.dueDate.split('-').reverse().join('/')):'')+'</p>'+acao+'</div>';
+    }).join('');
+    html += '</div>';
+    return html;
+  }
+  async function enviarComprovantePublico(index){
+    const fileEl=document.getElementById('pp-comprovante-'+index);
+    const file=fileEl && fileEl.files[0];
+    if (!file){ showToast(t('payment.chooseFileFirst')); return; }
+    if (file.size>COMPROVANTE_TAMANHO_MAX){ showToast(t('payment.fileTooLarge')); return; }
+    let dataUrl;
+    try{ dataUrl=await arquivoParaDataUrlComprimido(file); }catch(e){ showToast(t('toast.uploadFileFirst')); return; }
+    const { data, error } = await sb.rpc('portal_submit_payment_receipt', { p_token: ppToken, p_index: index, p_comprovante_data_url: dataUrl });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
+    showToast(t('payment.receiptSent'));
+    renderPortalPublicoPrincipal();
+  }
+  /* ===== Triagem / Seleção / Ajustes no Portal do Cliente =====
+     Cada fase só aparece se o proprietário a ligou na Etapa 5 do wizard.
+     O cliente marca como concluída, o que atualiza a timeline e (via
+     dispararEmailEvento) avisa o proprietário. */
+  function renderEntregaAprovacaoPublico(job){
+    const e=job.entrega;
+    if (!e || (!e.triagem && !e.selecao && !e.permiteAjustes)) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('wizard.step5')+'</h4>';
+    if (e.triagem){
+      html += '<div class="pp-block"><h4>'+t('entrega.screening')+'</h4>'+
+        (e.triagemLink ? '<p><a href="'+escapeHtml(e.triagemLink)+'" target="_blank" rel="noopener">'+escapeHtml(e.triagemLink)+'</a></p>' : '')+
+        (e.triagemConcluida
+          ? '<p style="color:var(--c-text-green);font-weight:600;font-size:13px">✓ '+t('entrega.markedDone')+'</p>'
+          : '<button class="btn soft" style="width:100%;margin-top:8px" onclick="marcarFaseEntregaPublico(\'triagemConcluida\')">'+t('entrega.markDone')+'</button>')+
+      '</div>';
+    }
+    if (e.selecao){
+      html += '<div class="pp-block" style="margin-top:10px"><h4>'+t('entrega.selection')+'</h4>'+
+        (e.selecaoLink ? '<p><a href="'+escapeHtml(e.selecaoLink)+'" target="_blank" rel="noopener">'+escapeHtml(e.selecaoLink)+'</a></p>' : '')+
+        (e.selecaoConcluida
+          ? '<p style="color:var(--c-text-green);font-weight:600;font-size:13px">✓ '+t('entrega.markedDone')+'</p>'
+          : '<button class="btn soft" style="width:100%;margin-top:8px" onclick="marcarFaseEntregaPublico(\'selecaoConcluida\')">'+t('entrega.markDone')+'</button>')+
+      '</div>';
+    }
+    if (e.permiteAjustes && e.ajustes && e.ajustes.length){
+      html += '<div class="pp-block" style="margin-top:10px"><h4>'+t('entrega.allowAdjustments')+'</h4>';
+      html += e.ajustes.map((a,i)=>{
+        if (a.status==='utilizado' || a.status==='concluido'){
+          return '<div style="margin-bottom:10px"><b style="font-size:13px">'+escapeHtml(a.nome)+'</b><p style="font-size:12.5px;color:var(--ink-soft);margin:2px 0 0">'+escapeHtml(a.observacoes||'')+'</p></div>';
+        }
+        return '<div style="margin-bottom:10px"><b style="font-size:13px">'+escapeHtml(a.nome)+'</b>'+
+          (a.link ? '<p style="margin:2px 0 6px"><a href="'+escapeHtml(a.link)+'" target="_blank" rel="noopener">'+escapeHtml(a.link)+'</a></p>' : '')+
+          '<div class="field" style="margin-bottom:6px"><textarea id="pp-ajuste-obs-'+i+'" placeholder="'+t('entrega.observationsPlaceholder')+'"></textarea></div>'+
+          '<button class="btn soft" style="width:100%" onclick="enviarObservacaoAjustePublico('+i+')">'+t('entrega.observations')+'</button></div>';
+      }).join('');
+      html += '</div>';
+    }
+    html += '</div>';
+    return html;
+  }
+  async function marcarFaseEntregaPublico(campo){
+    const { data, error } = await sb.rpc('portal_update_entrega', { p_token: ppToken, p_patch: { [campo]: true } });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('atualizacaoProjeto', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
+  async function enviarObservacaoAjustePublico(index){
+    const texto=(document.getElementById('pp-ajuste-obs-'+index).value||'').trim();
+    if (!texto){ alert(t('entrega.observationsPlaceholder')); return; }
+    const { data, error } = await sb.rpc('portal_request_ajuste', { p_token: ppToken, p_index: index, p_observacoes: texto });
+    if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
+    if (data2 && data2.job) ppJob = data2.job;
+    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
+    renderPortalPublicoPrincipal();
+  }
+  /* ===== Timeline bidirecional =====
+     Cada passo é do cliente ou da equipe — o projeto avança à medida que
+     cada lado conclui a sua parte. Só entram passos cujas funcionalidades
+     estão realmente ativas neste trabalho (contrato, pagamentos, triagem,
+     seleção, ajustes, entrega final). */
+  function construirTimelineBidirecional(job){
+    const e=job.entrega||{};
+    const pagos=(job.payments||[]).filter(p=>p.status==='pago').length;
+    const enviados=(job.payments||[]).filter(p=>p.status==='pago'||p.status==='a_confirmar').length;
+    const passos=[];
+    if (job.structure && job.structure.contrato) passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito: job.contract && job.contract.status==='assinado'});
+    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
+      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0});
+      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0});
+    }
+    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida});
+    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida});
+    if (e.permiteAjustes && e.ajustes && e.ajustes.length){
+      const utilizados=e.ajustes.filter(a=>a.status==='utilizado'||a.status==='concluido').length;
+      const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
+      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0});
+      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: concluidos>0 && concluidos===utilizados});
+    }
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: (job.milestones||[]).some(m=>m.key==='entrega' && m.status==='concluido')});
+    return passos;
+  }
+  function renderTimelinePublicoHtml(job){
+    const passos=construirTimelineBidirecional(job);
+    if (!passos.length) return '';
+    let html='<div style="margin-top:22px;border-top:1px solid var(--line-soft);padding-top:18px">'+
+      '<h4 style="margin:0 0 14px">'+t('timeline.title')+'</h4><div class="pp-timeline">';
+    html += passos.map(p=>
+      '<div class="pp-timeline-step'+(p.feito?' done':'')+'">'+
+        '<div class="pp-timeline-dot"></div>'+
+        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+(p.quem==='cliente'?t('timeline.you'):t('timeline.team'))+(p.feito?(' · '+t('timeline.done')):(' · '+t('timeline.pending')))+'</span></div>'+
+      '</div>'
+    ).join('');
+    html += '</div></div>';
+    return html;
   }
   let ppPessoasTemp = [];
   function renderPessoasImportantesPublico(){
@@ -2784,7 +3046,7 @@
     const signatureImg=canvas.toDataURL('image/png');
     const { data, error } = await sb.rpc('portal_sign_contract', { p_token: ppToken, p_signer_name: nome, p_signature_data_url: signatureImg });
     if (error || !data || !data.ok){ alert('Não foi possível assinar. Tenta novamente.'); return; }
-    const data2 = await abrirPortalPorToken(ppToken);
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
     if (data2 && data2.ownerEmail) dispararEmailEvento('contratoAssinado', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
@@ -2800,7 +3062,7 @@
     const briefing = { observacoes: texto, cronograma, pessoasImportantes: ppPessoasTemp };
     const { data, error } = await sb.rpc('portal_submit_briefing', { p_token: ppToken, p_briefing: briefing });
     if (error || !data || !data.ok){ alert('Não foi possível enviar. Tenta novamente.'); return; }
-    const data2 = await abrirPortalPorToken(ppToken);
+    const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
     if (data2 && data2.ownerEmail) dispararEmailEvento('briefingPreenchido', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
@@ -2878,8 +3140,46 @@
     "wizard.step2": { pt:"Recursos e equipe", en:"Resources & team", es:"Recursos y equipo" },
     "wizard.step3": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
     "wizard.step4": { pt:"Pagamentos", en:"Payments", es:"Pagos" },
-    "wizard.step5": { pt:"Contrato", en:"Contract", es:"Contrato" },
-    "wizard.step6": { pt:"Resumo", en:"Summary", es:"Resumen" },
+    "wizard.step5": { pt:"Entrega e Aprovação", en:"Delivery & Approval", es:"Entrega y Aprobación" },
+    "wizard.step6": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "wizard.step7": { pt:"Resumo", en:"Summary", es:"Resumen" },
+    "entrega.screening": { pt:"Triagem", en:"Screening", es:"Selección previa" },
+    "entrega.screeningHint": { pt:"O cliente faz uma primeira triagem dos materiais (fotos RAW, vídeos brutos, áudios, outros arquivos).", en:"The client does a first pass over the raw materials (RAW photos, raw video, audio, other files).", es:"El cliente hace una primera revisión de los materiales (fotos RAW, video en bruto, audio, otros archivos)." },
+    "entrega.selection": { pt:"Seleção", en:"Selection", es:"Selección" },
+    "entrega.selectionHint": { pt:"O cliente seleciona os materiais que seguem para edição ou entrega.", en:"The client picks which materials move on to editing or delivery.", es:"El cliente selecciona los materiales que pasan a edición o entrega." },
+    "entrega.materialLink": { pt:"Link do Material", en:"Material Link", es:"Enlace del Material" },
+    "entrega.materialLinkPlaceholder": { pt:"Pixieset, Frame.io, Drive, Dropbox…", en:"Pixieset, Frame.io, Drive, Dropbox…", es:"Pixieset, Frame.io, Drive, Dropbox…" },
+    "entrega.allowAdjustments": { pt:"Permitir Ajustes", en:"Allow Adjustments", es:"Permitir Ajustes" },
+    "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar alterações nos materiais entregues.", en:"The client can request changes to the delivered materials.", es:"El cliente puede solicitar cambios en los materiales entregados." },
+    "entrega.addAdjustment": { pt:"+ Adicionar Ajuste", en:"+ Add Adjustment", es:"+ Añadir Ajuste" },
+    "entrega.adjustmentName": { pt:"Nome do Ajuste", en:"Adjustment Name", es:"Nombre del Ajuste" },
+    "entrega.adjustmentLinkShort": { pt:"Link", en:"Link", es:"Enlace" },
+    "entrega.extraDaysShort": { pt:"Dias", en:"Days", es:"Días" },
+    "entrega.adjustmentDefault": { pt:"Ajuste", en:"Adjustment", es:"Ajuste" },
+    "entrega.deliveryFormat": { pt:"Formato de Entrega", en:"Delivery Format", es:"Formato de Entrega" },
+    "entrega.format.digital": { pt:"Download Digital", en:"Digital Download", es:"Descarga Digital" },
+    "entrega.format.gallery": { pt:"Galeria Online", en:"Online Gallery", es:"Galería Online" },
+    "entrega.format.pendrive": { pt:"Pen Drive", en:"USB Drive", es:"Pen Drive" },
+    "entrega.format.hd": { pt:"HD Externo", en:"External Drive", es:"Disco Externo" },
+    "entrega.format.album": { pt:"Álbum", en:"Album", es:"Álbum" },
+    "entrega.format.print": { pt:"Impressão", en:"Print", es:"Impresión" },
+    "entrega.format.other": { pt:"Outro", en:"Other", es:"Otro" },
+    "entrega.downloadLink": { pt:"Link de Download", en:"Download Link", es:"Enlace de Descarga" },
+    "entrega.deliveryDate": { pt:"Data de Entrega", en:"Delivery Date", es:"Fecha de Entrega" },
+    "entrega.observations": { pt:"Observações", en:"Notes", es:"Observaciones" },
+    "entrega.observationsPlaceholder": { pt:"Ex: trocar foto da capa, corrigir cor da cena 4, remover pessoa do fundo…", en:"E.g.: swap the cover photo, fix the color in scene 4, remove a person from the background…", es:"Ej.: cambiar la foto de portada, corregir el color de la escena 4, quitar a una persona del fondo…" },
+    "entrega.markDone": { pt:"Marcar como concluída", en:"Mark as done", es:"Marcar como completada" },
+    "entrega.markedDone": { pt:"Concluída", en:"Done", es:"Completada" },
+    "timeline.title": { pt:"Timeline", en:"Timeline", es:"Timeline" },
+    "timeline.contractSigned": { pt:"Contrato assinado", en:"Contract signed", es:"Contrato firmado" },
+    "timeline.paymentSent": { pt:"Pagamento enviado", en:"Payment sent", es:"Pago enviado" },
+    "timeline.paymentValidated": { pt:"Pagamento validado", en:"Payment validated", es:"Pago validado" },
+    "timeline.adjustmentRequested": { pt:"Ajuste solicitado", en:"Adjustment requested", es:"Ajuste solicitado" },
+    "timeline.adjustmentDone": { pt:"Ajuste concluído", en:"Adjustment done", es:"Ajuste completado" },
+    "timeline.you": { pt:"Você", en:"You", es:"Usted" },
+    "timeline.team": { pt:"Equipe", en:"Team", es:"Equipo" },
+    "timeline.done": { pt:"concluído", en:"done", es:"completado" },
+    "timeline.pending": { pt:"pendente", en:"pending", es:"pendiente" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
     "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
     "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
@@ -3260,13 +3560,27 @@
     "job.payments.requestProof": { pt:"Pedir comprovante", en:"Request proof", es:"Pedir justificante" },
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
-    "job.notifyClient": { pt:"Notificar cliente", en:"Notify client", es:"Notificar cliente" },
     "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
     "job.clientEmailHint": { pt:"{client} ainda não tem email registado. Adiciona um para poder enviar as notificações por email.", en:"{client} has no email on file yet. Add one so email notifications can be sent.", es:"{client} aún no tiene email registrado. Añade uno para poder enviar las notificaciones por email." },
     "portal.shareTitle": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing y firme el contrato." },
-    "portal.shareViaMessage": { pt:"Compartilhar", en:"Share", es:"Compartir" },
-    "portal.shareMessageText": { pt:"Olá! Aqui está o link para acompanhar o seu trabalho e assinar o contrato: ", en:"Hi! Here's the link to follow your job and sign the contract: ", es:"¡Hola! Aquí está el enlace para seguir tu trabajo y firmar el contrato: " },
+    "portal.resendEmail": { pt:"Reenviar Email", en:"Resend Email", es:"Reenviar Email" },
+    "portal.editMessageHint": { pt:"Pode editar a mensagem antes de copiar, se quiser.", en:"You can edit the message before copying, if you'd like.", es:"Puede editar el mensaje antes de copiarlo, si lo desea." },
+    "portal.shareMessageGreeting": { pt:"Olá.", en:"Hi.", es:"Hola." },
+    "portal.shareMessageIntro": { pt:"Segue o acesso ao seu portal do projeto.", en:"Here's your access to the project portal.", es:"Aquí tienes el acceso a tu portal del proyecto." },
+    "portal.shareMessageLinkLabel": { pt:"Link:", en:"Link:", es:"Enlace:" },
+    "portal.shareMessageCodeLabel": { pt:"Código de acesso:", en:"Access code:", es:"Código de acceso:" },
+    "portal.shareMessageSecurity": { pt:"Por segurança, mantenha estas informações em sigilo. Qualquer pessoa com o link e o código poderá acessar informações deste projeto.", en:"For your security, keep this information confidential. Anyone with the link and the code will be able to access this project's information.", es:"Por seguridad, mantenga esta información en secreto. Cualquier persona con el enlace y el código podrá acceder a la información de este proyecto." },
+    "portal.codeTitle": { pt:"Código de acesso", en:"Access code", es:"Código de acceso" },
+    "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
+    "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
+    "portal.codeConfirm": { pt:"Entrar", en:"Enter", es:"Entrar" },
+    "portal.createdOn": { pt:"Criado em", en:"Created on", es:"Creado el" },
+    "portal.openRoute": { pt:"Abrir Rota →", en:"Open Route →", es:"Abrir Ruta →" },
+    "portal.signedOn": { pt:"Assinado em", en:"Signed on", es:"Firmado el" },
+    "portal.briefingAnswered": { pt:"Respostas preenchidas", en:"Answers filled in", es:"Respuestas completadas" },
+    "portal.briefingPending": { pt:"Ainda por preencher", en:"Not filled in yet", es:"Aún sin completar" },
+    "portal.deadline": { pt:"prazo:", en:"deadline:", es:"plazo:" },
     "job.resources": { pt:"Recursos adicionais", en:"Additional resources", es:"Recursos adicionales" },
     "job.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
     "job.status.paid": { pt:"pago", en:"paid", es:"pagado" },
@@ -3274,6 +3588,11 @@
     "payment.statusReceiptReceived": { pt:"Comprovante recebido", en:"Receipt received", es:"Comprobante recibido" },
     "payment.statusPending": { pt:"Pendente", en:"Pending", es:"Pendiente" },
     "payment.overdue": { pt:"em atraso", en:"overdue", es:"atrasado" },
+    "payment.markPaid": { pt:"Marcar como paga", en:"Mark as paid", es:"Marcar como pagada" },
+    "payment.viewReceipt": { pt:"Ver comprovante", en:"View receipt", es:"Ver comprobante" },
+    "payment.chooseFileFirst": { pt:"Escolha um arquivo primeiro.", en:"Choose a file first.", es:"Elija un archivo primero." },
+    "payment.fileTooLarge": { pt:"Arquivo muito grande. O limite é 15 MB.", en:"File too large. The limit is 15 MB.", es:"Archivo demasiado grande. El límite es 15 MB." },
+    "payment.receiptSent": { pt:"Comprovante enviado. Aguardando confirmação.", en:"Receipt sent. Awaiting confirmation.", es:"Comprobante enviado. Esperando confirmación." },
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
     "history.receiptRequested": { pt:"Comprovante solicitado: ", en:"Receipt requested: ", es:"Comprobante solicitado: " },
     "history.clientSentReceipt": { pt:"Cliente enviou comprovante: ", en:"Client sent a receipt: ", es:"El cliente envió un comprobante: " },
@@ -3801,6 +4120,16 @@
     "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
     "collab.sectionTitle": { pt:"Colaboradores Externos", en:"External Collaborators", es:"Colaboradores Externos" },
+    "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
+    "collab.bulkApply": { pt:"Aplicar em massa", en:"Apply in bulk", es:"Aplicar en masa" },
+    "collab.role": { pt:"Função", en:"Role", es:"Función" },
+    "collab.rolePlaceholder": { pt:"Ex: Fotógrafo, Editor, Assistente…", en:"E.g.: Photographer, Editor, Assistant…", es:"Ej.: Fotógrafo, Editor, Asistente…" },
+    "collab.permission": { pt:"Permissão", en:"Permission", es:"Permiso" },
+    "collab.receivesContract": { pt:"Recebe Contrato", en:"Receives Contract", es:"Recibe Contrato" },
+    "collab.apply": { pt:"Aplicar", en:"Apply", es:"Aplicar" },
+    "collab.permLevel.reader": { pt:"Leitor", en:"Reader", es:"Lector" },
+    "collab.permLevel.editor": { pt:"Editor", en:"Editor", es:"Editor" },
+    "collab.permLevel.admin": { pt:"Administrador", en:"Administrator", es:"Administrador" },
     "collab.add": { pt:"Convidar colaborador", en:"Invite collaborator", es:"Invitar colaborador" },
     "collab.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
     "collab.none": { pt:"Sem colaboradores externos neste trabalho.", en:"No external collaborators on this job.", es:"Sin colaboradores externos en este trabajo." },
@@ -4720,7 +5049,7 @@
     document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
   }
-  const WIZARD_STEP_KEYS=['wizard.step1','wizard.step2','wizard.step3','wizard.step4','wizard.step5','wizard.step6'];
+  const WIZARD_STEP_KEYS=['wizard.step1','wizard.step2','wizard.step3','wizard.step4','wizard.step5','wizard.step6','wizard.step7'];
   function syncChrome(){
     const current=panelStack[panelStack.length-1];
     const back=document.getElementById('sheetBack');
@@ -4729,9 +5058,9 @@
     const prog=document.getElementById('sheetProgress');
     const header=document.getElementById('sheetHeader');
     if(current==='trabalho'){
-      // 5 pontos para as 5 etapas; o resumo (momento 6) mantém os 5 pontos
+      // 7 pontos para as 7 etapas; o resumo (momento 7) mantém os 7 pontos
       // preenchidos com o último marcado como atual.
-      const passo=Math.min(trabalhoMoment,5);
+      const passo=Math.min(trabalhoMoment,7);
       prog.style.display='flex';
       prog.querySelectorAll('span').forEach((s,i)=>{
         s.classList.toggle('on', i<passo);
@@ -5206,8 +5535,9 @@
     });
     if(n===2) renderColaboradoresPendentesWizard();
     if(n===4) prepararEtapaPagamentos();
-    if(n===5) renderModelosSugeridos();
-    if(n===6) renderReview();
+    if(n===5) prepararEtapaEntrega();
+    if(n===6) renderModelosSugeridos();
+    if(n===7) renderReview();
     document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
   }
@@ -5272,8 +5602,78 @@
       comprovativo:null
     }));
   }
+  /* ===== Etapa 5 — Entrega e Aprovação =====
+     Cada funcionalidade (Triagem, Seleção, Ajustes) tem o seu próprio toggle,
+     porque nem todo trabalho usa todas as fases. Os dados ficam disponíveis
+     depois em job.entrega para preencher automaticamente os contratos
+     (ver blocoTextos.entrega em integrarEntregaNoBloco). */
+  function prepararEtapaEntrega(){
+    atualizarEntregaFormato();
+    if(!document.getElementById('entrega-ajustes-lista').children.length) addAjusteWizard();
+  }
+  function toggleEntregaFase(el, fase){
+    el.classList.toggle('on');
+    document.getElementById('entrega-'+fase+'-link-wrap').style.display = el.classList.contains('on') ? 'block':'none';
+  }
+  function toggleEntregaAjustes(el){
+    el.classList.toggle('on');
+    document.getElementById('entrega-ajustes-wrap').style.display = el.classList.contains('on') ? 'block':'none';
+  }
+  function atualizarEntregaFormato(){
+    const formato=document.getElementById('entrega-formato').value;
+    document.getElementById('entrega-download-link-wrap').style.display = formato==='digital' ? 'block':'none';
+  }
+  function ajusteWizardRowHtml(i, a){
+    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1.4fr 1.4fr 0.7fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
+      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentName">Nome do Ajuste</label><input class="tw-ajuste-nome" placeholder="'+t('entrega.adjustmentDefault')+' '+(i+1)+'" value="'+escapeHtml(a.nome||'')+'"></div>'+
+      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentLinkShort">Link</label><input class="tw-ajuste-link" placeholder="https://…" value="'+escapeHtml(a.link||'')+'"></div>'+
+      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.extraDaysShort">Dias</label><input class="tw-ajuste-dias" type="number" min="0" step="1" value="'+(a.diasAdicionais!=null?a.diasAdicionais:0)+'"></div>'+
+      '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerAjusteWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
+    '</div>';
+  }
+  function addAjusteWizard(){
+    const lista=document.getElementById('entrega-ajustes-lista');
+    const i=lista.children.length;
+    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {nome:t('entrega.adjustmentDefault')+' '+(i+1), link:'', diasAdicionais:0}));
+  }
+  function removerAjusteWizard(btn){
+    btn.closest('[data-ajuste-row]').remove();
+  }
+  function lerAjustesWizard(){
+    return [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].map((row,i)=>({
+      nome: row.querySelector('.tw-ajuste-nome').value.trim() || (t('entrega.adjustmentDefault')+' '+(i+1)),
+      link: row.querySelector('.tw-ajuste-link').value.trim() || null,
+      diasAdicionais: parseInt(row.querySelector('.tw-ajuste-dias').value,10)||0,
+      status:'pendente', observacoes:null
+    }));
+  }
+  function lerEntregaWizard(){
+    const triagemOn=document.getElementById('entrega-triagem').classList.contains('on');
+    const selecaoOn=document.getElementById('entrega-selecao').classList.contains('on');
+    const ajustesOn=document.getElementById('entrega-ajustes-toggle').classList.contains('on');
+    const ajustes = ajustesOn ? lerAjustesWizard() : [];
+    return {
+      triagem: triagemOn,
+      triagemLink: triagemOn ? (document.getElementById('entrega-triagem-link').value.trim()||null) : null,
+      triagemConcluida:false,
+      selecao: selecaoOn,
+      selecaoLink: selecaoOn ? (document.getElementById('entrega-selecao-link').value.trim()||null) : null,
+      selecaoConcluida:false,
+      permiteAjustes: ajustesOn,
+      ajustes,
+      formatoEntrega: document.getElementById('entrega-formato').value,
+      dataEntrega: document.getElementById('entrega-data').value || null,
+      linkDownload: document.getElementById('entrega-formato').value==='digital' ? (document.getElementById('entrega-download-link').value.trim()||null) : null
+    };
+  }
+  /* Soma os dias adicionais de todos os ajustes já utilizados — usado tanto
+     para mostrar o prazo final atualizado quanto para preencher contratos. */
+  function diasAdicionaisEntrega(entrega){
+    if(!entrega || !entrega.ajustes) return 0;
+    return entrega.ajustes.filter(a=>a.status==='utilizado').reduce((s,a)=>s+(a.diasAdicionais||0),0);
+  }
   function trabalhoNext(){
-    trabalhoGoto(Math.min(6, trabalhoMoment+1));
+    trabalhoGoto(Math.min(7, trabalhoMoment+1));
   }
   let modeloContratoSelecionado=null;
   function renderModelosSugeridos(){
@@ -5529,6 +5929,13 @@
     if(nomesResp.length) html+=card(t('resumo.responsibles'), nomesResp.join(', '));
     html+=card(t('job.payments'), pagTxt);
     if(conteudo.length) html+=card(t('resumo.clientReceives'), conteudo.join(', '));
+    const entregaFases=[];
+    if(document.getElementById('entrega-triagem').classList.contains('on')) entregaFases.push(t('entrega.screening'));
+    if(document.getElementById('entrega-selecao').classList.contains('on')) entregaFases.push(t('entrega.selection'));
+    if(document.getElementById('entrega-ajustes-toggle').classList.contains('on')) entregaFases.push(document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]').length+' '+t('wizard.installments').toLowerCase());
+    if(entregaFases.length) html+=card(t('wizard.step5'), entregaFases.join(', '));
+    const entregaFormatoVal=document.getElementById('entrega-formato');
+    if(entregaFormatoVal) html+=card(t('entrega.deliveryFormat'), t('entrega.format.'+entregaFormatoVal.value));
     html+=card(t('resumo.contractTemplate'), modelo);
     html+='</div>';
     document.getElementById('trabalho-review-summary').innerHTML=html;
@@ -5648,7 +6055,7 @@
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
       payments:[], milestones:[], reminders:[], history:[], assignedTo:[],
-      teamPermissions: {} };
+      teamPermissions: {}, entrega: lerEntregaWizard(), criadoEm:new Date().toISOString() };
     // Recorrência (definida na Etapa 1): valor por ciclo = campo Valor;
     // primeira cobrança = data de início; renovação automática ligada => sem
     // data de fim (renova indefinidamente); desligada => usa a data de fim.
@@ -5790,6 +6197,12 @@
     const recFimWrap=document.getElementById('tw-recur-fim-wrap'); if(recFimWrap) recFimWrap.style.display='none';
     const recFimEl=document.getElementById('tw-recur-fim'); if(recFimEl) recFimEl.value='';
     const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
+    // Etapa 5 — Entrega e Aprovação: toggles desligados por padrão, campos limpos.
+    ['entrega-triagem','entrega-selecao','entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
+    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap','entrega-download-link-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+    ['entrega-triagem-link','entrega-selecao-link','entrega-download-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    const ajustesLista=document.getElementById('entrega-ajustes-lista'); if(ajustesLista) ajustesLista.innerHTML='';
+    const entregaFormato=document.getElementById('entrega-formato'); if(entregaFormato) entregaFormato.value='digital';
   }
 
   /* ===== MOTOR DE DADOS REAL — trabalhos criados, contratos, assinatura ===== */
@@ -6317,6 +6730,27 @@
       return 'O valor total é de '+fmtMoney(job.value)+', dividido em sinal de '+fmtMoney(job.value*sinal/100)+' ('+sinal+'%) à assinatura e '+fmtMoney(job.value*(100-sinal)/100)+' até '+prazoSaldo+'.';
     },
     entrega: (job,p)=>{
+      // Se o trabalho tem dados reais da Etapa "Entrega e Aprovação" (formato
+      // escolhido, data de entrega, ajustes configurados), usa-os para
+      // preencher a cláusula existente em vez dos valores genéricos do
+      // modelo — sem criar nenhuma cláusula nova.
+      const e=job.entrega;
+      if(e && (e.dataEntrega || e.formatoEntrega)){
+        const formatoLabelMap={digital:'por download digital', galeria:'por galeria online', pendrive:'em pen drive', hd:'em HD externo', album:'em álbum', impressao:'em formato impresso', outro:'conforme combinado'};
+        const formato = formatoLabelMap[e.formatoEntrega] || (p&&p.formatoEntrega) || 'por galeria online';
+        const diasExtra = diasAdicionaisEntrega(e);
+        let txt = 'O material final é entregue '+formato;
+        if(e.dataEntrega){
+          const dataFmt = e.dataEntrega.split('-').reverse().join('/');
+          txt += ', com previsão de entrega em '+dataFmt+(diasExtra?(' (podendo ser prorrogada em até '+diasExtra+' dias, conforme ajustes solicitados)'):'')+'.';
+        } else {
+          const dias=(p&&p.prazoEntregaDias!=null)?p.prazoEntregaDias:60;
+          const marco=(p&&p.marcoEntrega)||'o evento';
+          txt += ', em até '+dias+' dias após '+marco+'.';
+        }
+        if(e.permiteAjustes && e.ajustes && e.ajustes.length) txt += ' O cliente tem direito a '+e.ajustes.length+' '+(e.ajustes.length===1?'rodada de ajustes':'rodadas de ajustes')+' sobre o material entregue.';
+        return txt;
+      }
       const dias = (p&&p.prazoEntregaDias!=null) ? p.prazoEntregaDias : 60;
       const formato = (p&&p.formatoEntrega) || 'por galeria online';
       const marco = (p&&p.marcoEntrega) || 'o evento';
@@ -6801,7 +7235,7 @@
     const local=job.local;
     if(!local) return '';
     const enderecoBusca=job.localCompleto||local;
-    const mapsUrl='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(enderecoBusca);
+    const rotaUrl=linkRotaInteligente(job);
     if(job.geo && job.geo.lat){
       const lat=job.geo.lat, lon=job.geo.lon, d=0.0035;
       const bbox=(lon-d)+'%2C'+(lat-d)+'%2C'+(lon+d)+'%2C'+(lat+d);
@@ -6809,13 +7243,13 @@
       return '<div class="map-card">'+
         '<iframe class="map-real" src="'+embedUrl+'" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:148px;border:0;display:block"></iframe>'+
         '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
-        '<a class="map-link" href="'+mapsUrl+'" target="_blank" rel="noopener">Abrir →</a></div>'+
+        '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
       '</div>';
     }
     return '<div class="map-card">'+
       '<div class="map-visual">'+mapVisualSvg()+'<div class="map-tag">Localização</div><div class="map-pin">'+ICON_PIN+'</div></div>'+
       '<div class="map-info"><div class="map-addr">'+escapeHtml(local)+'</div>'+
-      '<a class="map-link" href="'+mapsUrl+'" target="_blank" rel="noopener">Abrir no Maps →</a></div>'+
+      '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
     '</div>';
   }
 
@@ -6922,6 +7356,7 @@
     const { error } = await sb.from('portal_tokens').insert(row);
     if(error){ console.error(error); showToast('Erro ao gerar link. Tenta novamente.'); return; }
     job.contract.link = window.location.origin + '/?portal=' + token;
+    job.contract.codigoAcesso = gerarCodigoAcessoPortal();
     job.contract.status='enviado';
     job.paymentMethods = metodosSelecionados || [];
     pushHistory(job,t('toast.contractGenerated'));
@@ -7357,18 +7792,20 @@
     closeInfo();
     if(ok) showToast(t('toast.emailSent'));
   }
-  function compartilharPortal(id){
-    const job=jobsData[id];
-    const texto=t('portal.shareMessageText')+job.contract.link;
-    if(navigator.share){
-      navigator.share({title:t('portal.shareTitle'), text:texto}).catch(()=>{});
-    } else if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(texto).then(()=>showToast(t('toast.linkCopied')));
-    } else {
-      showToast(texto);
-    }
-  }
   function abrirComoClienteSimulado(id){ currentJobId=id; openClient(); }
+  /* Gera um código de acesso de 6 dígitos para o portal — o cliente precisa
+     do link E do código para entrar, não só do link (reduz acessos indevidos
+     a quem intercepta o link sozinho). Guardado no próprio job, sem exigir
+     alterações de esquema no Supabase. */
+  function gerarCodigoAcessoPortal(){
+    return String(Math.floor(100000+Math.random()*900000));
+  }
+  function construirMensagemPortalCliente(job){
+    return t('portal.shareMessageGreeting')+'\n\n'+t('portal.shareMessageIntro')+'\n\n'+
+      t('portal.shareMessageLinkLabel')+' '+(job.contract.link||'')+'\n\n'+
+      t('portal.shareMessageCodeLabel')+' '+(job.contract.codigoAcesso||'')+'\n\n'+
+      t('portal.shareMessageSecurity');
+  }
   function abrirCompartilharPortal(id){
     const job=jobsData[id];
     if(!job){ showToast(t('toast.jobNotFound')); return; }
@@ -7378,43 +7815,24 @@
         <button class="btn primary" style="width:100%" onclick="abrirDefinirPrazoPortal('${id}')">${t('job.contract.getLink')}</button>`);
     } else {
       openInfo(t('portal.shareTitle'), `
-        <p style="font-size:13px;color:var(--ink-soft);word-break:break-all;margin-bottom:14px">${escapeHtml(job.contract.link)}</p>
-        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('job.contract.email')}</button>
-        <button class="btn soft" style="width:100%;margin-bottom:8px" onclick="compartilharPortal('${id}')">${t('portal.shareViaMessage')}</button>
-        <button class="btn ghost" style="width:100%" onclick="copiarLinkContrato('${id}')">${t('job.contract.copyLink')}</button>`);
+        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('portal.resendEmail')}</button>
+        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('job.contract.copyLink')}</button>`);
     }
   }
-  /* painel manual de notificações — para os tipos de email cujo melhor
-     momento de envio depende do julgamento do próprio freelancer (não há
-     um único evento do sistema que os dispare sozinho, ao contrário de
-     "pagamento recebido" ou "contrato assinado") */
-  function abrirNotificarCliente(id){
-    const job=jobsData[id];
-    if(!job){ showToast(t('toast.jobNotFound')); return; }
-    if(!job.email){ pedirEmailCliente(id, ()=>abrirNotificarCliente(id)); return; }
-    const opcoes=[
-      ['acessoPortal', 'email.badge.portalAccess'],
-      ['atualizacaoProjeto', 'email.badge.projectUpdate'],
-      ['acaoNecessaria', 'email.badge.actionNeeded'],
-      ['eventoAgendado', 'email.badge.eventScheduled'],
-      ['documentoDisponivel', 'email.badge.documentAvailable'],
-      ['avaliacaoSolicitada', 'email.badge.reviewRequest']
-    ];
-    const html=opcoes.map(([tipo,labelKey])=>
-      '<div class="pick-row" onclick="enviarNotificacaoCliente(\''+id+'\',\''+tipo+'\')"><div><div class="nm">'+t(labelKey)+'</div><div class="sub">'+t(TIPOS_EMAIL[tipo].titleKey)+'</div></div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
-    ).join('');
-    openInfo(t('job.notifyClient'), html);
-  }
-  async function enviarNotificacaoCliente(id, tipo){
+  function abrirCopiarMensagemPortal(id){
     const job=jobsData[id];
     if(!job) return;
-    const ok=await dispararEmailEvento(tipo, job.email, job);
-    if(!ok){ return; } /* dispararEmailEvento já mostrou o aviso de falha */
-    pushHistory(job, t('history.clientNotified')+' — '+t(TIPOS_EMAIL[tipo].badgeKey));
-    saveJobsData();
-    closeInfo();
-    showToast(t('toast.clientNotified'));
+    const msg=construirMensagemPortalCliente(job);
+    openInfo(t('job.contract.copyLink'), `
+      <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
+      <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical">${escapeHtml(msg)}</textarea>
+      <button class="btn primary" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
+  }
+  function copiarMensagemPortalEditada(){
+    const texto=document.getElementById('portal-msg-editavel').value;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(()=>{ showToast(t('toast.linkCopied')); closeInfo(); }).catch(()=>showToast(texto));
+    } else { showToast(texto); }
   }
 
   function marcarPagoDynamic(id,i){
@@ -7619,7 +8037,7 @@
       html+='</div></div>';
     }
 
-    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body" style="display:block"><div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div></div></div>';
+    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><div style="display:flex;gap:6px"><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div></div><div class="sec-body" style="display:block"><div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div></div></div>';
 
     document.getElementById('detalhe-dynamic').innerHTML=html;
     carregarColaboradoresJob(id);
@@ -7683,6 +8101,64 @@
     if(error){ showToast(t('toast.inviteError')); return; }
     await carregarColaboradoresJob(jobId);
     showToast(t('toast.personRemoved'));
+  }
+
+  /* ===== Contratos de Colaboradores =====
+     Etapa de gestão interna: cada colaborador do trabalho tem Função (texto
+     livre, ex. Fotógrafo/Editor), Permissão (Leitor/Editor/Administrador,
+     todos começam Leitor) e um toggle Recebe Contrato. Aplicação em massa
+     permite atribuir a mesma Função a vários colaboradores de uma vez e
+     ligar Recebe Contrato para todos eles. */
+  const PERMISSOES_CONTRATO_COLAB=[['leitor','collab.permLevel.reader'],['editor','collab.permLevel.editor'],['administrador','collab.permLevel.admin']];
+  function abrirContratosColaboradores(jobId){
+    const lista=colaboradoresCache[jobId]||[];
+    if(!lista.length){ showToast(t('collab.none')); return; }
+    openInfo(t('collab.contractsSection'), `
+      <div id="contratos-colab-lista"></div>
+      <button class="btn ghost" style="width:100%;margin-top:10px" onclick="abrirAplicarEmMassa('${jobId}')">${t('collab.bulkApply')}</button>`);
+    renderContratosColaboradoresLista(jobId);
+  }
+  function renderContratosColaboradoresLista(jobId){
+    const wrap=document.getElementById('contratos-colab-lista');
+    if(!wrap) return;
+    const lista=colaboradoresCache[jobId]||[];
+    wrap.innerHTML = lista.map(c=>
+      '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:12px 0">'+
+        '<div class="nm">'+escapeHtml(c.email)+'</div>'+
+        '<div class="field" style="margin-bottom:0"><label style="font-size:11px">'+t('collab.role')+'</label><input value="'+escapeHtml(c.funcao||'')+'" placeholder="'+t('collab.rolePlaceholder')+'" onblur="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'funcao\',this.value)"></div>'+
+        '<div class="field" style="margin-bottom:0"><label style="font-size:11px">'+t('collab.permission')+'</label><select onchange="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'permissao\',this.value)">'+
+          PERMISSOES_CONTRATO_COLAB.map(([key,labelKey])=>'<option value="'+key+'"'+((c.permissao||'leitor')===key?' selected':'')+'>'+t(labelKey)+'</option>').join('')+
+        '</select></div>'+
+        '<div class="struct-row" style="padding:0"><div class="struct-l"><div class="nm" style="font-size:12.5px">'+t('collab.receivesContract')+'</div></div><div class="toggle'+(c.recebe_contrato?' on':'')+'" onclick="this.classList.toggle(\'on\');salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'recebe_contrato\',this.classList.contains(\'on\'))"><div class="kn"></div></div></div>'+
+      '</div>'
+    ).join('');
+  }
+  async function salvarCampoColaborador(jobId, colabId, campo, valor){
+    const { error } = await sb.from('external_collaborators').update({[campo]:valor}).eq('id',colabId);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    const c=(colaboradoresCache[jobId]||[]).find(x=>x.id===colabId);
+    if(c) c[campo]=valor;
+    renderSecaoColaboradoresExternos(jobId);
+  }
+  function abrirAplicarEmMassa(jobId){
+    const lista=colaboradoresCache[jobId]||[];
+    openInfo(t('collab.bulkApply'), `
+      <div class="field"><label>${t('collab.role')}</label><input id="bulk-colab-funcao" placeholder="${t('collab.rolePlaceholder')}"></div>
+      <div id="bulk-colab-checklist">${lista.map(c=>
+        '<label class="pick-row"><input type="checkbox" class="bulk-colab-check" value="'+c.id+'" style="margin-right:10px"><div><div class="nm">'+escapeHtml(c.email)+'</div>'+(c.funcao?'<div class="sub">'+escapeHtml(c.funcao)+'</div>':'')+'</div></label>'
+      ).join('')}</div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="aplicarContratoEmMassa('${jobId}')">${t('collab.apply')}</button>`);
+  }
+  async function aplicarContratoEmMassa(jobId){
+    const funcao=(document.getElementById('bulk-colab-funcao').value||'').trim();
+    const ids=[...document.querySelectorAll('.bulk-colab-check:checked')].map(el=>el.value);
+    if(!funcao || !ids.length){ showToast(t('toast.writePersonName')); return; }
+    const { error } = await sb.from('external_collaborators').update({funcao, recebe_contrato:true}).in('id', ids);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    await carregarColaboradoresJob(jobId);
+    closeInfo();
+    abrirContratosColaboradores(jobId);
+    showToast(t('toast.changesSaved'));
   }
 
   let colabExternoEmailEncontrado=null, colabExternoNivel='leitura', colabExternoEscopo=null, colabExternoAcordo=null, colabExternoPermissoes={};
