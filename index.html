@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
@@ -518,11 +520,11 @@
   .pp-timeline-step .sub{font-size:12px;color:var(--neutral)}
   .pp-timeline-step.done .sub{color:var(--brand)}
 
-  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa estilizado (não é mapa real) + pin + link real ===== */
+  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa real minimalista (CartoDB, tons de cinza) + pin + rota inteligente ===== */
   .map-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:14px;background:var(--paper);
     box-shadow:0 6px 20px var(--btn-06)}
-  .map-visual{position:relative;height:104px;background:linear-gradient(135deg,#EDEAE2,#E2E8E5);overflow:hidden}
-  .map-visual svg.bg{width:100%;height:100%;display:block}
+  .map-visual{position:relative;height:104px;background:#E7E7E4;overflow:hidden}
+  [data-theme="dark"] .map-visual{background:#232320}
   .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-95%)}
   .map-pin svg{width:28px;height:28px;color:var(--ink);filter:drop-shadow(0 3px 5px rgba(0,0,0,.22))}
   .map-tag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-85);backdrop-filter:blur(6px);
@@ -531,7 +533,12 @@
   .map-info{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
   .map-addr{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35}
   .map-link{font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap;flex:none}
-  .map-real{filter:saturate(1.05)}
+  .map-leaflet{width:100%;height:148px;background:#E7E7E4}
+  [data-theme="dark"] .map-leaflet{background:#1A1A18}
+  /* Atribuição legal obrigatória, mas discreta — sem os links técnicos
+     (Report a problem / Donate / Terms) que o embed.html do OSM sempre trazia */
+  .map-leaflet .leaflet-control-attribution{font-size:9px;background:var(--glass-85);color:var(--ink-faint);padding:1px 5px;border-radius:4px 0 0 0}
+  .map-leaflet .leaflet-control-attribution a{color:var(--ink-faint)}
 
   .addr-dropdown{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--paper);
     border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px var(--btn-14);
@@ -691,6 +698,8 @@
   .tl-line{position:absolute;left:8.5px;top:22px;bottom:-9px;width:1.5px;background:var(--line)}
   .tl:last-child .tl-line{display:none}
   .tl-body .t{font-size:14px;font-weight:500} .tl-body .m{font-size:12.5px;color:var(--neutral)}
+  .tl-dot-status{width:18px;height:18px;flex:none;display:grid;place-items:center;font-size:11px;line-height:1;z-index:2}
+  .tl-date{font-size:11.5px;color:var(--ink-faint);margin-top:2px}
   .sec.open .chev{transform:rotate(180deg)}
   .sec-body{display:none;padding:0 16px 16px}
   .sec.open .sec-body{display:block}
@@ -2224,7 +2233,7 @@
           <div><div class="t"><span data-t="wizard.useTemplate">Usar um modelo</span></div><div class="s"><span data-t="wizard.fromSaved">dos seus modelos guardados</span></div></div>
         </div>
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="closeSheet();abrirBuilder(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Do zero</span></span></div>
+          <div class="sheet-item" onclick="abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Do zero</span></span></div>
           <div class="sheet-item" onclick="pushPanel('contrato-duplicar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span><span data-t="wizard.duplicate">Duplicar existente</span></span></div>
         </div>
         <div class="sheet-outline" onclick="pushPanel('comunidade-contratos')">
@@ -2868,6 +2877,7 @@
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
     if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+    setTimeout(inicializarMapasCard, 30);
   }
   /* ===== Pagamentos no Portal do Cliente =====
      O cliente vê cada parcela (paga/pendente/aguardando confirmação) e pode
@@ -2973,26 +2983,61 @@
      cada lado conclui a sua parte. Só entram passos cujas funcionalidades
      estão realmente ativas neste trabalho (contrato, pagamentos, triagem,
      seleção, ajustes, entrega final). */
+  /* Cada passo ganha: status (done/progress/pending/late — usado para o
+     ícone colorido 🟢🔵🟡🔴 em toda a aplicação), desc (contexto do que está
+     a acontecer) e data quando existir. acaoLabel/acaoFn só aparecem em
+     passos que a EQUIPA pode concluir diretamente por aqui — ações do
+     cliente (assinar, pagar, selecionar) não têm botão, porque acontecem no
+     Portal do Cliente. */
   function construirTimelineBidirecional(job){
     const e=job.entrega||{};
     const pagos=(job.payments||[]).filter(p=>p.status==='pago').length;
     const enviados=(job.payments||[]).filter(p=>p.status==='pago'||p.status==='a_confirmar').length;
+    const hoje=new Date().toISOString().slice(0,10);
+    const atrasado=(job.payments||[]).some(p=>p.status!=='pago' && p.dueDate && p.dueDate<hoje);
     const passos=[];
-    if (job.structure && job.structure.contrato) passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito: job.contract && job.contract.status==='assinado'});
-    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
-      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0});
-      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0});
+    if (job.structure && job.structure.contrato){
+      const feito=job.contract && job.contract.status==='assinado';
+      passos.push({label:t('timeline.contractSigned'), quem:'cliente', feito, status: feito?'done':'pending',
+        desc: feito ? (t('job.contract.signedByPrefix2')+(job.contract.signerName||'')) : t('timeline.desc.awaitingSignature'),
+        data: feito ? job.contract.signedAt : null});
     }
-    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida});
-    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida});
+    if (job.structure && job.structure.pagamentos && (job.payments||[]).length){
+      passos.push({label:t('timeline.paymentSent'), quem:'cliente', feito: enviados>0, status: enviados>0?'done':(atrasado?'late':'pending'),
+        desc: enviados>0 ? t('timeline.desc.paymentReceived') : t('timeline.desc.awaitingPayment'), data:null});
+      passos.push({label:t('timeline.paymentValidated'), quem:'equipe', feito: pagos>0, status: pagos>0?'done':(enviados>0?'progress':'pending'),
+        desc: pagos>0 ? t('timeline.desc.paymentConfirmed') : t('timeline.desc.awaitingConfirmation'), data:null});
+    }
+    if (e.triagem) passos.push({label:t('entrega.screening'), quem:'cliente', feito: !!e.triagemConcluida, status: e.triagemConcluida?'done':'progress',
+      desc: e.triagemConcluida ? t('timeline.desc.doneByClient') : t('timeline.desc.clientSelecting'), data:null});
+    if (e.selecao) passos.push({label:t('entrega.selection'), quem:'cliente', feito: !!e.selecaoConcluida, status: e.selecaoConcluida?'done':'progress',
+      desc: e.selecaoConcluida ? t('timeline.desc.doneByClient') : t('timeline.desc.clientSelecting'), data:null});
     if (e.permiteAjustes && e.ajustes && e.ajustes.length){
       const utilizados=e.ajustes.filter(a=>a.status==='utilizado'||a.status==='concluido').length;
       const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
-      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0});
-      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: concluidos>0 && concluidos===utilizados});
+      passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0, status: utilizados>0?'done':'pending',
+        desc: utilizados>0 ? (utilizados+' '+t('entrega.allowAdjustments').toLowerCase()) : t('timeline.desc.noRequestsYet'), data:null});
+      const pendentes=utilizados-concluidos;
+      passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: utilizados>0 && pendentes===0, status: (utilizados>0 && pendentes===0)?'done':(utilizados>0?'progress':'pending'),
+        desc: concluidos+'/'+utilizados, data:null,
+        acaoLabel: pendentes>0 ? t('action.complete') : null,
+        acaoFn: pendentes>0 ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
     }
-    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: (job.milestones||[]).some(m=>m.key==='entrega' && m.status==='concluido')});
+    const entregaMs=(job.milestones||[]).find(m=>m.key==='entrega');
+    const entregaFeita = entregaMs && entregaMs.status==='feito';
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita, status: entregaFeita?'done':'pending',
+      desc: entregaFeita ? t('timeline.desc.delivered') : t('timeline.desc.deliveryPending'),
+      data: e.dataEntrega ? e.dataEntrega.split('-').reverse().join('/') : null,
+      acaoLabel: !entregaFeita ? t('action.complete') : null,
+      acaoFn: !entregaFeita ? ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')') : null});
     return passos;
+  }
+  function concluirAjustesPendentesJob(jobId){
+    const job=jobsData[jobId]; if(!job || !job.entrega) return;
+    (job.entrega.ajustes||[]).forEach(a=>{ if(a.status==='utilizado') a.status='concluido'; });
+    pushHistory(job, t('toast.done'));
+    saveJobsData(); renderJobDetailDynamic(jobId);
+    showToast(t('toast.done'));
   }
   function renderTimelinePublicoHtml(job){
     const passos=construirTimelineBidirecional(job);
@@ -3002,7 +3047,7 @@
     html += passos.map(p=>
       '<div class="pp-timeline-step'+(p.feito?' done':'')+'">'+
         '<div class="pp-timeline-dot"></div>'+
-        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+(p.quem==='cliente'?t('timeline.you'):t('timeline.team'))+(p.feito?(' · '+t('timeline.done')):(' · '+t('timeline.pending')))+'</span></div>'+
+        '<div><div class="nm">'+escapeHtml(p.label)+'</div><span class="sub">'+escapeHtml(p.desc||'')+(p.data?(' · '+escapeHtml(p.data)):'')+'</span></div>'+
       '</div>'
     ).join('');
     html += '</div></div>';
@@ -3082,7 +3127,6 @@
     "action.attach": { pt:"Anexar", en:"Attach", es:"Adjuntar" },
     "action.complete": { pt:"Concluir", en:"Complete", es:"Concluir" },
     "action.contactSupport": { pt:"Falar com o suporte", en:"Contact support", es:"Hablar con soporte" },
-    "action.markDone": { pt:"Marcar como feito", en:"Mark as done", es:"Marcar como hecho" },
     "action.restore": { pt:"Restaurar", en:"Restore", es:"Restaurar" },
     "action.delete": { pt:"Deletar", en:"Delete", es:"Eliminar" },
     "action.deleteAccount": { pt:"Apagar conta e dados", en:"Delete account and data", es:"Eliminar cuenta y datos" },
@@ -3180,6 +3224,18 @@
     "timeline.team": { pt:"Equipe", en:"Team", es:"Equipo" },
     "timeline.done": { pt:"concluído", en:"done", es:"completado" },
     "timeline.pending": { pt:"pendente", en:"pending", es:"pendiente" },
+    "timeline.desc.awaitingSignature": { pt:"Aguardando assinatura do cliente", en:"Awaiting the client's signature", es:"Esperando la firma del cliente" },
+    "timeline.desc.paymentReceived": { pt:"Recebido do cliente", en:"Received from the client", es:"Recibido del cliente" },
+    "timeline.desc.awaitingPayment": { pt:"Aguardando pagamento", en:"Awaiting payment", es:"Esperando el pago" },
+    "timeline.desc.paymentConfirmed": { pt:"Confirmado", en:"Confirmed", es:"Confirmado" },
+    "timeline.desc.awaitingConfirmation": { pt:"Aguardando confirmação do comprovante", en:"Awaiting receipt confirmation", es:"Esperando confirmación del comprobante" },
+    "timeline.desc.doneByClient": { pt:"Concluído pelo cliente", en:"Done by the client", es:"Completado por el cliente" },
+    "timeline.desc.clientSelecting": { pt:"Cliente está selecionando arquivos", en:"Client is selecting files", es:"El cliente está seleccionando archivos" },
+    "timeline.desc.noRequestsYet": { pt:"Nenhum ajuste solicitado ainda", en:"No adjustment requested yet", es:"Aún no se solicitó ningún ajuste" },
+    "timeline.desc.delivered": { pt:"Entregue", en:"Delivered", es:"Entregado" },
+    "timeline.desc.deliveryPending": { pt:"Entrega pendente", en:"Delivery pending", es:"Entrega pendiente" },
+    "timeline.status.progress": { pt:"Em andamento", en:"In progress", es:"En curso" },
+    "timeline.status.late": { pt:"Atrasado", en:"Late", es:"Atrasado" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
     "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
     "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
@@ -3531,6 +3587,10 @@
     "job.contract.missing": { pt:"Contrato em falta.", en:"No contract yet.", es:"Sin contrato aún." },
     "job.contract.newLink": { pt:"Gerar novo link", en:"New link", es:"Nuevo enlace" },
     "job.contract.replace": { pt:"Substituir anexo", en:"Replace attachment", es:"Reemplazar adjunto" },
+    "job.contract.select": { pt:"Selecionar Contrato", en:"Select Contract", es:"Seleccionar Contrato" },
+    "job.contract.custom": { pt:"Personalizado", en:"Custom", es:"Personalizado" },
+    "job.contract.sentOn": { pt:"Enviado em", en:"Sent on", es:"Enviado el" },
+    "job.contract.view": { pt:"Ver Contrato", en:"View Contract", es:"Ver Contrato" },
     "job.contract.sent": { pt:"Contrato já enviado — não pode ser editado.", en:"Contract already sent — editing is locked.", es:"Contrato ya enviado — no se puede editar." },
     "job.contract.signedByPrefix": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
     "job.contract.signedByPrefix2": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
@@ -3555,9 +3615,12 @@
     "job.payment.overdueDaysSuffix": { pt:" dias", en:" days", es:" días" },
     "job.payment.paidOnPrefix": { pt:"pago a ", en:"paid on ", es:"pagado el " },
     "job.payments": { pt:"Pagamentos", en:"Payments", es:"Pagos" },
-    "job.payments.confirmReceipt": { pt:"Confirmar receção", en:"Confirm receipt", es:"Confirmar recepción" },
-    "job.payments.markPaid": { pt:"Marcar pago", en:"Mark as paid", es:"Marcar como pagado" },
-    "job.payments.requestProof": { pt:"Pedir comprovante", en:"Request proof", es:"Pedir justificante" },
+    "payment.paidOn": { pt:"Pago em", en:"Paid on", es:"Pagado el" },
+    "payment.dueOn": { pt:"Vencimento", en:"Due on", es:"Vencimiento" },
+    "payment.detailTitle": { pt:"Detalhe da parcela", en:"Installment detail", es:"Detalle de la cuota" },
+    "payment.replaceReceipt": { pt:"Substituir comprovante", en:"Replace receipt", es:"Sustituir comprobante" },
+    "payment.downloadReceipt": { pt:"Baixar comprovante", en:"Download receipt", es:"Descargar comprobante" },
+    "payment.noReceiptYet": { pt:"Ainda sem comprovante anexado.", en:"No receipt attached yet.", es:"Aún sin comprobante adjunto." },
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
@@ -3575,8 +3638,10 @@
     "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
     "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
     "portal.codeConfirm": { pt:"Entrar", en:"Enter", es:"Entrar" },
+    "portal.copyAccess": { pt:"Copiar Acesso", en:"Copy Access", es:"Copiar Acceso" },
     "portal.createdOn": { pt:"Criado em", en:"Created on", es:"Creado el" },
     "portal.openRoute": { pt:"Abrir Rota →", en:"Open Route →", es:"Abrir Ruta →" },
+    "portal.location": { pt:"Localização", en:"Location", es:"Ubicación" },
     "portal.signedOn": { pt:"Assinado em", en:"Signed on", es:"Firmado el" },
     "portal.briefingAnswered": { pt:"Respostas preenchidas", en:"Answers filled in", es:"Respuestas completadas" },
     "portal.briefingPending": { pt:"Ainda por preencher", en:"Not filled in yet", es:"Aún sin completar" },
@@ -3594,8 +3659,6 @@
     "payment.fileTooLarge": { pt:"Arquivo muito grande. O limite é 15 MB.", en:"File too large. The limit is 15 MB.", es:"Archivo demasiado grande. El límite es 15 MB." },
     "payment.receiptSent": { pt:"Comprovante enviado. Aguardando confirmação.", en:"Receipt sent. Awaiting confirmation.", es:"Comprobante enviado. Esperando confirmación." },
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
-    "history.receiptRequested": { pt:"Comprovante solicitado: ", en:"Receipt requested: ", es:"Comprobante solicitado: " },
-    "history.clientSentReceipt": { pt:"Cliente enviou comprovante: ", en:"Client sent a receipt: ", es:"El cliente envió un comprobante: " },
     "history.jobArchivedDone": { pt:"Trabalho concluído e arquivado", en:"Job completed and archived", es:"Trabajo concluido y archivado" },
     "history.jobArchivedDeleted": { pt:"Trabalho deletado", en:"Job deleted", es:"Trabajo eliminado" },
     "history.jobRestored": { pt:"Trabalho restaurado do histórico", en:"Job restored from history", es:"Trabajo restaurado del historial" },
@@ -4119,7 +4182,7 @@
     "team.seatsFullSuffix": { pt:" lugares do seu plano. Mude para um plano superior para adicionar mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
     "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
-    "collab.sectionTitle": { pt:"Colaboradores Externos", en:"External Collaborators", es:"Colaboradores Externos" },
+    "collab.sectionTitle": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
     "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
     "collab.bulkApply": { pt:"Aplicar em massa", en:"Apply in bulk", es:"Aplicar en masa" },
     "collab.role": { pt:"Função", en:"Role", es:"Función" },
@@ -4130,7 +4193,7 @@
     "collab.permLevel.reader": { pt:"Leitor", en:"Reader", es:"Lector" },
     "collab.permLevel.editor": { pt:"Editor", en:"Editor", es:"Editor" },
     "collab.permLevel.admin": { pt:"Administrador", en:"Administrator", es:"Administrador" },
-    "collab.add": { pt:"Convidar colaborador", en:"Invite collaborator", es:"Invitar colaborador" },
+    "collab.add": { pt:"+ Adicionar", en:"+ Add", es:"+ Añadir" },
     "collab.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
     "collab.none": { pt:"Sem colaboradores externos neste trabalho.", en:"No external collaborators on this job.", es:"Sin colaboradores externos en este trabajo." },
     "collab.title": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
@@ -4255,8 +4318,6 @@
     "toast.prefsSaved": { pt:"Preferências guardadas", en:"Preferences saved", es:"Preferencias guardadas" },
     "toast.preparingPdf": { pt:"Preparando o PDF…", en:"Preparing the PDF…", es:"Preparando el PDF…" },
     "toast.profilePhotoUpdated": { pt:"Foto de perfil atualizada.", en:"Profile photo updated.", es:"Foto de perfil actualizada." },
-    "toast.proofLinkSent": { pt:"Link de comprovante enviado ao cliente (simulado).", en:"Proof link sent to the client (simulated).", es:"Enlace de comprobante enviado al cliente (simulado)." },
-    "toast.proofReceived": { pt:"Comprovante recebido — confirma para resolver.", en:"Proof received — confirm to resolve.", es:"Comprobante recibido — confirma para resolver." },
     "toast.quickMode": { pt:" · modo rápido", en:" · quick mode", es:" · modo rápido" },
     "toast.ratingSaved": { pt:"Avaliação guardada.", en:"Rating saved.", es:"Valoración guardada." },
     "toast.referenceSaved": { pt:"Referência guardada.", en:"Reference saved.", es:"Referencia guardada." },
@@ -5353,11 +5414,31 @@
     trabalhoGoto(2);
     renderModeloEscolhidoWizard();
   }
+  /* Job para o qual estamos escolhendo um contrato a partir do card
+     "Selecionar Contrato" (Portal Operacional) — ver abrirSelecionarContratoJob.
+     Quando definido, os fluxos de biblioteca/modelo/duplicar geram o
+     contrato diretamente neste trabalho em vez de um modelo solto. */
+  let contratoParaJobId=null;
+  function abrirBuilderParaSelecao(modeloOrigem){
+    const alvo=contratoParaJobId;
+    contratoParaJobId=null;
+    closeSheet();
+    abrirBuilder(alvo, modeloOrigem);
+  }
+  /* Card de Contrato do Portal Operacional: sem contrato, o único ponto de
+     entrada é escolher um modelo da biblioteca/próprio — nunca "criar vazio"
+     ou "anexar arquivo" (isso já é decidido na criação do trabalho). */
+  function abrirSelecionarContratoJob(id){
+    contratoParaJobId=id;
+    twEmWizard=false;
+    openSheet();
+    pushPanel('contrato');
+  }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -5369,7 +5450,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    closeSheet(); abrirBuilder(null, { client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -5994,7 +6075,7 @@
     showToast(t('toast.clientAddedPrefix')+nome+t('toast.clientAddedSuffix'));
   }
   let criandoTrabalho=false;
-  function trabalhoCreate(){
+  async function trabalhoCreate(){
     /* guarda contra duplo-toque/duplo-clique — sem isto, um toque duplo no botão
        "Criar trabalho" (comum em ecrãs touch, sobretudo com alguma lentidão de rede)
        criava dois registos quase idênticos, cada um com o seu próprio card e as
@@ -6088,13 +6169,18 @@
     jobsData[id]=job;
     renderJobCard(job);
     saveJobsData();
-    twColaboradoresExternosPendentes.forEach(p=>finalizarColaboradorExternoPendente(job, p));
+    /* Espera as inserções de colaboradores terminarem ANTES de abrir o
+       Portal Operacional — sem isto, o card de Colaboradores fazia a sua
+       leitura antes das linhas existirem no Supabase (condição de corrida)
+       e mostrava "sem colaboradores" mesmo tendo sido adicionados na
+       criação do trabalho. */
+    await Promise.all(twColaboradoresExternosPendentes.map(p=>finalizarColaboradorExternoPendente(job, p)));
     closeSheet();
     showToast(t('toast.jobCreated')+' '+nomeTrabalho+'.');
     openJob(id);
     resetTrabalho();
   }
-  function finalizarColaboradorExternoPendente(job, p){
+  async function finalizarColaboradorExternoPendente(job, p){
     const briefing = p.permissoes.briefing && job.briefing ? {perguntas:job.briefing.perguntas||[], observacoes:''} : null;
     const datas = p.permissoes.datas ? {date:job.date, local:job.local} : null;
     const contrato = p.permissoes.contrato ? {status:job.contract.status} : null;
@@ -6109,23 +6195,22 @@
         jobNome: job.nome||job.typeLabel, jobCliente: job.client },
       acordo: p.acordo, entregas: [], status: semConta?'convidado':'ativo'
     };
-    sb.from('external_collaborators').insert(row).then(({error})=>{
-      if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
-      const jobNome = job.nome||job.typeLabel;
-      const remetente = perfilData.nome||t('defaults.userName');
-      const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
-      const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
-      if(semConta){
-        const link=window.location.origin+'/?colab='+token;
-        dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
-          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
-          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
-      } else {
-        dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
-          eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
-          bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
-      }
-    });
+    const { error } = await sb.from('external_collaborators').insert(row);
+    if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
+    const jobNome = job.nome||job.typeLabel;
+    const remetente = perfilData.nome||t('defaults.userName');
+    const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+    const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+    if(semConta){
+      const link=window.location.origin+'/?colab='+token;
+      dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+    } else {
+      dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
+    }
   }
   function gerarDatasEventoICS(job){
     if(!job.dateRaw) return null;
@@ -6699,11 +6784,11 @@
     return { perguntas:[], respondido:false, pessoasImportantes:[], cronograma:[], observacoes:'', prazo: job.dateRaw||null };
   }
   function gerarEstadoInformacoesCliente(job){
-    if(job.contract.status!=='assinado' && job.contract.status!=='enviado') return 'Não enviado';
-    if(job.briefing.respondido) return 'Concluído';
-    if(job.briefing.prazo && diasEntre(job.briefing.prazo)<0) return 'Prazo expirado';
+    if(job.contract.status!=='assinado' && job.contract.status!=='enviado') return statusEmoji('pending')+' Não enviado';
+    if(job.briefing.respondido) return statusEmoji('done')+' Concluído';
+    if(job.briefing.prazo && diasEntre(job.briefing.prazo)<0) return statusEmoji('late')+' Prazo expirado';
     const temAlgo = (job.briefing.cronograma&&job.briefing.cronograma.length) || (job.briefing.pessoasImportantes&&job.briefing.pessoasImportantes.length) || (job.briefing.observacoes&&job.briefing.observacoes.trim());
-    return temAlgo ? 'Parcialmente preenchido' : 'Aguardando preenchimento';
+    return temAlgo ? (statusEmoji('progress')+' Parcialmente preenchido') : (statusEmoji('pending')+' Aguardando preenchimento');
   }
   const CHECKLIST_ITENS_DEFAULT=['checklist.item.finalMaterial','checklist.item.sendToClient','checklist.item.confirmReceipt'];
   function gerarChecklist(job){
@@ -7042,11 +7127,7 @@
   function duplicarContratoDoTrabalho(jobId){
     const origem=jobsData[jobId];
     if(!origem) return;
-    builderContext=null;
-    builderModeloOrigem={ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) };
-    closeSheet();
-    renderBuilder();
-    go('builder');
+    abrirBuilderParaSelecao({ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
   function guardarBuilderContexto(){
@@ -7093,11 +7174,7 @@
       showToast(t('toast.templateImported'));
       return;
     }
-    builderContext=null;
-    builderModeloOrigem={ client:'', blocks };
-    closeSheet();
-    renderBuilder();
-    go('builder');
+    abrirBuilderParaSelecao({ client:'', blocks });
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
@@ -7222,127 +7299,54 @@
   const ICON_LINK=iconWrap('<path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/>');
   const ICON_MAIL=iconWrap('<rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="m4 7 8 6 8-6"/>');
   const ICON_PIN='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7.6 2 4 5.6 4 10c0 6.2 7 11.4 7.5 11.8a.8.8 0 0 0 1 0C13 21.4 20 16.2 20 10c0-4.4-3.6-8-8-8Z"/><circle cx="12" cy="10" r="2.7" fill="#fff"/></svg>';
-  function mapVisualSvg(){
-    return '<svg class="bg" viewBox="0 0 320 104" preserveAspectRatio="none">'+
-      '<path d="M-10 78 C 50 50, 110 92, 180 64 S 300 30, 340 50" stroke="#CFC8B8" stroke-width="9" fill="none"/>'+
-      '<path d="M30 -10 C 55 35, 20 70, 70 114" stroke="#CFC8B8" stroke-width="6" fill="none"/>'+
-      '<path d="M240 -10 C 230 30, 270 50, 250 104" stroke="#D8D2C4" stroke-width="5" fill="none"/>'+
-      '<circle cx="252" cy="26" r="2.6" fill="#BDB6A4"/><circle cx="272" cy="80" r="2.6" fill="#BDB6A4"/>'+
-      '<circle cx="58" cy="30" r="2.6" fill="#BDB6A4"/><circle cx="110" cy="20" r="2.6" fill="#BDB6A4"/>'+
-      '</svg>';
-  }
+  /* Mapa minimalista (CartoDB Positron/Dark Matter — tons de cinza, sem
+     cores vivas), via Leaflet carregado por CDN. Substitui o antigo iframe
+     do embed.html do OpenStreetMap, que trazia sempre o "Report a problem" /
+     "Make a donation" / "OpenStreetMap terms" — chrome técnico da API que
+     não faz sentido dentro do produto. A atribuição legal (obrigatória)
+     fica, mas reduzida a um texto discreto no canto do mapa. */
   function mapCardHtml(job){
     const local=job.local;
     if(!local) return '';
     const enderecoBusca=job.localCompleto||local;
     const rotaUrl=linkRotaInteligente(job);
-    if(job.geo && job.geo.lat){
-      const lat=job.geo.lat, lon=job.geo.lon, d=0.0035;
-      const bbox=(lon-d)+'%2C'+(lat-d)+'%2C'+(lon+d)+'%2C'+(lat+d);
-      const embedUrl='https://www.openstreetmap.org/export/embed.html?bbox='+bbox+'&layer=mapnik&marker='+lat+'%2C'+lon;
-      return '<div class="map-card">'+
-        '<iframe class="map-real" src="'+embedUrl+'" loading="lazy" referrerpolicy="no-referrer-when-downgrade" style="width:100%;height:148px;border:0;display:block"></iframe>'+
-        '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
-        '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
-      '</div>';
-    }
+    const mapId='mapa-card-'+Math.random().toString(36).slice(2,9);
+    const temGeo = job.geo && job.geo.lat!=null;
     return '<div class="map-card">'+
-      '<div class="map-visual">'+mapVisualSvg()+'<div class="map-tag">Localização</div><div class="map-pin">'+ICON_PIN+'</div></div>'+
-      '<div class="map-info"><div class="map-addr">'+escapeHtml(local)+'</div>'+
+      (temGeo
+        ? '<div class="map-leaflet" id="'+mapId+'" data-lat="'+job.geo.lat+'" data-lon="'+job.geo.lon+'"></div>'
+        : '<div class="map-visual"><div class="map-tag">'+t('portal.location')+'</div><div class="map-pin">'+ICON_PIN+'</div></div>')+
+      '<div class="map-info"><div class="map-addr">'+escapeHtml(enderecoBusca)+'</div>'+
       '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
     '</div>';
+  }
+  /* Chamar depois de inserir HTML com mapCardHtml() no DOM (mesmo padrão de
+     setTimeout(inicializarCanvasAssinatura,30) já usado no resto do app). */
+  function inicializarMapasCard(){
+    if(typeof L==='undefined') return;
+    document.querySelectorAll('.map-leaflet:not([data-init])').forEach(el=>{
+      el.setAttribute('data-init','1');
+      const lat=parseFloat(el.dataset.lat), lon=parseFloat(el.dataset.lon);
+      if(isNaN(lat)||isNaN(lon)) return;
+      const escuro=document.documentElement.getAttribute('data-theme')==='dark';
+      const map=L.map(el, {zoomControl:false, dragging:false, scrollWheelZoom:false, doubleClickZoom:false, boxZoom:false, keyboard:false, touchZoom:false, attributionControl:true});
+      map.setView([lat,lon], 15);
+      L.marker([lat,lon]).addTo(map);
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/'+(escuro?'dark_all':'light_all')+'/{z}/{x}/{y}{r}.png', {
+        maxZoom:19, attribution:'© OpenStreetMap, © CARTO'
+      }).addTo(map);
+      map.attributionControl.setPrefix(false);
+    });
   }
 
   function contractStatusTagHtml(job){
     const assinado = job.contract.status==='assinado';
-    return '<span class="sig-tag '+(assinado?'green':'yellow')+'">'+(assinado?t('contract.tagSigned'):t('contract.tagPending'))+'</span>';
+    return '<span class="sig-tag '+(assinado?'green':'yellow')+'">'+statusEmoji(assinado?'done':'pending')+' '+(assinado?t('contract.tagSigned'):t('contract.tagPending'))+'</span>';
   }
 
   function forcarContratoJob(jobId){
     jobsData[jobId].contract.forceShow=true;
     renderJobDetailDynamic(jobId);
-  }
-  function criarContratoVazioParaJob(id){
-    const job=jobsData[id];
-    job.contract.blocks=Object.keys(blocoNomes).map(key=>({id:genId(), key, customText:null, on:true}));
-    job.contract.templateName=null;
-    job.contract.status='rascunho';
-    marcarContratoAlterado(job);
-    pushHistory(job,t('toast.contractStarted'));
-    saveJobsData();
-    abrirBuilder(id);
-    showToast(t('toast.contractCreated'));
-  }
-  let anexoContratoFile=null;
-  function abrirAnexarContratoJob(id){
-    anexoContratoFile=null;
-    const refs=Object.values(referenciasData);
-    let html='';
-    if(refs.length){
-      html+='<p style="font-size:12.5px;color:var(--neutral);margin-bottom:10px">'+t('wizard.useReferenceOrUpload')+'</p>';
-      html+=refs.map(r=>'<div class="pick-row" onclick="anexarReferenciaAoJob(\''+id+'\',\''+r.id+'\')"><div><div class="nm">'+escapeHtml(r.nome)+'</div></div></div>').join('');
-      html+='<div class="sheet-divider"></div>';
-    }
-    html+='<div class="field"><label>'+t('field.name')+'</label><input id="anexo-nome" placeholder="'+t('upload.placeholder')+'"></div>';
-    html+='<input type="file" id="anexo-file-input" accept="image/*,.pdf,application/pdf,.txt,text/plain" style="display:none" onchange="onAnexoFileSelected(this)">';
-    html+='<div class="dropzone" id="anexo-dropzone" onclick="document.getElementById(\'anexo-file-input\').click()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg><div class="t">'+t('upload.clickToUploadFile')+'</div><div class="s">'+t('upload.fileTypesImgPdfTxt')+'</div></div>';
-    html+='<div class="filechip" id="anexo-filechip" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span class="nm" id="anexo-filename"></span><span class="x" onclick="resetAnexoFile()">✕</span></div>';
-    html+='<button class="btn primary" style="width:100%;margin-top:10px" onclick="guardarAnexoContratoJob(\''+id+'\')">'+t('action.attach')+'</button>';
-    openInfo(t('job.contract.attach'), html);
-  }
-  function onAnexoFileSelected(input){
-    const file=input.files[0]; if(!file) return;
-    anexoContratoFile=file;
-    document.getElementById('anexo-dropzone').style.display='none';
-    document.getElementById('anexo-filename').textContent=file.name;
-    document.getElementById('anexo-filechip').style.display='flex';
-  }
-  function resetAnexoFile(){
-    anexoContratoFile=null;
-    document.getElementById('anexo-file-input').value='';
-    document.getElementById('anexo-filechip').style.display='none';
-    document.getElementById('anexo-dropzone').style.display='block';
-  }
-  async function guardarAnexoContratoJob(id){
-    const job=jobsData[id];
-    const nomeEl=document.getElementById('anexo-nome');
-    const nome=nomeEl.value.trim();
-    if(!nome){ nomeEl.focus(); showToast(t('toast.nameRequired')); return; }
-    if(!anexoContratoFile){ showToast(t('toast.uploadFileFirst')); return; }
-    let ficheiroDataUrl=null;
-    try{ ficheiroDataUrl=await arquivoParaDataUrlComprimido(anexoContratoFile); }catch(e){}
-    job.contract.anexo={nome, ficheiroNome:anexoContratoFile.name, ficheiroDataUrl, anexadoEm:new Date().toISOString()};
-    pushHistory(job,t('toast.contractAttached')+nome);
-    saveJobsData();
-    closeInfo();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.contractAttached2'));
-  }
-  function anexarReferenciaAoJob(id, refId){
-    const job=jobsData[id]; const r=referenciasData[refId];
-    if(!r) return;
-    job.contract.anexo={nome:r.nome, ficheiroNome:r.ficheiroNome||null, texto:r.texto||null, ficheiroDataUrl:r.ficheiroDataUrl||null, anexadoEm:new Date().toISOString()};
-    pushHistory(job,t('toast.contractAttached')+r.nome);
-    saveJobsData();
-    closeInfo();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.contractAttached2'));
-  }
-  function verAnexoContratoJob(id){
-    const a=jobsData[id].contract.anexo;
-    if(!a) return;
-    let body='';
-    if(a.texto) body+='<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.6">'+escapeHtml(a.texto)+'</p>';
-    if(a.ficheiroDataUrl && a.ficheiroDataUrl.startsWith('data:image/')) body+='<img src="'+a.ficheiroDataUrl+'" style="width:100%;border-radius:11px;margin-top:'+(a.texto?'12px':'0')+'">';
-    else if(a.ficheiroNome) body+='<p style="font-size:13px;color:var(--neutral);margin-top:'+(a.texto?'12px':'0')+'">Arquivo: '+escapeHtml(a.ficheiroNome)+'</p>';
-    if(!body) body='<p style="font-size:13px;color:var(--neutral)">Sem conteúdo.</p>';
-    openInfo(a.nome, body);
-  }
-  function removerAnexoContratoJob(id){
-    delete jobsData[id].contract.anexo;
-    saveJobsData();
-    renderJobDetailDynamic(id);
-    showToast(t('toast.attachmentRemoved'));
   }
   function marcarContratoAlterado(job){
     const d=new Date();
@@ -7358,6 +7362,7 @@
     job.contract.link = window.location.origin + '/?portal=' + token;
     job.contract.codigoAcesso = gerarCodigoAcessoPortal();
     job.contract.status='enviado';
+    job.contract.enviadoEm = new Date().toLocaleDateString(jsLocale(), {day:'2-digit',month:'2-digit',year:'numeric'});
     job.paymentMethods = metodosSelecionados || [];
     pushHistory(job,t('toast.contractGenerated'));
     saveJobsData(); updateJobCard(jobId);
@@ -7816,14 +7821,14 @@
     } else {
       openInfo(t('portal.shareTitle'), `
         <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('portal.resendEmail')}</button>
-        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('job.contract.copyLink')}</button>`);
+        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('portal.copyAccess')}</button>`);
     }
   }
   function abrirCopiarMensagemPortal(id){
     const job=jobsData[id];
     if(!job) return;
     const msg=construirMensagemPortalCliente(job);
-    openInfo(t('job.contract.copyLink'), `
+    openInfo(t('portal.copyAccess'), `
       <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
       <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical">${escapeHtml(msg)}</textarea>
       <button class="btn primary" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
@@ -7856,6 +7861,32 @@
     showToast(t('recur.stopped'));
   }
 
+  /* Indicador de status único para toda a aplicação — Contrato, Briefing,
+     Timeline, Pagamentos, Entregas, Aprovações usam sempre os mesmos 4
+     estados. */
+  const STATUS_EMOJI={done:'🟢', progress:'🔵', pending:'🟡', late:'🔴'};
+  function statusEmoji(status){ return STATUS_EMOJI[status]||STATUS_EMOJI.pending; }
+  /* Card de Timeline do Portal Operacional — mesmo motor da timeline
+     bidirecional do Portal do Cliente (construirTimelineBidirecional), para
+     nunca haver duas versões divergentes do mesmo progresso. Cada item
+     segue sempre a ordem: Status, Título, Descrição, Data, Ação. */
+  function timelineCardHtml(job){
+    const passos=construirTimelineBidirecional(job);
+    if(!passos.length) return '';
+    let html='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
+    passos.forEach((p,i)=>{
+      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line"></div>':'')+
+        '<div class="tl-dot-status">'+statusEmoji(p.status)+'</div>'+
+        '<div class="tl-body">'+
+          '<div class="t">'+escapeHtml(p.label)+'</div>'+
+          (p.desc?'<div class="m">'+escapeHtml(p.desc)+'</div>':'')+
+          (p.data?'<div class="tl-date">'+escapeHtml(p.data)+'</div>':'')+
+          (p.acaoLabel?'<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
+        '</div></div>';
+    });
+    html+='</div></div>';
+    return html;
+  }
   function renderJobDetailDynamic(id){
     const job=jobsData[id];
     document.getElementById('d-title').textContent=job.nome||job.typeLabel;
@@ -7906,35 +7937,18 @@
         html+='<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'+t('wizard.quickHint')+'</p>';
         html+='<button class="btn ghost" onclick="forcarContratoJob(\''+id+'\')">'+t('job.contract.addAnyway')+'</button>';
       } else {
-        html+='<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'+t('job.contract.missing')+'</p>';
-        if(job.contract.anexo){
-          const a=job.contract.anexo;
-          html+='<div class="struct-row"><div class="struct-l" style="cursor:pointer" onclick="verAnexoContratoJob(\''+id+'\')"><div class="nm">'+escapeHtml(a.nome)+'</div><span class="sub">'+(a.ficheiroNome?escapeHtml(a.ficheiroNome):'texto colado')+'</span></div>'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="event.stopPropagation();removerAnexoContratoJob(\''+id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>';
-        }
-        html+='<div style="display:flex;gap:8px;margin-top:10px">';
-        html+='<button class="btn soft" style="flex:1" onclick="criarContratoVazioParaJob(\''+id+'\')">'+t('job.contract.create')+'</button>';
-        html+='<button class="btn soft" style="flex:1" onclick="abrirAnexarContratoJob(\''+id+'\')">'+(job.contract.anexo?t('job.contract.replace'):t('job.contract.attach'))+'</button>';
-        html+='</div>';
+        html+='<button class="btn primary" style="width:100%" onclick="abrirSelecionarContratoJob(\''+id+'\')">'+t('job.contract.select')+'</button>';
       }
-    } else if(job.contract.status==='rascunho'){
-      html+=contractSummaryHtml(job);
-      html+='<div style="display:flex;gap:8px;margin-top:10px">';
-      html+='<button class="btn soft" style="flex:1" onclick="abrirBuilder(\''+id+'\')">'+t('action.edit')+' '+t('job.contract')+'</button>';
-      html+='<button class="btn primary" style="flex:1" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+    } else {
+      // rascunho / enviado / assinado: resumo único (modelo, status, datas) + Ver Contrato
+      html+='<div style="font-size:13.5px;line-height:1.85;margin-bottom:10px">';
+      html+='<div><span style="color:var(--neutral)">'+t('resumo.contractTemplate')+':</span> '+escapeHtml(job.contract.templateName||t('job.contract.custom'))+'</div>';
+      if(job.contract.enviadoEm) html+='<div><span style="color:var(--neutral)">'+t('job.contract.sentOn')+':</span> '+job.contract.enviadoEm+'</div>';
+      if(job.contract.signedAt) html+='<div><span style="color:var(--neutral)">'+t('portal.signedOn')+':</span> '+job.contract.signedAt+'</div>';
       html+='</div>';
-    } else if(job.contract.status==='enviado'){
-      html+=contractSummaryHtml(job);
-      html+='<button class="btn soft" style="width:100%;margin-top:10px" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.newLink')+'</button>';
-      html+='<div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">';
-      html+='<button class="btn ghost" style="flex:1" onclick="copiarLinkContrato(\''+id+'\')">'+ICON_LINK+' '+t('job.contract.copyLink')+'</button>';
-      html+='<button class="btn ghost" style="flex:1" onclick="enviarPorEmail(\''+id+'\')">'+ICON_MAIL+' '+t('job.contract.email')+'</button>';
-      html+='</div>';
-      html+='<button class="btn ghost" style="width:100%;margin-top:8px;text-align:center" onclick="abrirComoClienteSimulado(\''+id+'\')">'+t('job.preview')+'</button>';
-    } else if(job.contract.status==='assinado'){
-      html+=contractSummaryHtml(job);
-      html+='<p style="font-size:13px;color:var(--ink);margin:10px 0 6px">'+t('job.contract.signedByPrefix2')+escapeHtml(job.contract.signerName)+' · '+job.contract.signedAt+'</p>';
-      html+='<button class="btn soft" style="width:100%;margin-top:4px" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
+      html+='<button class="btn soft" style="width:100%" onclick="abrirBuilder(\''+id+'\')">'+t('job.contract.view')+'</button>';
+      if(job.contract.status==='rascunho') html+='<button class="btn primary" style="width:100%;margin-top:8px" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+      if(job.contract.status==='assinado') html+='<button class="btn ghost" style="width:100%;margin-top:8px" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
     }
     html+='</div></div>';
 
@@ -7973,21 +7987,11 @@
       html+='</div></div>';
     }
 
-    if(job.milestones.length){
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
-      job.milestones.forEach(ms=>{
-        const dotClass= ms.status==='feito'?'tl-dot done':(ms.status==='pendente'?'tl-dot now':'tl-dot');
-        const inner= ms.status==='feito'? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'';
-        const podeMarcar = ms.status!=='feito' && (ms.key==='principal' || ms.key==='entrega');
-        const acao = podeMarcar ? '<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:5px" onclick="marcarMilestoneFeito(\''+id+'\',\''+ms.key+'\')">'+t('action.markDone')+'</button>' : '';
-        html+='<div class="tl"><div class="tl-line"></div><div class="'+dotClass+'">'+inner+'</div><div class="tl-body"><div class="t">'+ms.t+'</div><div class="m">'+ms.m+'</div>'+acao+'</div></div>';
-      });
-      html+='</div></div>';
-    }
+    html+=timelineCardHtml(job);
 
     if(job.payments.length){
       const pend=job.payments.filter(p=>p.status!=='pago').length;
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? pend+' pendente'+(pend>1?'s':'') : 'tudo pago')+'</div></div><div class="sec-body" style="display:block">';
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? (statusEmoji('pending')+' '+pend+' pendente'+(pend>1?'s':'')) : (statusEmoji('done')+' tudo pago'))+'</div></div><div class="sec-body" style="display:block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
@@ -8002,17 +8006,18 @@
         }
         html+='</div>';
       }
+      const hojeIso=new Date().toISOString().slice(0,10);
       job.payments.forEach((p,i)=>{
-        const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):t('payment.statusPending'));
-        const statusCor = p.status==='pago'?'var(--done)':(p.status==='a_confirmar'?'var(--pend)':'var(--late)');
+        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso;
+        const pStatus = p.status==='pago'?'done':(p.status==='a_confirmar'?'progress':(atrasada?'late':'pending'));
+        const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px">';
-        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
-        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">Vence: '+vencTxt+'</span><span style="color:'+statusCor+';font-weight:600">'+statusTxt+'</span></div>';
-        if(p.status==='pendente'){
-          html+='<div style="display:flex;gap:6px;margin-top:2px"><button class="btn ghost" style="padding:7px 9px;font-size:11.5px" onclick="pedirComprovativo(\''+id+'\','+i+')">'+t('job.payments.requestProof')+'</button><button class="btn soft" style="padding:7px 11px;font-size:12px" onclick="marcarPagoDynamic(\''+id+'\','+i+')">'+t('job.payments.markPaid')+'</button></div>';
-        } else if(p.status==='a_confirmar'){
-          html+='<button class="btn primary" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="marcarPagoDynamic(\''+id+'\','+i+')">'+t('job.payments.confirmReceipt')+'</button>';
+        const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
+        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px;cursor:pointer" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
+        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span><span style="font-weight:600">'+statusTxt+'</span></div>';
+        if(p.status!=='pago'){
+          html+='<button class="btn soft" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
         html+='</div>';
       });
@@ -8041,6 +8046,7 @@
 
     document.getElementById('detalhe-dynamic').innerHTML=html;
     carregarColaboradoresJob(id);
+    setTimeout(inicializarMapasCard, 30);
   }
   function toggleChecklistItem(jobId, i, el){
     const job=jobsData[jobId];
@@ -8091,10 +8097,12 @@
     const wrap=document.getElementById('colab-lista-'+jobId);
     if(!wrap) return;
     const lista=colaboradoresCache[jobId]||[];
-    wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.email)+'</div><span class="sub">'+papelNomeColaborador(c.nivel_acesso)+(c.acordo&&c.acordo.modelo?(c.acordo.assinado?' · '+t('collab.agreementSigned'):' · '+t('collab.agreementPending')):'')+'</span></div>'+
-      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
+    wrap.innerHTML = lista.length ? lista.map(c=>{
+      const permissaoLabel = (PERMISSOES_CONTRATO_COLAB.find(x=>x[0]===(c.permissao||'leitor'))||[])[1];
+      const linhas=[t('collab.role')+': '+(c.funcao||'—'), t('collab.permission')+': '+(permissaoLabel?t(permissaoLabel):'—')];
+      return '<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(c.email)+'</div><span class="sub">'+linhas.join(' · ')+(c.acordo&&c.acordo.modelo?(c.acordo.assinado?' · '+t('collab.agreementSigned'):' · '+t('collab.agreementPending')):'')+'</span></div>'+
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
   }
   async function removerColaboradorExterno(id, jobId){
     const { error } = await sb.from('external_collaborators').update({status:'removido'}).eq('id',id);
@@ -8582,20 +8590,43 @@
       dot.textContent = total>99 ? '99+' : String(total);
     });
   }
-  function pedirComprovativo(jobId, i){
+  /* Detalhe da parcela — visualizar/baixar/substituir comprovante. Deixou de
+     ser um botão permanente no card (poluição visual); só aparece ao abrir
+     esta ficha. */
+  function abrirDetalheParcela(jobId, i){
+    const job=jobsData[jobId]; const p=job.payments[i];
+    if(!p) return;
+    const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
+    const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
+    let html='<div style="font-size:13.5px;line-height:1.85;margin-bottom:12px">';
+    html+='<div><span style="color:var(--neutral)">'+t('job.value')+':</span> '+fmtMoney(p.amount)+'</div>';
+    html+='<div><span style="color:var(--neutral)">'+t('payment.dueOn')+':</span> '+vencTxt+'</div>';
+    if(pagoTxt) html+='<div><span style="color:var(--neutral)">'+t('payment.paidOn')+':</span> '+pagoTxt+'</div>';
+    html+='</div>';
+    const temComprovante = p.comprovativo && p.comprovativo.startsWith('data:');
+    if(temComprovante){
+      if(p.comprovativo.startsWith('data:image/')) html+='<img src="'+p.comprovativo+'" style="width:100%;border-radius:11px;margin-bottom:12px">';
+      html+='<a href="'+p.comprovativo+'" download class="btn soft" style="width:100%;display:block;text-align:center;margin-bottom:8px">'+t('payment.downloadReceipt')+'</a>';
+    } else {
+      html+='<p style="font-size:13px;color:var(--neutral);margin-bottom:12px">'+t('payment.noReceiptYet')+'</p>';
+    }
+    html+='<input type="file" id="detalhe-parc-file" accept="image/*,.pdf" style="display:none" onchange="substituirComprovanteParcela(\''+jobId+'\','+i+')">';
+    html+='<button class="btn ghost" style="width:100%" onclick="document.getElementById(\'detalhe-parc-file\').click()">'+t('payment.replaceReceipt')+'</button>';
+    if(p.status!=='pago') html+='<button class="btn primary" style="width:100%;margin-top:8px" onclick="closeInfo();marcarPagoDynamic(\''+jobId+'\','+i+')">'+t('action.complete')+'</button>';
+    openInfo(t('payment.detailTitle'), html);
+  }
+  async function substituirComprovanteParcela(jobId, i){
+    const fileEl=document.getElementById('detalhe-parc-file');
+    const file=fileEl && fileEl.files[0];
+    if(!file) return;
     const job=jobsData[jobId];
-    job.payments[i].comprovativo='pedido';
-    pushHistory(job, t('history.receiptRequested')+job.payments[i].label);
+    let dataUrl;
+    try{ dataUrl=await arquivoParaDataUrlComprimido(file); }catch(e){ showToast(t('toast.uploadFileFirst')); return; }
+    job.payments[i].comprovativo=dataUrl;
     saveJobsData();
-    showToast(t('toast.proofLinkSent'));
-    setTimeout(()=>{
-      job.payments[i].status='a_confirmar';
-      job.payments[i].comprovativo='recebido';
-      pushHistory(job, t('history.clientSentReceipt')+job.payments[i].label, 'cliente');
-      saveJobsData();
-      renderJobDetailDynamic(jobId);
-      showToast(t('toast.proofReceived'));
-    }, 2600);
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
   }
 
 
