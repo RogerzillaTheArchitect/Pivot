@@ -980,6 +980,11 @@
   .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
   .field input,.field textarea,.field select{width:100%;max-width:100%;border:1px solid var(--line);border-radius:11px;
     padding:11px 13px;font-family:inherit;font-size:14.5px;background:var(--paper);color:var(--ink);outline:none}
+  /* input[type=date]/time renderizam com uma altura nativa ligeiramente
+     diferente de text/number no Chromium (o ícone do calendário tem a sua
+     própria métrica) — isso desalinhava visualmente linhas como Valor+Data
+     mesmo com o mesmo padding. Forçar a mesma altura resolve. */
+  .field input:not([type="checkbox"]):not([type="radio"]),.field select{height:43px;box-sizing:border-box}
   .field input[type="time"],.field input[type="date"],.field input[type="datetime-local"]{min-width:0}
   .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand)}
   .field textarea{resize:vertical;min-height:84px;line-height:1.5}
