@@ -3615,9 +3615,12 @@
     "job.payment.overdueDaysSuffix": { pt:" dias", en:" days", es:" días" },
     "job.payment.paidOnPrefix": { pt:"pago a ", en:"paid on ", es:"pagado el " },
     "job.payments": { pt:"Pagamentos", en:"Payments", es:"Pagos" },
-    "job.payments.confirmReceipt": { pt:"Confirmar receção", en:"Confirm receipt", es:"Confirmar recepción" },
-    "job.payments.markPaid": { pt:"Marcar pago", en:"Mark as paid", es:"Marcar como pagado" },
-    "job.payments.requestProof": { pt:"Pedir comprovante", en:"Request proof", es:"Pedir justificante" },
+    "payment.paidOn": { pt:"Pago em", en:"Paid on", es:"Pagado el" },
+    "payment.dueOn": { pt:"Vencimento", en:"Due on", es:"Vencimiento" },
+    "payment.detailTitle": { pt:"Detalhe da parcela", en:"Installment detail", es:"Detalle de la cuota" },
+    "payment.replaceReceipt": { pt:"Substituir comprovante", en:"Replace receipt", es:"Sustituir comprobante" },
+    "payment.downloadReceipt": { pt:"Baixar comprovante", en:"Download receipt", es:"Descargar comprobante" },
+    "payment.noReceiptYet": { pt:"Ainda sem comprovante anexado.", en:"No receipt attached yet.", es:"Aún sin comprobante adjunto." },
     "job.preview": { pt:"Pré-visualizar Portal do Cliente", en:"Preview Client Portal", es:"Vista previa del portal del cliente" },
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
@@ -3656,8 +3659,6 @@
     "payment.fileTooLarge": { pt:"Arquivo muito grande. O limite é 15 MB.", en:"File too large. The limit is 15 MB.", es:"Archivo demasiado grande. El límite es 15 MB." },
     "payment.receiptSent": { pt:"Comprovante enviado. Aguardando confirmação.", en:"Receipt sent. Awaiting confirmation.", es:"Comprobante enviado. Esperando confirmación." },
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
-    "history.receiptRequested": { pt:"Comprovante solicitado: ", en:"Receipt requested: ", es:"Comprobante solicitado: " },
-    "history.clientSentReceipt": { pt:"Cliente enviou comprovante: ", en:"Client sent a receipt: ", es:"El cliente envió un comprobante: " },
     "history.jobArchivedDone": { pt:"Trabalho concluído e arquivado", en:"Job completed and archived", es:"Trabajo concluido y archivado" },
     "history.jobArchivedDeleted": { pt:"Trabalho deletado", en:"Job deleted", es:"Trabajo eliminado" },
     "history.jobRestored": { pt:"Trabalho restaurado do histórico", en:"Job restored from history", es:"Trabajo restaurado del historial" },
@@ -4317,8 +4318,6 @@
     "toast.prefsSaved": { pt:"Preferências guardadas", en:"Preferences saved", es:"Preferencias guardadas" },
     "toast.preparingPdf": { pt:"Preparando o PDF…", en:"Preparing the PDF…", es:"Preparando el PDF…" },
     "toast.profilePhotoUpdated": { pt:"Foto de perfil atualizada.", en:"Profile photo updated.", es:"Foto de perfil actualizada." },
-    "toast.proofLinkSent": { pt:"Link de comprovante enviado ao cliente (simulado).", en:"Proof link sent to the client (simulated).", es:"Enlace de comprobante enviado al cliente (simulado)." },
-    "toast.proofReceived": { pt:"Comprovante recebido — confirma para resolver.", en:"Proof received — confirm to resolve.", es:"Comprobante recibido — confirma para resolver." },
     "toast.quickMode": { pt:" · modo rápido", en:" · quick mode", es:" · modo rápido" },
     "toast.ratingSaved": { pt:"Avaliação guardada.", en:"Rating saved.", es:"Valoración guardada." },
     "toast.referenceSaved": { pt:"Referência guardada.", en:"Reference saved.", es:"Referencia guardada." },
@@ -8003,17 +8002,18 @@
         }
         html+='</div>';
       }
+      const hojeIso=new Date().toISOString().slice(0,10);
       job.payments.forEach((p,i)=>{
-        const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):t('payment.statusPending'));
-        const statusCor = p.status==='pago'?'var(--done)':(p.status==='a_confirmar'?'var(--pend)':'var(--late)');
+        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso;
+        const pStatus = p.status==='pago'?'done':(p.status==='a_confirmar'?'progress':(atrasada?'late':'pending'));
+        const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px">';
-        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
-        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">Vence: '+vencTxt+'</span><span style="color:'+statusCor+';font-weight:600">'+statusTxt+'</span></div>';
-        if(p.status==='pendente'){
-          html+='<div style="display:flex;gap:6px;margin-top:2px"><button class="btn ghost" style="padding:7px 9px;font-size:11.5px" onclick="pedirComprovativo(\''+id+'\','+i+')">'+t('job.payments.requestProof')+'</button><button class="btn soft" style="padding:7px 11px;font-size:12px" onclick="marcarPagoDynamic(\''+id+'\','+i+')">'+t('job.payments.markPaid')+'</button></div>';
-        } else if(p.status==='a_confirmar'){
-          html+='<button class="btn primary" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="marcarPagoDynamic(\''+id+'\','+i+')">'+t('job.payments.confirmReceipt')+'</button>';
+        const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
+        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px;cursor:pointer" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
+        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span><span style="font-weight:600">'+statusTxt+'</span></div>';
+        if(p.status!=='pago'){
+          html+='<button class="btn soft" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
         html+='</div>';
       });
@@ -8584,20 +8584,43 @@
       dot.textContent = total>99 ? '99+' : String(total);
     });
   }
-  function pedirComprovativo(jobId, i){
+  /* Detalhe da parcela — visualizar/baixar/substituir comprovante. Deixou de
+     ser um botão permanente no card (poluição visual); só aparece ao abrir
+     esta ficha. */
+  function abrirDetalheParcela(jobId, i){
+    const job=jobsData[jobId]; const p=job.payments[i];
+    if(!p) return;
+    const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
+    const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
+    let html='<div style="font-size:13.5px;line-height:1.85;margin-bottom:12px">';
+    html+='<div><span style="color:var(--neutral)">'+t('job.value')+':</span> '+fmtMoney(p.amount)+'</div>';
+    html+='<div><span style="color:var(--neutral)">'+t('payment.dueOn')+':</span> '+vencTxt+'</div>';
+    if(pagoTxt) html+='<div><span style="color:var(--neutral)">'+t('payment.paidOn')+':</span> '+pagoTxt+'</div>';
+    html+='</div>';
+    const temComprovante = p.comprovativo && p.comprovativo.startsWith('data:');
+    if(temComprovante){
+      if(p.comprovativo.startsWith('data:image/')) html+='<img src="'+p.comprovativo+'" style="width:100%;border-radius:11px;margin-bottom:12px">';
+      html+='<a href="'+p.comprovativo+'" download class="btn soft" style="width:100%;display:block;text-align:center;margin-bottom:8px">'+t('payment.downloadReceipt')+'</a>';
+    } else {
+      html+='<p style="font-size:13px;color:var(--neutral);margin-bottom:12px">'+t('payment.noReceiptYet')+'</p>';
+    }
+    html+='<input type="file" id="detalhe-parc-file" accept="image/*,.pdf" style="display:none" onchange="substituirComprovanteParcela(\''+jobId+'\','+i+')">';
+    html+='<button class="btn ghost" style="width:100%" onclick="document.getElementById(\'detalhe-parc-file\').click()">'+t('payment.replaceReceipt')+'</button>';
+    if(p.status!=='pago') html+='<button class="btn primary" style="width:100%;margin-top:8px" onclick="closeInfo();marcarPagoDynamic(\''+jobId+'\','+i+')">'+t('action.complete')+'</button>';
+    openInfo(t('payment.detailTitle'), html);
+  }
+  async function substituirComprovanteParcela(jobId, i){
+    const fileEl=document.getElementById('detalhe-parc-file');
+    const file=fileEl && fileEl.files[0];
+    if(!file) return;
     const job=jobsData[jobId];
-    job.payments[i].comprovativo='pedido';
-    pushHistory(job, t('history.receiptRequested')+job.payments[i].label);
+    let dataUrl;
+    try{ dataUrl=await arquivoParaDataUrlComprimido(file); }catch(e){ showToast(t('toast.uploadFileFirst')); return; }
+    job.payments[i].comprovativo=dataUrl;
     saveJobsData();
-    showToast(t('toast.proofLinkSent'));
-    setTimeout(()=>{
-      job.payments[i].status='a_confirmar';
-      job.payments[i].comprovativo='recebido';
-      pushHistory(job, t('history.clientSentReceipt')+job.payments[i].label, 'cliente');
-      saveJobsData();
-      renderJobDetailDynamic(jobId);
-      showToast(t('toast.proofReceived'));
-    }, 2600);
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
   }
 
 
