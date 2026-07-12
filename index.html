@@ -2183,10 +2183,14 @@
             <input id="entrega-selecao-link" placeholder="Pixieset, Frame.io, Drive, Dropbox…" data-t-placeholder="entrega.materialLinkPlaceholder">
           </div>
 
-          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Permitir Ajustes</div><span class="sub" data-t="entrega.allowAdjustmentsHint">O cliente pode solicitar alterações nos materiais entregues.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
+          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Revisões</div><span class="sub" data-t="entrega.allowAdjustmentsHint">O cliente pode solicitar revisões do material entregue.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
           <div id="entrega-ajustes-wrap" style="display:none;margin-top:8px">
-            <div id="entrega-ajustes-lista"></div>
-            <span class="inline-link" onclick="addAjusteWizard()"><span data-t="entrega.addAdjustment">+ Adicionar Ajuste</span></span>
+            <p class="plabel" style="margin:0 0 9px" data-t="entrega.revisionsQty">Quantidade de Revisões</p>
+            <div style="display:flex;align-items:center;gap:16px">
+              <button type="button" class="btn soft" style="width:40px;height:40px;padding:0;font-size:18px;font-weight:700" onclick="alterarQuantidadeRevisoes(-1)">−</button>
+              <span id="entrega-revisoes-qtd" style="font-size:18px;font-weight:700;min-width:20px;text-align:center">1</span>
+              <button type="button" class="btn soft" style="width:40px;height:40px;padding:0;font-size:18px;font-weight:700" onclick="alterarQuantidadeRevisoes(1)">+</button>
+            </div>
           </div>
 
           <p class="plabel" style="margin:20px 2px 9px" data-t="entrega.deliveryFormat">Formato de Entrega</p>
@@ -3240,11 +3244,10 @@
     "entrega.selectionHint": { pt:"O cliente seleciona os materiais que seguem para edição ou entrega.", en:"The client picks which materials move on to editing or delivery.", es:"El cliente selecciona los materiales que pasan a edición o entrega." },
     "entrega.materialLink": { pt:"Link do Material", en:"Material Link", es:"Enlace del Material" },
     "entrega.materialLinkPlaceholder": { pt:"Pixieset, Frame.io, Drive, Dropbox…", en:"Pixieset, Frame.io, Drive, Dropbox…", es:"Pixieset, Frame.io, Drive, Dropbox…" },
-    "entrega.allowAdjustments": { pt:"Permitir Ajustes", en:"Allow Adjustments", es:"Permitir Ajustes" },
-    "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar alterações nos materiais entregues.", en:"The client can request changes to the delivered materials.", es:"El cliente puede solicitar cambios en los materiales entregados." },
-    "entrega.addAdjustment": { pt:"+ Adicionar Ajuste", en:"+ Add Adjustment", es:"+ Añadir Ajuste" },
-    "entrega.extraDaysShort": { pt:"Dias", en:"Days", es:"Días" },
-    "entrega.adjustmentDefault": { pt:"Ajuste", en:"Adjustment", es:"Ajuste" },
+    "entrega.allowAdjustments": { pt:"Revisões", en:"Revisions", es:"Revisiones" },
+    "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar revisões do material entregue.", en:"The client can request revisions of the delivered material.", es:"El cliente puede solicitar revisiones del material entregado." },
+    "entrega.adjustmentDefault": { pt:"Revisão", en:"Revision", es:"Revisión" },
+    "entrega.revisionsQty": { pt:"Quantidade de Revisões", en:"Number of Revisions", es:"Cantidad de Revisiones" },
     "entrega.deliveryFormat": { pt:"Formato de Entrega", en:"Delivery Format", es:"Formato de Entrega" },
     "entrega.format.digital": { pt:"Download Digital", en:"Digital Download", es:"Descarga Digital" },
     "entrega.format.gallery": { pt:"Galeria Online", en:"Online Gallery", es:"Galería Online" },
@@ -3265,8 +3268,8 @@
     "timeline.contractSigned": { pt:"Contrato assinado", en:"Contract signed", es:"Contrato firmado" },
     "timeline.paymentSent": { pt:"Pagamento enviado", en:"Payment sent", es:"Pago enviado" },
     "timeline.paymentValidated": { pt:"Pagamento validado", en:"Payment validated", es:"Pago validado" },
-    "timeline.adjustmentRequested": { pt:"Ajuste solicitado", en:"Adjustment requested", es:"Ajuste solicitado" },
-    "timeline.adjustmentDone": { pt:"Ajuste concluído", en:"Adjustment done", es:"Ajuste completado" },
+    "timeline.adjustmentRequested": { pt:"Revisão solicitada", en:"Revision requested", es:"Revisión solicitada" },
+    "timeline.adjustmentDone": { pt:"Revisão concluída", en:"Revision done", es:"Revisión completada" },
     "timeline.you": { pt:"Você", en:"You", es:"Usted" },
     "timeline.team": { pt:"Equipe", en:"Team", es:"Equipo" },
     "timeline.done": { pt:"concluído", en:"done", es:"completado" },
@@ -5775,12 +5778,15 @@
     }));
   }
   /* ===== Etapa 5 — Entrega e Aprovação =====
-     Cada funcionalidade (Triagem, Seleção, Ajustes) tem o seu próprio toggle,
-     porque nem todo trabalho usa todas as fases. Os dados ficam disponíveis
-     depois em job.entrega para preencher automaticamente os contratos
-     (ver blocoTextos.entrega em integrarEntregaNoBloco). */
+     Cada funcionalidade (Triagem, Seleção, Revisões) tem o seu próprio
+     toggle, porque nem todo trabalho usa todas as fases. Os dados ficam
+     disponíveis depois em job.entrega para preencher automaticamente os
+     contratos (ver blocoTextos.entrega). Revisões não calcula prazos —
+     cada profissional tem o seu próprio fluxo de trabalho; o sistema só
+     pede quantas rodadas de revisão o trabalho terá. */
+  let entregaRevisoesQtd=1;
   function prepararEtapaEntrega(){
-    if(!document.getElementById('entrega-ajustes-lista').children.length) addAjusteWizard();
+    atualizarDisplayRevisoes();
   }
   function toggleEntregaFase(el, fase){
     el.classList.toggle('on');
@@ -5790,42 +5796,21 @@
     el.classList.toggle('on');
     document.getElementById('entrega-ajustes-wrap').style.display = el.classList.contains('on') ? 'block':'none';
   }
-  /* Na criação, o ajuste só pede Dias Adicionais — o proprietário ainda não
-     tem material pronto, então Nome (auto "Ajuste N") e Link não fazem
-     sentido aqui. O link só é pedido depois, quando a timeline chegar
-     "Aguardando envio para Ajuste N" (ver anexarLinkAjusteJob). */
-  function ajusteWizardRowHtml(i, a){
-    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1fr 0.8fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
-      '<div style="padding-bottom:12px"><span style="font-weight:600;font-size:14px">'+t('entrega.adjustmentDefault')+' '+(i+1)+'</span></div>'+
-      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.extraDaysShort">Dias</label><input class="tw-ajuste-dias" type="number" min="0" step="1" value="'+(a.diasAdicionais!=null?a.diasAdicionais:0)+'"></div>'+
-      '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerAjusteWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
-    '</div>';
+  function alterarQuantidadeRevisoes(delta){
+    entregaRevisoesQtd=Math.max(1, Math.min(20, entregaRevisoesQtd+delta));
+    atualizarDisplayRevisoes();
   }
-  function addAjusteWizard(){
-    const lista=document.getElementById('entrega-ajustes-lista');
-    const i=lista.children.length;
-    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {diasAdicionais:0}));
-    renumerarAjustesWizard();
+  function atualizarDisplayRevisoes(){
+    const el=document.getElementById('entrega-revisoes-qtd');
+    if(el) el.textContent=entregaRevisoesQtd;
   }
-  function removerAjusteWizard(btn){
-    btn.closest('[data-ajuste-row]').remove();
-    renumerarAjustesWizard();
-  }
-  /* Os rótulos "Ajuste N" têm de acompanhar a posição após remover uma
-     linha do meio — senão ficava "Ajuste 1, Ajuste 3" com um buraco. */
-  function renumerarAjustesWizard(){
-    [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].forEach((row,i)=>{
-      row.dataset.ajusteRow=i;
-      const lbl=row.querySelector('span');
-      if(lbl) lbl.textContent=t('entrega.adjustmentDefault')+' '+(i+1);
-    });
-  }
+  /* Gera "Revisão 1".."Revisão N" a partir da quantidade escolhida — o link
+     de cada uma só é pedido depois, quando a timeline chegar "Aguardando
+     envio para Revisão N" (ver abrirAnexarLinkAjuste). */
   function lerAjustesWizard(){
-    return [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].map((row,i)=>({
+    return Array.from({length:entregaRevisoesQtd}, (_,i)=>({
       nome: t('entrega.adjustmentDefault')+' '+(i+1),
-      link: null,
-      diasAdicionais: parseInt(row.querySelector('.tw-ajuste-dias').value,10)||0,
-      status:'pendente', observacoes:null
+      link: null, status:'pendente', observacoes:null
     }));
   }
   function lerEntregaWizard(){
@@ -5847,12 +5832,6 @@
       linkDownload: null,
       entregaFinalConcluida:false
     };
-  }
-  /* Soma os dias adicionais de todos os ajustes já utilizados — usado tanto
-     para mostrar o prazo final atualizado quanto para preencher contratos. */
-  function diasAdicionaisEntrega(entrega){
-    if(!entrega || !entrega.ajustes) return 0;
-    return entrega.ajustes.filter(a=>a.status==='utilizado').reduce((s,a)=>s+(a.diasAdicionais||0),0);
   }
   function trabalhoNext(){
     trabalhoGoto(Math.min(7, trabalhoMoment+1));
@@ -6125,7 +6104,7 @@
     const entregaFases=[];
     if(document.getElementById('entrega-triagem').classList.contains('on')) entregaFases.push(t('entrega.screening'));
     if(document.getElementById('entrega-selecao').classList.contains('on')) entregaFases.push(t('entrega.selection'));
-    if(document.getElementById('entrega-ajustes-toggle').classList.contains('on')) entregaFases.push(document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]').length+' '+t('wizard.installments').toLowerCase());
+    if(document.getElementById('entrega-ajustes-toggle').classList.contains('on')) entregaFases.push(t('entrega.allowAdjustments')+' ('+entregaRevisoesQtd+')');
     if(entregaFases.length) html+=card(t('wizard.step5'), entregaFases.join(', '));
     const entregaFormatoVal=document.getElementById('entrega-formato');
     if(entregaFormatoVal) html+=card(t('entrega.deliveryFormat'), t('entrega.format.'+entregaFormatoVal.value));
@@ -6399,7 +6378,7 @@
     ['entrega-triagem','entrega-selecao','entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
     ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
     ['entrega-triagem-link','entrega-selecao-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-    const ajustesLista=document.getElementById('entrega-ajustes-lista'); if(ajustesLista) ajustesLista.innerHTML='';
+    entregaRevisoesQtd=1; atualizarDisplayRevisoes();
     const entregaFormato=document.getElementById('entrega-formato'); if(entregaFormato) entregaFormato.value='digital';
   }
 
@@ -6936,17 +6915,16 @@
       if(e && (e.dataEntrega || e.formatoEntrega)){
         const formatoLabelMap={digital:'por download digital', galeria:'por galeria online', pendrive:'em pen drive', hd:'em HD externo', album:'em álbum', impressao:'em formato impresso', outro:'conforme combinado'};
         const formato = formatoLabelMap[e.formatoEntrega] || (p&&p.formatoEntrega) || 'por galeria online';
-        const diasExtra = diasAdicionaisEntrega(e);
         let txt = 'O material final é entregue '+formato;
         if(e.dataEntrega){
           const dataFmt = e.dataEntrega.split('-').reverse().join('/');
-          txt += ', com previsão de entrega em '+dataFmt+(diasExtra?(' (podendo ser prorrogada em até '+diasExtra+' dias, conforme ajustes solicitados)'):'')+'.';
+          txt += ', com previsão de entrega em '+dataFmt+'.';
         } else {
           const dias=(p&&p.prazoEntregaDias!=null)?p.prazoEntregaDias:60;
           const marco=(p&&p.marcoEntrega)||'o evento';
           txt += ', em até '+dias+' dias após '+marco+'.';
         }
-        if(e.permiteAjustes && e.ajustes && e.ajustes.length) txt += ' O cliente tem direito a '+e.ajustes.length+' '+(e.ajustes.length===1?'rodada de ajustes':'rodadas de ajustes')+' sobre o material entregue.';
+        if(e.permiteAjustes && e.ajustes && e.ajustes.length) txt += ' O cliente tem direito a '+e.ajustes.length+' '+(e.ajustes.length===1?'rodada de revisão':'rodadas de revisão')+' sobre o material entregue.';
         return txt;
       }
       const dias = (p&&p.prazoEntregaDias!=null) ? p.prazoEntregaDias : 60;
