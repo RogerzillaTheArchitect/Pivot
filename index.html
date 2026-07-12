@@ -5411,7 +5411,6 @@
     twEmWizard=false;
     while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
     showPanel('trabalho');
-    trabalhoGoto(2);
     renderModeloEscolhidoWizard();
   }
   /* Job para o qual estamos escolhendo um contrato a partir do card
@@ -5438,7 +5437,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -5450,7 +5449,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -5878,12 +5877,19 @@
   }
   let _twAddrResults=null;
   let _twAddrLocal=null;
+  /* Endereço já selecionado (com coordenadas) que o utilizador está a
+     complementar — número, bloco, apartamento, sala, lote. Só invalidamos a
+     geolocalização quando o texto deixa de começar por essa base, ou seja,
+     quando é mesmo uma edição substancial e não apenas um complemento. */
+  let twSelectedAddrBase=null;
   function onEnderecoInput(){
-    twSelectedGeo=null;
     const q=document.getElementById('tw-local').value.trim();
+    const complementando = twSelectedAddrBase && q.startsWith(twSelectedAddrBase);
+    if(!complementando){ twSelectedGeo=null; twSelectedAddrBase=null; }
     clearTimeout(twGeoTimer);
     const dd=document.getElementById('tw-addr-dropdown');
     if(q.length<2){ dd.style.display='none'; return; }
+    if(complementando){ dd.style.display='none'; return; }
     dd.style.display='block';
     mostrarSugestoesLocais(q);
     twGeoTimer=setTimeout(()=>buscarEnderecosReais(q), 400);
@@ -5937,14 +5943,18 @@
   function selecionarEnderecoReal(i){
     const r=_twAddrResults[i];
     const completo=montarEnderecoCompleto(r.address||{}, (r.display_name||'').split(',')[0]);
-    document.getElementById('tw-local').value=completo||r.display_name;
+    const valor=completo||r.display_name;
+    document.getElementById('tw-local').value=valor;
     twSelectedGeo={lat:parseFloat(r.lat), lon:parseFloat(r.lon)};
+    twSelectedAddrBase=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
   }
   function selecionarEnderecoLocal(i){
-    document.getElementById('tw-local').value=_twAddrLocal[i];
+    const valor=_twAddrLocal[i];
+    document.getElementById('tw-local').value=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
     twSelectedGeo=null;
+    twSelectedAddrBase=valor;
   }
   document.addEventListener('click', e=>{
     const dd=document.getElementById('tw-addr-dropdown');
@@ -6164,6 +6174,7 @@
     if(twModeloEscolhido){
       job.contract.blocks = twModeloEscolhido.blocks.map(b=>Object.assign({}, b));
       job.contract.templateName = twModeloEscolhido.nome;
+      job.contract.status = 'rascunho';
     }
     pushHistory(job,t('toast.jobCreated')+(trabalhoModo==='rapido'?t('toast.quickMode'):''));
     jobsData[id]=job;
@@ -6259,7 +6270,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -7111,7 +7122,27 @@
     return { id:'__template__', client:(builderModeloOrigem&&builderModeloOrigem.client)||'', typeLabel:'', value:0, date:null, local:'', email:'',
       contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || blocosModeloPadrao() } };
   }
-  function abrirBuilder(jobId, modeloOrigem){ builderContext=jobId||null; builderModeloOrigem=modeloOrigem||null; renderBuilder(); go('builder'); }
+  /* Quando jobId + modeloOrigem vêm juntos (fluxo "Selecionar Contrato" do
+     Portal Operacional), o modelo escolhido tem de ser aplicado ao job de
+     verdade — renderBuilder() só mostra job.contract.blocks como já estão,
+     nunca lia builderModeloOrigem sozinho. Sem isto, o card de Contrato
+     continuava a mostrar "vazio" mesmo depois de escolher um modelo. */
+  function abrirBuilder(jobId, modeloOrigem){
+    builderContext=jobId||null;
+    builderModeloOrigem=modeloOrigem||null;
+    if(jobId && modeloOrigem && modeloOrigem.blocks){
+      const job=jobsData[jobId];
+      if(job){
+        job.contract.blocks = modeloOrigem.blocks.map(b=>Object.assign({}, b));
+        if(modeloOrigem.nome) job.contract.templateName = modeloOrigem.nome;
+        if(job.contract.status==='vazio') job.contract.status='rascunho';
+        marcarContratoAlterado(job);
+        saveJobsData();
+      }
+    }
+    renderBuilder();
+    go('builder');
+  }
   function renderListaDuplicarContrato(){
     const wrap=document.getElementById('dup-contrato-lista');
     if(!wrap) return;
@@ -7127,7 +7158,7 @@
   function duplicarContratoDoTrabalho(jobId){
     const origem=jobsData[jobId];
     if(!origem) return;
-    abrirBuilderParaSelecao({ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
+    abrirBuilderParaSelecao({ client:origem.client, nome:origem.contract.templateName||null, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
   function guardarBuilderContexto(){
@@ -7174,7 +7205,7 @@
       showToast(t('toast.templateImported'));
       return;
     }
-    abrirBuilderParaSelecao({ client:'', blocks });
+    abrirBuilderParaSelecao({ client:'', nome:m.nome, blocks });
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
