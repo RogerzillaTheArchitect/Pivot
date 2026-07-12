@@ -8111,8 +8111,7 @@
     html+=timelineCardHtml(job);
 
     if(job.payments.length){
-      const pend=job.payments.filter(p=>p.status!=='pago').length;
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? (statusEmoji('pending')+' '+pend+' pendente'+(pend>1?'s':'')) : (statusEmoji('done')+' tudo pago'))+'</div></div><div class="sec-body" style="display:block">';
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-body" style="display:block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
@@ -8134,13 +8133,15 @@
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px;cursor:pointer" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
-        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span><span style="font-weight:600">'+statusTxt+'</span></div>';
+        html+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+          '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
+        html+='<div style="display:flex;align-items:center;gap:8px;flex:none">';
+        html+='<span style="font-size:12px;font-weight:600;white-space:nowrap">'+statusTxt+'</span>';
         if(p.status!=='pago'){
-          html+='<button class="btn soft" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
+          html+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
-        html+='</div>';
+        html+='</div></div>';
       });
       html+='</div></div>';
     }
