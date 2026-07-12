@@ -18,7 +18,7 @@
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
     --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.08); --bg-ice:#0B0B0A; --bg-ice-2:#050504;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58;
-    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --neutral:#B9B9B1; --urgent:#E8C547;
+    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
     --r:20px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
@@ -980,6 +980,11 @@
   .field label{display:block;font-size:12px;font-weight:600;color:var(--ink-soft);margin-bottom:6px}
   .field input,.field textarea,.field select{width:100%;max-width:100%;border:1px solid var(--line);border-radius:11px;
     padding:11px 13px;font-family:inherit;font-size:14.5px;background:var(--paper);color:var(--ink);outline:none}
+  /* input[type=date]/time renderizam com uma altura nativa ligeiramente
+     diferente de text/number no Chromium (o ícone do calendário tem a sua
+     própria métrica) — isso desalinhava visualmente linhas como Valor+Data
+     mesmo com o mesmo padding. Forçar a mesma altura resolve. */
+  .field input:not([type="checkbox"]):not([type="radio"]),.field select{height:43px;box-sizing:border-box}
   .field input[type="time"],.field input[type="date"],.field input[type="datetime-local"]{min-width:0}
   .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand)}
   .field textarea{resize:vertical;min-height:84px;line-height:1.5}
@@ -2186,7 +2191,7 @@
 
           <p class="plabel" style="margin:20px 2px 9px" data-t="entrega.deliveryFormat">Formato de Entrega</p>
           <div class="field">
-            <select id="entrega-formato" onchange="atualizarEntregaFormato()">
+            <select id="entrega-formato">
               <option value="digital" data-t="entrega.format.digital">Download Digital</option>
               <option value="galeria" data-t="entrega.format.gallery">Galeria Online</option>
               <option value="pendrive" data-t="entrega.format.pendrive">Pen Drive</option>
@@ -2195,10 +2200,6 @@
               <option value="impressao" data-t="entrega.format.print">Impressão</option>
               <option value="outro" data-t="entrega.format.other">Outro</option>
             </select>
-          </div>
-          <div class="field" id="entrega-download-link-wrap" style="display:none">
-            <label data-t="entrega.downloadLink">Link de Download</label>
-            <input id="entrega-download-link" placeholder="https://…">
           </div>
           <div class="field">
             <label data-t="entrega.deliveryDate">Data de Entrega</label>
@@ -2671,7 +2672,7 @@
     html += '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 16px">'+t(NIVEIS_COLAB.find(x=>x[0]===d.nivelAcesso)[1])+'</p>';
 
     if (precisaAssinar){
-      html += '<div style="margin-bottom:18px"><h4 style="margin:0 0 8px">'+escapeHtml(MODELOS_ACORDO[d.acordo.modelo]?t(MODELOS_ACORDO[d.acordo.modelo].nomeKey):'')+'</h4>';
+      html += '<div style="margin-bottom:18px"><h4 style="margin:0 0 8px">'+escapeHtml(d.acordo.nome || (MODELOS_ACORDO[d.acordo.modelo]?t(MODELOS_ACORDO[d.acordo.modelo].nomeKey):''))+'</h4>';
       html += '<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap">'+escapeHtml(d.acordo.texto||'')+'</p>';
       html += '<div class="field"><label>'+t('field.name')+'</label><input id="colab-sig-nome" placeholder="Nome e apelido"></div>';
       html += '<div class="field"><label>'+t('signature.instructions')+'</label><div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">'+t('signature.clear')+'</span></div></div>';
@@ -3017,20 +3018,66 @@
       const concluidos=e.ajustes.filter(a=>a.status==='concluido').length;
       passos.push({label:t('timeline.adjustmentRequested'), quem:'cliente', feito: utilizados>0, status: utilizados>0?'done':'pending',
         desc: utilizados>0 ? (utilizados+' '+t('entrega.allowAdjustments').toLowerCase()) : t('timeline.desc.noRequestsYet'), data:null});
+      // Cada ajuste solicitado e ainda sem link precisa que a equipe
+      // disponibilize o material revisado antes de poder ser concluído —
+      // o link só é pedido agora, nunca na criação do trabalho.
+      e.ajustes.forEach((a,idx)=>{
+        if (a.status==='utilizado' && !a.link){
+          passos.push({label:a.nome||(t('entrega.adjustmentDefault')+' '+(idx+1)), quem:'equipe', feito:false, status:'progress',
+            desc: t('timeline.desc.awaitingAdjustmentMaterial'), data:null,
+            acaoLabel: t('entrega.attachMaterialLink'),
+            acaoFn: ('abrirAnexarLinkAjuste(\''+job.id+'\','+idx+')')});
+        }
+      });
       const pendentes=utilizados-concluidos;
+      const todosComLink = e.ajustes.filter(a=>a.status==='utilizado').every(a=>a.link);
       passos.push({label:t('timeline.adjustmentDone'), quem:'equipe', feito: utilizados>0 && pendentes===0, status: (utilizados>0 && pendentes===0)?'done':(utilizados>0?'progress':'pending'),
         desc: concluidos+'/'+utilizados, data:null,
-        acaoLabel: pendentes>0 ? t('action.complete') : null,
-        acaoFn: pendentes>0 ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
+        acaoLabel: (pendentes>0 && todosComLink) ? t('action.complete') : null,
+        acaoFn: (pendentes>0 && todosComLink) ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
     }
     const entregaMs=(job.milestones||[]).find(m=>m.key==='entrega');
     const entregaFeita = entregaMs && entregaMs.status==='feito';
-    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita, status: entregaFeita?'done':'pending',
-      desc: entregaFeita ? t('timeline.desc.delivered') : t('timeline.desc.deliveryPending'),
+    const precisaLinkEntrega = e.formatoEntrega==='digital' && !e.linkDownload;
+    passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita,
+      status: entregaFeita?'done':(precisaLinkEntrega?'progress':'pending'),
+      desc: entregaFeita ? t('timeline.desc.delivered') : (precisaLinkEntrega ? t('timeline.desc.awaitingDeliveryMaterial') : t('timeline.desc.deliveryPending')),
       data: e.dataEntrega ? e.dataEntrega.split('-').reverse().join('/') : null,
-      acaoLabel: !entregaFeita ? t('action.complete') : null,
-      acaoFn: !entregaFeita ? ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')') : null});
+      acaoLabel: entregaFeita ? null : (precisaLinkEntrega ? t('entrega.attachDeliveryLink') : t('action.complete')),
+      acaoFn: entregaFeita ? null : (precisaLinkEntrega ? ('abrirAnexarLinkEntrega(\''+job.id+'\')') : ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')'))});
     return passos;
+  }
+  function abrirAnexarLinkAjuste(jobId, idx){
+    const job=jobsData[jobId]; const a=job.entrega.ajustes[idx];
+    openInfo(t('entrega.attachMaterialLink'), `
+      <div class="field"><label>${t('entrega.materialLink')}</label><input id="link-ajuste-input" placeholder="https://…" value="${escapeHtml(a.link||'')}"></div>
+      <button class="btn primary" style="width:100%" onclick="salvarLinkAjuste('${jobId}',${idx})">${t('action.save')}</button>`);
+  }
+  function salvarLinkAjuste(jobId, idx){
+    const link=(document.getElementById('link-ajuste-input').value||'').trim();
+    if(!link) return;
+    const job=jobsData[jobId];
+    job.entrega.ajustes[idx].link=link;
+    saveJobsData();
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
+  }
+  function abrirAnexarLinkEntrega(jobId){
+    const job=jobsData[jobId];
+    openInfo(t('entrega.attachDeliveryLink'), `
+      <div class="field"><label>${t('entrega.downloadLink')}</label><input id="link-entrega-input" placeholder="https://…" value="${escapeHtml((job.entrega&&job.entrega.linkDownload)||'')}"></div>
+      <button class="btn primary" style="width:100%" onclick="salvarLinkEntrega('${jobId}')">${t('action.save')}</button>`);
+  }
+  function salvarLinkEntrega(jobId){
+    const link=(document.getElementById('link-entrega-input').value||'').trim();
+    if(!link) return;
+    const job=jobsData[jobId];
+    job.entrega.linkDownload=link;
+    saveJobsData();
+    closeInfo();
+    renderJobDetailDynamic(jobId);
+    showToast(t('toast.changesSaved'));
   }
   function concluirAjustesPendentesJob(jobId){
     const job=jobsData[jobId]; if(!job || !job.entrega) return;
@@ -3196,8 +3243,6 @@
     "entrega.allowAdjustments": { pt:"Permitir Ajustes", en:"Allow Adjustments", es:"Permitir Ajustes" },
     "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar alterações nos materiais entregues.", en:"The client can request changes to the delivered materials.", es:"El cliente puede solicitar cambios en los materiales entregados." },
     "entrega.addAdjustment": { pt:"+ Adicionar Ajuste", en:"+ Add Adjustment", es:"+ Añadir Ajuste" },
-    "entrega.adjustmentName": { pt:"Nome do Ajuste", en:"Adjustment Name", es:"Nombre del Ajuste" },
-    "entrega.adjustmentLinkShort": { pt:"Link", en:"Link", es:"Enlace" },
     "entrega.extraDaysShort": { pt:"Dias", en:"Days", es:"Días" },
     "entrega.adjustmentDefault": { pt:"Ajuste", en:"Adjustment", es:"Ajuste" },
     "entrega.deliveryFormat": { pt:"Formato de Entrega", en:"Delivery Format", es:"Formato de Entrega" },
@@ -3209,6 +3254,8 @@
     "entrega.format.print": { pt:"Impressão", en:"Print", es:"Impresión" },
     "entrega.format.other": { pt:"Outro", en:"Other", es:"Otro" },
     "entrega.downloadLink": { pt:"Link de Download", en:"Download Link", es:"Enlace de Descarga" },
+    "entrega.attachMaterialLink": { pt:"Anexar Link do Material", en:"Attach Material Link", es:"Adjuntar Enlace del Material" },
+    "entrega.attachDeliveryLink": { pt:"Anexar Link da Entrega", en:"Attach Delivery Link", es:"Adjuntar Enlace de la Entrega" },
     "entrega.deliveryDate": { pt:"Data de Entrega", en:"Delivery Date", es:"Fecha de Entrega" },
     "entrega.observations": { pt:"Observações", en:"Notes", es:"Observaciones" },
     "entrega.observationsPlaceholder": { pt:"Ex: trocar foto da capa, corrigir cor da cena 4, remover pessoa do fundo…", en:"E.g.: swap the cover photo, fix the color in scene 4, remove a person from the background…", es:"Ej.: cambiar la foto de portada, corregir el color de la escena 4, quitar a una persona del fondo…" },
@@ -3234,6 +3281,8 @@
     "timeline.desc.noRequestsYet": { pt:"Nenhum ajuste solicitado ainda", en:"No adjustment requested yet", es:"Aún no se solicitó ningún ajuste" },
     "timeline.desc.delivered": { pt:"Entregue", en:"Delivered", es:"Entregado" },
     "timeline.desc.deliveryPending": { pt:"Entrega pendente", en:"Delivery pending", es:"Entrega pendiente" },
+    "timeline.desc.awaitingAdjustmentMaterial": { pt:"Aguardando envio do material revisado", en:"Awaiting the revised material", es:"Esperando el material revisado" },
+    "timeline.desc.awaitingDeliveryMaterial": { pt:"Aguardando envio da entrega", en:"Awaiting delivery upload", es:"Esperando el envío de la entrega" },
     "timeline.status.progress": { pt:"Em andamento", en:"In progress", es:"En curso" },
     "timeline.status.late": { pt:"Atrasado", en:"Late", es:"Atrasado" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
@@ -4184,7 +4233,11 @@
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
     "collab.sectionTitle": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
     "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
-    "collab.bulkApply": { pt:"Aplicar em massa", en:"Apply in bulk", es:"Aplicar en masa" },
+    "collab.addContractForCollabs": { pt:"Adicionar Contrato para Colaboradores", en:"Add Contract for Collaborators", es:"Añadir Contrato para Colaboradores" },
+    "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
+    "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
+    "collab.contractAppliedHint": { pt:"O contrato foi aplicado aos colaboradores selecionados.", en:"The contract was applied to the selected collaborators.", es:"El contrato fue aplicado a los colaboradores seleccionados." },
+    "collab.addAnotherContract": { pt:"Adicionar Outro Contrato", en:"Add Another Contract", es:"Añadir Otro Contrato" },
     "collab.role": { pt:"Função", en:"Role", es:"Función" },
     "collab.rolePlaceholder": { pt:"Ex: Fotógrafo, Editor, Assistente…", en:"E.g.: Photographer, Editor, Assistant…", es:"Ej.: Fotógrafo, Editor, Asistente…" },
     "collab.permission": { pt:"Permissão", en:"Permission", es:"Permiso" },
@@ -4246,6 +4299,10 @@
     "collab.agreement.confidentiality": { pt:"Confidencialidade", en:"Confidentiality", es:"Confidencialidad" },
     "collab.agreement.services": { pt:"Prestação de Serviços", en:"Service Agreement", es:"Prestación de Servicios" },
     "collab.agreement.custom": { pt:"Modelo Personalizado", en:"Custom Template", es:"Modelo Personalizado" },
+    "collab.changeContract": { pt:"Trocar contrato", en:"Change contract", es:"Cambiar contrato" },
+    "collab.roleRequired": { pt:"Preencha a função do colaborador.", en:"Fill in the collaborator's role.", es:"Complete la función del colaborador." },
+    "action.remove": { pt:"Remover", en:"Remove", es:"Quitar" },
+    "action.done": { pt:"Concluir", en:"Done", es:"Listo" },
     "collab.invite": { pt:"Convidar Colaborador", en:"Invite Collaborator", es:"Invitar Colaborador" },
     "collab.invited": { pt:"Colaborador adicionado.", en:"Collaborator added.", es:"Colaborador añadido." },
     "collab.agreementSigned": { pt:"acordo assinado", en:"agreement signed", es:"acuerdo firmado" },
@@ -5411,7 +5468,6 @@
     twEmWizard=false;
     while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
     showPanel('trabalho');
-    trabalhoGoto(2);
     renderModeloEscolhidoWizard();
   }
   /* Job para o qual estamos escolhendo um contrato a partir do card
@@ -5420,6 +5476,19 @@
      contrato diretamente neste trabalho em vez de um modelo solto. */
   let contratoParaJobId=null;
   function abrirBuilderParaSelecao(modeloOrigem){
+    if(contratoParaColaboradoresMassaJobId){
+      const jobId=contratoParaColaboradoresMassaJobId;
+      contratoParaColaboradoresMassaJobId=null;
+      closeSheet();
+      abrirAplicarContratoMassa(jobId, modeloOrigem||{blocks:[]});
+      return;
+    }
+    if(contratoParaColaboradorJobId){
+      const jobId=contratoParaColaboradorJobId;
+      contratoParaColaboradorJobId=null;
+      aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem||{blocks:[]});
+      return;
+    }
     const alvo=contratoParaJobId;
     contratoParaJobId=null;
     closeSheet();
@@ -5438,7 +5507,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -5450,7 +5519,7 @@
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -5689,7 +5758,6 @@
      depois em job.entrega para preencher automaticamente os contratos
      (ver blocoTextos.entrega em integrarEntregaNoBloco). */
   function prepararEtapaEntrega(){
-    atualizarEntregaFormato();
     if(!document.getElementById('entrega-ajustes-lista').children.length) addAjusteWizard();
   }
   function toggleEntregaFase(el, fase){
@@ -5700,14 +5768,13 @@
     el.classList.toggle('on');
     document.getElementById('entrega-ajustes-wrap').style.display = el.classList.contains('on') ? 'block':'none';
   }
-  function atualizarEntregaFormato(){
-    const formato=document.getElementById('entrega-formato').value;
-    document.getElementById('entrega-download-link-wrap').style.display = formato==='digital' ? 'block':'none';
-  }
+  /* Na criação, o ajuste só pede Dias Adicionais — o proprietário ainda não
+     tem material pronto, então Nome (auto "Ajuste N") e Link não fazem
+     sentido aqui. O link só é pedido depois, quando a timeline chegar
+     "Aguardando envio para Ajuste N" (ver anexarLinkAjusteJob). */
   function ajusteWizardRowHtml(i, a){
-    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1.4fr 1.4fr 0.7fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
-      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentName">Nome do Ajuste</label><input class="tw-ajuste-nome" placeholder="'+t('entrega.adjustmentDefault')+' '+(i+1)+'" value="'+escapeHtml(a.nome||'')+'"></div>'+
-      '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.adjustmentLinkShort">Link</label><input class="tw-ajuste-link" placeholder="https://…" value="'+escapeHtml(a.link||'')+'"></div>'+
+    return '<div class="field-row" data-ajuste-row="'+i+'" style="display:grid;grid-template-columns:1fr 0.8fr auto;align-items:flex-end;gap:10px;margin-bottom:8px">'+
+      '<div style="padding-bottom:12px"><span style="font-weight:600;font-size:14px">'+t('entrega.adjustmentDefault')+' '+(i+1)+'</span></div>'+
       '<div class="field" style="margin-bottom:0"><label style="font-size:11px" data-t="entrega.extraDaysShort">Dias</label><input class="tw-ajuste-dias" type="number" min="0" step="1" value="'+(a.diasAdicionais!=null?a.diasAdicionais:0)+'"></div>'+
       '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerAjusteWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
     '</div>';
@@ -5715,15 +5782,26 @@
   function addAjusteWizard(){
     const lista=document.getElementById('entrega-ajustes-lista');
     const i=lista.children.length;
-    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {nome:t('entrega.adjustmentDefault')+' '+(i+1), link:'', diasAdicionais:0}));
+    lista.insertAdjacentHTML('beforeend', ajusteWizardRowHtml(i, {diasAdicionais:0}));
+    renumerarAjustesWizard();
   }
   function removerAjusteWizard(btn){
     btn.closest('[data-ajuste-row]').remove();
+    renumerarAjustesWizard();
+  }
+  /* Os rótulos "Ajuste N" têm de acompanhar a posição após remover uma
+     linha do meio — senão ficava "Ajuste 1, Ajuste 3" com um buraco. */
+  function renumerarAjustesWizard(){
+    [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].forEach((row,i)=>{
+      row.dataset.ajusteRow=i;
+      const lbl=row.querySelector('span');
+      if(lbl) lbl.textContent=t('entrega.adjustmentDefault')+' '+(i+1);
+    });
   }
   function lerAjustesWizard(){
     return [...document.querySelectorAll('#entrega-ajustes-lista [data-ajuste-row]')].map((row,i)=>({
-      nome: row.querySelector('.tw-ajuste-nome').value.trim() || (t('entrega.adjustmentDefault')+' '+(i+1)),
-      link: row.querySelector('.tw-ajuste-link').value.trim() || null,
+      nome: t('entrega.adjustmentDefault')+' '+(i+1),
+      link: null,
       diasAdicionais: parseInt(row.querySelector('.tw-ajuste-dias').value,10)||0,
       status:'pendente', observacoes:null
     }));
@@ -5744,7 +5822,8 @@
       ajustes,
       formatoEntrega: document.getElementById('entrega-formato').value,
       dataEntrega: document.getElementById('entrega-data').value || null,
-      linkDownload: document.getElementById('entrega-formato').value==='digital' ? (document.getElementById('entrega-download-link').value.trim()||null) : null
+      linkDownload: null,
+      entregaFinalConcluida:false
     };
   }
   /* Soma os dias adicionais de todos os ajustes já utilizados — usado tanto
@@ -5878,12 +5957,19 @@
   }
   let _twAddrResults=null;
   let _twAddrLocal=null;
+  /* Endereço já selecionado (com coordenadas) que o utilizador está a
+     complementar — número, bloco, apartamento, sala, lote. Só invalidamos a
+     geolocalização quando o texto deixa de começar por essa base, ou seja,
+     quando é mesmo uma edição substancial e não apenas um complemento. */
+  let twSelectedAddrBase=null;
   function onEnderecoInput(){
-    twSelectedGeo=null;
     const q=document.getElementById('tw-local').value.trim();
+    const complementando = twSelectedAddrBase && q.startsWith(twSelectedAddrBase);
+    if(!complementando){ twSelectedGeo=null; twSelectedAddrBase=null; }
     clearTimeout(twGeoTimer);
     const dd=document.getElementById('tw-addr-dropdown');
     if(q.length<2){ dd.style.display='none'; return; }
+    if(complementando){ dd.style.display='none'; return; }
     dd.style.display='block';
     mostrarSugestoesLocais(q);
     twGeoTimer=setTimeout(()=>buscarEnderecosReais(q), 400);
@@ -5937,14 +6023,18 @@
   function selecionarEnderecoReal(i){
     const r=_twAddrResults[i];
     const completo=montarEnderecoCompleto(r.address||{}, (r.display_name||'').split(',')[0]);
-    document.getElementById('tw-local').value=completo||r.display_name;
+    const valor=completo||r.display_name;
+    document.getElementById('tw-local').value=valor;
     twSelectedGeo={lat:parseFloat(r.lat), lon:parseFloat(r.lon)};
+    twSelectedAddrBase=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
   }
   function selecionarEnderecoLocal(i){
-    document.getElementById('tw-local').value=_twAddrLocal[i];
+    const valor=_twAddrLocal[i];
+    document.getElementById('tw-local').value=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
     twSelectedGeo=null;
+    twSelectedAddrBase=valor;
   }
   document.addEventListener('click', e=>{
     const dd=document.getElementById('tw-addr-dropdown');
@@ -6164,6 +6254,7 @@
     if(twModeloEscolhido){
       job.contract.blocks = twModeloEscolhido.blocks.map(b=>Object.assign({}, b));
       job.contract.templateName = twModeloEscolhido.nome;
+      job.contract.status = 'rascunho';
     }
     pushHistory(job,t('toast.jobCreated')+(trabalhoModo==='rapido'?t('toast.quickMode'):''));
     jobsData[id]=job;
@@ -6189,7 +6280,7 @@
     const token = semConta ? (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'') : null;
     const row={
       workspace_id: currentWorkspaceId, job_id: job.id, user_id: p.userId, email: p.email, token,
-      nivel_acesso: p.nivel_acesso, permissoes: p.permissoes,
+      nivel_acesso: p.nivel_acesso, permissoes: p.permissoes, funcao: p.funcao||null, recebe_contrato: !!(p.acordo && p.acordo.texto),
       escopo: { briefing, datas, contrato, financeiro, horasPrevistas: job.duracaoHoras||null,
         checklist: job.checklist?job.checklist.itens.map(c=>({t:c.t,feito:false})):[], tarefas:[], documentos:[],
         jobNome: job.nome||job.typeLabel, jobCliente: job.client },
@@ -6259,7 +6350,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -6284,8 +6375,8 @@
     const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
     // Etapa 5 — Entrega e Aprovação: toggles desligados por padrão, campos limpos.
     ['entrega-triagem','entrega-selecao','entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
-    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap','entrega-download-link-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
-    ['entrega-triagem-link','entrega-selecao-link','entrega-download-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+    ['entrega-triagem-link','entrega-selecao-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
     const ajustesLista=document.getElementById('entrega-ajustes-lista'); if(ajustesLista) ajustesLista.innerHTML='';
     const entregaFormato=document.getElementById('entrega-formato'); if(entregaFormato) entregaFormato.value='digital';
   }
@@ -7111,7 +7202,27 @@
     return { id:'__template__', client:(builderModeloOrigem&&builderModeloOrigem.client)||'', typeLabel:'', value:0, date:null, local:'', email:'',
       contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || blocosModeloPadrao() } };
   }
-  function abrirBuilder(jobId, modeloOrigem){ builderContext=jobId||null; builderModeloOrigem=modeloOrigem||null; renderBuilder(); go('builder'); }
+  /* Quando jobId + modeloOrigem vêm juntos (fluxo "Selecionar Contrato" do
+     Portal Operacional), o modelo escolhido tem de ser aplicado ao job de
+     verdade — renderBuilder() só mostra job.contract.blocks como já estão,
+     nunca lia builderModeloOrigem sozinho. Sem isto, o card de Contrato
+     continuava a mostrar "vazio" mesmo depois de escolher um modelo. */
+  function abrirBuilder(jobId, modeloOrigem){
+    builderContext=jobId||null;
+    builderModeloOrigem=modeloOrigem||null;
+    if(jobId && modeloOrigem && modeloOrigem.blocks){
+      const job=jobsData[jobId];
+      if(job){
+        job.contract.blocks = modeloOrigem.blocks.map(b=>Object.assign({}, b));
+        if(modeloOrigem.nome) job.contract.templateName = modeloOrigem.nome;
+        if(job.contract.status==='vazio') job.contract.status='rascunho';
+        marcarContratoAlterado(job);
+        saveJobsData();
+      }
+    }
+    renderBuilder();
+    go('builder');
+  }
   function renderListaDuplicarContrato(){
     const wrap=document.getElementById('dup-contrato-lista');
     if(!wrap) return;
@@ -7127,7 +7238,7 @@
   function duplicarContratoDoTrabalho(jobId){
     const origem=jobsData[jobId];
     if(!origem) return;
-    abrirBuilderParaSelecao({ client:origem.client, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
+    abrirBuilderParaSelecao({ client:origem.client, nome:origem.contract.templateName||null, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
   function guardarBuilderContexto(){
@@ -7174,7 +7285,7 @@
       showToast(t('toast.templateImported'));
       return;
     }
-    abrirBuilderParaSelecao({ client:'', blocks });
+    abrirBuilderParaSelecao({ client:'', nome:m.nome, blocks });
   }
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
@@ -7863,9 +7974,19 @@
 
   /* Indicador de status único para toda a aplicação — Contrato, Briefing,
      Timeline, Pagamentos, Entregas, Aprovações usam sempre os mesmos 4
-     estados. */
-  const STATUS_EMOJI={done:'🟢', progress:'🔵', pending:'🟡', late:'🔴'};
-  function statusEmoji(status){ return STATUS_EMOJI[status]||STATUS_EMOJI.pending; }
+     estados. Ícones reais (mesma linguagem visual do resto do app —
+     stroke, viewBox 24x24), não emojis. */
+  const STATUS_ICONS={
+    done: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="m8 12.3 2.6 2.6L16 9.3"/></svg>',
+    progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l3.2 1.8"/></svg>',
+    pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l-2.6 1.8"/></svg>',
+    late: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>'
+  };
+  const STATUS_COLORS={done:'var(--done)', progress:'var(--progress)', pending:'var(--pend)', late:'var(--late)'};
+  function statusEmoji(status){
+    const s=STATUS_ICONS[status]?status:'pending';
+    return '<span style="display:inline-flex;vertical-align:-3px;width:15px;height:15px;color:'+STATUS_COLORS[s]+'">'+STATUS_ICONS[s]+'</span>';
+  }
   /* Card de Timeline do Portal Operacional — mesmo motor da timeline
      bidirecional do Portal do Cliente (construirTimelineBidirecional), para
      nunca haver duas versões divergentes do mesmo progresso. Cada item
@@ -7990,8 +8111,7 @@
     html+=timelineCardHtml(job);
 
     if(job.payments.length){
-      const pend=job.payments.filter(p=>p.status!=='pago').length;
-      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div><div class="sec-state" style="color:var(--ink)">'+(pend? (statusEmoji('pending')+' '+pend+' pendente'+(pend>1?'s':'')) : (statusEmoji('done')+' tudo pago'))+'</div></div><div class="sec-body" style="display:block">';
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-body" style="display:block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
@@ -8013,13 +8133,15 @@
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:5px;padding:14px 2px;cursor:pointer" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div style="display:flex;justify-content:space-between;width:100%"><span class="nm" style="font-weight:600">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+'</span><span style="font-weight:700;font-size:14.5px">'+fmtMoney(p.amount)+'</span></div>';
-        html+='<div style="display:flex;justify-content:space-between;width:100%;font-size:12.5px"><span style="color:var(--ink-soft)">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span><span style="font-weight:600">'+statusTxt+'</span></div>';
+        html+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+          '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
+        html+='<div style="display:flex;align-items:center;gap:8px;flex:none">';
+        html+='<span style="font-size:12px;font-weight:600;white-space:nowrap">'+statusTxt+'</span>';
         if(p.status!=='pago'){
-          html+='<button class="btn soft" style="padding:7px 11px;font-size:12px;margin-top:2px;align-self:flex-start" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
+          html+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
-        html+='</div>';
+        html+='</div></div>';
       });
       html+='</div></div>';
     }
@@ -8042,7 +8164,10 @@
       html+='</div></div>';
     }
 
-    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><div style="display:flex;gap:6px"><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div></div><div class="sec-body" style="display:block"><div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div></div></div>';
+    html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body" style="display:block">'+
+      '<div id="colab-lista-'+id+'"><p style="font-size:13px;color:var(--neutral)">'+t('collab.loading')+'</p></div>'+
+      '<button class="btn ghost" style="width:100%;margin-top:12px;border-top:1px solid var(--line-soft);padding-top:14px;border-radius:0 0 var(--r) var(--r)" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button>'+
+    '</div></div>';
 
     document.getElementById('detalhe-dynamic').innerHTML=html;
     carregarColaboradoresJob(id);
@@ -8123,7 +8248,7 @@
     if(!lista.length){ showToast(t('collab.none')); return; }
     openInfo(t('collab.contractsSection'), `
       <div id="contratos-colab-lista"></div>
-      <button class="btn ghost" style="width:100%;margin-top:10px" onclick="abrirAplicarEmMassa('${jobId}')">${t('collab.bulkApply')}</button>`);
+      <button class="btn ghost" style="width:100%;margin-top:10px" onclick="abrirBibliotecaContratoColaboradoresMassa('${jobId}')">${t('collab.addContractForCollabs')}</button>`);
     renderContratosColaboradoresLista(jobId);
   }
   function renderContratosColaboradoresLista(jobId){
@@ -8148,30 +8273,47 @@
     if(c) c[campo]=valor;
     renderSecaoColaboradoresExternos(jobId);
   }
-  function abrirAplicarEmMassa(jobId){
+  /* Aplicação em massa usa a MESMA Biblioteca de Contratos: escolhe-se um
+     modelo real (ex. "Contrato de Fotógrafo"), depois quem o recebe — nunca
+     uma lista de texto solta. Repetível via "Adicionar Outro Contrato". */
+  let contratoParaColaboradoresMassaJobId=null;
+  let modeloEscolhidoParaMassa=null;
+  function abrirBibliotecaContratoColaboradoresMassa(jobId){
+    contratoParaColaboradoresMassaJobId=jobId;
+    twEmWizard=false;
+    openSheet();
+    pushPanel('contrato');
+  }
+  function abrirAplicarContratoMassa(jobId, modeloOrigem){
+    modeloEscolhidoParaMassa=modeloOrigem;
     const lista=colaboradoresCache[jobId]||[];
-    openInfo(t('collab.bulkApply'), `
-      <div class="field"><label>${t('collab.role')}</label><input id="bulk-colab-funcao" placeholder="${t('collab.rolePlaceholder')}"></div>
+    openInfo(modeloOrigem.nome||t('collab.contractsSection'), `
+      <p style="font-size:12.5px;color:var(--neutral);margin-bottom:10px">${t('collab.selectWhoReceives')}</p>
       <div id="bulk-colab-checklist">${lista.map(c=>
         '<label class="pick-row"><input type="checkbox" class="bulk-colab-check" value="'+c.id+'" style="margin-right:10px"><div><div class="nm">'+escapeHtml(c.email)+'</div>'+(c.funcao?'<div class="sub">'+escapeHtml(c.funcao)+'</div>':'')+'</div></label>'
       ).join('')}</div>
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="aplicarContratoEmMassa('${jobId}')">${t('collab.apply')}</button>`);
   }
   async function aplicarContratoEmMassa(jobId){
-    const funcao=(document.getElementById('bulk-colab-funcao').value||'').trim();
     const ids=[...document.querySelectorAll('.bulk-colab-check:checked')].map(el=>el.value);
-    if(!funcao || !ids.length){ showToast(t('toast.writePersonName')); return; }
-    const { error } = await sb.from('external_collaborators').update({funcao, recebe_contrato:true}).in('id', ids);
+    if(!ids.length || !modeloEscolhidoParaMassa){ showToast(t('toast.writePersonName')); return; }
+    const job=jobsData[jobId]||{};
+    const texto=renderizarTextoModeloParaColaborador(job, modeloEscolhidoParaMassa.blocks);
+    const acordo={ modelo:'biblioteca', nome:modeloEscolhidoParaMassa.nome||null, texto, assinado:false };
+    const { error } = await sb.from('external_collaborators').update({acordo, recebe_contrato:true}).in('id', ids);
     if(error){ showToast(t('toast.inviteError')); return; }
+    modeloEscolhidoParaMassa=null;
     await carregarColaboradoresJob(jobId);
     closeInfo();
-    abrirContratosColaboradores(jobId);
-    showToast(t('toast.changesSaved'));
+    openInfo(t('collab.contractApplied'), `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('collab.contractAppliedHint')}</p>
+      <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="closeInfo();abrirBibliotecaContratoColaboradoresMassa('${jobId}')">${t('collab.addAnotherContract')}</button>
+      <button class="btn ghost" style="width:100%" onclick="closeInfo();abrirContratosColaboradores('${jobId}')">${t('action.done')}</button>`);
   }
 
-  let colabExternoEmailEncontrado=null, colabExternoNivel='leitura', colabExternoEscopo=null, colabExternoAcordo=null, colabExternoPermissoes={};
+  let colabExternoEmailEncontrado=null, colabExternoNivel='leitura', colabExternoEscopo=null, colabExternoAcordo=null, colabExternoPermissoes={}, colabExternoFuncao='';
   async function abrirAdicionarColaboradorExterno(jobId){
-    colabExternoEmailEncontrado=null; colabExternoNivel='leitura'; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoPermissoes={};
+    colabExternoEmailEncontrado=null; colabExternoNivel='leitura'; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoPermissoes={}; colabExternoFuncao='';
     openInfo(t('collab.title'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('collab.searchHint')}</p>
       <div class="field"><label>${t('collab.nameOrEmail')}</label><input id="colab-email" placeholder="${t('collab.nameOrEmailPlaceholder')}" oninput="renderSugestoesColab('${jobId}')" autocomplete="off"></div>
@@ -8267,6 +8409,7 @@
     ).join('');
     openInfo(t('collab.title'), `
       <div class="struct-row" style="margin-bottom:12px"><div class="struct-l"><div class="nm">${escapeHtml(u.nome||u.email)}</div><span class="sub">${escapeHtml(u.email)}</span></div></div>
+      <div class="field"><label>${t('collab.role')} *</label><input id="colab-funcao" placeholder="${t('collab.rolePlaceholder')}" value="${escapeHtml(colabExternoFuncao)}" oninput="colabExternoFuncao=this.value"></div>
       <p class="plabel" style="margin:6px 2px 9px">${t('collab.permissionsTitle')}</p>
       ${permissoesHtml}
       <p class="plabel" style="margin:16px 2px 9px">${t('collab.levelTitle')}</p>
@@ -8318,40 +8461,53 @@
     showToast(t('toast.settingsSaved'));
     abrirConfigurarColaboradorExterno(jobId);
   }
+  /* O contrato do colaborador usa a MESMA Biblioteca de Contratos do resto
+     do app — nunca os botões de texto NDA/Prestação/Personalizado. Depois
+     de escolher um modelo, o texto renderizado (mesmo motor dos contratos
+     de trabalho) fica em colabExternoAcordo.texto, reaproveitando toda a
+     assinatura já existente (assinarAcordoColabPublico etc.), que só olha
+     para texto/assinado — nunca para o "modelo" ter vindo do MODELOS_ACORDO. */
+  let contratoParaColaboradorJobId=null;
   function abrirAcordoColaboradorExterno(jobId){
-    if(!colabExternoAcordo) colabExternoAcordo={modelo:null, texto:''};
-    renderAcordoColaboradorExterno(jobId);
+    if(!colabExternoAcordo) colabExternoAcordo={modelo:null, nome:null, texto:''};
+    if(colabExternoAcordo.texto){
+      openInfo(t('collab.agreementOptional'), `
+        <div class="struct-row"><div class="struct-l"><div class="nm">${escapeHtml(colabExternoAcordo.nome||t('collab.agreement.custom'))}</div></div></div>
+        <p style="font-size:12.5px;color:var(--ink-soft);white-space:pre-wrap;max-height:180px;overflow-y:auto;margin:10px 0">${escapeHtml(colabExternoAcordo.texto)}</p>
+        <button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirSelecionarContratoColaborador('${jobId}')">${t('collab.changeContract')}</button>
+        <button class="btn ghost" style="width:100%" onclick="colabExternoAcordo=null;abrirConfigurarColaboradorExterno('${jobId}')">${t('action.remove')}</button>`);
+      return;
+    }
+    abrirSelecionarContratoColaborador(jobId);
   }
-  function renderAcordoColaboradorExterno(jobId){
-    const linhas=Object.keys(MODELOS_ACORDO).map(k=>
-      '<div class="pick-row'+(colabExternoAcordo.modelo===k?' selected':'')+'" onclick="selecionarModeloAcordo(\''+k+'\',\''+jobId+'\')"><div><div class="nm">'+t(MODELOS_ACORDO[k].nomeKey)+'</div></div></div>'
-    ).join('');
-    openInfo(t('collab.agreementOptional'), `
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">${t('collab.agreementHint')}</p>
-      ${linhas}
-      <div class="field" style="margin-top:12px"><textarea id="colab-acordo-texto" placeholder="${t('collab.agreementTextPlaceholder')}">${escapeHtml(colabExternoAcordo.texto||'')}</textarea></div>
-      <button class="btn primary" style="width:100%" onclick="guardarAcordoColaboradorExterno('${jobId}')">${t('action.save')}</button>`);
+  function abrirSelecionarContratoColaborador(jobId){
+    contratoParaColaboradorJobId=jobId;
+    twEmWizard=false;
+    openSheet();
+    pushPanel('contrato');
   }
-  function selecionarModeloAcordo(k,jobId){
-    colabExternoAcordo.modelo=k;
-    colabExternoAcordo.texto=MODELOS_ACORDO[k].texto;
-    renderAcordoColaboradorExterno(jobId);
+  function renderizarTextoModeloParaColaborador(job, blocks){
+    return blocks.filter(b=>b.on!==false).map(b=>blockName(b)+'\n'+blockText(job,b)).join('\n\n');
   }
-  function guardarAcordoColaboradorExterno(jobId){
-    colabExternoAcordo.texto=document.getElementById('colab-acordo-texto').value.trim();
-    showToast(t('toast.settingsSaved'));
+  function aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem){
+    const job=jobsData[jobId] || {};
+    colabExternoAcordo = { modelo:'biblioteca', nome:modeloOrigem.nome||null, texto: renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks), assinado:false };
+    closeSheet();
     abrirConfigurarColaboradorExterno(jobId);
   }
   async function convidarColaboradorExterno(jobId){
     const u=colabExternoEmailEncontrado;
     if(!u){ showToast(t('toast.inviteError')); return; }
+    const funcaoEl=document.getElementById('colab-funcao');
+    const funcao=(funcaoEl?funcaoEl.value:colabExternoFuncao).trim();
+    if(!funcao){ if(funcaoEl) funcaoEl.focus(); showToast(t('collab.roleRequired')); return; }
     const permissoes={};
     PERMISSOES_COLAB.forEach(([key])=>{ permissoes[key]=!!colabExternoPermissoes[key]; });
     if(jobId==='__wizard__'){
       // O trabalho ainda não existe (estamos no assistente de criação) — guarda a
       // configuração e só cria o registo real depois do trabalho ser criado.
-      twColaboradoresExternosPendentes.push({ email:u.email, nome:u.nome||u.email, userId:u.userId, nivel_acesso:colabExternoNivel, permissoes, acordo:colabExternoAcordo });
-      colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura';
+      twColaboradoresExternosPendentes.push({ email:u.email, nome:u.nome||u.email, userId:u.userId, nivel_acesso:colabExternoNivel, permissoes, acordo:colabExternoAcordo, funcao });
+      colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura'; colabExternoFuncao='';
       closeInfo();
       renderColaboradorExternoPendenteWizard();
       return;
@@ -8369,13 +8525,13 @@
     const token = semConta ? (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'') : null;
     const row={
       workspace_id: currentWorkspaceId, job_id: jobId, user_id: u.userId, email: u.email, token,
-      nivel_acesso: colabExternoNivel, permissoes,
+      nivel_acesso: colabExternoNivel, permissoes, funcao, recebe_contrato: !!(colabExternoAcordo && colabExternoAcordo.texto),
       escopo: Object.assign({}, escopo, {briefing, datas, contrato, financeiro, jobNome: job.nome||job.typeLabel, jobCliente: job.client}),
       acordo: colabExternoAcordo, entregas: [], status: semConta?'convidado':'ativo'
     };
     const { error } = await sb.from('external_collaborators').insert(row);
     if(error){ console.error(error); showToast(t('toast.inviteError')); return; }
-    colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura';
+    colabExternoEmailEncontrado=null; colabExternoEscopo=null; colabExternoAcordo=null; colabExternoNivel='leitura'; colabExternoFuncao='';
     closeInfo();
     await carregarColaboradoresJob(jobId);
     const jobNome = job.nome||job.typeLabel;
