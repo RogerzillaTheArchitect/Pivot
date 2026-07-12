@@ -985,7 +985,11 @@
      própria métrica) — isso desalinhava visualmente linhas como Valor+Data
      mesmo com o mesmo padding. Forçar a mesma altura resolve. */
   .field input:not([type="checkbox"]):not([type="radio"]),.field select{height:43px;box-sizing:border-box}
-  .field input[type="time"],.field input[type="date"],.field input[type="datetime-local"]{min-width:0}
+  /* Safari/iOS por vezes ignora width:100% em input[type=date] dentro de
+     grids/cards estreitos, fazendo o campo "vazar" para fora do card —
+     appearance:none + min-width:0 evita que o motor nativo do campo force
+     uma largura própria maior do que o container. */
+  .field input[type="time"],.field input[type="date"],.field input[type="datetime-local"]{min-width:0;width:100%;max-width:100%;-webkit-appearance:none;appearance:none}
   .field input:focus,.field textarea:focus,.field select:focus{border-color:var(--brand)}
   .field textarea{resize:vertical;min-height:84px;line-height:1.5}
   .field-row{display:flex;gap:10px}
