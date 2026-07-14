@@ -19,6 +19,7 @@
     --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.08); --bg-ice:#0B0B0A; --bg-ice-2:#050504;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58;
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
+    --label-out:rgba(255,255,255,.82);
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
     --r:20px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
@@ -321,16 +322,16 @@
 
   /* ===== HOJE / DASHBOARD ===== */
   .date{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:30px;font-weight:400;color:#F5F5F2;letter-spacing:.02em;margin-top:14px;margin-bottom:24px;text-transform:uppercase;display:block;text-align:left}
-  .section-label-out{font-size:12px;color:rgba(255,255,255,.82);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
+  .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
-  .month-summary{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:2px solid rgba(255,255,255,.30);
-    border-radius:22px;margin:12px 0 22px;box-shadow:0 20px 45px -12px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
-    backdrop-filter:blur(28px) saturate(190%);-webkit-backdrop-filter:blur(28px) saturate(190%);overflow:hidden;
+  .month-summary{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);border:1.5px solid rgba(255,255,255,.20);
+    border-radius:22px;margin:12px 0 22px;box-shadow:0 20px 45px -12px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter:blur(11px) saturate(170%);-webkit-backdrop-filter:blur(11px) saturate(170%);overflow:hidden;
     color:#F5F5F2;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
-  .ms-mes-atual{font-size:12.5px;font-weight:600;color:rgba(255,255,255,.82);text-align:center;text-transform:uppercase}
+  .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:148px;flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:6px 18px 0}
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -340,19 +341,19 @@
   .mr-track-outer{stroke:var(--c-track-lt)}
   .mr-track-inner{stroke:var(--brand)}
   .mr-ring{fill:none;stroke-linecap:round}
-  .mr-recebido{stroke:var(--c-dark-green)}
-  .mr-gastos{stroke:var(--c-yellow)}
+  .mr-recebido{stroke:url(#grad-mr-recebido)}
+  .mr-gastos{stroke:url(#grad-mr-gastos)}
   .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
   .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:18px;color:var(--ink);letter-spacing:-.01em;line-height:1}
   .ms-rings-center-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;color:var(--neutral);margin-top:3px}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink-soft);padding:11px 0;border-bottom:1px solid var(--btn-09)}
-  .mrl-item:first-child{color:#EAF3EF}
+  .mrl-item:first-child{color:var(--ink)}
   .mrl-item:last-child{border-bottom:none}
   .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:15px}
-  .mr-meta-c{color:rgba(234,243,239,.75)}
-  .mr-recebido-c{color:var(--c-dark-green)}
-  .mr-gastos-c{color:var(--c-yellow)}
+  .mr-meta-c{color:var(--ink-soft)}
+  .mr-recebido-c{color:#3D8A73}
+  .mr-gastos-c{color:#B98A4E}
   .ms-teto-note{font-family:var(--font-subtitle),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-size:12px;color:var(--ink-faint);padding:12px 18px 16px;border-top:1px solid var(--btn-09);text-align:center}
   .ms-teto-note b{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;color:var(--ink-soft);margin-left:4px}
@@ -361,10 +362,10 @@
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}
   .ms-meta-badge span{font-weight:600;color:var(--ink)}
   .ms-badge-gastos svg{color:#C98A2E}
-  .ms-section-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:rgba(255,255,255,.82);margin:18px 2px 8px;text-transform:uppercase}
+  .ms-section-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--label-out);margin:18px 2px 8px;text-transform:uppercase}
   .ms-cards-row{display:flex;gap:9px;margin:0 0 22px}
-  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:2px solid rgba(255,255,255,.30);border-radius:20px;
-    backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
+  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);border:1.5px solid rgba(255,255,255,.20);border-radius:20px;
+    backdrop-filter:blur(11px) saturate(170%);-webkit-backdrop-filter:blur(11px) saturate(170%);box-shadow:0 14px 32px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
     padding:12px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;cursor:pointer;
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
@@ -376,7 +377,7 @@
   .ms-sq-main{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:auto}
   .ms-icon{width:24px;height:24px;display:grid;place-items:center;color:#fff;flex:none}
   .ms-icon svg{width:12px;height:12px}
-  .ms-c-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.85);line-height:1.2;text-transform:uppercase}
+  .ms-c-label{font-size:11px;font-weight:600;color:var(--ink);line-height:1.2;text-transform:uppercase}
   .ms-c-value{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:25px;letter-spacing:-.01em;line-height:1}
   .ms-c-num{color:var(--ink-faint)}
   .ms-c-slash{color:var(--ink-faint);font-weight:400;margin:0 1px;font-size:.8em;vertical-align:.05em}
@@ -384,12 +385,12 @@
   .ms-c-trend{display:flex;align-items:center;gap:2px;font-size:10.5px;font-weight:600;color:var(--brand);height:15px;line-height:15px}
   .ms-c-trend svg{width:9px;height:9px}
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
-  .ms-c-vs{font-size:9.5px;color:rgba(255,255,255,.7);text-transform:uppercase}
+  .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
   .jobs-stat-card{display:block;margin:0 0 22px;cursor:pointer;
-    background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);
-    border:2px solid rgba(255,255,255,.30);border-radius:20px;padding:18px 8px;
-    backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
-    box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
+    background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);
+    border:1.5px solid rgba(255,255,255,.20);border-radius:20px;padding:18px 8px;
+    backdrop-filter:blur(11px) saturate(170%);-webkit-backdrop-filter:blur(11px) saturate(170%);
+    box-shadow:0 14px 32px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
     color:#F5F5F2;--ink:#F5F5F2;--ink-soft:#C9C9C2}
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 4px}
@@ -415,7 +416,7 @@
 
   .group{margin-bottom:24px}
   .group-label{font-size:11.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
-    color:rgba(255,255,255,.82);margin:0 2px 11px;display:flex;align-items:center;gap:8px}
+    color:var(--label-out);margin:0 2px 11px;display:flex;align-items:center;gap:8px}
   .group-label .ln{flex:1;height:1px;background:var(--line)}
 
   .radar-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:11px}
@@ -429,15 +430,27 @@
   .radar-swipe-btn svg{width:16px;height:16px}
   .radar-swipe-btn.editar{background:rgba(200,200,196,.42)}
   .radar-swipe-btn.concluir{background:rgba(217,127,121,.42)}
-  .card{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);
-    border:2px solid rgba(255,255,255,.30);border-radius:var(--r);padding:16px;
-    margin-bottom:11px;box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
-    backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
+  .card{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);
+    border:1.5px solid rgba(255,255,255,.20);border-radius:var(--r);padding:16px;
+    margin-bottom:11px;box-shadow:0 12px 28px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter:blur(11px) saturate(160%);-webkit-backdrop-filter:blur(11px) saturate(160%);
     transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,margin .35s,padding .35s;
     color:#F5F5F2;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
+  /* Tarefas: um único card de vidro envolvendo a lista, com divisórias entre
+     as linhas em vez de cada tarefa ser seu próprio card separado. */
+  #tasks-list{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);
+    border:1.5px solid rgba(255,255,255,.20);border-radius:var(--r);
+    box-shadow:0 12px 28px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter:blur(11px) saturate(160%);-webkit-backdrop-filter:blur(11px) saturate(160%);
+    overflow:hidden}
+  #tasks-list .radar-card-wrap{border-radius:0;margin-bottom:0}
+  #tasks-list .radar-card-wrap .card{background:none;border:none;border-radius:0;box-shadow:none;
+    backdrop-filter:none;-webkit-backdrop-filter:none;margin-bottom:0;
+    border-bottom:1px solid var(--line-soft)}
+  #tasks-list .radar-card-wrap:last-child .card{border-bottom:none}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
   .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(217,86,76,.13)}
@@ -1653,6 +1666,16 @@
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
+                  <defs>
+                    <linearGradient id="grad-mr-recebido" x1="15" y1="15" x2="135" y2="135" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#6FBFA1"/>
+                      <stop offset="100%" stop-color="#2F6B58"/>
+                    </linearGradient>
+                    <linearGradient id="grad-mr-gastos" x1="29" y1="29" x2="121" y2="121" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#D9AE5C"/>
+                      <stop offset="100%" stop-color="#8A6A2E"/>
+                    </linearGradient>
+                  </defs>
                   <circle class="mr-track mr-track-outer" cx="75" cy="75" r="60" stroke-width="11"/>
                   <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="11"/>
                   <circle class="mr-track mr-track-outer" cx="75" cy="75" r="46" stroke-width="11"/>
@@ -11340,21 +11363,25 @@ try {
   // vidro (shader) ficam por cima; isto é só a cor que se vê atrás delas.
   const PALETTES = {
     dark: {
-      base: '#050705',
+      base: '#060906',
+      brightness: 0.66,
       blobs: [
-        { cx:.22, cy:.20, rx:.58, ry:.52, c0:'#123720', blur:22, op:.95, period:34, phase:0,   comp:'source-over' },
-        { cx:.80, cy:.74, rx:.55, ry:.50, c0:'#1C5030', blur:24, op:.70, period:38, phase:-12, comp:'lighter' },
-        { cx:.50, cy:.48, rx:.60, ry:.55, c0:'#2C6B44', blur:30, op:.50, period:30, phase:-21, comp:'lighter' },
-        { cx:.70, cy:.28, rx:.30, ry:.26, c0:'#3E9160', blur:20, op:.38, period:32, phase:-6,  comp:'lighter' },
+        { cx:.16, cy:.14, rx:.30, ry:.26, c0:'#134022', blur:26, op:.55, period:34, phase:0,   comp:'lighter' },
+        { cx:.84, cy:.80, rx:.28, ry:.24, c0:'#1E5A34', blur:26, op:.48, period:38, phase:-12, comp:'lighter' },
+        { cx:.55, cy:.42, rx:.17, ry:.15, c0:'#5FCB85', blur:16, op:.62, period:30, phase:-21, comp:'lighter' },
+        { cx:.28, cy:.86, rx:.19, ry:.16, c0:'#2C6B44', blur:20, op:.32, period:32, phase:-6,  comp:'lighter' },
       ],
     },
     light: {
-      base: '#EAE3D2',
+      base: '#F3EEDF',
+      brightness: 1.0,
       blobs: [
-        { cx:.24, cy:.24, rx:.62, ry:.56, c0:'#AEB59C', blur:26, op:.55, period:34, phase:0,   comp:'multiply' },
-        { cx:.80, cy:.72, rx:.56, ry:.50, c0:'#C6BBA0', blur:26, op:.50, period:38, phase:-12, comp:'multiply' },
-        { cx:.54, cy:.46, rx:.52, ry:.48, c0:'#97A187', blur:30, op:.42, period:30, phase:-21, comp:'multiply' },
-        { cx:.68, cy:.30, rx:.30, ry:.26, c0:'#E08A38', blur:18, op:.52, period:32, phase:-6,  comp:'source-over' },
+        { cx:.18, cy:.18, rx:.27, ry:.23, c0:'#C9C2A4', blur:24, op:.35, period:34, phase:0,   comp:'multiply' },
+        { cx:.84, cy:.76, rx:.25, ry:.21, c0:'#D6CBA8', blur:24, op:.30, period:38, phase:-12, comp:'multiply' },
+        { cx:.66, cy:.30, rx:.22, ry:.18, c0:'#EC9A3E', blur:15, op:.70, period:30, phase:-21, comp:'source-over' },
+        { cx:.28, cy:.84, rx:.18, ry:.15, c0:'#D98A3E', blur:18, op:.35, period:32, phase:-6,  comp:'source-over' },
+        { cx:.42, cy:.62, rx:.24, ry:.20, c0:'#FBF8EF', blur:26, op:.55, period:36, phase:-9,  comp:'lighter' },
+        { cx:.10, cy:.68, rx:.20, ry:.17, c0:'#F6EFDD', blur:22, op:.45, period:33, phase:-27, comp:'lighter' },
       ],
     },
   };
@@ -11431,6 +11458,7 @@ try {
     uniform float uTime;
     uniform float uFlowStrength;
     uniform float uFlowSpeed;
+    uniform float uBrightness;
     varying vec2 vUv;
 
     const float PI = 3.14159265;
@@ -11484,6 +11512,7 @@ try {
       float highlight = pow(max(0.0, cos((local + 0.16) * PI)), 5.0);
       col *= edgeDark;
       col += uSheen * 0.14 * highlight;
+      col *= uBrightness;
 
       gl_FragColor = vec4(col, 1.0);
     }
@@ -11501,6 +11530,7 @@ try {
       uTime: { value: 0 },
       uFlowStrength: { value: 0.2 },
       uFlowSpeed: { value: 0.4 },
+      uBrightness: { value: PALETTES[currentTheme()].brightness },
     },
     vertexShader,
     fragmentShader,
@@ -11538,6 +11568,7 @@ try {
   new MutationObserver(() => {
     drawSource(clock.getElapsedTime());
     texture.needsUpdate = true;
+    material.uniforms.uBrightness.value = PALETTES[currentTheme()].brightness;
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
 
   const clock = new THREE.Clock();
