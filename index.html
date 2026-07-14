@@ -926,22 +926,23 @@
   .bib-card .bc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   .bib-card .bc-title{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .bib-card .bc-desc{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.45}
-  .bib-card .bc-meta{display:flex;align-items:center;gap:12px;margin-top:9px;font-size:11.5px;color:var(--neutral);flex-wrap:wrap}
-  .bib-card .bc-meta .star{color:#E0A93B}
-  .bib-fav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--neutral)}
-  .bib-fav svg{width:17px;height:17px}
-  .bib-fav.on{color:#E0A93B}
+  .bib-card .bc-meta{display:flex;align-items:center;gap:10px;margin-top:6px;font-size:11px;color:var(--neutral);flex-wrap:wrap;font-weight:400}
+  .bib-fav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint)}
+  .bib-fav svg{width:17px;height:17px;opacity:.55}
+  .bib-fav.on{color:var(--ink)}
+  .bib-fav.on svg{opacity:1}
   .bib-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
   .bib-tag.tipo{background:var(--btn-06);color:var(--ink-soft)}
   .bib-tag.verif{background:#E7F3EC;color:#15532D;display:inline-flex;align-items:center;gap:3px}
   .bib-tag.verif svg{width:10px;height:10px}
-  .bib-selo{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
-  .bib-selo svg{width:11px;height:11px;flex:none}
-  .bib-selo.origem-oficial{background:#E7F3EC;color:#15532D}
-  .bib-selo.origem-comunidade{background:var(--btn-06);color:var(--ink-soft)}
-  .bib-selo.origem-juridico{background:#EFE7F6;color:#4B2E7A}
-  .bib-selo.destaque-popular{background:#FDF0DC;color:#9A5B12}
-  .bib-selo.destaque-recomendado{background:#E7F0FB;color:#1D4E89}
+  .bib-selo{font-size:11px;font-weight:600;letter-spacing:.01em;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+  .bib-selo.tier-ouro{color:#B8912F}
+  .bib-selo.tier-prata{color:#8E939C}
+  .bib-selo.tier-bronze{color:#A9713C}
+  .bib-minitag{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:6px;background:var(--btn-06);color:var(--ink-soft);border:1px solid var(--line-soft)}
+  .bib-check{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;color:var(--paper)}
+  .bib-check.on{background:var(--ink);border-color:var(--ink)}
+  .bib-check svg{width:13px;height:13px}
   .bc-selos{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
   .bc-autor{font-size:12px;color:var(--ink-soft);margin-top:8px}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
@@ -1880,7 +1881,7 @@
         <div id="blocklist" class="dyn-blocklist"></div>
 
         <button class="addblock" id="addblock-btn" onclick="abrirBibliotecaBlocos()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> Adicionar bloco da biblioteca
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> <span data-t="library.addBlockBtn">Adicionar Bloco</span>
         </button>
         <div id="builder-progress" style="display:none;margin-top:18px">
           <button class="btn primary" style="width:100%" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
@@ -3614,7 +3615,7 @@
     "library.facet.profession": { pt:"Segmento", en:"Segment", es:"Segmento" },
     "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
-    "library.origin.legal": { pt:"Jurídicos", en:"Legal", es:"Jurídicos" },
+    "library.origin.legal": { pt:"Validação Jurídica", en:"Legal Validation", es:"Validación Jurídica" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.createNew": { pt:"Novo Contrato", en:"New Contract", es:"Nuevo Contrato" },
     "library.importFile": { pt:"Importar Arquivo", en:"Import File", es:"Importar Archivo" },
@@ -3626,14 +3627,22 @@
     "library.sort.mostRecommended": { pt:"Mais Recomendados", en:"Most Recommended", es:"Más Recomendados" },
     "library.sort.az": { pt:"A-Z", en:"A-Z", es:"A-Z" },
     "library.clearFilters": { pt:"Limpar filtros", en:"Clear filters", es:"Limpiar filtros" },
-    "library.badge.popular": { pt:"Popular", en:"Popular", es:"Popular" },
-    "library.badge.recommended": { pt:"Recomendado", en:"Recommended", es:"Recomendado" },
     "library.blocksCount": { pt:"blocos", en:"blocks", es:"bloques" },
     "library.protectedStructure": { pt:"Estrutura do contrato", en:"Contract structure", es:"Estructura del contrato" },
     "library.structureUnavailable": { pt:"Estrutura não disponível para pré-visualização.", en:"Structure preview not available.", es:"Estructura no disponible para vista previa." },
     "library.protectedBlockSample": { pt:"Amostra de bloco protegido", en:"Protected block sample", es:"Muestra de bloque protegido" },
     "library.protectedBlock": { pt:"Conteúdo protegido", en:"Protected content", es:"Contenido protegido" },
     "library.import": { pt:"Importar", en:"Import", es:"Importar" },
+    "library.addBlockBtn": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
+    "library.blocksExplore": { pt:"Explorar Biblioteca", en:"Browse Library", es:"Explorar Biblioteca" },
+    "library.blocksCreateNew": { pt:"Criar Novo Bloco", en:"Create New Block", es:"Crear Nuevo Bloque" },
+    "library.blocksSearchPlaceholder": { pt:"Pesquisar contratos…", en:"Search contracts…", es:"Buscar contratos…" },
+    "library.importNBlocks": { pt:"Importar {n} Blocos", en:"Import {n} Blocks", es:"Importar {n} Bloques" },
+    "library.selectBlocks": { pt:"Seleciona os blocos", en:"Select blocks", es:"Selecciona los bloques" },
+    "library.blocksImported": { pt:"{n} blocos importados para o contrato.", en:"{n} blocks imported into the contract.", es:"{n} bloques importados al contrato." },
+    "library.blockNamePlaceholder": { pt:"Nome do bloco", en:"Block name", es:"Nombre del bloque" },
+    "library.blockTextPlaceholder": { pt:"Texto da cláusula…", en:"Clause text…", es:"Texto de la cláusula…" },
+    "library.blockNameRequired": { pt:"Escreve um nome para o bloco.", en:"Enter a name for the block.", es:"Escribe un nombre para el bloque." },
     "library.verified": { pt:"Verificado", en:"Verified", es:"Verificado" },
     "library.uses": { pt:"usos", en:"uses", es:"usos" },
     "library.by": { pt:"por ", en:"by ", es:"por " },
@@ -7307,6 +7316,11 @@
   /* Builder unificado — modelo em branco (builderContext=null) ou trabalho real (builderContext=jobId) */
   let builderContext=null;
   let builderModeloOrigem=null;
+  /* Guarda os blocos de um modelo em branco (sem builderModeloOrigem) entre
+     chamadas de getBuilderJob() — sem isto, cada chamada devolvia um array
+     novo de blocosModeloPadrao(), então nenhuma edição feita nesse estado
+     (incluir bloco, alterar texto, etc.) sobrevivia à próxima leitura. */
+  let builderBlankBlocks=null;
   function blocosModeloPadrao(){
     return [
       {id:'m1', key:'identificacao', customText:null, on:true},
@@ -7318,8 +7332,9 @@
   }
   function getBuilderJob(){
     if(builderContext) return jobsData[builderContext];
+    if(!builderModeloOrigem && !builderBlankBlocks) builderBlankBlocks=blocosModeloPadrao();
     return { id:'__template__', client:(builderModeloOrigem&&builderModeloOrigem.client)||'', typeLabel:'', value:0, date:null, local:'', email:'',
-      contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || blocosModeloPadrao() } };
+      contract:{ blocks: (builderModeloOrigem&&builderModeloOrigem.blocks) || builderBlankBlocks } };
   }
   /* Quando jobId + modeloOrigem vêm juntos (fluxo "Selecionar Contrato" do
      Portal Operacional), o modelo escolhido tem de ser aplicado ao job de
@@ -7329,6 +7344,7 @@
   function abrirBuilder(jobId, modeloOrigem){
     builderContext=jobId||null;
     builderModeloOrigem=modeloOrigem||null;
+    builderBlankBlocks=null;
     if(jobId && modeloOrigem && modeloOrigem.blocks){
       const job=jobsData[jobId];
       if(job){
@@ -7482,30 +7498,100 @@
     if(builderContext) saveJobsData();
   }
 
-  const blocoLib=[
-    {nomeKey:'block.privacy', texto:'Ambas as partes comprometem-se a não divulgar informação confidencial trocada no âmbito deste trabalho.'},
-    {nomeKey:'block.cancellation', texto:'Cancelamentos com mais de 60 dias de antecedência têm reembolso total do sinal. Entre 60 e 30 dias, reembolso de 50%. Com menos de 30 dias, sem reembolso.'},
-    {nomeKey:'block.imageRights', texto:'O cliente autoriza o uso comercial das imagens em campanhas de marketing do prestador, mediante acordo prévio por escrito.'},
-    {nomeKey:'block.deliveryGallery', texto:'O material final é entregue por galeria online, em até 30 dias após o evento — prazo reduzido.'},
-    {nomeKey:'block.payment3', texto:'O valor total é dividido em 3 parcelas iguais: à assinatura, a meio do projeto, e na entrega final.'}
-  ];
   function abrirBibliotecaBlocos(){
     if(builderContext) return;
-    const html=blocoLib.map((b,i)=>
-      '<div class="pick-row" onclick="adicionarBlocoBiblioteca('+i+')"><div><div class="nm">'+t(b.nomeKey)+'</div></div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>'
-    ).join('');
+    const html=
+      '<div class="pick-row" onclick="abrirExplorarBibliotecaBlocos()"><div><div class="nm">'+t('library.blocksExplore')+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
+      '<div class="pick-row" onclick="abrirCriarNovoBloco()"><div><div class="nm">'+t('library.blocksCreateNew')+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
     openInfo(t('builder.blockLibrary'), html);
   }
-  function adicionarBlocoBiblioteca(i){
-    if(builderContext) return;
-    const lib=blocoLib[i];
-    const libNome=t(lib.nomeKey);
+  let bibBlocosBusca='';
+  function abrirExplorarBibliotecaBlocos(){
+    bibBlocosBusca='';
+    openInfo(t('library.blocksExplore'),
+      '<div class="searchbox" style="margin-bottom:12px">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>'+
+        '<input id="bib-blocos-busca" placeholder="'+t('library.blocksSearchPlaceholder')+'" oninput="bibBlocosBusca=this.value;renderBibBlocosLista()" autocomplete="off">'+
+      '</div><div id="bib-blocos-lista"></div>'
+    );
+    renderBibBlocosLista();
+  }
+  function renderBibBlocosLista(){
+    const wrap=document.getElementById('bib-blocos-lista');
+    if(!wrap) return;
+    const q=bibBlocosBusca.trim().toLowerCase();
+    const itens=BIBLIOTECA_OFICIAL.filter(b=>(BIBLIOTECA_BLOCOS[b.id]||[]).length)
+      .filter(b=>!q || ((b.titulo||'')+' '+(b.tags||[]).join(' ')).toLowerCase().includes(q));
+    wrap.innerHTML = itens.length ? itens.map(b=>
+      '<div class="pick-row" onclick="abrirBlocosDoContrato(\''+b.id+'\')"><div><div class="nm">'+escapeHtml(b.titulo)+'</div></div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
+  }
+  const BIB_BLOCO_NOMES={
+    identificacao:'Identificação', pagamento:'Pagamento', entrega:'Entrega', cancelamento:'Cancelamento',
+    direitos:'Direitos Autorais', forcaMaior:'Força Maior', alteracaoEscopo:'Alteração de Escopo',
+    confidencialidade:'Confidencialidade', garantias:'Garantias'
+  };
+  function bibNomeBlocoAmigavel(key){ return BIB_BLOCO_NOMES[key] || bibCapitalizar(key); }
+  let bibBlocosContratoAtual=null;
+  let bibBlocosSelecionados=new Set();
+  function abrirBlocosDoContrato(id){
+    const modelo=BIBLIOTECA_OFICIAL.find(b=>b.id===id);
+    if(!modelo) return;
+    bibBlocosContratoAtual=id;
+    bibBlocosSelecionados=new Set();
+    openInfo(modelo.titulo, buildBibBlocosChecklistHtml());
+  }
+  function buildBibBlocosChecklistHtml(){
+    const blocos=(BIBLIOTECA_BLOCOS[bibBlocosContratoAtual]||[]).filter(b=>b.key!=='identificacao');
+    const rows=blocos.map((b,i)=>{
+      const on=bibBlocosSelecionados.has(i);
+      return '<div class="pick-row" style="cursor:pointer" onclick="toggleBibBlocoSelecionado('+i+')">'+
+        '<div style="display:flex;align-items:center;gap:11px">'+
+          '<span class="bib-check'+(on?' on':'')+'">'+(on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'')+'</span>'+
+          '<div class="nm">'+escapeHtml(bibNomeBlocoAmigavel(b.key))+'</div>'+
+        '</div></div>';
+    }).join('');
+    const n=bibBlocosSelecionados.size;
+    return '<div id="bib-blocos-check-list">'+(rows||'<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:14px" '+(n?'':'disabled')+' onclick="importarBlocosSelecionados()">'+(n? t('library.importNBlocks').replace('{n}', n) : t('library.selectBlocks'))+'</button>';
+  }
+  function toggleBibBlocoSelecionado(i){
+    if(bibBlocosSelecionados.has(i)) bibBlocosSelecionados.delete(i); else bibBlocosSelecionados.add(i);
+    document.getElementById('infoBody').innerHTML=buildBibBlocosChecklistHtml();
+  }
+  function importarBlocosSelecionados(){
+    const composicao=(BIBLIOTECA_BLOCOS[bibBlocosContratoAtual]||[]).filter(b=>b.key!=='identificacao');
+    const indices=[...bibBlocosSelecionados].sort((a,b)=>a-b);
+    if(!indices.length) return;
     const job=getBuilderJob();
-    job.contract.blocks.push({id:genId(), key:null, name:libNome, customText:lib.texto, on:true});
+    indices.forEach(i=>{
+      const c=composicao[i];
+      if(!c) return;
+      job.contract.blocks.push({id:genId(), key:c.key, customText:null, on:true, params:c.params||null});
+    });
     renderBuilder();
     closeInfo();
-    showToast(t('toast.blockAddedPrefix')+libNome+t('toast.blockAddedSuffix'));
+    showToast(t('library.blocksImported').replace('{n}', indices.length));
+  }
+  function abrirCriarNovoBloco(){
+    openInfo(t('library.blocksCreateNew'),
+      '<div class="field"><input id="novobloco-nome" placeholder="'+t('library.blockNamePlaceholder')+'" autocomplete="off"></div>'+
+      '<div class="field"><textarea id="novobloco-texto" rows="5" placeholder="'+t('library.blockTextPlaceholder')+'"></textarea></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovoBlocoManual()">'+t('action.save')+'</button>'
+    );
+  }
+  function salvarNovoBlocoManual(){
+    const nome=(document.getElementById('novobloco-nome').value||'').trim();
+    const texto=(document.getElementById('novobloco-texto').value||'').trim();
+    if(!nome){ showToast(t('library.blockNameRequired')); return; }
+    const job=getBuilderJob();
+    job.contract.blocks.push({id:genId(), key:null, name:nome, customText:texto, on:true});
+    renderBuilder();
+    closeInfo();
+    showToast(t('toast.blockAddedPrefix')+nome+t('toast.blockAddedSuffix'));
   }
 
   function iconWrap(d){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+d+'</svg>'; }
@@ -9598,15 +9684,19 @@
      Biblioteca Pivot (BIBLIOTECA_OFICIAL, autoria da comunidade), os blocos
      jurídicos (LEGAL_BLOCKS) e os modelos de checklist/briefing/cronograma
      (CATALOGO_EXPLORAR). A pessoa busca por texto e afina por facetas. */
-  const SECAO_BLOCO_NOMES={
-    pagamento:'Pagamento', propriedade_intelectual:'Propriedade Intelectual', dados_pessoais:'Proteção de Dados',
-    responsabilidade:'Responsabilidades', cancelamento:'Cancelamento', confidencialidade:'Confidencialidade',
-    forca_maior:'Força Maior', entrega:'Entrega', garantias:'Garantias', vigencia:'Vigência'
+  const BLOCO_KEY_COBERTURA={
+    pagamento:'Pagamento', entrega:'Entrega', cancelamento:'Cancelamento', direitos:'Propriedade Intelectual',
+    forcaMaior:'Força Maior', confidencialidade:'Confidencialidade', garantias:'Garantias'
   };
-  function bibNomeSecaoBloco(cat){ return SECAO_BLOCO_NOMES[cat] || null; }
+  function bibCoberturasDoModelo(b){
+    const comp=BIBLIOTECA_BLOCOS[b.id];
+    if(!comp) return [];
+    return [...new Set(comp.map(c=>BLOCO_KEY_COBERTURA[c.key]).filter(Boolean))];
+  }
+  function bibCapitalizar(s){ return (s||'').replace(/[_-]/g,' ').replace(/\b\w/g, c=>c.toUpperCase()); }
   const BIB_CATEGORIA_AMIGAVEL={
     'Casamentos':'Eventos', 'Corporativo':'Eventos', 'Fotografia':'Audiovisual', 'Vídeo':'Audiovisual',
-    'Drone':'Audiovisual', 'Imobiliário':'Imobiliário', 'Cláusulas':'Jurídico', 'Modelos':'Projetos', 'Outros':'Outros'
+    'Drone':'Audiovisual', 'Imobiliário':'Imobiliário', 'Modelos':'Projetos', 'Outros':'Outros'
   };
   function bibCategoriaAmigavel(it){ return BIB_CATEGORIA_AMIGAVEL[it.categoria] || it.categoria; }
   function bibProfissao(it){
@@ -9619,15 +9709,6 @@
   }
   function bibContexto(it){
     const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))+' '+(it.tipo||'')).toLowerCase();
-    if(it.origem==='juridico'){
-      if(/tecnologia|saas|programacao/.test(s)) return 'Tecnologia';
-      if(/marketing/.test(s)) return 'Marketing';
-      if(/consultoria/.test(s)) return 'Consultoria';
-      if(/agencia|b2b/.test(s)) return 'Corporativo';
-      if(/freelancer/.test(s)) return 'Freelancer';
-      if(/fotografia|video|design|conteúdo|conteudo/.test(s)) return 'Produção de Conteúdo';
-      return 'Prestação de Serviços';
-    }
     if(/checklist|cronograma|briefing/.test(s)) return 'Projeto';
     if(/casamento|wedding|corporativo|workshop|conferência|conferencia|palestra|empresa/.test(s)) return 'Eventos';
     if(/imobili/.test(s)) return 'Imobiliário';
@@ -9645,18 +9726,7 @@
         verificado:(b.avaliacao||0)>=4.7,
         profissao:bibProfissao(b),
         numBlocos: (BIBLIOTECA_BLOCOS[b.id]||[]).length || null,
-        secao: b.tipo==='Informações do Cliente' ? 'Informações do cliente' : null
-      };
-      item.categoriaAmigavel=bibCategoriaAmigavel(item);
-      item.contexto=bibContexto(item);
-      out.push(item);
-    });
-    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>{
-      const item={
-        id:'bl:'+bl.id, titulo:lbl3(bl.nome), tipo:'Bloco', categoria:'Cláusulas', autor:'Pivot Legal',
-        avaliacao:null, usos:null, desc:lbl3(bl.resumo), tags:bl.industry_tags||[], origem:'juridico',
-        verificado: !bl.requires_local_review, texto:lbl3(bl.texto),
-        profissao:null, numBlocos:null, secao: bibNomeSecaoBloco(bl.categoria)
+        coberturas: b.tipo==='Informações do Cliente' ? ['Informações do cliente'] : bibCoberturasDoModelo(b)
       };
       item.categoriaAmigavel=bibCategoriaAmigavel(item);
       item.contexto=bibContexto(item);
@@ -9668,7 +9738,7 @@
         id:'ex:'+m.cat, titulo:t(m.tituloKey), tipo, categoria:'Modelos', autor:'Pivot',
         avaliacao:null, usos:null, desc:t(m.subKey), tags:[], origem:'oficial', verificado:false, onclick:m.onclick,
         profissao:null, numBlocos:null,
-        secao: m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Informações do cliente':m.cat==='cronogramas'?'Cronograma':null
+        coberturas: m.cat==='checklists'?['Checklist']:m.cat==='briefings'?['Informações do cliente']:m.cat==='cronogramas'?['Cronograma']:[]
       };
       item.categoriaAmigavel=bibCategoriaAmigavel(item);
       item.contexto=bibContexto(item);
@@ -9679,7 +9749,7 @@
   }
   let bibOrigem='todos';
   let bibOrdenacao='usos';
-  let bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, secao:null};
+  let bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, coberturas:null};
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
@@ -9702,13 +9772,26 @@
     ['profissao','library.facet.profession'],
     ['contexto','library.facet.context'],
     ['categoriaAmigavel','library.facet.category'],
-    ['secao','library.facet.section']
+    ['coberturas','library.facet.section']
   ];
   const BIB_ORDENACOES=[
     ['usos','library.sort.mostUsed'],
     ['recomendados','library.sort.mostRecommended'],
     ['az','library.sort.az']
   ];
+  function bibItemBateFaceta(item, fac, valor){
+    const v=item[fac];
+    return Array.isArray(v) ? v.includes(valor) : v===valor;
+  }
+  function bibValoresFaceta(itens, fac){
+    const vals=new Set();
+    itens.forEach(i=>{
+      const v=i[fac];
+      if(Array.isArray(v)) v.forEach(x=>{ if(x) vals.add(x); });
+      else if(v) vals.add(v);
+    });
+    return [...vals].sort();
+  }
   function toggleBibFacet(faceta, valor){
     bibFacetSel[faceta] = bibFacetSel[faceta]===valor ? null : valor;
     renderBiblioteca();
@@ -9724,7 +9807,8 @@
     const todos=catalogoBiblioteca();
     if(bibOrigem==='populares') return todos.filter(i=>(i.usos||0)>=150);
     if(bibOrigem==='recomendados') return todos.filter(i=>(i.avaliacao||0)>=4.7);
-    if(bibOrigem==='oficial'||bibOrigem==='comunidade'||bibOrigem==='juridico') return todos.filter(i=>i.origem===bibOrigem);
+    if(bibOrigem==='juridico') return todos.filter(i=>i.verificado);
+    if(bibOrigem==='oficial'||bibOrigem==='comunidade') return todos.filter(i=>i.origem===bibOrigem);
     return todos;
   }
   function bibContarFiltrosAtivos(){
@@ -9739,7 +9823,7 @@
   function buildBibFiltrosSheetHtml(){
     const base=bibItensFiltradosPorOrigem();
     let html=BIB_FACETAS.map(([fac,labelKey])=>{
-      const valores=[...new Set(base.map(i=>i[fac]).filter(Boolean))].sort();
+      const valores=bibValoresFaceta(base, fac);
       if(!valores.length) return '';
       const sel=bibFacetSel[fac];
       const chips=valores.map(v=>'<span class="bib-fchip'+(sel===v?' on':'')+'" onclick="toggleBibFacet(\''+fac+'\',\''+escapeHtml(v).replace(/'/g,"\\'")+'\')">'+escapeHtml(v)+'</span>').join('');
@@ -9759,7 +9843,7 @@
     openInfo(t('library.filterTitle'), buildBibFiltrosSheetHtml());
   }
   function limparFiltrosBiblioteca(){
-    bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, secao:null};
+    bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, coberturas:null};
     bibOrdenacao='usos';
     renderBiblioteca();
     refrescarSheetFiltrosBiblioteca();
@@ -9771,23 +9855,14 @@
     else arr.sort((a,b)=>(b.usos||0)-(a.usos||0));
     return arr;
   }
-  const BIB_SELO_ICONS={
-    oficial:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
-    comunidade:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    juridico:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
-    popular:'<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
-    recomendado:'<path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>'
-  };
-  function bibSeloSpan(cls, iconKey, label){
-    return '<span class="bib-selo '+cls+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+BIB_SELO_ICONS[iconKey]+'</svg>'+label+'</span>';
+  function bibSeloSpan(cls, label){
+    return '<span class="bib-selo '+cls+'">◇ '+label+'</span>';
   }
   function bibSelosHtml(item){
     let html='';
-    if(item.origem==='oficial') html+=bibSeloSpan('origem-oficial','oficial',t('library.origin.official'));
-    else if(item.origem==='comunidade') html+=bibSeloSpan('origem-comunidade','comunidade',t('library.origin.community'));
-    else if(item.origem==='juridico') html+=bibSeloSpan('origem-juridico','juridico',t('library.origin.legal'));
-    if((item.usos||0)>=150) html+=bibSeloSpan('destaque-popular','popular',t('library.badge.popular'));
-    if((item.avaliacao||0)>=4.7) html+=bibSeloSpan('destaque-recomendado','recomendado',t('library.badge.recommended'));
+    if(item.origem==='oficial') html+=bibSeloSpan('tier-ouro',t('library.origin.official'));
+    if(item.verificado) html+=bibSeloSpan('tier-prata',t('library.origin.legal'));
+    if(item.origem==='comunidade') html+=bibSeloSpan('tier-bronze',t('library.origin.community'));
     return html;
   }
   function renderBiblioteca(){
@@ -9796,7 +9871,7 @@
     if(!wrap) return;
     const q=(document.getElementById('bib-busca').value||'').trim().toLowerCase();
     let itens=bibItensFiltradosPorOrigem();
-    BIB_FACETAS.forEach(([fac])=>{ if(bibFacetSel[fac]) itens=itens.filter(i=>i[fac]===bibFacetSel[fac]); });
+    BIB_FACETAS.forEach(([fac])=>{ if(bibFacetSel[fac]) itens=itens.filter(i=>bibItemBateFaceta(i,fac,bibFacetSel[fac])); });
     if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
     itens=ordenarBibItens(itens);
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
@@ -9810,10 +9885,10 @@
         '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+' <span class="bib-tag tipo">'+escapeHtml(i.tipo)+'</span></div>'+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
         '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div></div>'+
-        (selos?'<div class="bc-selos">'+selos+'</div>':'')+
         (i.autor?'<div class="bc-autor">'+t('library.by')+escapeHtml(i.autor)+'</div>':'')+
+        (selos?'<div class="bc-selos">'+selos+'</div>':'')+
         (metricas.length?'<div class="bc-meta">'+metricas.join('<span>·</span>')+'</div>':'')+
-        (i.tags&&i.tags.length?'<div class="bc-tags">'+i.tags.slice(0,4).map(tg=>'<span class="struct-pill">#'+escapeHtml(tg)+'</span>').join('')+'</div>':'')+
+        (i.tags&&i.tags.length?'<div class="bc-tags">'+i.tags.slice(0,4).map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>':'')+
       '</div>';
     }).join('');
   }
@@ -9843,9 +9918,9 @@
     const fav=bibFavoritos.has(id);
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
+    if(it.autor) html+='<p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px">'+escapeHtml(t('library.by')+it.autor)+'</p>';
     const selos=bibSelosHtml(it);
     if(selos) html+='<div class="bc-selos" style="margin-bottom:10px">'+selos+'</div>';
-    if(it.autor) html+='<p style="font-size:12px;color:var(--ink-soft);margin-bottom:4px">'+escapeHtml(t('library.by')+it.autor)+'</p>';
     const metricas=[];
     if(it.usos) metricas.push(it.usos+' '+t('library.uses'));
     if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
@@ -9854,7 +9929,7 @@
     html+=bibEstruturaProtegidaHtml(it);
     html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
     html+=bibBlocoBlurHtml(it);
-    if(it.tags&&it.tags.length) html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">'+it.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
+    if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "abrirBuilder(null)";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
