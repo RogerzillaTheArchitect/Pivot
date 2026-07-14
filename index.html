@@ -939,6 +939,7 @@
   .bib-selo.tier-ouro{color:#B8912F}
   .bib-selo.tier-prata{color:#8E939C}
   .bib-selo.tier-bronze{color:#A9713C}
+  .bib-selo-icon{font-size:15px;line-height:1;cursor:default}
   .bib-minitag{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:6px;background:var(--btn-06);color:var(--ink-soft);border:1px solid var(--line-soft)}
   .bib-check{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;color:var(--paper)}
   .bib-check.on{background:var(--ink);border-color:var(--ink)}
@@ -946,6 +947,8 @@
   .bc-selos{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
   .bc-autor{font-size:12px;color:var(--ink-soft);margin-top:8px}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .bc-side{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .bc-selos-col{display:flex;flex-direction:column;align-items:center;gap:3px}
   .chip-ic svg.bib-chip-icon{width:12px;height:12px}
   .bib-create-wrap{position:relative}
   .bib-create-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:20;min-width:170px;padding:6px;display:none}
@@ -3643,6 +3646,12 @@
     "library.blockNamePlaceholder": { pt:"Nome do bloco", en:"Block name", es:"Nombre del bloque" },
     "library.blockTextPlaceholder": { pt:"Texto da cláusula…", en:"Clause text…", es:"Texto de la cláusula…" },
     "library.blockNameRequired": { pt:"Escreve um nome para o bloco.", en:"Enter a name for the block.", es:"Escribe un nombre para el bloque." },
+    "library.blocksFromContract": { pt:"Blocos do contrato", en:"Blocks from this contract", es:"Bloques del contrato" },
+    "library.blocksTypeChecklist": { pt:"Checklist", en:"Checklist", es:"Checklist" },
+    "library.blocksTypeQuestionnaire": { pt:"Questionário", en:"Questionnaire", es:"Cuestionario" },
+    "library.blocksTypeSchedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
+    "library.blocksTypeModel": { pt:"Modelo", en:"Model", es:"Modelo" },
+    "library.blocksTypeClause": { pt:"Cláusula jurídica", en:"Legal clause", es:"Cláusula jurídica" },
     "library.verified": { pt:"Verificado", en:"Verified", es:"Verificado" },
     "library.uses": { pt:"usos", en:"uses", es:"usos" },
     "library.by": { pt:"por ", en:"by ", es:"por " },
@@ -7518,16 +7527,43 @@
     );
     renderBibBlocosLista();
   }
+  function bibBlocosCatalogo(){
+    const out=[];
+    BIBLIOTECA_OFICIAL.filter(b=>b.tipo==='Contrato' && (BIBLIOTECA_BLOCOS[b.id]||[]).length).forEach(b=>{
+      out.push({kind:'contrato', id:b.id, titulo:b.titulo, sub:t('library.blocksFromContract')});
+    });
+    BIBLIOTECA_OFICIAL.filter(b=>b.tipo!=='Contrato').forEach(b=>{
+      out.push({kind:'avulso', titulo:b.titulo, texto:b.desc, sub:b.tipo});
+    });
+    CATALOGO_EXPLORAR.forEach(m=>{
+      const tipo = m.cat==='checklists'?t('library.blocksTypeChecklist'):m.cat==='briefings'?t('library.blocksTypeQuestionnaire'):m.cat==='cronogramas'?t('library.blocksTypeSchedule'):t('library.blocksTypeModel');
+      out.push({kind:'avulso', titulo:t(m.tituloKey), texto:t(m.subKey), sub:tipo});
+    });
+    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>{
+      out.push({kind:'avulso', titulo:lbl3(bl.nome), texto:lbl3(bl.texto), sub:t('library.blocksTypeClause')});
+    });
+    return out;
+  }
+  let bibBlocosListaAtual=[];
   function renderBibBlocosLista(){
     const wrap=document.getElementById('bib-blocos-lista');
     if(!wrap) return;
     const q=bibBlocosBusca.trim().toLowerCase();
-    const itens=BIBLIOTECA_OFICIAL.filter(b=>(BIBLIOTECA_BLOCOS[b.id]||[]).length)
-      .filter(b=>!q || ((b.titulo||'')+' '+(b.tags||[]).join(' ')).toLowerCase().includes(q));
-    wrap.innerHTML = itens.length ? itens.map(b=>
-      '<div class="pick-row" onclick="abrirBlocosDoContrato(\''+b.id+'\')"><div><div class="nm">'+escapeHtml(b.titulo)+'</div></div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
+    bibBlocosListaAtual=bibBlocosCatalogo().filter(i=>!q || (i.titulo||'').toLowerCase().includes(q));
+    wrap.innerHTML = bibBlocosListaAtual.length ? bibBlocosListaAtual.map((i,idx)=>{
+      const onclick = i.kind==='contrato' ? "abrirBlocosDoContrato('"+i.id+"')" : "importarBlocoAvulso("+idx+")";
+      return '<div class="pick-row" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(i.titulo)+'</div>'+(i.sub?'<div class="sub">'+escapeHtml(i.sub)+'</div>':'')+'</div>'+
+        '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
+  }
+  function importarBlocoAvulso(idx){
+    const item=bibBlocosListaAtual[idx];
+    if(!item) return;
+    const job=getBuilderJob();
+    job.contract.blocks.push({id:genId(), key:null, name:item.titulo, customText:item.texto||'', on:true});
+    renderBuilder();
+    closeInfo();
+    showToast(t('toast.blockAddedPrefix')+item.titulo+t('toast.blockAddedSuffix'));
   }
   const BIB_BLOCO_NOMES={
     identificacao:'Identificação', pagamento:'Pagamento', entrega:'Entrega', cancelamento:'Cancelamento',
@@ -9693,7 +9729,9 @@
     if(!comp) return [];
     return [...new Set(comp.map(c=>BLOCO_KEY_COBERTURA[c.key]).filter(Boolean))];
   }
-  function bibCapitalizar(s){ return (s||'').replace(/[_-]/g,' ').replace(/\b\w/g, c=>c.toUpperCase()); }
+  function bibCapitalizar(s){
+    return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  }
   const BIB_CATEGORIA_AMIGAVEL={
     'Casamentos':'Eventos', 'Corporativo':'Eventos', 'Fotografia':'Audiovisual', 'Vídeo':'Audiovisual',
     'Drone':'Audiovisual', 'Imobiliário':'Imobiliário', 'Modelos':'Projetos', 'Outros':'Outros'
@@ -9719,26 +9757,14 @@
   function catalogoBiblioteca(){
     if(_catalogoBibCache) return _catalogoBibCache;
     const out=[];
-    BIBLIOTECA_OFICIAL.forEach(b=>{
+    BIBLIOTECA_OFICIAL.filter(b=>b.tipo==='Contrato').forEach(b=>{
       const item={
         id:'of:'+b.id, titulo:b.titulo, tipo:b.tipo, categoria:b.categoria, autor:b.autor,
         avaliacao:b.avaliacao, usos:b.usos, desc:b.desc, tags:b.tags||[], origem:'oficial',
         verificado:(b.avaliacao||0)>=4.7,
         profissao:bibProfissao(b),
         numBlocos: (BIBLIOTECA_BLOCOS[b.id]||[]).length || null,
-        coberturas: b.tipo==='Informações do Cliente' ? ['Informações do cliente'] : bibCoberturasDoModelo(b)
-      };
-      item.categoriaAmigavel=bibCategoriaAmigavel(item);
-      item.contexto=bibContexto(item);
-      out.push(item);
-    });
-    CATALOGO_EXPLORAR.forEach(m=>{
-      const tipo = m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Briefing':m.cat==='cronogramas'?'Cronograma':'Contrato';
-      const item={
-        id:'ex:'+m.cat, titulo:t(m.tituloKey), tipo, categoria:'Modelos', autor:'Pivot',
-        avaliacao:null, usos:null, desc:t(m.subKey), tags:[], origem:'oficial', verificado:false, onclick:m.onclick,
-        profissao:null, numBlocos:null,
-        coberturas: m.cat==='checklists'?['Checklist']:m.cat==='briefings'?['Informações do cliente']:m.cat==='cronogramas'?['Cronograma']:[]
+        coberturas: bibCoberturasDoModelo(b)
       };
       item.categoriaAmigavel=bibCategoriaAmigavel(item);
       item.contexto=bibContexto(item);
@@ -9855,14 +9881,15 @@
     else arr.sort((a,b)=>(b.usos||0)-(a.usos||0));
     return arr;
   }
-  function bibSeloSpan(cls, label){
+  function bibSeloSpan(cls, label, iconOnly){
+    if(iconOnly) return '<span class="bib-selo bib-selo-icon '+cls+'" title="'+escapeHtml(label)+'">◇</span>';
     return '<span class="bib-selo '+cls+'">◇ '+label+'</span>';
   }
-  function bibSelosHtml(item){
+  function bibSelosHtml(item, iconOnly){
     let html='';
-    if(item.origem==='oficial') html+=bibSeloSpan('tier-ouro',t('library.origin.official'));
-    if(item.verificado) html+=bibSeloSpan('tier-prata',t('library.origin.legal'));
-    if(item.origem==='comunidade') html+=bibSeloSpan('tier-bronze',t('library.origin.community'));
+    if(item.origem==='oficial') html+=bibSeloSpan('tier-ouro',t('library.origin.official'),iconOnly);
+    if(item.verificado) html+=bibSeloSpan('tier-prata',t('library.origin.legal'),iconOnly);
+    if(item.origem==='comunidade') html+=bibSeloSpan('tier-bronze',t('library.origin.community'),iconOnly);
     return html;
   }
   function renderBiblioteca(){
@@ -9877,18 +9904,19 @@
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.id);
-      const metricas=[];
-      if(i.usos) metricas.push(i.usos+' '+t('library.uses'));
-      if(i.numBlocos) metricas.push(i.numBlocos+' '+t('library.blocksCount'));
-      const selos=bibSelosHtml(i);
+      const rodape=[];
+      if(i.autor) rodape.push(t('library.by')+escapeHtml(i.autor));
+      if(i.usos) rodape.push(i.usos+' '+t('library.uses'));
+      if(i.numBlocos) rodape.push(i.numBlocos+' '+t('library.blocksCount'));
+      const selos=bibSelosHtml(i, true);
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
-        '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+' <span class="bib-tag tipo">'+escapeHtml(i.tipo)+'</span></div>'+
+        '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
-        '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div></div>'+
-        (i.autor?'<div class="bc-autor">'+t('library.by')+escapeHtml(i.autor)+'</div>':'')+
-        (selos?'<div class="bc-selos">'+selos+'</div>':'')+
-        (metricas.length?'<div class="bc-meta">'+metricas.join('<span>·</span>')+'</div>':'')+
-        (i.tags&&i.tags.length?'<div class="bc-tags">'+i.tags.slice(0,4).map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>':'')+
+        '<div class="bc-side">'+
+          '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>'+
+          (selos?'<div class="bc-selos-col">'+selos+'</div>':'')+
+        '</div></div>'+
+        (rodape.length?'<div class="bc-meta">'+rodape.join('<span>•</span>')+'</div>':'')+
       '</div>';
     }).join('');
   }
