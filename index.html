@@ -7350,10 +7350,15 @@
      verdade — renderBuilder() só mostra job.contract.blocks como já estão,
      nunca lia builderModeloOrigem sozinho. Sem isto, o card de Contrato
      continuava a mostrar "vazio" mesmo depois de escolher um modelo. */
+  let builderVoltarView='trabalhos';
   function abrirBuilder(jobId, modeloOrigem){
     builderContext=jobId||null;
     builderModeloOrigem=modeloOrigem||null;
     builderBlankBlocks=null;
+    if(!jobId){
+      const activeEl=document.querySelector('.view.active');
+      if(activeEl && activeEl.id!=='v-builder') builderVoltarView=activeEl.id.replace(/^v-/,'');
+    }
     if(jobId && modeloOrigem && modeloOrigem.blocks){
       const job=jobsData[jobId];
       if(job){
@@ -7384,7 +7389,7 @@
     if(!origem) return;
     abrirBuilderParaSelecao({ client:origem.client, nome:origem.contract.templateName||null, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
-  function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go('detalhe'); } }
+  function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go(builderVoltarView); } }
   function guardarBuilderContexto(){
     if(builderContext){ saveJobsData(); showToast(t('toast.changesSaved')); return; }
     openInfo(t('builder.saveTemplateTitle'), `
