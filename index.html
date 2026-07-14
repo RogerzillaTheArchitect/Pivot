@@ -935,12 +935,17 @@
   .bib-tag.tipo{background:var(--btn-06);color:var(--ink-soft)}
   .bib-tag.verif{background:#E7F3EC;color:#15532D;display:inline-flex;align-items:center;gap:3px}
   .bib-tag.verif svg{width:10px;height:10px}
-  .bib-selo{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:3px;white-space:nowrap}
+  .bib-selo{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+  .bib-selo svg{width:11px;height:11px;flex:none}
   .bib-selo.origem-oficial{background:#E7F3EC;color:#15532D}
   .bib-selo.origem-comunidade{background:var(--btn-06);color:var(--ink-soft)}
   .bib-selo.origem-juridico{background:#EFE7F6;color:#4B2E7A}
   .bib-selo.destaque-popular{background:#FDF0DC;color:#9A5B12}
   .bib-selo.destaque-recomendado{background:#E7F0FB;color:#1D4E89}
+  .bc-selos{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .bc-autor{font-size:12px;color:var(--ink-soft);margin-top:8px}
+  .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+  .chip-ic svg.bib-chip-icon{width:12px;height:12px}
   .bib-create-wrap{position:relative}
   .bib-create-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);z-index:20;min-width:170px;padding:6px;display:none}
   .bib-create-menu.show{display:block}
@@ -1904,11 +1909,11 @@
 
         <div class="filter-row" id="bib-origem-row" style="margin-bottom:8px">
           <div class="chip on" data-org="todos" onclick="setBibOrigem(this,'todos')"><span data-t="library.origin.all">Todos</span></div>
-          <div class="chip chip-ic" data-org="oficial" onclick="setBibOrigem(this,'oficial')">✓ <span data-t="library.origin.official">Oficial Pivot</span></div>
-          <div class="chip chip-ic" data-org="comunidade" onclick="setBibOrigem(this,'comunidade')">◉ <span data-t="library.origin.community">Comunidade</span></div>
-          <div class="chip chip-ic" data-org="juridico" onclick="setBibOrigem(this,'juridico')">⚖ <span data-t="library.origin.legal">Jurídicos</span></div>
-          <div class="chip chip-ic" data-org="populares" onclick="setBibOrigem(this,'populares')">🔥 <span data-t="library.origin.popular">Populares</span></div>
-          <div class="chip chip-ic" data-org="recomendados" onclick="setBibOrigem(this,'recomendados')">👍 <span data-t="library.origin.recommended">Recomendados</span></div>
+          <div class="chip chip-ic" data-org="oficial" onclick="setBibOrigem(this,'oficial')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> <span data-t="library.origin.official">Oficial Pivot</span></div>
+          <div class="chip chip-ic" data-org="comunidade" onclick="setBibOrigem(this,'comunidade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-t="library.origin.community">Comunidade</span></div>
+          <div class="chip chip-ic" data-org="juridico" onclick="setBibOrigem(this,'juridico')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> <span data-t="library.origin.legal">Jurídicos</span></div>
+          <div class="chip chip-ic" data-org="populares" onclick="setBibOrigem(this,'populares')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg> <span data-t="library.origin.popular">Populares</span></div>
+          <div class="chip chip-ic" data-org="recomendados" onclick="setBibOrigem(this,'recomendados')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg> <span data-t="library.origin.recommended">Recomendados</span></div>
         </div>
 
         <div class="filter-row" style="margin-bottom:12px">
@@ -3606,9 +3611,9 @@
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
-    "library.facet.profession": { pt:"Profissão", en:"Profession", es:"Profesión" },
-    "library.facet.event": { pt:"Evento", en:"Event", es:"Evento" },
-    "library.facet.section": { pt:"Seções", en:"Sections", es:"Secciones" },
+    "library.facet.profession": { pt:"Segmento", en:"Segment", es:"Segmento" },
+    "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
+    "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Jurídicos", en:"Legal", es:"Jurídicos" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.createNew": { pt:"Novo Contrato", en:"New Contract", es:"Nuevo Contrato" },
@@ -9593,10 +9598,17 @@
      Biblioteca Pivot (BIBLIOTECA_OFICIAL, autoria da comunidade), os blocos
      jurídicos (LEGAL_BLOCKS) e os modelos de checklist/briefing/cronograma
      (CATALOGO_EXPLORAR). A pessoa busca por texto e afina por facetas. */
-  const SECAO_BLOCO_NOMES={objeto:'Objeto',pagamento:'Pagamento',prazo:'Prazo',cancelamento:'Cancelamento',
-    propriedade:'Direitos de imagem',confidencialidade:'Confidencialidade',responsabilidade:'Responsabilidade',
-    entrega:'Entrega',garantia:'Garantia',foro:'Foro e lei',geral:'Cláusulas gerais'};
-  function bibNomeSecaoBloco(cat){ return SECAO_BLOCO_NOMES[cat] || (cat? cat.charAt(0).toUpperCase()+cat.slice(1) : 'Cláusulas'); }
+  const SECAO_BLOCO_NOMES={
+    pagamento:'Pagamento', propriedade_intelectual:'Propriedade Intelectual', dados_pessoais:'Proteção de Dados',
+    responsabilidade:'Responsabilidades', cancelamento:'Cancelamento', confidencialidade:'Confidencialidade',
+    forca_maior:'Força Maior', entrega:'Entrega', garantias:'Garantias', vigencia:'Vigência'
+  };
+  function bibNomeSecaoBloco(cat){ return SECAO_BLOCO_NOMES[cat] || null; }
+  const BIB_CATEGORIA_AMIGAVEL={
+    'Casamentos':'Eventos', 'Corporativo':'Eventos', 'Fotografia':'Audiovisual', 'Vídeo':'Audiovisual',
+    'Drone':'Audiovisual', 'Imobiliário':'Imobiliário', 'Cláusulas':'Jurídico', 'Modelos':'Projetos', 'Outros':'Outros'
+  };
+  function bibCategoriaAmigavel(it){ return BIB_CATEGORIA_AMIGAVEL[it.categoria] || it.categoria; }
   function bibProfissao(it){
     const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))).toLowerCase();
     if(/vídeo|video|drone|aftermovie|videoclipe|podcast/.test(s)) return 'Videomaker';
@@ -9605,50 +9617,69 @@
     if(/fotograf|retrato|imobili/.test(s)) return 'Fotógrafo';
     return null;
   }
-  function bibEvento(it){
-    const s=((it.titulo||'')+' '+((it.tags||[]).join(' '))+' '+(it.categoria||'')).toLowerCase();
-    if(/boudoir/.test(s)) return 'Boudoir';
-    if(/pré wedding|pre wedding|noivado/.test(s)) return 'Pré wedding';
-    if(/casamento|wedding|elopement/.test(s)) return 'Casamento';
-    if(/podcast/.test(s)) return 'Podcast';
-    if(/palestra|conferência|conferencia|talk/.test(s)) return 'Palestra';
-    if(/corporativo|workshop|empresa|conferência|evento/.test(s)) return 'Corporativo';
-    if(/sessão|sessao|ensaio|retrato|família|familia|produto/.test(s)) return 'Sessão fotográfica';
-    return null;
+  function bibContexto(it){
+    const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))+' '+(it.tipo||'')).toLowerCase();
+    if(it.origem==='juridico'){
+      if(/tecnologia|saas|programacao/.test(s)) return 'Tecnologia';
+      if(/marketing/.test(s)) return 'Marketing';
+      if(/consultoria/.test(s)) return 'Consultoria';
+      if(/agencia|b2b/.test(s)) return 'Corporativo';
+      if(/freelancer/.test(s)) return 'Freelancer';
+      if(/fotografia|video|design|conteúdo|conteudo/.test(s)) return 'Produção de Conteúdo';
+      return 'Prestação de Serviços';
+    }
+    if(/checklist|cronograma|briefing/.test(s)) return 'Projeto';
+    if(/casamento|wedding|corporativo|workshop|conferência|conferencia|palestra|empresa/.test(s)) return 'Eventos';
+    if(/imobili/.test(s)) return 'Imobiliário';
+    if(/vídeo|video|drone|fotograf|aftermovie|podcast|videoclipe/.test(s)) return 'Produção de Conteúdo';
+    return 'Prestação de Serviços';
   }
   let _catalogoBibCache=null;
   function catalogoBiblioteca(){
     if(_catalogoBibCache) return _catalogoBibCache;
     const out=[];
-    BIBLIOTECA_OFICIAL.forEach(b=>out.push({
-      id:'of:'+b.id, titulo:b.titulo, tipo:b.tipo, categoria:b.categoria, autor:b.autor,
-      avaliacao:b.avaliacao, usos:b.usos, desc:b.desc, tags:b.tags||[], origem:'oficial',
-      verificado:(b.avaliacao||0)>=4.7,
-      profissao:bibProfissao(b), evento:bibEvento(b),
-      numBlocos: (BIBLIOTECA_BLOCOS[b.id]||[]).length || null,
-      secao: b.tipo==='Informações do Cliente' ? 'Informações do cliente' : null
-    }));
-    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>out.push({
-      id:'bl:'+bl.id, titulo:lbl3(bl.nome), tipo:'Bloco', categoria:'Cláusulas', autor:'Pivot Legal',
-      avaliacao:null, usos:null, desc:lbl3(bl.resumo), tags:bl.industry_tags||[], origem:'juridico',
-      verificado: !bl.requires_local_review, texto:lbl3(bl.texto),
-      profissao:null, evento:null, numBlocos:null, secao: bibNomeSecaoBloco(bl.categoria)
-    }));
+    BIBLIOTECA_OFICIAL.forEach(b=>{
+      const item={
+        id:'of:'+b.id, titulo:b.titulo, tipo:b.tipo, categoria:b.categoria, autor:b.autor,
+        avaliacao:b.avaliacao, usos:b.usos, desc:b.desc, tags:b.tags||[], origem:'oficial',
+        verificado:(b.avaliacao||0)>=4.7,
+        profissao:bibProfissao(b),
+        numBlocos: (BIBLIOTECA_BLOCOS[b.id]||[]).length || null,
+        secao: b.tipo==='Informações do Cliente' ? 'Informações do cliente' : null
+      };
+      item.categoriaAmigavel=bibCategoriaAmigavel(item);
+      item.contexto=bibContexto(item);
+      out.push(item);
+    });
+    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>{
+      const item={
+        id:'bl:'+bl.id, titulo:lbl3(bl.nome), tipo:'Bloco', categoria:'Cláusulas', autor:'Pivot Legal',
+        avaliacao:null, usos:null, desc:lbl3(bl.resumo), tags:bl.industry_tags||[], origem:'juridico',
+        verificado: !bl.requires_local_review, texto:lbl3(bl.texto),
+        profissao:null, numBlocos:null, secao: bibNomeSecaoBloco(bl.categoria)
+      };
+      item.categoriaAmigavel=bibCategoriaAmigavel(item);
+      item.contexto=bibContexto(item);
+      out.push(item);
+    });
     CATALOGO_EXPLORAR.forEach(m=>{
       const tipo = m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Briefing':m.cat==='cronogramas'?'Cronograma':'Contrato';
-      out.push({
+      const item={
         id:'ex:'+m.cat, titulo:t(m.tituloKey), tipo, categoria:'Modelos', autor:'Pivot',
         avaliacao:null, usos:null, desc:t(m.subKey), tags:[], origem:'oficial', verificado:false, onclick:m.onclick,
-        profissao:null, evento:null, numBlocos:null,
+        profissao:null, numBlocos:null,
         secao: m.cat==='checklists'?'Checklist':m.cat==='briefings'?'Informações do cliente':m.cat==='cronogramas'?'Cronograma':null
-      });
+      };
+      item.categoriaAmigavel=bibCategoriaAmigavel(item);
+      item.contexto=bibContexto(item);
+      out.push(item);
     });
     _catalogoBibCache=out;
     return out;
   }
   let bibOrigem='todos';
   let bibOrdenacao='usos';
-  let bibFacetSel={categoria:null, profissao:null, evento:null, secao:null};
+  let bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, secao:null};
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
@@ -9669,8 +9700,8 @@
   });
   const BIB_FACETAS=[
     ['profissao','library.facet.profession'],
-    ['categoria','library.facet.category'],
-    ['evento','library.facet.event'],
+    ['contexto','library.facet.context'],
+    ['categoriaAmigavel','library.facet.category'],
     ['secao','library.facet.section']
   ];
   const BIB_ORDENACOES=[
@@ -9728,7 +9759,7 @@
     openInfo(t('library.filterTitle'), buildBibFiltrosSheetHtml());
   }
   function limparFiltrosBiblioteca(){
-    bibFacetSel={categoria:null, profissao:null, evento:null, secao:null};
+    bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, secao:null};
     bibOrdenacao='usos';
     renderBiblioteca();
     refrescarSheetFiltrosBiblioteca();
@@ -9740,13 +9771,23 @@
     else arr.sort((a,b)=>(b.usos||0)-(a.usos||0));
     return arr;
   }
+  const BIB_SELO_ICONS={
+    oficial:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+    comunidade:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+    juridico:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
+    popular:'<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
+    recomendado:'<path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>'
+  };
+  function bibSeloSpan(cls, iconKey, label){
+    return '<span class="bib-selo '+cls+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+BIB_SELO_ICONS[iconKey]+'</svg>'+label+'</span>';
+  }
   function bibSelosHtml(item){
     let html='';
-    if(item.origem==='oficial') html+='<span class="bib-selo origem-oficial">✓ '+t('library.origin.official')+'</span>';
-    else if(item.origem==='comunidade') html+='<span class="bib-selo origem-comunidade">◉ '+t('library.origin.community')+'</span>';
-    else if(item.origem==='juridico') html+='<span class="bib-selo origem-juridico">⚖ '+t('library.origin.legal')+'</span>';
-    if((item.usos||0)>=150) html+='<span class="bib-selo destaque-popular">🔥 '+t('library.badge.popular')+'</span>';
-    if((item.avaliacao||0)>=4.7) html+='<span class="bib-selo destaque-recomendado">👍 '+t('library.badge.recommended')+'</span>';
+    if(item.origem==='oficial') html+=bibSeloSpan('origem-oficial','oficial',t('library.origin.official'));
+    else if(item.origem==='comunidade') html+=bibSeloSpan('origem-comunidade','comunidade',t('library.origin.community'));
+    else if(item.origem==='juridico') html+=bibSeloSpan('origem-juridico','juridico',t('library.origin.legal'));
+    if((item.usos||0)>=150) html+=bibSeloSpan('destaque-popular','popular',t('library.badge.popular'));
+    if((item.avaliacao||0)>=4.7) html+=bibSeloSpan('destaque-recomendado','recomendado',t('library.badge.recommended'));
     return html;
   }
   function renderBiblioteca(){
@@ -9761,17 +9802,18 @@
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.id);
-      const meta=[];
-      if(i.usos) meta.push(i.usos+' '+t('library.uses'));
-      if(i.numBlocos) meta.push(i.numBlocos+' '+t('library.blocksCount'));
-      if(i.autor) meta.push(t('library.by')+escapeHtml(i.autor));
+      const metricas=[];
+      if(i.usos) metricas.push(i.usos+' '+t('library.uses'));
+      if(i.numBlocos) metricas.push(i.numBlocos+' '+t('library.blocksCount'));
+      const selos=bibSelosHtml(i);
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+' <span class="bib-tag tipo">'+escapeHtml(i.tipo)+'</span></div>'+
-        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
-        '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">'+bibSelosHtml(i)+'</div></div>'+
+        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
         '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div></div>'+
-        (meta.length?'<div class="bc-meta">'+meta.join('<span>·</span>')+'</div>':'')+
-        (i.tags&&i.tags.length?'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">'+i.tags.slice(0,4).map(tg=>'<span class="struct-pill">#'+escapeHtml(tg)+'</span>').join('')+'</div>':'')+
+        (selos?'<div class="bc-selos">'+selos+'</div>':'')+
+        (i.autor?'<div class="bc-autor">'+t('library.by')+escapeHtml(i.autor)+'</div>':'')+
+        (metricas.length?'<div class="bc-meta">'+metricas.join('<span>·</span>')+'</div>':'')+
+        (i.tags&&i.tags.length?'<div class="bc-tags">'+i.tags.slice(0,4).map(tg=>'<span class="struct-pill">#'+escapeHtml(tg)+'</span>').join('')+'</div>':'')+
       '</div>';
     }).join('');
   }
@@ -9799,12 +9841,15 @@
     const it=catalogoBiblioteca().find(i=>i.id===id);
     if(!it) return;
     const fav=bibFavoritos.has(id);
-    let html='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px">'+bibSelosHtml(it)+'</div>';
+    let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
-    const meta=[];
-    if(it.usos) meta.push(it.usos+' '+t('library.uses'));
-    if(it.autor) meta.push(t('library.by')+it.autor);
-    if(meta.length) html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+escapeHtml(meta.join(' · '))+'</p>';
+    const selos=bibSelosHtml(it);
+    if(selos) html+='<div class="bc-selos" style="margin-bottom:10px">'+selos+'</div>';
+    if(it.autor) html+='<p style="font-size:12px;color:var(--ink-soft);margin-bottom:4px">'+escapeHtml(t('library.by')+it.autor)+'</p>';
+    const metricas=[];
+    if(it.usos) metricas.push(it.usos+' '+t('library.uses'));
+    if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
+    if(metricas.length) html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+escapeHtml(metricas.join(' · '))+'</p>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
     html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
