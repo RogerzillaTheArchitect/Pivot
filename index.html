@@ -82,6 +82,13 @@
   .shell::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;mix-blend-mode:overlay;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
 
+  /* Canvas WebGL que refrata as mesmas cores dos blobs através de vidro fraturado
+     (ver .bg-blobs acima). Some com opacity:0 até o WebGL confirmar suporte via JS;
+     se falhar, os blobs CSS abaixo continuam visíveis normalmente como fallback. */
+  #bg-glass-canvas{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease}
+  #bg-glass-canvas.ready{opacity:1}
+  #bg-glass-canvas.ready ~ .bg-blobs,#bg-glass-canvas.ready ~ .bg-sheen{display:none}
+
   /* ===== SPLASH ===== */
   #splash{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease, visibility .5s}
@@ -1558,6 +1565,7 @@
 
 <div class="shell">
 
+  <canvas id="bg-glass-canvas" aria-hidden="true"></canvas>
   <div class="bg-blobs" aria-hidden="true">
     <div class="bg-blob bg-blob-1"></div>
     <div class="bg-blob bg-blob-2"></div>
@@ -11302,6 +11310,263 @@
   ajustarPaddingEcra();
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
+</script>
+
+<script type="module">
+// Background WebGL: reproduz as cores/movimento dos ".bg-blob" (definidos no <style>)
+// num canvas 2D e refrata o resultado através de um shader de vidro fraturado
+// (Three.js), com leve parallax pelo mouse. Se WebGL falhar, os blobs CSS originais
+// continuam visíveis (ver regra "#bg-glass-canvas.ready ~ .bg-blobs" no <style>).
+try {
+  const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.min.js");
+
+  const shell = document.querySelector('.shell');
+  const canvas = document.getElementById('bg-glass-canvas');
+  if (!shell || !canvas) throw new Error('shell/canvas ausente');
+
+  // ---- Fonte: mesmas cores/curvas de ".bg-blob-*" e ".bg-sheen", desenhadas em canvas 2D ----
+  // Canvas de origem pequeno de propósito: o custo de ctx.filter='blur()' escala com
+  // área × raio, e essa textura é redesenhada em intervalos (não a cada frame do RAF,
+  // ver THROTTLE_MS abaixo) — mesma armadilha de custo que o feTurbulence descartado
+  // no CSS original. O plano WebGL faz o upscale sem perda visível perceptível.
+  const src = document.createElement('canvas');
+  const srcCtx = src.getContext('2d');
+  const SRC_SIZE = 224;
+  src.width = SRC_SIZE;
+  src.height = SRC_SIZE;
+
+  // Paletas do background, escolhidas conforme o modo claro/escuro do app.
+  // Escura: preto + verde. Clara: creme + sálvia + laranja. As barras de
+  // vidro (shader) ficam por cima; isto é só a cor que se vê atrás delas.
+  const PALETTES = {
+    dark: {
+      base: '#050705',
+      blobs: [
+        { cx:.22, cy:.20, rx:.58, ry:.52, c0:'#123720', blur:22, op:.95, period:34, phase:0,   comp:'source-over' },
+        { cx:.80, cy:.74, rx:.55, ry:.50, c0:'#1C5030', blur:24, op:.70, period:38, phase:-12, comp:'lighter' },
+        { cx:.50, cy:.48, rx:.60, ry:.55, c0:'#2C6B44', blur:30, op:.50, period:30, phase:-21, comp:'lighter' },
+        { cx:.70, cy:.28, rx:.30, ry:.26, c0:'#3E9160', blur:20, op:.38, period:32, phase:-6,  comp:'lighter' },
+      ],
+    },
+    light: {
+      base: '#EAE3D2',
+      blobs: [
+        { cx:.24, cy:.24, rx:.62, ry:.56, c0:'#AEB59C', blur:26, op:.55, period:34, phase:0,   comp:'multiply' },
+        { cx:.80, cy:.72, rx:.56, ry:.50, c0:'#C6BBA0', blur:26, op:.50, period:38, phase:-12, comp:'multiply' },
+        { cx:.54, cy:.46, rx:.52, ry:.48, c0:'#97A187', blur:30, op:.42, period:30, phase:-21, comp:'multiply' },
+        { cx:.68, cy:.30, rx:.30, ry:.26, c0:'#E08A38', blur:18, op:.52, period:32, phase:-6,  comp:'source-over' },
+      ],
+    },
+  };
+  const currentTheme = () =>
+    document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+
+  function drawSource(tSec) {
+    const pal = PALETTES[currentTheme()];
+    srcCtx.clearRect(0, 0, SRC_SIZE, SRC_SIZE);
+    srcCtx.fillStyle = pal.base;
+    srcCtx.fillRect(0, 0, SRC_SIZE, SRC_SIZE);
+
+    for (const b of pal.blobs) {
+      const p = (((tSec + b.phase) % b.period) + b.period) % b.period / b.period; // 0..1
+      const wobble = Math.sin(p * Math.PI * 2);
+      const dx = wobble * 0.05;
+      const dy = Math.cos(p * Math.PI * 2) * 0.045;
+      const scale = 1 + wobble * 0.1;
+
+      srcCtx.save();
+      srcCtx.globalCompositeOperation = b.comp;
+      srcCtx.globalAlpha = b.op;
+      srcCtx.filter = `blur(${b.blur}px)`;
+
+      const cx = (b.cx + dx) * SRC_SIZE;
+      const cy = (b.cy + dy) * SRC_SIZE;
+      const r = Math.max(b.rx, b.ry) * scale * SRC_SIZE * 0.7;
+
+      const grad = srcCtx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      grad.addColorStop(0, b.c0);
+      grad.addColorStop(0.55, b.c0);
+      grad.addColorStop(1, 'transparent');
+
+      srcCtx.fillStyle = grad;
+      srcCtx.beginPath();
+      srcCtx.ellipse(cx, cy, b.rx * scale * SRC_SIZE, b.ry * scale * SRC_SIZE, 0, 0, Math.PI * 2);
+      srcCtx.fill();
+      srcCtx.restore();
+    }
+  }
+
+  drawSource(0);
+
+  // ---- Three.js: plano fullscreen com shader de vidro fraturado ----
+  const texture = new THREE.CanvasTexture(src);
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const vertexShader = `
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  // Duas camadas: (1) background líquido animado por baixo; (2) barras de
+  // vidro canelado por cima, que refratam + desfocam o background. Só o
+  // background se move; as barras ficam paradas (reagem só ao mouse).
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    uniform vec2 uMouse;
+    uniform float uBars;
+    uniform float uRefraction;
+    uniform float uBlur;
+    uniform float uSheen;
+    uniform float uParallax;
+    uniform float uTime;
+    uniform float uFlowStrength;
+    uniform float uFlowSpeed;
+    varying vec2 vUv;
+
+    const float PI = 3.14159265;
+
+    // Camada 1 — movimento líquido no CONTEÚDO do background. Domain warp
+    // animado no tempo (equivalente à Evolution do Turbulent Displace do
+    // After Effects, ref: build_liquid_bg.jsx). As barras não se movem por
+    // causa disto — só o que se vê atrás delas flui.
+    vec2 liquidFlow(vec2 uv) {
+      float t = uTime * uFlowSpeed;
+      vec2 w;
+      w.x = sin(uv.y * 5.3 + t) + 0.5 * sin(uv.y * 11.0 - t * 1.3);
+      w.y = cos(uv.x * 4.7 - t * 0.9) + 0.5 * cos(uv.x * 9.0 + t * 1.1);
+      return w * uFlowStrength;
+    }
+
+    vec3 sampleBg(vec2 uv) {
+      vec2 p = uv + liquidFlow(uv);
+      return texture2D(uTexture, clamp(p, 0.0, 1.0)).rgb;
+    }
+
+    // Camada 2 — refração por barra (lente cilíndrica) + parallax. SEM relevo
+    // aqui: o relevo (linhas) é aplicado depois, por-pixel, para não borrar.
+    vec3 glassContent(vec2 uv) {
+      float barWidth = 1.0 / uBars;
+      float local = fract(uv.x * uBars) - 0.5;
+      float bend = sin(local * PI) * uRefraction * barWidth;
+      vec2 g = uv;
+      g.x += bend + (uMouse.x - 0.5) * uParallax;
+      g.y += (uMouse.y - 0.5) * uParallax * 0.4;
+      return sampleBg(g);
+    }
+
+    void main() {
+      vec2 uv = vUv;
+
+      // Blur do CONTEÚDO refratado (frosted), num pequeno kernel relativo à
+      // largura da barra. As linhas das barras NÃO entram aqui.
+      float spread = uBlur / uBars;
+      vec3 col = vec3(0.0);
+      for (int i = -4; i <= 4; i++) {
+        float o = float(i) / 4.0;
+        col += glassContent(uv + vec2(o * spread, o * spread * 0.5));
+      }
+      col /= 9.0;
+
+      // Relevo/linhas das barras, nítido (por-pixel): bordas escuras + filete
+      // de luz deslocado. É isto que dá as linhas verticais crisp do vidro.
+      float local = fract(uv.x * uBars) - 0.5;
+      float edgeDark = 1.0 - uSheen * 0.30 * pow(abs(local) * 2.0, 2.0);
+      float highlight = pow(max(0.0, cos((local + 0.16) * PI)), 5.0);
+      col *= edgeDark;
+      col += uSheen * 0.14 * highlight;
+
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  const material = new THREE.ShaderMaterial({
+    uniforms: {
+      uTexture: { value: texture },
+      uMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      uBars: { value: 21 },
+      uRefraction: { value: 1.5 },
+      uBlur: { value: 0.01 },
+      uSheen: { value: 0.05 },
+      uParallax: { value: 0.142 },
+      uTime: { value: 0 },
+      uFlowStrength: { value: 0.2 },
+      uFlowSpeed: { value: 0.4 },
+    },
+    vertexShader,
+    fragmentShader,
+    transparent: true,
+  });
+
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+  scene.add(mesh);
+
+  function resize() {
+    const w = shell.clientWidth;
+    const h = shell.clientHeight;
+    renderer.setSize(w, h, false);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const mouse = { x: 0.5, y: 0.5 };
+  const targetMouse = { x: 0.5, y: 0.5 };
+  shell.addEventListener('mousemove', (e) => {
+    const rect = shell.getBoundingClientRect();
+    targetMouse.x = (e.clientX - rect.left) / rect.width;
+    targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height;
+  });
+
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const THROTTLE_SEC = 1 / 12; // redesenha a textura de origem a ~12fps, render WebGL continua a 60fps
+  let lastDrawAt = -Infinity;
+
+  // Troca a paleta (clara/escura) quando o app alterna o modo — aplicarTema()
+  // escreve data-theme no <html>. drawSource já lê currentTheme() sozinho; isto
+  // força um redraw imediato (importante sob movimento reduzido, onde o loop
+  // não redesenha a textura periodicamente).
+  new MutationObserver(() => {
+    drawSource(clock.getElapsedTime());
+    texture.needsUpdate = true;
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  const clock = new THREE.Clock();
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const now = clock.getElapsedTime();
+    if (!reducedMotion && now - lastDrawAt > THROTTLE_SEC) {
+      lastDrawAt = now;
+      drawSource(now);
+      texture.needsUpdate = true;
+    }
+
+    mouse.x = lerp(mouse.x, targetMouse.x, 0.12);
+    mouse.y = lerp(mouse.y, targetMouse.y, 0.12);
+    material.uniforms.uMouse.value.set(mouse.x, mouse.y);
+
+    // Fluxo líquido animado continuamente (a 60fps, GPU); congela se o
+    // utilizador pediu movimento reduzido.
+    if (!reducedMotion) material.uniforms.uTime.value = now;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  canvas.classList.add('ready');
+} catch (err) {
+  console.warn('[bg-glass] WebGL background indisponível, mantendo blobs CSS:', err);
+}
 </script>
 </body>
 </html>
