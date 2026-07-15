@@ -319,8 +319,9 @@
     display:grid;place-items:center;cursor:pointer;color:#fff;flex:none;transition:opacity .15s;opacity:.85}
   .icon-btn:hover{opacity:1}
   .icon-btn svg{width:20px;height:20px}
-  #notif-btn{width:auto;min-width:38px;padding:0 11px 0 9px;display:flex;align-items:center;justify-content:center;gap:5px}
-  .notif-count{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:12.5px;font-weight:600;color:#fff}
+  #notif-btn{position:relative}
+  .notif-count{position:absolute;top:2px;right:1px;font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:10px;font-weight:700;color:#fff;line-height:1;pointer-events:none}
 
   .screen{flex:1;overflow-y:auto;padding:8px 30px 40px}
   .screen::-webkit-scrollbar{width:8px}
@@ -331,7 +332,9 @@
   @keyframes fade{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
 
   /* ===== HOJE / DASHBOARD ===== */
-  .date{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:30px;font-weight:400;color:#F5F5F2;letter-spacing:.02em;margin-top:14px;margin-bottom:24px;text-transform:uppercase;display:block;text-align:left}
+  .date-header{margin-top:14px;margin-bottom:24px;display:flex;flex-direction:column;line-height:1}
+  .date-month{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:34px;font-weight:600;color:#F5F5F2;letter-spacing:.02em;text-transform:uppercase}
+  .date-year{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;font-weight:400;color:#8E8E86;letter-spacing:.04em;margin-top:4px}
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
   .month-summary{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);border:1px solid rgba(255,255,255,.10);
@@ -351,9 +354,11 @@
   .mr-track-outer{stroke:var(--c-track-lt)}
   .mr-track-inner{stroke:var(--brand)}
   .mr-ring{fill:none;stroke-linecap:round}
-  .mr-meta{stroke:url(#grad-mr-meta)}
-  .mr-esperado{stroke:url(#grad-mr-esperado)}
-  .mr-recebido{stroke:url(#grad-mr-recebido)}
+  .mr-meta{stroke:#F2F5F3}
+  .mr-esperado{stroke:#A8E6C1}
+  .mr-recebido{stroke:#63C798}
+  .mr-despesas{stroke:#E9B949}
+  .mr-teto{stroke:#D95A5A}
   .mr-tip{fill:#fff;filter:drop-shadow(0 0 3px rgba(255,255,255,.8));opacity:0;
     transition:opacity .3s ease .1s,cx 1s cubic-bezier(.2,.8,.2,1) .06s,cy 1s cubic-bezier(.2,.8,.2,1) .06s}
   .mr-tip.show{opacity:1}
@@ -361,21 +366,15 @@
   .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:18px;color:var(--ink);letter-spacing:-.01em;line-height:1}
   .ms-rings-center-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;color:var(--neutral);margin-top:3px}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
-  .mrl-item{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--ink-soft);padding:11px 0;border-bottom:1px solid var(--btn-09);cursor:pointer}
+  .mrl-item{display:flex;align-items:center;gap:11px;font-size:16px;color:var(--ink-soft);padding:11px 0;border-bottom:1px solid var(--btn-09);cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
   .mrl-item:last-child{border-bottom:none}
-  .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:15px}
-  .mr-meta-c{color:#B8912F}
-  .mr-esperado-c{color:#4A7FB5}
-  .mr-recebido-c{color:#3D8A73}
-  .mr-gastos-c{color:#B98A4E}
-  .ms-despesas-bar-wrap{padding:2px 18px 0;cursor:pointer}
-  .ms-despesas-bar{position:relative;height:7px;border-radius:99px;background:rgba(255,255,255,.10);overflow:visible}
-  .ms-despesas-fill{position:absolute;left:0;top:0;height:100%;width:0;border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1),background .4s ease}
-  .ms-despesas-marker{position:absolute;top:-3px;bottom:-3px;width:2px;border-radius:1px;background:rgba(255,255,255,.55);left:100%}
-  .ms-teto-note{font-family:var(--font-subtitle),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:12px;color:var(--ink-faint);padding:12px 18px 16px;border-top:1px solid var(--btn-09);text-align:center;cursor:pointer}
-  .ms-teto-note b{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;color:var(--ink-soft);margin-left:4px}
+  .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:17px}
+  .mr-meta-c{color:#F2F5F3}
+  .mr-esperado-c{color:#A8E6C1}
+  .mr-recebido-c{color:#63C798}
+  .mr-gastos-c{color:#E9B949}
+  .mr-teto-c{color:#D95A5A}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}
@@ -449,9 +448,9 @@
     font-size:11px;font-weight:600;color:#fff;cursor:pointer;border:none;font-family:inherit;
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .radar-swipe-btn svg{width:16px;height:16px}
-  .radar-swipe-btn.editar{background:rgba(200,200,196,.42)}
-  .radar-swipe-btn.concluir{background:rgba(217,127,121,.42)}
-  .radar-swipe-btn.arquivar{background:rgba(160,160,150,.42)}
+  .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
+  .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
+  .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
   .radar-status-icon{width:14px;height:14px;flex:none;margin-right:7px}
   .radar-status-icon.late{color:var(--late)}
   .radar-status-icon.soon{color:var(--urgent)}
@@ -871,7 +870,7 @@
   @media (prefers-reduced-motion:reduce){.priority-dot,.dot-late,.notif-dot,.urgent-dot{animation:none}}
   /* pontos simples, estáticos: dias do calendário e legenda financeira (não pulsam) */
   .cd{background:rgba(255,255,255,.85)}
-  .mrl-dot{width:9px;height:9px;border-radius:50%;flex:none;background:transparent;border:1.5px solid currentColor}
+  .mrl-dot{width:12px;height:12px;border-radius:50%;flex:none;background:transparent;border:2px solid currentColor}
   .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
   .venc-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex:none}
   .venc-amount{font-size:14.5px;font-weight:600;color:var(--ink)}
@@ -1718,7 +1717,10 @@
 
       <!-- ============ HOJE / DASHBOARD ============ -->
       <section class="view active" id="v-hoje">
-        <div class="date" id="hoje-data">Quarta, 24 de junho</div>
+        <div class="date-header">
+          <span class="date-month" id="hoje-mes">JUNHO</span>
+          <span class="date-year" id="hoje-ano">2026</span>
+        </div>
 
         <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
         <div class="month-summary" onclick="abrirRelatorios('financeiro')">
@@ -1729,34 +1731,27 @@
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('financeiro')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('financeiro')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
               </div>
             </div>
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
-                  <defs>
-                    <linearGradient id="grad-mr-meta" x1="11" y1="11" x2="139" y2="139" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#D9C48C"/>
-                      <stop offset="100%" stop-color="#B8912F"/>
-                    </linearGradient>
-                    <linearGradient id="grad-mr-esperado" x1="25" y1="25" x2="125" y2="125" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#8FB8DD"/>
-                      <stop offset="100%" stop-color="#4A7FB5"/>
-                    </linearGradient>
-                    <linearGradient id="grad-mr-recebido" x1="39" y1="39" x2="111" y2="111" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#6FBFA1"/>
-                      <stop offset="100%" stop-color="#2F6B58"/>
-                    </linearGradient>
-                  </defs>
-                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="64" stroke-width="9"/>
-                  <circle class="mr-ring mr-meta" id="mr-meta" cx="75" cy="75" r="64" stroke-width="9"/>
-                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="50" stroke-width="9"/>
-                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="50" stroke-width="9"/>
-                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="36" stroke-width="9"/>
-                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="36" stroke-width="9"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="66" stroke-width="8"/>
+                  <circle class="mr-ring mr-meta" id="mr-meta" cx="75" cy="75" r="66" stroke-width="8"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="56" stroke-width="8"/>
+                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="56" stroke-width="8"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="46" stroke-width="8"/>
+                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="46" stroke-width="8"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="36" stroke-width="8"/>
+                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="36" stroke-width="8"/>
+                  <circle class="mr-track mr-track-outer" cx="75" cy="75" r="26" stroke-width="8"/>
+                  <circle class="mr-ring mr-teto" id="mr-teto" cx="75" cy="75" r="26" stroke-width="8"/>
                   <circle class="mr-tip" id="mr-tip-meta" r="1.5"/>
                   <circle class="mr-tip" id="mr-tip-esperado" r="1.5"/>
                   <circle class="mr-tip" id="mr-tip-recebido" r="1.5"/>
+                  <circle class="mr-tip" id="mr-tip-despesas" r="1.5"/>
+                  <circle class="mr-tip" id="mr-tip-teto" r="1.5"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
@@ -1764,10 +1759,6 @@
               </div>
             </div>
           </div>
-          <div class="ms-despesas-bar-wrap" onclick="event.stopPropagation();abrirDespesas()">
-            <div class="ms-despesas-bar"><div class="ms-despesas-fill" id="ms-despesas-fill"></div><div class="ms-despesas-marker" id="ms-despesas-marker"></div></div>
-          </div>
-          <div class="ms-teto-note" onclick="event.stopPropagation();abrirDefinirMetas()"><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
         </div>
 
         <span class="section-label-out" data-t="home.performanceTitle">Performance</span>
@@ -4799,30 +4790,34 @@
     showToast(t('toast.goalsUpdated'));
   }
   function renderRingsDashboard(recebido, esperado, custos){
-    const meta=METAS.receita||1, limiteGastos=METAS.gastos||1;
-    /* 3 anéis concêntricos, todos contra a Meta como referência (Apple Fitness-style:
-       a Meta é o "limite" do sistema, não um anel de progresso à parte) — externo=Meta
-       (sempre cheio, num===den, é a fronteira visual), intermédio=Esperado/Meta,
-       interno=Recebido/Meta. Despesas não é anel — é a barra própria abaixo (ver
-       renderBarraDespesas). Todos continuam a girar (com sombreado) se ultrapassarem
-       100%, via pintarAnelComVolta. */
-    const rMeta=pintarAnelComVolta('mr-meta', 64, meta, meta);
-    const rEsperado=pintarAnelComVolta('mr-esperado', 50, esperado, meta);
-    const rRecebido=pintarAnelComVolta('mr-recebido', 36, recebido, meta);
-    posicionarPontaAnel('mr-tip-meta', 64, rMeta&&rMeta.pctAtual);
-    posicionarPontaAnel('mr-tip-esperado', 50, rEsperado&&rEsperado.pctAtual);
-    posicionarPontaAnel('mr-tip-recebido', 36, rRecebido&&rRecebido.pctAtual);
+    const meta=METAS.receita||1, teto=METAS.gastos||1;
+    /* 5 anéis concêntricos, cada um com seu próprio anel/cor/progresso, coexistindo
+       no mesmo conjunto gráfico (nunca uma barra separada). Meta é sempre o anel
+       externo e — junto com Teto — funciona como anel-fronteira (sempre cheio,
+       num===den): Meta delimita o grupo de receita (Esperado/Recebido progridem
+       contra ela), Teto delimita o grupo de despesa (Despesas progride contra ele).
+       Todos continuam a girar (com sombreado) se ultrapassarem 100%, via
+       pintarAnelComVolta. */
+    const rMeta=pintarAnelComVolta('mr-meta', 66, meta, meta);
+    const rEsperado=pintarAnelComVolta('mr-esperado', 56, esperado, meta);
+    const rRecebido=pintarAnelComVolta('mr-recebido', 46, recebido, meta);
+    const rDespesas=pintarAnelComVolta('mr-despesas', 36, custos, teto);
+    const rTeto=pintarAnelComVolta('mr-teto', 26, teto, teto);
+    posicionarPontaAnel('mr-tip-meta', 66, rMeta&&rMeta.pctAtual);
+    posicionarPontaAnel('mr-tip-esperado', 56, rEsperado&&rEsperado.pctAtual);
+    posicionarPontaAnel('mr-tip-recebido', 46, rRecebido&&rRecebido.pctAtual);
+    posicionarPontaAnel('mr-tip-despesas', 36, rDespesas&&rDespesas.pctAtual);
+    posicionarPontaAnel('mr-tip-teto', 26, rTeto&&rTeto.pctAtual);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
     set('mrl-receb', fmtMoney(recebido));
     set('mrl-gastos', fmtMoney(custos));
-    set('mrl-teto', fmtMoney(limiteGastos));
+    set('mrl-teto', fmtMoney(teto));
     /* saldo real do mês até agora: o que entrou menos o que já saiu */
     const saldo=recebido-custos;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-    renderBarraDespesas(custos, limiteGastos);
   }
   /* posiciona o marcador de ponta (círculo) na extremidade do progresso do anel —
      mesmo referencial (não rotacionado) dos círculos do anel: 0° = 3 horas, sentido
@@ -4836,32 +4831,6 @@
     el.setAttribute('cx', 75+r*Math.cos(ang));
     el.setAttribute('cy', 75+r*Math.sin(ang));
     el.classList.toggle('show', p>1.5 && p<99.5);
-  }
-  /* Despesas não é um 4º anel — é uma barra de risco própria, com gradiente de cor
-     conforme a proximidade do teto de gastos, e um marcador fixo mostrando onde fica
-     o limite de 100%. A barra tem alcance maior que o teto (30% de folga) para que
-     ultrapassar o limite continue visível como "mais barra depois do marcador",
-     em vez de ficar preso no fim. */
-  function corGradienteDespesas(pct){
-    if(pct<=40) return ['#F8FAFA','#DDF8E7'];
-    if(pct<=70) return ['#DDF8E7','#F5D76E'];
-    if(pct<=90) return ['#F5D76E','#E9A93B'];
-    if(pct<=100) return ['#E9A93B','#D84C4C'];
-    return ['#C63D3D','#C63D3D'];
-  }
-  function renderBarraDespesas(custos, teto){
-    const fill=document.getElementById('ms-despesas-fill');
-    const marker=document.getElementById('ms-despesas-marker');
-    if(!fill || !marker) return;
-    const pct = teto>0 ? (custos/teto*100) : (custos>0?999:0);
-    const range = Math.max(teto*1.3, custos*1.05, teto+1);
-    const fillPct = Math.min(custos/range*100, 100);
-    const markerPct = Math.min(teto/range*100, 100);
-    const over = pct>100;
-    const [c1,c2] = over ? ['#C63D3D','#C63D3D'] : corGradienteDespesas(pct);
-    fill.style.width = fillPct+'%';
-    fill.style.background = 'linear-gradient(90deg,'+c1+','+c2+')';
-    marker.style.left = markerPct+'%';
   }
   /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não fica
      preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco como
@@ -5056,10 +5025,11 @@
     const nomesMeses=LANG==='en'?nomesMesesEn:LANG==='es'?nomesMesesEs:nomesMesesPt;
     const mesEl=document.getElementById('ms-mes-atual');
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
-    const dataEl=document.getElementById('hoje-data');
-    if(dataEl){
+    const mesHojeEl=document.getElementById('hoje-mes'), anoHojeEl=document.getElementById('hoje-ano');
+    if(mesHojeEl && anoHojeEl){
       const hoje=new Date();
-      dataEl.textContent=nomesMeses[hoje.getMonth()]+' '+hoje.getFullYear();
+      mesHojeEl.textContent=nomesMeses[hoje.getMonth()];
+      anoHojeEl.textContent=hoje.getFullYear();
     }
     renderTasksList();
     updateHoje();
@@ -5213,51 +5183,65 @@
       const wrap=card.closest('.radar-card-wrap');
       const acoesDir=wrap&&wrap.querySelector('.radar-swipe-actions.right');
       const acoesEsq=wrap&&wrap.querySelector('.radar-swipe-actions.left');
-      let startX=0, dx=0, dragging=false, pointerId=null;
+      /* estado explícito de 3 posições — o card só pode estar fechado, com as
+         ações da esquerda reveladas, ou com as da direita reveladas. Nunca os
+         dois ao mesmo tempo, nunca um estado intermediário permanente. */
+      let openSide='closed'; // 'closed' | 'left' | 'right'
+      let startX=0, baseX=0, curX=0, dragging=false, pointerId=null;
+      let hapticLight=false, hapticFull=false;
+      const setActions=x=>{
+        if(x<0 && acoesDir){
+          const p=Math.min(1, -x/LARG_DIR);
+          acoesDir.style.opacity=p; acoesDir.style.transform='scale('+(.85+.15*p)+')';
+          if(acoesEsq) acoesEsq.style.opacity=0;
+        } else if(x>0 && acoesEsq){
+          const p=Math.min(1, x/LARG_ESQ);
+          acoesEsq.style.opacity=p; acoesEsq.style.transform='scale('+(.85+.15*p)+')';
+          if(acoesDir) acoesDir.style.opacity=0;
+        } else {
+          if(acoesDir) acoesDir.style.opacity=0;
+          if(acoesEsq) acoesEsq.style.opacity=0;
+        }
+      };
       card.addEventListener('pointerdown', e=>{
-        startX=e.clientX; dx=0; dragging=true; pointerId=e.pointerId;
-        card.style.transition='none'; card.dataset.swiped='0';
+        startX=e.clientX; dragging=true; pointerId=e.pointerId;
+        baseX = openSide==='left' ? LARG_ESQ : openSide==='right' ? -LARG_DIR : 0;
+        curX=baseX;
+        hapticLight=false; hapticFull=false;
+        card.style.transition='none';
         try{ card.setPointerCapture(pointerId); }catch(err){}
       });
       card.addEventListener('pointermove', e=>{
         if(!dragging || e.pointerId!==pointerId) return;
-        dx=e.clientX-startX;
-        if(dx<-LARG_DIR) dx=-LARG_DIR;
-        if(dx>LARG_ESQ) dx=LARG_ESQ;
-        /* só revela as ações (e movimenta o card) depois de um arrasto real —
-           um simples toque ou o início de um scroll vertical não deve mostrar
-           as abas por baixo do vidro. A partir daí, a opacidade e a escala das
-           ações acompanham a distância do arrasto em tempo real (em vez de
-           aparecerem de repente ao cruzar um limiar), como no Apple Mail. */
-        if(Math.abs(dx)>12){
-          if(card.dataset.swiped!=='1') haptic('tick');
-          card.dataset.swiped='1';
-          if(wrap) wrap.classList.add('active');
-          card.style.transform='translateX('+dx+'px)';
-          if(dx<0 && acoesDir){
-            const p=Math.min(1, -dx/LARG_DIR);
-            acoesDir.style.opacity=p; acoesDir.style.transform='scale('+(.85+.15*p)+')';
-            if(acoesEsq){ acoesEsq.style.opacity=0; }
-          } else if(dx>0 && acoesEsq){
-            const p=Math.min(1, dx/LARG_ESQ);
-            acoesEsq.style.opacity=p; acoesEsq.style.transform='scale('+(.85+.15*p)+')';
-            if(acoesDir){ acoesDir.style.opacity=0; }
-          }
-        }
+        let x=baseX+(e.clientX-startX);
+        /* a partir de um estado já aberto, o arrasto só pode levar de volta
+           ao centro — nunca atravessar para o lado oposto na mesma gesture,
+           o que evitaria a "troca automática de lado". */
+        if(openSide==='left') x=Math.max(0, Math.min(LARG_ESQ, x));
+        else if(openSide==='right') x=Math.max(-LARG_DIR, Math.min(0, x));
+        else x=Math.max(-LARG_DIR, Math.min(LARG_ESQ, x));
+        curX=x;
+        if(Math.abs(x-baseX)>4 && wrap) wrap.classList.add('active');
+        card.style.transform='translateX('+x+'px)';
+        setActions(x);
+        const range = x<0 ? LARG_DIR : LARG_ESQ;
+        const p = range>0 ? Math.abs(x)/range : 0;
+        if(p>=.3 && !hapticLight){ hapticLight=true; haptic('light'); }
+        if(p>=1 && !hapticFull){ hapticFull=true; haptic('medium'); }
       });
       const fim=e=>{
         if(!dragging || (e && e.pointerId!==pointerId)) return;
         dragging=false;
         if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
         card.style.transition='transform .2s ease';
-        const abreDir = dx<-70, abreEsq = dx>36;
-        card.style.transform = abreDir ? 'translateX(-'+LARG_DIR+'px)' : (abreEsq ? 'translateX('+LARG_ESQ+'px)' : 'translateX(0)');
-        if(abreDir || abreEsq) haptic('snap');
+        const abreDir = curX<=-LARG_DIR*.4, abreEsq = curX>=LARG_ESQ*.4;
+        openSide = abreDir ? 'right' : (abreEsq ? 'left' : 'closed');
+        const finalX = abreDir ? -LARG_DIR : (abreEsq ? LARG_ESQ : 0);
+        card.style.transform = 'translateX('+finalX+'px)';
         [acoesDir, acoesEsq].forEach(el=>{ if(el) el.style.transition='opacity .2s ease, transform .2s ease'; });
-        if(acoesDir) acoesDir.style.opacity = abreDir ? 1 : 0;
-        if(acoesEsq) acoesEsq.style.opacity = abreEsq ? 1 : 0;
-        if(!abreDir && !abreEsq){
-          setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
+        setActions(finalX);
+        if(openSide==='closed' && wrap){
+          setTimeout(()=>{ wrap.classList.remove('active'); }, 200);
         }
       };
       card.addEventListener('pointerup', fim);
@@ -10757,8 +10741,8 @@
   function haptic(style){
     if(!('vibrate' in navigator)) return;
     try{
-      if(style==='tick') navigator.vibrate(8);
-      else if(style==='snap') navigator.vibrate(15);
+      if(style==='tick'||style==='light') navigator.vibrate(8);
+      else if(style==='snap'||style==='medium') navigator.vibrate(18);
       else if(style==='success') navigator.vibrate([12,40,12]);
       else navigator.vibrate(10);
     }catch(e){}
