@@ -346,20 +346,20 @@
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:148px;flex:none;display:flex;flex-direction:column;align-items:center}
-  .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:6px 18px 0}
+  .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:16px 18px}
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:148px;height:148px;transform:rotate(-90deg)}
   .mr-trilho{fill:none}
   .mr-trilho-meta{stroke:rgba(242,245,243,.45)}
   .mr-trilho-teto{stroke:rgba(255,255,255,.22)}
-  .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
+  .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 0 1.5px rgba(0,0,0,.25))}
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
-  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;width:78px;height:78px;margin:auto;padding:0 6px;box-sizing:border-box}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:5px}
-  .ms-rings-center-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase}
+  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;width:74px;height:74px;margin:auto;padding:0 6px;box-sizing:border-box;background:none}
+  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:6px;text-align:center}
+  .ms-rings-center-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;color:var(--ink-soft);padding:8px 0;cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
@@ -1733,12 +1733,12 @@
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
                     <linearGradient id="grad-esperado" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#B8F1D2"/>
-                      <stop offset="100%" stop-color="#89DDB5"/>
+                      <stop offset="0%" stop-color="#DDF3E6"/>
+                      <stop offset="100%" stop-color="#A8E6C1"/>
                     </linearGradient>
                     <linearGradient id="grad-recebido" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#6FD4A6"/>
-                      <stop offset="100%" stop-color="#3FA97C"/>
+                      <stop offset="0%" stop-color="#63C798"/>
+                      <stop offset="100%" stop-color="#2F8F63"/>
                     </linearGradient>
                     <linearGradient id="grad-despesas" x1="123" y1="123" x2="27" y2="27" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stop-color="#FFF7D6"/>
@@ -1752,8 +1752,8 @@
                   <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="59" stroke-width="10"/>
                   <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="59" stroke-width="10"/>
                   <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="59" stroke-width="10"/>
-                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="46" stroke-width="10"/>
-                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="46" stroke-width="10"/>
+                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="48" stroke-width="10"/>
+                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="48" stroke-width="10"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
@@ -4812,9 +4812,9 @@
       if(esperado>=recebido) espEl.parentNode.insertBefore(espEl, recEl);
       else espEl.parentNode.insertBefore(recEl, espEl);
     }
-    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta);
-    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta);
-    pintarAnelComVolta('mr-despesas', 46, custos, teto);
+    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta, true);
+    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta, true);
+    pintarAnelComVolta('mr-despesas', 48, custos, teto, undefined, true);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
@@ -4831,11 +4831,14 @@
       saldoEl.style.fontSize = len>11 ? '10px' : len>9 ? '12px' : len>7 ? '14px' : '16px';
     }
   }
-  /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não fica
-     preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco como
-     a pista (o círculo imediatamente anterior no SVG) ganham um brilho/sombreado
-     para indicar que pelo menos uma volta já foi completada */
-  function pintarAnelComVolta(elId, r, num, den, trackElOverride){
+  /* anel genérico com suporte a "voltas": por padrão, se num ultrapassa den, o arco
+     não fica preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco
+     como a pista (o círculo imediatamente anterior no SVG) ganham um brilho/sombreado
+     para indicar que pelo menos uma volta já foi completada. Com semCiclo=true (usado
+     pelos anéis do card Financeiro), o comportamento é outro: o anel simplesmente para
+     em 100% e continua totalmente desenhado, sem reiniciar — só o brilho de "ultrapassou
+     o alvo" continua a acender via ring-lapped-progress/track. */
+  function pintarAnelComVolta(elId, r, num, den, trackElOverride, semCiclo){
     const el=document.getElementById(elId);
     if(!el) return null;
     const circ=2*Math.PI*r;
@@ -4844,7 +4847,9 @@
     /* quando o progresso cai exatamente numa volta completa (100%, 200%...), o resto
        da divisão é 0 — sem este ajuste o anel ficava com o traço todo recolhido
        (invisível) em vez de mostrar a volta cheia. */
-    const pctAtual=(laps>0 && ratioReal===laps) ? 100 : (ratioReal-laps)*100;
+    const pctAtual = semCiclo
+      ? Math.min(100, ratioReal*100)
+      : (laps>0 && ratioReal===laps) ? 100 : (ratioReal-laps)*100;
     const trackEl=trackElOverride||el.previousElementSibling;
     el.classList.toggle('ring-lapped-progress', laps>0);
     if(trackEl) trackEl.classList.toggle('ring-lapped-track', laps>0);
