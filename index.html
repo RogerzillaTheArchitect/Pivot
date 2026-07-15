@@ -21,7 +21,7 @@
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --label-out:rgba(255,255,255,.82);
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
-    --r:20px; --sb-w:236px; --nav-h:74px;
+    --r:12px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
     --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(122,124,116,.90); --glass-55:rgba(122,124,116,.92); --glass-6:rgba(122,124,116,.93); --glass-62:rgba(122,124,116,.94); --glass-65:rgba(122,124,116,.95); --glass-7:rgba(122,124,116,.96); --glass-85:rgba(122,124,116,.98); --glass2-75:rgba(122,124,116,.7);
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
@@ -338,7 +338,7 @@
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
   .month-summary{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);border:1px solid rgba(255,255,255,.10);
-    border-radius:22px;margin:12px 0 22px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
+    border-radius:12px;margin:12px 0 22px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
     color:#F5F5F2;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
@@ -361,9 +361,10 @@
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
-  .ms-rings-center{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:0 4px;box-sizing:border-box;margin-bottom:10px}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:5px;text-align:center}
-  .ms-rings-center-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center}
+  .ms-rings-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;
+    width:74px;height:74px;margin:auto;padding:0 4px;box-sizing:border-box}
+  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;text-align:center}
+  .ms-rings-center-lbl{display:block;font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center;margin-bottom:10px}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;color:var(--ink-soft);padding:8px 0;cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
@@ -404,7 +405,7 @@
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
   .jobs-stat-card{display:block;margin:0 0 22px;cursor:pointer;
     background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);
-    border:1px solid rgba(255,255,255,.10);border-radius:20px;padding:18px 8px;
+    border:1px solid rgba(255,255,255,.10);border-radius:12px;padding:18px 8px;
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
     box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     color:#F5F5F2;--ink:#F5F5F2;--ink-soft:#C9C9C2}
@@ -449,17 +450,25 @@
   .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
   .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
   .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
-  /* sinal de urgência do card de tarefa: em vez de ícone, um leve degradê radial
-     no canto inferior direito — atrasado = laranja-avermelhado, próximo vencimento
-     = amarelo — sobre um fundo mais escuro (mesma opacidade .10 de antes, só a cor
-     de base ficou mais próxima do preto) pra o efeito de cor aparecer melhor. */
-  .card.radar-card.late,.card.radar-card.soon{
-    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(16,15,13,.10)}
-  .card.radar-card.late::before,.card.radar-card.soon::before{
+  /* sinal de urgência do card de tarefa: em vez de ícone/bolinha, uma tag com
+     moldura (.radar-tag) + um degradê horizontal cobrindo o lado direito do card
+     inteiro, com início suave a partir do meio (não uma linha dura) — atrasado =
+     laranja-avermelhado, próximo vencimento = amarelo, demais tarefas do mês =
+     verde. Fundo mais escuro que o resto do app (mesma opacidade .10, cor de base
+     mais próxima do preto) pra o efeito de cor se destacar melhor. */
+  .card.radar-card{
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10)}
+  .card.radar-card::before{
     content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0}
-  .card.radar-card.late::before{background:radial-gradient(160px 130px at 100% 100%,rgba(224,102,58,.55),transparent 72%)}
-  .card.radar-card.soon::before{background:radial-gradient(160px 130px at 100% 100%,rgba(232,197,71,.45),transparent 72%)}
-  .card.radar-card.late>*,.card.radar-card.soon>*{position:relative;z-index:1}
+  .card.radar-card.late::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(224,102,58,.16) 58%,rgba(224,102,58,.42) 100%)}
+  .card.radar-card.soon::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(232,197,71,.14) 58%,rgba(232,197,71,.36) 100%)}
+  .card.radar-card.normal::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(79,161,137,.14) 58%,rgba(79,161,137,.34) 100%)}
+  .card.radar-card>*{position:relative;z-index:1}
+  .radar-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;
+    font-weight:600;border:1px solid;letter-spacing:.02em}
+  .radar-tag.late{color:#F0916A;border-color:rgba(224,102,58,.55);background:rgba(224,102,58,.10)}
+  .radar-tag.soon{color:#EAD07D;border-color:rgba(232,197,71,.55);background:rgba(232,197,71,.10)}
+  .radar-tag.normal{color:#7FC4A9;border-color:rgba(79,161,137,.55);background:rgba(79,161,137,.10)}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
@@ -469,18 +478,11 @@
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
-  /* Tarefas: um único card de vidro envolvendo a lista, com divisórias entre
-     as linhas em vez de cada tarefa ser seu próprio card separado. */
-  #tasks-list{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);
-    border:1.5px solid rgba(255,255,255,.20);border-radius:var(--r);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
-    backdrop-filter:blur(11px) saturate(160%);-webkit-backdrop-filter:blur(11px) saturate(160%);
-    overflow:hidden}
-  #tasks-list .radar-card-wrap{border-radius:0;margin-bottom:0}
-  #tasks-list .radar-card-wrap .card{background:none;border:none;border-radius:0;box-shadow:none;
-    backdrop-filter:none;-webkit-backdrop-filter:none;margin-bottom:0;
-    border-bottom:1px solid var(--line-soft)}
-  #tasks-list .radar-card-wrap:last-child .card{border-bottom:none}
+  /* Tarefas: cards colados em lista (sem espaço entre eles), mas cada um com
+     fundo e cantos totalmente arredondados próprios — em vez de um único bloco
+     de vidro com divisórias internas retas. */
+  #tasks-list .radar-card-wrap{margin-bottom:0}
+  #tasks-list .radar-card-wrap .card{border-radius:var(--r)}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
   .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(217,86,76,.13)}
@@ -666,7 +668,7 @@
   .priority-opt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
   .priority-opt.on .priority-dot{box-shadow:0 0 0 1.5px var(--paper)}
 
-  .job-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:11px}
+  .job-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:0}
   .job-card-wrap .job{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
   .job-swipe-actions{position:absolute;top:0;right:0;height:100%;width:204px;display:flex;z-index:0;
     opacity:0;pointer-events:none;transition:opacity .15s ease}
@@ -678,10 +680,17 @@
   .job-swipe-btn.editar{background:rgba(200,200,196,.42)}
   .job-swipe-btn.concluir{background:rgba(79,161,137,.42)}
   .job-swipe-btn.deletar{background:rgba(217,127,121,.42)}
+  .detalhe-footer-actions{display:flex;gap:10px;margin-top:28px;padding-bottom:10px}
+  .job-footer-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+    padding:12px 8px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper);
+    color:var(--ink-soft);font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s}
+  .job-footer-btn:hover{background:var(--paper-2)}
+  .job-footer-btn svg{width:18px;height:18px}
+  .job-footer-btn.concluir{color:var(--brand);border-color:var(--btn-32)}
   .job{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease;
-    background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);
-    border:2px solid rgba(255,255,255,.30);border-radius:var(--r);padding:15px 16px;
-    margin-bottom:11px;cursor:pointer;box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:15px 16px;
+    margin-bottom:0;cursor:pointer;box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08);
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
@@ -1744,10 +1753,7 @@
               </div>
             </div>
             <div class="ms-rings-wrap-outer">
-              <div class="ms-rings-center">
-                <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
-                <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
-              </div>
+              <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
@@ -1774,6 +1780,9 @@
                   <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="48" stroke-width="10"/>
                   <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="48" stroke-width="10"/>
                 </svg>
+                <div class="ms-rings-center">
+                  <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1936,6 +1945,12 @@
         </button>
 
         <div id="detalhe-dynamic"></div>
+
+        <div class="detalhe-footer-actions">
+          <button class="job-footer-btn" onclick="confirmarDeletarTrabalho(currentJobId)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg><span data-t="action.archive">Arquivar</span></button>
+          <button class="job-footer-btn" onclick="abrirEditarInfoTrabalho()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span data-t="action.edit">Editar</span></button>
+          <button class="job-footer-btn concluir" onclick="arquivarTrabalho(currentJobId,'concluido')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg><span data-t="action.complete">Concluir</span></button>
+        </div>
       </section>
 
       <!-- ============ BUILDER DE CONTRATO ============ -->
@@ -3332,6 +3347,11 @@
     "action.add": { pt:"Adicionar", en:"Add", es:"Añadir" },
     "action.attach": { pt:"Anexar", en:"Attach", es:"Adjuntar" },
     "action.complete": { pt:"Concluir", en:"Complete", es:"Concluir" },
+    "action.archive": { pt:"Arquivar", en:"Archive", es:"Archivar" },
+    "job.editInfoTitle": { pt:"Editar informações", en:"Edit info", es:"Editar información" },
+    "field.client": { pt:"Cliente", en:"Client", es:"Cliente" },
+    "field.type": { pt:"Tipo de trabalho", en:"Job type", es:"Tipo de trabajo" },
+    "field.local": { pt:"Local", en:"Location", es:"Lugar" },
     "action.contactSupport": { pt:"Falar com o suporte", en:"Contact support", es:"Hablar con soporte" },
     "action.restore": { pt:"Restaurar", en:"Restore", es:"Restaurar" },
     "action.delete": { pt:"Deletar", en:"Delete", es:"Eliminar" },
@@ -4420,6 +4440,8 @@
     "status.inDaysSuffix": { pt:" dias", en:" days", es:" días" },
     "status.overdue": { pt:"atrasado", en:"overdue", es:"atrasado" },
     "status.overdueTitle": { pt:"Atrasado", en:"Overdue", es:"Atrasado" },
+    "status.overdueDays": { pt:"Atrasado {d} dias", en:"Overdue {d} days", es:"Atrasado {d} días" },
+    "status.overdueOneDay": { pt:"Atrasado 1 dia", en:"Overdue 1 day", es:"Atrasado 1 día" },
     "status.sentNotSeenPrefix": { pt:"enviada · não vista há ", en:"sent · not seen for ", es:"enviada · no vista hace " },
     "status.today": { pt:"hoje", en:"today", es:"hoy" },
     "status.tomorrow": { pt:"amanhã", en:"tomorrow", es:"mañana" },
@@ -4570,6 +4592,7 @@
     "history.clientSignedContract": { pt:"Cliente assinou o contrato", en:"Client signed the contract", es:"El cliente firmó el contrato" },
     "toast.fileDownloaded": { pt:"Arquivo descarregado.", en:"File downloaded.", es:"Archivo descargado." },
     "toast.fillDescValue": { pt:"Preenche a descrição e o valor.", en:"Please fill in the description and amount.", es:"Rellena la descripción y el importe." },
+    "toast.jobUpdated": { pt:"Informações atualizadas.", en:"Info updated.", es:"Información actualizada." },
     "toast.goalsUpdated": { pt:"Metas atualizadas.", en:"Goals updated.", es:"Metas actualizadas." },
     "toast.googleSynced": { pt:"Google Calendar sincronizado.", en:"Google Calendar synced.", es:"Google Calendar sincronizado." },
     "toast.imageError": { pt:"Não foi possível carregar a imagem.", en:"Could not load the image.", es:"No se pudo cargar la imagen." },
@@ -5079,7 +5102,7 @@
   }
   function gerarLabelTemporal(dataISO, hora){
     const d=diasEntre(dataISO);
-    if(d<0) return t('status.overdueTitle');
+    if(d<0) return Math.abs(d)===1 ? t('status.overdueOneDay') : t('status.overdueDays').replace('{d}', Math.abs(d));
     if(d===0) return t('status.today')+(hora?(' · '+hora):'');
     if(d===1) return t('status.tomorrow')+(hora?(' · '+hora):'');
     if(d===7) return t('status.inOneWeek');
@@ -5124,19 +5147,18 @@
     wrap.innerHTML=itens.map(construirCardRadar).join('');
     ativarSwipeRadar();
   }
-  /* Sinal de urgência por nível: em vez de ícone de alerta, o próprio card ganha
-     um leve degradê radial no canto — atrasado (crítica) = laranja-avermelhado,
-     próximo vencimento (alta/média) = amarelo. Níveis mais baixos (normal) mantêm
-     o pontinho neutro discreto de antes — não é toda tarefa que precisa de alarme
-     visual. */
+  /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
+     (cor de acordo com o nível) + o próprio card ganha um leve degradê do lado
+     direito — atrasado (crítica) = laranja-avermelhado, próximo vencimento
+     (alta/média) = amarelo, demais tarefas do mês (normal) = verde. Todo nível
+     agora usa a mesma linguagem visual (tag + degradê), nada de ícone de alerta
+     nem bolinha solta. */
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
-    const isCritica = nivel==='critica';
-    const isAlta = nivel==='alta' || nivel==='media';
-    const urgClasse = isCritica ? ' late' : (isAlta ? ' soon' : '');
-    const statusHtml = urgClasse ? '' : '<span class="priority-dot" style="background:var(--c-green-soft);margin-right:7px"></span>';
-    let card='<div class="card radar-card'+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
-    card+='<div class="card-kicker">'+statusHtml+gerarLabelTemporal(it.dataISO, it.hora)+'</div>';
+    const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
+    const tagHtml='<span class="radar-tag '+urgClasse+'">'+gerarLabelTemporal(it.dataISO, it.hora)+'</span>';
+    let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    card+='<div class="card-kicker">'+tagHtml+'</div>';
     card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
     if(it.principal) card+='<div class="card-meta">'+escapeHtml(it.principal)+'</div>';
     if(it.secundaria) card+='<div class="card-meta" style="color:var(--neutral);font-size:12px">'+escapeHtml(it.secundaria)+'</div>';
@@ -5410,6 +5432,33 @@
       return;
     }
     go('detalhe');
+  }
+  /* Edição rápida das informações principais do trabalho, acessível pelo rodapé
+     da página de detalhe (Arquivar/Editar/Concluir). Só os campos simples de
+     texto (cliente, tipo, local) — data/valor têm formulários e formatações
+     próprias noutros pontos do app, editar por aqui arriscaria dessincronizar
+     dateRaw/date ou o cálculo de recorrência. */
+  function abrirEditarInfoTrabalho(){
+    const job=jobsData[currentJobId]; if(!job) return;
+    const html='<div class="field"><label data-t="field.client">Cliente</label><input id="job-edit-client" value="'+escapeHtml(job.client||'')+'"></div>'+
+      '<div class="field"><label data-t="field.type">Tipo de trabalho</label><input id="job-edit-type" value="'+escapeHtml(job.typeLabel||'')+'"></div>'+
+      '<div class="field"><label data-t="field.local">Local</label><input id="job-edit-local" value="'+escapeHtml(job.local||'')+'"></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEditarInfoTrabalho()">'+t('reports.saveExpense')+'</button>';
+    openInfo(t('job.editInfoTitle'), html);
+  }
+  function salvarEditarInfoTrabalho(){
+    const job=jobsData[currentJobId]; if(!job) return;
+    const client=(document.getElementById('job-edit-client').value||'').trim();
+    const typeLabel=(document.getElementById('job-edit-type').value||'').trim();
+    const local=(document.getElementById('job-edit-local').value||'').trim();
+    if(!client || !typeLabel){ showToast(t('toast.fillDescValue')); return; }
+    job.client=client; job.typeLabel=typeLabel; job.local=local;
+    saveJobsData();
+    closeInfo();
+    renderJobDetailDynamic(currentJobId);
+    const cardEl=document.querySelector('.job[data-job-id="'+currentJobId+'"]');
+    if(cardEl) updateJobCardInner(cardEl, job);
+    showToast(t('toast.jobUpdated'));
   }
 
   function updateHoje(){
