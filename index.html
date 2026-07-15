@@ -361,8 +361,8 @@
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
-  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;width:74px;height:74px;margin:auto;padding:0 6px;box-sizing:border-box;background:none}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:6px;text-align:center}
+  .ms-rings-center{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;padding:0 4px;box-sizing:border-box;margin-bottom:10px}
+  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:5px;text-align:center}
   .ms-rings-center-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;color:var(--ink-soft);padding:8px 0;cursor:pointer}
@@ -449,9 +449,17 @@
   .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
   .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
   .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
-  .radar-status-icon{width:14px;height:14px;flex:none;margin-right:7px}
-  .radar-status-icon.late{color:var(--late)}
-  .radar-status-icon.soon{color:var(--urgent)}
+  /* sinal de urgência do card de tarefa: em vez de ícone, um leve degradê radial
+     no canto inferior direito — atrasado = laranja-avermelhado, próximo vencimento
+     = amarelo — sobre um fundo mais escuro (mesma opacidade .10 de antes, só a cor
+     de base ficou mais próxima do preto) pra o efeito de cor aparecer melhor. */
+  .card.radar-card.late,.card.radar-card.soon{
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(16,15,13,.10)}
+  .card.radar-card.late::before,.card.radar-card.soon::before{
+    content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0}
+  .card.radar-card.late::before{background:radial-gradient(160px 130px at 100% 100%,rgba(224,102,58,.55),transparent 72%)}
+  .card.radar-card.soon::before{background:radial-gradient(160px 130px at 100% 100%,rgba(232,197,71,.45),transparent 72%)}
+  .card.radar-card.late>*,.card.radar-card.soon>*{position:relative;z-index:1}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
@@ -1736,6 +1744,10 @@
               </div>
             </div>
             <div class="ms-rings-wrap-outer">
+              <div class="ms-rings-center">
+                <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
+                <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
+              </div>
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
@@ -1762,10 +1774,6 @@
                   <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="48" stroke-width="10"/>
                   <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="48" stroke-width="10"/>
                 </svg>
-                <div class="ms-rings-center">
-                  <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
-                  <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
-                </div>
               </div>
             </div>
           </div>
@@ -2119,6 +2127,13 @@
           <span><i style="background:var(--late)"></i><span data-t="cost.thisMonth">gasto</span></span>
           <span><i class="dash" style="background:var(--ink-soft)"></i><span data-t="reports.goalCeiling">meta / teto</span></span>
         </div>
+
+        <!-- listas de despesas e recebidos do mês -->
+        <div class="group-label" style="margin-top:24px"><span data-t="reports.incomeList">Recebidos do mês</span> <span class="ln"></span></div>
+        <div id="rel-recebidos-lista" style="margin-top:10px"></div>
+
+        <div class="group-label" style="margin-top:24px"><span data-t="reports.expenseList">Despesas do mês</span> <span class="ln"></span></div>
+        <div id="rel-despesas-lista" style="margin-top:10px"></div>
 
         <!-- estatísticas operacionais -->
         <div class="group-label" style="margin-top:24px" id="rel-anchor-performance"><span data-t="reports.opStats">Estatísticas operacionais</span> <span class="ln"></span></div>
@@ -4345,6 +4360,11 @@
     "reports.spendCeiling": { pt:"Teto de gastos", en:"Spend ceiling", es:"Techo de gastos" },
     "reports.monthEvolution": { pt:"Evolução do mês", en:"Month evolution", es:"Evolución del mes" },
     "reports.goalCeiling": { pt:"meta / teto", en:"goal / ceiling", es:"meta / techo" },
+    "reports.incomeList": { pt:"Recebidos do mês", en:"Month income", es:"Ingresos del mes" },
+    "reports.expenseList": { pt:"Despesas do mês", en:"Month expenses", es:"Gastos del mes" },
+    "reports.noIncome": { pt:"Ainda sem recebidos este mês.", en:"No income yet this month.", es:"Aún sin ingresos este mes." },
+    "reports.contractLabel": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "reports.manualLabel": { pt:"Manual", en:"Manual", es:"Manual" },
     "reports.opStats": { pt:"Estatísticas operacionais", en:"Operational stats", es:"Estadísticas operativas" },
     "reports.vsGoal": { pt:" vs meta", en:" vs goal", es:" vs meta" },
     "reports.op.overduePayments": { pt:"Recebimentos em atraso", en:"Overdue receivables", es:"Cobros vencidos" },
@@ -5104,21 +5124,18 @@
     wrap.innerHTML=itens.map(construirCardRadar).join('');
     ativarSwipeRadar();
   }
-  /* Ícone de estado por nível: atrasado (crítica) = alert-triangle vermelho,
-     próximo vencimento (alta/média, vence hoje/amanhã) = alert-circle amarelo.
-     Níveis mais baixos (normal) mantêm o pontinho neutro discreto de antes —
-     não é toda tarefa que precisa de alarme visual. */
-  const ICON_ALERT_TRIANGLE='<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><path d="M12 9v4"/><path d="M12 17h.01"/>';
-  const ICON_ALERT_CIRCLE='<circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/>';
+  /* Sinal de urgência por nível: em vez de ícone de alerta, o próprio card ganha
+     um leve degradê radial no canto — atrasado (crítica) = laranja-avermelhado,
+     próximo vencimento (alta/média) = amarelo. Níveis mais baixos (normal) mantêm
+     o pontinho neutro discreto de antes — não é toda tarefa que precisa de alarme
+     visual. */
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const isCritica = nivel==='critica';
     const isAlta = nivel==='alta' || nivel==='media';
-    let statusHtml;
-    if(isCritica) statusHtml='<svg class="radar-status-icon late" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+ICON_ALERT_TRIANGLE+'</svg>';
-    else if(isAlta) statusHtml='<svg class="radar-status-icon soon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+ICON_ALERT_CIRCLE+'</svg>';
-    else statusHtml='<span class="priority-dot" style="background:var(--c-green-soft);margin-right:7px"></span>';
-    let card='<div class="card radar-card" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    const urgClasse = isCritica ? ' late' : (isAlta ? ' soon' : '');
+    const statusHtml = urgClasse ? '' : '<span class="priority-dot" style="background:var(--c-green-soft);margin-right:7px"></span>';
+    let card='<div class="card radar-card'+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
     card+='<div class="card-kicker">'+statusHtml+gerarLabelTemporal(it.dataISO, it.hora)+'</div>';
     card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
     if(it.principal) card+='<div class="card-meta">'+escapeHtml(it.principal)+'</div>';
@@ -6906,6 +6923,7 @@
     const ti=document.getElementById('rel-teto-input'); if(ti && document.activeElement!==ti) ti.value=METAS.gastos||0;
 
     renderRelLineChart(ano, mes);
+    renderRelListasFinanceiras();
     renderRelOpStats();
   }
 
@@ -6955,6 +6973,75 @@
       const [y,m]=r.data.split('-').map(Number);
       return y===ano && m===mes;
     }).reduce((s,r)=>s+(parseFloat(r.valor)||0),0);
+  }
+  /* ===== Listas de Relatórios: Recebidos (parcelas de contrato + manuais) e
+     Despesas (todas manuais) do mês atual ===== */
+  function listaRecebidosDoMes(){
+    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+    const itens=[];
+    jobsVisiveis().forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        const d=p.pagoEm||p.dueDate;
+        if(!d || d.slice(0,7)!==mesISO) return;
+        itens.push({ desc:p.label||t('field.payment'), cliente:j.client||j.typeLabel||'', jobId:j.id, valor:Number(p.amount)||0, data:d, manual:false });
+      });
+    });
+    Object.values(receitasData).forEach(r=>{
+      if(!r.data || r.data.slice(0,7)!==mesISO) return;
+      itens.push({ desc:r.descricao, id:r.id, valor:Number(r.valor)||0, data:r.data, manual:true });
+    });
+    return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  }
+  function listaDespesasDoMes(){
+    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+    return Object.values(custosData).filter(c=>c.data && c.data.slice(0,7)===mesISO)
+      .map(c=>({ desc:c.descricao, id:c.id, valor:Number(c.valor)||0, data:c.data }))
+      .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  }
+  function renderRelListasFinanceiras(){
+    const recWrap=document.getElementById('rel-recebidos-lista');
+    const despWrap=document.getElementById('rel-despesas-lista');
+    if(!recWrap || !despWrap) return;
+    const fmtData=d=>d ? d.split('-').reverse().join('/') : '';
+    const recebidos=listaRecebidosDoMes();
+    recWrap.innerHTML = recebidos.length ? recebidos.map(it=>{
+      const sub = (it.manual ? t('reports.manualLabel') : t('reports.contractLabel')+': '+escapeHtml(it.cliente)) + (it.data?(' · '+fmtData(it.data)):'');
+      const onclick = it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
+      return '<div class="pick-row" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(it.desc)+'</div><div class="sub">'+sub+'</div></div><div style="font-weight:600;color:var(--brand);flex:none;margin-left:10px">'+fmtMoney(it.valor)+'</div></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('reports.noIncome')+'</p>';
+    const despesas=listaDespesasDoMes();
+    despWrap.innerHTML = despesas.length ? despesas.map(c=>
+      '<div class="pick-row" onclick="editarDespesa(\''+c.id+'\')"><div><div class="nm">'+escapeHtml(c.desc)+'</div><div class="sub">'+fmtData(c.data)+'</div></div><div style="font-weight:600;color:var(--late);flex:none;margin-left:10px">'+fmtMoney(c.valor)+'</div></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>';
+  }
+  function editarReceitaManual(id){
+    const r=receitasData[id]; if(!r) return;
+    const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="rec-edit-nome" value="'+escapeHtml(r.descricao)+'"></div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-edit-valor" type="number" min="0" inputmode="decimal" value="'+r.valor+'"></div>'+
+      '<div class="field"><label>'+t('field.date')+'</label><input id="rec-edit-data" type="date" value="'+(r.data||'')+'"></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>'+
+      '<button class="btn soft" style="width:100%;margin-top:8px;color:var(--late)" onclick="removerReceita(\''+id+'\')">'+t('action.remove')+'</button>';
+    openInfo(t('home.entryIncome'), html);
+  }
+  function salvarEdicaoReceita(id){
+    const r=receitasData[id]; if(!r) return;
+    const desc=(document.getElementById('rec-edit-nome').value||'').trim();
+    const valor=parseFloat(document.getElementById('rec-edit-valor').value);
+    if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
+    r.descricao=desc; r.valor=valor; r.data=document.getElementById('rec-edit-data').value||r.data;
+    saveReceitasData();
+    closeInfo();
+    renderMonthTicker();
+    renderRelListasFinanceiras();
+    showToast(t('toast.incomeAdded'));
+  }
+  function removerReceita(id){
+    delete receitasData[id];
+    saveReceitasData();
+    closeInfo();
+    renderMonthTicker();
+    renderRelListasFinanceiras();
   }
   /* ===== Despesas — painel com cards e swipe para editar/apagar ===== */
   function abrirDespesas(){
