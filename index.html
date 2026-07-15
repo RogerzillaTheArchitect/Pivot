@@ -333,7 +333,7 @@
 
   /* ===== HOJE / DASHBOARD ===== */
   .date-header{margin-top:14px;margin-bottom:28px;display:flex;flex-direction:column;line-height:1}
-  .date-month{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:56px;font-weight:600;color:#F5F5F2;letter-spacing:.02em;text-transform:uppercase}
+  .date-month{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:54px;font-weight:600;line-height:1;color:#F5F5F2;letter-spacing:.02em;text-transform:uppercase}
   .date-year{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:400;color:#F5F5F2;opacity:.75;letter-spacing:.04em;margin-top:9px}
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
@@ -353,25 +353,23 @@
   .mr-trilho{fill:none}
   .mr-trilho-meta{stroke:#F2F5F3}
   .mr-trilho-teto{stroke:rgba(255,255,255,.12)}
-  .mr-ring{fill:none;stroke-linecap:round}
+  .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
   .mr-esperado{stroke:#A8E6C1}
   .mr-recebido{stroke:#63C798}
+  .mr-despesas{stroke:url(#grad-despesas)}
   .mr-teto-marker{stroke:rgba(255,255,255,.6);stroke-width:2.5;stroke-linecap:round}
-  .mr-tip{fill:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.9)) drop-shadow(0 0 8px rgba(255,255,255,.4));opacity:0;
-    transition:opacity .3s ease .1s,cx 1s cubic-bezier(.2,.8,.2,1) .06s,cy 1s cubic-bezier(.2,.8,.2,1) .06s}
-  .mr-tip.show{opacity:1}
   .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:18px;color:var(--ink);letter-spacing:-.01em;line-height:1}
+  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:18px;color:var(--ink);letter-spacing:-.01em;line-height:1}
   .ms-rings-center-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;color:var(--neutral);margin-top:3px}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
-  .mrl-item{display:flex;align-items:center;gap:11px;font-size:18px;color:var(--ink-soft);padding:11px 0;border-bottom:1px solid var(--btn-09);cursor:pointer}
+  .mrl-item{display:flex;align-items:center;gap:11px;font-size:17px;font-weight:500;color:var(--ink-soft);padding:11px 0;border-bottom:1px solid var(--btn-09);cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
   .mrl-item:last-child{border-bottom:none}
-  .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:17px}
+  .mrl-item b{margin-left:auto;color:var(--ink);font-weight:600;font-size:18px}
   .mr-meta-c{color:#F2F5F3}
   .mr-esperado-c{color:#A8E6C1}
   .mr-recebido-c{color:#63C798}
-  .mr-gastos-c{color:#F5D76E;transition:color .4s ease}
+  .mr-gastos-c{color:#F5D76E}
   .mr-teto-c{color:#D84C4C}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
@@ -868,7 +866,7 @@
   @media (prefers-reduced-motion:reduce){.priority-dot,.dot-late,.notif-dot,.urgent-dot{animation:none}}
   /* pontos simples, estáticos: dias do calendário e legenda financeira (não pulsam) */
   .cd{background:rgba(255,255,255,.85)}
-  .mrl-dot{width:12px;height:12px;border-radius:50%;flex:none;background:transparent;border:2px solid currentColor}
+  .mrl-dot{width:18px;height:18px;border-radius:50%;flex:none;background:transparent;border:2px solid currentColor}
   .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
   .venc-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex:none}
   .venc-amount{font-size:14.5px;font-weight:600;color:var(--ink)}
@@ -1735,15 +1733,21 @@
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
+                  <defs>
+                    <linearGradient id="grad-despesas" x1="38" y1="38" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#FFF7D6"/>
+                      <stop offset="25%" stop-color="#F5D76E"/>
+                      <stop offset="50%" stop-color="#E9A93B"/>
+                      <stop offset="75%" stop-color="#E27D3D"/>
+                      <stop offset="100%" stop-color="#D84C4C"/>
+                    </linearGradient>
+                  </defs>
                   <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="58" stroke-width="16"/>
                   <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="58" stroke-width="9"/>
                   <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="58" stroke-width="9"/>
                   <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="32" stroke-width="16"/>
                   <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="32" stroke-width="9"/>
                   <line class="mr-teto-marker" x1="99" y1="75" x2="115" y2="75"/>
-                  <circle class="mr-tip" id="mr-tip-esperado" r="1.5"/>
-                  <circle class="mr-tip" id="mr-tip-recebido" r="1.5"/>
-                  <circle class="mr-tip" id="mr-tip-despesas" r="1.5"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
@@ -4783,29 +4787,19 @@
   }
   function renderRingsDashboard(recebido, esperado, custos){
     const meta=METAS.receita||1, teto=METAS.gastos||1;
-    /* 5 anéis concêntricos, cada um com seu próprio anel/cor/progresso, coexistindo
-       no mesmo conjunto gráfico (nunca uma barra separada). Meta é sempre o anel
-       externo com Esperado e Recebido sobrepostos no mesmo raio (dois progressos
-       dentro do mesmo trilho, não anéis separados); Teto é o trilho interno, com
-       Despesas sobreposta da mesma forma. Esperado é pintado antes de Recebido para
-       que o trecho ainda não recebido continue visível em verde claro por trás do
-       trecho já recebido (verde mais escuro, por cima). Todos os progressos continuam
-       a girar (com sombreado) se ultrapassarem 100%, via pintarAnelComVolta. */
+    /* 2 anéis apenas: Meta é o trilho externo com Esperado e Recebido sobrepostos no
+       mesmo raio (dois progressos dentro do mesmo trilho, não anéis separados); Teto
+       é o trilho interno, com Despesas sobreposta da mesma forma. Esperado é pintado
+       antes de Recebido para que o trecho ainda não recebido continue visível em
+       verde claro por trás do trecho já recebido (verde mais escuro, por cima).
+       Despesas usa um gradiente SVG fixo (grad-despesas no <defs>) — a cor muda
+       sozinha conforme o arco cresce, sem lógica de cor em JS. Todos os progressos
+       continuam a girar (com sombreado) se ultrapassarem 100%, via
+       pintarAnelComVolta. */
     const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    const rEsperado=pintarAnelComVolta('mr-esperado', 58, esperado, meta);
-    const rRecebido=pintarAnelComVolta('mr-recebido', 58, recebido, meta, trilhoMeta);
-    const rDespesas=pintarAnelComVolta('mr-despesas', 32, custos, teto);
-    posicionarPontaAnel('mr-tip-esperado', 58, rEsperado&&rEsperado.pctAtual);
-    posicionarPontaAnel('mr-tip-recebido', 58, rRecebido&&rRecebido.pctAtual);
-    posicionarPontaAnel('mr-tip-despesas', 32, rDespesas&&rDespesas.pctAtual);
-    /* Despesas muda de cor conforme se aproxima do teto — o risco deve ser percebido
-       só de olhar pro anel, sem precisar ler os números. */
-    const pctDespesas = teto>0 ? (custos/teto*100) : (custos>0?999:0);
-    const corDesp = corDespesas(pctDespesas);
-    const despesasEl=document.getElementById('mr-despesas');
-    if(despesasEl) despesasEl.style.stroke=corDesp;
-    const gastosDot=document.querySelector('.mr-gastos-c');
-    if(gastosDot) gastosDot.style.color=corDesp;
+    pintarAnelComVolta('mr-esperado', 58, esperado, meta);
+    pintarAnelComVolta('mr-recebido', 58, recebido, meta, trilhoMeta);
+    pintarAnelComVolta('mr-despesas', 32, custos, teto);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
@@ -4816,29 +4810,6 @@
     const saldo=recebido-custos;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-  }
-  /* faixas de risco das despesas contra o teto — a cor sobe de amarelo claro a
-     vermelho intenso conforme o gasto se aproxima e ultrapassa o limite. */
-  function corDespesas(pct){
-    if(pct<=25) return '#FFF7D6';
-    if(pct<=50) return '#F5D76E';
-    if(pct<=75) return '#E9A93B';
-    if(pct<=90) return '#E27D3D';
-    if(pct<=100) return '#D84C4C';
-    return '#B93333';
-  }
-  /* posiciona o marcador de ponta (círculo) na extremidade do progresso do anel —
-     mesmo referencial (não rotacionado) dos círculos do anel: 0° = 3 horas, sentido
-     horário, porque o <svg> inteiro já é rotacionado -90deg via CSS, então o
-     marcador acompanha a mesma rotação automaticamente. */
-  function posicionarPontaAnel(tipId, r, pct){
-    const el=document.getElementById(tipId);
-    if(!el) return;
-    const p=pct||0;
-    const ang=(p/100)*2*Math.PI;
-    el.setAttribute('cx', 75+r*Math.cos(ang));
-    el.setAttribute('cy', 75+r*Math.sin(ang));
-    el.classList.toggle('show', p>1.5 && p<99.5);
   }
   /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não fica
      preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco como
