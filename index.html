@@ -2246,8 +2246,8 @@
             <span class="inline-link" id="tw-criar-cliente" style="display:none;margin-top:8px" onclick="revelarNovoCliente()"><span data-t="wizard.createAsNewPrefix">+ Criar “</span><span id="tw-novo-nome"></span><span data-t="wizard.createAsNewSuffix">” como novo cliente</span></span>
             <div id="tw-novo-cliente-fields" style="display:none;margin-top:10px">
               <div class="field-row">
-                <div class="field"><input id="tw-novo-email" placeholder="email" data-t-placeholder="field.email"></div>
-                <div class="field"><input id="tw-novo-tel" placeholder="telefone" data-t-placeholder="field.phone"></div>
+                <div class="field"><input id="tw-novo-email" placeholder="email" data-t-placeholder="field.email" type="email" autocomplete="off" name="tw-cliente-email-novo"></div>
+                <div class="field"><input id="tw-novo-tel" placeholder="telefone" data-t-placeholder="field.phone" type="tel" autocomplete="off" name="tw-cliente-tel-novo"></div>
               </div>
               <button class="btn soft" style="width:100%" onclick="guardarNovoClienteInline()"><span data-t="wizard.saveClient">Guardar cliente</span></button>
             </div>
@@ -2559,7 +2559,7 @@
           <label data-t="field.nameRequired">Nome *</label><input id="cl-nome" placeholder="Nome completo" data-t-placeholder="field.namePlaceholder">
           <div class="field-err" id="cl-nome-err" data-t="wizard.client.nameError">Precisa de um nome para continuar.</div>
         </div>
-        <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()"></div>
+        <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()" type="email" autocomplete="off" name="cl-email-cliente"></div>
         <div class="warn-box" id="cl-dup" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>
           <div><span data-t="wizard.client.dupPrefix">Já existe </span><b id="cl-dup-nome"></b><span data-t="wizard.client.dupSuffix"> com este email.</span>
@@ -3782,6 +3782,9 @@
     "field.company": { pt:"Empresa", en:"Company", es:"Empresa" },
     "field.currency": { pt:"Moeda", en:"Currency", es:"Moneda" },
     "field.date": { pt:"Data", en:"Date", es:"Fecha" },
+    "field.payment": { pt:"Pagamento", en:"Payment", es:"Pago" },
+    "toast.requiredJobFields": { pt:"Preenche título, data e hora para criar o trabalho.", en:"Fill in title, date and time to create the job.", es:"Rellena título, fecha y hora para crear el trabajo." },
+    "toast.requiredPaymentDate": { pt:"Cada parcela precisa de uma data de pagamento.", en:"Each installment needs a payment date.", es:"Cada cuota necesita una fecha de pago." },
     "field.dateFormat": { pt:"Formato de data", en:"Date format", es:"Formato de fecha" },
     "field.daysBefore": { pt:"Dias antes (separados por vírgula, 0 = no dia)", en:"Days before (comma-separated, 0 = on the day)", es:"Días antes (separados por comas, 0 = el día)" },
     "field.emailOptional": { pt:"email (opcional)", en:"email (optional)", es:"email (opcional)" },
@@ -5953,7 +5956,7 @@
       return;
     }
     openInfo(t('team.addPerson'), `
-      <div class="field"><label>${t('login.email')}</label><input id="eq-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder"></div>
+      <div class="field"><label>${t('login.email')}</label><input id="eq-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" type="email" autocomplete="off" name="eq-email-convite"></div>
       <div class="field"><label>${t('field.role')}</label><select id="eq-papel"><option value="Editor">${papelNome('Editor')}</option><option value="Viewer">${papelNome('Viewer')}</option></select></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px" id="eq-papel-desc">${papelDesc('Editor')}</p>
       <button class="btn primary" style="width:100%" onclick="guardarNovoMembro()">${t('action.add')}</button>`);
@@ -6517,13 +6520,42 @@
        ponteiro/toque simultâneo), o atributo disabled já impede o segundo clique
        de sequer chegar ao handler. */
     if(criandoTrabalho) return;
+    /* Título, Data e Hora são obrigatórios — sem isto o sistema deixava criar
+       trabalhos "fantasma" (título a cair para o nome do cliente, data/hora a
+       ficar null), difíceis de encontrar depois e sem entrar corretamente no
+       calendário. Valida antes de sequer travar o botão, e volta ao passo 1
+       do assistente (onde estes 3 campos vivem) se faltar algo. */
+    const tituloVal=(document.getElementById('tw-nome').value||'').trim();
+    const dataVal=document.getElementById('tw-data').value;
+    const horaVal=document.getElementById('tw-hora').value;
+    if(!tituloVal || !dataVal || !horaVal){
+      document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
+        m.style.display = m.dataset.moment==='1' ? 'block':'none';
+      });
+      trabalhoMoment=1;
+      showToast(t('toast.requiredJobFields'));
+      return;
+    }
+    /* Se a etapa de pagamentos estiver com parcelas próprias, cada uma precisa
+       de uma data de vencimento — o valor já nunca fica nulo (default 0 em
+       lerParcelasWizard), mas a data podia ficar vazia e nenhuma cobrança/
+       lembrete conseguia disparar. */
+    const envioPagamentosEl=document.getElementById('envio-pagamentos');
+    if(envioPagamentosEl && envioPagamentosEl.classList.contains('on')){
+      const parcelasSemData=[...document.querySelectorAll('#tw-parcelas-lista [data-parc-row]')]
+        .some(row=>!row.querySelector('.tw-parc-data').value);
+      if(parcelasSemData){
+        showToast(t('toast.requiredPaymentDate'));
+        return;
+      }
+    }
     criandoTrabalho=true;
     const btnCriar=document.querySelector('.panel[data-panel="trabalho"] button[onclick="trabalhoCreate()"]');
     if(btnCriar) btnCriar.disabled=true;
     setTimeout(()=>{ criandoTrabalho=false; if(btnCriar) btnCriar.disabled=false; }, 1500);
     const cliente=document.getElementById('tw-cliente').value.trim()||'Novo cliente';
-    const nomeTrabalho=document.getElementById('tw-nome').value.trim()||cliente;
-    const dateRaw=document.getElementById('tw-data').value||null;
+    const nomeTrabalho=tituloVal;
+    const dateRaw=dataVal||null;
     const dateFimRaw=document.getElementById('tw-data-fim').value||null;
     const horaIni=document.getElementById('tw-hora').value||null;
     const horaFim=document.getElementById('tw-hora-fim').value||null;
@@ -6584,7 +6616,10 @@
       const parcelasListaEl=document.getElementById('tw-parcelas-lista');
       job.payments = job.structure.pagamentos
         ? ((parcelasListaEl && parcelasListaEl.children.length) ? lerParcelasWizard() : gerarPagamentos(job))
-        : [];
+        /* mesmo sem pagamentos ativados, o valor da parcela nunca fica nulo — fica
+           um registo de €0 com a data do próprio trabalho como vencimento, em vez
+           de um array vazio sem nenhuma referência de valor/data. */
+        : [{label:t('field.payment'), amount:0, status:'pendente', dueDate:dateRaw, comprovativo:null}];
     }
     // milestones depois da recorrência: um contrato recorrente não tem
     // "sinal + pagamento final", tem ciclos — as etapas de meia-parcela são
@@ -8487,7 +8522,7 @@
     if(!job) return;
     openInfo(t('job.clientEmailTitle'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('job.clientEmailHint').replace('{client}', escapeHtml(job.client))}</p>
-      <div class="field"><label>Email</label><input id="ce-email" type="email" value="${escapeHtml(job.email||'')}" placeholder="email@exemplo.pt"></div>
+      <div class="field"><label>Email</label><input id="ce-email" type="email" value="${escapeHtml(job.email||'')}" placeholder="email@exemplo.pt" autocomplete="off" name="ce-email-cliente"></div>
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarEmailCliente('${id}')">${t('action.save')}</button>`);
     _aposGuardarEmail = aposGuardar || null;
     setTimeout(()=>{ const el=document.getElementById('ce-email'); if(el) el.focus(); }, 60);
