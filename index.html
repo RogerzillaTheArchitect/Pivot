@@ -337,13 +337,17 @@
   .date-year{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:22px;font-weight:400;color:#F5F5F2;opacity:.75;letter-spacing:.04em;margin-top:9px}
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
-  .month-summary{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);border:1px solid rgba(255,255,255,.10);
+  .month-summary{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);border:1px solid rgba(255,255,255,.10);
     border-radius:22px;margin:12px 0 22px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
     color:#F5F5F2;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
+  .ms-add-btn{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(255,255,255,.10);color:var(--ink);cursor:pointer;z-index:2;transition:background .15s,opacity .15s;opacity:.85}
+  .ms-add-btn:hover{opacity:1;background:rgba(255,255,255,.16)}
+  .ms-add-btn svg{width:15px;height:15px}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:148px;flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:16px 18px}
@@ -1718,6 +1722,9 @@
 
         <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
         <div class="month-summary" onclick="abrirRelatorios('financeiro')">
+          <div class="ms-add-btn" onclick="event.stopPropagation();abrirRegistroManual()" aria-label="Adicionar despesa ou recebido">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
           <div class="ms-progress-row">
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
@@ -3785,6 +3792,10 @@
     "home.ceiling": { pt:"Teto", en:"Ceiling", es:"Techo" },
     "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
     "home.totalProfit": { pt:"Lucro total", en:"Total profit", es:"Beneficio total" },
+    "home.entryExpense": { pt:"Despesa", en:"Expense", es:"Gasto" },
+    "home.entryIncome": { pt:"Recebido", en:"Income", es:"Ingreso" },
+    "home.addEntryTitle": { pt:"Registar movimento", en:"Add entry", es:"Registrar movimiento" },
+    "home.addEntryBtn": { pt:"Adicionar", en:"Add", es:"Añadir" },
     "home.performanceTitle": { pt:"Performance", en:"Performance", es:"Rendimiento" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
     "home.hours": { pt:"Horas", en:"Worktime", es:"Horas" },
@@ -4524,6 +4535,7 @@
     "toast.contractGenerated": { pt:"Contrato gerado e link criado", en:"Contract generated and link created", es:"Contrato generado y enlace creado" },
     "toast.contractStarted": { pt:"Contrato iniciado", en:"Contract started", es:"Contrato iniciado" },
     "toast.costAdded": { pt:"Custo adicionado.", en:"Cost added.", es:"Costo añadido." },
+    "toast.incomeAdded": { pt:"Receita adicionada.", en:"Income added.", es:"Ingreso añadido." },
     "toast.costRemoved": { pt:"Custo removido.", en:"Cost removed.", es:"Costo eliminado." },
     "toast.createdFemSuffix": { pt:"\" criada.", en:"\" created.", es:"\" creada." },
     "toast.customRemindersSaved": { pt:"Lembretes personalizados guardados.", en:"Custom reminders saved.", es:"Recordatorios personalizados guardados." },
@@ -4964,7 +4976,9 @@
     const pendMeu=pendenciasMinhasParaAnel();
     const pendClienteBucket=bucketPorMesDoJob(pendCliente);
     const pendMeuBucket=bucketPorMesDoJob(pendMeu);
-    return {recebido, porReceber, contratosFechados, totalJobs:todos.length,
+    /* recebido inclui entradas manuais avulsas (botão + do card Financeiro), além
+       dos pagamentos de trabalhos já marcados como pagos */
+    return {recebido:recebido+receitasDoMes(), porReceber, contratosFechados, totalJobs:todos.length,
       fechadosEsteMes, fechadosMesAnterior, realizadosEsteMes, realizadosMesAnterior, entreguesEsteMes, entreguesMesAnterior,
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
@@ -6895,6 +6909,53 @@
     renderRelOpStats();
   }
 
+  /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
+     sem estar ligado a um trabalho. Despesa cai em custosData (já existente);
+     Recebido cai em receitasData (novo, mesmo formato). ===== */
+  function abrirRegistroManual(){
+    const hoje=new Date().toISOString().slice(0,10);
+    const html='<div class="chip on" id="reg-tipo-despesa" style="display:inline-block;margin-right:8px" onclick="selecionarTipoRegistro(\'despesa\')" data-t="home.entryExpense">Despesa</div>'+
+      '<div class="chip" id="reg-tipo-recebido" style="display:inline-block" onclick="selecionarTipoRegistro(\'recebido\')" data-t="home.entryIncome">Recebido</div>'+
+      '<div class="field" style="margin-top:14px"><label data-t="reports.expenseName">Nome</label><input id="reg-nome" placeholder="Uber, freelance extra…"></div>'+
+      '<div class="field-row"><div class="field"><label data-t="reports.expenseValue">Valor</label><input id="reg-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')salvarRegistroManual()"></div>'+
+      '<div class="field"><label data-t="field.date">Data</label><input id="reg-data" type="date" value="'+hoje+'"></div></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarRegistroManual()" data-t="home.addEntryBtn">Adicionar</button>';
+    openInfo(t('home.addEntryTitle'), html);
+  }
+  function selecionarTipoRegistro(tipo){
+    document.getElementById('reg-tipo-despesa').classList.toggle('on', tipo==='despesa');
+    document.getElementById('reg-tipo-recebido').classList.toggle('on', tipo==='recebido');
+  }
+  function salvarRegistroManual(){
+    const tipo = document.getElementById('reg-tipo-recebido').classList.contains('on') ? 'recebido' : 'despesa';
+    const nomeEl=document.getElementById('reg-nome'), valEl=document.getElementById('reg-valor'), dataEl=document.getElementById('reg-data');
+    const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), data=dataEl.value||new Date().toISOString().slice(0,10);
+    if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
+    if(tipo==='despesa'){
+      const id='cst'+Date.now();
+      custosData[id]={ id, descricao:desc, valor, categoria:'', data };
+      saveCustosData();
+    } else {
+      const id='rec'+Date.now();
+      receitasData[id]={ id, descricao:desc, valor, data };
+      saveReceitasData();
+    }
+    closeInfo();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    showToast(tipo==='despesa' ? t('toast.costAdded') : t('toast.incomeAdded'));
+  }
+  let receitasData={};
+  function saveReceitasData(){ savePersisted('pivot-receitasData', ()=>receitasData); }
+  async function loadReceitasData(){ await loadPersisted('pivot-receitasData', d=>{ receitasData=d; }); }
+  function receitasDoMes(){
+    const hoje=new Date(); const ano=hoje.getFullYear(), mes=hoje.getMonth()+1;
+    return Object.values(receitasData).filter(r=>{
+      if(!r.data) return true;
+      const [y,m]=r.data.split('-').map(Number);
+      return y===ano && m===mes;
+    }).reduce((s,r)=>s+(parseFloat(r.valor)||0),0);
+  }
   /* ===== Despesas — painel com cards e swipe para editar/apagar ===== */
   function abrirDespesas(){
     const html='<div class="field-row" style="margin-bottom:2px"><div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
@@ -11770,7 +11831,7 @@
        para filtrar a lista de trabalhos assim que ela é renderizada abaixo. */
     await loadEquipaData();
     await Promise.all([
-      loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(),
+      loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(), loadReceitasData(),
       loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
       loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos()
     ]);
