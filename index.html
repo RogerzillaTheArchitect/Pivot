@@ -354,12 +354,12 @@
   .mr-trilho-meta{stroke:rgba(242,245,243,.45)}
   .mr-trilho-teto{stroke:rgba(255,255,255,.22)}
   .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
-  .mr-esperado{stroke:#A8E6C1}
-  .mr-recebido{stroke:#63C798}
+  .mr-esperado{stroke:url(#grad-esperado)}
+  .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
-  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:15px;color:var(--ink);letter-spacing:-.01em;line-height:1}
-  .ms-rings-center-lbl{font-size:8.5px;font-weight:600;letter-spacing:.06em;color:var(--neutral);margin-top:3px}
+  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;width:78px;height:78px;margin:auto;padding:0 6px;box-sizing:border-box}
+  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:16px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;margin-top:5px}
+  .ms-rings-center-lbl{font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--neutral);opacity:.7;text-transform:uppercase}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:9px;font-size:13px;font-weight:400;color:var(--ink-soft);padding:8px 0;cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
@@ -1732,22 +1732,31 @@
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
-                    <linearGradient id="grad-despesas" x1="26" y1="26" x2="124" y2="124" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="grad-esperado" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#B8F1D2"/>
+                      <stop offset="100%" stop-color="#89DDB5"/>
+                    </linearGradient>
+                    <linearGradient id="grad-recebido" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stop-color="#6FD4A6"/>
+                      <stop offset="100%" stop-color="#3FA97C"/>
+                    </linearGradient>
+                    <linearGradient id="grad-despesas" x1="123" y1="123" x2="27" y2="27" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stop-color="#FFF7D6"/>
                       <stop offset="25%" stop-color="#F5D76E"/>
                       <stop offset="50%" stop-color="#E9A93B"/>
                       <stop offset="75%" stop-color="#E27D3D"/>
                       <stop offset="90%" stop-color="#D84C4C"/>
-                      <stop offset="100%" stop-color="#B93333"/>
+                      <stop offset="100%" stop-color="#6B1414"/>
                     </linearGradient>
                   </defs>
-                  <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="60" stroke-width="10"/>
-                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="60" stroke-width="10"/>
-                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="10"/>
-                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="44" stroke-width="10"/>
-                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="44" stroke-width="10"/>
+                  <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="59" stroke-width="10"/>
+                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="59" stroke-width="10"/>
+                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="59" stroke-width="10"/>
+                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="46" stroke-width="10"/>
+                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="46" stroke-width="10"/>
                 </svg>
                 <div class="ms-rings-center">
+                  <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
                 </div>
               </div>
@@ -3775,6 +3784,7 @@
     "home.expenses": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "home.ceiling": { pt:"Teto", en:"Ceiling", es:"Techo" },
     "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
+    "home.totalProfit": { pt:"Lucro total", en:"Total profit", es:"Beneficio total" },
     "home.performanceTitle": { pt:"Performance", en:"Performance", es:"Rendimiento" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
     "home.hours": { pt:"Horas", en:"Worktime", es:"Horas" },
@@ -4794,9 +4804,17 @@
        Todos os progressos continuam a girar (com sombreado) se ultrapassarem 100%,
        via pintarAnelComVolta. */
     const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    pintarAnelComVolta('mr-esperado', 60, esperado, meta);
-    pintarAnelComVolta('mr-recebido', 60, recebido, meta, trilhoMeta);
-    pintarAnelComVolta('mr-despesas', 44, custos, teto);
+    /* a barra de maior valor fica sempre por baixo (mais cedo no DOM), a menor por
+       cima — reordena os elementos a cada render em vez de assumir que Esperado é
+       sempre >= Recebido, para o caso raro de o recebido superar o esperado. */
+    const espEl=document.getElementById('mr-esperado'), recEl=document.getElementById('mr-recebido');
+    if(espEl && recEl){
+      if(esperado>=recebido) espEl.parentNode.insertBefore(espEl, recEl);
+      else espEl.parentNode.insertBefore(recEl, espEl);
+    }
+    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta);
+    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta);
+    pintarAnelComVolta('mr-despesas', 46, custos, teto);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
@@ -4806,7 +4824,12 @@
     /* saldo real do mês até agora: o que entrou menos o que já saiu */
     const saldo=recebido-custos;
     const saldoEl=document.getElementById('mt-saldo');
-    if(saldoEl) saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
+    if(saldoEl){
+      saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
+      /* a fonte encolhe conforme o valor cresce, pra nunca encostar no anel interno */
+      const len=saldoEl.textContent.length;
+      saldoEl.style.fontSize = len>11 ? '10px' : len>9 ? '12px' : len>7 ? '14px' : '16px';
+    }
   }
   /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não fica
      preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco como
