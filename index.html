@@ -10,9 +10,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
   :root{
     --paper:#161614; --paper-2:#0F0F0D; --ink:#F1F1EE; --ink-soft:#C9C9C2; --ink-faint:#8E8E86;
@@ -4615,6 +4612,7 @@
     "toast.portalLang": { pt:"Idioma do portal do cliente: ", en:"Client portal language: ", es:"Idioma del portal del cliente: " },
     "toast.prefsSaved": { pt:"Preferências guardadas", en:"Preferences saved", es:"Preferencias guardadas" },
     "toast.preparingPdf": { pt:"Preparando o PDF…", en:"Preparing the PDF…", es:"Preparando el PDF…" },
+    "toast.pdfLoadError": { pt:"Não foi possível carregar o gerador de PDF. Verifica a ligação.", en:"Couldn't load the PDF generator. Check your connection.", es:"No se pudo cargar el generador de PDF. Verifica tu conexión." },
     "toast.profilePhotoUpdated": { pt:"Foto de perfil atualizada.", en:"Profile photo updated.", es:"Foto de perfil actualizada." },
     "toast.quickMode": { pt:" · modo rápido", en:" · quick mode", es:" · modo rápido" },
     "toast.ratingSaved": { pt:"Avaliação guardada.", en:"Rating saved.", es:"Valoración guardada." },
@@ -8018,11 +8016,32 @@
       '<a class="map-link" href="'+rotaUrl+'" target="_blank" rel="noopener">'+t('portal.openRoute')+'</a></div>'+
     '</div>';
   }
+  /* Leaflet só é carregado (CSS+JS via CDN) na primeira vez que um card com mapa
+     realmente aparece no ecrã — antes carregava sempre no <head>, mesmo em sessões
+     que nunca abrem um trabalho com localização definida. */
+  let _leafletLoading=null;
+  function carregarLeaflet(){
+    if(typeof L!=='undefined') return Promise.resolve();
+    if(_leafletLoading) return _leafletLoading;
+    _leafletLoading=new Promise((resolve,reject)=>{
+      const link=document.createElement('link');
+      link.rel='stylesheet'; link.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+      document.head.appendChild(link);
+      const s=document.createElement('script');
+      s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+      s.onload=resolve;
+      s.onerror=()=>{ _leafletLoading=null; reject(new Error('leaflet load failed')); };
+      document.head.appendChild(s);
+    });
+    return _leafletLoading;
+  }
   /* Chamar depois de inserir HTML com mapCardHtml() no DOM (mesmo padrão de
      setTimeout(inicializarCanvasAssinatura,30) já usado no resto do app). */
   function inicializarMapasCard(){
-    if(typeof L==='undefined') return;
-    document.querySelectorAll('.map-leaflet:not([data-init])').forEach(el=>{
+    const pendentes=document.querySelectorAll('.map-leaflet:not([data-init])');
+    if(!pendentes.length) return;
+    if(typeof L==='undefined'){ carregarLeaflet().then(inicializarMapasCard).catch(()=>{}); return; }
+    pendentes.forEach(el=>{
       el.setAttribute('data-init','1');
       const lat=parseFloat(el.dataset.lat), lon=parseFloat(el.dataset.lon);
       if(isNaN(lat)||isNaN(lon)) return;
@@ -9461,14 +9480,14 @@
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-soft);margin:14px 2px"><input type="checkbox" id="sig-aceite1" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.acceptTerms')+'</label>';
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-soft);margin:0 2px 16px"><input type="checkbox" id="sig-aceite2" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.confirmData')+'</label>';
       html+='<div class="field"><label>'+tp('portal.signatureLabel')+'</label>'+
-        '<div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">'+tp('portal.clear')+'</span></div></div>';
+        '<div class="sig-pad-wrap"><canvas id="sig-canvas-cliente"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvasCliente()">'+tp('portal.clear')+'</span></div></div>';
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--ink-soft);margin:0 2px 16px">'+
         '<input type="checkbox" id="sig-geo-opt" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.allowLocation')+'</label>';
       html+='<button class="btn primary" style="width:100%" onclick="assinarContratoCliente(\''+id+'\')">'+tp('portal.sign')+'</button>';
     }
     document.getElementById('client-dynamic').innerHTML=html;
     if(job.briefing && job.briefing.pessoasImportantes!=null && !job.briefing.respondido) renderPessoasImportantesLista(id);
-    if(job.contract.status!=='assinado') setTimeout(inicializarCanvasAssinatura, 30);
+    if(job.contract.status!=='assinado') setTimeout(inicializarCanvasAssinaturaCliente, 30);
   }
   function renderPessoasImportantesLista(id){
     const job=jobsData[id];
@@ -9560,6 +9579,45 @@
     sigCanvasCtx.clearRect(0,0,canvas.width,canvas.height);
     sigHasDrawing=false;
   }
+  /* Pad de assinatura dedicado ao preview do Portal do Cliente (#client-dynamic).
+     Antes reaproveitava o id "sig-canvas" partilhado com o popup de assinatura de
+     acordo de colaboração (dentro do mesmo app autenticado) — se os dois ficassem
+     montados ao mesmo tempo, getElementById('sig-canvas') pegava sempre o primeiro
+     do documento, deixando o outro pad sem responder ao desenho. Id e funções
+     próprias eliminam essa colisão, no mesmo padrão já usado pela assinatura do
+     Perfil (perfil-sig-canvas). */
+  let sigClienteCanvasCtx=null, sigClienteDrawing=false, sigClienteHasDrawing=false;
+  function inicializarCanvasAssinaturaCliente(){
+    const canvas=document.getElementById('sig-canvas-cliente');
+    if(!canvas || canvas.dataset.bound) return;
+    canvas.dataset.bound='1';
+    sigClienteHasDrawing=false;
+    const dpr=window.devicePixelRatio||1;
+    const rect=canvas.getBoundingClientRect();
+    canvas.width=rect.width*dpr; canvas.height=110*dpr;
+    const ctx=canvas.getContext('2d');
+    ctx.scale(dpr,dpr);
+    ctx.strokeStyle=document.documentElement.getAttribute('data-theme')==='dark'?'#EAEDEC':'#15261C'; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.lineJoin='round';
+    sigClienteCanvasCtx=ctx;
+    let lastX=0, lastY=0;
+    const pos=e=>{ const r=canvas.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
+    canvas.addEventListener('pointerdown', e=>{ sigClienteDrawing=true; const p=pos(e); lastX=p.x; lastY=p.y; });
+    canvas.addEventListener('pointermove', e=>{
+      if(!sigClienteDrawing) return;
+      const p=pos(e);
+      ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke();
+      lastX=p.x; lastY=p.y; sigClienteHasDrawing=true;
+    });
+    const parar=()=>{ sigClienteDrawing=false; };
+    canvas.addEventListener('pointerup', parar);
+    canvas.addEventListener('pointerleave', parar);
+  }
+  function limparAssinaturaCanvasCliente(){
+    const canvas=document.getElementById('sig-canvas-cliente');
+    if(!canvas || !sigClienteCanvasCtx) return;
+    sigClienteCanvasCtx.clearRect(0,0,canvas.width,canvas.height);
+    sigClienteHasDrawing=false;
+  }
   async function capturarMetadadosAssinatura(textoDocumento, comGeo){
     const meta={
       dataHoraUTC: new Date().toISOString(),
@@ -9624,7 +9682,7 @@
     const textoDocumento=job.contract.blocks.filter(b=>b.on).map(b=>blockName(b)+': '+blockText(job,b)).join('\n');
     clientToast('A confirmar assinatura…');
     const meta=await capturarMetadadosAssinatura(textoDocumento, comGeo);
-    const canvas=document.getElementById('sig-canvas');
+    const canvas=document.getElementById('sig-canvas-cliente');
     const assinaturaImg = canvas ? canvas.toDataURL('image/png') : null;
     aplicarAssinaturaContrato(job, {nome, meta, assinaturaImg});
     updateJobCard(id);
@@ -9633,9 +9691,29 @@
     clientToast('Contrato assinado. Confirmação gerada.');
   }
 
+  /* jsPDF só é carregado (via CDN) na primeira vez que uma cópia de contrato é
+     mesmo pedida — antes carregava sempre no <head>, mesmo em sessões que nunca
+     descarregam um PDF. */
+  let _jspdfLoading=null;
+  function carregarJsPDF(){
+    if(window.jspdf) return Promise.resolve();
+    if(_jspdfLoading) return _jspdfLoading;
+    _jspdfLoading=new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      s.onload=resolve;
+      s.onerror=()=>{ _jspdfLoading=null; reject(new Error('jspdf load failed')); };
+      document.head.appendChild(s);
+    });
+    return _jspdfLoading;
+  }
   function descarregarCopiaContrato(id){
     const job=jobsData[id];
-    if(!window.jspdf){ showToast(t('toast.preparingPdf')); setTimeout(()=>descarregarCopiaContrato(id), 500); return; }
+    if(!window.jspdf){
+      showToast(t('toast.preparingPdf'));
+      carregarJsPDF().then(()=>descarregarCopiaContrato(id)).catch(()=>showToast(t('toast.pdfLoadError')));
+      return;
+    }
     const { jsPDF }=window.jspdf;
     const doc=new jsPDF({unit:'mm', format:'a4'});
     const pageW=doc.internal.pageSize.getWidth();
