@@ -4937,13 +4937,20 @@
       return c.fechado && (c.aRealizar || c.aEntregar);
     });
   }
-  function calcularEstatisticasMes(){
+  /* ano/mes opcionais (mes=1-12) — omitidos, usa o mês/ano reais de hoje (mesmo
+     comportamento de sempre, todo call site existente continua igual). Passados,
+     permite recalcular as estatísticas para qualquer mês (navegação de Relatórios,
+     histórico de 12 meses) sem inventar dados — as datas já estavam guardadas em
+     cada job/pagamento, só faltava um jeito de filtrar por um mês arbitrário. */
+  function calcularEstatisticasMes(ano, mes){
     let recebido=0, porReceber=0;
     let contratosFechados=0, trabalhosRealizar=0, trabalhosRealizados=0, trabalhosEntregar=0, trabalhosEntregues=0;
     let pagamentosPendentesCount=0, pagamentosTotalCount=0, trabalhosAtivos=0, trabalhosConcluidos=0;
     const hoje=new Date();
-    const mesAtualISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
-    const mesAnt=new Date(hoje.getFullYear(), hoje.getMonth()-1, 1);
+    const anoRef = ano!=null ? ano : hoje.getFullYear();
+    const mesRef = mes!=null ? mes : hoje.getMonth()+1; // 1-12
+    const mesAtualISO=anoRef+'-'+String(mesRef).padStart(2,'0');
+    const mesAnt=new Date(anoRef, mesRef-2, 1);
     const mesAnteriorISO=mesAnt.getFullYear()+'-'+String(mesAnt.getMonth()+1).padStart(2,'0');
     let fechadosEsteMes=0, fechadosMesAnterior=0;
     let realizadosEsteMes=0, realizadosMesAnterior=0;
@@ -5022,7 +5029,7 @@
     const pendMeuBucket=bucketPorMesDoJob(pendMeu);
     /* recebido inclui entradas manuais avulsas (botão + do card Financeiro), além
        dos pagamentos de trabalhos já marcados como pagos */
-    return {recebido:recebido+receitasDoMes(), porReceber, contratosFechados, totalJobs:todos.length,
+    return {recebido:recebido+receitasDoMes(anoRef,mesRef), porReceber, contratosFechados, totalJobs:todos.length,
       fechadosEsteMes, fechadosMesAnterior, realizadosEsteMes, realizadosMesAnterior, entreguesEsteMes, entreguesMesAnterior,
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
@@ -5030,7 +5037,7 @@
       horasEsteMes, horasMesAnterior,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
-      custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
+      custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
@@ -5392,8 +5399,8 @@
     await loadPersisted('pivot-custosData', d=>{ custosData=d; });
     renderMonthTicker();
   }
-  function custosDoMes(){
-    const hoje=new Date(); const ano=hoje.getFullYear(), mes=hoje.getMonth()+1;
+  function custosDoMes(anoParam, mesParam){
+    const hoje=new Date(); const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     return Object.values(custosData).filter(c=>{
       if(!c.data) return true;
       const [y,m]=c.data.split('-').map(Number);
@@ -6808,18 +6815,21 @@
     }, 26);
   }
 
-  /* Só há dados reais do mês atual — sem histórico de meses anteriores ainda,
-     por isso não inventamos números para navegação entre meses passados. */
-  const REL_MESES=[[new Date().getMonth(), new Date().getFullYear(), null, null]];
-  let relMonthIndex=REL_MESES.length-1;
+  /* Navegação de mês em Relatórios — infinita nos dois sentidos, cruza anos
+     automaticamente. As datas já estavam guardadas em cada job/pagamento/despesa;
+     calcularEstatisticasMes()/custosDoMes()/etc. agora aceitam (ano,mes) para
+     filtrar por qualquer mês real, então não há "dados inventados" — meses
+     futuros só mostram zeros honestos porque ainda não existe nada com essa data. */
+  let relAno = new Date().getFullYear();
+  let relMes = new Date().getMonth()+1; // 1-12
   function relMonthNav(dir){
-    const next=relMonthIndex+dir;
-    if(next<0 || next>REL_MESES.length-1) return;
-    relMonthIndex=next;
+    relMes+=dir;
+    if(relMes>12){ relMes=1; relAno++; }
+    else if(relMes<1){ relMes=12; relAno--; }
     renderRelatorios();
   }
   function abrirRelatorioDoMes(){
-    relMonthIndex=REL_MESES.length-1;
+    relAno=new Date().getFullYear(); relMes=new Date().getMonth()+1;
     go('relatorios');
   }
   /* a dashboard leva para a secção correspondente da página única de Relatórios */
@@ -6979,14 +6989,14 @@
   }
 
   function renderRelatorios(){
-    const ano=REL_MESES[relMonthIndex][1], mesIdx=REL_MESES[relMonthIndex][0], mes=mesIdx+1;
-    const s=calcularEstatisticasMes();
+    const ano=relAno, mes=relMes, mesIdx=relMes-1;
+    const s=calcularEstatisticasMes(ano, mes);
     const recebido=s.recebido, meta=METAS.receita||0, gasto=s.custos||0;
-    document.getElementById('rel-month-label').textContent=mesCompleto(mesIdx)+' '+ano;
-    document.getElementById('rel-next-btn').style.opacity='.35';
-    document.getElementById('rel-next-btn').style.pointerEvents='none';
-    document.getElementById('rel-prev-btn').style.opacity = relMonthIndex===0 ? '.35':'1';
-    document.getElementById('rel-prev-btn').style.pointerEvents = relMonthIndex===0 ? 'none':'auto';
+    const lblMes=document.getElementById('rel-month-label');
+    if(lblMes) lblMes.textContent=mesCompleto(mesIdx)+' '+ano;
+    const lblMesNovo=document.getElementById('rel-mes-label'), lblAnoNovo=document.getElementById('rel-ano-label');
+    if(lblMesNovo) lblMesNovo.textContent=mesCompleto(mesIdx).toUpperCase();
+    if(lblAnoNovo) lblAnoNovo.textContent=ano;
 
     // anel esquerdo: recebido vs meta
     const infoMeta=pintarAnelComVolta('rel-ring-meta', 52, recebido, meta||1);
@@ -7048,8 +7058,8 @@
   let receitasData={};
   function saveReceitasData(){ savePersisted('pivot-receitasData', ()=>receitasData); }
   async function loadReceitasData(){ await loadPersisted('pivot-receitasData', d=>{ receitasData=d; }); }
-  function receitasDoMes(){
-    const hoje=new Date(); const ano=hoje.getFullYear(), mes=hoje.getMonth()+1;
+  function receitasDoMes(anoParam, mesParam){
+    const hoje=new Date(); const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     return Object.values(receitasData).filter(r=>{
       if(!r.data) return true;
       const [y,m]=r.data.split('-').map(Number);
@@ -7057,9 +7067,11 @@
     }).reduce((s,r)=>s+(parseFloat(r.valor)||0),0);
   }
   /* ===== Listas de Relatórios: Recebidos (parcelas de contrato + manuais) e
-     Despesas (todas manuais) do mês atual ===== */
-  function listaRecebidosDoMes(){
-    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+     Despesas (todas manuais) de um mês — ano/mes omitidos usam o mês atual real. ===== */
+  function listaRecebidosDoMes(anoParam, mesParam){
+    const hoje=new Date();
+    const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
+    const mesISO=ano+'-'+String(mes).padStart(2,'0');
     const itens=[];
     jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach(p=>{
@@ -7075,8 +7087,10 @@
     });
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
-  function listaDespesasDoMes(){
-    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+  function listaDespesasDoMes(anoParam, mesParam){
+    const hoje=new Date();
+    const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
+    const mesISO=ano+'-'+String(mes).padStart(2,'0');
     return Object.values(custosData).filter(c=>c.data && c.data.slice(0,7)===mesISO)
       .map(c=>({ desc:c.descricao, id:c.id, valor:Number(c.valor)||0, data:c.data }))
       .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
