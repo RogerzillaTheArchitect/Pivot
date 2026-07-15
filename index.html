@@ -351,7 +351,7 @@
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:148px;height:148px;transform:rotate(-90deg)}
   .mr-trilho{fill:none}
-  .mr-trilho-meta{stroke:#F2F5F3}
+  .mr-trilho-meta{stroke:rgba(242,245,243,.45)}
   .mr-trilho-teto{stroke:rgba(255,255,255,.22)}
   .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
   .mr-esperado{stroke:#A8E6C1}
@@ -1732,19 +1732,20 @@
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
-                    <linearGradient id="grad-despesas" x1="38" y1="38" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+                    <linearGradient id="grad-despesas" x1="26" y1="26" x2="124" y2="124" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stop-color="#FFF7D6"/>
                       <stop offset="25%" stop-color="#F5D76E"/>
                       <stop offset="50%" stop-color="#E9A93B"/>
                       <stop offset="75%" stop-color="#E27D3D"/>
-                      <stop offset="100%" stop-color="#D84C4C"/>
+                      <stop offset="90%" stop-color="#D84C4C"/>
+                      <stop offset="100%" stop-color="#B93333"/>
                     </linearGradient>
                   </defs>
-                  <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="58" stroke-width="16"/>
-                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="58" stroke-width="9"/>
-                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="58" stroke-width="9"/>
-                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="32" stroke-width="16"/>
-                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="32" stroke-width="9"/>
+                  <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="60" stroke-width="10"/>
+                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="60" stroke-width="10"/>
+                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="60" stroke-width="10"/>
+                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="44" stroke-width="10"/>
+                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="44" stroke-width="10"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
@@ -4793,9 +4794,9 @@
        Todos os progressos continuam a girar (com sombreado) se ultrapassarem 100%,
        via pintarAnelComVolta. */
     const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    pintarAnelComVolta('mr-esperado', 58, esperado, meta);
-    pintarAnelComVolta('mr-recebido', 58, recebido, meta, trilhoMeta);
-    pintarAnelComVolta('mr-despesas', 32, custos, teto);
+    pintarAnelComVolta('mr-esperado', 60, esperado, meta);
+    pintarAnelComVolta('mr-recebido', 60, recebido, meta, trilhoMeta);
+    pintarAnelComVolta('mr-despesas', 44, custos, teto);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
