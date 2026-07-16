@@ -851,10 +851,30 @@
   .prow .chevr{width:15px;height:15px;color:var(--neutral)}
   .plabel{font-size:11.5px;font-weight:600;letter-spacing:.13em;color:var(--neutral);
     margin:18px 2px 9px}
-  .rel-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:6px}
+  .rel-head-v2{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .rel-head-actions{display:flex;flex-direction:column;gap:8px;flex:none}
+  .rel-glass-btn{display:flex;align-items:center;justify-content:center;gap:6px;height:36px;padding:0 14px;
+    border-radius:10px;background:rgba(20,20,24,.55);backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);
+    border:1px solid rgba(255,255,255,.10);color:#fff;font-size:12.5px;font-weight:600;font-family:inherit;cursor:pointer;
+    white-space:nowrap;transition:background .15s}
+  .rel-glass-btn:hover{background:rgba(30,30,34,.65)}
+  .rel-glass-btn svg{width:14px;height:14px;flex:none}
+  .rel-month-nav{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:14px}
   .rel-month-nav span{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;color:var(--ink);min-width:130px;text-align:center}
+  .rel-month-center{display:flex;flex-direction:column;align-items:center;min-width:140px}
+  .rel-mes-big{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:26px;color:var(--ink);letter-spacing:.02em;line-height:1}
+  .rel-ano-small{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:13px;color:var(--neutral);margin-top:2px}
   .rel-nav-btn{width:30px;height:30px;display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none}
   .rel-nav-btn svg{width:15px;height:15px}
+  .rel-bar-row{margin-bottom:12px;cursor:default}
+  .rel-bar-row.clickable{cursor:pointer}
+  .rel-bar-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+  .rel-bar-label{font-size:12.5px;color:var(--ink-soft);font-weight:500}
+  .rel-bar-value{font-family:var(--font-numeric),inherit;font-size:12.5px;color:var(--ink);font-weight:600}
+  .rel-bar-track{height:7px;border-radius:99px;background:var(--paper-2);overflow:hidden}
+  .rel-bar-fill{height:100%;border-radius:99px;opacity:.72;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .rel-bar-row.clickable.selected .rel-bar-fill{opacity:1}
+  .rel-bar-row.clickable.selected .rel-bar-label{color:var(--ink);font-weight:600}
   .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
   .venc-icon{width:34px;height:34px;color:#fff;display:grid;place-items:center;flex:none}
   .venc-icon svg{width:17px;height:17px}
@@ -1735,7 +1755,7 @@
         </div>
 
         <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
-        <div class="month-summary" onclick="abrirRelatorios('financeiro')">
+        <div class="month-summary" onclick="abrirRelatorios('faturamento')">
           <div class="ms-add-btn" onclick="event.stopPropagation();abrirRegistroManual()" aria-label="Adicionar despesa ou recebido">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </div>
@@ -1743,8 +1763,8 @@
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('financeiro')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('financeiro')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
               </div>
@@ -1785,7 +1805,7 @@
           </div>
         </div>
 
-        <span class="section-label-out" data-t="home.performanceTitle">Performance</span>
+        <span class="section-label-out" data-t="reports.opStats">Estatísticas Operacionais</span>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <defs>
             <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
@@ -1800,7 +1820,7 @@
             </linearGradient>
           </defs>
         </svg>
-        <div class="jobs-stat-card" onclick="abrirRelatorios('performance')">
+        <div class="jobs-stat-card" onclick="abrirRelatorios('operacional')">
           <div class="jobs-stat-grid6">
           <div class="jobs-stat-col">
             <span class="ms-c-label" data-t="home.hours">Horas</span>
@@ -1871,7 +1891,7 @@
           </div>
         </div>
 
-        <span class="section-label-out" data-t="home.tasksTitle">Tarefas</span>
+        <span class="section-label-out" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
         <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
@@ -2080,77 +2100,53 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <div class="page-head">
-          <div class="page-title" data-t="reports.title">Relatórios</div>
-          <span class="inline-link" style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px" onclick="abrirDespesas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M12 5v14M5 12h14"/></svg><span data-t="reports.expenses">Despesas</span></span>
+        <div class="page-head rel-head-v2">
+          <div>
+            <div class="page-title" data-t="reports.title">Relatórios</div>
+            <span class="inline-link" style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px" onclick="abrirDespesas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M12 5v14M5 12h14"/></svg><span data-t="reports.expenses">Despesas</span></span>
+          </div>
+          <div class="rel-head-actions">
+            <button class="rel-glass-btn" onclick="abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg><span data-t="reports.addBtn">Adicionar</span></button>
+            <button class="rel-glass-btn" onclick="abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-t="reports.params">Parâmetros</span></button>
+          </div>
         </div>
 
         <div class="rel-month-nav">
           <div class="rel-nav-btn" id="rel-prev-btn" onclick="relMonthNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></div>
-          <span id="rel-month-label">Julho 2026</span>
+          <div class="rel-month-center">
+            <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
+            <span class="rel-ano-small" id="rel-ano-label">2026</span>
+          </div>
           <div class="rel-nav-btn" id="rel-next-btn" onclick="relMonthNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
-        <!-- 2 anéis lado a lado: recebido vs meta · recebido vs gasto (lucro) -->
-        <div class="rel-dual" id="rel-anchor-financeiro">
-          <div class="rel-ring-box">
-            <svg class="ring-svg" viewBox="0 0 120 120">
-              <circle class="ring-bg" cx="60" cy="60" r="52"/>
-              <circle class="ring-fg" id="rel-ring-meta" cx="60" cy="60" r="52"/>
-            </svg>
-            <div class="ring-center"><div class="ring-pct" id="rel-meta-pct">0%</div><div class="ring-label" data-t="reports.ofGoal">da meta</div></div>
-            <div class="rel-ring-cap" id="rel-meta-cap"></div>
-          </div>
-          <div class="rel-ring-box">
-            <svg class="ring-svg" viewBox="0 0 120 120">
-              <circle class="ring-bg" cx="60" cy="60" r="52"/>
-              <circle class="ring-fg" id="rel-ring-lucro" cx="60" cy="60" r="52" style="stroke:var(--brand)"/>
-            </svg>
-            <div class="ring-center"><div class="ring-pct" id="rel-lucro-pct">0%</div><div class="ring-label" data-t="reports.profit">de lucro</div></div>
-            <div class="rel-ring-cap" id="rel-lucro-cap"></div>
-          </div>
-        </div>
-
-        <!-- counters: meta mensal · teto de gastos -->
-        <div class="rel-counters">
-          <div class="rel-counter">
-            <div class="rel-counter-label" data-t="reports.monthlyGoal">Meta mensal</div>
-            <div class="rel-counter-ctrl">
-              <button onclick="ajustarMetaRel('receita',-100)">−</button>
-              <input id="rel-meta-input" type="number" min="0" inputmode="numeric" onchange="setMetaRelFromInput('receita')">
-              <button onclick="ajustarMetaRel('receita',100)">+</button>
-            </div>
-          </div>
-          <div class="rel-counter">
-            <div class="rel-counter-label" data-t="reports.spendCeiling">Teto de gastos</div>
-            <div class="rel-counter-ctrl">
-              <button onclick="ajustarMetaRel('gastos',-100)">−</button>
-              <input id="rel-teto-input" type="number" min="0" inputmode="numeric" onchange="setMetaRelFromInput('gastos')">
-              <button onclick="ajustarMetaRel('gastos',100)">+</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- gráfico de linha: recebido vs gasto ao longo do mês, com meta e teto -->
-        <div class="group-label" style="margin-top:22px"><span data-t="reports.monthEvolution">Evolução do mês</span> <span class="ln"></span></div>
-        <div id="rel-linechart"></div>
+        <!-- Card 1: Faturamento -->
+        <div class="group-label" style="margin-top:20px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span> <span class="ln"></span></div>
+        <div id="rel-fat-bars" style="margin-top:10px"></div>
+        <div id="rel-linechart" style="margin-top:14px"></div>
         <div class="rel-line-legend">
           <span><i style="background:var(--brand)"></i><span data-t="reports.received">recebido</span></span>
           <span><i style="background:var(--late)"></i><span data-t="cost.thisMonth">gasto</span></span>
           <span><i class="dash" style="background:var(--ink-soft)"></i><span data-t="reports.goalCeiling">meta / teto</span></span>
         </div>
 
-        <!-- listas de despesas e recebidos do mês -->
-        <div class="group-label" style="margin-top:24px"><span data-t="reports.incomeList">Recebidos do mês</span> <span class="ln"></span></div>
-        <div id="rel-recebidos-lista" style="margin-top:10px"></div>
+        <!-- Card 2: Estatísticas Operacionais -->
+        <div class="group-label" style="margin-top:26px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span> <span class="ln"></span></div>
+        <div id="rel-op-bars" style="margin-top:10px"></div>
+        <div id="rel-annual-chart" style="margin-top:14px"></div>
 
-        <div class="group-label" style="margin-top:24px"><span data-t="reports.expenseList">Despesas do mês</span> <span class="ln"></span></div>
-        <div id="rel-despesas-lista" style="margin-top:10px"></div>
+        <!-- Card 3: Fluxo de Tarefas -->
+        <div class="group-label" style="margin-top:26px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span> <span class="ln"></span></div>
+        <div class="rel-op-list" id="rel-op-extra" style="margin-top:10px"></div>
 
-        <!-- estatísticas operacionais -->
-        <div class="group-label" style="margin-top:24px" id="rel-anchor-performance"><span data-t="reports.opStats">Estatísticas operacionais</span> <span class="ln"></span></div>
-        <div class="jobs-stat-row" id="rel-op-rings" style="margin-top:10px"></div>
-        <div class="rel-op-list" id="rel-op-extra" style="margin-top:14px"></div>
+        <!-- Card 4: Fluxo Financeiro -->
+        <div class="group-label" style="margin-top:26px"><span data-t="reports.cashFlow">Fluxo Financeiro</span> <span class="ln"></span></div>
+        <div class="rel-fluxo-chips" style="margin-top:10px">
+          <div class="chip on rel-fluxo-chip" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></div>
+          <div class="chip rel-fluxo-chip" data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></div>
+          <div class="chip rel-fluxo-chip" data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></div>
+        </div>
+        <div id="rel-fluxo-lista" style="margin-top:10px"></div>
       </section>
 
       <!-- ============ EQUIPA ============ -->
@@ -3831,7 +3827,6 @@
     "home.entryIncome": { pt:"Recebido", en:"Income", es:"Ingreso" },
     "home.addEntryTitle": { pt:"Registar movimento", en:"Add entry", es:"Registrar movimiento" },
     "home.addEntryBtn": { pt:"Adicionar", en:"Add", es:"Añadir" },
-    "home.performanceTitle": { pt:"Performance", en:"Performance", es:"Rendimiento" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
     "home.hours": { pt:"Horas", en:"Worktime", es:"Horas" },
     "home.awaiting": { pt:"Aguardando", en:"Awaiting", es:"Esperando" },
@@ -4385,7 +4380,16 @@
     "reports.noIncome": { pt:"Ainda sem recebidos este mês.", en:"No income yet this month.", es:"Aún sin ingresos este mes." },
     "reports.contractLabel": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "reports.manualLabel": { pt:"Manual", en:"Manual", es:"Manual" },
-    "reports.opStats": { pt:"Estatísticas operacionais", en:"Operational stats", es:"Estadísticas operativas" },
+    "reports.opStats": { pt:"Estatísticas Operacionais", en:"Operational Stats", es:"Estadísticas Operativas" },
+    "reports.billing": { pt:"Faturamento", en:"Billing", es:"Facturación" },
+    "reports.taskFlow": { pt:"Fluxo de Tarefas", en:"Task Flow", es:"Flujo de Tareas" },
+    "reports.cashFlow": { pt:"Fluxo Financeiro", en:"Cash Flow", es:"Flujo Financiero" },
+    "reports.params": { pt:"Parâmetros", en:"Parameters", es:"Parámetros" },
+    "reports.addBtn": { pt:"Adicionar", en:"Add", es:"Añadir" },
+    "reports.flowAll": { pt:"Todos", en:"All", es:"Todos" },
+    "reports.flowIncome": { pt:"Recebidos", en:"Income", es:"Ingresos" },
+    "reports.flowExpense": { pt:"Despesas", en:"Expenses", es:"Gastos" },
+    "reports.emptyFlow": { pt:"Nada por aqui neste mês.", en:"Nothing here this month.", es:"Nada por aquí este mes." },
     "reports.vsGoal": { pt:" vs meta", en:" vs goal", es:" vs meta" },
     "reports.op.overduePayments": { pt:"Recebimentos em atraso", en:"Overdue receivables", es:"Cobros vencidos" },
     "reports.op.overdueDeliveries": { pt:"Entregas em atraso", en:"Overdue deliveries", es:"Entregas vencidas" },
@@ -4937,13 +4941,20 @@
       return c.fechado && (c.aRealizar || c.aEntregar);
     });
   }
-  function calcularEstatisticasMes(){
+  /* ano/mes opcionais (mes=1-12) — omitidos, usa o mês/ano reais de hoje (mesmo
+     comportamento de sempre, todo call site existente continua igual). Passados,
+     permite recalcular as estatísticas para qualquer mês (navegação de Relatórios,
+     histórico de 12 meses) sem inventar dados — as datas já estavam guardadas em
+     cada job/pagamento, só faltava um jeito de filtrar por um mês arbitrário. */
+  function calcularEstatisticasMes(ano, mes){
     let recebido=0, porReceber=0;
     let contratosFechados=0, trabalhosRealizar=0, trabalhosRealizados=0, trabalhosEntregar=0, trabalhosEntregues=0;
     let pagamentosPendentesCount=0, pagamentosTotalCount=0, trabalhosAtivos=0, trabalhosConcluidos=0;
     const hoje=new Date();
-    const mesAtualISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
-    const mesAnt=new Date(hoje.getFullYear(), hoje.getMonth()-1, 1);
+    const anoRef = ano!=null ? ano : hoje.getFullYear();
+    const mesRef = mes!=null ? mes : hoje.getMonth()+1; // 1-12
+    const mesAtualISO=anoRef+'-'+String(mesRef).padStart(2,'0');
+    const mesAnt=new Date(anoRef, mesRef-2, 1);
     const mesAnteriorISO=mesAnt.getFullYear()+'-'+String(mesAnt.getMonth()+1).padStart(2,'0');
     let fechadosEsteMes=0, fechadosMesAnterior=0;
     let realizadosEsteMes=0, realizadosMesAnterior=0;
@@ -5022,7 +5033,7 @@
     const pendMeuBucket=bucketPorMesDoJob(pendMeu);
     /* recebido inclui entradas manuais avulsas (botão + do card Financeiro), além
        dos pagamentos de trabalhos já marcados como pagos */
-    return {recebido:recebido+receitasDoMes(), porReceber, contratosFechados, totalJobs:todos.length,
+    return {recebido:recebido+receitasDoMes(anoRef,mesRef), porReceber, contratosFechados, totalJobs:todos.length,
       fechadosEsteMes, fechadosMesAnterior, realizadosEsteMes, realizadosMesAnterior, entreguesEsteMes, entreguesMesAnterior,
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
@@ -5030,7 +5041,7 @@
       horasEsteMes, horasMesAnterior,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
-      custos:custosDoMes(), meta:METAS.receita, limiteGastos:METAS.gastos};
+      custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
@@ -5392,8 +5403,8 @@
     await loadPersisted('pivot-custosData', d=>{ custosData=d; });
     renderMonthTicker();
   }
-  function custosDoMes(){
-    const hoje=new Date(); const ano=hoje.getFullYear(), mes=hoje.getMonth()+1;
+  function custosDoMes(anoParam, mesParam){
+    const hoje=new Date(); const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     return Object.values(custosData).filter(c=>{
       if(!c.data) return true;
       const [y,m]=c.data.split('-').map(Number);
@@ -6808,18 +6819,21 @@
     }, 26);
   }
 
-  /* Só há dados reais do mês atual — sem histórico de meses anteriores ainda,
-     por isso não inventamos números para navegação entre meses passados. */
-  const REL_MESES=[[new Date().getMonth(), new Date().getFullYear(), null, null]];
-  let relMonthIndex=REL_MESES.length-1;
+  /* Navegação de mês em Relatórios — infinita nos dois sentidos, cruza anos
+     automaticamente. As datas já estavam guardadas em cada job/pagamento/despesa;
+     calcularEstatisticasMes()/custosDoMes()/etc. agora aceitam (ano,mes) para
+     filtrar por qualquer mês real, então não há "dados inventados" — meses
+     futuros só mostram zeros honestos porque ainda não existe nada com essa data. */
+  let relAno = new Date().getFullYear();
+  let relMes = new Date().getMonth()+1; // 1-12
   function relMonthNav(dir){
-    const next=relMonthIndex+dir;
-    if(next<0 || next>REL_MESES.length-1) return;
-    relMonthIndex=next;
+    relMes+=dir;
+    if(relMes>12){ relMes=1; relAno++; }
+    else if(relMes<1){ relMes=12; relAno--; }
     renderRelatorios();
   }
   function abrirRelatorioDoMes(){
-    relMonthIndex=REL_MESES.length-1;
+    relAno=new Date().getFullYear(); relMes=new Date().getMonth()+1;
     go('relatorios');
   }
   /* a dashboard leva para a secção correspondente da página única de Relatórios */
@@ -6830,8 +6844,8 @@
        a mover-se e falha silenciosamente (o ecrã fica preso no topo). Espera
        a animação acabar antes de rolar. */
     setTimeout(()=>{
-      const alvo = tab==='performance' ? 'rel-anchor-performance' : 'rel-anchor-financeiro';
-      const el=document.getElementById(alvo);
+      const mapa={ faturamento:'rel-anchor-faturamento', operacional:'rel-anchor-operacional', tarefas:'rel-anchor-tarefas' };
+      const el=document.getElementById(mapa[tab]||'rel-anchor-faturamento');
       if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
     }, 480);
   }
@@ -6860,17 +6874,6 @@
     return anterior>0 ? Math.round((atual-anterior)/anterior*100) : 100;
   }
 
-  /* ===== counters de meta / teto ===== */
-  function ajustarMetaRel(campo, delta){
-    METAS[campo]=Math.max(0, (METAS[campo]||0)+delta);
-    saveMetas(); renderRelatorios();
-  }
-  function setMetaRelFromInput(campo){
-    const id = campo==='receita' ? 'rel-meta-input' : 'rel-teto-input';
-    const v=parseFloat(document.getElementById(id).value);
-    METAS[campo]=isNaN(v)?0:Math.max(0,v);
-    saveMetas(); renderRelatorios();
-  }
 
   /* ===== estatísticas operacionais — listas por trás de cada métrica ===== */
   function opAtrasosCliente(){
@@ -6917,13 +6920,12 @@
     else html=itens.map(it=>'<div class="pick-row" onclick="closeInfo();openJob(\''+it.job.id+'\')"><div style="flex:1;min-width:0"><div class="nm">'+escapeHtml(it.job.client||it.job.nome||'')+'</div><div class="sub">'+escapeHtml(it.label)+'</div></div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>').join('');
     openInfo(titulo, html);
   }
+  /* Card 3 (Fluxo de Tarefas) — os mesmos 4 indicadores agregados de sempre,
+     agora sob o anchor rel-anchor-tarefas. Os 3 mini-anéis que existiam aqui
+     (Fechados/Executados/Concluídos) saíram — esses 3 já aparecem, com mais
+     contexto (barra + histórico de 12 meses), no Card 2 Estatísticas
+     Operacionais logo acima. */
   function renderRelOpStats(){
-    const s=calcularEstatisticasMes();
-    construirMiniAneis(document.getElementById('rel-op-rings'), [
-      {id:'rel-op-fechados', label:t('home.closed'), num:s.contratosFechados, den:s.totalJobs, trend:pctTendencia(s.fechadosEsteMes,s.fechadosMesAnterior), onclick:"abrirTrabalhosFiltrados('fechados')"},
-      {id:'rel-op-executados', label:t('home.executed'), num:s.trabalhosRealizados, den:s.trabalhosRealizados+s.trabalhosRealizar, trend:pctTendencia(s.realizadosEsteMes,s.realizadosMesAnterior), onclick:"abrirTrabalhosFiltrados('executados')"},
-      {id:'rel-op-entregues', label:t('home.delivered'), num:s.trabalhosEntregues, den:s.trabalhosEntregues+s.trabalhosEntregar, trend:pctTendencia(s.entreguesEsteMes,s.entreguesMesAnterior), onclick:"abrirTrabalhosFiltrados('entregues')"},
-    ]);
     const linhas=[
       {cor:'var(--late)', label:t('reports.op.overduePayments'), itens:opAtrasosCliente()},
       {cor:'var(--urgent)', label:t('reports.op.overdueDeliveries'), itens:opAtrasosMeus()},
@@ -6935,6 +6937,110 @@
     wrap.querySelectorAll('.rel-op-row').forEach((row,i)=>{
       row.onclick=()=>abrirListaOp(linhas[i].label, linhas[i].itens);
     });
+  }
+
+  /* ===== Barra horizontal reutilizável (Cards 1 e 2 de Relatórios) ===== */
+  function relBarRow(label, valor, max, cor, onclick, fmt, campoAtivo){
+    const pct = max>0 ? Math.min(100, Math.round(valor/max*100)) : 0;
+    const valorFmt = fmt==='int' ? valor : fmtMoney(valor);
+    const selecionado = campoAtivo && onclick && onclick.indexOf("'"+campoAtivo+"'")!==-1;
+    return '<div class="rel-bar-row'+(onclick?' clickable':'')+(selecionado?' selected':'')+'"'+(onclick?' onclick="'+onclick+'"':'')+'>'+
+      '<div class="rel-bar-top"><span class="rel-bar-label">'+escapeHtml(label)+'</span><span class="rel-bar-value">'+valorFmt+'</span></div>'+
+      '<div class="rel-bar-track"><div class="rel-bar-fill" style="width:'+pct+'%;background:'+cor+'"></div></div></div>';
+  }
+  /* Card 1 — Faturamento: as mesmas 5 grandezas do card financeiro da Dashboard,
+     como barras horizontais analíticas (mesma paleta, menos brilho/glow). */
+  function renderRelFatBars(s){
+    const wrap=document.getElementById('rel-fat-bars'); if(!wrap) return;
+    const meta=s.meta||0, esperado=s.porReceber||0, recebido=s.recebido||0, custos=s.custos||0, teto=s.limiteGastos||0;
+    const max=Math.max(meta, esperado, recebido, custos, teto, 1);
+    wrap.innerHTML =
+      relBarRow(t('home.target'), meta, max, 'rgba(242,245,243,.55)') +
+      relBarRow(t('home.expected'), esperado, max, '#A8E6C1') +
+      relBarRow(t('home.received'), recebido, max, '#63C798') +
+      relBarRow(t('home.expenses'), custos, max, 'linear-gradient(90deg,#F5D76E,#D84C4C)') +
+      relBarRow(t('home.ceiling'), teto, max, 'rgba(242,245,243,.35)');
+  }
+
+  /* ===== Card 2 — Estatísticas Operacionais: 6 barras clicáveis + histórico de
+     12 meses da métrica selecionada. Usa os campos "-EsteMes" (fluxo do mês),
+     não os totais acumulados (que não variam por mês). ===== */
+  let relMetricaSelecionada='fechados';
+  function relCampoDeStats(s, campo){
+    return ({ fechados:s.fechadosEsteMes, executados:s.realizadosEsteMes, concluidos:s.entreguesEsteMes,
+      horas:Math.round(s.horasEsteMes||0), pendencias:s.pendClienteEsteMes, demandas:s.pendMeuEsteMes })[campo] || 0;
+  }
+  function renderRelOpBars(s){
+    const wrap=document.getElementById('rel-op-bars'); if(!wrap) return;
+    const vals={ fechados:s.fechadosEsteMes, executados:s.realizadosEsteMes, concluidos:s.entreguesEsteMes,
+      horas:Math.round(s.horasEsteMes||0), pendencias:s.pendClienteEsteMes, demandas:s.pendMeuEsteMes };
+    const max=Math.max(...Object.values(vals), 1);
+    wrap.innerHTML =
+      relBarRow(t('home.closed'), vals.fechados, max, 'var(--brand)', "relSelecionarMetricaAnual('fechados')", 'int', relMetricaSelecionada) +
+      relBarRow(t('home.executed'), vals.executados, max, 'var(--brand)', "relSelecionarMetricaAnual('executados')", 'int', relMetricaSelecionada) +
+      relBarRow(t('home.completedTile'), vals.concluidos, max, 'var(--brand)', "relSelecionarMetricaAnual('concluidos')", 'int', relMetricaSelecionada) +
+      relBarRow(t('home.hours'), vals.horas, max, 'var(--urgent)', "relSelecionarMetricaAnual('horas')", 'int', relMetricaSelecionada) +
+      relBarRow(t('home.pending'), vals.pendencias, max, 'var(--pend)', "relSelecionarMetricaAnual('pendencias')", 'int', relMetricaSelecionada) +
+      relBarRow(t('home.demands'), vals.demandas, max, 'var(--late)', "relSelecionarMetricaAnual('demandas')", 'int', relMetricaSelecionada);
+  }
+  function relHistoricoAnual(campo){
+    const out=[]; let ano=relAno, mes=relMes;
+    for(let i=11;i>=0;i--){
+      let m=mes-i, a=ano;
+      while(m<1){ m+=12; a--; }
+      const s=calcularEstatisticasMes(a,m);
+      out.push({ano:a, mes:m, valor:relCampoDeStats(s,campo)});
+    }
+    return out;
+  }
+  function relSelecionarMetricaAnual(campo){
+    relMetricaSelecionada=campo;
+    renderRelAnnualBarChart(campo);
+    renderRelOpBars(calcularEstatisticasMes(relAno, relMes));
+  }
+  function renderRelAnnualBarChart(campo){
+    const dados=relHistoricoAnual(campo);
+    const wrap=document.getElementById('rel-annual-chart'); if(!wrap) return;
+    const W=320,H=150,padL=6,padR=6,padT=10,padB=18;
+    const maxV=Math.max(1, ...dados.map(d=>d.valor));
+    const bw=(W-padL-padR)/dados.length;
+    const barras=dados.map((d,i)=>{
+      const h=(d.valor/maxV)*(H-padT-padB), x=padL+i*bw+bw*0.18, y=H-padB-h;
+      const ativo=(d.ano===relAno && d.mes===relMes);
+      return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw*0.64).toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" fill="var(--brand)" opacity="'+(ativo?1:.5)+'" rx="2"/>'+
+        '<text x="'+(x+bw*0.32).toFixed(1)+'" y="'+(H-5)+'" font-size="8" fill="var(--neutral)" text-anchor="middle">'+mesCompleto(d.mes-1).slice(0,3)+'</text>';
+    }).join('');
+    wrap.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible">'+barras+'</svg>';
+  }
+
+  /* ===== Card 4 — Fluxo Financeiro: lista unificada (recebidos + despesas) do
+     mês selecionado, filtrável. Reaproveita listaRecebidosDoMes/
+     listaDespesasDoMes tal como já eram usadas — só o consumidor mudou. ===== */
+  let relFiltroFluxo='todos'; // 'todos'|'recebidos'|'despesas'
+  function relSetFiltroFluxo(f){
+    relFiltroFluxo=f;
+    renderRelFluxoFinanceiro();
+    document.querySelectorAll('.rel-fluxo-chip').forEach(el=>el.classList.toggle('on', el.dataset.f===f));
+  }
+  function relFluxoDoMes(ano, mes){
+    const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
+    const desp=listaDespesasDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'despesa'}));
+    return rec.concat(desp).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  }
+  function renderRelFluxoFinanceiro(){
+    const wrap=document.getElementById('rel-fluxo-lista'); if(!wrap) return;
+    let itens=relFluxoDoMes(relAno, relMes);
+    if(relFiltroFluxo==='recebidos') itens=itens.filter(i=>i.tipo==='recebido');
+    else if(relFiltroFluxo==='despesas') itens=itens.filter(i=>i.tipo==='despesa');
+    const fmtData=d=>d ? d.split('-').reverse().join('/') : '';
+    wrap.innerHTML = itens.length ? itens.map(it=>{
+      if(it.tipo==='recebido'){
+        const sub=(it.manual ? t('reports.manualLabel') : t('reports.contractLabel')+': '+escapeHtml(it.cliente||'')) + (it.data?(' · '+fmtData(it.data)):'');
+        const onclick = it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
+        return '<div class="pick-row" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(it.desc)+'</div><div class="sub">'+sub+'</div></div><div style="font-weight:600;color:var(--brand);flex:none;margin-left:10px">'+fmtMoney(it.valor)+'</div></div>';
+      }
+      return '<div class="pick-row" onclick="editarDespesa(\''+it.id+'\')"><div><div class="nm">'+escapeHtml(it.desc)+'</div><div class="sub">'+fmtData(it.data)+'</div></div><div style="font-weight:600;color:var(--late);flex:none;margin-left:10px">'+fmtMoney(it.valor)+'</div></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('reports.emptyFlow')+'</p>';
   }
 
   /* ===== gráfico de linha: recebido e gasto acumulados no mês, com meta e teto ===== */
@@ -6979,34 +7085,18 @@
   }
 
   function renderRelatorios(){
-    const ano=REL_MESES[relMonthIndex][1], mesIdx=REL_MESES[relMonthIndex][0], mes=mesIdx+1;
-    const s=calcularEstatisticasMes();
-    const recebido=s.recebido, meta=METAS.receita||0, gasto=s.custos||0;
-    document.getElementById('rel-month-label').textContent=mesCompleto(mesIdx)+' '+ano;
-    document.getElementById('rel-next-btn').style.opacity='.35';
-    document.getElementById('rel-next-btn').style.pointerEvents='none';
-    document.getElementById('rel-prev-btn').style.opacity = relMonthIndex===0 ? '.35':'1';
-    document.getElementById('rel-prev-btn').style.pointerEvents = relMonthIndex===0 ? 'none':'auto';
+    const ano=relAno, mes=relMes, mesIdx=relMes-1;
+    const s=calcularEstatisticasMes(ano, mes);
+    const lblMesNovo=document.getElementById('rel-mes-label'), lblAnoNovo=document.getElementById('rel-ano-label');
+    if(lblMesNovo) lblMesNovo.textContent=mesCompleto(mesIdx).toUpperCase();
+    if(lblAnoNovo) lblAnoNovo.textContent=ano;
 
-    // anel esquerdo: recebido vs meta
-    const infoMeta=pintarAnelComVolta('rel-ring-meta', 52, recebido, meta||1);
-    if(infoMeta){ const el=document.getElementById('rel-meta-pct'); el.textContent='0%'; setTimeout(()=>countUp(el, infoMeta.pctTotal, '%'), 60); }
-    const difMeta=recebido-meta;
-    document.getElementById('rel-meta-cap').innerHTML=meta>0 ? ('<b style="color:'+(difMeta>=0?'var(--brand)':'var(--late)')+'">'+(difMeta>=0?'+':'−')+fmtMoney(Math.abs(difMeta))+'</b>'+t('reports.vsGoal')) : '—';
-    // anel direito: lucro (recebido − gasto) / recebido
-    const lucro=recebido-gasto;
-    const pctLucro=recebido>0 ? Math.round(lucro/recebido*100) : 0;
-    const infoLucro=pintarAnelComVolta('rel-ring-lucro', 52, Math.max(0,lucro), recebido||1);
-    if(infoLucro){ const el=document.getElementById('rel-lucro-pct'); el.textContent='0%'; setTimeout(()=>countUp(el, pctLucro, '%'), 60); }
-    document.getElementById('rel-lucro-cap').innerHTML='<b style="color:'+(lucro>=0?'var(--brand)':'var(--late)')+'">'+(lucro>=0?'+':'−')+fmtMoney(Math.abs(lucro))+'</b>';
-
-    // counters
-    const mi=document.getElementById('rel-meta-input'); if(mi && document.activeElement!==mi) mi.value=meta;
-    const ti=document.getElementById('rel-teto-input'); if(ti && document.activeElement!==ti) ti.value=METAS.gastos||0;
-
+    renderRelFatBars(s);
     renderRelLineChart(ano, mes);
-    renderRelListasFinanceiras();
+    renderRelOpBars(s);
+    renderRelAnnualBarChart(relMetricaSelecionada);
     renderRelOpStats();
+    renderRelFluxoFinanceiro();
   }
 
   /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
@@ -7048,8 +7138,8 @@
   let receitasData={};
   function saveReceitasData(){ savePersisted('pivot-receitasData', ()=>receitasData); }
   async function loadReceitasData(){ await loadPersisted('pivot-receitasData', d=>{ receitasData=d; }); }
-  function receitasDoMes(){
-    const hoje=new Date(); const ano=hoje.getFullYear(), mes=hoje.getMonth()+1;
+  function receitasDoMes(anoParam, mesParam){
+    const hoje=new Date(); const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     return Object.values(receitasData).filter(r=>{
       if(!r.data) return true;
       const [y,m]=r.data.split('-').map(Number);
@@ -7057,9 +7147,11 @@
     }).reduce((s,r)=>s+(parseFloat(r.valor)||0),0);
   }
   /* ===== Listas de Relatórios: Recebidos (parcelas de contrato + manuais) e
-     Despesas (todas manuais) do mês atual ===== */
-  function listaRecebidosDoMes(){
-    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+     Despesas (todas manuais) de um mês — ano/mes omitidos usam o mês atual real. ===== */
+  function listaRecebidosDoMes(anoParam, mesParam){
+    const hoje=new Date();
+    const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
+    const mesISO=ano+'-'+String(mes).padStart(2,'0');
     const itens=[];
     jobsVisiveis().forEach(j=>{
       (j.payments||[]).forEach(p=>{
@@ -7075,27 +7167,13 @@
     });
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
-  function listaDespesasDoMes(){
-    const hoje=new Date(); const mesISO=hoje.getFullYear()+'-'+String(hoje.getMonth()+1).padStart(2,'0');
+  function listaDespesasDoMes(anoParam, mesParam){
+    const hoje=new Date();
+    const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
+    const mesISO=ano+'-'+String(mes).padStart(2,'0');
     return Object.values(custosData).filter(c=>c.data && c.data.slice(0,7)===mesISO)
       .map(c=>({ desc:c.descricao, id:c.id, valor:Number(c.valor)||0, data:c.data }))
       .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
-  }
-  function renderRelListasFinanceiras(){
-    const recWrap=document.getElementById('rel-recebidos-lista');
-    const despWrap=document.getElementById('rel-despesas-lista');
-    if(!recWrap || !despWrap) return;
-    const fmtData=d=>d ? d.split('-').reverse().join('/') : '';
-    const recebidos=listaRecebidosDoMes();
-    recWrap.innerHTML = recebidos.length ? recebidos.map(it=>{
-      const sub = (it.manual ? t('reports.manualLabel') : t('reports.contractLabel')+': '+escapeHtml(it.cliente)) + (it.data?(' · '+fmtData(it.data)):'');
-      const onclick = it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
-      return '<div class="pick-row" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(it.desc)+'</div><div class="sub">'+sub+'</div></div><div style="font-weight:600;color:var(--brand);flex:none;margin-left:10px">'+fmtMoney(it.valor)+'</div></div>';
-    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('reports.noIncome')+'</p>';
-    const despesas=listaDespesasDoMes();
-    despWrap.innerHTML = despesas.length ? despesas.map(c=>
-      '<div class="pick-row" onclick="editarDespesa(\''+c.id+'\')"><div><div class="nm">'+escapeHtml(c.desc)+'</div><div class="sub">'+fmtData(c.data)+'</div></div><div style="font-weight:600;color:var(--late);flex:none;margin-left:10px">'+fmtMoney(c.valor)+'</div></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>';
   }
   function editarReceitaManual(id){
     const r=receitasData[id]; if(!r) return;
@@ -7115,7 +7193,7 @@
     saveReceitasData();
     closeInfo();
     renderMonthTicker();
-    renderRelListasFinanceiras();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
     showToast(t('toast.incomeAdded'));
   }
   function removerReceita(id){
@@ -7123,7 +7201,7 @@
     saveReceitasData();
     closeInfo();
     renderMonthTicker();
-    renderRelListasFinanceiras();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
   }
   /* ===== Despesas — painel com cards e swipe para editar/apagar ===== */
   function abrirDespesas(){
