@@ -60,8 +60,10 @@
      é a interação entre camadas que lê como luz atravessando vidro, não uma forma isolada.
      feTurbulence/feDisplacementMap animado foi testado e descartado: recalcular a
      distorção a cada frame trava o render (custo de CPU, não é GPU-compositável). */
-  .bg-blobs{position:absolute;inset:-25%;z-index:0;pointer-events:none;overflow:hidden;
-    --blob-1:#151513; --blob-2:#1C1C1A; --blob-3:#181816; --blob-accent:#26241F}
+  /* animação de vidro/blobs desligada por completo — fica só o grafite plano
+     do .shell (#131310), sem movimento e sem qualquer resquício de verde */
+  .bg-blobs{display:none}
+  .bg-sheen{display:none}
   .bg-blob{position:absolute;inset:0;will-change:transform}
   .bg-blob-1{filter:blur(96px);opacity:.85;mix-blend-mode:normal;
     background:radial-gradient(ellipse 88% 72% at 20% 18%,var(--blob-1) 0%,rgba(21,22,15,.5) 42%,transparent 74%);
