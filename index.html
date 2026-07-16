@@ -18,7 +18,7 @@
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --label-out:rgba(255,255,255,.82);
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
-    --r:12px; --sb-w:236px; --nav-h:74px;
+    --r:8px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:22,22,20; --glass-rgb-2:15,15,13; --btn-rgb:79,161,137;
     --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(122,124,116,.90); --glass-55:rgba(122,124,116,.92); --glass-6:rgba(122,124,116,.93); --glass-62:rgba(122,124,116,.94); --glass-65:rgba(122,124,116,.95); --glass-7:rgba(122,124,116,.96); --glass-85:rgba(122,124,116,.98); --glass2-75:rgba(122,124,116,.7);
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
@@ -61,7 +61,7 @@
      feTurbulence/feDisplacementMap animado foi testado e descartado: recalcular a
      distorção a cada frame trava o render (custo de CPU, não é GPU-compositável). */
   .bg-blobs{position:absolute;inset:-25%;z-index:0;pointer-events:none;overflow:hidden;
-    --blob-1:#15160F; --blob-2:#1D1F1E; --blob-3:#191A15; --blob-accent:#2E4238}
+    --blob-1:#151513; --blob-2:#1C1C1A; --blob-3:#181816; --blob-accent:#26241F}
   .bg-blob{position:absolute;inset:0;will-change:transform}
   .bg-blob-1{filter:blur(96px);opacity:.85;mix-blend-mode:normal;
     background:radial-gradient(ellipse 88% 72% at 20% 18%,var(--blob-1) 0%,rgba(21,22,15,.5) 42%,transparent 74%);
@@ -85,15 +85,11 @@
   @keyframes driftD{0%{opacity:.18;transform:translate(0,0) scale(1)}50%{opacity:.28;transform:translate(-4%,4%) scale(1.18)}100%{opacity:.12;transform:translate(4%,-3%) scale(.88)}}
   @keyframes sheenDrift{0%{transform:translate(-6%,-3%) rotate(0deg)}50%{transform:translate(5%,4%) rotate(4deg)}100%{transform:translate(-3%,5%) rotate(-3deg)}}
   @media (prefers-reduced-motion:reduce){.bg-blob,.bg-sheen{animation:none}}
-  .shell::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.3;mix-blend-mode:overlay;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E")}
-
-  /* Canvas WebGL que refrata as mesmas cores dos blobs através de vidro fraturado
-     (ver .bg-blobs acima). Some com opacity:0 até o WebGL confirmar suporte via JS;
-     se falhar, os blobs CSS abaixo continuam visíveis normalmente como fallback. */
-  #bg-glass-canvas{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .6s ease}
-  #bg-glass-canvas.ready{opacity:1}
-  #bg-glass-canvas.ready ~ .bg-blobs,#bg-glass-canvas.ready ~ .bg-sheen{display:none}
+  /* Canvas WebGL desligado — o glow/streaks lia como cyberpunk/neon, não como o
+     "grafite premium, extremamente subtil" pedido. Os blobs CSS abaixo (já
+     silenciosos, sem verde) ficam como único fundo. Ficheiro/JS mantidos
+     intactos, só deixam de aparecer. */
+  #bg-glass-canvas{display:none}
 
   /* ===== SPLASH ===== */
   #splash{position:fixed;inset:0;z-index:999;background:var(--paper);display:flex;flex-direction:column;
@@ -303,8 +299,8 @@
   .main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;background:transparent}
   .topbar-mobile{display:none;position:absolute;top:10px;left:18px;right:18px;z-index:40;
     padding:14px 18px;align-items:center;justify-content:space-between;border-radius:var(--r);
-    background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,0) 45%),rgba(122,124,116,.20);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(26,25,23,.62);
+    backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid rgba(255,255,255,.10);box-shadow:0 8px 30px rgba(0,0,0,.15);
     --paper:#161614;--paper-2:#0F0F0D;--ink:#F1F1EE;--ink-soft:#C9C9C2;--ink-faint:#8E8E86;
     --line:rgba(255,255,255,.16);--line-soft:rgba(255,255,255,.10);--neutral:#B9B9B1;--btn-rgb:79,161,137;
@@ -367,10 +363,10 @@
   .mrl-item:first-child{color:var(--ink)}
   .mrl-item b{margin-left:auto;color:var(--ink);font-weight:500;font-size:13.5px}
   .mr-meta-c{color:#F2F5F3}
-  .mr-esperado-c{color:#A8E6C1}
-  .mr-recebido-c{color:#63C798}
-  .mr-gastos-c{color:#F5D76E}
-  .mr-teto-c{color:#D84C4C}
+  .mr-esperado-c{color:#B8C7A8}
+  .mr-recebido-c{color:#5E7A52}
+  .mr-gastos-c{color:#C9A855}
+  .mr-teto-c{color:#A8453D}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}
@@ -415,10 +411,10 @@
   .mini-ring-wrap{position:relative;width:60px;height:60px}
   .mini-ring{width:60px;height:60px;transform:rotate(-90deg)}
   .mini-ring-track{fill:none;stroke:rgba(255,255,255,.16)}
-  .mini-ring-progress{fill:none;stroke:url(#grad-mini-progress);stroke-linecap:round;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+  .mini-ring-progress{fill:none;stroke:url(#grad-mini-progress);stroke-linecap:butt;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
   [data-theme="light"] .mini-ring-progress{stroke:url(#grad-mini-progress-light)}
   .mini-ring-track-outer{fill:none;stroke:rgba(255,255,255,.10)}
-  .mini-ring-progress-outer{fill:none;stroke:var(--urgent);stroke-linecap:round;stroke-dasharray:170;stroke-dashoffset:170;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+  .mini-ring-progress-outer{fill:none;stroke:var(--urgent);stroke-linecap:butt;stroke-dasharray:170;stroke-dashoffset:170;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
   /* qualquer anel que já completou pelo menos uma volta: arco com brilho, pista mais clara */
   .ring-lapped-progress{filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
   .ring-lapped-track{opacity:.6}
@@ -429,7 +425,7 @@
   .headline em{font-style:normal;color:var(--ink);font-weight:600}
 
   .group{margin-bottom:24px}
-  .group-label{font-size:11.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  .group-label{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
     color:var(--label-out);margin:0 2px 11px;display:flex;align-items:center;gap:8px}
   .group-label .ln{flex:1;height:1px;background:var(--line)}
 
@@ -1372,8 +1368,8 @@
 
   /* ===== MOBILE NAV ===== */
   .nav{display:none;position:absolute;bottom:calc(10px + env(safe-area-inset-bottom));left:18px;right:18px;
-    background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,0) 45%),rgba(122,124,116,.20);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);border-radius:var(--r);
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(26,25,23,.62);
+    backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);border-radius:var(--r);
     border:1px solid rgba(255,255,255,.10);box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:30;height:var(--nav-h);
     align-items:center;padding:0 6px}
   .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
@@ -1761,14 +1757,14 @@
       </div>
       <div style="display:flex;gap:8px">
         <div class="icon-btn" onclick="go('pesquisa')" aria-label="Pesquisar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0h-4Z" fill-opacity=".6"/></svg>
           <span class="notif-count" id="notif-count" style="display:none"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-3l3-3h6l3 3v3"/></svg>
         </div>
       </div>
     </div>
@@ -1803,20 +1799,20 @@
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
                     <linearGradient id="grad-esperado" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#DDF3E6"/>
-                      <stop offset="100%" stop-color="#A8E6C1"/>
+                      <stop offset="0%" stop-color="#C9D4BE"/>
+                      <stop offset="100%" stop-color="#9FB58C"/>
                     </linearGradient>
                     <linearGradient id="grad-recebido" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#63C798"/>
-                      <stop offset="100%" stop-color="#2F8F63"/>
+                      <stop offset="0%" stop-color="#7A9468"/>
+                      <stop offset="100%" stop-color="#4C6B45"/>
                     </linearGradient>
                     <linearGradient id="grad-despesas" x1="123" y1="123" x2="27" y2="27" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#FFF7D6"/>
-                      <stop offset="25%" stop-color="#F5D76E"/>
-                      <stop offset="50%" stop-color="#E9A93B"/>
-                      <stop offset="75%" stop-color="#E27D3D"/>
-                      <stop offset="90%" stop-color="#D84C4C"/>
-                      <stop offset="100%" stop-color="#6B1414"/>
+                      <stop offset="0%" stop-color="#D9C9A0"/>
+                      <stop offset="25%" stop-color="#C9A855"/>
+                      <stop offset="50%" stop-color="#BC7C3E"/>
+                      <stop offset="75%" stop-color="#A85A38"/>
+                      <stop offset="90%" stop-color="#8B3A2E"/>
+                      <stop offset="100%" stop-color="#4A1F17"/>
                     </linearGradient>
                   </defs>
                   <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="59" stroke-width="10"/>
@@ -1837,9 +1833,9 @@
         <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <defs>
             <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#DDF8E7"/>
-              <stop offset="50%" stop-color="#7FD2A7"/>
-              <stop offset="100%" stop-color="#4FA47A"/>
+              <stop offset="0%" stop-color="#B8C7A8"/>
+              <stop offset="50%" stop-color="#83996E"/>
+              <stop offset="100%" stop-color="#5E7A52"/>
             </linearGradient>
             <linearGradient id="grad-mini-progress-light" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#5A8D67"/>
@@ -2201,20 +2197,20 @@
   <!-- ===== MOBILE NAV ===== -->
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11.5 12 4l8 7.5"/><rect x="6" y="11.5" width="12" height="8.5"/></svg>
       <span id="nav-label-hoje" data-t="nav.home">Início</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><path d="M3 13h18"/></svg>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 5v14M5 12h14"/></svg></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </button>
     <button id="n-relatorios" onclick="go('relatorios')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>
       <span id="nav-label-relatorios" data-t="reports.title">Relatórios</span>
     </button>
   </nav>
@@ -7101,8 +7097,8 @@
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
      etc) — reaproveitada aqui, não uma cor nova, só a mesma legenda aplicada
      também às barras de Faturamento */
-  const REL_C_META='#F2F5F3', REL_C_ESPERADO='#A8E6C1', REL_C_RECEBIDO='#63C798',
-    REL_C_DESPESAS='#F5D76E', REL_C_TETO='#D84C4C';
+  const REL_C_META='#F2F5F3', REL_C_ESPERADO='#B8C7A8', REL_C_RECEBIDO='#5E7A52',
+    REL_C_DESPESAS='#C9A855', REL_C_TETO='#A8453D';
   /* Card 1 — Faturamento: linhas soltas sobre o fundo, sem caixa — a barra é o
      próprio elemento. Valor acima à direita, barra grossa de cantos quadrados
      (não pílula), rótulo por baixo. */
@@ -7179,7 +7175,7 @@
     const barras=dados.map((d,i)=>{
       const h=(d.valor/maxV)*(H-padT-padB), x=padL+i*bw+bw*0.18, y=H-padB-h;
       const ativo=(d.ano===relAno && d.mes===relMes);
-      return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw*0.64).toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" fill="var(--brand)" opacity="'+(ativo?1:.5)+'" rx="2"/>'+
+      return '<rect x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" width="'+(bw*0.64).toFixed(1)+'" height="'+Math.max(h,1).toFixed(1)+'" fill="#5E7A52" opacity="'+(ativo?1:.5)+'" rx="1"/>'+
         '<text x="'+(x+bw*0.32).toFixed(1)+'" y="'+(H-5)+'" font-size="8" fill="var(--neutral)" text-anchor="middle">'+mesCompleto(d.mes-1).slice(0,3)+'</text>';
     }).join('');
     wrap.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible">'+barras+'</svg>';
@@ -7359,12 +7355,12 @@
     const labels=tickIdx.map(i=>'<text x="'+x(i).toFixed(1)+'" y="'+(H-3)+'" font-size="8.5" fill="var(--neutral)" text-anchor="middle">'+pts[i].label+'</text>').join('');
     wrap.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible">'+
       '<defs>'+
-        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--brand)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></linearGradient>'+
+        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5E7A52" stop-opacity=".3"/><stop offset="100%" stop-color="#5E7A52" stop-opacity="0"/></linearGradient>'+
         '<linearGradient id="rel-wave-gasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C2793C" stop-opacity=".2"/><stop offset="100%" stop-color="#C2793C" stop-opacity="0"/></linearGradient>'+
         '<linearGradient id="rel-wave-gasto-linha" x1="0" y1="0" x2="1" y2="0">'+gradDespesaStops+'</linearGradient>'+
       '</defs>'+
-      refLine(meta,'var(--brand)','.1')+refLine(teto,'#A13F2E','.15')+
-      onda('gasto','rel-wave-gasto','url(#rel-wave-gasto-linha)',1.2)+onda('recebido','rel-wave-recebido','var(--brand)',1.2)+
+      refLine(meta,'#5E7A52','.1')+refLine(teto,'#A13F2E','.15')+
+      onda('gasto','rel-wave-gasto','url(#rel-wave-gasto-linha)',1.2)+onda('recebido','rel-wave-recebido','#5E7A52',1.2)+
       hashes+labels+
       '</svg>';
   }
