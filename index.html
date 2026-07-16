@@ -851,38 +851,27 @@
   .prow .chevr{width:15px;height:15px;color:var(--neutral)}
   .plabel{font-size:11.5px;font-weight:600;letter-spacing:.13em;color:var(--neutral);
     margin:18px 2px 9px}
-  .rel-head-v2{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
-  .rel-head-actions{display:flex;align-items:center;gap:0;flex:none;margin-top:3px;margin-left:auto}
-  .rel-head-btn{display:flex;align-items:center;gap:5px;padding:6px 10px;background:none;border:none;
-    color:var(--ink-soft);font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;
-    font-family:inherit;cursor:pointer;transition:color .15s}
-  .rel-head-btn:hover{color:var(--ink)}
-  .rel-head-btn svg{width:13px;height:13px;flex:none}
-  .rel-head-sep{width:1px;height:14px;background:var(--line);flex:none}
-  .rel-month-nav{display:flex;align-items:center;justify-content:center;gap:34px;margin-top:18px}
-  .rel-month-center{display:flex;flex-direction:column;align-items:center;min-width:150px;cursor:pointer;
-    padding:3px 12px;border-radius:10px;transition:background .15s}
-  .rel-month-center:hover{background:var(--paper-2)}
+  /* Relatórios — o bloco de período É o topo da página (sem título duplicado
+     com o menu inferior); Parâmetros/Adicionar são ícones puros nos extremos */
+  .rel-period-bar{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+  .rel-icon-btn{width:34px;height:34px;display:grid;place-items:center;background:none;border:none;
+    color:var(--ink-soft);cursor:pointer;flex:none;transition:color .15s}
+  .rel-icon-btn:hover{color:var(--ink)}
+  .rel-icon-btn svg{width:17px;height:17px}
+  .rel-month-center{display:flex;flex-direction:column;align-items:center;cursor:pointer;
+    touch-action:pan-y;user-select:none}
   .rel-mes-big{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-weight:600;font-size:32px;color:var(--ink);letter-spacing:.01em;line-height:1}
   .rel-mes-big.compact{font-size:17px;letter-spacing:0}
   .rel-ano-small{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--neutral);margin-top:6px}
-  .rel-nav-btn{width:28px;height:28px;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint);flex:none;transition:color .15s}
-  .rel-nav-btn:hover{color:var(--ink)}
-  .rel-nav-btn svg{width:14px;height:14px}
 
-  /* barras editoriais (Cards 1 e 2) — um único bloco colado, texto DENTRO do
-     preenchimento em vez de numa linha acima de uma track separada */
-  .rel-ledger{border-radius:12px;overflow:hidden;border:1px solid var(--line-soft)}
-  .rel-ledger-row{position:relative;display:flex;align-items:center;justify-content:space-between;
-    padding:12px 14px;border-top:1px solid var(--line-soft);overflow:hidden;cursor:default}
-  .rel-ledger-row:first-child{border-top:none}
-  .rel-ledger-row.clickable{cursor:pointer}
-  .rel-ledger-fill{position:absolute;inset:0;width:0;opacity:.16;transition:width .5s cubic-bezier(.2,.8,.2,1)}
-  .rel-ledger-row.selected .rel-ledger-fill{opacity:.28}
-  .rel-ledger-label{position:relative;font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);z-index:1}
-  .rel-ledger-row.selected .rel-ledger-label{color:var(--ink)}
-  .rel-ledger-value{position:relative;font-family:var(--font-numeric),inherit;font-size:14px;font-weight:600;color:var(--ink);z-index:1;flex:none;margin-left:10px}
+  /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo */
+  .rel-line-item{margin-bottom:18px}
+  .rel-line-item:last-child{margin-bottom:0}
+  .rel-line-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+  .rel-line-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft)}
+  .rel-line-value{font-family:var(--font-numeric),inherit;font-size:14px;font-weight:600;color:var(--ink)}
+  .rel-line-bar{height:5px;border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
   .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
   .venc-icon{width:34px;height:34px;color:#fff;display:grid;place-items:center;flex:none}
   .venc-icon svg{width:17px;height:17px}
@@ -936,32 +925,36 @@
   .bar.now{background:var(--brand)}
   .bar-mo{font-size:11px;color:var(--neutral)}
 
-  /* ===== RELATÓRIOS — página unificada ===== */
-  .rel-line-legend{display:flex;justify-content:center;gap:16px;font-size:11.5px;color:var(--ink-soft);margin-top:10px}
-  .rel-line-legend span{display:inline-flex;align-items:center;gap:5px}
-  .rel-line-legend i{width:11px;height:3px;border-radius:2px;display:inline-block}
-  .rel-line-legend i.dash{background-image:none;opacity:.7;width:11px;height:0;border-top:2px dashed currentColor;background:none!important}
+  /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
+     bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
-  /* Fluxo de Tarefas — um único cartão com linhas coladas (hairline), não 4 cartões soltos */
-  .rel-tasks-card{border-radius:12px;overflow:hidden;border:1px solid var(--line-soft)}
-  .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
-    border-top:1px solid var(--line-soft);cursor:pointer;transition:background .15s}
-  .rel-op-row:first-child{border-top:none}
-  .rel-op-row:hover{background:var(--paper-2)}
+  /* Card 2 (Estatísticas Operacionais) — lista analítica simples; nenhuma barra
+     visível por padrão. A barra/gráfico só aparece no histórico de 12 meses
+     abaixo, depois de tocar num indicador. */
+  .rel-stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
+  .rel-stat-row .l{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .rel-stat-row .l .dot{width:6px;height:6px;border-radius:50%;flex:none;opacity:.6}
+  .rel-stat-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink-soft)}
+  .rel-stat-row.selected .l{color:var(--ink)}
+  .rel-stat-row.selected .l .dot{opacity:1}
+  .rel-stat-row.selected .v{color:var(--ink)}
+
+  /* Fluxo de Tarefas — cor + nome + número, sem bordas nem divisórias */
+  .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
   .rel-op-row .l{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
   .rel-op-row .l .dot{width:7px;height:7px;border-radius:50%;flex:none}
   .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink)}
   .rel-op-row.zero{opacity:.45}
 
-  /* Fluxo Financeiro — metadados por ícone em vez de texto literal "Contrato:/Data:" */
-  .rel-fluxo-item{display:flex;align-items:center;justify-content:space-between;padding:12px 2px;
-    border-top:1px solid var(--line-soft);cursor:pointer}
-  .rel-fluxo-item:first-child{border-top:none}
+  /* Fluxo Financeiro — timeline: título/metadados/valor empilhados, separados
+     por espaçamento, sem caixa envolvendo cada item */
+  .rel-fluxo-item{padding:13px 0;cursor:pointer}
   .rel-fluxo-item .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
-  .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:3px;flex-wrap:wrap}
+  .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
   .rel-fluxo-meta span{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:var(--neutral)}
   .rel-fluxo-meta svg{width:11px;height:11px;flex:none}
-  .rel-fluxo-val{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;flex:none;margin-left:10px}
+  .rel-fluxo-val{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;margin-top:6px}
 
   /* Seletor avançado de período (modal aberto ao tocar no mês/ano) */
   .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--ink)}
@@ -2120,46 +2113,33 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <div class="page-head rel-head-v2">
-          <div class="page-title" data-t="reports.title">Relatórios</div>
-          <div class="rel-head-actions">
-            <button class="rel-head-btn" onclick="abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg><span data-t="reports.addBtn">Adicionar</span></button>
-            <span class="rel-head-sep"></span>
-            <button class="rel-head-btn" onclick="abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span data-t="reports.params">Parâmetros</span></button>
-          </div>
-        </div>
-
-        <div class="rel-month-nav">
-          <div class="rel-nav-btn" id="rel-prev-btn" onclick="relMonthNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m15 18-6-6 6-6"/></svg></div>
-          <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
+        <div class="rel-period-bar">
+          <button class="rel-icon-btn" onclick="abrirDefinirMetas()" aria-label="Parâmetros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+          <div class="rel-month-center" id="rel-month-swipe">
             <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
             <span class="rel-ano-small" id="rel-ano-label">2026</span>
           </div>
-          <div class="rel-nav-btn" id="rel-next-btn" onclick="relMonthNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <button class="rel-icon-btn" onclick="abrirRegistroManual()" aria-label="Adicionar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
 
-        <!-- Card 1: Faturamento -->
-        <div class="group-label" style="margin-top:22px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span> <span class="ln"></span></div>
-        <div class="rel-ledger" id="rel-fat-bars" style="margin-top:10px"></div>
-        <div id="rel-linechart" style="margin-top:16px"></div>
-        <div class="rel-line-legend">
-          <span><i style="background:var(--brand)"></i><span data-t="reports.received">recebido</span></span>
-          <span><i style="background:var(--late)"></i><span data-t="cost.thisMonth">gasto</span></span>
-          <span><i class="dash" style="background:var(--ink-soft)"></i><span data-t="reports.goalCeiling">meta / teto</span></span>
-        </div>
+        <!-- Card 1: Faturamento — sem caixa; as barras são o próprio elemento -->
+        <div class="group-label" style="margin-top:26px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
+        <div id="rel-fat-bars" style="margin-top:16px"></div>
+        <div id="rel-linechart" style="margin-top:20px"></div>
 
-        <!-- Card 2: Estatísticas Operacionais -->
-        <div class="group-label" style="margin-top:28px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span> <span class="ln"></span></div>
-        <div class="rel-ledger" id="rel-op-bars" style="margin-top:10px"></div>
-        <div id="rel-annual-chart" style="margin-top:16px"></div>
+        <!-- Card 2: Estatísticas Operacionais — lista analítica; a barra/gráfico só
+             aparece ao tocar num indicador -->
+        <div class="group-label" style="margin-top:32px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span></div>
+        <div id="rel-op-bars" style="margin-top:8px"></div>
+        <div id="rel-annual-chart" style="margin-top:14px"></div>
 
         <!-- Card 3: Fluxo de Tarefas -->
-        <div class="group-label" style="margin-top:28px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span> <span class="ln"></span></div>
-        <div class="rel-tasks-card" id="rel-op-extra" style="margin-top:10px"></div>
+        <div class="group-label" style="margin-top:32px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
+        <div id="rel-op-extra" style="margin-top:8px"></div>
 
-        <!-- Card 4: Fluxo Financeiro -->
-        <div class="group-label" style="margin-top:28px"><span data-t="reports.cashFlow">Fluxo Financeiro</span> <span class="ln"></span></div>
-        <div class="segmented" id="rel-fluxo-seg" style="margin-top:10px;margin-bottom:0">
+        <!-- Card 4: Fluxo Financeiro — timeline, sem cartões -->
+        <div class="group-label" style="margin-top:32px"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
+        <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
           <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
           <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
           <button data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></button>
@@ -6923,6 +6903,23 @@
     go('relatorios');
   }
 
+  /* deslizar sobre o bloco de mês/ano navega período (sem setas visuais);
+     um toque sem deslocamento abre o seletor avançado */
+  function bindRelSwipe(){
+    const el=document.getElementById('rel-month-swipe');
+    if(!el || el._swipeBound) return;
+    el._swipeBound=true;
+    let sx=null, sy=null;
+    el.addEventListener('pointerdown', e=>{ sx=e.clientX; sy=e.clientY; });
+    el.addEventListener('pointerup', e=>{
+      if(sx==null) return;
+      const dx=e.clientX-sx, dy=e.clientY-sy;
+      sx=null; sy=null;
+      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.5) relMonthNav(dx<0?-1:1);
+      else if(Math.abs(dx)<8 && Math.abs(dy)<8) abrirSeletorPeriodo();
+    });
+  }
+
   /* ===== seletor avançado de período — modal aberto ao tocar no mês/ano ===== */
   let relPeriodoTabTemp='mes', relPeriodoAnoTemp=new Date().getFullYear();
   function abrirSeletorPeriodo(){
@@ -7086,53 +7083,53 @@
     });
   }
 
-  /* ===== Linha de relatório editorial reutilizável (Cards 1 e 2 de Relatórios) —
-     texto sempre DENTRO do preenchimento, linhas coladas num único bloco (.rel-ledger) ===== */
-  function relBarRow(label, valor, max, cor, onclick, fmt, campoAtivo){
+  /* despesas — âmbar→cobre dessaturado (item de direção visual: nada de amarelo/
+     vermelho vivos, tom "material", não fintech/gaming). Local a Relatórios só. */
+  const REL_COR_DESPESA='linear-gradient(90deg,#C69A56,#A15B3A)';
+  /* Card 1 — Faturamento: linhas soltas sobre o fundo, sem caixa — a barra é o
+     próprio elemento (rótulo/valor numa linha, barra proporcional por baixo). */
+  function relLineRow(label, valor, max, cor){
     const pct = max>0 ? Math.min(100, Math.round(valor/max*100)) : 0;
-    const valorFmt = fmt==='int' ? valor : fmtMoney(valor);
-    const selecionado = campoAtivo && onclick && onclick.indexOf("'"+campoAtivo+"'")!==-1;
-    return '<div class="rel-ledger-row'+(onclick?' clickable':'')+(selecionado?' selected':'')+'"'+(onclick?' onclick="'+onclick+'"':'')+'>'+
-      '<div class="rel-ledger-fill" style="width:'+pct+'%;background:'+cor+'"></div>'+
-      '<span class="rel-ledger-label">'+escapeHtml(label)+'</span>'+
-      '<span class="rel-ledger-value">'+valorFmt+'</span></div>';
+    return '<div class="rel-line-item">'+
+      '<div class="rel-line-top"><span class="rel-line-label">'+escapeHtml(label)+'</span><span class="rel-line-value">'+fmtMoney(valor)+'</span></div>'+
+      '<div class="rel-line-bar" style="width:'+Math.max(pct,2)+'%;background:'+cor+'"></div></div>';
   }
-  /* Card 1 — Faturamento: as mesmas 5 grandezas do card financeiro da Dashboard, como
-     linhas de relatório. Paleta restrita ao sistema já existente (sem cores novas):
-     verde Pivot para recebido, degradê amarelo→vermelho (--urgent→--late) para
-     despesas, neutros para as referências (Meta/Esperado/Teto). */
   function renderRelFatBars(s){
     const wrap=document.getElementById('rel-fat-bars'); if(!wrap) return;
     const meta=s.meta||0, esperado=s.porReceber||0, recebido=s.recebido||0, custos=s.custos||0, teto=s.limiteGastos||0;
     const max=Math.max(meta, esperado, recebido, custos, teto, 1);
     wrap.innerHTML =
-      relBarRow(t('home.target'), meta, max, 'var(--ink-faint)') +
-      relBarRow(t('home.expected'), esperado, max, 'var(--neutral)') +
-      relBarRow(t('home.received'), recebido, max, 'var(--brand)') +
-      relBarRow(t('home.expenses'), custos, max, 'linear-gradient(90deg,var(--urgent),var(--late))') +
-      relBarRow(t('home.ceiling'), teto, max, 'var(--ink-faint)');
+      relLineRow(t('home.target'), meta, max, 'var(--ink-faint)') +
+      relLineRow(t('home.expected'), esperado, max, 'var(--neutral)') +
+      relLineRow(t('home.received'), recebido, max, 'var(--brand)') +
+      relLineRow(t('home.expenses'), custos, max, REL_COR_DESPESA) +
+      relLineRow(t('home.ceiling'), teto, max, 'var(--ink-faint)');
   }
 
-  /* ===== Card 2 — Estatísticas Operacionais: 6 barras clicáveis + histórico de
-     12 meses da métrica selecionada. Usa os campos "-EsteMes" (fluxo do mês),
-     não os totais acumulados (que não variam por mês). ===== */
-  let relMetricaSelecionada='fechados';
+  /* ===== Card 2 — Estatísticas Operacionais: lista analítica (rótulo + número,
+     sem barra). Tocar num indicador seleciona-o e revela o histórico de 12 meses
+     abaixo — a barra só existe ali, não repetida aqui. Usa os campos "-EsteMes"
+     (fluxo do mês), não os totais acumulados (que não variam por mês). ===== */
+  let relMetricaSelecionada=null;
   function relCampoDeStats(s, campo){
     return ({ fechados:s.fechadosEsteMes, executados:s.realizadosEsteMes, concluidos:s.entreguesEsteMes,
       horas:Math.round(s.horasEsteMes||0), pendencias:s.pendClienteEsteMes, demandas:s.pendMeuEsteMes })[campo] || 0;
   }
+  function relStatRow(label, valor, campo, cor){
+    const selecionado = relMetricaSelecionada===campo;
+    return '<div class="rel-stat-row'+(selecionado?' selected':'')+'" onclick="relSelecionarMetricaAnual(\''+campo+'\')">'+
+      '<span class="l"><span class="dot" style="background:'+cor+'"></span>'+escapeHtml(label)+'</span>'+
+      '<span class="v">'+valor+'</span></div>';
+  }
   function renderRelOpBars(s){
     const wrap=document.getElementById('rel-op-bars'); if(!wrap) return;
-    const vals={ fechados:s.fechadosEsteMes, executados:s.realizadosEsteMes, concluidos:s.entreguesEsteMes,
-      horas:Math.round(s.horasEsteMes||0), pendencias:s.pendClienteEsteMes, demandas:s.pendMeuEsteMes };
-    const max=Math.max(...Object.values(vals), 1);
     wrap.innerHTML =
-      relBarRow(t('home.closed'), vals.fechados, max, 'var(--brand)', "relSelecionarMetricaAnual('fechados')", 'int', relMetricaSelecionada) +
-      relBarRow(t('home.executed'), vals.executados, max, 'var(--brand)', "relSelecionarMetricaAnual('executados')", 'int', relMetricaSelecionada) +
-      relBarRow(t('home.completedTile'), vals.concluidos, max, 'var(--brand)', "relSelecionarMetricaAnual('concluidos')", 'int', relMetricaSelecionada) +
-      relBarRow(t('home.hours'), vals.horas, max, 'var(--urgent)', "relSelecionarMetricaAnual('horas')", 'int', relMetricaSelecionada) +
-      relBarRow(t('home.pending'), vals.pendencias, max, 'var(--pend)', "relSelecionarMetricaAnual('pendencias')", 'int', relMetricaSelecionada) +
-      relBarRow(t('home.demands'), vals.demandas, max, 'var(--late)', "relSelecionarMetricaAnual('demandas')", 'int', relMetricaSelecionada);
+      relStatRow(t('home.closed'), s.fechadosEsteMes, 'fechados', 'var(--brand)') +
+      relStatRow(t('home.executed'), s.realizadosEsteMes, 'executados', 'var(--brand)') +
+      relStatRow(t('home.completedTile'), s.entreguesEsteMes, 'concluidos', 'var(--brand)') +
+      relStatRow(t('home.hours'), Math.round(s.horasEsteMes||0), 'horas', 'var(--urgent)') +
+      relStatRow(t('home.pending'), s.pendClienteEsteMes, 'pendencias', 'var(--pend)') +
+      relStatRow(t('home.demands'), s.pendMeuEsteMes, 'demandas', 'var(--late)');
   }
   function relHistoricoAnual(campo){
     const out=[]; let ano=relAno, mes=relMes;
@@ -7145,13 +7142,14 @@
     return out;
   }
   function relSelecionarMetricaAnual(campo){
-    relMetricaSelecionada=campo;
-    renderRelAnnualBarChart(campo);
+    relMetricaSelecionada = relMetricaSelecionada===campo ? null : campo;
+    renderRelAnnualBarChart(relMetricaSelecionada);
     renderRelOpBars(relStatsAgregadas());
   }
   function renderRelAnnualBarChart(campo){
-    const dados=relHistoricoAnual(campo);
     const wrap=document.getElementById('rel-annual-chart'); if(!wrap) return;
+    if(!campo){ wrap.innerHTML=''; return; }
+    const dados=relHistoricoAnual(campo);
     const W=320,H=150,padL=6,padR=6,padT=10,padB=18;
     const maxV=Math.max(1, ...dados.map(d=>d.valor));
     const bw=(W-padL-padR)/dados.length;
@@ -7189,26 +7187,30 @@
   const ICON_CONTRATO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>';
   const ICON_MANUAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   const ICON_CALENDARIO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
-  /* Card 4 — metadados por ícone (contrato/utilizador + calendário) em vez de texto
-     literal "Contrato:/Data:", reduzindo repetição e dando hierarquia visual */
+  const fmtDataCurta=d=>{
+    if(!d) return '';
+    const partes=d.split('-'); const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
+    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
+  };
+  /* Card 4 — timeline: título, metadados por ícone (contrato/utilizador + calendário)
+     e valor empilhados, separados por espaçamento — não por caixa/cartão */
   function renderRelFluxoFinanceiro(){
     const wrap=document.getElementById('rel-fluxo-lista'); if(!wrap) return;
     let itens=relFluxoPeriodo();
     if(relFiltroFluxo==='recebidos') itens=itens.filter(i=>i.tipo==='recebido');
     else if(relFiltroFluxo==='despesas') itens=itens.filter(i=>i.tipo==='despesa');
-    const fmtData=d=>d ? d.split('-').reverse().join('/') : '';
     wrap.innerHTML = itens.length ? itens.map(it=>{
       const cor = it.tipo==='recebido' ? 'var(--brand)' : 'var(--late)';
       const sinal = it.tipo==='recebido' ? '+' : '−';
       let meta;
       if(it.tipo==='recebido'){
         meta = (it.manual ? '<span>'+ICON_MANUAL+t('reports.manualLabel')+'</span>' : '<span>'+ICON_CONTRATO+escapeHtml(it.cliente||'')+'</span>') +
-          (it.data ? '<span>'+ICON_CALENDARIO+fmtData(it.data)+'</span>' : '');
+          (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
       } else {
-        meta = (it.data ? '<span>'+ICON_CALENDARIO+fmtData(it.data)+'</span>' : '');
+        meta = (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
       }
       const onclick = it.tipo==='recebido' ? (it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')") : "editarDespesa('"+it.id+"')";
-      return '<div class="rel-fluxo-item" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div></div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div></div>';
+      return '<div class="rel-fluxo-item" onclick="'+onclick+'"><div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div></div>';
     }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('reports.emptyFlow')+'</p>';
   }
 
@@ -7230,41 +7232,86 @@
     for(let i=1;i<=dias;i++){ recebido[i]+=recebido[i-1]; gasto[i]+=gasto[i-1]; }
     return {recebido, gasto};
   }
-  /* onda preenchida (não apenas linha) — recebido/gasto como camadas de área com
-     gradiente, no espírito de um waveform/equalizer analítico. serieAcumuladaMes
-     (dados) não muda; só a forma de desenhar muda. */
-  function renderRelLineChart(ano, mes){
-    const wrap=document.getElementById('rel-linechart');
-    if(!wrap) return;
-    const dias=new Date(ano, mes, 0).getDate();
-    const {recebido, gasto}=serieAcumuladaMes(ano, mes, dias);
-    const W=320, H=150, padL=4, padR=4, padT=10, padB=18;
+  /* série do gráfico, adaptada ao tipo de período selecionado — mês (dia a dia,
+     serieAcumuladaMes inalterada), trimestre/ano (mês a mês, soma dos meses do
+     range) ou intervalo personalizado (dia a dia dentro do intervalo exato,
+     lendo os mesmos dados-fonte de sempre: pagamentos e custosData). */
+  function relSerieGrafico(){
+    if(relPeriodo.tipo==='trimestre' || relPeriodo.tipo==='ano'){
+      let accR=0, accG=0;
+      return relRangeMeses().map(({ano,mes})=>{
+        const s=calcularEstatisticasMes(ano,mes);
+        accR+=s.recebido; accG+=s.custos;
+        return {label:mesCompleto(mes-1).slice(0,3), recebido:accR, gasto:accG};
+      });
+    }
+    if(relPeriodo.tipo==='intervalo'){
+      const ini=new Date(relPeriodo.ini+'T00:00:00'), fim=new Date(relPeriodo.fim+'T00:00:00');
+      const dias=Math.max(1, Math.round((fim-ini)/86400000)+1);
+      const porDia={};
+      jobsVisiveis().forEach(j=>(j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        const d=p.pagoEm||p.dueDate; if(!d || d<relPeriodo.ini || d>relPeriodo.fim) return;
+        (porDia[d]=porDia[d]||{r:0,g:0}).r+=Number(p.amount)||0;
+      }));
+      Object.values(custosData).forEach(c=>{
+        if(!c.data || c.data<relPeriodo.ini || c.data>relPeriodo.fim) return;
+        (porDia[c.data]=porDia[c.data]||{r:0,g:0}).g+=Number(c.valor)||0;
+      });
+      const out=[]; let accR=0, accG=0;
+      for(let i=0;i<dias;i++){
+        const d=new Date(ini); d.setDate(d.getDate()+i);
+        const iso=d.toISOString().slice(0,10), v=porDia[iso]||{r:0,g:0};
+        accR+=v.r; accG+=v.g;
+        out.push({label:d.getDate(), recebido:accR, gasto:accG});
+      }
+      return out;
+    }
+    const dias=new Date(relAno, relMes, 0).getDate();
+    const {recebido, gasto}=serieAcumuladaMes(relAno, relMes, dias);
+    const out=[]; for(let d=1;d<=dias;d++) out.push({label:d, recebido:recebido[d], gasto:gasto[d]});
+    return out;
+  }
+  /* onda preenchida (não linhas/legenda/pontilhado) — recebidos como massa
+     principal, despesas como camada secundária por baixo, meta/teto como linhas
+     discretas sólidas. Eixo com poucos números (fórmula de passo por dias) e
+     marcações discretas entre eles, sem grelha atravessando o gráfico. */
+  function renderRelLineChart(){
+    const wrap=document.getElementById('rel-linechart'); if(!wrap) return;
+    const pts=relSerieGrafico();
+    const N=pts.length; if(!N){ wrap.innerHTML=''; return; }
+    const W=320, H=150, padL=4, padR=4, padT=10, padB=20;
     const meta=METAS.receita||0, teto=METAS.gastos||0;
-    const maxV=Math.max(1, meta, teto, recebido[dias], gasto[dias]);
-    const x=d=>padL+(d-1)/(dias-1||1)*(W-padL-padR);
+    const maxV=Math.max(1, meta, teto, pts[N-1].recebido, pts[N-1].gasto);
+    const x=i=>padL+(N>1?i/(N-1):0.5)*(W-padL-padR);
     const y=v=>H-padB-(v/maxV)*(H-padT-padB);
     const baseY=H-padB;
-    const onda=(arr,idGrad)=>{
-      let pts=''; for(let d=1;d<=dias;d++){ pts+=(d===1?'M':'L')+x(d).toFixed(1)+' '+y(arr[d]).toFixed(1)+' '; }
-      const area=pts+'L'+x(dias).toFixed(1)+' '+baseY+' L'+x(1).toFixed(1)+' '+baseY+' Z';
-      return '<path d="'+area+'" fill="url(#'+idGrad+')" opacity=".9"/>'+
-        '<path d="'+pts+'" fill="none" stroke="url(#'+idGrad+'-line)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+    const onda=(campo, idGrad, corVar)=>{
+      let path=''; for(let i=0;i<N;i++){ path+=(i===0?'M':'L')+x(i).toFixed(1)+' '+y(pts[i][campo]).toFixed(1)+' '; }
+      const area=path+'L'+x(N-1).toFixed(1)+' '+baseY+' L'+x(0).toFixed(1)+' '+baseY+' Z';
+      return '<path d="'+area+'" fill="url(#'+idGrad+')"/>'+
+        '<path d="'+path+'" fill="none" stroke="var('+corVar+')" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>';
     };
-    const refLine=(v,cor)=> v>0 ? '<line x1="'+padL+'" y1="'+y(v).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y(v).toFixed(1)+'" stroke="'+cor+'" stroke-width="1" stroke-dasharray="3 4" opacity=".4"/>' : '';
-    /* escala temporal adaptativa: sempre múltiplos ticks, não só 1 e o último dia */
-    const passo = dias<=10 ? 2 : (dias<=20 ? 5 : Math.round(dias/6/5)*5 || 5);
-    const ticks=[1]; for(let d=passo; d<dias; d+=passo) ticks.push(d); if(ticks[ticks.length-1]!==dias) ticks.push(dias);
-    const ticksHtml=ticks.map(d=>'<text x="'+x(d).toFixed(1)+'" y="'+(H-4)+'" font-size="8.5" fill="var(--neutral)" text-anchor="middle">'+d+'</text>').join('');
+    const refLine=(v,cor)=> v>0 ? '<line x1="'+padL+'" y1="'+y(v).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y(v).toFixed(1)+'" stroke="'+cor+'" stroke-width="1" opacity=".2"/>' : '';
+    const tickIdx = (relPeriodo.tipo==='trimestre' || relPeriodo.tipo==='ano') ? [...Array(N).keys()] : (()=>{
+      const passo = N<=28 ? 4 : 5;
+      const arr=[0]; for(let d=passo; d<N; d+=passo) arr.push(d); if(arr[arr.length-1]!==N-1) arr.push(N-1); return arr;
+    })();
+    const tickSet=new Set(tickIdx);
+    const eixoY=baseY+9;
+    const hashes=N>tickIdx.length ? [...Array(N).keys()].map(i=>{
+      const alto=tickSet.has(i);
+      return '<line x1="'+x(i).toFixed(1)+'" y1="'+(eixoY-(alto?4:2)).toFixed(1)+'" x2="'+x(i).toFixed(1)+'" y2="'+eixoY.toFixed(1)+'" stroke="var(--ink-faint)" stroke-width="1" opacity="'+(alto?'.5':'.22')+'"/>';
+    }).join('') : '';
+    const labels=tickIdx.map(i=>'<text x="'+x(i).toFixed(1)+'" y="'+(H-3)+'" font-size="8.5" fill="var(--neutral)" text-anchor="middle">'+pts[i].label+'</text>').join('');
     wrap.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible">'+
       '<defs>'+
-        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--brand)" stop-opacity=".38"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></linearGradient>'+
-        '<linearGradient id="rel-wave-recebido-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--brand)"/><stop offset="100%" stop-color="var(--brand)"/></linearGradient>'+
-        '<linearGradient id="rel-wave-gasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--late)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--late)" stop-opacity="0"/></linearGradient>'+
-        '<linearGradient id="rel-wave-gasto-line" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--late)"/><stop offset="100%" stop-color="var(--late)"/></linearGradient>'+
+        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--brand)" stop-opacity=".34"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></linearGradient>'+
+        '<linearGradient id="rel-wave-gasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--late)" stop-opacity=".24"/><stop offset="100%" stop-color="var(--late)" stop-opacity="0"/></linearGradient>'+
       '</defs>'+
       refLine(meta,'var(--brand)')+refLine(teto,'var(--late)')+
-      onda(gasto,'rel-wave-gasto')+onda(recebido,'rel-wave-recebido')+
-      ticksHtml+
+      onda('gasto','rel-wave-gasto','--late')+onda('recebido','rel-wave-recebido','--brand')+
+      hashes+labels+
       '</svg>';
   }
 
@@ -7276,7 +7323,7 @@
     if(lblAnoNovo) lblAnoNovo.textContent=lbl.small;
 
     renderRelFatBars(s);
-    renderRelLineChart(relAno, relMes);
+    renderRelLineChart();
     renderRelOpBars(s);
     renderRelAnnualBarChart(relMetricaSelecionada);
     renderRelOpStats();
@@ -12367,6 +12414,7 @@
   ajustarPaddingEcra();
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
+  bindRelSwipe();
 </script>
 
 <script type="module">
