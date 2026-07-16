@@ -851,27 +851,38 @@
   .prow .chevr{width:15px;height:15px;color:var(--neutral)}
   .plabel{font-size:11.5px;font-weight:600;letter-spacing:.13em;color:var(--neutral);
     margin:18px 2px 9px}
-  /* Relatórios — o bloco de período É o topo da página (sem título duplicado
-     com o menu inferior); Parâmetros/Adicionar são ícones puros nos extremos */
-  .rel-period-bar{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+  /* Relatórios — título pequeno só de contexto (o menu inferior já indica a
+     página; isto só ajuda a orientar, sem competir com o período) */
+  .rel-context-title{text-align:center;font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--neutral);margin-bottom:6px}
+  .rel-period-bar{display:flex;align-items:center;justify-content:space-between;gap:6px}
   .rel-icon-btn{width:34px;height:34px;display:grid;place-items:center;background:none;border:none;
     color:var(--ink-soft);cursor:pointer;flex:none;transition:color .15s}
   .rel-icon-btn:hover{color:var(--ink)}
   .rel-icon-btn svg{width:17px;height:17px}
-  .rel-month-center{display:flex;flex-direction:column;align-items:center;cursor:pointer;
-    touch-action:pan-y;user-select:none}
+  /* navegação de mês — botões altos e discretos (opacidade baixa em repouso,
+     área de toque grande) em vez de setas minúsculas ou gesto de deslizar */
+  .rel-month-row{display:flex;align-items:stretch;justify-content:center;gap:10px;flex:1;min-width:0}
+  .rel-nav-tall{width:42px;min-height:52px;border:none;background:none;color:var(--ink-faint);
+    opacity:.32;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    flex:none;transition:opacity .15s}
+  .rel-nav-tall:hover{opacity:.75}
+  .rel-nav-tall svg{width:17px;height:17px}
+  .rel-month-center{display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
   .rel-mes-big{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-weight:600;font-size:32px;color:var(--ink);letter-spacing:.01em;line-height:1}
   .rel-mes-big.compact{font-size:17px;letter-spacing:0}
   .rel-ano-small{font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--neutral);margin-top:6px}
 
-  /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo */
+  /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo.
+     Sem cantos arredondados em pílula (isso lê como progress bar de UI) — traço
+     fino e reto, mais perto de um gráfico de relatório do que de um componente. */
   .rel-line-item{margin-bottom:18px}
   .rel-line-item:last-child{margin-bottom:0}
   .rel-line-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
   .rel-line-label{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft)}
   .rel-line-value{font-family:var(--font-numeric),inherit;font-size:14px;font-weight:600;color:var(--ink)}
-  .rel-line-bar{height:5px;border-radius:99px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .rel-line-bar{height:4px;border-radius:1px;opacity:.9;transition:width .5s cubic-bezier(.2,.8,.2,1)}
   .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
   .venc-icon{width:34px;height:34px;color:#fff;display:grid;place-items:center;flex:none}
   .venc-icon svg{width:17px;height:17px}
@@ -932,29 +943,33 @@
      visível por padrão. A barra/gráfico só aparece no histórico de 12 meses
      abaixo, depois de tocar num indicador. */
   .rel-stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
-  .rel-stat-row .l{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:600;
+  .rel-stat-row .l{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;
     letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
-  .rel-stat-row .l .dot{width:6px;height:6px;border-radius:50%;flex:none;opacity:.6}
+  .rel-stat-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
   .rel-stat-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink-soft)}
   .rel-stat-row.selected .l{color:var(--ink)}
-  .rel-stat-row.selected .l .dot{opacity:1}
+  .rel-stat-row.selected .l svg{color:var(--ink)}
   .rel-stat-row.selected .v{color:var(--ink)}
 
-  /* Fluxo de Tarefas — cor + nome + número, sem bordas nem divisórias */
+  /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
   .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
-  .rel-op-row .l{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
-  .rel-op-row .l .dot{width:7px;height:7px;border-radius:50%;flex:none}
+  .rel-op-row .l{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
+  .rel-op-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
   .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink)}
   .rel-op-row.zero{opacity:.45}
 
   /* Fluxo Financeiro — timeline: título/metadados/valor empilhados, separados
-     por espaçamento, sem caixa envolvendo cada item */
-  .rel-fluxo-item{padding:13px 0;cursor:pointer}
+     por espaçamento, sem caixa envolvendo cada item. Reaproveita o motor de
+     swipe do radar (.radar-card-wrap/.radar-card) tal e qual — só o "casco"
+     visual do .card é neutralizado aqui para manter o estilo de timeline. */
+  #rel-fluxo-lista .radar-card-wrap{margin-bottom:0}
+  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-radius:0;box-shadow:none;padding:13px 0}
+  #rel-fluxo-lista .card.radar-card::before{content:none}
   .rel-fluxo-item .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
   .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
   .rel-fluxo-meta span{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:var(--neutral)}
   .rel-fluxo-meta svg{width:11px;height:11px;flex:none}
-  .rel-fluxo-val{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;margin-top:6px}
+  .rel-fluxo-val{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;margin-top:6px;text-align:right}
 
   /* Seletor avançado de período (modal aberto ao tocar no mês/ano) */
   .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--ink)}
@@ -2113,32 +2128,37 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
+        <div class="rel-context-title" data-t="reports.title">Relatórios</div>
         <div class="rel-period-bar">
           <button class="rel-icon-btn" onclick="abrirDefinirMetas()" aria-label="Parâmetros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-          <div class="rel-month-center" id="rel-month-swipe">
-            <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
-            <span class="rel-ano-small" id="rel-ano-label">2026</span>
+          <div class="rel-month-row">
+            <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+            <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
+              <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
+              <span class="rel-ano-small" id="rel-ano-label">2026</span>
+            </div>
+            <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
           </div>
           <button class="rel-icon-btn" onclick="abrirRegistroManual()" aria-label="Adicionar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
 
         <!-- Card 1: Faturamento — sem caixa; as barras são o próprio elemento -->
-        <div class="group-label" style="margin-top:26px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
+        <div class="group-label" style="margin-top:40px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
         <div id="rel-fat-bars" style="margin-top:16px"></div>
         <div id="rel-linechart" style="margin-top:20px"></div>
 
         <!-- Card 2: Estatísticas Operacionais — lista analítica; a barra/gráfico só
              aparece ao tocar num indicador -->
-        <div class="group-label" style="margin-top:32px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span></div>
+        <div class="group-label" style="margin-top:48px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span></div>
         <div id="rel-op-bars" style="margin-top:8px"></div>
         <div id="rel-annual-chart" style="margin-top:14px"></div>
 
         <!-- Card 3: Fluxo de Tarefas -->
-        <div class="group-label" style="margin-top:32px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
+        <div class="group-label" style="margin-top:48px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
         <div id="rel-op-extra" style="margin-top:8px"></div>
 
         <!-- Card 4: Fluxo Financeiro — timeline, sem cartões -->
-        <div class="group-label" style="margin-top:32px"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
+        <div class="group-label" style="margin-top:48px"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
         <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
           <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
           <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
@@ -6903,23 +6923,6 @@
     go('relatorios');
   }
 
-  /* deslizar sobre o bloco de mês/ano navega período (sem setas visuais);
-     um toque sem deslocamento abre o seletor avançado */
-  function bindRelSwipe(){
-    const el=document.getElementById('rel-month-swipe');
-    if(!el || el._swipeBound) return;
-    el._swipeBound=true;
-    let sx=null, sy=null;
-    el.addEventListener('pointerdown', e=>{ sx=e.clientX; sy=e.clientY; });
-    el.addEventListener('pointerup', e=>{
-      if(sx==null) return;
-      const dx=e.clientX-sx, dy=e.clientY-sy;
-      sx=null; sy=null;
-      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)*1.5) relMonthNav(dx<0?-1:1);
-      else if(Math.abs(dx)<8 && Math.abs(dy)<8) abrirSeletorPeriodo();
-    });
-  }
-
   /* ===== seletor avançado de período — modal aberto ao tocar no mês/ano ===== */
   let relPeriodoTabTemp='mes', relPeriodoAnoTemp=new Date().getFullYear();
   function abrirSeletorPeriodo(){
@@ -7064,6 +7067,18 @@
     else html=itens.map(it=>'<div class="pick-row" onclick="closeInfo();openJob(\''+it.job.id+'\')"><div style="flex:1;min-width:0"><div class="nm">'+escapeHtml(it.job.client||it.job.nome||'')+'</div><div class="sub">'+escapeHtml(it.label)+'</div></div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>').join('');
     openInfo(titulo, html);
   }
+  /* ícones semânticos monocromáticos (mesmo estilo/peso/cor) — substituem os
+     pontos coloridos em Estatísticas Operacionais e Fluxo de Tarefas, que
+     criavam ruído sem transmitir mais informação do que o próprio rótulo */
+  const ICON_FECHADO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="m9 14 2 2 4-4"/></svg>';
+  const ICON_PASTA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  const ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>';
+  const ICON_RELOGIO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>';
+  const ICON_ALERTA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>';
+  const ICON_LISTA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>';
+  const ICON_MOEDA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.3 15.2c.4 1 1.4 1.6 2.7 1.6 1.7 0 2.8-.9 2.8-2s-1-1.7-2.8-2-2.8-.9-2.8-2 1.1-2 2.8-2c1.3 0 2.3.6 2.7 1.6"/><path d="M12 7v10"/></svg>';
+  const ICON_ENTREGA_TAREFA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>';
+  const ICON_UTILIZADOR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   /* Card 3 (Fluxo de Tarefas) — os mesmos 4 indicadores agregados de sempre,
      agora sob o anchor rel-anchor-tarefas. Os 3 mini-anéis que existiam aqui
      (Fechados/Executados/Concluídos) saíram — esses 3 já aparecem, com mais
@@ -7071,13 +7086,13 @@
      Operacionais logo acima. */
   function renderRelOpStats(){
     const linhas=[
-      {cor:'var(--late)', label:t('reports.op.overduePayments'), itens:opAtrasosCliente()},
-      {cor:'var(--urgent)', label:t('reports.op.overdueDeliveries'), itens:opAtrasosMeus()},
-      {cor:'var(--pend)', label:t('reports.op.clientPending'), itens:opPendenciasCliente()},
-      {cor:'var(--brand)', label:t('reports.op.myPending'), itens:opPendenciasMinhas()},
+      {icone:ICON_MOEDA, label:t('reports.op.overduePayments'), itens:opAtrasosCliente()},
+      {icone:ICON_ENTREGA_TAREFA, label:t('reports.op.overdueDeliveries'), itens:opAtrasosMeus()},
+      {icone:ICON_UTILIZADOR, label:t('reports.op.clientPending'), itens:opPendenciasCliente()},
+      {icone:ICON_LISTA, label:t('reports.op.myPending'), itens:opPendenciasMinhas()},
     ];
     const wrap=document.getElementById('rel-op-extra');
-    wrap.innerHTML=linhas.map((l,i)=>'<div class="rel-op-row'+(l.itens.length===0?' zero':'')+'" data-op="'+i+'"><div class="l"><span class="dot" style="background:'+l.cor+'"></span>'+escapeHtml(l.label)+'</div><div class="v">'+l.itens.length+'</div></div>').join('');
+    wrap.innerHTML=linhas.map((l,i)=>'<div class="rel-op-row'+(l.itens.length===0?' zero':'')+'" data-op="'+i+'"><div class="l">'+l.icone+escapeHtml(l.label)+'</div><div class="v">'+l.itens.length+'</div></div>').join('');
     wrap.querySelectorAll('.rel-op-row').forEach((row,i)=>{
       row.onclick=()=>abrirListaOp(linhas[i].label, linhas[i].itens);
     });
@@ -7115,21 +7130,21 @@
     return ({ fechados:s.fechadosEsteMes, executados:s.realizadosEsteMes, concluidos:s.entreguesEsteMes,
       horas:Math.round(s.horasEsteMes||0), pendencias:s.pendClienteEsteMes, demandas:s.pendMeuEsteMes })[campo] || 0;
   }
-  function relStatRow(label, valor, campo, cor){
+  function relStatRow(label, valor, campo, icone){
     const selecionado = relMetricaSelecionada===campo;
     return '<div class="rel-stat-row'+(selecionado?' selected':'')+'" onclick="relSelecionarMetricaAnual(\''+campo+'\')">'+
-      '<span class="l"><span class="dot" style="background:'+cor+'"></span>'+escapeHtml(label)+'</span>'+
+      '<span class="l">'+icone+escapeHtml(label)+'</span>'+
       '<span class="v">'+valor+'</span></div>';
   }
   function renderRelOpBars(s){
     const wrap=document.getElementById('rel-op-bars'); if(!wrap) return;
     wrap.innerHTML =
-      relStatRow(t('home.closed'), s.fechadosEsteMes, 'fechados', 'var(--brand)') +
-      relStatRow(t('home.executed'), s.realizadosEsteMes, 'executados', 'var(--brand)') +
-      relStatRow(t('home.completedTile'), s.entreguesEsteMes, 'concluidos', 'var(--brand)') +
-      relStatRow(t('home.hours'), Math.round(s.horasEsteMes||0), 'horas', 'var(--urgent)') +
-      relStatRow(t('home.pending'), s.pendClienteEsteMes, 'pendencias', 'var(--pend)') +
-      relStatRow(t('home.demands'), s.pendMeuEsteMes, 'demandas', 'var(--late)');
+      relStatRow(t('home.closed'), s.fechadosEsteMes, 'fechados', ICON_FECHADO) +
+      relStatRow(t('home.executed'), s.realizadosEsteMes, 'executados', ICON_PASTA) +
+      relStatRow(t('home.completedTile'), s.entreguesEsteMes, 'concluidos', ICON_CHECK) +
+      relStatRow(t('home.hours'), Math.round(s.horasEsteMes||0), 'horas', ICON_RELOGIO) +
+      relStatRow(t('home.pending'), s.pendClienteEsteMes, 'pendencias', ICON_ALERTA) +
+      relStatRow(t('home.demands'), s.pendMeuEsteMes, 'demandas', ICON_LISTA);
   }
   function relHistoricoAnual(campo){
     const out=[]; let ano=relAno, mes=relMes;
@@ -7192,8 +7207,17 @@
     const partes=d.split('-'); const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
     return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
   };
+  const ICON_LAPIS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>';
+  const ICON_LIXO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
   /* Card 4 — timeline: título, metadados por ícone (contrato/utilizador + calendário)
-     e valor empilhados, separados por espaçamento — não por caixa/cartão */
+     e valor empilhados (valor sempre alinhado à direita), separados por espaçamento —
+     não por caixa/cartão. Interação: exatamente o mesmo swipe bidirecional já usado em
+     Trabalhos/Tarefas (ativarSwipeRadar, reaproveitada sem alterações) — deslizar para
+     a esquerda revela Eliminar, para a direita revela Editar; tocar abre os detalhes. */
+  function relFluxoOnClick(it){
+    if(it.tipo==='recebido') return it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
+    return "editarDespesa('"+it.id+"')";
+  }
   function renderRelFluxoFinanceiro(){
     const wrap=document.getElementById('rel-fluxo-lista'); if(!wrap) return;
     let itens=relFluxoPeriodo();
@@ -7209,9 +7233,20 @@
       } else {
         meta = (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
       }
-      const onclick = it.tipo==='recebido' ? (it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')") : "editarDespesa('"+it.id+"')";
-      return '<div class="rel-fluxo-item" onclick="'+onclick+'"><div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div></div>';
+      const onclickAcao=relFluxoOnClick(it);
+      const tapGuard="if(this.closest('.radar-card-wrap').classList.contains('active')){event.stopPropagation();return;} "+onclickAcao;
+      /* pagamentos de contrato não têm "eliminar" aqui (não é uma entrada avulsa) —
+         o painel da direita só existe para lançamentos manuais (recebido ou despesa) */
+      const podeEliminar = it.tipo==='despesa' || it.manual;
+      const removerAcao = it.tipo==='despesa' ? "event.stopPropagation();removerCusto('"+it.id+"')" : "event.stopPropagation();removerReceita('"+it.id+"')";
+      return '<div class="radar-card-wrap">'+
+        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();'+onclickAcao+'">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
+        (podeEliminar ? '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="'+removerAcao+'">'+ICON_LIXO+t('action.remove')+'</button></div>' : '')+
+        '<div class="card radar-card rel-fluxo-item" onclick="'+tapGuard+'">'+
+          '<div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div>'+
+        '</div></div>';
     }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('reports.emptyFlow')+'</p>';
+    ativarSwipeRadar();
   }
 
   /* ===== gráfico de linha: recebido e gasto acumulados no mês, com meta e teto ===== */
@@ -7276,6 +7311,14 @@
      principal, despesas como camada secundária por baixo, meta/teto como linhas
      discretas sólidas. Eixo com poucos números (fórmula de passo por dias) e
      marcações discretas entre eles, sem grelha atravessando o gráfico. */
+  /* despesas: âmbar (baixo) → laranja (médio) → vermelho queimado (alto), a
+     linha evolui com o próprio valor em vez de ficar vermelha o tempo todo */
+  function relCorDespesa(valor, ref){
+    const p = ref>0 ? valor/ref : 0;
+    if(p<0.4) return '#C69A56';
+    if(p<0.75) return '#C2793C';
+    return '#A13F2E';
+  }
   function renderRelLineChart(){
     const wrap=document.getElementById('rel-linechart'); if(!wrap) return;
     const pts=relSerieGrafico();
@@ -7286,13 +7329,15 @@
     const x=i=>padL+(N>1?i/(N-1):0.5)*(W-padL-padR);
     const y=v=>H-padB-(v/maxV)*(H-padT-padB);
     const baseY=H-padB;
-    const onda=(campo, idGrad, corVar)=>{
+    const refDespesa = teto>0 ? teto : Math.max(1, pts[N-1].gasto);
+    const gradDespesaStops = pts.map((p,i)=>'<stop offset="'+((N>1?i/(N-1):0)*100).toFixed(1)+'%" stop-color="'+relCorDespesa(p.gasto, refDespesa)+'"/>').join('');
+    const onda=(campo, idGrad, strokeRef, largura)=>{
       let path=''; for(let i=0;i<N;i++){ path+=(i===0?'M':'L')+x(i).toFixed(1)+' '+y(pts[i][campo]).toFixed(1)+' '; }
       const area=path+'L'+x(N-1).toFixed(1)+' '+baseY+' L'+x(0).toFixed(1)+' '+baseY+' Z';
       return '<path d="'+area+'" fill="url(#'+idGrad+')"/>'+
-        '<path d="'+path+'" fill="none" stroke="var('+corVar+')" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>';
+        '<path d="'+path+'" fill="none" stroke="'+strokeRef+'" stroke-width="'+largura+'" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>';
     };
-    const refLine=(v,cor)=> v>0 ? '<line x1="'+padL+'" y1="'+y(v).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y(v).toFixed(1)+'" stroke="'+cor+'" stroke-width="1" opacity=".2"/>' : '';
+    const refLine=(v,cor,op)=> v>0 ? '<line x1="'+padL+'" y1="'+y(v).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+y(v).toFixed(1)+'" stroke="'+cor+'" stroke-width=".75" opacity="'+op+'"/>' : '';
     const tickIdx = (relPeriodo.tipo==='trimestre' || relPeriodo.tipo==='ano') ? [...Array(N).keys()] : (()=>{
       const passo = N<=28 ? 4 : 5;
       const arr=[0]; for(let d=passo; d<N; d+=passo) arr.push(d); if(arr[arr.length-1]!==N-1) arr.push(N-1); return arr;
@@ -7306,11 +7351,12 @@
     const labels=tickIdx.map(i=>'<text x="'+x(i).toFixed(1)+'" y="'+(H-3)+'" font-size="8.5" fill="var(--neutral)" text-anchor="middle">'+pts[i].label+'</text>').join('');
     wrap.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;overflow:visible">'+
       '<defs>'+
-        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--brand)" stop-opacity=".34"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></linearGradient>'+
-        '<linearGradient id="rel-wave-gasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--late)" stop-opacity=".24"/><stop offset="100%" stop-color="var(--late)" stop-opacity="0"/></linearGradient>'+
+        '<linearGradient id="rel-wave-recebido" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--brand)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--brand)" stop-opacity="0"/></linearGradient>'+
+        '<linearGradient id="rel-wave-gasto" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C2793C" stop-opacity=".2"/><stop offset="100%" stop-color="#C2793C" stop-opacity="0"/></linearGradient>'+
+        '<linearGradient id="rel-wave-gasto-linha" x1="0" y1="0" x2="1" y2="0">'+gradDespesaStops+'</linearGradient>'+
       '</defs>'+
-      refLine(meta,'var(--brand)')+refLine(teto,'var(--late)')+
-      onda('gasto','rel-wave-gasto','--late')+onda('recebido','rel-wave-recebido','--brand')+
+      refLine(meta,'var(--brand)','.1')+refLine(teto,'#A13F2E','.15')+
+      onda('gasto','rel-wave-gasto','url(#rel-wave-gasto-linha)',1.2)+onda('recebido','rel-wave-recebido','var(--brand)',1.2)+
       hashes+labels+
       '</svg>';
   }
@@ -12414,7 +12460,6 @@
   ajustarPaddingEcra();
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
-  bindRelSwipe();
 </script>
 
 <script type="module">
