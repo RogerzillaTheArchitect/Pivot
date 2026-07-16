@@ -7106,11 +7106,15 @@
   /* Card 1 — Faturamento: linhas soltas sobre o fundo, sem caixa — a barra é o
      próprio elemento. Valor acima à direita, barra grossa de cantos quadrados
      (não pílula), rótulo por baixo. */
+  /* escala em raiz quadrada, não linear — a Meta costuma ser bem maior que os
+     outros valores (Esperado/Recebido/Despesas/Teto); numa escala linear isso
+     reduz os outros a quadradinhos quase invisíveis. Raiz comprime a diferença
+     mantendo a ordem relativa, sem inventar dados. */
   function relLineRow(label, valor, max, cor){
-    const pct = max>0 ? Math.min(100, Math.round(valor/max*100)) : 0;
+    const pct = max>0 ? Math.min(100, Math.round(Math.sqrt(valor/max)*100)) : 0;
     return '<div class="rel-line-item">'+
       '<div class="rel-line-value-row"><span class="rel-line-value">'+fmtMoney(valor)+'</span></div>'+
-      '<div class="rel-line-bar" style="width:'+Math.max(pct,3)+'%;background:'+cor+'"></div>'+
+      '<div class="rel-line-bar" style="width:'+Math.max(pct,6)+'%;background:'+cor+'"></div>'+
       '<span class="rel-line-label">'+escapeHtml(label)+'</span></div>';
   }
   function renderRelFatBars(s){
