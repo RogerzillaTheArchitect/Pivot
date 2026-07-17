@@ -863,12 +863,18 @@
 
     <div class="sheet-body" id="sheetBody">
 
-      <!-- HOME — 4 cartões do mesmo tamanho -->
+      <!-- HOME — grade de opções de criação -->
       <div class="panel show" data-panel="home">
         <div class="sheet-grid">
           <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
           <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
+          <div class="sheet-item" onclick="pushPanel('contrato')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span data-t="sheet.contract">Contrato</span></div>
+          <div class="sheet-item" onclick="closeSheet();abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span data-t="sheet.financialMovement">Movimentação Financeira</span></div>
+          <div class="sheet-item" onclick="closeSheet();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span data-t="sheet.goalsLimits">Metas e Limites</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.servicesSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><span data-t="sheet.services">Serviços</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.reminderSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.listSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
           <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span data-t="sheet.template">Modelo</span></div>
         </div>
       </div>
@@ -3086,6 +3092,15 @@
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
     "sheet.template": { pt:"Modelo", en:"Template", es:"Plantilla" },
+    "sheet.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "sheet.financialMovement": { pt:"Movimentação Financeira", en:"Financial Entry", es:"Movimiento Financiero" },
+    "sheet.goalsLimits": { pt:"Metas e Limites", en:"Goals & Limits", es:"Metas y Límites" },
+    "sheet.services": { pt:"Serviços", en:"Services", es:"Servicios" },
+    "sheet.reminder": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
+    "sheet.list": { pt:"Lista", en:"List", es:"Lista" },
+    "sheet.servicesSoon": { pt:"Criação de serviços em breve.", en:"Service creation coming soon.", es:"Creación de servicios próximamente." },
+    "sheet.reminderSoon": { pt:"Lembretes avulsos em breve.", en:"Standalone reminders coming soon.", es:"Recordatorios independientes próximamente." },
+    "sheet.listSoon": { pt:"Listas avulsas em breve.", en:"Standalone lists coming soon.", es:"Listas independientes próximamente." },
     // --- Assinatura ---
     "signature.clear": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "signature.noneYet": { pt:"Ainda sem assinatura guardada", en:"No signature saved yet", es:"Aún sin firma guardada" },
