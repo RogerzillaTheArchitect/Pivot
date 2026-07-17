@@ -3506,22 +3506,22 @@
     const meta=METAS.receita||1, teto=METAS.gastos||1;
     /* 2 anéis: Meta é o trilho externo (sempre cheio, é só referência visual, sem
        progresso próprio) com Esperado e Recebido sobrepostos no mesmo raio — a
-       barra de maior valor é pintada por último (fica por cima), a menor por
-       baixo. Teto é o trilho interno, com Despesas sobreposta da mesma forma.
-       Despesas usa um gradiente SVG fixo (grad-despesas) que vai do amarelo
-       claro ao vermelho conforme o arco cresce. Nenhum progresso ultrapassa o
-       círculo completo: ao chegar a 100% o anel para cheio (com sombreado a
-       indicar que já passou da meta) em vez de reiniciar do zero — ver
-       pintarAnelComVolta. */
+       barra de MENOR valor fica sempre por cima (mais acima na pilha visual),
+       a de MAIOR valor por baixo. É essa camada de baixo que mostra a "sobra"
+       de crescimento além do que a camada de cima cobre. Teto é o trilho
+       interno, com Despesas sobreposta da mesma forma. Despesas usa um
+       gradiente SVG fixo (grad-despesas) que vai do amarelo claro ao vermelho
+       conforme o arco cresce. Nenhum progresso ultrapassa o círculo completo:
+       ao chegar a 100% o anel para cheio (com sombreado a indicar que já
+       passou da meta) em vez de reiniciar do zero — ver pintarAnelComVolta. */
     const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    /* a barra de maior valor fica sempre por último no DOM (por cima), a menor
-       por baixo — reordena os elementos a cada render em vez de assumir que
-       Esperado é sempre >= Recebido, para o caso raro de o recebido superar
-       o esperado. */
+    /* a barra de MENOR valor fica sempre por último no DOM (por cima), a de
+       MAIOR valor por baixo — reordena os elementos a cada render, recalculando
+       a hierarquia sempre que os valores mudam. */
     const espEl=document.getElementById('mr-esperado'), recEl=document.getElementById('mr-recebido');
     if(espEl && recEl){
-      if(esperado>=recebido) espEl.parentNode.insertBefore(recEl, espEl);
-      else espEl.parentNode.insertBefore(espEl, recEl);
+      if(esperado>=recebido) espEl.parentNode.insertBefore(espEl, recEl);
+      else espEl.parentNode.insertBefore(recEl, espEl);
     }
     pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta);
     pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta);
