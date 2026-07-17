@@ -10,7 +10,7 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&family=Six+Caps&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&family=Six+Caps&family=JetBrains+Mono:wght@400;500;600;700&family=Zalando+Sans+Expanded:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/background.css">
 <link rel="stylesheet" href="styles/domains/landing.css">
@@ -352,7 +352,7 @@
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">Dashboard</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">RESUMO</span>
     </div>
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
@@ -408,9 +408,6 @@
 
         <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
         <div class="month-summary" onclick="abrirRelatorios('faturamento')">
-          <div class="ms-add-btn" onclick="event.stopPropagation();abrirRegistroManual()" aria-label="Adicionar despesa ou recebido">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-          </div>
           <div class="ms-progress-row">
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
@@ -422,7 +419,6 @@
               </div>
             </div>
             <div class="ms-rings-wrap-outer">
-              <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Lucro total</span>
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
@@ -450,6 +446,7 @@
                   <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="48" stroke-width="10"/>
                 </svg>
                 <div class="ms-rings-center">
+                  <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Total</span>
                   <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
                 </div>
               </div>
@@ -558,16 +555,20 @@
       <section class="view" id="v-trabalhos">
         <div class="page-head">
           <div class="page-title" data-t="nav.jobs">Trabalhos</div>
-          <span class="inline-link" style="font-size:12.5px" onclick="go('historico')" data-t="jobs.history">Histórico</span>
         </div>
 
-        <div class="cal-head">
-          <div class="icon-btn" id="cal-prev" style="width:32px;height:32px" onclick="calNav(-1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
-          <div class="cal-month" id="cal-month-label">Junho 2026</div>
-          <div class="icon-btn" id="cal-next" style="width:32px;height:32px" onclick="calNav(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="card">
+          <div class="rel-month-row">
+            <button class="rel-nav-tall" id="cal-prev" onclick="calNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+            <div class="rel-month-center">
+              <span class="rel-mes-big" id="cal-mes-label">JUNHO</span>
+              <span class="rel-ano-small" id="cal-ano-label">2026</span>
+            </div>
+            <button class="rel-nav-tall" id="cal-next" onclick="calNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+          </div>
+          <div class="cal-grid" id="calgrid"></div>
+          <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
         </div>
-        <div class="cal-grid" id="calgrid"></div>
-        <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
 
         <div class="filter-row" style="margin-top:22px">
           <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
@@ -576,12 +577,14 @@
           <div class="chip" data-key="cliente" onclick="filterJobs(this,'cliente')"><span data-t="jobs.filter.client">Com o cliente</span></div>
           <div class="chip" data-key="atrasados" onclick="filterJobs(this,'atrasados')"><span data-t="jobs.filter.overdue">Atrasados</span></div>
           <div class="chip" data-key="concluidos" onclick="filterJobs(this,'concluidos')"><span data-t="jobs.filter.done">Concluídos</span></div>
+          <div class="chip" data-key="arquivados" onclick="filterJobs(this,'arquivados')"><span data-t="jobs.filter.archived">Arquivados</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
           <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div>
           <h3 style="font-size:19px" data-t="jobs.emptyFilter">Nada neste filtro.</h3><p><span data-t="home.tryAll">Tenta "Todos" para ver a carteira completa.</span></p>
         </div>
+        <div id="jobsArquivadosList" style="display:none"></div>
       </section>
 
       <!-- ============ HISTÓRICO (trabalhos concluídos/deletados) ============ -->
@@ -826,7 +829,7 @@
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11.5 12 4l8 7.5"/><rect x="6" y="11.5" width="12" height="8.5"/></svg>
-      <span id="nav-label-hoje" data-t="nav.home">Início</span>
+      <span id="nav-label-hoje" data-t="nav.home">RESUMO</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><path d="M3 13h18"/></svg>
@@ -2464,7 +2467,7 @@
     "home.expenses": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "home.ceiling": { pt:"Teto", en:"Ceiling", es:"Techo" },
     "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
-    "home.totalProfit": { pt:"Lucro total", en:"Total profit", es:"Beneficio total" },
+    "home.totalProfit": { pt:"Total", en:"Total", es:"Total" },
     "home.entryExpense": { pt:"Despesa", en:"Expense", es:"Gasto" },
     "home.entryIncome": { pt:"Recebido", en:"Income", es:"Ingreso" },
     "home.addEntryTitle": { pt:"Registar movimento", en:"Add entry", es:"Registrar movimiento" },
@@ -2594,6 +2597,8 @@
     "jobs.filter.all": { pt:"Todos", en:"All", es:"Todos" },
     "jobs.filter.mine": { pt:"A meu cargo", en:"On me", es:"A mi cargo" },
     "jobs.filter.client": { pt:"Com o cliente", en:"With client", es:"Con el cliente" },
+    "jobs.archivedEmpty": { pt:"Ainda sem trabalhos arquivados.", en:"No archived jobs yet.", es:"Aún no hay trabajos archivados." },
+    "jobs.filter.archived": { pt:"Arquivados", en:"Archived", es:"Archivados" },
     "jobs.filter.awaiting": { pt:"Aguardando assinatura", en:"Awaiting signature", es:"Esperando firma" },
     "jobs.filter.delivering": { pt:"A entregar", en:"Delivering", es:"Por entregar" },
     "jobs.filter.done": { pt:"Concluídos", en:"Completed", es:"Completados" },
@@ -2796,7 +2801,7 @@
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
-    "nav.home": { pt:"Início", en:"Home", es:"Inicio" },
+    "nav.home": { pt:"RESUMO", en:"Dashboard", es:"Inicio" },
     "nav.jobs": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
     "nav.libraries": { pt:"Bibliotecas", en:"Libraries", es:"Bibliotecas" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
@@ -8927,22 +8932,43 @@
     if(typeof renderHistorico==='function') renderHistorico();
     showToast(t('toast.jobRestored'));
   }
+  /* card de trabalho arquivado (concluído ou apagado) — reaproveitado tanto pela
+     view Histórico quanto pelo filtro "Arquivados" da lista de Trabalhos. */
+  function htmlCardArquivado(job){
+    const done=job.arquivado.motivo==='concluido';
+    const dataFmt=new Date(job.arquivado.em).toLocaleDateString(jsLocale(),{day:'2-digit',month:'short',year:'numeric'});
+    return '<div class="job" style="cursor:default">'+
+      '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
+      '<div class="state '+(done?'s-active':'s-wait')+'">'+(done?t('jobs.history.done'):t('jobs.history.deleted'))+'</div></div>'+
+      '<div class="job-next"><div class="nd" style="background:'+(done?'var(--brand)':'var(--late)')+'"></div><span>'+dataFmt+'</span></div>'+
+      '<button class="btn soft" style="width:100%;margin-top:10px" onclick="restaurarTrabalho(\''+job.id+'\')">'+t('action.restore')+'</button>'+
+    '</div>';
+  }
+  function jobsArquivados(){
+    return jobsVisiveis().filter(j=>j.arquivado).sort((a,b)=> new Date(b.arquivado.em)-new Date(a.arquivado.em));
+  }
   function renderHistorico(){
     const wrap=document.getElementById('historico-lista');
     if(!wrap) return;
-    const itens=jobsVisiveis().filter(j=>j.arquivado).sort((a,b)=> new Date(b.arquivado.em)-new Date(a.arquivado.em));
-    wrap.innerHTML=itens.map(job=>{
-      const done=job.arquivado.motivo==='concluido';
-      const dataFmt=new Date(job.arquivado.em).toLocaleDateString(jsLocale(),{day:'2-digit',month:'short',year:'numeric'});
-      return '<div class="job" style="cursor:default">'+
-        '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
-        '<div class="state '+(done?'s-active':'s-wait')+'">'+(done?t('jobs.history.done'):t('jobs.history.deleted'))+'</div></div>'+
-        '<div class="job-next"><div class="nd" style="background:'+(done?'var(--brand)':'var(--late)')+'"></div><span>'+dataFmt+'</span></div>'+
-        '<button class="btn soft" style="width:100%;margin-top:10px" onclick="restaurarTrabalho(\''+job.id+'\')">'+t('action.restore')+'</button>'+
-      '</div>';
-    }).join('');
+    const itens=jobsArquivados();
+    wrap.innerHTML=itens.map(htmlCardArquivado).join('');
     const empty=document.getElementById('historicoEmpty');
     if(empty) empty.style.display = itens.length===0 ? 'block':'none';
+  }
+  /* lista de arquivados embutida na própria tela de Trabalhos (chip "Arquivados") —
+     esconde os job-card-wrap normais e injeta os cards arquivados num container à parte,
+     em vez de reaproveitar o filtro por dataset (os arquivados nunca chegam a ser
+     renderizados como .job normais, ver renderJobCard). */
+  function renderJobsArquivadosList(){
+    const wrap=document.getElementById('jobsArquivadosList');
+    if(!wrap) return;
+    document.querySelectorAll('#v-trabalhos .job-card-wrap').forEach(w=>w.style.display='none');
+    document.getElementById('jobsEmpty').style.display='none';
+    const df=document.getElementById('cal-dia-filtro'); if(df) df.style.display='none';
+    const itens=jobsArquivados();
+    wrap.style.display='block';
+    wrap.innerHTML = itens.length ? itens.map(htmlCardArquivado).join('') :
+      '<div class="empty" style="padding:46px 16px"><div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div><h3 style="font-size:19px">'+t('jobs.archivedEmpty')+'</h3></div>';
   }
   /* ===== Classificação canónica de trabalho — fonte única usada em todo o lado ===== */
   /* Visibilidade por atribuição de equipa: Admin vê tudo; trabalhos sem
@@ -10640,7 +10666,13 @@
     document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
     if(el) el.classList.add('on');
     calFiltroAtivo=key;
-    aplicarFiltrosTrabalhos();
+    if(key==='arquivados'){
+      renderJobsArquivadosList();
+    } else {
+      const arqWrap=document.getElementById('jobsArquivadosList');
+      if(arqWrap){ arqWrap.style.display='none'; arqWrap.innerHTML=''; }
+      aplicarFiltrosTrabalhos();
+    }
     if(typeof renderCalendar==='function') renderCalendar();
   }
   function abrirTrabalhosFiltrados(key){
@@ -10700,7 +10732,6 @@
     return months;
   }
   const calMonths=buildCalMonths();
-  function calMonthLabel(m){ return mesCompleto(m.month-1)+' '+m.year; }
   /* filtragem do calendário: espelha a classificação usada nos chips de Trabalhos,
      para que o calendário mostre sempre os mesmos trabalhos que a lista abaixo */
   function jobPassaFiltroCal(job, key){
@@ -10775,11 +10806,12 @@
     const m=calMonths[calIndex];
     const hojeReal=diaHojeSeForOMes(m);
     const merged=mergedMonthData(m);
-    document.getElementById('cal-month-label').textContent=calMonthLabel(m);
-    document.getElementById('cal-prev').style.opacity = calIndex===0 ? '.35':'1';
-    document.getElementById('cal-prev').style.pointerEvents = calIndex===0 ? 'none':'auto';
-    document.getElementById('cal-next').style.opacity = calIndex===calMonths.length-1 ? '.35':'1';
-    document.getElementById('cal-next').style.pointerEvents = calIndex===calMonths.length-1 ? 'none':'auto';
+    document.getElementById('cal-mes-label').textContent=mesCompleto(m.month-1).toUpperCase();
+    document.getElementById('cal-ano-label').textContent=String(m.year);
+    document.getElementById('cal-prev').style.opacity = calIndex===0 ? '.15':'';
+    document.getElementById('cal-prev').style.pointerEvents = calIndex===0 ? 'none':'';
+    document.getElementById('cal-next').style.opacity = calIndex===calMonths.length-1 ? '.15':'';
+    document.getElementById('cal-next').style.pointerEvents = calIndex===calMonths.length-1 ? 'none':'';
     const grid=document.getElementById('calgrid'); grid.innerHTML='';
     ['S','T','Q','Q','S','S','D'].forEach(d=>{const el=document.createElement('div');el.className='cal-dow';el.textContent=d;grid.appendChild(el)});
     for(let i=1;i<=m.days;i++){
