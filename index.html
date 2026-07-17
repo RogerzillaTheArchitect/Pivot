@@ -663,26 +663,18 @@
           </div>
         </div>
 
-        <div class="searchbox" style="margin:8px 0 12px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-          <input id="bib-busca" placeholder="Procurar contratos, criadores ou palavras-chave…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
-        </div>
-
-        <div class="filter-row" id="bib-origem-row" style="margin-bottom:8px">
-          <div class="chip on" data-org="todos" onclick="setBibOrigem(this,'todos')"><span data-t="library.origin.all">Todos</span></div>
-          <div class="chip chip-ic" data-org="oficial" onclick="setBibOrigem(this,'oficial')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg> <span data-t="library.origin.official">Oficial Pivot</span></div>
-          <div class="chip chip-ic" data-org="comunidade" onclick="setBibOrigem(this,'comunidade')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-t="library.origin.community">Comunidade</span></div>
-          <div class="chip chip-ic" data-org="juridico" onclick="setBibOrigem(this,'juridico')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg> <span data-t="library.origin.legal">Jurídicos</span></div>
-          <div class="chip chip-ic" data-org="populares" onclick="setBibOrigem(this,'populares')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></svg> <span data-t="library.origin.popular">Populares</span></div>
-          <div class="chip chip-ic" data-org="recomendados" onclick="setBibOrigem(this,'recomendados')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/></svg> <span data-t="library.origin.recommended">Recomendados</span></div>
-          <div class="chip chip-ic" id="bib-filtrar-chip" onclick="abrirFiltrosBiblioteca()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
-            <span data-t="library.filter">Filtrar</span>
+        <div class="card bib-page-card">
+          <div class="searchbox bib-searchbox" style="margin:0 0 14px">
+            <div class="bib-filter-icon-btn" id="bib-filtrar-chip" onclick="abrirFiltrosBiblioteca()" aria-label="Filtrar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+            </div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+            <input id="bib-busca" placeholder="Procurar contratos, criadores ou palavras-chave…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
           </div>
-        </div>
 
-        <div id="bib-lista"></div>
-        <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
+          <div id="bib-lista"></div>
+          <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
+        </div>
       </section>
 
       <!-- ============ CONTATOS (clientes + colaboradores) ============ -->
@@ -2370,6 +2362,7 @@
     "library.importSoon": { pt:"Importar arquivo em breve.", en:"File import coming soon.", es:"Importar archivo próximamente." },
     "library.filter": { pt:"Filtrar", en:"Filter", es:"Filtrar" },
     "library.filterTitle": { pt:"Filtros avançados", en:"Advanced filters", es:"Filtros avanzados" },
+    "library.filterOrigin": { pt:"Origem", en:"Source", es:"Origen" },
     "library.sortLabel": { pt:"Ordenar por", en:"Sort by", es:"Ordenar por" },
     "library.sort.mostUsed": { pt:"Mais Utilizados", en:"Most Used", es:"Más Utilizados" },
     "library.sort.mostRecommended": { pt:"Mais Recomendados", en:"Most Recommended", es:"Más Recomendados" },
@@ -9296,17 +9289,23 @@
     _catalogoBibCache=out;
     return out;
   }
-  let bibOrigem='todos';
+  let bibOrigemSel=new Set();
   let bibOrdenacao='usos';
   let bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, coberturas:null};
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
-  function setBibOrigem(el, org){
-    document.querySelectorAll('#bib-origem-row .chip').forEach(c=>c.classList.remove('on'));
-    el.classList.add('on');
-    bibOrigem=org;
+  const BIB_ORIGENS=[
+    ['oficial','library.origin.official'],
+    ['comunidade','library.origin.community'],
+    ['juridico','library.origin.legal'],
+    ['populares','library.origin.popular'],
+    ['recomendados','library.origin.recommended']
+  ];
+  function toggleBibOrigem(org){
+    if(bibOrigemSel.has(org)) bibOrigemSel.delete(org); else bibOrigemSel.add(org);
     renderBiblioteca();
+    if(document.getElementById('infoSheet').classList.contains('show')) refrescarSheetFiltrosBiblioteca();
   }
   function toggleBibCreateMenu(ev){
     if(ev) ev.stopPropagation();
@@ -9352,16 +9351,19 @@
     if(document.getElementById('infoSheet').classList.contains('show')) refrescarSheetFiltrosBiblioteca();
   }
   function toggleBibAcc(el){ el.classList.toggle('open'); }
+  function bibItemBateOrigem(item, org){
+    if(org==='populares') return (item.usos||0)>=150;
+    if(org==='recomendados') return (item.avaliacao||0)>=4.7;
+    if(org==='juridico') return !!item.verificado;
+    return item.origem===org;
+  }
   function bibItensFiltradosPorOrigem(){
     const todos=catalogoBiblioteca();
-    if(bibOrigem==='populares') return todos.filter(i=>(i.usos||0)>=150);
-    if(bibOrigem==='recomendados') return todos.filter(i=>(i.avaliacao||0)>=4.7);
-    if(bibOrigem==='juridico') return todos.filter(i=>i.verificado);
-    if(bibOrigem==='oficial'||bibOrigem==='comunidade') return todos.filter(i=>i.origem===bibOrigem);
-    return todos;
+    if(bibOrigemSel.size===0) return todos;
+    return todos.filter(i=>[...bibOrigemSel].some(org=>bibItemBateOrigem(i,org)));
   }
   function bibContarFiltrosAtivos(){
-    let n=Object.values(bibFacetSel).filter(Boolean).length;
+    let n=Object.values(bibFacetSel).filter(Boolean).length + bibOrigemSel.size;
     if(bibOrdenacao!=='usos') n++;
     return n;
   }
@@ -9370,8 +9372,12 @@
     if(chip) chip.classList.toggle('on', bibContarFiltrosAtivos()>0);
   }
   function buildBibFiltrosSheetHtml(){
+    const origemChips=BIB_ORIGENS.map(([org,labelKey])=>
+      '<span class="bib-fchip'+(bibOrigemSel.has(org)?' on':'')+'" onclick="toggleBibOrigem(\''+org+'\')">'+t(labelKey)+'</span>'
+    ).join('');
+    let html='<div class="bib-acc open"><div class="bib-acc-head" onclick="toggleBibAcc(this.parentElement)"><span>'+t('library.filterOrigin')+'</span>'+(bibOrigemSel.size?'<span class="cnt">'+bibOrigemSel.size+'</span>':'')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div><div class="bib-acc-body">'+origemChips+'</div></div>';
     const base=bibItensFiltradosPorOrigem();
-    let html=BIB_FACETAS.map(([fac,labelKey])=>{
+    html+=BIB_FACETAS.map(([fac,labelKey])=>{
       const valores=bibValoresFaceta(base, fac);
       if(!valores.length) return '';
       const sel=bibFacetSel[fac];
@@ -9392,6 +9398,7 @@
     openInfo(t('library.filterTitle'), buildBibFiltrosSheetHtml());
   }
   function limparFiltrosBiblioteca(){
+    bibOrigemSel=new Set();
     bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, coberturas:null};
     bibOrdenacao='usos';
     renderBiblioteca();
