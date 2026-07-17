@@ -755,43 +755,54 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <div class="rel-context-title" data-t="reports.title">Relatórios</div>
-        <div class="rel-period-bar">
-          <button class="rel-icon-btn" onclick="abrirDefinirMetas()" aria-label="Parâmetros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
-          <div class="rel-month-row">
-            <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
-            <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
-              <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
-              <span class="rel-ano-small" id="rel-ano-label">2026</span>
+        <div class="page-title" data-t="reports.title">Relatórios</div>
+
+        <div class="card rel-card">
+          <div class="rel-period-bar">
+            <button class="rel-icon-btn" onclick="abrirDefinirMetas()" aria-label="Parâmetros"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+            <div class="rel-month-row">
+              <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+              <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
+                <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
+                <span class="rel-ano-small" id="rel-ano-label">2026</span>
+              </div>
+              <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
             </div>
-            <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+            <button class="rel-icon-btn" onclick="abrirRegistroManual()" aria-label="Adicionar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></button>
           </div>
-          <button class="rel-icon-btn" onclick="abrirRegistroManual()" aria-label="Adicionar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
 
-        <!-- Card 1: Faturamento — sem caixa; as barras são o próprio elemento -->
-        <div class="group-label" style="margin-top:40px" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
-        <div id="rel-fat-bars" style="margin-top:16px"></div>
-        <div id="rel-linechart" style="margin-top:20px"></div>
+        <!-- Card: Faturamento — as barras são o próprio elemento -->
+        <div class="card rel-card">
+          <div class="group-label" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
+          <div id="rel-fat-bars" style="margin-top:16px"></div>
+          <div id="rel-linechart" style="margin-top:20px"></div>
+        </div>
 
-        <!-- Card 2: Estatísticas Operacionais — lista analítica; a barra/gráfico só
+        <!-- Card: Estatísticas Operacionais — lista analítica; a barra/gráfico só
              aparece ao tocar num indicador -->
-        <div class="group-label" style="margin-top:48px" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span></div>
-        <div id="rel-op-bars" style="margin-top:8px"></div>
-        <div id="rel-annual-chart" style="margin-top:14px"></div>
-
-        <!-- Card 3: Fluxo de Tarefas -->
-        <div class="group-label" style="margin-top:48px" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
-        <div id="rel-op-extra" style="margin-top:8px"></div>
-
-        <!-- Card 4: Fluxo Financeiro — timeline, sem cartões -->
-        <div class="group-label" style="margin-top:48px"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
-        <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
-          <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
-          <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
-          <button data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></button>
+        <div class="card rel-card">
+          <div class="group-label" id="rel-anchor-operacional"><span data-t="reports.opStats">Estatísticas Operacionais</span></div>
+          <div id="rel-op-bars" style="margin-top:8px"></div>
+          <div id="rel-annual-chart" style="margin-top:14px"></div>
         </div>
-        <div id="rel-fluxo-lista"></div>
+
+        <!-- Card: Fluxo de Tarefas -->
+        <div class="card rel-card">
+          <div class="group-label" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
+          <div id="rel-op-extra" style="margin-top:8px"></div>
+        </div>
+
+        <!-- Card: Fluxo Financeiro — timeline -->
+        <div class="card rel-card">
+          <div class="group-label"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
+          <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
+            <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
+            <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
+            <button data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></button>
+          </div>
+          <div id="rel-fluxo-lista"></div>
+        </div>
       </section>
 
       <!-- ============ EQUIPA ============ -->
