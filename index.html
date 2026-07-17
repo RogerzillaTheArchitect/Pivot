@@ -2929,6 +2929,8 @@
     "profile.company.categoryPlaceholder": { pt:"ex: Fotografia & Filmes", en:"e.g. Photography & Film", es:"ej: Fotografía y Cine" },
     "profile.company.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
     "profile.company.website": { pt:"Website", en:"Website", es:"Sitio web" },
+    "profile.company.taxId": { pt:"Identificação Fiscal (CPF/CNPJ/NIF/NISS)", en:"Tax ID (CPF/CNPJ/VAT/etc.)", es:"Identificación Fiscal (CPF/CNPJ/NIF/NISS)" },
+    "profile.company.taxIdPlaceholder": { pt:"Número do documento", en:"Document number", es:"Número del documento" },
     "profile.account.name": { pt:"Nome", en:"Name", es:"Nombre" },
     "profile.account.plan": { pt:"Plano", en:"Plan", es:"Plan" },
     "profile.account.save": { pt:"Guardar alterações", en:"Save changes", es:"Guardar cambios" },
@@ -9626,7 +9628,7 @@
   function saveClientesData(){ savePersisted('pivot-clientesData', ()=>clientesData); }
   function saveTarefasData(){ savePersisted('pivot-tarefasData', ()=>tarefasData); }
   async function loadClientesData(){ await loadPersisted('pivot-clientesData', d=>{ clientesData=d; }); }
-  let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
+  let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false} } };
   const METODOS_PAGAMENTO_META=[
     ['revolut','payment.method.revolut','@utilizador'],
@@ -10200,6 +10202,7 @@
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.empresaEmail||'')}" id="emp-email"></div>
       <div class="field"><label>${t('profile.company.phone')}</label><input value="${escapeHtml(perfilData.telefone)}" id="emp-telefone"></div>
       <div class="field"><label>${t('profile.company.website')}</label><input value="${escapeHtml(perfilData.website)}" id="emp-website"></div>
+      <div class="field"><label>${t('profile.company.taxId')}</label><input value="${escapeHtml(perfilData.taxId||'')}" id="emp-taxid" placeholder="${t('profile.company.taxIdPlaceholder')}"></div>
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarEmpresa()">${t('profile.account.save')}</button>`);
   }
   async function onEmpresaAvatarSelected(input){
@@ -10221,6 +10224,7 @@
     perfilData.empresaEmail=document.getElementById('emp-email').value.trim();
     perfilData.telefone=document.getElementById('emp-telefone').value.trim();
     perfilData.website=document.getElementById('emp-website').value.trim();
+    perfilData.taxId=document.getElementById('emp-taxid').value.trim();
     savePerfilData();
     aplicarPerfilData();
     closeInfo(); showToast(t('toast.accountDataUpdated'));
