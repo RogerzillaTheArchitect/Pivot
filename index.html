@@ -2833,6 +2833,7 @@
     "notif.stateNotAsked": { pt:"ainda não pedidas", en:"not requested yet", es:"aún no solicitadas" },
     "notif.stateUnsupported": { pt:"não suportadas aqui", en:"not supported here", es:"no compatibles aquí" },
     "notif.title": { pt:"Notificações", en:"Notifications", es:"Notificaciones" },
+    "notif.clearAll": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "notif.urgent": { pt:"Push em urgências", en:"Push for urgent items", es:"Push en urgencias" },
     "notif.urgentSub": { pt:"atrasos e eventos próximos", en:"overdue items and upcoming events", es:"retrasos y eventos próximos" },
     // --- Pagamentos ---
@@ -8355,10 +8356,11 @@
     const hojeISO=new Date().toISOString().slice(0,10);
     let items=[];
     jobsVisiveis().forEach(j=>{
-      (j.payments||[]).forEach(p=>{
+      (j.payments||[]).forEach((p,i)=>{
         if(p.status==='pago') return;
         const atrasado = p.dueDate && p.dueDate < hojeISO;
         items.push({
+          id: 'pay:'+j.id+':'+i,
           prioridade: atrasado ? 'urgente' : (p.status==='a_confirmar' ? 'media' : 'media'),
           texto: p.label+' — '+j.client,
           sub: atrasado ? t('payment.overdue') : (p.status==='a_confirmar' ? t('payment.receiptReceivedConfirm') : t('payment.statusPending').toLowerCase()),
@@ -8367,65 +8369,119 @@
       });
       (j.milestones||[]).forEach(m=>{
         if(m.key==='entrega' && m.status!=='feito'){
-          items.push({ prioridade:'normal', texto:t('milestone.delivery')+j.client, sub:m.m, jobId:j.id });
+          items.push({ id:'ms:'+j.id+':'+m.key, prioridade:'normal', texto:t('milestone.delivery')+j.client, sub:m.m, jobId:j.id });
         }
       });
     });
     Object.values(tarefasData).forEach(t=>{
       if(t.feito || t.tipo!=='simples') return;
-      items.push({ prioridade:prioClasse(t.prioridade), texto:t.titulo, sub:'tarefa'+(t.data?(' · '+t.data.split('-').reverse().slice(0,2).join('/')):''), jobId:t.jobId });
+      items.push({ id:'task:'+t.id, prioridade:prioClasse(t.prioridade), texto:t.titulo, sub:'tarefa'+(t.data?(' · '+t.data.split('-').reverse().slice(0,2).join('/')):''), jobId:t.jobId });
     });
     const ordem={urgente:0, media:1, normal:2};
-    return items.sort((a,b)=>ordem[a.prioridade]-ordem[b.prioridade]);
+    return items.filter(it=>!notifDismissed.has(it.id)).sort((a,b)=>ordem[a.prioridade]-ordem[b.prioridade]);
   }
   function gerarAtividadeCliente(){
     let items=[];
     jobsVisiveis().forEach(j=>{
       (j.history||[]).forEach(h=>{
-        if(h.tipo==='cliente') items.push({texto:h.text+' — '+j.client, ts:h.ts, tsRaw:h.tsRaw||0, jobId:j.id});
+        if(h.tipo==='cliente') items.push({id:'act:'+j.id+':'+(h.tsRaw||0), texto:h.text+' — '+j.client, ts:h.ts, tsRaw:h.tsRaw||0, jobId:j.id});
       });
     });
     items.sort((a,b)=>b.tsRaw-a.tsRaw);
     const seteDiasAtras=Date.now()-7*86400000;
-    return items.filter(it=>it.tsRaw>=seteDiasAtras);
+    return items.filter(it=>it.tsRaw>=seteDiasAtras && !notifDismissed.has(it.id));
+  }
+  let notifDismissed=new Set();
+  let notifSeenIds=new Set();
+  function saveNotifDismissed(){ savePersisted('pivot-notifDismissed', ()=>[...notifDismissed]); }
+  async function loadNotifDismissed(){ await loadPersisted('pivot-notifDismissed', d=>{ notifDismissed=new Set(d||[]); }); }
+  function notifCardHtml(id, dotHtml, texto, sub, onclick){
+    return '<div class="notif-wrap" data-notif="'+id+'">'+
+        '<div class="notif-dismiss-action" onclick="event.stopPropagation();descartarNotificacao(\''+id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
+        '<div class="notif-card" onclick="'+onclick+'">'+dotHtml+
+          '<div><div class="nm">'+escapeHtml(texto)+'</div><div class="sub">'+escapeHtml(sub)+'</div></div>'+
+        '</div>'+
+      '</div>';
   }
   function abrirNotificacoes(){
     const items=gerarNotificacoes();
     const atividade=gerarAtividadeCliente();
+    items.forEach(it=>notifSeenIds.add(it.id));
+    atividade.forEach(a=>notifSeenIds.add(a.id));
     let html='';
     if(!items.length && !atividade.length){
       html='<p style="font-size:13.5px;color:var(--neutral);text-align:center;padding:24px 0">'+t('notif.emptyState')+'</p>';
     } else {
+      html+='<button class="btn soft notif-clear-btn" onclick="limparNotificacoes()">'+t('notif.clearAll')+'</button>';
       if(items.length){
-        html+=items.map(it=>
-          '<div class="pick-row" onclick="closeInfo();'+(it.jobId?('openJob(\''+it.jobId+'\')'):'')+'">'+
-            '<div style="display:flex;align-items:center"><span class="priority-dot '+it.prioridade+'"></span>'+
-            '<div><div class="nm">'+escapeHtml(it.texto)+'</div><div class="sub">'+escapeHtml(it.sub)+'</div></div></div>'+
-          '</div>'
-        ).join('');
+        html+=items.map(it=>notifCardHtml(it.id,
+          '<span class="priority-dot '+it.prioridade+'"></span>',
+          it.texto, it.sub,
+          'closeInfo();'+(it.jobId?('openJob(\''+it.jobId+'\')'):'')
+        )).join('');
       }
       if(atividade.length){
         html+='<p class="plabel" style="margin:'+(items.length?'14px':'0')+' 2px 6px">'+t('job.clientActivity')+'</p>';
-        html+=atividade.map(a=>
-          '<div class="pick-row" onclick="closeInfo();openJob(\''+a.jobId+'\')">'+
-            '<div style="display:flex;align-items:center;gap:11px"><div style="width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><path d="M20 6 9 17l-5-5"/></svg></div>'+
-            '<div><div class="nm">'+escapeHtml(a.texto)+'</div><div class="sub">'+escapeHtml(a.ts)+'</div></div></div>'+
-          '</div>'
-        ).join('');
+        html+=atividade.map(a=>notifCardHtml(a.id,
+          '<div style="width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><path d="M20 6 9 17l-5-5"/></svg></div>',
+          a.texto, a.ts,
+          'closeInfo();openJob(\''+a.jobId+'\')'
+        )).join('');
       }
     }
     openInfo(t('notif.title'), html);
+    ativarSwipeNotificacoes();
+    atualizarNotifDot();
+  }
+  function descartarNotificacao(id){
+    notifDismissed.add(id);
+    saveNotifDismissed();
+    const wrap=document.querySelector('.notif-wrap[data-notif="'+id+'"]');
+    if(wrap){ wrap.style.transition='opacity .2s,max-height .2s'; wrap.style.maxHeight=wrap.offsetHeight+'px'; requestAnimationFrame(()=>{ wrap.style.opacity='0'; wrap.style.maxHeight='0'; }); setTimeout(()=>wrap.remove(),220); }
+    atualizarNotifDot();
+  }
+  function limparNotificacoes(){
+    gerarNotificacoes().forEach(it=>notifDismissed.add(it.id));
+    gerarAtividadeCliente().forEach(a=>notifDismissed.add(a.id));
+    saveNotifDismissed();
+    abrirNotificacoes();
+  }
+  function ativarSwipeNotificacoes(){
+    document.querySelectorAll('#infoBody .notif-wrap').forEach(wrap=>{
+      const card=wrap.querySelector('.notif-card');
+      const revelado=64; let x0=null, y0=null, aberto=false, horizontal=null;
+      card.addEventListener('pointerdown', e=>{ x0=e.clientX; y0=e.clientY; horizontal=null; card.style.transition='none'; });
+      card.addEventListener('pointermove', e=>{
+        if(x0===null) return;
+        const dx=e.clientX-x0, dy=e.clientY-y0;
+        if(horizontal===null){ if(Math.abs(dx)>6||Math.abs(dy)>6) horizontal=Math.abs(dx)>Math.abs(dy); }
+        if(!horizontal) return;
+        let tx=(aberto?-revelado:0)+dx;
+        tx=Math.max(-revelado, Math.min(0, tx));
+        card.style.transform='translateX('+tx+'px)';
+      });
+      const fim=e=>{
+        if(x0===null) return;
+        card.style.transition='';
+        const dx=(e.clientX||0)-x0;
+        if(horizontal){ aberto = aberto ? dx<40 : dx<-40; card.style.transform='translateX('+(aberto?-revelado:0)+'px)'; if(aberto&&navigator.vibrate)navigator.vibrate(6); }
+        x0=null; y0=null; horizontal=null;
+      };
+      card.addEventListener('pointerup', fim);
+      card.addEventListener('pointercancel', fim);
+    });
   }
   function atualizarNotifDot(){
-    const total = gerarNotificacoes().length + gerarAtividadeCliente().length;
-    const txt = total>99 ? '99+' : String(total);
+    const naoVistas = gerarNotificacoes().filter(it=>!notifSeenIds.has(it.id)).length
+      + gerarAtividadeCliente().filter(a=>!notifSeenIds.has(a.id)).length;
+    const txt = naoVistas>99 ? '99+' : String(naoVistas);
     document.querySelectorAll('.notif-dot').forEach(dot=>{
-      dot.style.display = total>0 ? 'flex' : 'none';
+      dot.style.display = naoVistas>0 ? 'flex' : 'none';
       dot.textContent = txt;
     });
     /* barra superior mobile: sem badge/bolinha — só ícone + número como texto */
     document.querySelectorAll('.notif-count').forEach(el=>{
-      el.style.display = total>0 ? 'inline' : 'none';
+      el.style.display = naoVistas>0 ? 'inline' : 'none';
       el.textContent = txt;
     });
   }
@@ -11147,7 +11203,7 @@
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(), loadReceitasData(),
       loadPerfilData(), loadMetas(), loadLembretesPerfil(), loadColecoesData(),
-      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos()
+      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed()
     ]);
     renderMonthTicker();
   }

@@ -107,6 +107,24 @@
   .pick-row.selected .pick-check{visibility:visible}
   .pick-row .chevr{width:15px;height:15px;color:var(--neutral);flex:none}
 
+  /* ===== NOTIFICAÇÕES — vidro escuro translúcido + swipe pra descartar ===== */
+  .notif-clear-btn{width:100%;margin-bottom:14px}
+  .notif-wrap{position:relative;overflow:hidden;border-radius:13px;margin-bottom:8px;touch-action:pan-y}
+  .notif-dismiss-action{position:absolute;top:0;right:0;height:100%;width:64px;display:flex;align-items:center;
+    justify-content:center;background:var(--late);color:#fff}
+  .notif-dismiss-action svg{width:16px;height:16px}
+  .notif-card{position:relative;display:flex;align-items:center;gap:11px;padding:13px 14px;border-radius:13px;
+    cursor:pointer;will-change:transform;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(20,19,17,.55);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 8px 22px -8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06);
+    backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
+    transition:transform .22s cubic-bezier(.2,.8,.2,1);
+    color:#F5F5F2;
+    --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1}
+  .notif-card .nm{font-size:14px;font-weight:500;color:var(--ink)}
+  .notif-card .sub{font-size:12px;color:var(--ink-soft);margin-top:2px}
+
   .colrow{border:1px solid var(--line);border-radius:13px;margin-bottom:9px;overflow:hidden}
   .colrow-head{display:flex;align-items:center;gap:11px;padding:13px 14px;cursor:pointer}
   .colrow-head .body{flex:1;min-width:0}
