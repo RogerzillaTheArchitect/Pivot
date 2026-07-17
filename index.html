@@ -3505,25 +3505,27 @@
   function renderRingsDashboard(recebido, esperado, custos){
     const meta=METAS.receita||1, teto=METAS.gastos||1;
     /* 2 anéis: Meta é o trilho externo (sempre cheio, é só referência visual, sem
-       progresso próprio) com Esperado e Recebido sobrepostos no mesmo raio — Esperado
-       pintado primeiro (maior, fica por baixo), Recebido pintado depois (menor, fica
-       por cima). Teto é o trilho interno, com Despesas sobreposta da mesma forma
-       (Teto por baixo, Despesas por cima). Despesas usa um gradiente SVG fixo
-       (grad-despesas) que vai do amarelo claro ao vermelho conforme o arco cresce.
-       Todos os progressos continuam a girar (com sombreado) se ultrapassarem 100%,
-       via pintarAnelComVolta. */
+       progresso próprio) com Esperado e Recebido sobrepostos no mesmo raio — a
+       barra de maior valor é pintada por último (fica por cima), a menor por
+       baixo. Teto é o trilho interno, com Despesas sobreposta da mesma forma.
+       Despesas usa um gradiente SVG fixo (grad-despesas) que vai do amarelo
+       claro ao vermelho conforme o arco cresce. Nenhum progresso ultrapassa o
+       círculo completo: ao chegar a 100% o anel para cheio (com sombreado a
+       indicar que já passou da meta) em vez de reiniciar do zero — ver
+       pintarAnelComVolta. */
     const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    /* a barra de maior valor fica sempre por baixo (mais cedo no DOM), a menor por
-       cima — reordena os elementos a cada render em vez de assumir que Esperado é
-       sempre >= Recebido, para o caso raro de o recebido superar o esperado. */
+    /* a barra de maior valor fica sempre por último no DOM (por cima), a menor
+       por baixo — reordena os elementos a cada render em vez de assumir que
+       Esperado é sempre >= Recebido, para o caso raro de o recebido superar
+       o esperado. */
     const espEl=document.getElementById('mr-esperado'), recEl=document.getElementById('mr-recebido');
     if(espEl && recEl){
-      if(esperado>=recebido) espEl.parentNode.insertBefore(espEl, recEl);
-      else espEl.parentNode.insertBefore(recEl, espEl);
+      if(esperado>=recebido) espEl.parentNode.insertBefore(recEl, espEl);
+      else espEl.parentNode.insertBefore(espEl, recEl);
     }
-    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta, true);
-    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta, true);
-    pintarAnelComVolta('mr-despesas', 48, custos, teto, undefined, true);
+    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta);
+    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta);
+    pintarAnelComVolta('mr-despesas', 48, custos, teto);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
@@ -3540,25 +3542,18 @@
       saldoEl.style.fontSize = len>11 ? '10px' : len>9 ? '12px' : len>7 ? '14px' : '16px';
     }
   }
-  /* anel genérico com suporte a "voltas": por padrão, se num ultrapassa den, o arco
-     não fica preso em 100% — continua a partir de 0 na volta seguinte, e tanto o arco
-     como a pista (o círculo imediatamente anterior no SVG) ganham um brilho/sombreado
-     para indicar que pelo menos uma volta já foi completada. Com semCiclo=true (usado
-     pelos anéis do card Financeiro), o comportamento é outro: o anel simplesmente para
-     em 100% e continua totalmente desenhado, sem reiniciar — só o brilho de "ultrapassou
-     o alvo" continua a acender via ring-lapped-progress/track. */
-  function pintarAnelComVolta(elId, r, num, den, trackElOverride, semCiclo){
+  /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não
+     reinicia do zero — para cheio (círculo completo) e fica assim, com o
+     arco e a pista (o círculo imediatamente anterior no SVG) a ganhar um
+     brilho/sombreado para indicar que a meta já foi ultrapassada. A volta já
+     dada nunca desaparece nem é substituída por uma volta parcial nova. */
+  function pintarAnelComVolta(elId, r, num, den, trackElOverride){
     const el=document.getElementById(elId);
     if(!el) return null;
     const circ=2*Math.PI*r;
     const ratioReal = den>0 ? num/den : (num>0?1:0);
     const laps=Math.floor(ratioReal);
-    /* quando o progresso cai exatamente numa volta completa (100%, 200%...), o resto
-       da divisão é 0 — sem este ajuste o anel ficava com o traço todo recolhido
-       (invisível) em vez de mostrar a volta cheia. */
-    const pctAtual = semCiclo
-      ? Math.min(100, ratioReal*100)
-      : (laps>0 && ratioReal===laps) ? 100 : (ratioReal-laps)*100;
+    const pctAtual = Math.min(100, ratioReal*100);
     const trackEl=trackElOverride||el.previousElementSibling;
     el.classList.toggle('ring-lapped-progress', laps>0);
     if(trackEl) trackEl.classList.toggle('ring-lapped-track', laps>0);
