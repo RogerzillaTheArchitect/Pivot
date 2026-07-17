@@ -3094,16 +3094,16 @@
     "signature.uploadHint": { pt:"foto ou scan da sua assinatura", en:"photo or scan of your signature", es:"foto o escaneo de tu firma" },
     // --- Estados genéricos ---
     "status.daysSuffixShort": { pt:"d", en:"d", es:"d" },
-    "status.inDaysPrefix": { pt:"em ", en:"in ", es:"en " },
+    "status.inDaysPrefix": { pt:"Em ", en:"In ", es:"En " },
     "status.inDaysSuffix": { pt:" dias", en:" days", es:" días" },
     "status.overdue": { pt:"atrasado", en:"overdue", es:"atrasado" },
     "status.overdueTitle": { pt:"Atrasado", en:"Overdue", es:"Atrasado" },
-    "status.overdueDays": { pt:"Atrasado {d} dias", en:"Overdue {d} days", es:"Atrasado {d} días" },
-    "status.overdueOneDay": { pt:"Atrasado 1 dia", en:"Overdue 1 day", es:"Atrasado 1 día" },
+    "status.overdueDays": { pt:"{d} Dias atraso", en:"{d} Days overdue", es:"{d} Días de atraso" },
+    "status.overdueOneDay": { pt:"1 Dia atraso", en:"1 Day overdue", es:"1 Día de atraso" },
     "status.sentNotSeenPrefix": { pt:"enviada · não vista há ", en:"sent · not seen for ", es:"enviada · no vista hace " },
-    "status.today": { pt:"hoje", en:"today", es:"hoy" },
-    "status.tomorrow": { pt:"amanhã", en:"tomorrow", es:"mañana" },
-    "status.inOneWeek": { pt:"em 1 semana", en:"in 1 week", es:"en 1 semana" },
+    "status.today": { pt:"Vence Hoje", en:"Due Today", es:"Vence Hoy" },
+    "status.tomorrow": { pt:"Vence Amanhã", en:"Due Tomorrow", es:"Vence Mañana" },
+    "status.inOneWeek": { pt:"Em 1 semana", en:"In 1 week", es:"En 1 semana" },
     // --- task ---
     "task.addItemPlaceholder": { pt:"Adicionar item…", en:"Add item…", es:"Añadir elemento…" },
     "task.linkToJob": { pt:"Associar a trabalho", en:"Link to a job", es:"Asociar a un trabajo" },
@@ -3819,7 +3819,7 @@
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
     const tagHtml='<span class="radar-tag '+urgClasse+'">'+gerarLabelTemporal(it.dataISO, it.hora)+'</span>';
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
-    card+='<div class="card-kicker">'+tagHtml+'</div>';
+    card+=tagHtml;
     card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
     if(it.principal) card+='<div class="card-meta">'+escapeHtml(it.principal)+'</div>';
     if(it.secundaria) card+='<div class="card-meta" style="color:var(--neutral);font-size:12px">'+escapeHtml(it.secundaria)+'</div>';

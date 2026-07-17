@@ -113,25 +113,33 @@
   .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
   .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
   .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
-  /* sinal de urgência do card de tarefa: em vez de ícone/bolinha, uma tag com
-     moldura (.radar-tag) + um degradê horizontal cobrindo o lado direito do card
-     inteiro, com início suave a partir do meio (não uma linha dura) — atrasado =
-     laranja-avermelhado, próximo vencimento = amarelo, demais tarefas do mês =
-     verde. Fundo mais escuro que o resto do app (mesma opacidade .10, cor de base
-     mais próxima do preto) pra o efeito de cor se destacar melhor. */
+  /* sinal de urgência do card de tarefa: um degradê sutil só na BORDA do card
+     (não mais um "banho" cobrindo o interior), respeitando o border-radius via
+     a técnica de mask (dois gradientes, um recortado pro content-box, XOR entre
+     eles = só sobra o anel da borda). Atrasado = bordô, urgente (hoje/amanhã) =
+     amarelo leve, normal (2+ dias) = verde escuro. O .radar-tag deixou de ficar
+     em fluxo no topo do card e virou um badge fixo no canto superior direito,
+     com o texto de prazo (ex.: "2 Dias atraso", "Vence Hoje", "Em 5 dias"). */
   .card.radar-card{
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10)}
   .card.radar-card::before{
-    content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0}
-  .card.radar-card.late::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(224,102,58,.16) 58%,rgba(224,102,58,.42) 100%)}
-  .card.radar-card.soon::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(232,197,71,.14) 58%,rgba(232,197,71,.36) 100%)}
-  .card.radar-card.normal::before{background:linear-gradient(to right,transparent 0%,transparent 42%,rgba(79,161,137,.14) 58%,rgba(79,161,137,.34) 100%)}
+    content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+    padding:1.5px;
+    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite:xor;
+    mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite:exclude}
+  .card.radar-card.late::before{background:linear-gradient(135deg,rgba(122,33,56,.95) 0%,rgba(122,33,56,.3) 55%,transparent 100%)}
+  .card.radar-card.soon::before{background:linear-gradient(135deg,rgba(232,197,71,.85) 0%,rgba(232,197,71,.22) 55%,transparent 100%)}
+  .card.radar-card.normal::before{background:linear-gradient(135deg,rgba(31,74,52,.95) 0%,rgba(31,74,52,.3) 55%,transparent 100%)}
   .card.radar-card>*{position:relative;z-index:1}
-  .radar-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:11px;
-    font-weight:600;border:1px solid;letter-spacing:.02em}
-  .radar-tag.late{color:#F0916A;border-color:rgba(224,102,58,.55);background:rgba(224,102,58,.10)}
-  .radar-tag.soon{color:#EAD07D;border-color:rgba(232,197,71,.55);background:rgba(232,197,71,.10)}
-  .radar-tag.normal{color:#7FC4A9;border-color:rgba(79,161,137,.55);background:rgba(79,161,137,.10)}
+  .radar-card .card-title{padding-right:88px}
+  .radar-tag{position:absolute;top:12px;right:12px;z-index:2;display:inline-flex;align-items:center;
+    padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:600;border:1px solid;
+    letter-spacing:.02em;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .radar-tag.late{color:#E8899E;border-color:rgba(122,33,56,.6);background:rgba(122,33,56,.28)}
+  .radar-tag.soon{color:#EAD07D;border-color:rgba(232,197,71,.55);background:rgba(232,197,71,.14)}
+  .radar-tag.normal{color:#6FBE93;border-color:rgba(31,74,52,.6);background:rgba(31,74,52,.3)}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
@@ -153,8 +161,6 @@
   .card-body{flex:1;min-width:0}
   .card-tap{cursor:pointer}
   .btn:disabled,.btn.done{opacity:.5;cursor:default;pointer-events:none}
-  .card-kicker{font-size:12px;font-weight:600;margin-bottom:3px;text-transform:uppercase}
-  .kick-late{color:var(--ink)} .kick-pend{color:var(--ink)} .kick-event{color:var(--ink)}
   .card-title{font-size:15.5px;font-weight:500}
   .card-meta{font-size:13px;color:var(--ink-soft);margin-top:2px}
   .card-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px;padding-top:12px;
