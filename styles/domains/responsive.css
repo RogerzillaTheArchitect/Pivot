@@ -1,0 +1,45 @@
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:899px){
+    .sidebar{display:none}
+    .topbar-mobile{display:flex}
+    .nav{display:flex}
+    .screen{padding:var(--topbar-pad,86px) 18px var(--nav-pad,98px)}
+    .shell{height:100vh;max-width:480px;box-shadow:0 0 0 1px var(--line-soft)}
+  }
+  @media (min-width:900px){
+    /* Criar / info-sheet deixam de ser folha de baixo e passam a modal centrado, como num site a sério */
+    .sheet{
+      left:50%; right:auto; bottom:auto; top:50%;
+      width:560px; max-width:90vw;
+      border-radius:var(--r);
+      transform:translate(-50%,-46%) scale(.97);
+      opacity:0; pointer-events:none;
+      transition:transform .28s cubic-bezier(.2,.8,.2,1), opacity .25s;
+      box-shadow:0 28px 70px rgba(24,23,43,.24);
+    }
+    .sheet.show{ transform:translate(-50%,-50%) scale(1); opacity:1; pointer-events:all }
+    .sheet-grab{display:none}
+    .sheet-header{padding-top:4px}
+
+    /* Portal do cliente vira uma pré-visualização emoldurada, como uma janela de telefone flutuante */
+    .client-wrap{
+      left:50%; top:50%; right:auto; bottom:auto;
+      transform:translate(-50%,-50%) scale(.96);
+      opacity:0; pointer-events:none;
+      width:430px; height:84vh; max-height:800px;
+      border-radius:30px; overflow:hidden;
+      box-shadow:0 32px 80px rgba(24,23,43,.32);
+      border:1px solid var(--glass-6);
+      animation:none !important;
+      transition:transform .3s cubic-bezier(.2,.8,.2,1), opacity .28s;
+    }
+    .client-wrap.show{ transform:translate(-50%,-50%) scale(1); opacity:1; pointer-events:all }
+
+    /* afinação de hover — feedback de rato, não só de toque */
+    .btn:hover{filter:brightness(1.04)}
+    .job:hover{border-color:rgba(41,82,68,.28);transform:translateY(-2px);box-shadow:0 14px 28px -12px rgba(15,20,15,.22)}
+    .icon-btn:hover{cursor:pointer}
+    .pick-row:hover, .comm-card:hover{cursor:pointer}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+  :focus-visible{outline:2px solid var(--brand);outline-offset:2px}

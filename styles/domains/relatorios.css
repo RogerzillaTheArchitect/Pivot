@@ -1,0 +1,59 @@
+  /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
+     bordas/caixas/linhas — só tipografia, cor e respiro ===== */
+
+  /* Card 2 (Estatísticas Operacionais) — lista analítica simples; nenhuma barra
+     visível por padrão. A barra/gráfico só aparece no histórico de 12 meses
+     abaixo, depois de tocar num indicador. */
+  .rel-stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
+  .rel-stat-row .l{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .rel-stat-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
+  .rel-stat-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink-soft)}
+  .rel-stat-row.selected .l{color:var(--ink)}
+  .rel-stat-row.selected .l svg{color:var(--ink)}
+  .rel-stat-row.selected .v{color:var(--ink)}
+
+  /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
+  .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
+  .rel-op-row .l{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
+  .rel-op-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
+  .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink)}
+  .rel-op-row.zero{opacity:.45}
+
+  /* Fluxo Financeiro — timeline: título/metadados/valor empilhados, separados
+     por espaçamento, sem caixa envolvendo cada item. Reaproveita o motor de
+     swipe do radar (.radar-card-wrap/.radar-card) tal e qual — só o "casco"
+     visual do .card é neutralizado aqui para manter o estilo de timeline. */
+  #rel-fluxo-lista .radar-card-wrap{margin-bottom:0}
+  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-radius:0;box-shadow:none;padding:13px 0}
+  #rel-fluxo-lista .card.radar-card::before{content:none}
+  .rel-fluxo-item .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}
+  .rel-fluxo-meta span{display:inline-flex;align-items:center;gap:3px;font-size:11.5px;color:var(--neutral)}
+  .rel-fluxo-meta svg{width:11px;height:11px;flex:none}
+  .rel-fluxo-val{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;margin-top:6px;text-align:right}
+
+  /* Seletor avançado de período (modal aberto ao tocar no mês/ano) */
+  .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--ink)}
+  .rel-year-nav span{cursor:pointer;color:var(--ink-soft);width:24px;text-align:center}
+  .rel-year-nav span:hover{color:var(--ink)}
+  .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
+  .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:9px;
+    font-size:12.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
+  .rel-month-cell:hover{border-color:var(--brand)}
+  .rel-month-cell.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
+  /* despesas — cards com swipe para revelar editar/apagar */
+  .exp-wrap{position:relative;overflow:hidden;border-radius:12px;margin-bottom:8px;touch-action:pan-y}
+  .exp-actions{position:absolute;top:0;right:0;height:100%;display:flex;align-items:center;gap:8px;padding:0 12px}
+  .exp-actions button{width:34px;height:34px;border-radius:50%;border:none;display:grid;place-items:center;cursor:pointer}
+  .exp-actions .ed{background:var(--btn-06);color:var(--ink)}
+  .exp-actions .rm{background:var(--late);color:#fff}
+  .exp-actions svg{width:15px;height:15px}
+  .exp-card{position:relative;display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;transition:transform .22s cubic-bezier(.2,.8,.2,1);will-change:transform}
+  .exp-card .nm{font-size:14px;font-weight:500;color:var(--ink)}
+  .exp-card .sub{font-size:11.5px;color:var(--neutral)}
+  .exp-card .val{font-family:var(--font-numeric),inherit;font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:12px}
+  .exp-card .val .fx{display:flex;gap:10px}
+  .exp-card .val .fx svg{width:15px;height:15px;color:var(--neutral);cursor:pointer}
+

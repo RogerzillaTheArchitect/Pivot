@@ -1,0 +1,109 @@
+  /* ===== PERFIL ===== */
+  .profile-head{display:flex;align-items:center;gap:14px;margin:18px 0 22px}
+  .p-avatar{width:54px;height:54px;border-radius:14px;background:var(--ink);color:var(--paper);
+    font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center}
+  .p-avatar-wrap{position:relative;flex:none}
+  .p-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:50%;background:var(--brand);
+    color:#fff;display:grid;place-items:center;cursor:pointer;border:2px solid var(--paper)}
+  .p-avatar-edit svg{width:11px;height:11px}
+  .p-name{font-size:17px;font-weight:600}
+  .p-sub{font-size:13px;color:var(--neutral)}
+  .plist{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(122,124,116,.34);border:2px solid rgba(255,255,255,.30);border-radius:20px;overflow:hidden;margin-bottom:16px;
+    box-shadow:0 14px 32px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.16);backdrop-filter:blur(24px) saturate(190%);-webkit-backdrop-filter:blur(24px) saturate(190%);
+    color:#F5F5F2;
+    --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
+    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+  .prow{display:flex;align-items:center;gap:13px;padding:14px 16px;border-bottom:1px solid var(--line-soft);
+    cursor:pointer}
+  .prow:last-child{border-bottom:none}
+  .prow svg{width:18px;height:18px;color:var(--ink-soft);flex:none}
+  .prow .t{flex:1;font-size:14.5px;font-weight:500}
+  .prow .v{font-size:13px;color:var(--neutral)}
+  .prow .chevr{width:15px;height:15px;color:var(--neutral)}
+  .plabel{font-size:11.5px;font-weight:600;letter-spacing:.13em;color:var(--neutral);
+    margin:18px 2px 9px}
+  /* Relatórios — título pequeno só de contexto (o menu inferior já indica a
+     página; isto só ajuda a orientar, sem competir com o período) */
+  .rel-context-title{text-align:center;font-size:11px;font-weight:600;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--neutral);margin-bottom:6px}
+  .rel-period-bar{display:flex;align-items:center;justify-content:space-between;gap:6px}
+  .rel-icon-btn{width:34px;height:34px;display:grid;place-items:center;background:none;border:none;
+    color:var(--ink-soft);cursor:pointer;flex:none;transition:color .15s}
+  .rel-icon-btn:hover{color:var(--ink)}
+  .rel-icon-btn svg{width:17px;height:17px}
+  /* navegação de mês — botões altos e discretos (opacidade baixa em repouso,
+     área de toque grande) em vez de setas minúsculas ou gesto de deslizar */
+  .rel-month-row{display:flex;align-items:stretch;justify-content:center;gap:10px;flex:1;min-width:0}
+  .rel-nav-tall{width:42px;min-height:52px;border:none;background:none;color:var(--ink-faint);
+    opacity:.32;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    flex:none;transition:opacity .15s}
+  .rel-nav-tall:hover{opacity:.75}
+  .rel-nav-tall svg{width:17px;height:17px}
+  .rel-month-center{display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
+  .rel-mes-big{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-weight:400;font-size:28px;color:var(--ink);letter-spacing:0;line-height:1}
+  .rel-mes-big.compact{font-size:15px;letter-spacing:0}
+  .rel-ano-small{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10px;font-weight:400;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral);margin-top:3px}
+
+  /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo.
+     Sem cantos arredondados em pílula (isso lê como progress bar de UI) — traço
+     fino e reto, mais perto de um gráfico de relatório do que de um componente. */
+  .rel-line-item{margin-bottom:20px}
+  .rel-line-item:last-child{margin-bottom:0}
+  .rel-line-value-row{display:flex;justify-content:flex-end;margin-bottom:7px}
+  .rel-line-value{font-family:var(--font-numeric),inherit;font-size:15px;font-weight:600;color:var(--ink)}
+  .rel-line-bar{height:15px;border-radius:4px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .rel-line-label{display:block;margin-top:7px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft)}
+  .venc-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .venc-icon{width:34px;height:34px;color:#fff;display:grid;place-items:center;flex:none}
+  .venc-icon svg{width:17px;height:17px}
+  .venc-title{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--ink)}
+  .venc-row{display:flex;align-items:center;gap:13px;padding:13px 0;border-top:1px solid var(--line-soft);cursor:pointer}
+  .venc-row:first-child{border-top:none}
+  .venc-date{width:42px;height:42px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;background:var(--c-date-bg-ok)}
+  .venc-date.atrasado{background:var(--paper-2)}
+  .venc-date .d{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:16px;color:var(--c-text-green);line-height:1}
+  .venc-date.atrasado .d{color:var(--ink)}
+  .venc-date .m{font-size:9px;font-weight:600;letter-spacing:.04em;color:var(--c-text-green);margin-top:1px}
+  .venc-date.atrasado .m{color:var(--ink-soft)}
+  .venc-info{flex:1;min-width:0}
+  .venc-info .cli{font-size:14px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px}
+  .urgent-dot{width:7px;height:7px;border-radius:50%;background-color:var(--late);flex:none;display:inline-block}
+  .notif-dot{min-width:15px;height:15px;padding:0 3px;border-radius:8px;background:var(--urgent);
+    color:#1B1B16;font-size:9.5px;font-weight:700;line-height:1;box-sizing:border-box;
+    align-items:center;justify-content:center}
+  .priority-dot,.dot-late,.notif-dot,.urgent-dot{
+    filter:blur(.4px);animation:featherBreathe 3s ease-in-out infinite}
+  @keyframes featherBreathe{
+    0%,100%{filter:blur(.4px) brightness(1.3);transform:scale(1)}
+    50%{filter:blur(.4px) brightness(0.7);transform:scale(1.28)}
+  }
+  @media (prefers-reduced-motion:reduce){.priority-dot,.dot-late,.notif-dot,.urgent-dot{animation:none}}
+  /* pontos simples, estáticos: dias do calendário e legenda financeira (não pulsam) */
+  .cd{background:rgba(255,255,255,.85)}
+  .mrl-dot{width:20px;height:20px;border-radius:50%;flex:none;background:transparent;border:2px solid currentColor}
+  .venc-desc{font-size:12.5px;color:var(--ink-soft);flex:1;min-width:0}
+  .venc-right{display:flex;flex-direction:column;align-items:flex-end;gap:1px;flex:none}
+  .venc-amount{font-size:14.5px;font-weight:600;color:var(--ink)}
+  .venc-status{font-size:11.5px;color:var(--neutral)}
+  .venc-right.breve .venc-amount,.venc-right.breve .venc-status{color:var(--c-text-green)}
+  .venc-chev{width:16px;height:16px;color:var(--neutral);flex:none}
+  .ring-card{position:relative;width:172px;height:172px;margin:18px auto 8px}
+  .ring-svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .ring-bg{fill:none;stroke:var(--c-track-lt);stroke-width:10}
+  .ring-fg{fill:none;stroke:var(--brand);stroke-width:10;stroke-linecap:round;
+    stroke-dasharray:326.7;stroke-dashoffset:326.7;transition:stroke-dashoffset 1.1s cubic-bezier(.2,.8,.2,1)}
+  .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring-pct{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;font-size:22px;letter-spacing:-.01em}
+  .ring-label{font-size:12px;color:var(--neutral);margin-top:2px;text-align:center;max-width:110px}
+  .ring-legend{display:flex;justify-content:center;gap:22px;font-size:13px;color:var(--ink-soft);margin-bottom:4px}
+  .ring-legend b{color:var(--ink);font-weight:600}
+  .rel-summary{font-size:12.5px;color:var(--ink-soft);margin-top:8px;padding:10px 12px;background:var(--paper-2);border-radius:10px}
+  .barchart{display:flex;align-items:flex-end;gap:9px;height:118px;padding:8px 2px 0;margin-bottom:10px}
+  .bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end;position:relative}
+  .bar-goal-line{position:absolute;left:6%;right:6%;height:2px;background:var(--ink);opacity:.32;z-index:2}
+  .bar{width:100%;max-width:30px;border-radius:8px 8px 4px 4px;background:var(--c-track-lt);height:0;
+    transition:height 1s cubic-bezier(.2,.8,.2,1)}
+  .bar.now{background:var(--brand)}
+  .bar-mo{font-size:11px;color:var(--neutral)}
+

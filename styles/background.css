@@ -1,0 +1,42 @@
+  /* ===== BACKGROUND ANIMADO — refração de vidro translúcido =====
+     Fixo em tons escuros independentemente do toggle "Modo escuro": os cards/textos
+     da app estão bloqueados em vidro escuro+texto claro (ver histórico), então um
+     fundo claro os deixaria ilegíveis. Paleta clara (--blob-*-light, não usada)
+     fica pronta para quando os cards também ficarem theme-aware.
+     Técnica: campos de cor grandes com gradientes de 3 paradas (sem corte abrupto,
+     para não gerar anéis/faixas no blur) sobrepostos com mix-blend-mode distintos —
+     é a interação entre camadas que lê como luz atravessando vidro, não uma forma isolada.
+     feTurbulence/feDisplacementMap animado foi testado e descartado: recalcular a
+     distorção a cada frame trava o render (custo de CPU, não é GPU-compositável). */
+  /* animação de vidro/blobs desligada por completo — fica só o grafite plano
+     do .shell (#131310), sem movimento e sem qualquer resquício de verde */
+  .bg-blobs{display:none}
+  .bg-sheen{display:none}
+  .bg-blob{position:absolute;inset:0;will-change:transform}
+  .bg-blob-1{filter:blur(96px);opacity:.85;mix-blend-mode:normal;
+    background:radial-gradient(ellipse 88% 72% at 20% 18%,var(--blob-1) 0%,rgba(21,22,15,.5) 42%,transparent 74%);
+    animation:driftA 34s ease-in-out infinite alternate}
+  .bg-blob-2{filter:blur(102px);opacity:.75;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 92% 76% at 80% 78%,var(--blob-2) 0%,rgba(29,31,30,.45) 44%,transparent 76%);
+    animation:driftB 38s ease-in-out infinite alternate;animation-delay:-12s}
+  .bg-blob-3{filter:blur(108px);opacity:.6;mix-blend-mode:overlay;
+    background:radial-gradient(ellipse 96% 82% at 48% 48%,var(--blob-3) 0%,rgba(25,26,21,.35) 46%,transparent 80%);
+    animation:driftC 30s ease-in-out infinite alternate;animation-delay:-21s}
+  .bg-blob-4{filter:blur(78px);opacity:.18;mix-blend-mode:soft-light;
+    background:radial-gradient(ellipse 42% 36% at 70% 26%,var(--blob-accent) 0%,transparent 62%);
+    animation:driftD 32s ease-in-out infinite alternate;animation-delay:-6s}
+  .bg-sheen{position:absolute;inset:-30%;z-index:0;pointer-events:none;mix-blend-mode:soft-light;opacity:.45;
+    filter:blur(60px);will-change:transform;
+    background:linear-gradient(128deg,transparent 30%,rgba(255,255,255,.12) 50%,transparent 68%);
+    animation:sheenDrift 42s ease-in-out infinite alternate}
+  @keyframes driftA{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(-5%,4%) scale(1.12,.94) rotate(5deg)}100%{transform:translate(4%,-5%) scale(.93,1.08) rotate(-4deg)}}
+  @keyframes driftB{0%{transform:translate(0,0) scale(1,1) rotate(0deg)}50%{transform:translate(5%,-4%) scale(.92,1.1) rotate(-6deg)}100%{transform:translate(-4%,5%) scale(1.1,.9) rotate(5deg)}}
+  @keyframes driftC{0%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(-3%,-4%) scale(1.08) rotate(7deg)}100%{transform:translate(4%,3%) scale(.94) rotate(-6deg)}}
+  @keyframes driftD{0%{opacity:.18;transform:translate(0,0) scale(1)}50%{opacity:.28;transform:translate(-4%,4%) scale(1.18)}100%{opacity:.12;transform:translate(4%,-3%) scale(.88)}}
+  @keyframes sheenDrift{0%{transform:translate(-6%,-3%) rotate(0deg)}50%{transform:translate(5%,4%) rotate(4deg)}100%{transform:translate(-3%,5%) rotate(-3deg)}}
+  @media (prefers-reduced-motion:reduce){.bg-blob,.bg-sheen{animation:none}}
+  /* Canvas WebGL desligado — o glow/streaks lia como cyberpunk/neon, não como o
+     "grafite premium, extremamente subtil" pedido. Os blobs CSS abaixo (já
+     silenciosos, sem verde) ficam como único fundo. Ficheiro/JS mantidos
+     intactos, só deixam de aparecer. */
+  #bg-glass-canvas{display:none}
