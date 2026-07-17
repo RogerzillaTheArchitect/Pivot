@@ -113,26 +113,21 @@
   .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
   .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
   .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
-  /* sinal de urgência do card de tarefa: um degradê sutil só na BORDA do card
-     (não mais um "banho" cobrindo o interior), respeitando o border-radius via
-     a técnica de mask (dois gradientes, um recortado pro content-box, XOR entre
-     eles = só sobra o anel da borda). Atrasado = bordô, urgente (hoje/amanhã) =
-     amarelo leve, normal (2+ dias) = verde escuro. O .radar-tag deixou de ficar
-     em fluxo no topo do card e virou um badge fixo no canto superior direito,
-     com o texto de prazo (ex.: "2 Dias atraso", "Vence Hoje", "Em 5 dias"). */
+  /* sinal de urgência do card de tarefa: um brilho suave que sangra a partir
+     das bordas pra dentro do card, dissolvendo-se no fundo escuro (inset
+     box-shadow com blur grande, em vez de uma faixa/anel de aresta dura) —
+     mesma linguagem de um halo de luz colorida ao redor de um cartão escuro.
+     Atrasado = bordô, urgente (hoje/amanhã) = amarelo leve, normal (2+ dias)
+     = verde escuro. O .radar-tag fica fixo no canto superior direito, com o
+     texto de prazo (ex.: "2 Dias atraso", "Vence Hoje", "Em 5 dias"). */
   .card.radar-card{
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10)}
-  .card.radar-card::before{
-    content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
-    padding:1.5px;
-    -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite:xor;
-    mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite:exclude}
-  .card.radar-card.late::before{background:linear-gradient(135deg,rgba(122,33,56,.95) 0%,rgba(122,33,56,.3) 55%,transparent 100%)}
-  .card.radar-card.soon::before{background:linear-gradient(135deg,rgba(232,197,71,.85) 0%,rgba(232,197,71,.22) 55%,transparent 100%)}
-  .card.radar-card.normal::before{background:linear-gradient(135deg,rgba(31,74,52,.95) 0%,rgba(31,74,52,.3) 55%,transparent 100%)}
-  .card.radar-card>*{position:relative;z-index:1}
+  .card.radar-card.late{border-color:rgba(122,33,56,.4);
+    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(122,33,56,.42)}
+  .card.radar-card.soon{border-color:rgba(232,197,71,.35);
+    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(232,197,71,.32)}
+  .card.radar-card.normal{border-color:rgba(31,74,52,.4);
+    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(31,74,52,.42)}
   .radar-card .card-title{padding-right:88px}
   .radar-tag{position:absolute;top:12px;right:12px;z-index:2;display:inline-flex;align-items:center;
     padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:600;border:1px solid;
@@ -163,6 +158,14 @@
   .btn:disabled,.btn.done{opacity:.5;cursor:default;pointer-events:none}
   .card-title{font-size:15.5px;font-weight:500}
   .card-meta{font-size:13px;color:var(--ink-soft);margin-top:2px}
+  /* linhas de indicador com ícone (valor, endereço, duração, assinatura
+     pendente…) — ícone à esquerda, texto à direita, uma por tipo de dado
+     presente no card. Usado tanto nos cards de Tarefas (Dashboard) quanto
+     nos cards de Trabalhos/Projetos (lista completa). */
+  .card-rows{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+  .card-info-row{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);min-width:0}
+  .card-info-row span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .card-info-row svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
   .card-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px;padding-top:12px;
     border-top:1px solid var(--btn-07)}
   .card-info-item{display:flex;flex-direction:column;gap:3px;min-width:0}

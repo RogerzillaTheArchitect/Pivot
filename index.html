@@ -132,7 +132,7 @@
         <div class="lp-shot-body">
           <div class="lp-shot-nav">
             <div class="lp-shot-nav-item on"><span></span>Dashboard</div>
-            <div class="lp-shot-nav-item"><span></span>Trabalhos</div>
+            <div class="lp-shot-nav-item"><span></span>Projetos</div>
             <div class="lp-shot-nav-item"><span></span>Contratos</div>
             <div class="lp-shot-nav-item"><span></span>Clientes</div>
             <div class="lp-shot-nav-item"><span></span>Financeiro</div>
@@ -863,12 +863,18 @@
 
     <div class="sheet-body" id="sheetBody">
 
-      <!-- HOME — 4 cartões do mesmo tamanho -->
+      <!-- HOME — grade de opções de criação -->
       <div class="panel show" data-panel="home">
         <div class="sheet-grid">
           <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
           <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
+          <div class="sheet-item" onclick="pushPanel('contrato')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span data-t="sheet.contract">Contrato</span></div>
+          <div class="sheet-item" onclick="closeSheet();abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span data-t="sheet.financialMovement">Movimentação Financeira</span></div>
+          <div class="sheet-item" onclick="closeSheet();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span data-t="sheet.goalsLimits">Metas e Limites</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.servicesSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><span data-t="sheet.services">Serviços</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.reminderSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
+          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.listSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
           <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span data-t="sheet.template">Modelo</span></div>
         </div>
       </div>
@@ -2156,7 +2162,7 @@
     "currency.real": { pt:"R$ Real", en:"R$ Real", es:"R$ Real" },
     // --- Dashboard — cartões ---
     "dashboard.pendingPayments": { pt:"Pagamentos pendentes", en:"Pending payments", es:"Pagos pendientes" },
-    "dashboard.recentJobs": { pt:"Trabalhos recentes", en:"Recent jobs", es:"Trabajos recientes" },
+    "dashboard.recentJobs": { pt:"Projetos recentes", en:"Recent projects", es:"Proyectos recientes" },
     "dashboard.upcomingDeliveries": { pt:"Próximas entregas", en:"Upcoming deliveries", es:"Próximas entregas" },
     // --- Email ---
     "email.greeting": { pt:"Olá ", en:"Hello ", es:"Hola " },
@@ -2174,7 +2180,7 @@
     "email.eventDetailsTitle": { pt:"Detalhes do Evento", en:"Event Details", es:"Detalles del Evento" },
     "email.detail.date": { pt:"Data", en:"Date", es:"Fecha" },
     "email.detail.location": { pt:"Local", en:"Location", es:"Lugar" },
-    "email.detail.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
+    "email.detail.job": { pt:"Projeto", en:"Project", es:"Proyecto" },
     "email.detail.invitedBy": { pt:"Convidado por", en:"Invited by", es:"Invitado por" },
     "email.badge.jobCollab": { pt:"Colaborador em trabalho", en:"Job collaborator", es:"Colaborador en trabajo" },
     "email.title.jobCollabInvite": { pt:"Convidaram-no para colaborar num trabalho", en:"You've been invited to collaborate on a job", es:"Le invitaron a colaborar en un trabajo" },
@@ -2452,7 +2458,7 @@
     "home.closed": { pt:"Fechados", en:"Closed", es:"Cerrados" },
     "home.delivered": { pt:"Entregues", en:"Delivered", es:"Entregados" },
     "home.done": { pt:"Realizados", en:"Done", es:"Completados" },
-    "home.jobs": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
+    "home.jobs": { pt:"Projetos", en:"Projects", es:"Proyectos" },
     "home.needsAttention": { pt:"Pendências", en:"Pending", es:"Pendientes" },
     "home.ofLimit": { pt:"do limite", en:"of limit", es:"del límite" },
     "home.ofTarget": { pt:"do previsto", en:"of target", es:"del objetivo" },
@@ -2516,7 +2522,7 @@
     "job.contract.signedByPrefix2": { pt:"Assinado por ", en:"Signed by ", es:"Firmado por " },
     "job.delivery.expectedPrefix": { pt:"prevista ", en:"expected ", es:"prevista " },
     "job.delivery.final": { pt:"Entrega final", en:"Final delivery", es:"Entrega final" },
-    "job.detail.back": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
+    "job.detail.back": { pt:"Projetos", en:"Projects", es:"Proyectos" },
     "job.detail.ceremonyLocation": { pt:"Local da cerimónia", en:"Ceremony location", es:"Lugar de la ceremonia" },
     "job.detail.guestCount": { pt:"Nº de convidados", en:"Number of guests", es:"Nº de invitados" },
     "job.detail.imagesCount": { pt:"imagens", en:"images", es:"imágenes" },
@@ -2579,13 +2585,13 @@
     "payment.fileTooLarge": { pt:"Arquivo muito grande. O limite é 15 MB.", en:"File too large. The limit is 15 MB.", es:"Archivo demasiado grande. El límite es 15 MB." },
     "payment.receiptSent": { pt:"Comprovante enviado. Aguardando confirmação.", en:"Receipt sent. Awaiting confirmation.", es:"Comprobante enviado. Esperando confirmación." },
     "payment.receiptReceivedConfirm": { pt:"comprovante recebido, confirme", en:"receipt received, confirm", es:"comprobante recibido, confirme" },
-    "history.jobArchivedDone": { pt:"Trabalho concluído e arquivado", en:"Job completed and archived", es:"Trabajo concluido y archivado" },
-    "history.jobArchivedDeleted": { pt:"Trabalho deletado", en:"Job deleted", es:"Trabajo eliminado" },
-    "history.jobRestored": { pt:"Trabalho restaurado do histórico", en:"Job restored from history", es:"Trabajo restaurado del historial" },
+    "history.jobArchivedDone": { pt:"Projeto concluído e arquivado", en:"Project completed and archived", es:"Proyecto concluido y archivado" },
+    "history.jobArchivedDeleted": { pt:"Projeto deletado", en:"Project deleted", es:"Proyecto eliminado" },
+    "history.jobRestored": { pt:"Projeto restaurado do histórico", en:"Project restored from history", es:"Proyecto restaurado del historial" },
     "history.clientNotified": { pt:"Cliente notificado por email", en:"Client notified by email", es:"Cliente notificado por email" },
-    "history.deleteConfirm": { pt:"Deletar o trabalho de {client}? Vai para o Histórico e pode ser restaurado depois.", en:"Delete {client}'s job? It moves to History and can be restored later.", es:"¿Eliminar el trabajo de {client}? Va al Historial y se puede restaurar después." },
+    "history.deleteConfirm": { pt:"Deletar o projeto de {client}? Vai para o Histórico e pode ser restaurado depois.", en:"Delete {client}'s project? It moves to History and can be restored later.", es:"¿Eliminar el proyecto de {client}? Va al Historial y se puede restaurar después." },
     "job.timeline": { pt:"Timeline", en:"Timeline", es:"Línea de tiempo" },
-    "job.typeDefault": { pt:"Trabalho", en:"Job", es:"Trabajo" },
+    "job.typeDefault": { pt:"Projeto", en:"Project", es:"Proyecto" },
     // --- Trabalhos — lista e filtros ---
     "jobs.alert.clientUnanswered": { pt:"Informações do Cliente por responder", en:"Client details unanswered", es:"Datos del cliente sin responder" },
     "jobs.alert.deliveryToday": { pt:"Entrega prevista hoje", en:"Delivery due today", es:"Entrega prevista hoy" },
@@ -2731,7 +2737,7 @@
     "landing.priceCustom": { pt:"Sob consulta", en:"Contact us", es:"Bajo consulta" },
     "landing.li.jobs3": { pt:"3 trabalhos ativos", en:"3 active jobs", es:"3 trabajos activos" },
     "landing.li.jobs10": { pt:"10 trabalhos ativos", en:"10 active jobs", es:"10 trabajos activos" },
-    "landing.li.jobsUnlimited": { pt:"Trabalhos ilimitados", en:"Unlimited jobs", es:"Trabajos ilimitados" },
+    "landing.li.jobsUnlimited": { pt:"Projetos ilimitados", en:"Unlimited projects", es:"Proyectos ilimitados" },
     "landing.li.clients100": { pt:"100 clientes", en:"100 clients", es:"100 clientes" },
     "landing.li.clientsUnlimited": { pt:"Clientes ilimitados", en:"Unlimited clients", es:"Clientes ilimitados" },
     "landing.li.user1": { pt:"1 utilizador", en:"1 user", es:"1 usuario" },
@@ -2802,7 +2808,7 @@
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
     "nav.home": { pt:"RESUMO", en:"Dashboard", es:"Inicio" },
-    "nav.jobs": { pt:"Trabalhos", en:"Jobs", es:"Trabajos" },
+    "nav.jobs": { pt:"Projetos", en:"Projects", es:"Proyectos" },
     "nav.libraries": { pt:"Bibliotecas", en:"Libraries", es:"Bibliotecas" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
     "nav.search": { pt:"Pesquisar", en:"Search", es:"Buscar" },
@@ -2975,7 +2981,7 @@
     "contacts.received": { pt:"Recebido", en:"Received", es:"Recibido" },
     "contacts.pending": { pt:"Por receber", en:"Outstanding", es:"Por recibir" },
     "contacts.history": { pt:"Histórico de trabalhos", en:"Job history", es:"Historial de trabajos" },
-    "contacts.together": { pt:"Trabalhos em conjunto", en:"Jobs together", es:"Trabajos en conjunto" },
+    "contacts.together": { pt:"Projetos em conjunto", en:"Projects together", es:"Proyectos en conjunto" },
     "contacts.noHistory": { pt:"Sem trabalhos registados com este contacto.", en:"No jobs recorded with this contact.", es:"Sin trabajos registrados con este contacto." },
     "contacts.type": { pt:"Tipo", en:"Type", es:"Tipo" },
     "contacts.noEmail": { pt:"Sem email", en:"No email", es:"Sin email" },
@@ -2997,14 +3003,14 @@
     // --- Lembretes (legado) ---
     "reminders.applied": { pt:"\" aplicado a todos os trabalhos.", en:"\" applied to all jobs.", es:"\" aplicado a todos los trabajos." },
     // --- Relatórios ---
-    "reports.activeJobs": { pt:"Trabalhos ativos", en:"Active jobs", es:"Trabajos activos" },
+    "reports.activeJobs": { pt:"Projetos ativos", en:"Active projects", es:"Proyectos activos" },
     "reports.chart": { pt:"Receita mensal — recebido vs. previsto", en:"Monthly revenue — received vs. projected", es:"Ingresos mensuales — recibido vs. previsto" },
     "reports.performanceChart": { pt:"Desempenho do mês atual", en:"Current month performance", es:"Rendimiento del mes actual" },
     "reports.closedThisMonth": { pt:"Fechados este mês: ", en:"Closed this month: ", es:"Cerrados este mes: " },
     "reports.closedLastMonth": { pt:" · Mês anterior: ", en:" · Last month: ", es:" · Mes anterior: " },
     "reports.noHistoryYet": { pt:"Ainda sem histórico suficiente para comparar meses.", en:"Not enough history yet to compare months.", es:"Aún no hay suficiente historial para comparar meses." },
     "reports.completedDeliveries": { pt:"Entregas concluídas", en:"Completed deliveries", es:"Entregas completadas" },
-    "reports.completedJobs": { pt:"Trabalhos concluídos", en:"Completed jobs", es:"Trabajos completados" },
+    "reports.completedJobs": { pt:"Projetos concluídos", en:"Completed projects", es:"Proyectos completados" },
     "reports.diff.prefix": { pt:" · Diferença: ", en:" · Difference: ", es:" · Diferencia: " },
     "reports.ofProjected": { pt:"do previsto", en:"of projected", es:"de lo previsto" },
     "reports.ofCeiling": { pt:"do teto", en:"of ceiling", es:"del techo" },
@@ -3082,10 +3088,19 @@
     "contact.type.other": { pt:"Outro", en:"Other", es:"Otro" },
     "wizard.createContact": { pt:"Criar contacto →", en:"Create contact →", es:"Crear contacto →" },
     "toast.contactCreated": { pt:"Contacto criado: ", en:"Contact created: ", es:"Contacto creado: " },
-    "sheet.job": { pt:"Trabalho", en:"Job", es:"Trabajo" },
+    "sheet.job": { pt:"Projeto", en:"Project", es:"Proyecto" },
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
     "sheet.template": { pt:"Modelo", en:"Template", es:"Plantilla" },
+    "sheet.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "sheet.financialMovement": { pt:"Movimentação Financeira", en:"Financial Entry", es:"Movimiento Financiero" },
+    "sheet.goalsLimits": { pt:"Metas e Limites", en:"Goals & Limits", es:"Metas y Límites" },
+    "sheet.services": { pt:"Serviços", en:"Services", es:"Servicios" },
+    "sheet.reminder": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
+    "sheet.list": { pt:"Lista", en:"List", es:"Lista" },
+    "sheet.servicesSoon": { pt:"Criação de serviços em breve.", en:"Service creation coming soon.", es:"Creación de servicios próximamente." },
+    "sheet.reminderSoon": { pt:"Lembretes avulsos em breve.", en:"Standalone reminders coming soon.", es:"Recordatorios independientes próximamente." },
+    "sheet.listSoon": { pt:"Listas avulsas em breve.", en:"Standalone lists coming soon.", es:"Listas independientes próximamente." },
     // --- Assinatura ---
     "signature.clear": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "signature.noneYet": { pt:"Ainda sem assinatura guardada", en:"No signature saved yet", es:"Aún sin firma guardada" },
@@ -3254,11 +3269,11 @@
     "toast.goalsUpdated": { pt:"Metas atualizadas.", en:"Goals updated.", es:"Metas actualizadas." },
     "toast.googleSynced": { pt:"Google Calendar sincronizado.", en:"Google Calendar synced.", es:"Google Calendar sincronizado." },
     "toast.imageError": { pt:"Não foi possível carregar a imagem.", en:"Could not load the image.", es:"No se pudo cargar la imagen." },
-    "toast.jobCreated": { pt:"Trabalho criado", en:"Job created", es:"Trabajo creado" },
-    "toast.jobNotFound": { pt:"Trabalho não encontrado.", en:"Job not found.", es:"Trabajo no encontrado." },
-    "toast.jobArchivedDone": { pt:"Trabalho concluído — movido para o Histórico.", en:"Job completed — moved to History.", es:"Trabajo concluido — movido al Historial." },
-    "toast.jobArchivedDeleted": { pt:"Trabalho deletado — movido para o Histórico.", en:"Job deleted — moved to History.", es:"Trabajo eliminado — movido al Historial." },
-    "toast.jobRestored": { pt:"Trabalho restaurado.", en:"Job restored.", es:"Trabajo restaurado." },
+    "toast.jobCreated": { pt:"Projeto criado", en:"Project created", es:"Proyecto creado" },
+    "toast.jobNotFound": { pt:"Projeto não encontrado.", en:"Project not found.", es:"Proyecto no encontrado." },
+    "toast.jobArchivedDone": { pt:"Projeto concluído — movido para o Histórico.", en:"Project completed — moved to History.", es:"Proyecto concluido — movido al Historial." },
+    "toast.jobArchivedDeleted": { pt:"Projeto deletado — movido para o Histórico.", en:"Project deleted — moved to History.", es:"Proyecto eliminado — movido al Historial." },
+    "toast.jobRestored": { pt:"Projeto restaurado.", en:"Project restored.", es:"Proyecto restaurado." },
     "toast.linkCopied": { pt:"Link copiado.", en:"Link copied.", es:"Enlace copiado." },
     "toast.linkGenerated": { pt:"Link gerado.", en:"Link generated.", es:"Enlace generado." },
     "toast.clientNotified": { pt:"Cliente notificado por email.", en:"Client notified by email.", es:"Cliente notificado por email." },
@@ -3814,15 +3829,41 @@
      (alta/média) = amarelo, demais tarefas do mês (normal) = verde. Todo nível
      agora usa a mesma linguagem visual (tag + degradê), nada de ícone de alerta
      nem bolinha solta. */
+  /* ícones dos indicadores de conteúdo dos cards (Tarefas do Dashboard e
+     Trabalhos/Projetos) — um ícone por tipo de dado, sempre à esquerda do
+     texto correspondente. */
+  const CARD_ROW_ICONS={
+    money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
+    pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+    client:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
+  };
+  function cardInfoRow(kind, text){
+    if(!text) return '';
+    const icon=CARD_ROW_ICONS[kind]||'';
+    return '<div class="card-info-row">'+icon+'<span>'+escapeHtml(String(text))+'</span></div>';
+  }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
     const tagHtml='<span class="radar-tag '+urgClasse+'">'+gerarLabelTemporal(it.dataISO, it.hora)+'</span>';
+    let rows='';
+    if(it.tipo==='contrato'){
+      rows+=cardInfoRow('pen', it.secundaria);
+    } else if(it.tipo==='pagamento'){
+      rows+=cardInfoRow('money', fmtMoney(it.principal)+(it.secundaria?(' · '+it.secundaria):''));
+    } else if(it.tipo==='evento'){
+      if(it.principal){
+        const isDuracao=/^Dura[cç][aã]o/i.test(it.principal);
+        rows+=cardInfoRow(isDuracao?'clock':'pin', isDuracao ? it.principal.replace(/^Dura[cç][aã]o\s*/i,'') : it.principal);
+      }
+      if(it.secundaria) rows+=cardInfoRow('clock', it.secundaria.replace(/^Dura[cç][aã]o\s*/i,''));
+    }
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
     card+=tagHtml;
     card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
-    if(it.principal) card+='<div class="card-meta">'+escapeHtml(it.principal)+'</div>';
-    if(it.secundaria) card+='<div class="card-meta" style="color:var(--neutral);font-size:12px">'+escapeHtml(it.secundaria)+'</div>';
+    if(rows) card+='<div class="card-rows">'+rows+'</div>';
     card+='</div>';
     return '<div class="radar-card-wrap">'+
       '<div class="radar-swipe-actions left">'+
@@ -7681,7 +7722,7 @@
     if(job.modo==='rapido'){
       html+='<div class="warn-box" style="background:var(--paper-2);border-color:var(--line);color:var(--ink-soft);margin-bottom:14px">'+
         iconWrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')+
-        '<div>Trabalho rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing, a não ser que precise.</div></div>';
+        '<div>Projeto rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing, a não ser que precise.</div></div>';
     }
 
     html+=mapCardHtml(job);
@@ -9004,8 +9045,17 @@
     div.dataset.executado= c.executado?'1':'0';
     div.dataset.entregue= c.entregue?'1':'0';
     const signed=c.fechado;
+    /* mesmos indicadores com ícone usados nos cards de Tarefas (Dashboard) —
+       cardInfoRow/CARD_ROW_ICONS — pra manter a mesma linguagem visual entre
+       a versão resumida (Tarefas) e a versão completa em lista (Projetos). */
+    let rows='';
+    if(!signed) rows+=cardInfoRow('pen', t('jobs.filter.awaiting'));
+    const proxPagamento=(job.payments||[]).find(p=>p.status!=='pago' && p.dueDate);
+    if(proxPagamento) rows+=cardInfoRow('money', fmtMoney(proxPagamento.amount)+(proxPagamento.label?(' · '+proxPagamento.label):''));
+    if(job.local) rows+=cardInfoRow('pin', job.local);
+    if(job.duracaoHoras!=null) rows+=cardInfoRow('clock', formatarDuracao(job.duracaoHoras));
     div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+' · '+escapeHtml(job.date||'data a definir')+'</div></div></div><div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div>'+
-      '<div class="job-next"><div class="nd" style="background:'+(signed?'var(--brand)':'var(--pend)')+'"></div><span>'+(signed?t('jobs.status.signed'):t('jobs.filter.awaiting'))+'</span></div>';
+      (rows ? '<div class="card-rows">'+rows+'</div>' : '');
   }
   function updateJobCard(id){
     const job=jobsData[id];
@@ -10589,7 +10639,8 @@
     tl.querySelector('.m').textContent='pago agora';
     const card=document.querySelector('#v-trabalhos .job[onclick*="sofia"]');
     if(card){ card.dataset.payment='paid'; card.dataset.overdue='0'; card.dataset.pending='0';
-      card.querySelector('.job-next').innerHTML='<div class="nd" style="background:var(--done)"></div><span>Pagamento regularizado</span>'; }
+      const jn=card.querySelector('.job-next');
+      if(jn) jn.innerHTML='<div class="nd" style="background:var(--done)"></div><span>Pagamento regularizado</span>'; }
     showToast(t('payment.markedPaid'));
   }
 
