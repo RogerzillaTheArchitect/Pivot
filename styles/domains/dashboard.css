@@ -144,11 +144,11 @@
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
-  /* Tarefas: cards colados em lista (sem espaço entre eles), mas cada um com
-     fundo e cantos totalmente arredondados próprios — em vez de um único bloco
-     de vidro com divisórias internas retas. */
-  #tasks-list .radar-card-wrap{margin-bottom:0}
-  #tasks-list .radar-card-wrap .card{border-radius:var(--r)}
+  /* Tarefas: cada card com fundo e cantos totalmente arredondados próprios,
+     leve espaçamento entre eles, e todos com a mesma altura (min-height cobre
+     o conteúdo mais alto — título + até duas linhas de indicador). */
+  #tasks-list .radar-card-wrap{margin-bottom:10px}
+  #tasks-list .radar-card-wrap .card{border-radius:var(--r);min-height:112px}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
   .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(217,86,76,.13)}
