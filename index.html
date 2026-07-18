@@ -1737,14 +1737,15 @@
     if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
     const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
-    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
     showToast(t('payment.receiptSent'));
     renderPortalPublicoPrincipal();
   }
   /* ===== Triagem / Seleção / Ajustes no Portal do Cliente =====
      Cada fase só aparece se o proprietário a ligou na Etapa 5 do wizard.
-     O cliente marca como concluída, o que atualiza a timeline e (via
-     dispararEmailEvento) avisa o proprietário. */
+     O cliente marca como concluída, o que atualiza a timeline — o
+     proprietário é avisado só na app (sino de notificações, via
+     job.history/gerarAtividadeCliente), sem email, já que a ação passou a
+     ser dele, não do cliente. */
   function renderEntregaAprovacaoPublico(job){
     const e=job.entrega;
     if (!e || (!e.triagem && !e.selecao && !e.permiteAjustes)) return '';
@@ -1787,7 +1788,6 @@
     if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
     const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
-    if (data2 && data2.ownerEmail) dispararEmailEvento('atualizacaoProjeto', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
   }
   async function enviarObservacaoAjustePublico(index){
@@ -1961,7 +1961,6 @@
     if (error || !data || !data.ok){ alert('Não foi possível assinar. Tenta novamente.'); return; }
     const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
-    if (data2 && data2.ownerEmail) dispararEmailEvento('contratoAssinado', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
   }
   async function enviarBriefingPublico(){
@@ -1977,7 +1976,6 @@
     if (error || !data || !data.ok){ alert('Não foi possível enviar. Tenta novamente.'); return; }
     const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
-    if (data2 && data2.ownerEmail) dispararEmailEvento('briefingPreenchido', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
   }
 
