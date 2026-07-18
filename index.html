@@ -654,13 +654,6 @@
       <section class="view" id="v-bibliotecas">
         <div class="page-head">
           <div class="page-title" data-t="nav.libraries">Bibliotecas</div>
-          <div class="bib-create-wrap">
-            <span class="inline-link" style="font-size:12.5px;display:inline-flex;align-items:center;gap:4px" onclick="toggleBibCreateMenu(event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M12 5v14M5 12h14"/></svg><span data-t="library.create">criar</span></span>
-            <div class="bib-create-menu" id="bib-create-menu">
-              <div onclick="closeBibCreateMenu();abrirCriarModeloBiblioteca()"><span data-t="library.createNew">Novo Contrato</span></div>
-              <div onclick="closeBibCreateMenu();showToast(t('library.importSoon'))"><span data-t="library.importFile">Importar Arquivo</span></div>
-            </div>
-          </div>
         </div>
 
         <div class="card bib-page-card">
@@ -2344,7 +2337,6 @@
     "explore.editableModel": { pt:"Modelo · editável", en:"Template · editable", es:"Modelo · editable" },
     "explore.empty": { pt:"Em crescimento. Sugere um modelo que gostarias de ver aqui.", en:"Growing. Suggest a template you’d like to see here.", es:"En crecimiento. Sugiere una plantilla que te gustaría ver aquí." },
     "explore.library": { pt:"Biblioteca Pivot", en:"Pivot Library", es:"Biblioteca Pivot" },
-    "library.create": { pt:"criar", en:"create", es:"crear" },
     "library.searchPlaceholder": { pt:"Explorar biblioteca…", en:"Explore library…", es:"Explorar biblioteca…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
     "library.origin.official": { pt:"Oficial Pivot", en:"Official Pivot", es:"Oficial Pivot" },
@@ -2359,16 +2351,8 @@
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Validação Jurídica", en:"Legal Validation", es:"Validación Jurídica" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
-    "library.badge.popular": { pt:"Popular", en:"Popular", es:"Popular" },
-    "library.badge.recommended": { pt:"Recomendado", en:"Recommended", es:"Recomendado" },
-    "library.selo.oficialDesc": { pt:"Modelo criado e mantido pela equipa Pivot.", en:"Template created and maintained by the Pivot team.", es:"Plantilla creada y mantenida por el equipo Pivot." },
-    "library.selo.juridicoDesc": { pt:"Contrato com nota de qualidade validada.", en:"Contract with a validated quality score.", es:"Contrato con una puntuación de calidad validada." },
-    "library.selo.comunidadeDesc": { pt:"Modelo partilhado pela comunidade Pivot.", en:"Template shared by the Pivot community.", es:"Plantilla compartida por la comunidad Pivot." },
-    "library.selo.popularDesc": { pt:"Um dos modelos mais utilizados na biblioteca.", en:"One of the most used templates in the library.", es:"Una de las plantillas más utilizadas en la biblioteca." },
-    "library.selo.recomendadoDesc": { pt:"Altamente avaliado pelos utilizadores.", en:"Highly rated by users.", es:"Altamente valorado por los usuarios." },
-    "library.createNew": { pt:"Novo Contrato", en:"New Contract", es:"Nuevo Contrato" },
-    "library.importFile": { pt:"Importar Arquivo", en:"Import File", es:"Importar Archivo" },
-    "library.importSoon": { pt:"Importar arquivo em breve.", en:"File import coming soon.", es:"Importar archivo próximamente." },
+    "library.recommendCount": { pt:"recomendam", en:"recommend", es:"recomiendan" },
+    "library.viewBlock": { pt:"Visualizar", en:"View", es:"Ver" },
     "library.filter": { pt:"Filtrar", en:"Filter", es:"Filtrar" },
     "library.filterTitle": { pt:"Filtros avançados", en:"Advanced filters", es:"Filtros avanzados" },
     "library.filterOrigin": { pt:"Origem", en:"Source", es:"Origen" },
@@ -2400,8 +2384,6 @@
     "library.blocksTypeModel": { pt:"Modelo", en:"Model", es:"Modelo" },
     "library.blocksTypeClause": { pt:"Cláusula jurídica", en:"Legal clause", es:"Cláusula jurídica" },
     "library.verified": { pt:"Verificado", en:"Verified", es:"Verificado" },
-    "library.uses": { pt:"usos", en:"uses", es:"usos" },
-    "library.by": { pt:"por ", en:"by ", es:"por " },
     "library.use": { pt:"Usar este modelo", en:"Use this template", es:"Usar esta plantilla" },
     "library.favorited": { pt:"Guardado nos teus favoritos", en:"Saved to your favorites", es:"Guardado en tus favoritos" },
     "library.unfavorited": { pt:"Removido dos favoritos", en:"Removed from favorites", es:"Eliminado de favoritos" },
@@ -9376,15 +9358,6 @@
     renderBiblioteca();
     if(document.getElementById('infoSheet').classList.contains('show')) refrescarSheetFiltrosBiblioteca();
   }
-  function toggleBibCreateMenu(ev){
-    if(ev) ev.stopPropagation();
-    document.getElementById('bib-create-menu').classList.toggle('show');
-  }
-  function closeBibCreateMenu(){ const m=document.getElementById('bib-create-menu'); if(m) m.classList.remove('show'); }
-  document.addEventListener('click', function(ev){
-    const menu=document.getElementById('bib-create-menu');
-    if(menu && menu.classList.contains('show') && !menu.closest('.bib-create-wrap').contains(ev.target)) menu.classList.remove('show');
-  });
   const BIB_FACETAS=[
     ['profissao','library.facet.profession'],
     ['contexto','library.facet.context'],
@@ -9480,41 +9453,15 @@
     else arr.sort((a,b)=>(b.usos||0)-(a.usos||0));
     return arr;
   }
-  const BIB_SELO_ICONS={
-    oficial:'<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
-    juridico:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>',
-    comunidade:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
-    popular:'<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
-    recomendado:'<path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2h0a3.13 3.13 0 0 1 3 3.88Z"/>'
-  };
-  const BIB_SELO_INFO={
-    oficial:{tier:'tier-ouro', titleKey:'library.origin.official', descKey:'library.selo.oficialDesc'},
-    juridico:{tier:'tier-prata', titleKey:'library.origin.legal', descKey:'library.selo.juridicoDesc'},
-    comunidade:{tier:'tier-bronze', titleKey:'library.origin.community', descKey:'library.selo.comunidadeDesc'},
-    popular:{tier:'tier-bronze', titleKey:'library.badge.popular', descKey:'library.selo.popularDesc'},
-    recomendado:{tier:'tier-bronze', titleKey:'library.badge.recommended', descKey:'library.selo.recomendadoDesc'}
-  };
-  function bibSeloSpan(tipoKey, iconOnly){
-    const info=BIB_SELO_INFO[tipoKey];
-    const label=t(info.titleKey);
-    const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+BIB_SELO_ICONS[tipoKey]+'</svg>';
-    const onclick='event.stopPropagation();abrirExplicacaoSelo(\''+tipoKey+'\')';
-    if(iconOnly) return '<span class="bib-selo bib-selo-icon '+info.tier+'" title="'+escapeHtml(label)+'" onclick="'+onclick+'">'+icon+'</span>';
-    return '<span class="bib-selo '+info.tier+'" style="cursor:pointer" onclick="'+onclick+'">'+icon+' '+label+'</span>';
-  }
-  function abrirExplicacaoSelo(tipoKey){
-    const info=BIB_SELO_INFO[tipoKey];
-    if(!info) return;
-    openInfo(t(info.titleKey), '<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5">'+escapeHtml(t(info.descKey))+'</p>');
-  }
-  function bibSelosHtml(item, iconOnly){
-    let html='';
-    if(item.origem==='oficial') html+=bibSeloSpan('oficial',iconOnly);
-    if(item.verificado) html+=bibSeloSpan('juridico',iconOnly);
-    if(item.origem==='comunidade') html+=bibSeloSpan('comunidade',iconOnly);
-    if((item.usos||0)>=150) html+=bibSeloSpan('popular',iconOnly);
-    if((item.avaliacao||0)>=4.7) html+=bibSeloSpan('recomendado',iconOnly);
-    return html;
+  /* Em vez de insígnias separadas no canto do card, a origem do modelo vira
+     parte da própria linha de autor: comunidade mostra a pessoa que
+     partilhou, oficial mostra "Pivot Oficial", jurídico mostra o escritório
+     validador — um único rótulo, sem badges adicionais do lado direito
+     (só o favoritar continua lá). */
+  function bibAutorLinha(item){
+    if(item.origem==='oficial') return '✅ '+t('library.origin.official');
+    if(item.verificado) return '⚖️ '+escapeHtml(item.autor||'');
+    return '👤 '+escapeHtml(item.autor||'');
   }
   function renderBiblioteca(){
     bibAtualizarChipFiltrar();
@@ -9528,18 +9475,13 @@
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.id);
-      const rodape=[];
-      if(i.autor) rodape.push(t('library.by')+escapeHtml(i.autor));
-      if(i.usos) rodape.push(i.usos+' '+t('library.uses'));
-      if(i.numBlocos) rodape.push(i.numBlocos+' '+t('library.blocksCount'));
-      const selos=bibSelosHtml(i, true);
+      const rodape=[bibAutorLinha(i)];
+      if(i.usos) rodape.push('👍 '+i.usos+' '+t('library.recommendCount'));
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
-        '<div class="bc-side">'+
-          '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>'+
-          (selos?'<div class="bc-selos-col">'+selos+'</div>':'')+
-        '</div></div>'+
+        '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>'+
+        '</div>'+
         (rodape.length?'<div class="bc-meta">'+rodape.join('<span>•</span>')+'</div>':'')+
       '</div>';
     }).join('');
@@ -9564,32 +9506,39 @@
     const preview = (texto||'').slice(0,180);
     return '<div class="bib-blur-block"><div class="txt">'+escapeHtml(preview)+'</div><div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>'+t('library.protectedBlock')+'</div></div>';
   }
+  function bibBlocoVisivelHtml(item){
+    const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
+    const preview = (texto||'').slice(0,180);
+    return '<div class="bib-preview-block"><div class="txt">'+escapeHtml(preview)+(texto.length>180?'…':'')+'</div>'+
+      '<button class="btn soft" style="width:100%" onclick="event.stopPropagation();abrirVisualizarBlocoBiblioteca(\''+item.id+'\')">'+t('library.viewBlock')+'</button></div>';
+  }
+  function abrirVisualizarBlocoBiblioteca(id){
+    const it=catalogoBiblioteca().find(i=>i.id===id);
+    if(!it) return;
+    const texto = it.texto || it.desc || '';
+    openInfo(it.titulo, '<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;white-space:pre-wrap">'+escapeHtml(texto)+'</p>');
+  }
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
     if(!it) return;
     const fav=bibFavoritos.has(id);
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
-    if(it.autor) html+='<p style="font-size:12px;color:var(--ink-soft);margin-bottom:8px">'+escapeHtml(t('library.by')+it.autor)+'</p>';
-    const selos=bibSelosHtml(it);
-    if(selos) html+='<div class="bc-selos" style="margin-bottom:10px">'+selos+'</div>';
-    const metricas=[];
-    if(it.usos) metricas.push(it.usos+' '+t('library.uses'));
+    const metricas=[bibAutorLinha(it)];
+    if(it.usos) metricas.push('👍 '+it.usos+' '+t('library.recommendCount'));
     if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
-    if(metricas.length) html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+escapeHtml(metricas.join(' · '))+'</p>';
+    html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+metricas.join(' · ')+'</p>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
     html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
-    html+=bibBlocoBlurHtml(it);
+    /* só contratos com validação jurídica mantêm o bloco borrado — os demais
+       mostram uma prévia legível com um botão para ver o conteúdo completo. */
+    html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "abrirBuilder(null)";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
-  }
-  /* construtor de modelo por blocos — reaproveita o builder de contrato existente */
-  function abrirCriarModeloBiblioteca(){
-    abrirBuilder(null);
   }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
