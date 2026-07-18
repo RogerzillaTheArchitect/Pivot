@@ -352,7 +352,7 @@
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">RESUMO</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">Resumo</span>
     </div>
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
@@ -832,7 +832,7 @@
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11.5 12 4l8 7.5"/><rect x="6" y="11.5" width="12" height="8.5"/></svg>
-      <span id="nav-label-hoje" data-t="nav.home">RESUMO</span>
+      <span id="nav-label-hoje" data-t="nav.home">Resumo</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><path d="M3 13h18"/></svg>
@@ -2490,6 +2490,7 @@
     "home.demands": { pt:"Demandas", en:"Demands", es:"Demandas" },
     "home.tasksTitle": { pt:"Tarefas", en:"Tasks", es:"Tareas" },
     "tasks.contractPending": { pt:"Contrato aguardando assinatura", en:"Contract awaiting signature", es:"Contrato pendiente de firma" },
+    "tasks.signatureLabel": { pt:"Assinatura", en:"Signature", es:"Firma" },
     "tasks.paymentDue": { pt:"Pagamento vence", en:"Payment due", es:"Pago vence" },
     "home.tryAll": { pt:"Tenta \"Todos\" para ver a carteira completa.", en:"Try \"All\" to see your full portfolio.", es:"Prueba \"Todos\" para ver toda tu cartera." },
     "home.upcoming": { pt:"Próximos vencimentos", en:"Upcoming payments", es:"Próximos vencimientos" },
@@ -2811,7 +2812,7 @@
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
-    "nav.home": { pt:"RESUMO", en:"Dashboard", es:"Inicio" },
+    "nav.home": { pt:"Resumo", en:"Dashboard", es:"Inicio" },
     "nav.jobs": { pt:"Projetos", en:"Projects", es:"Proyectos" },
     "nav.libraries": { pt:"Bibliotecas", en:"Libraries", es:"Bibliotecas" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
@@ -3120,12 +3121,11 @@
     "status.inDaysSuffix": { pt:" dias", en:" days", es:" días" },
     "status.overdue": { pt:"atrasado", en:"overdue", es:"atrasado" },
     "status.overdueTitle": { pt:"Atrasado", en:"Overdue", es:"Atrasado" },
-    "status.overdueDays": { pt:"{d} Dias atraso", en:"{d} Days overdue", es:"{d} Días de atraso" },
-    "status.overdueOneDay": { pt:"1 Dia atraso", en:"1 Day overdue", es:"1 Día de atraso" },
     "status.sentNotSeenPrefix": { pt:"enviada · não vista há ", en:"sent · not seen for ", es:"enviada · no vista hace " },
-    "status.today": { pt:"Vence Hoje", en:"Due Today", es:"Vence Hoy" },
-    "status.tomorrow": { pt:"Vence Amanhã", en:"Due Tomorrow", es:"Vence Mañana" },
-    "status.inOneWeek": { pt:"Em 1 semana", en:"In 1 week", es:"En 1 semana" },
+    "status.today": { pt:"Hoje", en:"Today", es:"Hoy" },
+    "status.tomorrow": { pt:"Amanhã", en:"Tomorrow", es:"Mañana" },
+    "status.oneDayLabel": { pt:"1 dia", en:"1 day", es:"1 día" },
+    "status.daysLabel": { pt:" dias", en:" days", es:" días" },
     // --- task ---
     "task.addItemPlaceholder": { pt:"Adicionar item…", en:"Add item…", es:"Añadir elemento…" },
     "task.linkToJob": { pt:"Associar a trabalho", en:"Link to a job", es:"Asociar a un trabajo" },
@@ -3785,11 +3785,10 @@
   }
   function gerarLabelTemporal(dataISO, hora){
     const d=diasEntre(dataISO);
-    if(d<0) return Math.abs(d)===1 ? t('status.overdueOneDay') : t('status.overdueDays').replace('{d}', Math.abs(d));
     if(d===0) return t('status.today')+(hora?(' · '+hora):'');
     if(d===1) return t('status.tomorrow')+(hora?(' · '+hora):'');
-    if(d===7) return t('status.inOneWeek');
-    return t('status.inDaysPrefix')+d+t('status.inDaysSuffix');
+    const n=Math.abs(d);
+    return n===1 ? t('status.oneDayLabel') : (n+t('status.daysLabel'));
   }
   function gerarItensRadar(){
     const itens=[];
@@ -3841,10 +3840,13 @@
      texto correspondente. */
   const CARD_ROW_ICONS={
     money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    moneyCircle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v9"/><path d="M14.5 9.3c0-1-.9-1.8-2.5-1.8s-2.5.7-2.5 1.7c0 1 .9 1.4 2.5 1.8s2.5.9 2.5 1.9c0 1-.9 1.7-2.5 1.7s-2.5-.8-2.5-1.8"/></svg>',
     pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
     clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
     pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>',
-    client:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>'
+    client:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
+    clientDep:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h3"/><path d="M11 12h8"/><path d="m15 8 4 4-4 4"/></svg>',
+    mineDep:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 5h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-3"/><path d="M13 12H5"/><path d="m9 8-4 4 4 4"/></svg>'
   };
   function cardInfoRow(kind, text){
     if(!text) return '';
@@ -3857,9 +3859,9 @@
     const tagHtml='<span class="radar-tag '+urgClasse+'">'+gerarLabelTemporal(it.dataISO, it.hora)+'</span>';
     let rows='';
     if(it.tipo==='contrato'){
-      rows+=cardInfoRow('pen', it.secundaria);
+      rows+=cardInfoRow('clientDep', t('tasks.signatureLabel'));
     } else if(it.tipo==='pagamento'){
-      rows+=cardInfoRow('money', fmtMoney(it.principal)+(it.secundaria?(' · '+it.secundaria):''));
+      rows+=cardInfoRow('moneyCircle', fmtMoney(it.principal));
     } else if(it.tipo==='evento'){
       if(it.principal){
         const isDuracao=/^Dura[cç][aã]o/i.test(it.principal);
@@ -5489,7 +5491,7 @@
   let currentJobId=null;
   let clientContext=null;
 
-  function fmtMoney(v){ return Math.round(v||0).toLocaleString(jsLocale())+' €'; }
+  function fmtMoney(v){ return Math.round(v||0).toLocaleString(jsLocale())+'€'; }
   const AVATAR_COLORS=['#B23A1E','#5C4A1E','#1F6E66','#A8631A','#B8466E','#4C7A3D'];
   function avatarColor(name){
     let h=0; for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))>>>0;
@@ -9111,9 +9113,9 @@
        cardInfoRow/CARD_ROW_ICONS — pra manter a mesma linguagem visual entre
        a versão resumida (Tarefas) e a versão completa em lista (Projetos). */
     let rows='';
-    if(!signed) rows+=cardInfoRow('pen', t('jobs.filter.awaiting'));
+    if(!signed) rows+=cardInfoRow('clientDep', t('tasks.signatureLabel'));
     const proxPagamento=(job.payments||[]).find(p=>p.status!=='pago' && p.dueDate);
-    if(proxPagamento) rows+=cardInfoRow('money', fmtMoney(proxPagamento.amount)+(proxPagamento.label?(' · '+proxPagamento.label):''));
+    if(proxPagamento) rows+=cardInfoRow('moneyCircle', fmtMoney(proxPagamento.amount));
     if(job.local) rows+=cardInfoRow('pin', job.local);
     if(job.duracaoHoras!=null) rows+=cardInfoRow('clock', formatarDuracao(job.duracaoHoras));
     div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+' · '+escapeHtml(job.date||'data a definir')+'</div></div></div><div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div>'+
