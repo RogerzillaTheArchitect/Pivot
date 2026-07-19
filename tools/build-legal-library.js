@@ -128,7 +128,7 @@ function parseSimpleFrontmatter(lines) {
 function parseContractFile(file) {
   const text = fs.readFileSync(file, 'utf8');
   const lines = text.split(/\r?\n/);
-  const meta = { market: null, category: null, subcategory: null, contractType: null, status: null, version: null, tags: [] };
+  const meta = { market: null, category: null, subcategory: null, contractType: null, status: null, version: null, tags: [], language: 'en' };
 
   const fm = parseSimpleFrontmatter(lines);
   if (fm.data.market) meta.market = titleCase(fm.data.market);
@@ -138,6 +138,7 @@ function parseContractFile(file) {
   if (fm.data.status) meta.status = fm.data.status;
   if (fm.data.version) meta.version = fm.data.version;
   if (fm.data.tags) meta.tags = fm.data.tags;
+  if (fm.data.language) meta.language = fm.data.language;
 
   // Header em prosa ("Market: X" ou "Market: X | Category: Y | Subcategory: Z")
   // — busca em todo o cabeçalho (até o primeiro "### BLOCK:"), não só nas
@@ -280,6 +281,7 @@ function main() {
         category: c.meta.category,
         subcategory: c.meta.subcategory,
         status: c.meta.status,
+        language: c.meta.language,
         desc: bp ? bp.purpose : null,
         tags: bp ? bp.useCases : [],
         previewText,
