@@ -1,14 +1,6 @@
   /* ===== TRABALHOS ===== */
   .page-title{font-family:var(--font-title),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
   .page-head{display:flex;align-items:center;justify-content:space-between}
-  /* aba estilo pasta: título encostado no topo do card seguinte, como uma
-     aba de pasta física — usado nas páginas cujo título é o rótulo de um
-     único card grande logo abaixo (Modelos, Relatórios, Projetos). */
-  .page-title-tab{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.1em;
-    margin:14px 0 0;padding:8px 16px;border-radius:var(--r) var(--r) 0 0;
-    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
-    border:1px solid rgba(255,255,255,.10);border-bottom:none}
-  .page-head:has(.page-title-tab){margin-bottom:0}
   .evento-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
   .evento-tipo-card{display:flex;align-items:center;gap:9px;padding:13px 12px;border-radius:12px;border:1px solid var(--line);
     background:var(--paper);font-size:13.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;min-width:0}
@@ -32,7 +24,7 @@
 
   .job-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:10px}
   .job-card-wrap .job{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
-  .job-swipe-actions{position:absolute;top:0;right:0;height:100%;width:204px;display:flex;z-index:0;
+  .job-swipe-actions{position:absolute;top:0;right:0;height:100%;width:204px;display:flex;z-index:2;
     opacity:0;pointer-events:none;transition:opacity .15s ease}
   .job-card-wrap.active .job-swipe-actions{opacity:1;pointer-events:auto}
   .job-swipe-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;

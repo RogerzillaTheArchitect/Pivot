@@ -401,12 +401,12 @@
 
       <!-- ============ HOJE / DASHBOARD ============ -->
       <section class="view active" id="v-hoje">
-        <div class="section-label-row folder-tab">
-          <span class="section-label-out" style="margin:0" data-t="home.financeTitle">Financeiro</span>
+        <div class="card finance-ops-card">
+        <div class="fo-title-row">
+          <span class="fo-title" data-t="home.financeTitle">Financeiro</span>
           <div class="section-menu-btn" onclick="event.stopPropagation();abrirMenuFinanceiro()"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18" r="1.7"/></svg></div>
         </div>
-        <div class="month-summary" onclick="abrirRelatorios('faturamento')">
-          <div class="ms-progress-row">
+        <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
@@ -450,9 +450,12 @@
               </div>
             </div>
           </div>
-        </div>
 
-        <span class="section-label-out folder-tab" data-t="reports.opStats">Estatísticas Operacionais</span>
+        <div class="fo-divider"></div>
+
+        <div class="fo-title-row">
+          <span class="fo-title" data-t="reports.opStats">Estatísticas Operacionais</span>
+        </div>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <defs>
             <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
@@ -467,8 +470,7 @@
             </linearGradient>
           </defs>
         </svg>
-        <div class="jobs-stat-card" onclick="abrirRelatorios('operacional')">
-          <div class="jobs-stat-grid6">
+          <div class="jobs-stat-grid6" onclick="abrirRelatorios('operacional')">
           <div class="jobs-stat-col">
             <span class="ms-c-label" data-t="home.hours">Horas</span>
             <div class="mini-ring-wrap">
@@ -538,7 +540,7 @@
           </div>
         </div>
 
-        <span class="section-label-out folder-tab" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
+        <span class="section-label-out" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
         <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
@@ -551,9 +553,6 @@
 
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
-        <div class="page-head">
-          <div class="page-title page-title-tab" data-t="nav.jobs">Trabalhos</div>
-        </div>
 
         <div class="card">
           <div class="rel-month-row">
@@ -650,10 +649,6 @@
 
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
-        <div class="page-head">
-          <div class="page-title page-title-tab" data-t="nav.libraries">Modelos</div>
-        </div>
-
         <div class="card bib-page-card">
           <div class="bib-search-row" style="margin:0 0 14px">
             <div class="bib-filter-icon-btn" id="bib-salvos-chip" onclick="abrirSalvosBiblioteca()" aria-label="Salvos">
@@ -738,8 +733,6 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <div class="page-title page-title-tab" data-t="reports.title">Relatórios</div>
-
         <!-- Card: Faturamento — as barras são o próprio elemento; o seletor de
              mês/ano fica dentro deste mesmo card, no topo. -->
         <div class="card rel-card">
@@ -3793,18 +3786,22 @@
       let openSide='closed'; // 'closed' | 'left' | 'right'
       let startX=0, baseX=0, curX=0, dragging=false, pointerId=null;
       let hapticLight=false, hapticFull=false;
+      /* z-index dos botões fica acima do card (para a transição de arrasto não
+         "engolir" o clique) — por isso o lado que não está revelado precisa de
+         pointer-events:none explícito, ou fica clicável por baixo do card mesmo
+         invisível (opacity:0 sozinho não desliga clique). */
       const setActions=x=>{
         if(x<0 && acoesDir){
           const p=Math.min(1, -x/LARG_DIR);
-          acoesDir.style.opacity=p; acoesDir.style.transform='scale('+(.85+.15*p)+')';
-          if(acoesEsq) acoesEsq.style.opacity=0;
+          acoesDir.style.opacity=p; acoesDir.style.transform='scale('+(.85+.15*p)+')'; acoesDir.style.pointerEvents=p>0?'auto':'none';
+          if(acoesEsq){ acoesEsq.style.opacity=0; acoesEsq.style.pointerEvents='none'; }
         } else if(x>0 && acoesEsq){
           const p=Math.min(1, x/LARG_ESQ);
-          acoesEsq.style.opacity=p; acoesEsq.style.transform='scale('+(.85+.15*p)+')';
-          if(acoesDir) acoesDir.style.opacity=0;
+          acoesEsq.style.opacity=p; acoesEsq.style.transform='scale('+(.85+.15*p)+')'; acoesEsq.style.pointerEvents=p>0?'auto':'none';
+          if(acoesDir){ acoesDir.style.opacity=0; acoesDir.style.pointerEvents='none'; }
         } else {
-          if(acoesDir) acoesDir.style.opacity=0;
-          if(acoesEsq) acoesEsq.style.opacity=0;
+          if(acoesDir){ acoesDir.style.opacity=0; acoesDir.style.pointerEvents='none'; }
+          if(acoesEsq){ acoesEsq.style.opacity=0; acoesEsq.style.pointerEvents='none'; }
         }
       };
       card.addEventListener('pointerdown', e=>{
