@@ -401,7 +401,10 @@
 
       <!-- ============ HOJE / DASHBOARD ============ -->
       <section class="view active" id="v-hoje">
-        <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
+        <div class="section-label-row folder-tab">
+          <span class="section-label-out" style="margin:0" data-t="home.financeTitle">Financeiro</span>
+          <div class="section-menu-btn" onclick="event.stopPropagation();abrirMenuFinanceiro()"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18" r="1.7"/></svg></div>
+        </div>
         <div class="month-summary" onclick="abrirRelatorios('faturamento')">
           <div class="ms-progress-row">
             <div class="ms-progress-left">
@@ -449,7 +452,7 @@
           </div>
         </div>
 
-        <span class="section-label-out" data-t="reports.opStats">Estatísticas Operacionais</span>
+        <span class="section-label-out folder-tab" data-t="reports.opStats">Estatísticas Operacionais</span>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <defs>
             <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
@@ -535,7 +538,7 @@
           </div>
         </div>
 
-        <span class="section-label-out" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
+        <span class="section-label-out folder-tab" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
         <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
@@ -549,7 +552,7 @@
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
         <div class="page-head">
-          <div class="page-title" data-t="nav.jobs">Trabalhos</div>
+          <div class="page-title page-title-tab" data-t="nav.jobs">Trabalhos</div>
         </div>
 
         <div class="card">
@@ -648,7 +651,7 @@
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
         <div class="page-head">
-          <div class="page-title" data-t="nav.libraries">Modelos</div>
+          <div class="page-title page-title-tab" data-t="nav.libraries">Modelos</div>
         </div>
 
         <div class="card bib-page-card">
@@ -735,7 +738,7 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <div class="page-title" data-t="reports.title">Relatórios</div>
+        <div class="page-title page-title-tab" data-t="reports.title">Relatórios</div>
 
         <!-- Card: Faturamento — as barras são o próprio elemento; o seletor de
              mês/ano fica dentro deste mesmo card, no topo. -->
@@ -2370,7 +2373,6 @@
     "job.clientInfo.unanswered": { pt:"por responder", en:"unanswered", es:"sin responder" },
     "job.clientRespondsViaLink": { pt:"O cliente responde no mesmo link do contrato.", en:"The client responds via the same contract link.", es:"El cliente responde desde el mismo enlace del contrato." },
     "job.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
-    "job.contract.addAnyway": { pt:"Adicionar contrato mesmo assim", en:"Add a contract anyway", es:"Añadir contrato igualmente" },
     "job.contract.attach": { pt:"Anexar contrato", en:"Attach contract", es:"Adjuntar contrato" },
     "job.contract.awaitingClient": { pt:"Ainda à espera de assinatura do cliente.", en:"Still awaiting the client's signature.", es:"Aún a la espera de la firma del cliente." },
     "job.contract.copyLink": { pt:"Copiar link", en:"Copy link", es:"Copiar enlace" },
@@ -2381,7 +2383,6 @@
     "job.contract.missing": { pt:"Contrato em falta.", en:"No contract yet.", es:"Sin contrato aún." },
     "job.contract.newLink": { pt:"Gerar novo link", en:"New link", es:"Nuevo enlace" },
     "job.contract.replace": { pt:"Substituir anexo", en:"Replace attachment", es:"Reemplazar adjunto" },
-    "job.contract.select": { pt:"Selecionar Contrato", en:"Select Contract", es:"Seleccionar Contrato" },
     "job.contract.custom": { pt:"Personalizado", en:"Custom", es:"Personalizado" },
     "job.contract.sentOn": { pt:"Enviado em", en:"Sent on", es:"Enviado el" },
     "job.contract.view": { pt:"Ver Contrato", en:"View Contract", es:"Ver Contrato" },
@@ -3203,7 +3204,7 @@
     "wizard.date": { pt:"Data", en:"Date", es:"Fecha" },
     "wizard.end": { pt:"Fim", en:"End", es:"Fin" },
     "wizard.fee": { pt:"Valor", en:"Fee", es:"Importe" },
-    "wizard.fromScratch": { pt:"Do zero", en:"From scratch", es:"Desde cero" },
+    "wizard.fromScratch": { pt:"Novo", en:"New", es:"Nuevo" },
     "wizard.fullHint": { pt:"Gera contrato, briefing, cronograma e pagamentos automaticamente.", en:"Automatically generates contract, brief, schedule and payments.", es:"Genera automáticamente contrato, información del cliente, cronograma y pagos." },
     "wizard.fullMode": { pt:"Completo", en:"Full mode", es:"Completo" },
     "wizard.importantNotes": { pt:"Observações Importantes", en:"Important Notes", es:"Notas Importantes" },
@@ -3214,7 +3215,6 @@
     "wizard.model.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "wizard.noMatchesFor": { pt:"Nenhum resultado para \"", en:"No matches for \"", es:"Sin coincidencias para \"" },
     "wizard.optional": { pt:"(opcional)", en:"(optional)", es:"(opcional)" },
-    "wizard.quickHint": { pt:"Sem contrato nem informações do cliente.", en:"No contract or client brief.", es:"Sin contrato ni información del cliente." },
     "wizard.quickMode": { pt:"Rápido", en:"Quick mode", es:"Modo rápido" },
     "wizard.saveClient": { pt:"Guardar cliente", en:"Save client", es:"Guardar cliente" },
     "wizard.saveReference": { pt:"Guardar como referência", en:"Save as reference", es:"Guardar como referencia" },
@@ -3339,6 +3339,13 @@
     if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
+  }
+  function abrirMenuFinanceiro(){
+    openInfo(t('home.financeTitle'), '<div class="plist">'+
+      '<div class="prow" onclick="closeInfo();abrirRelatorios(\'faturamento\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12.5" y="8" width="3" height="10"/><rect x="18" y="5" width="3" height="13"/></svg><div class="t">'+t('reports.billing')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
+      '<div class="prow" onclick="closeInfo();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><div class="t">'+t('sheet.goalsLimits')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
+      '<div class="prow" onclick="closeInfo();abrirDespesas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><div class="t">'+t('home.expenses')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
+    '</div>');
   }
   let METAS={receita:0, gastos:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
@@ -4355,11 +4362,6 @@
     showPanel('trabalho');
     renderModeloEscolhidoWizard();
   }
-  /* Job para o qual estamos escolhendo um contrato a partir do card
-     "Selecionar Contrato" (Portal Operacional) — ver abrirSelecionarContratoJob.
-     Quando definido, os fluxos de biblioteca/modelo/duplicar geram o
-     contrato diretamente neste trabalho em vez de um modelo solto. */
-  let contratoParaJobId=null;
   function abrirBuilderParaSelecao(modeloOrigem){
     if(contratoParaColaboradoresMassaJobId){
       const jobId=contratoParaColaboradoresMassaJobId;
@@ -4379,36 +4381,15 @@
       aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem||{blocks:[]});
       return;
     }
-    const alvo=contratoParaJobId;
-    contratoParaJobId=null;
     closeSheet();
-    abrirBuilder(alvo, modeloOrigem);
-  }
-  /* Abre o painel da biblioteca de contratos SEM destruir o que já estava
-     aberto. openSheet() chama resetSheet() -> resetTrabalho(), que apaga
-     todos os campos já preenchidos do wizard — chamá-lo enquanto o utilizador
-     está a meio da criação de um trabalho (ex.: a escolher um contrato para
-     um colaborador na Etapa 2) apagava o trabalho inteiro em segundo plano,
-     e ao voltar não havia "trabalho" na pilha de painéis para onde regressar,
-     então closeSheet() fechava tudo — esse era o bug de "encerra a criação". */
-  function abrirPainelBibliotecaContrato(){
-    if(!document.getElementById('sheet').classList.contains('show')) openSheet();
-    pushPanel('contrato');
+    abrirBuilder(null, modeloOrigem);
   }
   /* Contrato de Colaborador vai direto à Biblioteca — sem passar pela tela
-     antiga "Novo Contrato" (Do zero / Duplicar existente / Usar modelo
+     antiga "Novo Contrato" (Novo / Duplicar existente / Usar modelo
      guardado), que não faz sentido neste fluxo. */
   function abrirPainelBibliotecaContratoDireto(){
     if(!document.getElementById('sheet').classList.contains('show')) openSheet();
     pushPanel('comunidade-contratos');
-  }
-  /* Card de Contrato do Portal Operacional: sem contrato, o único ponto de
-     entrada é escolher um modelo da biblioteca/próprio — nunca "criar vazio"
-     ou "anexar arquivo" (isso já é decidido na criação do trabalho). */
-  function abrirSelecionarContratoJob(id){
-    contratoParaJobId=id;
-    twEmWizard=false;
-    abrirPainelBibliotecaContrato();
   }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
@@ -6902,10 +6883,6 @@
     return '<span class="sig-tag '+(assinado?'green':'yellow')+'">'+statusEmoji(assinado?'done':'pending')+' '+(assinado?t('contract.tagSigned'):t('contract.tagPending'))+'</span>';
   }
 
-  function forcarContratoJob(jobId){
-    jobsData[jobId].contract.forceShow=true;
-    renderJobDetailDynamic(jobId);
-  }
   function marcarContratoAlterado(job){
     const d=new Date();
     job.contract.lastModified=String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+' '+String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
@@ -7500,19 +7477,16 @@
     if(job.modo==='rapido'){
       html+='<div class="warn-box" style="background:var(--paper-2);border-color:var(--line);color:var(--ink-soft);margin-bottom:14px">'+
         iconWrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')+
-        '<div>Projeto rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing, a não ser que precise.</div></div>';
+        '<div>Projeto rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing.</div></div>';
     }
 
     html+=mapCardHtml(job);
 
     html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_DOC+'<div class="sec-title">'+t('job.contract')+'</div></div>'+contractStatusTagHtml(job)+'</div><div class="sec-body" style="display:block">';
     if(job.contract.status==='vazio'){
-      if(job.modo==='rapido' && !job.contract.forceShow){
-        html+='<p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">'+t('wizard.quickHint')+'</p>';
-        html+='<button class="btn ghost" onclick="forcarContratoJob(\''+id+'\')">'+t('job.contract.addAnyway')+'</button>';
-      } else {
-        html+='<button class="btn primary" style="width:100%" onclick="abrirSelecionarContratoJob(\''+id+'\')">'+t('job.contract.select')+'</button>';
-      }
+      /* decisão de ter ou não contrato é feita na criação do trabalho — depois
+         de criado, não é mais possível anexar nem alterar isso aqui. */
+      html+='<p style="font-size:13.5px;color:var(--ink-soft)">'+t('job.contract.missing')+'</p>';
     } else {
       // rascunho / enviado / assinado: resumo único (modelo, status, datas) + Ver Contrato
       html+='<div style="font-size:13.5px;line-height:1.85;margin-bottom:10px">';

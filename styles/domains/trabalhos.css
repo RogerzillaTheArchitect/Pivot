@@ -1,6 +1,14 @@
   /* ===== TRABALHOS ===== */
   .page-title{font-family:var(--font-title),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
   .page-head{display:flex;align-items:center;justify-content:space-between}
+  /* aba estilo pasta: título encostado no topo do card seguinte, como uma
+     aba de pasta física — usado nas páginas cujo título é o rótulo de um
+     único card grande logo abaixo (Modelos, Relatórios, Projetos). */
+  .page-title-tab{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.1em;
+    margin:14px 0 0;padding:8px 16px;border-radius:var(--r) var(--r) 0 0;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    border:1px solid rgba(255,255,255,.10);border-bottom:none}
+  .page-head:has(.page-title-tab){margin-bottom:0}
   .evento-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
   .evento-tipo-card{display:flex;align-items:center;gap:9px;padding:13px 12px;border-radius:12px;border:1px solid var(--line);
     background:var(--paper);font-size:13.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;min-width:0}
@@ -48,6 +56,7 @@
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
+    will-change:transform;
     color:#F5F5F2;min-height:112px;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
