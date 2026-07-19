@@ -8,20 +8,20 @@
   .bib-acc.open .bib-acc-body{display:flex}
   .bib-fchip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;transition:all .15s}
   .bib-fchip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-  .bib-card{position:relative;display:flex;flex-direction:column;height:168px;border-radius:13px;padding:14px;margin-bottom:9px;cursor:pointer;
-    background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(122,124,116,.15);
-    border:1.5px solid rgba(255,255,255,.20);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.22),inset 0 1px 0 rgba(255,255,255,.12);
+  .bib-card{position:relative;display:flex;flex-direction:column;height:168px;border-radius:var(--r);padding:14px;margin-bottom:9px;cursor:pointer;
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(11px) saturate(160%);-webkit-backdrop-filter:blur(11px) saturate(160%);
     transition:border-color .15s;color:#F5F5F2;
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
   .bib-card:hover{border-color:var(--brand)}
-  .bib-card .bc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
   .bib-card .bc-title{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .bib-card .bc-desc{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.45;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
-  .bib-card .bc-meta{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:8px;font-size:11px;color:var(--neutral);flex-wrap:wrap;font-weight:400}
+  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:8px;font-size:11px;color:var(--neutral);font-weight:400}
+  .bib-card .bc-meta-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
   .bib-fav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint)}
   .bib-fav svg{width:17px;height:17px;opacity:.5}
   .bib-fav.on{color:var(--ink)}
@@ -61,7 +61,11 @@
 
   /* ===== BIBLIOTECA — card de topo (busca + filtro + lista) ===== */
   .bib-page-card{padding:16px}
-  .bib-searchbox{background:var(--paper-2);box-shadow:none}
+  /* filtro/salvos ficam como botoes proprios, fora do campo de busca —
+     o campo de busca fica mais compacto e com o mesmo alinhamento/altura
+     dos botoes, arestas menos arredondadas (10px, igual aos botoes). */
+  .bib-search-row{display:flex;align-items:center;gap:8px}
+  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:10px;padding:9px 12px;margin:0;flex:1;min-width:0}
   .bib-filter-icon-btn{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
     cursor:pointer;color:var(--ink-soft);background:var(--btn-06);transition:background .15s,color .15s}
   .bib-filter-icon-btn svg{width:17px;height:17px}
