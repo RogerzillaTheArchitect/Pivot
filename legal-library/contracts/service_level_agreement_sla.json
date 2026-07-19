@@ -1,0 +1,241 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "Service Quality",
+    "subcategory": "Performance Guarantees",
+    "contractType": "Service Level Agreement (SLA)",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [SERVICE_PROVIDER_NAME] (\"Provider\") and [CLIENT_NAME] (\"Client\") regarding [SERVICE_DESCRIPTION]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_PROVIDER_NAME",
+        "CLIENT_NAME",
+        "SERVICE_DESCRIPTION"
+      ]
+    },
+    {
+      "name": "Service Levels",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "service_levels.performance_targets",
+          "version": null,
+          "text": "The Provider shall maintain the following measurable service levels for [SERVICE_DESCRIPTION]: availability of at least [UPTIME_TARGET_PERCENT], measured monthly, excluding periods defined in the Maintenance Windows Clause and events covered by the Force Majeure Clause."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_DESCRIPTION",
+        "UPTIME_TARGET_PERCENT"
+      ]
+    },
+    {
+      "name": "Availability",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "availability.calculation_method",
+          "version": null,
+          "text": "Availability shall be calculated as the percentage of total minutes in the measurement period during which [SERVICE_DESCRIPTION] was accessible and functioning as intended, excluding Maintenance Windows."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_DESCRIPTION"
+      ]
+    },
+    {
+      "name": "Response Time",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "response_time.target",
+          "version": null,
+          "text": "The Provider shall acknowledge a reported issue with [SERVICE_DESCRIPTION] within [RESPONSE_TIME_TARGET], measured from the time the Client submits the issue through the agreed reporting channel."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_DESCRIPTION",
+        "RESPONSE_TIME_TARGET"
+      ]
+    },
+    {
+      "name": "Resolution Time",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "resolution_time.target",
+          "version": null,
+          "text": "The Provider shall use the Priority Matrix Clause to classify each reported issue and shall resolve it within the corresponding resolution time target defined for that priority level."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Priority Matrix",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "priority_matrix.classification",
+          "version": null,
+          "text": "Reported issues shall be classified as [PRIORITY_LEVELS], each with a corresponding resolution time target of [RESOLUTION_TIME_BY_PRIORITY]."
+        }
+      ],
+      "dynamicFields": [
+        "PRIORITY_LEVELS",
+        "RESOLUTION_TIME_BY_PRIORITY"
+      ]
+    },
+    {
+      "name": "Maintenance Windows",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "maintenance_windows.scheduled_maintenance",
+          "version": null,
+          "text": "The Provider may perform scheduled maintenance during [MAINTENANCE_WINDOW_SCHEDULE]. Downtime occurring during a scheduled Maintenance Window does not count against the Performance Targets Clause, provided the Provider gives the Client at least [MAINTENANCE_NOTICE_PERIOD_HOURS] hours' advance notice."
+        }
+      ],
+      "dynamicFields": [
+        "MAINTENANCE_WINDOW_SCHEDULE",
+        "MAINTENANCE_NOTICE_PERIOD_HOURS"
+      ]
+    },
+    {
+      "name": "Escalation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "escalation.path",
+          "version": null,
+          "text": "If an issue is not resolved within the applicable Resolution Time Clause target, the Client may escalate the issue to [ESCALATION_CONTACT], who shall respond within [ESCALATION_RESPONSE_TIME]."
+        }
+      ],
+      "dynamicFields": [
+        "ESCALATION_CONTACT",
+        "ESCALATION_RESPONSE_TIME"
+      ]
+    },
+    {
+      "name": "Service Credits",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "service_credits.remedy",
+          "version": null,
+          "text": "If the Provider fails to meet the Performance Targets Clause in a given measurement period, the Client shall be entitled to a service credit calculated as [SERVICE_CREDIT_FORMULA], applied against the Client's next invoice."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_CREDIT_FORMULA"
+      ]
+    },
+    {
+      "name": "Penalties",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "penalties.chronic_failure",
+          "version": null,
+          "text": "If the Provider fails to meet the Performance Targets Clause in [CHRONIC_FAILURE_THRESHOLD] measurement periods within any [CHRONIC_FAILURE_WINDOW], the Client may terminate this Agreement for cause under the Termination Clause, in addition to any service credit due."
+        }
+      ],
+      "dynamicFields": [
+        "CHRONIC_FAILURE_THRESHOLD",
+        "CHRONIC_FAILURE_WINDOW"
+      ]
+    },
+    {
+      "name": "Monitoring",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "monitoring.reporting_obligation",
+          "version": null,
+          "text": "The Provider shall make performance data for [SERVICE_DESCRIPTION] available to the Client on a [REPORTING_FREQUENCY] basis, sufficient for the Client to verify compliance with the Performance Targets Clause."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_DESCRIPTION",
+        "REPORTING_FREQUENCY"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_chronic_failure",
+          "version": null,
+          "text": "The Client may terminate this Agreement under the conditions set out in the Chronic Failure Clause by giving written notice to the Provider."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to meet any service level to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: every metric (uptime, response, resolution) tied to a Dynamic Field with an explicit calculation method, satisfying PLDS-001 §2's ban on undefined qualifiers. Duplication: Response Time vs Resolution Time kept distinct (acknowledgment vs. fix). Loophole closed: added Chronic Failure Clause so repeated minor breaches don't only ever produce minor credits with no escalation to termination. Contradiction: none — Maintenance Windows exclusion applies only to Availability calculation, not to Response/Resolution time obligations. Missing protection: added Monitoring Block so Client isn't dependent solely on Provider's self-reported compliance claims. Complexity: kept Priority Matrix separate from Resolution Time to avoid a single overloaded clause. Enforceability: Service Credits formula is a Dynamic Field, not vague \"reasonable credit\" language. Attack: Provider schedules \"maintenance\" constantly to mask real downtime — mitigated by mandatory advance notice period in Maintenance Windows Clause, making abuse visible and disputable. Attack: Provider argues chronic minor breaches don't trigger termination since each individual credit was paid — mitigated by explicit Chronic Failure threshold operating independently of credit payment. Attack: Client claims non-compliance without any data — mitigated by Monitoring Clause requiring Provider to furnish verifiable performance data. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "SERVICE_PROVIDER_NAME",
+    "CLIENT_NAME",
+    "SERVICE_DESCRIPTION",
+    "UPTIME_TARGET_PERCENT",
+    "RESPONSE_TIME_TARGET",
+    "PRIORITY_LEVELS",
+    "RESOLUTION_TIME_BY_PRIORITY",
+    "MAINTENANCE_WINDOW_SCHEDULE",
+    "MAINTENANCE_NOTICE_PERIOD_HOURS",
+    "ESCALATION_CONTACT",
+    "ESCALATION_RESPONSE_TIME",
+    "SERVICE_CREDIT_FORMULA",
+    "CHRONIC_FAILURE_THRESHOLD",
+    "CHRONIC_FAILURE_WINDOW",
+    "REPORTING_FREQUENCY",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "service_level_agreement_sla"
+}

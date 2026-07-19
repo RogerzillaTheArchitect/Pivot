@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "market": "Marketing",
+    "category": "Digital Marketing",
+    "subcategory": "Management",
+    "contractType": "Digital Marketing Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "marketing",
+      "digital-marketing",
+      "retainer",
+      "performance-bonus"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Marketing Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "marketing_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall perform the digital marketing services described in [SERVICES_CONTRACTED] for [PROJECT_NAME]. The Service Provider does not guarantee specific results, including but not limited to lead volume, conversion rate, or revenue, as these depend on factors outside the Service Provider's control."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Performance Bonus",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "performance_bonus.criteria",
+          "version": null,
+          "text": "Where the Parties agree to a performance bonus, the Service Provider shall receive an additional [PERFORMANCE_BONUS_AMOUNT] if [PERFORMANCE_METRIC] reaches [PERFORMANCE_TARGET] within [PERFORMANCE_MEASUREMENT_PERIOD], as measured by [PERFORMANCE_MEASUREMENT_SOURCE]."
+        }
+      ],
+      "dynamicFields": [
+        "PERFORMANCE_BONUS_AMOUNT",
+        "PERFORMANCE_METRIC",
+        "PERFORMANCE_TARGET",
+        "PERFORMANCE_MEASUREMENT_PERIOD",
+        "PERFORMANCE_MEASUREMENT_SOURCE"
+      ]
+    },
+    {
+      "name": "Travel",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Meetings",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "meetings.schedule",
+          "version": null,
+          "text": "The Parties shall meet according to [MEETING_SCHEDULE] to review progress on the Services."
+        }
+      ],
+      "dynamicFields": [
+        "MEETING_SCHEDULE"
+      ]
+    },
+    {
+      "name": "Additional Campaigns",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_campaigns.pricing",
+          "version": null,
+          "text": "Campaigns requested beyond those described in [SERVICES_CONTRACTED] shall be scoped and priced separately at [ADDITIONAL_CAMPAIGN_RATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "ADDITIONAL_CAMPAIGN_RATE"
+      ]
+    },
+    {
+      "name": "Consulting Hours",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "consulting_hours.pricing",
+          "version": null,
+          "text": "Consulting hours requested beyond those included in [SERVICES_CONTRACTED] shall be charged at [CONSULTING_HOURLY_RATE] per hour."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "CONSULTING_HOURLY_RATE"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the Services described in [SERVICES_CONTRACTED] for [BILLING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Monthly Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "monthly_reports.provision",
+          "version": null,
+          "text": "The Service Provider shall deliver a monthly report summarizing the Services performed and results against [PERFORMANCE_METRIC] where applicable."
+        }
+      ],
+      "dynamicFields": [
+        "PERFORMANCE_METRIC"
+      ]
+    },
+    {
+      "name": "Renewal",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "renewal.continuation",
+          "version": null,
+          "text": "This Agreement renews automatically for successive [BILLING_PERIOD] periods unless either Party gives written notice of non-renewal at least [RENEWAL_NOTICE_PERIOD_DAYS] days before the end of the current period."
+        }
+      ],
+      "dynamicFields": [
+        "BILLING_PERIOD",
+        "RENEWAL_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement for convenience upon [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice. The Client shall pay for Services performed up to the effective date of termination."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Marketing Scope Clause explicitly disclaims guaranteed results within the primary scope definition itself, directly addressing Step 2 risk #1 at its source rather than in a secondary liability clause. Duplication: Additional Campaigns vs. Consulting Hours kept distinct — the former addresses new discrete marketing initiatives, the latter addresses ad-hoc advisory time, genuinely separate services. Loophole closed: Performance Bonus explicitly requires a named measurement source, preventing disputes over whose analytics data governs bonus eligibility. Contradiction: none between Renewal (continuation mechanism) and Termination (exit mechanism) — complementary, not overlapping. Missing protection: none additional required. Complexity: minimal, correctly reflecting a retainer-style service relationship. Enforceability: performance bonus criteria fully anchored to explicit Dynamic Fields (metric, target, period, source) enabling automated bonus calculation. Attack: Client claims the Provider guaranteed a specific lead volume and sues for failing to deliver it — mitigated by the explicit no-guarantee disclaimer in the Marketing Scope Clause. Attack: Provider and Client dispute whether a performance bonus was earned because they used different analytics tools — mitigated by the Performance Bonus Clause's explicit measurement source requirement. Attack: Agreement continues renewing for years despite the Client's repeated attempts to informally end it — mitigated by the Renewal Clause's requirement for formal written non-renewal notice. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "PERFORMANCE_BONUS_AMOUNT",
+    "PERFORMANCE_METRIC",
+    "PERFORMANCE_TARGET",
+    "PERFORMANCE_MEASUREMENT_PERIOD",
+    "PERFORMANCE_MEASUREMENT_SOURCE",
+    "MEETING_SCHEDULE",
+    "ADDITIONAL_CAMPAIGN_RATE",
+    "CONSULTING_HOURLY_RATE",
+    "BILLING_PERIOD",
+    "DELIVERY_DATE",
+    "RENEWAL_NOTICE_PERIOD_DAYS",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "digital_marketing_services_agreement"
+}

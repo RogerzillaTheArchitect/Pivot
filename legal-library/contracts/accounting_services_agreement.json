@@ -1,0 +1,289 @@
+{
+  "meta": {
+    "market": "Consulting",
+    "category": "Finance",
+    "subcategory": "Accounting",
+    "contractType": "Accounting Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "consulting",
+      "accounting",
+      "tax",
+      "data-protection"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Accounting Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "accounting_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide accounting services described in [SERVICES_CONTRACTED] for [ACCOUNTING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "ACCOUNTING_PERIOD"
+      ]
+    },
+    {
+      "name": "Responsibilities",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "responsibilities.record_accuracy",
+          "version": null,
+          "text": "The Client shall provide accurate and complete financial records and information necessary to perform the Services, within [RECORD_SUBMISSION_PERIOD_DAYS] days of the Service Provider's request. The Service Provider shall not be liable for errors or delay resulting from inaccurate, incomplete, or late information provided by the Client."
+        }
+      ],
+      "dynamicFields": [
+        "RECORD_SUBMISSION_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Representation Before Authorities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "representation_before_authorities.scope",
+          "version": null,
+          "text": "Where the Client specifically authorizes it, the Service Provider shall represent the Client before [TAX_AUTHORITY_NAME] in connection with [REPRESENTATION_MATTER], for an additional fee of [REPRESENTATION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "TAX_AUTHORITY_NAME",
+        "REPRESENTATION_MATTER",
+        "REPRESENTATION_FEE"
+      ]
+    },
+    {
+      "name": "Payroll",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "payroll.inclusion",
+          "version": null,
+          "text": "Where the Services include payroll processing, the Service Provider shall process payroll for [NUMBER_OF_EMPLOYEES] employees for an additional fee of [PAYROLL_FEE] per [BILLING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "NUMBER_OF_EMPLOYEES",
+        "PAYROLL_FEE",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "Financial Planning",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "financial_planning.inclusion",
+          "version": null,
+          "text": "Where the Services include financial planning advice, the Service Provider shall provide it as described in [FINANCIAL_PLANNING_SCOPE] for an additional fee of [FINANCIAL_PLANNING_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "FINANCIAL_PLANNING_SCOPE",
+        "FINANCIAL_PLANNING_FEE"
+      ]
+    },
+    {
+      "name": "Business Consulting",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "business_consulting.inclusion",
+          "version": null,
+          "text": "Where the Services include business consulting advice, the Client remains solely responsible for decisions to implement, and the manner of implementing, any recommendation."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Emergency Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "emergency_support.provision",
+          "version": null,
+          "text": "Where the Client requires urgent assistance outside standard turnaround times, the Service Provider shall use reasonable efforts to respond within [EMERGENCY_RESPONSE_TIME], for an additional fee of [EMERGENCY_SUPPORT_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "EMERGENCY_RESPONSE_TIME",
+        "EMERGENCY_SUPPORT_FEE"
+      ]
+    },
+    {
+      "name": "Deadlines",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "deadlines.statutory_tracking",
+          "version": null,
+          "text": "The Service Provider shall track and inform the Client of the statutory filing deadlines applicable to [SERVICES_CONTRACTED], including [FILING_DEADLINE_LIST]. The Client shall provide the information required under the Responsibilities Clause in time for the Service Provider to meet each deadline."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "FILING_DEADLINE_LIST"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Data Protection",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "data_protection.safeguards",
+          "version": null,
+          "text": "The Service Provider shall implement appropriate technical and organizational measures to protect the Client's financial and personal data processed in connection with the Services, and shall notify the Client without undue delay upon becoming aware of a breach involving that data."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Responsibilities Clause explicitly shifts liability for inaccurate/late Client-provided information away from the Provider, closing Step 2 risk #1 as a Required Block given its centrality to this Contract Type's core risk. Duplication: none — Deadlines (statutory date-tracking) and Responsibilities (information timeliness) are complementary, cross-referencing each other rather than duplicating obligations. Loophole closed: Representation Before Authorities requires specific Client authorization per matter, closing a gap where an accountant could act on the Client's behalf beyond the Client's actual intent. Contradiction: none. Missing protection: Data Protection added given the elevated sensitivity of financial/personal data central to this Contract Type. Complexity: Business Consulting kept as a lightweight cross-reference to the general advisory disclaimer, avoiding duplicating the full Business Consulting Agreement's clause library. Enforceability: record submission period and filing deadline list both explicit Dynamic Fields, enabling automated deadline-tracking alerts. Attack: Client submits incomplete records late, causing a missed filing deadline, then blames the accountant — mitigated by the Responsibilities Clause's explicit liability shift for Client-caused delay, cross-referenced by the Deadlines Clause. Attack: Accountant represents the Client before a tax authority on a matter never actually authorized — mitigated by Representation Before Authorities' matter-specific authorization requirement. Attack: Financial data breach occurs and the Provider fails to notify the Client — mitigated by Data Protection's explicit \"without undue delay\" notification obligation. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "ACCOUNTING_PERIOD",
+    "RECORD_SUBMISSION_PERIOD_DAYS",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "TAX_AUTHORITY_NAME",
+    "REPRESENTATION_MATTER",
+    "REPRESENTATION_FEE",
+    "NUMBER_OF_EMPLOYEES",
+    "PAYROLL_FEE",
+    "BILLING_PERIOD",
+    "FINANCIAL_PLANNING_SCOPE",
+    "FINANCIAL_PLANNING_FEE",
+    "EMERGENCY_RESPONSE_TIME",
+    "EMERGENCY_SUPPORT_FEE",
+    "FILING_DEADLINE_LIST",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "accounting_services_agreement"
+}

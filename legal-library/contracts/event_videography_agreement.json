@@ -1,0 +1,373 @@
+{
+  "meta": {
+    "market": "Videography",
+    "category": "Events",
+    "subcategory": "Private Events",
+    "contractType": "Event Videography Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the event videography services described in [SERVICES_CONTRACTED] at [EVENT_LOCATION] on [EVENT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "EVENT_LOCATION",
+        "EVENT_DATE"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [EVENT_DATE] at [EVENT_LOCATION], subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Drone Operation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "drone_operation.authorization",
+          "version": null,
+          "text": "Where aerial filming is included, the Service Provider warrants that it holds any authorization required by applicable aviation regulation to operate a drone at [EVENT_LOCATION]."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Additional Hours",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_hours.extension",
+          "version": null,
+          "text": "If the Client requests coverage beyond the hours included in [SERVICES_CONTRACTED], the Client shall pay [ADDITIONAL_HOUR_RATE] per additional hour."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "ADDITIONAL_HOUR_RATE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Accommodation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "accommodation.reimbursement",
+          "version": null,
+          "text": "Where [EVENT_LOCATION] requires overnight travel, the Client shall provide or reimburse reasonable accommodation for the Service Provider."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Express Delivery",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "express_delivery.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request delivery within [EXPRESS_DELIVERY_PERIOD_DAYS] days, in exchange for an additional fee of [EXPRESS_DELIVERY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "EXPRESS_DELIVERY_PERIOD_DAYS",
+        "EXPRESS_DELIVERY_FEE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Cancellation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "cancellation.client_initiated",
+          "version": null,
+          "text": "If the Client cancels the Services more than [CANCELLATION_NOTICE_PERIOD_DAYS] days before [EVENT_DATE], the Client shall forfeit [CANCELLATION_FEE_PERCENT] of [TOTAL_VALUE]. If the Client cancels within [CANCELLATION_NOTICE_PERIOD_DAYS] days of [EVENT_DATE], the Client shall forfeit the full amount of [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "CANCELLATION_NOTICE_PERIOD_DAYS",
+        "EVENT_DATE",
+        "CANCELLATION_FEE_PERCENT",
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Rescheduling",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "rescheduling.client_initiated",
+          "version": null,
+          "text": "The Client may request to reschedule [EVENT_DATE] by giving at least [RESCHEDULING_NOTICE_PERIOD_DAYS] days' written notice, subject to the Service Provider's availability. The Service Provider may charge a rescheduling fee of [RESCHEDULING_FEE_AMOUNT] where availability requires reallocation of resources."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "RESCHEDULING_NOTICE_PERIOD_DAYS",
+        "RESCHEDULING_FEE_AMOUNT"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "client_responsibilities.access_and_cooperation",
+          "version": null,
+          "text": "The Client shall ensure the Service Provider has timely access to [EVENT_LOCATION] and any information reasonably necessary to perform the Services."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Service Provider Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "service_provider_responsibilities.professional_standard",
+          "version": null,
+          "text": "The Service Provider shall perform the Services with the skill and care ordinarily exercised by professionals providing comparable services under comparable circumstances."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Image Rights",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "image_rights.attendee_notice",
+          "version": null,
+          "text": "The Client shall be responsible for informing attendees of [EVENT_LOCATION] that filming will take place, and for handling any attendee's request to be excluded from filming."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.ownership",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a [LICENSE_SCOPE] license to use the Deliverables for [PERMITTED_USE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSE_SCOPE",
+        "PERMITTED_USE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Force Majeure",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "force_majeure.weather_and_venue",
+          "version": null,
+          "text": "If [EVENT_DATE] is affected by weather conditions or venue unavailability beyond the Service Provider's control, the Parties shall apply the Rescheduling Clause rather than treating the event as cancelled."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: Additional Hours explicit rate distinguishes this Contract Type's block-coverage billing style from Event Photography's simple hourly-rate-plus-overtime model, a genuine and justified divergence given differing service delivery norms. Duplication: none. Loophole closed: none new beyond patterns already established. Contradiction: none between Force Majeure and Cancellation. Missing protection: none beyond established pattern. Complexity: reused Wedding Videography's Cancellation/Rescheduling/Force Majeure verbatim for internal consistency. Enforceability: Additional Hours rate explicit and tied to Client request, avoiding unilateral billing. Attack: Provider bills extra hours the Client never requested — mitigated: clause conditions the fee on \"the Client requests.\" Remaining attack vectors mirror those already mitigated in Wedding Videography and Event Photography (guest consent, cancellation timing, weather disruption). No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "EVENT_LOCATION",
+    "EVENT_DATE",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "ADDITIONAL_HOUR_RATE",
+    "EXPRESS_DELIVERY_PERIOD_DAYS",
+    "EXPRESS_DELIVERY_FEE",
+    "CANCELLATION_NOTICE_PERIOD_DAYS",
+    "CANCELLATION_FEE_PERCENT",
+    "RESCHEDULING_NOTICE_PERIOD_DAYS",
+    "RESCHEDULING_FEE_AMOUNT",
+    "LICENSE_SCOPE",
+    "PERMITTED_USE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "event_videography_agreement"
+}

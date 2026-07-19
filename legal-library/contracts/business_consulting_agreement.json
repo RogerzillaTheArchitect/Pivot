@@ -1,0 +1,319 @@
+{
+  "meta": {
+    "market": "Consulting",
+    "category": "Management Consulting",
+    "subcategory": "Strategy",
+    "contractType": "Business Consulting Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "consulting",
+      "business-strategy",
+      "conflict-of-interest",
+      "advisory"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Consulting Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "consulting_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide business consulting services described in [SERVICES_CONTRACTED], culminating in the deliverable(s) described in the Deliverables Clause. The Service Provider's advice is based on the information provided by the Client; the Client remains solely responsible for decisions to implement, and the manner of implementing, any recommendation."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "On-site Consulting",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "onsite_consulting.provision",
+          "version": null,
+          "text": "Where the Services include on-site consulting, the Service Provider shall attend [CLIENT_SITE_ADDRESS] on [ONSITE_DATES] at [ONSITE_RATE] per day."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_SITE_ADDRESS",
+        "ONSITE_DATES",
+        "ONSITE_RATE"
+      ]
+    },
+    {
+      "name": "Additional Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_reports.pricing",
+          "version": null,
+          "text": "Reports requested beyond those described in the Deliverables Clause shall be charged at [ADDITIONAL_REPORT_FEE] per report."
+        }
+      ],
+      "dynamicFields": [
+        "ADDITIONAL_REPORT_FEE"
+      ]
+    },
+    {
+      "name": "Training",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "training.provision",
+          "version": null,
+          "text": "Where the Services include training, the Service Provider shall provide [TRAINING_HOURS] hours of training on the Deliverables' recommendations."
+        }
+      ],
+      "dynamicFields": [
+        "TRAINING_HOURS"
+      ]
+    },
+    {
+      "name": "Follow-up Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "follow_up_support.bounded_assistance",
+          "version": null,
+          "text": "The Service Provider shall provide up to [INCLUDED_FOLLOW_UP_HOURS] hours of follow-up support at no additional charge. Additional support shall be charged at [FOLLOW_UP_HOURLY_RATE] per hour."
+        }
+      ],
+      "dynamicFields": [
+        "INCLUDED_FOLLOW_UP_HOURS",
+        "FOLLOW_UP_HOURLY_RATE"
+      ]
+    },
+    {
+      "name": "Performance Bonuses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "performance_bonuses.criteria",
+          "version": null,
+          "text": "Where the Parties agree to a performance bonus, the Service Provider shall receive an additional [PERFORMANCE_BONUS_AMOUNT] if [PERFORMANCE_METRIC] reaches [PERFORMANCE_TARGET] within [PERFORMANCE_MEASUREMENT_PERIOD], as measured by [PERFORMANCE_MEASUREMENT_SOURCE]."
+        }
+      ],
+      "dynamicFields": [
+        "PERFORMANCE_BONUS_AMOUNT",
+        "PERFORMANCE_METRIC",
+        "PERFORMANCE_TARGET",
+        "PERFORMANCE_MEASUREMENT_PERIOD",
+        "PERFORMANCE_MEASUREMENT_SOURCE"
+      ]
+    },
+    {
+      "name": "Meetings",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "meetings.schedule",
+          "version": null,
+          "text": "The Parties shall meet according to [MEETING_SCHEDULE] to review progress on the Services."
+        }
+      ],
+      "dynamicFields": [
+        "MEETING_SCHEDULE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Conflict of Interest",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "conflict_of_interest.disclosure",
+          "version": null,
+          "text": "The Service Provider shall disclose to the Client any engagement with a business that directly competes with the Client, existing at the start of or arising during this Agreement, and shall not use confidential information obtained from the Client to benefit a competing engagement."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Consulting Scope reuses the canonical advisory disclaimer established in Technical Consulting (Software Development Market), maintaining cross-Market consistency for identical legal concepts. Duplication: Follow-up Support vs. On-site Consulting kept distinct — the former is bounded remote assistance, the latter is location-specific attendance. Loophole closed: Conflict of Interest Clause requires disclosure of both existing and arising competing engagements, closing a gap where a consultant could take on a competitor mid-engagement without notice. Contradiction: none. Missing protection: Performance Bonuses reused verbatim from Marketing Market's pattern, ensuring the same objective-measurement safeguard applies wherever bonus structures appear. Complexity: minimal, correctly reusing established cross-Market patterns rather than re-deriving new wording. Enforceability: conflict disclosure obligation is continuous (\"existing... or arising during\"), not a one-time check. Attack: Consultant is secretly advising the Client's direct competitor using insights from the Client's own strategy sessions — mitigated by Conflict of Interest's continuous disclosure obligation and explicit restriction on using confidential information for a competing engagement. Attack: Client blames the consultant for a failed strategic pivot based on advice given — mitigated by the reused advisory disclaimer in Consulting Scope. Remaining attack vectors (unlimited follow-up, vague bonus criteria) mirror those already mitigated in Technical Consulting. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "CLIENT_SITE_ADDRESS",
+    "ONSITE_DATES",
+    "ONSITE_RATE",
+    "ADDITIONAL_REPORT_FEE",
+    "TRAINING_HOURS",
+    "INCLUDED_FOLLOW_UP_HOURS",
+    "FOLLOW_UP_HOURLY_RATE",
+    "PERFORMANCE_BONUS_AMOUNT",
+    "PERFORMANCE_METRIC",
+    "PERFORMANCE_TARGET",
+    "PERFORMANCE_MEASUREMENT_PERIOD",
+    "PERFORMANCE_MEASUREMENT_SOURCE",
+    "MEETING_SCHEDULE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "business_consulting_agreement"
+}

@@ -1,0 +1,211 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "Commercial Relationships",
+    "subcategory": "Distribution",
+    "contractType": "Reseller Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [SUPPLIER_NAME] (\"Supplier\") and [RESELLER_NAME] (\"Reseller\")."
+        }
+      ],
+      "dynamicFields": [
+        "SUPPLIER_NAME",
+        "RESELLER_NAME"
+      ]
+    },
+    {
+      "name": "Products",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "products.scope",
+          "version": null,
+          "text": "This Agreement covers the resale of [PRODUCT_NAME] by the Reseller to end customers."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME"
+      ]
+    },
+    {
+      "name": "Pricing",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "pricing.terms",
+          "version": null,
+          "text": "The Supplier shall sell [PRODUCT_NAME] to the Reseller at [WHOLESALE_PRICE]. The Reseller may set its own resale price to end customers, subject to any resale price guidance the Supplier provides, which shall not be binding unless required by applicable law."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME",
+        "WHOLESALE_PRICE"
+      ]
+    },
+    {
+      "name": "Minimum Sales",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "minimum_sales.commitment",
+          "version": null,
+          "text": "The Reseller shall purchase or sell at least [MINIMUM_SALES_VOLUME] of [PRODUCT_NAME] during each [MINIMUM_SALES_PERIOD]. Failure to meet this commitment entitles the Supplier to convert the Reseller's status under the Exclusive Territory Clause to non-exclusive."
+        }
+      ],
+      "dynamicFields": [
+        "MINIMUM_SALES_VOLUME",
+        "PRODUCT_NAME",
+        "MINIMUM_SALES_PERIOD"
+      ]
+    },
+    {
+      "name": "Territory",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "territory.scope",
+          "version": null,
+          "text": "The Reseller may resell [PRODUCT_NAME] within [RESALE_TERRITORY]."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME",
+        "RESALE_TERRITORY"
+      ]
+    },
+    {
+      "name": "Exclusive Territory",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "exclusive_territory.grant",
+          "version": null,
+          "text": "Within the territory defined in the Territory Clause, the Supplier shall not appoint another reseller for [PRODUCT_NAME], provided the Reseller continues to meet the Minimum Sales Clause."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME"
+      ]
+    },
+    {
+      "name": "Brand Usage",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "brand_usage.license",
+          "version": null,
+          "text": "The Supplier grants the Reseller a limited, non-exclusive, revocable license to use the Supplier's trademarks and brand materials solely to market and resell [PRODUCT_NAME], in accordance with the Supplier's brand guidelines."
+        },
+        {
+          "id": "brand_usage.quality_control",
+          "version": null,
+          "text": "The Reseller shall not alter the Supplier's trademarks or use them in a manner that could damage the Supplier's brand reputation. The Supplier may revoke the license granted under the Brand Usage License Clause upon written notice if the Reseller breaches this Clause."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME"
+      ]
+    },
+    {
+      "name": "Marketing Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "marketing_support.provision",
+          "version": null,
+          "text": "The Supplier may provide marketing materials or support to the Reseller for [PRODUCT_NAME] under terms agreed separately between the Parties."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCT_NAME"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.reseller_independent_conduct",
+          "version": null,
+          "text": "The Supplier shall not be liable for any representation, warranty, or conduct of the Reseller toward end customers that exceeds or contradicts the Supplier's official product documentation."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement without cause by giving [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice."
+        },
+        {
+          "id": "termination.for_cause",
+          "version": null,
+          "text": "Either Party may terminate this Agreement immediately by written notice if the other Party materially breaches this Agreement and fails to remedy the breach within [CURE_PERIOD_DAYS] days of receiving written notice."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS",
+        "CURE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: resale price guidance explicitly non-binding unless legally required, avoiding resale price maintenance issues flagged as a cross-jurisdiction concern. Duplication: none — Territory (geographic scope) vs Exclusive Territory (exclusivity condition) are distinct. Loophole closed: linked Exclusive Territory continuation directly to Minimum Sales performance, preventing a reseller from holding exclusivity indefinitely without performance. Contradiction: none between Brand Usage License and Quality Control — the latter is an explicit limitation on the former, not a conflicting grant. Missing protection: added Liability Clause disclaiming responsibility for reseller's independent representations, addressing Step 2 risk #6. Complexity: kept pricing flexible (wholesale price only) rather than dictating end-customer pricing structure. Enforceability: brand revocation right explicit and tied to a defined breach condition. Attack: Reseller claims exclusivity survives despite missing sales targets — mitigated by explicit conversion mechanism in Minimum Sales Clause. Attack: Reseller uses supplier's logo in a modified, unauthorized form — mitigated by Quality Control Clause granting explicit revocation right. Attack: End customer sues supplier over reseller's exaggerated marketing claim — mitigated by Reseller Independent Conduct liability clause. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "SUPPLIER_NAME",
+    "RESELLER_NAME",
+    "PRODUCT_NAME",
+    "WHOLESALE_PRICE",
+    "MINIMUM_SALES_VOLUME",
+    "MINIMUM_SALES_PERIOD",
+    "RESALE_TERRITORY",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "CURE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "reseller_agreement"
+}

@@ -1,0 +1,315 @@
+{
+  "meta": {
+    "market": "Videography",
+    "category": "Real Estate",
+    "subcategory": "Property",
+    "contractType": "Real Estate Video Production Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall produce real estate video content described in [SERVICES_CONTRACTED] at [PROPERTY_ADDRESS] on [SHOOT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PROPERTY_ADDRESS",
+        "SHOOT_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Drone Operation",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "drone_operation.authorization",
+          "version": null,
+          "text": "Where aerial capture is included, the Service Provider warrants that it holds any authorization required by applicable aviation regulation to operate a drone at [PROPERTY_ADDRESS]."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Virtual Tour",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "virtual_tour.format",
+          "version": null,
+          "text": "Where the Services include a virtual tour, the Service Provider shall deliver it in [VIRTUAL_TOUR_FORMAT] format, compatible with [VIRTUAL_TOUR_PLATFORM]."
+        }
+      ],
+      "dynamicFields": [
+        "VIRTUAL_TOUR_FORMAT",
+        "VIRTUAL_TOUR_PLATFORM"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Rush Delivery",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "rush_delivery.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request delivery within [RUSH_DELIVERY_PERIOD_DAYS] days, in exchange for an additional fee of [RUSH_DELIVERY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "RUSH_DELIVERY_PERIOD_DAYS",
+        "RUSH_DELIVERY_FEE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [SHOOT_DATE] at [PROPERTY_ADDRESS], subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "SHOOT_DATE",
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Weather Policy",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "weather_policy.rescheduling",
+          "version": null,
+          "text": "If weather conditions at [SHOOT_DATE] prevent adequate exterior filming at [PROPERTY_ADDRESS], the Parties shall reschedule the affected portion of the Services at no additional charge."
+        }
+      ],
+      "dynamicFields": [
+        "SHOOT_DATE",
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Commercial Usage",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "commercial_usage.listing_license",
+          "version": null,
+          "text": "Upon full payment of [TOTAL_VALUE], the Client receives a license to use the Deliverables for the marketing and sale or lease of [PROPERTY_ADDRESS], including listing syndication platforms. The Service Provider retains copyright in the Deliverables."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.ownership",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a [LICENSE_SCOPE] license to use the Deliverables for [PERMITTED_USE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSE_SCOPE",
+        "PERMITTED_USE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "client_responsibilities.property_access",
+          "version": null,
+          "text": "The Client shall ensure the Service Provider has access to [PROPERTY_ADDRESS] at the scheduled time on [SHOOT_DATE]. Ambiguity: none — Virtual Tour format and platform explicit via Dynamic Fields, closing Step 2 risk #5. Duplication: none — reuses Real Estate Photography's pattern for Drone Operation, Weather Policy, Commercial Usage, and Client Responsibilities verbatim in structure per PLDS-001 §14 consistency, differing only in [SHOOT_DATE] vs [EVENT_DATE] naming appropriate to video production terminology. Loophole closed: none new — pattern already closed in Photography equivalent. Contradiction: none. Missing protection: none additional needed beyond Photography's equivalent plus Virtual Tour. Complexity: minimal, directly mirrors Real Estate Photography structure per Market-internal consistency rule for cross-Market analogous risk. Enforceability: identical enforceability pattern to Real Estate Photography Agreement, validated as consistent. Attack: Client expects an interactive 3D virtual tour but receives a simple walkthrough video — mitigated by explicit format Dynamic Field. Remaining attack vectors identical to and already mitigated as in Real Estate Photography Agreement (drone authorization, access failure, weather disruption, listing-scope overreach). No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS",
+        "SHOOT_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "PROPERTY_ADDRESS",
+    "SHOOT_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "VIRTUAL_TOUR_FORMAT",
+    "VIRTUAL_TOUR_PLATFORM",
+    "RUSH_DELIVERY_PERIOD_DAYS",
+    "RUSH_DELIVERY_FEE",
+    "DELIVERY_DATE",
+    "LICENSE_SCOPE",
+    "PERMITTED_USE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE",
+    "EVENT_DATE"
+  ],
+  "slug": "real_estate_video_production_agreement"
+}

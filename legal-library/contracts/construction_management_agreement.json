@@ -1,0 +1,289 @@
+{
+  "meta": {
+    "market": "Architecture & Engineering",
+    "category": "Construction",
+    "subcategory": "Project Management",
+    "contractType": "Construction Management Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "construction-management",
+      "project-management",
+      "site-safety",
+      "risk-management"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Management Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "management_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide construction management services described in [SERVICES_CONTRACTED] for [PROJECT_NAME]. The Service Provider coordinates the work of contractors and suppliers but does not itself perform construction trades unless expressly agreed in writing."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place according to the project timeline described in [MILESTONE_SCHEDULE]."
+        }
+      ],
+      "dynamicFields": [
+        "MILESTONE_SCHEDULE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Weekly Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "weekly_reports.provision",
+          "version": null,
+          "text": "The Service Provider shall deliver a weekly report summarizing progress, issues, and upcoming tasks."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Site Inspections",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "site_inspections.provision",
+          "version": null,
+          "text": "The Service Provider shall conduct site inspections at [PROJECT_SITE_ADDRESS] on [INSPECTION_FREQUENCY] and report observations to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS",
+        "INSPECTION_FREQUENCY"
+      ]
+    },
+    {
+      "name": "Risk Management",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "risk_management.plan",
+          "version": null,
+          "text": "The Service Provider shall monitor project risks and maintain a risk register or equivalent record summarizing major risks and mitigation steps."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Emergency Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "emergency_support.provision",
+          "version": null,
+          "text": "Where the Client requests urgent support outside standard working hours, the Service Provider shall use reasonable efforts to respond within [EMERGENCY_RESPONSE_TIME], for an additional fee of [EMERGENCY_SUPPORT_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "EMERGENCY_RESPONSE_TIME",
+        "EMERGENCY_SUPPORT_FEE"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the Services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "deliverables.reporting",
+          "version": null,
+          "text": "The Service Provider shall deliver the reports and records described in [DELIVERABLES_SCOPE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERABLES_SCOPE"
+      ]
+    },
+    {
+      "name": "Safety Requirements",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "safety_requirements.site_control",
+          "version": null,
+          "text": "Where the Services include management of on-site personnel, the Service Provider shall implement and communicate reasonable site-safety procedures within its coordination role, and shall promptly notify the Client of any observed safety issue requiring escalation."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "responsibilities.client_cooperation",
+          "version": null,
+          "text": "The Client shall provide timely decisions, access to the project site, and relevant project information necessary for the Service Provider to coordinate the work effectively."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Management Scope explicitly states the coordinator/trade-execution distinction, preventing the most common scope confusion in this Contract Type. Duplication: Weekly Reports vs. Deliverables kept distinct — the former is ongoing progress reporting, the latter is any specific reporting package agreed separately. Loophole closed: Safety Requirements becomes conditional only when personnel management exists, matching the actual trigger and avoiding an overbroad safety obligation where the manager has no on-site personnel role. Contradiction: none. Missing protection: Risk Management added as a core coordination duty reflecting the manager's role in tracking project-level risks. Complexity: kept site inspections and weekly reports as separate controls because they serve different monitoring frequencies and purposes. Enforceability: service coordination exclusion and safety escalation duties both explicit and tied to the service model. Attack: Client claims the construction manager was supposed to perform the drywall, not coordinate it — mitigated by the Management Scope's explicit trade-execution exclusion. Attack: A safety incident occurs on site and the Client alleges the manager had no duty to flag it — mitigated by the Safety Requirements conditional clause when personnel management is included. Attack: Client expects emergency support at midnight without a fee — mitigated by Emergency Support's explicit request-based, fee-based structure. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "MILESTONE_SCHEDULE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "PROJECT_SITE_ADDRESS",
+    "INSPECTION_FREQUENCY",
+    "EMERGENCY_RESPONSE_TIME",
+    "EMERGENCY_SUPPORT_FEE",
+    "DELIVERABLES_SCOPE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "construction_management_agreement"
+}

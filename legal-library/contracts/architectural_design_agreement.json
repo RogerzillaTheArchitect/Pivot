@@ -1,0 +1,359 @@
+{
+  "meta": {
+    "market": "Architecture & Engineering",
+    "category": "Architecture",
+    "subcategory": "Building Design",
+    "contractType": "Architectural Design Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "architecture",
+      "building-design",
+      "municipal-approval",
+      "intellectual-property"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Project Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "project_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide architectural design services for [PROJECT_NAME] described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME",
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the architectural design services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Municipal Approval",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "municipal_approval.authorization",
+          "version": null,
+          "text": "Where the Client specifically authorizes it, the Service Provider shall prepare and file the permit applications required for [PROJECT_NAME] with [MUNICIPAL_AUTHORITY]. The Service Provider shall not be liable for delay resulting from the municipal authority's independent review process, which is outside either Party's control."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME",
+        "MUNICIPAL_AUTHORITY"
+      ]
+    },
+    {
+      "name": "Site Supervision",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "site_supervision.provision",
+          "version": null,
+          "text": "Where the Client requests site supervision during construction, the Service Provider shall visit [PROJECT_SITE_ADDRESS] periodically to confirm general conformance with the design intent, for an additional fee of [SITE_SUPERVISION_FEE] per [BILLING_PERIOD]. Site supervision under this Clause does not include construction management or day-to-day site oversight."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS",
+        "SITE_SUPERVISION_FEE",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "Project Revisions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "project_revisions.pricing",
+          "version": null,
+          "text": "The Client may request up to [INCLUDED_REVISION_ROUNDS] rounds of revisions at no additional charge. Additional rounds shall be charged at [ADDITIONAL_REVISION_FEE] per round."
+        }
+      ],
+      "dynamicFields": [
+        "INCLUDED_REVISION_ROUNDS",
+        "ADDITIONAL_REVISION_FEE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Urgent Delivery",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "urgent_delivery.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request delivery within [URGENT_DELIVERY_PERIOD_DAYS] days, in exchange for an additional fee of [URGENT_DELIVERY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "URGENT_DELIVERY_PERIOD_DAYS",
+        "URGENT_DELIVERY_FEE"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "client_responsibilities.access_and_cooperation",
+          "version": null,
+          "text": "The Client shall ensure the Service Provider has timely access to [EVENT_LOCATION] and any information reasonably necessary to perform the Services."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Service Provider Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "service_provider_responsibilities.professional_standard",
+          "version": null,
+          "text": "The Service Provider shall perform the Services with the skill and care ordinarily exercised by professionals providing comparable services under comparable circumstances."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Approvals",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "approvals.regulatory_timeline_disclaimer",
+          "version": null,
+          "text": "The Service Provider shall use reasonable efforts to obtain necessary regulatory approvals for [PROJECT_NAME], but shall not be liable for delay caused by a regulatory body's review timeline."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Intellectual Property",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "intellectual_property.design_ownership",
+          "version": null,
+          "text": "The Service Provider retains ownership of the architectural designs and drawings. Upon full payment of [TOTAL_VALUE], the Client receives a license to use the designs for the construction of [PROJECT_NAME] at [PROJECT_SITE_ADDRESS], and not for construction at another site or by another client without the Service Provider's written consent."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PROJECT_NAME",
+        "PROJECT_SITE_ADDRESS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement for convenience upon [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice. The Client shall pay for Services performed up to the effective date of termination."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Site Supervision explicitly excludes construction management, distinguishing it from a separate Construction Management Agreement's scope, closing Step 2 risk #2. Duplication: Municipal Approval (permit filing) vs. Approvals (general regulatory timeline disclaimer) kept distinct — the former is an authorized service the architect performs, the latter is a general disclaimer applicable even without the architect handling filing directly. Loophole closed: Intellectual Property explicitly restricts design reuse to the specific project and site, closing a gap where a Client could reuse a paid design at an unrelated site without further compensation. Contradiction: none. Missing protection: Architect Responsibilities reused Service Provider Responsibilities pattern; professional standard of care embedded via General Provisions' cross-Market pattern. Complexity: kept Municipal Approval and Approvals separate given genuinely different triggering conditions. Enforceability: design reuse restriction explicitly tied to project name and site address Dynamic Fields. Attack: Client reuses the architect's design for a second, unrelated building without additional payment — mitigated by Intellectual Property's explicit site/project-specific license restriction. Attack: Permit approval takes six months longer than expected and the Client blames the architect for the delay — mitigated by Municipal Approval and Approvals Clauses' explicit regulatory-timeline disclaimers. Attack: Client expects the architect to manage the construction site day-to-day under the Site Supervision fee — mitigated by the Clause's explicit scope exclusion. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "MUNICIPAL_AUTHORITY",
+    "PROJECT_SITE_ADDRESS",
+    "SITE_SUPERVISION_FEE",
+    "BILLING_PERIOD",
+    "INCLUDED_REVISION_ROUNDS",
+    "ADDITIONAL_REVISION_FEE",
+    "URGENT_DELIVERY_PERIOD_DAYS",
+    "URGENT_DELIVERY_FEE",
+    "EVENT_LOCATION",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "architectural_design_agreement"
+}

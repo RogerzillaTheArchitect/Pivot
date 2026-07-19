@@ -1,0 +1,247 @@
+{
+  "meta": {
+    "market": "Consulting",
+    "category": "Personal Development",
+    "subcategory": "Mentorship",
+    "contractType": "Mentorship Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "consulting",
+      "mentorship",
+      "personal-development"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Mentorship Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "mentorship_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide mentorship services described in [SERVICES_CONTRACTED]. Mentorship is not a substitute for professional therapeutic, medical, financial, or legal advice, and the Client should seek a qualified professional for such matters."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Online Meetings",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "online_meetings.provision",
+          "version": null,
+          "text": "Where meetings are conducted online, they shall take place via [ONLINE_PLATFORM]."
+        }
+      ],
+      "dynamicFields": [
+        "ONLINE_PLATFORM"
+      ]
+    },
+    {
+      "name": "Additional Sessions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_sessions.pricing",
+          "version": null,
+          "text": "Sessions requested beyond [SESSIONS_INCLUDED] shall be charged at [ADDITIONAL_SESSION_RATE] per session."
+        }
+      ],
+      "dynamicFields": [
+        "SESSIONS_INCLUDED",
+        "ADDITIONAL_SESSION_RATE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Support Materials",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "support_materials.provision",
+          "version": null,
+          "text": "The Service Provider shall share reference materials described in [SUPPORT_MATERIALS_SCOPE] to support the mentee's development."
+        }
+      ],
+      "dynamicFields": [
+        "SUPPORT_MATERIALS_SCOPE"
+      ]
+    },
+    {
+      "name": "Meeting Schedule",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "meeting_schedule.frequency",
+          "version": null,
+          "text": "Meetings shall take place [MEETING_FREQUENCY] for [MEETING_DURATION] each, according to [MEETING_SCHEDULE_REFERENCE]."
+        }
+      ],
+      "dynamicFields": [
+        "MEETING_FREQUENCY",
+        "MEETING_DURATION",
+        "MEETING_SCHEDULE_REFERENCE"
+      ]
+    },
+    {
+      "name": "Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "responsibilities.mentor_mentee_engagement",
+          "version": null,
+          "text": "The mentee is responsible for actively participating in meetings and pursuing agreed development goals between meetings. The mentor is responsible for preparing for and facilitating each meeting in good faith."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement for convenience upon [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice. The Client shall pay for sessions completed up to the effective date of termination."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Mentorship Scope reuses Coaching's professional-advice disclaimer verbatim in structure, adapted only in terminology, maintaining cross-Contract-Type consistency for an identical underlying risk. Duplication: none — Support Materials is a lightweight, mentorship-specific deliverable absent from Coaching's more session-intensive structure. Loophole closed: none new required beyond the reused Coaching pattern. Contradiction: none. Missing protection: Confidentiality kept Optional (not Required as in Coaching) reflecting this Contract Type's typically lower-stakes, less clinically personal disclosure profile — a deliberate, justified divergence. Complexity: minimal — Cancellation/Rescheduling deliberately omitted given mentorship's more flexible, less formally structured session cadence relative to Coaching. Enforceability: session pricing and meeting frequency both explicit Dynamic Fields. Attack: Mentee relies on the mentor's guidance instead of seeking qualified professional help for a serious personal issue — mitigated by the explicit disclaimer in the Mentorship Scope Clause. Attack: Mentor and mentee dispute whether a given session counted toward the included allotment — mitigated by explicit Additional Sessions pricing tied to a defined included-count field. Attack: Mentee expects the mentor to complete their goals for them — mitigated by the Responsibilities Clause's explicit division of engagement duties. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "ONLINE_PLATFORM",
+    "SESSIONS_INCLUDED",
+    "ADDITIONAL_SESSION_RATE",
+    "SUPPORT_MATERIALS_SCOPE",
+    "MEETING_FREQUENCY",
+    "MEETING_DURATION",
+    "MEETING_SCHEDULE_REFERENCE",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "mentorship_agreement"
+}
