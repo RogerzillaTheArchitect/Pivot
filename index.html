@@ -5503,113 +5503,85 @@
   }
 
   /* ✨ Trabalho — 3 momentos */
-  const BIBLIOTECA_OFICIAL=[
-    {id:'b1', titulo:'Casamento Essencial', tipo:'Contrato', categoria:'Casamentos', autor:'Tiago Reis', avaliacao:4.3, usos:103, desc:'Cobertura direta do evento, sem extras, entrega digital.', tags:['casamento','wedding','essencial','digital']},
-    {id:'b2', titulo:'Casamento Premium', tipo:'Contrato', categoria:'Casamentos', autor:'Bruno Silva', avaliacao:4.4, usos:312, desc:'Cobertura completa do dia, álbum incluído, entrega em 60 dias.', tags:['casamento','wedding','álbum','premium','cobertura completa']},
-    {id:'b3', titulo:'Destination Wedding', tipo:'Contrato', categoria:'Casamentos', autor:'Tiago Reis', avaliacao:4.7, usos:203, desc:'Casamentos fora da cidade — viagem, estadia e logística incluídas.', tags:['casamento','wedding','destination','viagem']},
-    {id:'b4', titulo:'Mini Wedding', tipo:'Contrato', categoria:'Casamentos', autor:'Tiago Reis', avaliacao:4.7, usos:34, desc:'Casamentos íntimos, até 30 convidados.', tags:['casamento','mini wedding','íntimo']},
-    {id:'b5', titulo:'Elopement', tipo:'Contrato', categoria:'Casamentos', autor:'Inês Ramos', avaliacao:4.4, usos:94, desc:'Cerimónias a dois, sem convidados, foco total no casal.', tags:['casamento','elopement','íntimo','a dois']},
-    {id:'b6', titulo:'Sessão Individual', tipo:'Contrato', categoria:'Fotografia', autor:'Helena Santos', avaliacao:4.7, usos:203, desc:'Sessão de retrato a solo, em estúdio ou exterior.', tags:['fotografia','retrato','sessão','individual']},
-    {id:'b7', titulo:'Sessão Casal', tipo:'Contrato', categoria:'Fotografia', autor:'Bruno Silva', avaliacao:4.8, usos:301, desc:'Ensaio de casal — noivado, aniversário ou simplesmente porque sim.', tags:['fotografia','casal','ensaio','noivado']},
-    {id:'b8', titulo:'Sessão Família', tipo:'Contrato', categoria:'Fotografia', autor:'Helena Santos', avaliacao:4.6, usos:162, desc:'Sessões para famílias, com ou sem crianças pequenas.', tags:['fotografia','família','sessão','crianças']},
-    {id:'b9', titulo:'Retrato Corporativo', tipo:'Contrato', categoria:'Fotografia', autor:'Pedro Nunes', avaliacao:4.5, usos:23, desc:'Retratos profissionais para equipes e lideranças.', tags:['fotografia','corporativo','retrato','equipe']},
-    {id:'b10', titulo:'Fotografia Imobiliária', tipo:'Contrato', categoria:'Imobiliário', autor:'Marta Dias', avaliacao:4.8, usos:127, desc:'Fotografia de interiores e exteriores para anúncios.', tags:['imobiliário','imóvel','fotografia']},
-    {id:'b11', titulo:'Fotografia de Produto', tipo:'Contrato', categoria:'Fotografia', autor:'Carla Mendes', avaliacao:4.4, usos:334, desc:'Still life e catálogo para lojas e e-commerce.', tags:['fotografia','produto','catálogo','ecommerce']},
-    {id:'b12', titulo:'Vídeo Comercial', tipo:'Contrato', categoria:'Vídeo', autor:'Rui Pereira', avaliacao:4.4, usos:148, desc:'Vídeo publicitário curto, para campanhas e redes sociais.', tags:['vídeo','video','comercial','publicidade']},
-    {id:'b13', titulo:'Vídeo Institucional', tipo:'Contrato', categoria:'Vídeo', autor:'Tiago Reis', avaliacao:4.5, usos:134, desc:'Vídeo de apresentação para empresas e marcas.', tags:['vídeo','video','institucional','empresa','marca']},
-    {id:'b14', titulo:'Aftermovie', tipo:'Contrato', categoria:'Vídeo', autor:'Pedro Nunes', avaliacao:4.5, usos:34, desc:'Resumo dinâmico de um evento, pronto para redes sociais.', tags:['vídeo','video','aftermovie','evento']},
-    {id:'b15', titulo:'Podcast', tipo:'Contrato', categoria:'Vídeo', autor:'Diogo Costa', avaliacao:4.6, usos:148, desc:'Gravação e edição de episódios, em estúdio ou remoto.', tags:['podcast','áudio','gravação','episódio']},
-    {id:'b16', titulo:'Videoclipe', tipo:'Contrato', categoria:'Vídeo', autor:'Tiago Reis', avaliacao:4.7, usos:256, desc:'Produção musical, do conceito à edição final.', tags:['vídeo','video','videoclipe','música']},
-    {id:'b17', titulo:'Produção de Conteúdo', tipo:'Contrato', categoria:'Vídeo', autor:'Pedro Nunes', avaliacao:4.9, usos:134, desc:'Pacote de conteúdo para redes sociais, fotos e vídeos curtos.', tags:['conteúdo','redes sociais','social media']},
-    {id:'b18', titulo:'Evento Corporativo', tipo:'Contrato', categoria:'Corporativo', autor:'Pedro Nunes', avaliacao:4.4, usos:41, desc:'Cobertura fotográfica e/ou vídeo de eventos de empresa.', tags:['corporativo','evento','empresa']},
-    {id:'b19', titulo:'Conferência', tipo:'Contrato', categoria:'Corporativo', autor:'Inês Ramos', avaliacao:4.7, usos:334, desc:'Cobertura de palestras, painéis e networking.', tags:['corporativo','conferência','palestra','networking']},
-    {id:'b20', titulo:'Workshop', tipo:'Contrato', categoria:'Corporativo', autor:'Carla Mendes', avaliacao:4.9, usos:94, desc:'Cobertura de formações e workshops presenciais.', tags:['corporativo','workshop','formação']},
-    {id:'b21', titulo:'Palestra', tipo:'Contrato', categoria:'Corporativo', autor:'Tiago Reis', avaliacao:4.5, usos:162, desc:'Gravação de uma única intervenção ou palestra.', tags:['corporativo','palestra','talk']},
-    {id:'b22', titulo:'Captação Aérea', tipo:'Contrato', categoria:'Drone', autor:'Rui Pereira', avaliacao:4.4, usos:134, desc:'Imagens e vídeo aéreo com drone certificado.', tags:['drone','aéreo','captação']},
-    {id:'b23', titulo:'Drone Imobiliário', tipo:'Contrato', categoria:'Drone', autor:'Bruno Silva', avaliacao:4.7, usos:301, desc:'Vista aérea de imóveis e terrenos para anúncios.', tags:['drone','imobiliário','imóvel','aéreo']},
-    {id:'b24', titulo:'Prestação de Serviços', tipo:'Contrato', categoria:'Outros', autor:'Tiago Reis', avaliacao:4.7, usos:78, desc:'Modelo genérico, adaptável a qualquer tipo de trabalho.', tags:['geral','genérico','serviços']},
-    {id:'b25', titulo:'Freelancer', tipo:'Contrato', categoria:'Outros', autor:'Helena Santos', avaliacao:4.8, usos:78, desc:'Modelo simples para trabalhos pontuais e avulsos.', tags:['geral','freelance','avulso','pontual']},
-    {id:'b26', titulo:'Projeto Criativo', tipo:'Contrato', categoria:'Outros', autor:'Diogo Costa', avaliacao:4.5, usos:256, desc:'Modelo flexível para projetos criativos sem categoria fixa.', tags:['geral','criativo','projeto']},
-    {id:'b27', titulo:'Informações do Cliente — Casamento', tipo:'Informações do Cliente', categoria:'Casamentos', autor:'Helena Santos', avaliacao:4.4, usos:127, desc:'Perguntas-chave para alinhar expectativas do grande dia.', tags:['casamento','wedding','informações']},
-    {id:'b28', titulo:'Informações do Cliente — Sessão Fotográfica', tipo:'Informações do Cliente', categoria:'Fotografia', autor:'Inês Ramos', avaliacao:4.4, usos:34, desc:'Preferências de estilo, local e referências visuais.', tags:['fotografia','retrato','informações']},
-    {id:'b29', titulo:'Informações do Cliente — Vídeo Institucional', tipo:'Informações do Cliente', categoria:'Vídeo', autor:'Rui Pereira', avaliacao:4.6, usos:41, desc:'Objetivo, público-alvo e mensagens-chave do vídeo.', tags:['vídeo','video','institucional']},
-    {id:'b30', titulo:'Informações do Cliente — Podcast', tipo:'Informações do Cliente', categoria:'Vídeo', autor:'Bruno Silva', avaliacao:4.9, usos:221, desc:'Tema, convidados e formato de cada episódio.', tags:['podcast','áudio','informações']},
-    {id:'b31', titulo:'Cronograma Casamento', tipo:'Cronograma', categoria:'Casamentos', autor:'Rui Pereira', avaliacao:4.4, usos:178, desc:'Estrutura horária típica — cerimónia, cocktail, jantar, festa.', tags:['casamento','wedding','cronograma','horário']},
-    {id:'b32', titulo:'Cronograma Conferência', tipo:'Cronograma', categoria:'Corporativo', autor:'Sofia Almeida', avaliacao:4.9, usos:256, desc:'Estrutura de blocos — abertura, palestras, networking.', tags:['corporativo','conferência','cronograma']},
-    {id:'b33', titulo:'Cronograma Evento Corporativo', tipo:'Cronograma', categoria:'Corporativo', autor:'Diogo Costa', avaliacao:4.4, usos:67, desc:'Blocos de agenda para conferências e lançamentos.', tags:['corporativo','evento','cronograma']},
-    {id:'b34', titulo:'Cronograma Podcast — Série', tipo:'Cronograma', categoria:'Vídeo', autor:'Bruno Silva', avaliacao:4.8, usos:203, desc:'Blocos de gravação para várias datas seguidas.', tags:['podcast','áudio','cronograma','série']},
-    {id:'b35', titulo:'Checklist Equipamento Casamento', tipo:'Checklist', categoria:'Casamentos', autor:'Carla Mendes', avaliacao:4.8, usos:156, desc:'Lista de verificação de material antes do grande dia.', tags:['casamento','wedding','checklist','equipamento']},
-    {id:'b36', titulo:'Checklist Entrega Vídeo', tipo:'Checklist', categoria:'Vídeo', autor:'Pedro Nunes', avaliacao:4.6, usos:94, desc:'Passos de exportação, revisão e envio final.', tags:['vídeo','video','checklist','entrega']},
-    {id:'b37', titulo:'Coleção Casamento Completa', tipo:'Coleção', categoria:'Casamentos', autor:'Marta Dias', avaliacao:4.6, usos:41, desc:'Contrato + informações do cliente + cronograma + pagamentos, tudo junto.', tags:['casamento','wedding','coleção','completa']},
-    {id:'b38', titulo:'Coleção Corporativo Essencial', tipo:'Coleção', categoria:'Corporativo', autor:'Inês Ramos', avaliacao:4.9, usos:67, desc:'Contrato + cronograma para eventos de empresa.', tags:['corporativo','evento','coleção']},
-    {id:'b39', titulo:'Coleção Sessão Fotográfica', tipo:'Coleção', categoria:'Fotografia', autor:'Marta Dias', avaliacao:4.8, usos:156, desc:'Contrato + informações do cliente para sessões de retrato ou casal.', tags:['fotografia','retrato','sessão','coleção']}
-  ];
-  /* Composição real de cada modelo "Contrato"/"Coleção" da Biblioteca — cada
-     entrada é a lista de blocos (chave de blocoTextos + parâmetros próprios)
-     que dá a esse modelo o seu conteúdo distinto. Antes, TODOS os 39 modelos
-     geravam o mesmo esqueleto genérico (blocosModeloPadrao) — agora cada um
-     reflete o contexto real do serviço: prazos de entrega, % de sinal, janela
-     de cancelamento e se os direitos ficam com o prestador (uso de portfólio,
-     comum em trabalho pessoal/eventos) ou são cedidos ao cliente (comum em
-     trabalho B2B/corporativo, onde a empresa precisa de usar o material
-     livremente). Modelos "Informações do Cliente"/"Cronograma"/"Checklist"
-     não estão aqui — ainda não têm gerador de conteúdo próprio, ver nota em
-     blocosParaModeloBiblioteca. */
-  const BIBLIOTECA_BLOCOS = {
-    // ---- Casamentos ----
-    b1: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:45}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'} ],
-    b2: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:40}}, {key:'entrega', params:{prazoEntregaDias:60, formatoEntrega:'por galeria online e álbum físico'}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
-    b3: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:75}}, {key:'cancelamento', params:{diasCancelamento:45, percentReembolso:30}}, {key:'direitos'}, {key:'forcaMaior'}, {key:'alteracaoEscopo'} ],
-    b4: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, marcoEntrega:'a cerimónia'}}, {key:'cancelamento', params:{diasCancelamento:20, percentReembolso:50}}, {key:'direitos'} ],
-    b5: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'} ],
-    // ---- Fotografia ----
-    b6: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:15, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'} ],
-    b7: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ],
-    b8: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ],
-    b9: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
-    b11: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'alteracaoEscopo'} ],
-    // ---- Imobiliário ----
-    b10: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiros digitais em alta resolução', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
-    // ---- Vídeo ----
-    b12: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:21, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'alteracaoEscopo'}, {key:'garantias'} ],
-    b13: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:21, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
-    b14: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiro digital, pronto para redes sociais'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
-    b15: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiro de áudio/vídeo editado', marcoEntrega:'a gravação'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
-    b16: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'garantias'} ],
-    b17: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:7, formatoEntrega:'por ficheiros digitais, prontos para redes sociais'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
-    // ---- Corporativo ----
-    b18: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:14, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'}, {key:'forcaMaior'} ],
-    b19: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
-    b20: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por galeria digital'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
-    b21: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:7, formatoEntrega:'por ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}} ],
-    // ---- Drone ----
-    b22: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:10, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'} ],
-    b23: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:5, formatoEntrega:'por ficheiro digital em alta resolução'}}, {key:'cancelamento', params:{diasCancelamento:3, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'forcaMaior'} ],
-    // ---- Outros ----
-    b24: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'} ],
-    b25: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:15, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:7, percentReembolso:50}}, {key:'direitos'} ],
-    b26: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:30, formatoEntrega:'conforme acordado'}}, {key:'cancelamento', params:{diasCancelamento:15, percentReembolso:50}}, {key:'direitos'}, {key:'alteracaoEscopo'}, {key:'garantias'} ],
-    // ---- Coleções ----
-    b37: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:40}}, {key:'entrega', params:{prazoEntregaDias:60, formatoEntrega:'por galeria online e álbum físico'}}, {key:'cancelamento', params:{diasCancelamento:30, percentReembolso:50}}, {key:'direitos'}, {key:'forcaMaior'}, {key:'confidencialidade'} ],
-    b38: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:14, formatoEntrega:'por galeria/ficheiro digital'}}, {key:'cancelamento', params:{diasCancelamento:14, percentReembolso:50}}, {key:'direitos', params:{cessaoTotal:true}}, {key:'confidencialidade'} ],
-    b39: [ {key:'identificacao'}, {key:'pagamento', params:{percentSinal:50}}, {key:'entrega', params:{prazoEntregaDias:20, formatoEntrega:'por galeria digital', marcoEntrega:'a sessão'}}, {key:'cancelamento', params:{diasCancelamento:10, percentReembolso:50}}, {key:'direitos'} ]
+  /* ============================================================
+     LEGAL LIBRARY ENGINE — fundação
+     Fonte de verdade: Markdown oficial em "Legal Library" (compilado por
+     tools/build-legal-library.js). Este objeto é a ÚNICA porta de entrada
+     que o resto do app usa para ler o catálogo — nenhum outro código lê
+     legal-library/*.json diretamente. Isso é o que permite trocar a
+     origem dos dados no futuro (ex.: um endpoint de API) sem tocar em
+     nenhum dos pontos do app que consultam a biblioteca.
+     Hoje o catálogo publicado (legal-library/index.json) está vazio de
+     propósito — ver legal-library/README.md para publicar o conteúdo
+     real dos 61 contratos.
+     Cada entrada do catálogo tem o formato:
+       { id, titulo, categoria, mercado, subcategoria, desc, tags,
+         requiredBlockCount, optionalBlockCount, clauseCount }
+     Não existem (e não são fabricados) autor/avaliação/usos — esses
+     conceitos vinham do antigo catálogo comunitário e não têm
+     equivalente na Biblioteca Jurídica oficial, que é uma fonte única
+     e curada, não um marketplace. */
+  const LegalLibrary = {
+    _catalog: [], _byId: new Map(), _detailCache: new Map(), _manifest: null, _basePath: 'legal-library/',
+    async init(){
+      try{
+        const [manifest, idx] = await Promise.all([
+          fetch(this._basePath+'manifest.json').then(r=>r.json()),
+          fetch(this._basePath+'index.json').then(r=>r.json())
+        ]);
+        this._manifest = manifest;
+        this._catalog = (idx.contractTypes||[]).map(c=>({
+          id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
+          mercado: c.market, desc: null, tags: [],
+          requiredBlockCount: c.requiredBlockCount, optionalBlockCount: c.optionalBlockCount, clauseCount: c.clauseCount
+        }));
+      }catch(e){
+        console.warn('LegalLibrary: catálogo indisponível, seguindo com biblioteca vazia.', e);
+        this._manifest = {published:false};
+        this._catalog = [];
+      }
+      this._byId.clear();
+      this._catalog.forEach(c=>this._byId.set(c.id, c));
+      return this._catalog;
+    },
+    list({categoria, query}={}){
+      let out = this._catalog;
+      if(categoria) out = out.filter(c=>c.categoria===categoria);
+      if(query){
+        const q=query.toLowerCase();
+        out = out.filter(c=>((c.titulo||'')+' '+(c.desc||'')+' '+(c.tags||[]).join(' ')).toLowerCase().includes(q));
+      }
+      return out;
+    },
+    get(id){ return this._byId.get(id) || null; },
+    async getDetail(id){
+      if(this._detailCache.has(id)) return this._detailCache.get(id);
+      const c=this.get(id); if(!c) return null;
+      try{
+        const detail = await fetch(this._basePath+'contracts/'+c.id+'.json').then(r=>r.json());
+        this._detailCache.set(id, detail);
+        return detail;
+      }catch(e){ console.warn('LegalLibrary: detalhe indisponível para', id, e); return null; }
+    },
+    resolveClauseText(text, fieldValues={}){
+      return text.replace(/\[([A-Z0-9_]+)\]/g, (m,name)=> (fieldValues[name]!=null ? fieldValues[name] : m));
+    }
   };
-  /* Gera os blocos reais de um modelo da Biblioteca. Modelos "Contrato"/
-     "Coleção" usam a composição de BIBLIOTECA_BLOCOS; qualquer id sem entrada
-     (ou tipos ainda sem gerador próprio — Informações do Cliente, Cronograma,
-     Checklist) cai no esqueleto genérico anterior, para nunca deixar o
-     wizard sem blocos. */
+  LegalLibrary.init();
+  /* Modelos "Contrato" da Biblioteca Jurídica ainda não têm gerador de
+     blocos próprio (os blocos oficiais usam nomes/estrutura do Blueprint,
+     não as 9 chaves genéricas de blocoTextos) — até essa etapa ser feita,
+     qualquer seleção cai no esqueleto genérico em branco, para nunca deixar
+     o wizard sem blocos. */
   function blocosParaModeloBiblioteca(m){
-    const composicao = m && BIBLIOTECA_BLOCOS[m.id];
-    if(!composicao) return blocosModeloPadrao();
-    return composicao.map((c,i)=>({ id:'lb'+i, key:c.key, customText:null, on:true, params:c.params||null }));
+    return blocosModeloPadrao();
   }
   function sugerirModelos(nomeTrabalho){
-    const q=(nomeTrabalho||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const q=(nomeTrabalho||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
     const palavras=q.split(/\s+/).filter(w=>w.length>2);
     if(!palavras.length) return [];
-    const pontuados=BIBLIOTECA_OFICIAL.filter(m=>m.tipo==='Contrato').map(m=>{
-      const alvo=(m.titulo+' '+m.tags.join(' ')).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const pontuados=LegalLibrary.list().map(m=>{
+      const alvo=(m.titulo+' '+(m.tags||[]).join(' ')).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
       let pontos=0;
       palavras.forEach(p=>{ if(alvo.includes(p)) pontos++; });
       return {modelo:m, pontos};
@@ -5624,22 +5596,24 @@
         '<div class="model-card-name">'+escapeHtml(m.titulo)+'</div>'+
         '<svg class="model-card-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>'+
       '</div>'+
-      '<div class="model-card-desc">'+escapeHtml(m.desc)+'</div>'+
-      '<div class="model-card-foot">'+
-        '<span class="model-card-author">por '+escapeHtml(m.autor)+'</span>'+
-        '<span class="model-card-rating">'+ICON_ESTRELA+m.avaliacao.toFixed(1)+'</span>'+
-        '<span class="model-card-usage">Usado '+m.usos+' vezes</span>'+
-      '</div>'+
+      '<div class="model-card-desc">'+escapeHtml(m.desc||'')+'</div>'+
     '</div>';
   }
-  /* Biblioteca Pivot — navegação real por categoria e detalhe dinâmico */
+  /* Biblioteca Pivot — navegação real por categoria e detalhe dinâmico.
+     A categoria de cada item é o Market da Biblioteca Jurídica oficial
+     (Photography, Videography, Design, ...) — os ícones abaixo cobrem os
+     9 mercados do Blueprint; qualquer nome fora dessa lista cai no ícone
+     genérico ("Outros"). */
   const BIB_CATEGORIA_ICONS={
-    'Casamentos':'<path d="M20.8 8.6c0 4.2-5.4 8-8.8 10.4-3.4-2.4-8.8-6.2-8.8-10.4a4.8 4.8 0 0 1 8.8-2.7A4.8 4.8 0 0 1 20.8 8.6Z"/>',
-    'Fotografia':'<path d="M4 8h2.5l1.3-2h8.4l1.3 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.4"/>',
-    'Vídeo':'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="m15.5 10 6-3.2v10.4l-6-3.2"/>',
-    'Corporativo':'<rect x="2.5" y="7.5" width="19" height="12" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M2.5 13h19"/>',
-    'Imobiliário':'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',
-    'Drone':'<path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2 2M16.4 16.4l2 2M5.6 18.4l2-2M16.4 7.6l2-2"/>',
+    'Photography':'<path d="M4 8h2.5l1.3-2h8.4l1.3 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.4"/>',
+    'Videography':'<rect x="2.5" y="6" width="13" height="12" rx="2"/><path d="m15.5 10 6-3.2v10.4l-6-3.2"/>',
+    'Design':'<path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/>',
+    'Software Development':'<path d="m8 9-5 3 5 3M16 9l5 3-5 3M13 5l-2 14"/>',
+    'Marketing':'<path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/>',
+    'Consulting':'<rect x="2.5" y="7.5" width="19" height="12" rx="2"/><path d="M8.5 7.5V6a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v1.5M2.5 13h19"/>',
+    'Architecture & Engineering':'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',
+    'Education & Content':'<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/>',
+    'Universal Contracts':'<circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>',
     'Outros':'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
   };
   let bibFiltroAtual={contratos:'populares', modelos:'populares'};
@@ -5674,23 +5648,17 @@
       return;
     }
 
-    const tipoFiltro = escopo==='contratos' ? 'Contrato' : null;
-    let base = tipoFiltro ? BIBLIOTECA_OFICIAL.filter(m=>m.tipo===tipoFiltro) : BIBLIOTECA_OFICIAL;
+    let base = LegalLibrary.list();
     if(origem==='favoritos') base = base.filter(m=>bibFavoritos.has('of:'+m.id));
-    if(q) base = base.filter(m=>((m.titulo||'')+' '+(m.desc||'')+' '+(m.tags||[]).join(' ')+' '+(m.categoria||'')+' '+(m.autor||'')).toLowerCase().includes(q));
+    if(q) base = base.filter(m=>((m.titulo||'')+' '+(m.desc||'')+' '+(m.tags||[]).join(' ')+' '+(m.categoria||'')).toLowerCase().includes(q));
     const categorias=[...new Set(base.map(m=>m.categoria))];
-    const filtro=bibFiltroAtual[escopo];
-    const tabs=[
-      {key:'populares', label:'Populares', icon:'<path d="M12 2c1 3-3 4-3 8a3 3 0 0 0 6 0c1.5 1 2 3 2 4.5A5 5 0 0 1 7 14.5C7 9 12 7 12 2Z"/>'},
-      {key:'avaliados', label:'Avaliados', icon:'<path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6Z"/>'}
-    ].concat(categorias.map(c=>({key:c, label:c, icon:BIB_CATEGORIA_ICONS[c]||BIB_CATEGORIA_ICONS['Outros']})));
+    let filtro=bibFiltroAtual[escopo];
+    if(!categorias.includes(filtro)) filtro=categorias[0]||null;
+    const tabs=categorias.map(c=>({key:c, label:c, icon:BIB_CATEGORIA_ICONS[c]||BIB_CATEGORIA_ICONS['Outros']}));
     document.getElementById('bib-'+escopo+'-tabs').innerHTML=tabs.map(tb=>
       '<div class="chip chip-ic'+(tb.key===filtro?' on':'')+'" onclick="selecionarFiltroBiblioteca(\''+escopo+'\',\''+tb.key+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+tb.icon+'</svg> '+escapeHtml(tb.label)+'</div>'
     ).join('');
-    let itens;
-    if(filtro==='populares') itens=[...base].sort((a,b)=>b.usos-a.usos);
-    else if(filtro==='avaliados') itens=[...base].sort((a,b)=>b.avaliacao-a.avaliacao);
-    else itens=base.filter(m=>m.categoria===filtro);
+    const itens = filtro ? base.filter(m=>m.categoria===filtro) : base;
     wrap.innerHTML = itens.length ? itens.map(m=>bibCardHtml(m,escopo)).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
   }
   function selecionarFiltroBiblioteca(escopo,key){
@@ -5700,12 +5668,9 @@
   function bibCardHtml(m, escopo){
     const fav=bibFavoritos.has('of:'+m.id);
     return '<div class="model-card">'+
-      '<div class="model-card-head" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer"><div class="model-card-name">'+escapeHtml(m.titulo)+'</div><span class="model-card-type-pill">'+escapeHtml(m.tipo)+'</span></div>'+
-      '<div class="model-card-desc" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer">'+escapeHtml(m.desc)+'</div>'+
+      '<div class="model-card-head" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer"><div class="model-card-name">'+escapeHtml(m.titulo)+'</div></div>'+
+      '<div class="model-card-desc" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer">'+escapeHtml(m.desc||'')+'</div>'+
       '<div class="model-card-foot">'+
-        '<span class="model-card-author">por '+escapeHtml(m.autor)+'</span>'+
-        '<span class="model-card-rating">'+ICON_ESTRELA+m.avaliacao.toFixed(1)+'</span>'+
-        '<span class="model-card-usage">Usado '+m.usos+' vezes</span>'+
         '<span class="bib-fav'+(fav?' on':'')+'" style="margin-left:auto;cursor:pointer" onclick="event.stopPropagation();toggleFavBibliotecaWizard(\''+m.id+'\',\''+escopo+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:16px;height:16px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></span>'+
       '</div>'+
     '</div>';
@@ -5723,15 +5688,17 @@
       '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
   }
   function abrirDetalheBiblioteca(id){
-    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
+    const m=LegalLibrary.get(id);
     if(!m) return;
     let html='<div class="model-detail-head">';
     html+='<div class="model-detail-name">'+escapeHtml(m.titulo)+'</div>';
-    html+='<div class="model-detail-meta">por '+escapeHtml(m.autor)+' · <span class="model-card-rating">'+ICON_ESTRELA+m.avaliacao.toFixed(1)+'</span> · Usado '+m.usos+' vezes</div>';
+    html+='<div class="model-detail-meta">'+escapeHtml(m.categoria||'')+'</div>';
     html+='</div>';
-    html+='<p class="model-detail-desc">'+escapeHtml(m.desc)+'</p>';
-    html+='<div class="plabel">Etiquetas</div>';
-    html+='<div class="detail-structure">'+m.tags.map(t=>'<span class="struct-pill">'+escapeHtml(t)+'</span>').join('')+'</div>';
+    html+='<p class="model-detail-desc">'+escapeHtml(m.desc||'')+'</p>';
+    if((m.tags||[]).length){
+      html+='<div class="plabel">Etiquetas</div>';
+      html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
+    }
     html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>Conteúdo da Biblioteca Pivot. Revê antes de usar — não é aconselhamento jurídico.</div></div>';
     html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft" onclick="guardarModeloBiblioteca(\''+id+'\')">'+t('action.save')+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
     html+='<div class="plabel" style="margin-top:18px">Avaliação</div>';
@@ -5742,7 +5709,8 @@
     renderEstrelasAvaliacao(id);
   }
   function selecionarModeloBibliotecaNoWizard(id){
-    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
+    const m=LegalLibrary.get(id);
+    if(!m) return;
     marcarModeloComoUsado(id);
     twModeloEscolhido={ nome:m.titulo, blocks:blocosParaModeloBiblioteca(m) };
     twEmWizard=false;
@@ -5807,7 +5775,8 @@
   }
   function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
-    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
+    const m=LegalLibrary.get(id);
+    if(!m) return;
     marcarModeloComoUsado(id);
     abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
@@ -5819,7 +5788,8 @@
   }
   function importarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
-    const m=BIBLIOTECA_OFICIAL.find(x=>x.id===id);
+    const m=LegalLibrary.get(id);
+    if(!m) return;
     marcarModeloComoUsado(id);
     abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
@@ -7236,11 +7206,16 @@
     forcaMaior:'Força maior', alteracaoEscopo:'Alteração de âmbito',
     propriedadeIntelectual:'Materiais de trabalho', garantias:'Garantias e revisões'
   };
-  /* Cada função aceita (job, params) — params vem de b.params, definido por
-     modelo na Biblioteca (ver BIBLIOTECA_BLOCOS), e permanece opcional: sem
-     params, o comportamento é o mesmo de antes (genérico, valores por
-     omissão). O texto continua a reagir a alterações no job (valor, data,
-     local) porque só é calculado no momento de renderizar. */
+  /* Motor de cláusulas genérico (interim) — usado por todo trabalho/modelo
+     em branco (blocosModeloPadrao) e por qualquer contrato já existente
+     que referencie uma destas 9 chaves. Mantido de propósito mesmo após a
+     remoção do catálogo falso da Biblioteca: é a lógica que gera o texto
+     final de QUALQUER contrato hoje, inclusive os já criados por usuários
+     reais — substituí-lo exige primeiro um gerador de blocos ligado à
+     Biblioteca Jurídica oficial (blocos com nomes/estrutura do Blueprint,
+     não estas 9 chaves em português). Cada função aceita (job, params); o
+     texto reage a alterações no job (valor, data, local) porque só é
+     calculado no momento de renderizar. */
   const blocoTextos={
     identificacao: (job,p)=>t('contract.between').replace('{company}',perfilData.empresa||'Pivot').replace('{client}',job.client).replace('{job}',job.typeLabel).toLowerCase()+(job.date?(' em '+job.date):'')+(job.local?(', em '+job.local):'')+'.',
     pagamento: (job,p)=>{
@@ -7291,232 +7266,12 @@
   function genId(){ return 'b'+Math.random().toString(36).slice(2,9); }
   function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  /* ============================================================
-     BIBLIOTECA JURÍDICA MODULAR — v1 (fundação)
-     Cada bloco é um objeto rico com metadados + texto trilingue.
-     Base NEUTRA INTERNACIONAL: sem lei de nenhum país específico.
-     Pontos que dependem de legislação local aparecem como
-     {{placeholders}} e ficam marcados em requires_local_review.
-     ⚠️ NÃO é aconselhamento jurídico — cada bloco tem de ser
-     revisto por advogado na jurisdição do utilizador antes de venda.
-     Tiers de preço: free | basic | pro (ligam ao sistema Stripe).
-     ============================================================ */
-  const LEGAL_BLOCKS = [
-    {
-      id:'obj-001', categoria:'objeto', subcategoria:'ambito',
-      nome:{pt:'Objeto e âmbito do serviço', en:'Object and scope of service', es:'Objeto y alcance del servicio'},
-      resumo:{pt:'Define com precisão o que está — e o que não está — incluído.', en:'Precisely defines what is — and is not — included.', es:'Define con precisión qué está — y qué no — incluido.'},
-      texto:{
-        pt:`O Prestador obriga-se a executar os seguintes serviços em favor do Cliente: {{descricao_servico}}. O presente contrato abrange exclusivamente as prestações expressamente descritas. Quaisquer serviços, entregáveis ou funcionalidades não previstos neste documento consideram-se excluídos do âmbito e apenas serão realizados mediante acordo escrito adicional, com o respetivo ajuste de preço e prazo.`,
-        en:`The Provider undertakes to perform the following services for the Client: {{descricao_servico}}. This agreement covers solely the deliverables expressly described herein. Any service, deliverable or feature not set out in this document is deemed excluded from scope and shall be performed only upon further written agreement, with a corresponding adjustment of price and timeline.`,
-        es:`El Prestador se obliga a ejecutar los siguientes servicios en favor del Cliente: {{descricao_servico}}. El presente contrato abarca exclusivamente las prestaciones expresamente descritas. Cualquier servicio, entregable o funcionalidad no previsto en este documento se considera excluido del alcance y solo se realizará mediante acuerdo escrito adicional, con el correspondiente ajuste de precio y plazo.`
-      },
-      variaveis:['descricao_servico'], risco:20, complexidade:'basica',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:['id-001'], exclusive_with:[],
-      industry_tags:['geral','servicos'], preco_tier:'free', versao:'1.0.0'
-    },
-    {
-      id:'pay-014', categoria:'pagamento', subcategoria:'parcelado_mora',
-      nome:{pt:'Pagamento parcelado com mora e suspensão', en:'Instalment payment with default interest and suspension', es:'Pago fraccionado con mora y suspensión'},
-      resumo:{pt:'Sinal + saldo, com juros de mora e direito de suspender por falta de pagamento.', en:'Deposit + balance, with default interest and right to suspend on non-payment.', es:'Señal + saldo, con intereses de mora y derecho a suspender por impago.'},
-      texto:{
-        pt:`O preço total dos serviços é de {{valor_total}}, pago da seguinte forma: (i) {{percent_sinal}} a título de sinal, na assinatura deste contrato; e (ii) o remanescente até {{data_saldo}}. O não pagamento de qualquer parcela na data devida constitui o Cliente em mora, independentemente de interpelação, vencendo juros à taxa de {{taxa_juros}} ao mês sobre o montante em atraso. Decorridos {{dias_suspensao}} dias de atraso, o Prestador poderá suspender a execução dos serviços e a entrega de quaisquer materiais até à regularização integral, sem que tal constitua incumprimento da sua parte.`,
-        en:`The total price for the services is {{valor_total}}, payable as follows: (i) {{percent_sinal}} as a deposit upon signature of this agreement; and (ii) the remainder by {{data_saldo}}. Failure to pay any instalment when due places the Client in default automatically, without need for notice, and default interest shall accrue at {{taxa_juros}} per month on the overdue amount. After {{dias_suspensao}} days of delay, the Provider may suspend performance of the services and delivery of any materials until full settlement, and such suspension shall not constitute a breach by the Provider.`,
-        es:`El precio total de los servicios es de {{valor_total}}, pagadero de la siguiente forma: (i) {{percent_sinal}} en concepto de señal, a la firma de este contrato; y (ii) el resto hasta {{data_saldo}}. El impago de cualquier cuota en la fecha debida constituye al Cliente en mora, sin necesidad de requerimiento, devengando intereses a la tasa de {{taxa_juros}} mensual sobre el importe atrasado. Transcurridos {{dias_suspensao}} días de retraso, el Prestador podrá suspender la ejecución de los servicios y la entrega de cualquier material hasta la regularización íntegra, sin que ello constituya incumplimiento por su parte.`
-      },
-      variaveis:['valor_total','percent_sinal','data_saldo','taxa_juros','dias_suspensao'], risco:55, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'A taxa de juro de mora máxima é limitada por lei em vários países — ajustar {{taxa_juros}} ao limite local.', en:'Maximum default interest is capped by law in several countries — adjust {{taxa_juros}} to the local limit.', es:'La tasa máxima de interés de mora está limitada por ley en varios países — ajustar {{taxa_juros}} al límite local.'},
-      mandatory_with:[], exclusive_with:['pay-002'], industry_tags:['geral','freelancer','agencia'], preco_tier:'basic', versao:'1.0.0'
-    },
-    {
-      id:'ip-021', categoria:'propriedade_intelectual', subcategoria:'licenca_cessao',
-      nome:{pt:'Propriedade intelectual — cessão sob pagamento integral', en:'Intellectual property — assignment upon full payment', es:'Propiedad intelectual — cesión bajo pago íntegro'},
-      resumo:{pt:'Direitos transferem-se só após pagamento total; prestador mantém uso em portfólio.', en:'Rights transfer only after full payment; provider keeps portfolio use.', es:'Los derechos se transfieren solo tras el pago total; el prestador conserva uso en portafolio.'},
-      texto:{
-        pt:`Os direitos patrimoniais sobre os entregáveis finais transferem-se para o Cliente apenas após o pagamento integral do preço acordado. Até esse momento, o Prestador conserva a titularidade de todos os direitos. O Prestador mantém, em qualquer caso, o direito de identificar-se como autor e de exibir o trabalho no seu portfólio e materiais de divulgação, salvo estipulação escrita de confidencialidade em contrário. Os materiais preliminares, ficheiros de trabalho e métodos próprios do Prestador não integram a cessão e permanecem na sua exclusiva titularidade.`,
-        en:`Economic rights over the final deliverables transfer to the Client only upon full payment of the agreed price. Until then, the Provider retains ownership of all rights. In any event, the Provider retains the right to be identified as author and to display the work in its portfolio and promotional materials, unless a written confidentiality provision states otherwise. The Provider's preliminary materials, working files and proprietary methods are not included in the assignment and remain its exclusive property.`,
-        es:`Los derechos patrimoniales sobre los entregables finales se transfieren al Cliente solo tras el pago íntegro del precio acordado. Hasta ese momento, el Prestador conserva la titularidad de todos los derechos. El Prestador mantiene, en todo caso, el derecho a identificarse como autor y a exhibir el trabajo en su portafolio y materiales de difusión, salvo estipulación escrita de confidencialidad en contrario. Los materiales preliminares, archivos de trabajo y métodos propios del Prestador no integran la cesión y permanecen en su exclusiva titularidad.`
-      },
-      variaveis:[], risco:60, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'Direitos morais de autor são inalienáveis em Civil Law (não podem ser cedidos, só os patrimoniais) — este bloco já reflete isso.', en:'Moral rights are inalienable under Civil Law (only economic rights can be assigned) — this block already reflects that.', es:'Los derechos morales son inalienables en Civil Law (solo se ceden los patrimoniales) — este bloque ya lo refleja.'},
-      mandatory_with:[], exclusive_with:['ip-020'], industry_tags:['fotografia','video','design','programacao','conteudo'], preco_tier:'pro', versao:'1.0.0'
-    },
-    {
-      id:'dat-030', categoria:'dados_pessoais', subcategoria:'protecao_neutra',
-      nome:{pt:'Proteção de dados pessoais (neutro GDPR/LGPD/CCPA)', en:'Personal data protection (neutral GDPR/LGPD/CCPA)', es:'Protección de datos personales (neutro GDPR/LGPD/CCPA)'},
-      resumo:{pt:'Base neutra de tratamento de dados, adaptável ao regime local.', en:'Neutral data-processing basis, adaptable to the local regime.', es:'Base neutra de tratamiento de datos, adaptable al régimen local.'},
-      texto:{
-        pt:`Cada parte trata os dados pessoais a que tenha acesso no âmbito deste contrato apenas na medida necessária à sua execução, adotando medidas técnicas e organizativas adequadas à sua segurança e confidencialidade. Os dados não são utilizados para finalidades incompatíveis nem partilhados com terceiros sem base legítima. As partes cooperam no cumprimento das obrigações aplicáveis ao abrigo da legislação de proteção de dados vigente ({{regime_dados}}), incluindo o atendimento a pedidos dos titulares e a notificação de incidentes de segurança sem demora injustificada.`,
-        en:`Each party processes the personal data it accesses under this agreement only to the extent necessary for its performance, adopting technical and organisational measures appropriate to its security and confidentiality. Data shall not be used for incompatible purposes nor shared with third parties without a lawful basis. The parties cooperate in meeting the obligations applicable under the data-protection law in force ({{regime_dados}}), including responding to data-subject requests and notifying security incidents without undue delay.`,
-        es:`Cada parte trata los datos personales a los que acceda en el marco de este contrato solo en la medida necesaria para su ejecución, adoptando medidas técnicas y organizativas adecuadas a su seguridad y confidencialidad. Los datos no se utilizan para finalidades incompatibles ni se comparten con terceros sin base legítima. Las partes cooperan en el cumplimiento de las obligaciones aplicables conforme a la legislación de protección de datos vigente ({{regime_dados}}), incluyendo la atención a solicitudes de los titulares y la notificación de incidentes de seguridad sin demora injustificada.`
-      },
-      variaveis:['regime_dados'], risco:70, complexidade:'avancada',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'{{regime_dados}} = RGPD (UE), LGPD (Brasil), CCPA (Califórnia). Cada regime tem obrigações próprias — este bloco é a base neutra; a versão completa por regime é um bloco pro dedicado.', en:'{{regime_dados}} = GDPR (EU), LGPD (Brazil), CCPA (California). Each regime has its own duties — this is the neutral base; the full per-regime version is a dedicated pro block.', es:'{{regime_dados}} = RGPD (UE), LGPD (Brasil), CCPA (California). Cada régimen tiene obligaciones propias — esta es la base neutra; la versión completa por régimen es un bloque pro dedicado.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['geral','tecnologia','saas','marketing'], preco_tier:'pro', versao:'1.0.0'
-    },
-    {
-      id:'lia-040', categoria:'responsabilidade', subcategoria:'limitacao_isencao',
-      nome:{pt:'Limitação de responsabilidade e isenção', en:'Limitation of liability and disclaimer', es:'Limitación de responsabilidad y exención'},
-      resumo:{pt:'Limita a responsabilidade ao valor do contrato e exclui danos indiretos.', en:'Caps liability at the contract value and excludes indirect damages.', es:'Limita la responsabilidad al valor del contrato y excluye daños indirectos.'},
-      texto:{
-        pt:`Na máxima medida permitida pela lei aplicável, a responsabilidade total do Prestador emergente ou relacionada com este contrato fica limitada ao montante efetivamente pago pelo Cliente ao abrigo do mesmo. Nenhuma das partes responde por danos indiretos, lucros cessantes, perda de dados ou danos consequenciais. Nada neste contrato exclui ou limita a responsabilidade que não possa ser licitamente excluída, designadamente por dolo, culpa grave ou danos a pessoas.`,
-        en:`To the maximum extent permitted by applicable law, the Provider's total liability arising out of or relating to this agreement is limited to the amount actually paid by the Client under it. Neither party shall be liable for indirect damages, lost profits, loss of data or consequential damages. Nothing in this agreement excludes or limits any liability that cannot lawfully be excluded, in particular for wilful misconduct, gross negligence or personal injury.`,
-        es:`En la máxima medida permitida por la ley aplicable, la responsabilidad total del Prestador derivada o relacionada con este contrato queda limitada al importe efectivamente pagado por el Cliente en virtud del mismo. Ninguna de las partes responde por daños indirectos, lucro cesante, pérdida de datos o daños consecuenciales. Nada en este contrato excluye o limita la responsabilidad que no pueda excluirse lícitamente, en particular por dolo, culpa grave o daños a las personas.`
-      },
-      variaveis:[], risco:75, complexidade:'avancada',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:false,
-      requires_local_review:true, jurisdiction_notes:{pt:'Cláusulas de limitação têm força reduzida em contratos com consumidores (B2C) — por isso b2c:false. Para consumidor, usar versão específica.', en:'Limitation clauses are weakened in consumer contracts (B2C) — hence b2c:false. Use a consumer-specific version for B2C.', es:'Las cláusulas de limitación tienen fuerza reducida en contratos con consumidores (B2C) — por eso b2c:false. Para consumidor, usar versión específica.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['geral','b2b','tecnologia','consultoria'], preco_tier:'basic', versao:'1.0.0'
-    }
-  ];
   // Aviso legal obrigatório — anexado a todo contrato gerado e mostrado no ato de compra.
   const LEGAL_DISCLAIMER = {
     pt:'Os modelos disponibilizados são conteúdo informativo e ponto de partida editável. Não constituem aconselhamento jurídico nem substituem a consulta de um advogado habilitado na jurisdição aplicável. O Pivot e os autores dos modelos não se responsabilizam pelo uso dado a estes documentos. Recomenda-se revisão profissional antes da assinatura.',
     en:'The templates provided are informational content and an editable starting point. They do not constitute legal advice and do not replace consulting a lawyer qualified in the applicable jurisdiction. Pivot and the template authors accept no liability for the use made of these documents. Professional review before signature is recommended.',
     es:'Las plantillas facilitadas son contenido informativo y un punto de partida editable. No constituyen asesoramiento jurídico ni sustituyen la consulta de un abogado habilitado en la jurisdicción aplicable. Pivot y los autores de las plantillas no se responsabilizan del uso dado a estos documentos. Se recomienda revisión profesional antes de la firma.'
   };
-  LEGAL_BLOCKS.push(
-    {
-      id:'can-050', categoria:'cancelamento', subcategoria:'reembolso_escalonado',
-      nome:{pt:'Cancelamento com reembolso escalonado', en:'Cancellation with tiered refund', es:'Cancelación con reembolso escalonado'},
-      resumo:{pt:'Reembolso do sinal decresce à medida que a data se aproxima.', en:'Deposit refund decreases as the date approaches.', es:'El reembolso de la señal disminuye a medida que se acerca la fecha.'},
-      texto:{
-        pt:`Em caso de cancelamento pelo Cliente: (i) com mais de {{dias_total}} dias de antecedência relativamente à data acordada, o sinal é reembolsado a {{percent_alto}}; (ii) entre {{dias_total}} e {{dias_parcial}} dias, a {{percent_medio}}; (iii) com menos de {{dias_parcial}} dias, o sinal não é reembolsável, por destinar-se a compensar a indisponibilidade do Prestador e a recusa de outros trabalhos. Serviços já executados e despesas comprovadamente incorridas são sempre devidos.`,
-        en:`In the event of cancellation by the Client: (i) more than {{dias_total}} days before the agreed date, the deposit is refunded at {{percent_alto}}; (ii) between {{dias_total}} and {{dias_parcial}} days, at {{percent_medio}}; (iii) fewer than {{dias_parcial}} days, the deposit is non-refundable, as it compensates the Provider's unavailability and the turning away of other work. Services already performed and duly evidenced expenses are always payable.`,
-        es:`En caso de cancelación por el Cliente: (i) con más de {{dias_total}} días de antelación respecto a la fecha acordada, la señal se reembolsa al {{percent_alto}}; (ii) entre {{dias_total}} y {{dias_parcial}} días, al {{percent_medio}}; (iii) con menos de {{dias_parcial}} días, la señal no es reembolsable, por destinarse a compensar la indisponibilidad del Prestador y el rechazo de otros trabajos. Los servicios ya ejecutados y los gastos acreditados son siempre exigibles.`
-      },
-      variaveis:['dias_total','percent_alto','dias_parcial','percent_medio'], risco:50, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'Cláusulas de retenção total podem ser reduzidas por tribunais como cláusula penal excessiva — o escalonamento reduz esse risco.', en:'Full-forfeit clauses may be reduced by courts as an excessive penalty — tiering reduces that risk.', es:'Las cláusulas de retención total pueden ser reducidas por los tribunales como cláusula penal excesiva — el escalonamiento reduce ese riesgo.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['eventos','casamentos','fotografia','video','geral'], preco_tier:'basic', versao:'1.0.0'
-    },
-    {
-      id:'con-060', categoria:'confidencialidade', subcategoria:'nda_mutuo',
-      nome:{pt:'Confidencialidade mútua (NDA integrado)', en:'Mutual confidentiality (integrated NDA)', es:'Confidencialidad mutua (NDA integrado)'},
-      resumo:{pt:'Protege informação sensível de ambas as partes, com prazo pós-contrato.', en:'Protects sensitive information of both parties, with a post-term period.', es:'Protege información sensible de ambas partes, con plazo posterior al contrato.'},
-      texto:{
-        pt:`Cada parte compromete-se a manter em sigilo toda a informação confidencial a que aceda por força deste contrato — incluindo dados comerciais, técnicos, financeiros e pessoais — e a não a divulgar nem utilizar fora do estrito âmbito da sua execução. Excluem-se as informações que sejam ou se tornem públicas sem violação deste dever, ou cuja divulgação seja legalmente exigida. Este dever mantém-se em vigor durante {{anos_pos}} anos após o termo do contrato.`,
-        en:`Each party undertakes to keep confidential all confidential information it accesses under this agreement — including commercial, technical, financial and personal data — and not to disclose or use it outside the strict scope of its performance. Information that is or becomes public without breach of this duty, or whose disclosure is legally required, is excluded. This duty remains in force for {{anos_pos}} years after termination of the agreement.`,
-        es:`Cada parte se compromete a mantener en secreto toda la información confidencial a la que acceda en virtud de este contrato — incluidos datos comerciales, técnicos, financieros y personales — y a no divulgarla ni utilizarla fuera del estricto ámbito de su ejecución. Se excluye la información que sea o se vuelva pública sin infracción de este deber, o cuya divulgación sea legalmente exigida. Este deber permanece en vigor durante {{anos_pos}} años tras la terminación del contrato.`
-      },
-      variaveis:['anos_pos'], risco:45, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:[], exclusive_with:[], industry_tags:['geral','tecnologia','consultoria','agencia'], preco_tier:'basic', versao:'1.0.0'
-    },
-    {
-      id:'frm-070', categoria:'forca_maior', subcategoria:'suspensao_resolucao',
-      nome:{pt:'Força maior', en:'Force majeure', es:'Fuerza mayor'},
-      resumo:{pt:'Suspende obrigações perante eventos imprevisíveis e incontroláveis.', en:'Suspends obligations upon unforeseeable, uncontrollable events.', es:'Suspende obligaciones ante eventos imprevisibles e incontrolables.'},
-      texto:{
-        pt:`Nenhuma das partes responde pelo incumprimento ou atraso resultante de evento de força maior — designadamente catástrofe natural, guerra, epidemia, falha generalizada de comunicações ou ato de autoridade — que esteja fora do seu controlo razoável e não pudesse ter sido evitado. A parte afetada notifica a outra sem demora e envida esforços razoáveis para mitigar os efeitos. Persistindo o evento por mais de {{dias_forca}} dias, qualquer das partes pode resolver o contrato, sendo devidos apenas os serviços já prestados.`,
-        en:`Neither party is liable for failure or delay resulting from a force majeure event — including natural disaster, war, epidemic, widespread communications failure or act of authority — that is beyond its reasonable control and could not have been avoided. The affected party notifies the other without delay and uses reasonable efforts to mitigate the effects. If the event persists for more than {{dias_forca}} days, either party may terminate the agreement, and only services already rendered are payable.`,
-        es:`Ninguna de las partes responde por el incumplimiento o retraso resultante de un evento de fuerza mayor — en particular catástrofe natural, guerra, epidemia, fallo generalizado de comunicaciones o acto de autoridad — que esté fuera de su control razonable y no pudiera haberse evitado. La parte afectada notifica a la otra sin demora y realiza esfuerzos razonables para mitigar los efectos. Si el evento persiste más de {{dias_forca}} días, cualquiera de las partes puede resolver el contrato, siendo exigibles solo los servicios ya prestados.`
-      },
-      variaveis:['dias_forca'], risco:40, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:[], exclusive_with:[], industry_tags:['geral','eventos','construcao','tecnologia'], preco_tier:'free', versao:'1.0.0'
-    },
-    {
-      id:'sco-080', categoria:'alteracao_escopo', subcategoria:'change_order',
-      nome:{pt:'Alteração de âmbito e trabalho adicional', en:'Scope change and additional work', es:'Cambio de alcance y trabajo adicional'},
-      resumo:{pt:'Todo pedido extra é orçado e aprovado por escrito antes de executar.', en:'Every extra request is quoted and approved in writing before work begins.', es:'Toda solicitud extra se presupuesta y aprueba por escrito antes de ejecutar.'},
-      texto:{
-        pt:`Qualquer pedido do Cliente que exceda o âmbito definido — incluindo revisões além do número acordado, novas funcionalidades ou alterações significativas — constitui trabalho adicional. Antes da sua execução, o Prestador apresenta orçamento e novo prazo, que só vinculam as partes após aprovação escrita do Cliente. Na ausência de aprovação, mantém-se o âmbito original. Estão incluídas {{num_revisoes}} rondas de revisão; as seguintes são cobradas à taxa de {{taxa_hora}}.`,
-        en:`Any Client request exceeding the defined scope — including revisions beyond the agreed number, new features or significant changes — constitutes additional work. Before performing it, the Provider submits a quote and a new timeline, which bind the parties only upon the Client's written approval. Absent approval, the original scope stands. {{num_revisoes}} rounds of revision are included; further rounds are charged at {{taxa_hora}}.`,
-        es:`Cualquier solicitud del Cliente que exceda el alcance definido — incluidas revisiones más allá del número acordado, nuevas funcionalidades o cambios significativos — constituye trabajo adicional. Antes de su ejecución, el Prestador presenta presupuesto y nuevo plazo, que solo vinculan a las partes tras la aprobación escrita del Cliente. En ausencia de aprobación, se mantiene el alcance original. Se incluyen {{num_revisoes}} rondas de revisión; las siguientes se cobran a la tarifa de {{taxa_hora}}.`
-      },
-      variaveis:['num_revisoes','taxa_hora'], risco:35, complexidade:'basica',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:['obj-001'], exclusive_with:[], industry_tags:['design','programacao','marketing','consultoria','agencia'], preco_tier:'free', versao:'1.0.0'
-    },
-    {
-      id:'dis-090', categoria:'litigios', subcategoria:'lei_foro',
-      nome:{pt:'Lei aplicável e resolução de litígios', en:'Governing law and dispute resolution', es:'Ley aplicable y resolución de litigios'},
-      resumo:{pt:'Define lei, foro e escalada negociação → mediação → tribunal/arbitragem.', en:'Sets law, forum and escalation: negotiation → mediation → court/arbitration.', es:'Define ley, foro y escalada: negociación → mediación → tribunal/arbitraje.'},
-      texto:{
-        pt:`O presente contrato rege-se pela lei de {{lei_aplicavel}}. As partes procurarão resolver de boa-fé qualquer litígio por negociação direta no prazo de {{dias_negociacao}} dias. Não havendo acordo, submetê-lo-ão a mediação. Persistindo o diferendo, será dirimido por {{foro_arbitragem}}. Esta cláusula não impede qualquer das partes de requerer providências cautelares urgentes junto do tribunal competente.`,
-        en:`This agreement is governed by the law of {{lei_aplicavel}}. The parties shall seek in good faith to resolve any dispute by direct negotiation within {{dias_negociacao}} days. Failing agreement, they shall submit it to mediation. If the dispute persists, it shall be settled by {{foro_arbitragem}}. This clause does not prevent either party from seeking urgent interim relief before the competent court.`,
-        es:`El presente contrato se rige por la ley de {{lei_aplicavel}}. Las partes procurarán resolver de buena fe cualquier litigio mediante negociación directa en el plazo de {{dias_negociacao}} días. A falta de acuerdo, lo someterán a mediación. Si el diferendo persiste, será dirimido por {{foro_arbitragem}}. Esta cláusula no impide a ninguna de las partes solicitar medidas cautelares urgentes ante el tribunal competente.`
-      },
-      variaveis:['lei_aplicavel','dias_negociacao','foro_arbitragem'], risco:65, complexidade:'avancada',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'{{lei_aplicavel}} e {{foro_arbitragem}} são obrigatoriamente locais. Em B2C, a lei protege o consumidor e não se pode impor foro estrangeiro — usar variante consumidor.', en:'{{lei_aplicavel}} and {{foro_arbitragem}} must be local. In B2C, consumer law applies and a foreign forum cannot be imposed — use the consumer variant.', es:'{{lei_aplicavel}} y {{foro_arbitragem}} son obligatoriamente locales. En B2C, la ley protege al consumidor y no se puede imponer foro extranjero — usar variante consumidor.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['geral','b2b','internacional'], preco_tier:'basic', versao:'1.0.0'
-    }
-  );
-  LEGAL_BLOCKS.push(
-    {
-      id:'del-100', categoria:'entrega', subcategoria:'formato_prazo',
-      nome:{pt:'Entrega, formato e aceitação', en:'Delivery, format and acceptance', es:'Entrega, formato y aceptación'},
-      resumo:{pt:'Define como, quando e em que formato os entregáveis são disponibilizados.', en:'Defines how, when and in what format deliverables are provided.', es:'Define cómo, cuándo y en qué formato se entregan los entregables.'},
-      texto:{
-        pt:`Os entregáveis finais são disponibilizados ao Cliente em formato {{formato_entrega}}, através de {{canal_entrega}}, até {{prazo_entrega}} após {{marco_inicio}}. O Cliente dispõe de {{dias_aceitacao}} dias após a entrega para comunicar, por escrito e de forma fundamentada, eventuais desconformidades com o âmbito acordado. Decorrido esse prazo sem manifestação, os entregáveis consideram-se aceites. Pedidos de alteração que excedam o âmbito original seguem o regime de trabalho adicional.`,
-        en:`The final deliverables are made available to the Client in {{formato_entrega}} format, via {{canal_entrega}}, by {{prazo_entrega}} after {{marco_inicio}}. The Client has {{dias_aceitacao}} days after delivery to report, in writing and with reasons, any non-conformity with the agreed scope. If no objection is raised within that period, the deliverables are deemed accepted. Change requests exceeding the original scope follow the additional-work regime.`,
-        es:`Los entregables finales se ponen a disposición del Cliente en formato {{formato_entrega}}, a través de {{canal_entrega}}, hasta {{prazo_entrega}} después de {{marco_inicio}}. El Cliente dispone de {{dias_aceitacao}} días tras la entrega para comunicar, por escrito y de forma fundamentada, eventuales disconformidades con el alcance acordado. Transcurrido ese plazo sin manifestación, los entregables se consideran aceptados. Las solicitudes de cambio que excedan el alcance original siguen el régimen de trabajo adicional.`
-      },
-      variaveis:['formato_entrega','canal_entrega','prazo_entrega','marco_inicio','dias_aceitacao'], risco:30, complexidade:'basica',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:['obj-001'], exclusive_with:[], industry_tags:['geral','design','programacao','fotografia','video'], preco_tier:'free', versao:'1.0.0'
-    },
-    {
-      id:'war-110', categoria:'garantias', subcategoria:'garantia_correcao',
-      nome:{pt:'Garantia de correção pós-entrega', en:'Post-delivery correction warranty', es:'Garantía de corrección posentrega'},
-      resumo:{pt:'Corrige defeitos reais sem custo por um período; exclui mau uso e alterações de terceiros.', en:'Fixes genuine defects at no cost for a period; excludes misuse and third-party changes.', es:'Corrige defectos reales sin coste durante un período; excluye mal uso y cambios de terceros.'},
-      texto:{
-        pt:`O Prestador garante que os entregáveis estarão isentos de defeitos que os tornem desconformes com o âmbito acordado, obrigando-se a corrigi-los sem custo adicional se comunicados dentro de {{dias_garantia}} dias após a aceitação. Esta garantia não cobre alterações introduzidas por terceiros, uso indevido, integração com sistemas não previstos, nem evolução de requisitos posterior à aceitação, casos em que se aplica o regime de trabalho adicional.`,
-        en:`The Provider warrants that the deliverables will be free from defects that render them non-conforming with the agreed scope, and undertakes to correct them at no additional cost if reported within {{dias_garantia}} days after acceptance. This warranty does not cover changes made by third parties, misuse, integration with unforeseen systems, or requirements evolving after acceptance, which follow the additional-work regime.`,
-        es:`El Prestador garantiza que los entregables estarán libres de defectos que los hagan disconformes con el alcance acordado, obligándose a corregirlos sin coste adicional si se comunican dentro de {{dias_garantia}} días tras la aceptación. Esta garantía no cubre cambios introducidos por terceros, uso indebido, integración con sistemas no previstos, ni evolución de requisitos posterior a la aceptación, casos en que se aplica el régimen de trabajo adicional.`
-      },
-      variaveis:['dias_garantia'], risco:45, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:[], exclusive_with:[], industry_tags:['programacao','design','tecnologia','saas'], preco_tier:'basic', versao:'1.0.0'
-    },
-    {
-      id:'nsc-120', categoria:'nao_aliciamento', subcategoria:'nao_concorrencia_leve',
-      nome:{pt:'Não-aliciamento e não-concorrência limitada', en:'Non-solicitation and limited non-compete', es:'No captación y no competencia limitada'},
-      resumo:{pt:'Impede aliciar colaboradores/clientes; restrição de concorrência proporcional e temporária.', en:'Prevents poaching staff/clients; proportionate, time-limited non-compete.', es:'Impide captar colaboradores/clientes; restricción de competencia proporcional y temporal.'},
-      texto:{
-        pt:`Durante a vigência deste contrato e por {{meses_pos}} meses após o seu termo, nenhuma das partes aliciará, direta ou indiretamente, colaboradores ou clientes da outra parte com quem tenha contactado no âmbito deste trabalho. {{clausula_concorrencia_opcional}} Esta restrição é interpretada de forma restritiva e não impede a livre atividade profissional das partes fora do âmbito descrito.`,
-        en:`During the term of this agreement and for {{meses_pos}} months thereafter, neither party shall, directly or indirectly, solicit staff or clients of the other party with whom it has had contact under this engagement. {{clausula_concorrencia_opcional}} This restriction is construed narrowly and does not prevent the parties' free professional activity outside the scope described.`,
-        es:`Durante la vigencia de este contrato y durante {{meses_pos}} meses tras su terminación, ninguna de las partes captará, directa o indirectamente, colaboradores o clientes de la otra parte con quienes haya tenido contacto en el marco de este trabajo. {{clausula_concorrencia_opcional}} Esta restricción se interpreta de forma restrictiva y no impide la libre actividad profesional de las partes fuera del alcance descrito.`
-      },
-      variaveis:['meses_pos','clausula_concorrencia_opcional'], risco:50, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:false,
-      requires_local_review:true, jurisdiction_notes:{pt:'Cláusulas de não-concorrência têm validade limitada e variável por país (algumas jurisdições exigem compensação financeira) — manter período curto e âmbito estrito.', en:'Non-compete clauses have limited, country-variable validity (some jurisdictions require compensation) — keep the period short and the scope narrow.', es:'Las cláusulas de no competencia tienen validez limitada y variable por país (algunas jurisdicciones exigen compensación) — mantener el período corto y el alcance estricto.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['agencia','consultoria','tecnologia','b2b'], preco_tier:'pro', versao:'1.0.0'
-    },
-    {
-      id:'ai-130', categoria:'inteligencia_artificial', subcategoria:'uso_treino_ia',
-      nome:{pt:'Uso de inteligência artificial no trabalho', en:'Use of artificial intelligence in the work', es:'Uso de inteligencia artificial en el trabajo'},
-      resumo:{pt:'Divulga o uso de ferramentas de IA e trata a questão de dados usados para treino.', en:'Discloses AI-tool use and addresses data used for training.', es:'Divulga el uso de herramientas de IA y trata la cuestión de datos usados para entrenamiento.'},
-      texto:{
-        pt:`O Prestador poderá utilizar ferramentas de inteligência artificial como apoio à execução dos serviços, mantendo em qualquer caso a responsabilidade integral pelo resultado final e pela sua adequação ao âmbito acordado. O Prestador não submeterá conteúdo confidencial ou dados pessoais do Cliente a ferramentas de IA de terceiros para fins de treino de modelos, salvo autorização escrita e específica do Cliente. Sendo os entregáveis gerados, no todo ou em parte, com recurso a IA, tal facto é comunicado ao Cliente mediante pedido.`,
-        en:`The Provider may use artificial intelligence tools to assist in performing the services, retaining in any event full responsibility for the final result and its conformity with the agreed scope. The Provider shall not submit the Client's confidential content or personal data to third-party AI tools for model-training purposes, except with the Client's specific written authorisation. Where deliverables are generated, in whole or in part, using AI, this fact shall be disclosed to the Client upon request.`,
-        es:`El Prestador podrá utilizar herramientas de inteligencia artificial como apoyo a la ejecución de los servicios, manteniendo en todo caso la responsabilidad íntegra por el resultado final y su adecuación al alcance acordado. El Prestador no someterá contenido confidencial ni datos personales del Cliente a herramientas de IA de terceros con fines de entrenamiento de modelos, salvo autorización escrita y específica del Cliente. Si los entregables se generan, total o parcialmente, con ayuda de IA, este hecho se comunicará al Cliente cuando lo solicite.`
-      },
-      variaveis:[], risco:55, complexidade:'avancada',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:true, jurisdiction_notes:{pt:'Regulação de IA está em evolução rápida (ex.: AI Act na UE) — este bloco é a base neutra e deve ser revisto periodicamente.', en:'AI regulation is evolving rapidly (e.g. EU AI Act) — this is the neutral base and should be reviewed periodically.', es:'La regulación de IA está en rápida evolución (p. ej. AI Act de la UE) — este bloque es la base neutra y debe revisarse periódicamente.'},
-      mandatory_with:[], exclusive_with:[], industry_tags:['design','conteudo','programacao','marketing','copywriting'], preco_tier:'pro', versao:'1.0.0'
-    },
-    {
-      id:'trm-140', categoria:'vigencia', subcategoria:'inicio_termo_rescisao',
-      nome:{pt:'Vigência, termo e rescisão antecipada', en:'Term, expiry and early termination', es:'Vigencia, término y rescisión anticipada'},
-      resumo:{pt:'Define início/fim do contrato e as condições para terminar antes do previsto.', en:'Defines the agreement\'s start/end and conditions for ending it early.', es:'Define inicio/fin del contrato y las condiciones para terminarlo antes de lo previsto.'},
-      texto:{
-        pt:`Este contrato vigora desde a data da sua assinatura até à conclusão dos serviços descritos, ou até {{data_termo}}, o que ocorrer primeiro. Qualquer das partes pode resolvê-lo antecipadamente em caso de incumprimento grave da outra parte não sanado no prazo de {{dias_sanacao}} dias após notificação escrita. Em caso de resolução, são devidos os serviços já prestados até à data, calculados proporcionalmente ao valor total acordado.`,
-        en:`This agreement runs from its date of signature until completion of the described services, or until {{data_termo}}, whichever occurs first. Either party may terminate it early in the event of a material breach by the other party not remedied within {{dias_sanacao}} days of written notice. Upon termination, the services already rendered up to that date are payable, calculated pro rata to the total agreed price.`,
-        es:`Este contrato está vigente desde la fecha de su firma hasta la finalización de los servicios descritos, o hasta {{data_termo}}, lo que ocurra primero. Cualquiera de las partes puede resolverlo anticipadamente en caso de incumplimiento grave de la otra parte no subsanado en el plazo de {{dias_sanacao}} días tras notificación escrita. En caso de resolución, son exigibles los servicios ya prestados hasta la fecha, calculados proporcionalmente al valor total acordado.`
-      },
-      variaveis:['data_termo','dias_sanacao'], risco:40, complexidade:'intermedia',
-      legal_system:['civil','common'], paises:['universal'], b2b:true, b2c:true,
-      requires_local_review:false, mandatory_with:[], exclusive_with:[], industry_tags:['geral','saas','consultoria','assinaturas'], preco_tier:'free', versao:'1.0.0'
-    }
-  );
   function blockName(b){ return b.key ? blocoNomes[b.key] : (b.name||'Bloco'); }
   function blockText(job,b){ return (b.customText!=null) ? b.customText : (b.key ? blocoTextos[b.key](job,b.params) : ''); }
   function contractSummaryHtml(job){
@@ -7737,20 +7492,16 @@
     );
     renderBibBlocosLista();
   }
+  /* A composição de blocos por cláusula de um contrato oficial (import
+     seletivo de blocos individuais de um contrato da Biblioteca Jurídica
+     para dentro de outro contrato) depende do gerador de blocos oficiais
+     — ainda não implementado (ver nota em blocosParaModeloBiblioteca).
+     Até lá, este catálogo mostra só os itens avulsos (Explorar). */
   function bibBlocosCatalogo(){
     const out=[];
-    BIBLIOTECA_OFICIAL.filter(b=>b.tipo==='Contrato' && (BIBLIOTECA_BLOCOS[b.id]||[]).length).forEach(b=>{
-      out.push({kind:'contrato', id:b.id, titulo:b.titulo, sub:t('library.blocksFromContract')});
-    });
-    BIBLIOTECA_OFICIAL.filter(b=>b.tipo!=='Contrato').forEach(b=>{
-      out.push({kind:'avulso', titulo:b.titulo, texto:b.desc, sub:b.tipo});
-    });
     CATALOGO_EXPLORAR.forEach(m=>{
       const tipo = m.cat==='checklists'?t('library.blocksTypeChecklist'):m.cat==='briefings'?t('library.blocksTypeQuestionnaire'):m.cat==='cronogramas'?t('library.blocksTypeSchedule'):t('library.blocksTypeModel');
       out.push({kind:'avulso', titulo:t(m.tituloKey), texto:t(m.subKey), sub:tipo});
-    });
-    (typeof LEGAL_BLOCKS!=='undefined'?LEGAL_BLOCKS:[]).forEach(bl=>{
-      out.push({kind:'avulso', titulo:lbl3(bl.nome), texto:lbl3(bl.texto), sub:t('library.blocksTypeClause')});
     });
     return out;
   }
@@ -7761,8 +7512,7 @@
     const q=bibBlocosBusca.trim().toLowerCase();
     bibBlocosListaAtual=bibBlocosCatalogo().filter(i=>!q || (i.titulo||'').toLowerCase().includes(q));
     wrap.innerHTML = bibBlocosListaAtual.length ? bibBlocosListaAtual.map((i,idx)=>{
-      const onclick = i.kind==='contrato' ? "abrirBlocosDoContrato('"+i.id+"')" : "importarBlocoAvulso("+idx+")";
-      return '<div class="pick-row" onclick="'+onclick+'"><div><div class="nm">'+escapeHtml(i.titulo)+'</div>'+(i.sub?'<div class="sub">'+escapeHtml(i.sub)+'</div>':'')+'</div>'+
+      return '<div class="pick-row" onclick="importarBlocoAvulso('+idx+')"><div><div class="nm">'+escapeHtml(i.titulo)+'</div>'+(i.sub?'<div class="sub">'+escapeHtml(i.sub)+'</div>':'')+'</div>'+
         '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
     }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
   }
@@ -7781,47 +7531,6 @@
     confidencialidade:'Confidencialidade', garantias:'Garantias'
   };
   function bibNomeBlocoAmigavel(key){ return BIB_BLOCO_NOMES[key] || bibCapitalizar(key); }
-  let bibBlocosContratoAtual=null;
-  let bibBlocosSelecionados=new Set();
-  function abrirBlocosDoContrato(id){
-    const modelo=BIBLIOTECA_OFICIAL.find(b=>b.id===id);
-    if(!modelo) return;
-    bibBlocosContratoAtual=id;
-    bibBlocosSelecionados=new Set();
-    openInfo(modelo.titulo, buildBibBlocosChecklistHtml());
-  }
-  function buildBibBlocosChecklistHtml(){
-    const blocos=(BIBLIOTECA_BLOCOS[bibBlocosContratoAtual]||[]).filter(b=>b.key!=='identificacao');
-    const rows=blocos.map((b,i)=>{
-      const on=bibBlocosSelecionados.has(i);
-      return '<div class="pick-row" style="cursor:pointer" onclick="toggleBibBlocoSelecionado('+i+')">'+
-        '<div style="display:flex;align-items:center;gap:11px">'+
-          '<span class="bib-check'+(on?' on':'')+'">'+(on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>':'')+'</span>'+
-          '<div class="nm">'+escapeHtml(bibNomeBlocoAmigavel(b.key))+'</div>'+
-        '</div></div>';
-    }).join('');
-    const n=bibBlocosSelecionados.size;
-    return '<div id="bib-blocos-check-list">'+(rows||'<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>')+'</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:14px" '+(n?'':'disabled')+' onclick="importarBlocosSelecionados()">'+(n? t('library.importNBlocks').replace('{n}', n) : t('library.selectBlocks'))+'</button>';
-  }
-  function toggleBibBlocoSelecionado(i){
-    if(bibBlocosSelecionados.has(i)) bibBlocosSelecionados.delete(i); else bibBlocosSelecionados.add(i);
-    document.getElementById('infoBody').innerHTML=buildBibBlocosChecklistHtml();
-  }
-  function importarBlocosSelecionados(){
-    const composicao=(BIBLIOTECA_BLOCOS[bibBlocosContratoAtual]||[]).filter(b=>b.key!=='identificacao');
-    const indices=[...bibBlocosSelecionados].sort((a,b)=>a-b);
-    if(!indices.length) return;
-    const job=getBuilderJob();
-    indices.forEach(i=>{
-      const c=composicao[i];
-      if(!c) return;
-      job.contract.blocks.push({id:genId(), key:c.key, customText:null, on:true, params:c.params||null});
-    });
-    renderBuilder();
-    closeInfo();
-    showToast(t('library.blocksImported').replace('{n}', indices.length));
-  }
   function abrirCriarNovoBloco(){
     openInfo(t('library.blocksCreateNew'),
       '<div class="field"><input id="novobloco-nome" placeholder="'+t('library.blockNamePlaceholder')+'" autocomplete="off"></div>'+
@@ -9932,62 +9641,56 @@
     {cat:'cronogramas', tituloKey:'explore.sampleTimeline', subKey:'explore.editableFlow', onclick:"openSheet();abrirListaModelo('cronograma')"}
   ];
   /* ===================== BIBLIOTECA UNIFICADA =====================
-     Junta numa só busca tudo o que já existia disperso: os contratos da
-     Biblioteca Pivot (BIBLIOTECA_OFICIAL, autoria da comunidade), os blocos
-     jurídicos (LEGAL_BLOCKS) e os modelos de checklist/briefing/cronograma
-     (CATALOGO_EXPLORAR). A pessoa busca por texto e afina por facetas. */
-  const BLOCO_KEY_COBERTURA={
-    pagamento:'Pagamento', entrega:'Entrega', cancelamento:'Cancelamento', direitos:'Propriedade Intelectual',
-    forcaMaior:'Força Maior', confidencialidade:'Confidencialidade', garantias:'Garantias'
-  };
+     Busca unificada sobre o catálogo da Biblioteca Jurídica oficial
+     (LegalLibrary). "Coberturas" (quais blocos um contrato cobre, ex.:
+     Pagamento/Cancelamento) dependia da composição BIBLIOTECA_BLOCOS, que
+     não existe mais — até o gerador de blocos oficiais ficar pronto, essa
+     faceta fica sem valores (e por isso não aparece, ver bibValoresFaceta). */
   function bibCoberturasDoModelo(b){
-    const comp=BIBLIOTECA_BLOCOS[b.id];
-    if(!comp) return [];
-    return [...new Set(comp.map(c=>BLOCO_KEY_COBERTURA[c.key]).filter(Boolean))];
+    return [];
   }
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
   }
   const BIB_CATEGORIA_AMIGAVEL={
-    'Casamentos':'Eventos', 'Corporativo':'Eventos', 'Fotografia':'Audiovisual', 'Vídeo':'Audiovisual',
-    'Drone':'Audiovisual', 'Imobiliário':'Imobiliário', 'Modelos':'Projetos', 'Outros':'Outros'
+    'Photography':'Audiovisual', 'Videography':'Audiovisual', 'Design':'Design',
+    'Software Development':'Tecnologia', 'Marketing':'Marketing', 'Consulting':'Consultoria',
+    'Architecture & Engineering':'Arquitetura & Engenharia', 'Education & Content':'Educação & Conteúdo',
+    'Universal Contracts':'Geral'
   };
   function bibCategoriaAmigavel(it){ return BIB_CATEGORIA_AMIGAVEL[it.categoria] || it.categoria; }
   function bibProfissao(it){
     const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))).toLowerCase();
-    if(/vídeo|video|drone|aftermovie|videoclipe|podcast/.test(s)) return 'Videomaker';
-    if(/casamento|wedding/.test(s)) return 'Wedding planner';
-    if(/design|conteúdo|social/.test(s)) return 'Designer';
-    if(/fotograf|retrato|imobili/.test(s)) return 'Fotógrafo';
+    if(/video|drone|aftermovie/.test(s)) return 'Videomaker';
+    if(/wedding/.test(s)) return 'Wedding planner';
+    if(/design/.test(s)) return 'Designer';
+    if(/photo/.test(s)) return 'Fotógrafo';
     return null;
   }
   function bibContexto(it){
-    const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))+' '+(it.tipo||'')).toLowerCase();
-    if(/checklist|cronograma|briefing/.test(s)) return 'Projeto';
-    if(/casamento|wedding|corporativo|workshop|conferência|conferencia|palestra|empresa/.test(s)) return 'Eventos';
-    if(/imobili/.test(s)) return 'Imobiliário';
-    if(/vídeo|video|drone|fotograf|aftermovie|podcast|videoclipe/.test(s)) return 'Produção de Conteúdo';
+    const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))).toLowerCase();
+    if(/consult|coaching|mentorship/.test(s)) return 'Consultoria';
+    if(/wedding|event/.test(s)) return 'Eventos';
+    if(/real estate|architect/.test(s)) return 'Imobiliário';
+    if(/video|photo|drone|design/.test(s)) return 'Produção de Conteúdo';
     return 'Prestação de Serviços';
   }
-  let _catalogoBibCache=null;
+  /* Sem cache: LegalLibrary carrega de forma assíncrona (fetch), então um
+     cache module-level calculado antes do fetch terminar ficaria preso
+     vazio para sempre. O catálogo tem no máximo algumas dezenas de itens —
+     recalcular a cada chamada é barato. */
   function catalogoBiblioteca(){
-    if(_catalogoBibCache) return _catalogoBibCache;
-    const out=[];
-    BIBLIOTECA_OFICIAL.filter(b=>b.tipo==='Contrato').forEach(b=>{
+    return LegalLibrary.list().map(b=>{
       const item={
-        id:'of:'+b.id, titulo:b.titulo, tipo:b.tipo, categoria:b.categoria, autor:b.autor,
-        avaliacao:b.avaliacao, usos:b.usos, desc:b.desc, tags:b.tags||[], origem:'oficial',
-        verificado:(b.avaliacao||0)>=4.7,
+        id:'of:'+b.id, titulo:b.titulo, categoria:b.categoria, desc:b.desc, tags:b.tags||[], origem:'oficial',
         profissao:bibProfissao(b),
-        numBlocos: (BIBLIOTECA_BLOCOS[b.id]||[]).length || null,
+        numBlocos: (b.requiredBlockCount||0)+(b.optionalBlockCount||0) || null,
         coberturas: bibCoberturasDoModelo(b)
       };
       item.categoriaAmigavel=bibCategoriaAmigavel(item);
       item.contexto=bibContexto(item);
-      out.push(item);
+      return item;
     });
-    _catalogoBibCache=out;
-    return out;
   }
   let bibOrigem='todos';
   let bibOrdenacao='usos';
@@ -10168,13 +9871,10 @@
     renderBiblioteca();
   }
   function bibEstruturaProtegidaHtml(item){
-    const rawId=item.id.replace(/^of:/,'');
-    const blocos=BIBLIOTECA_BLOCOS[rawId];
-    if(!blocos || !blocos.length) return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
-    return '<div style="margin-bottom:14px">'+blocos.map(b=>{
-      const largura = 35 + Math.min(65, Object.keys(b.params||{}).length*20 + (b.key||'').length*2);
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(b.key)+'</div><div class="bib-struct-bar"><i style="width:'+largura+'%"></i></div></div>';
-    }).join('')+'</div>';
+    /* A composição real de blocos por contrato oficial ainda não existe
+       (ver nota em blocosParaModeloBiblioteca) — mostra o aviso padrão até
+       essa etapa ser feita, em vez de fabricar uma estrutura falsa. */
+    return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
   }
   function bibBlocoBlurHtml(item){
     const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
@@ -10951,113 +10651,6 @@
     savePerfilData();
     aplicarPerfilData();
     closeInfo(); showToast(t('toast.accountDataUpdated'));
-  }
-  const LEGAL_TIER_META = { free:{cor:'#1FA463', label:{pt:'Grátis',en:'Free',es:'Gratis'}}, basic:{cor:'#C1863A', label:{pt:'Básico',en:'Basic',es:'Basic'}}, pro:{cor:'#295244', label:{pt:'Pro',en:'Pro',es:'Pro'}} };
-  function lbl3(obj){ const l=(LANG||'pt'); return (obj&&(obj[l]||obj.pt))||''; }
-  function abrirBibliotecaJuridica(){
-    const cats=[...new Set(LEGAL_BLOCKS.map(b=>b.categoria))];
-    let html='<p style="font-size:12.5px;color:var(--neutral);margin-bottom:14px">'+lbl3(LEGAL_DISCLAIMER)+'</p>';
-    cats.forEach(cat=>{
-      const blocos=LEGAL_BLOCKS.filter(b=>b.categoria===cat);
-      html+='<div class="plabel" style="margin:14px 2px 8px;text-transform:capitalize">'+escapeHtml(cat.replace(/_/g,' '))+'</div>';
-      blocos.forEach(b=>{
-        const tier=LEGAL_TIER_META[b.preco_tier]||LEGAL_TIER_META.free;
-        html+='<div class="struct-row" style="cursor:pointer" onclick="verBlocoJuridico(\''+b.id+'\')">'+
-          '<div class="struct-l"><div class="nm">'+escapeHtml(lbl3(b.nome))+'</div>'+
-          '<span class="sub">'+escapeHtml(lbl3(b.resumo))+'</span></div>'+
-          '<span class="sig-tag" style="flex:none;background:'+tier.cor+'22;color:'+tier.cor+';border:1px solid '+tier.cor+'55">'+lbl3(tier.label)+'</span></div>';
-      });
-    });
-    openInfo(t('legal.libraryTitle'), html);
-  }
-  function verBlocoJuridico(id){
-    const b=LEGAL_BLOCKS.find(x=>x.id===id);
-    if(!b) return;
-    const tier=LEGAL_TIER_META[b.preco_tier]||LEGAL_TIER_META.free;
-    let html='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">'+
-      '<span class="sig-tag" style="background:'+tier.cor+'22;color:'+tier.cor+';border:1px solid '+tier.cor+'55">'+lbl3(tier.label)+'</span>'+
-      '<span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft)">'+t('legal.risk')+': '+b.risco+'/100</span>'+
-      '<span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft)">'+escapeHtml(b.complexidade)+'</span></div>';
-    html+='<p style="font-size:13.5px;line-height:1.6;color:var(--ink);white-space:pre-wrap">'+escapeHtml(lbl3(b.texto))+'</p>';
-    if(b.industry_tags && b.industry_tags.length) html+='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">'+b.industry_tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
-    if(b.requires_local_review && b.jurisdiction_notes) html+='<div class="warn-box" style="margin-top:12px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div style="font-size:12.5px">'+escapeHtml(lbl3(b.jurisdiction_notes))+'</div></div>';
-    html+='<button class="btn soft" style="width:100%;margin-top:14px" onclick="abrirBibliotecaJuridica()">'+t('action.back')+'</button>';
-    openInfo(lbl3(b.nome), html);
-  }
-
-  /* ============================================================
-     CONTRATOS-RECEITA — combinam blocos automaticamente por profissão.
-     obrigatorios: sempre incluídos. recomendados: incluídos por padrão,
-     mas removíveis. opcionais: disponíveis para adicionar. proibidos:
-     nunca combinar (ex.: não-concorrência num contrato de consumidor).
-     ============================================================ */
-  const CONTRACT_TEMPLATES = [
-    {
-      id:'ct-eventos', nome:{pt:'Fotografia e Vídeo de Eventos',en:'Event Photography & Video',es:'Fotografía y Vídeo de Eventos'},
-      tags:['fotografia','video','casamentos','eventos'],
-      obrigatorios:['obj-001','pay-014','del-100'],
-      recomendados:['can-050','ip-021','con-060'],
-      opcionais:['frm-070','dis-090'], proibidos:['nsc-120']
-    },
-    {
-      id:'ct-digital', nome:{pt:'Design e Desenvolvimento Digital',en:'Design & Digital Development',es:'Diseño y Desarrollo Digital'},
-      tags:['design','programacao','tecnologia','saas'],
-      obrigatorios:['obj-001','pay-014','sco-080'],
-      recomendados:['del-100','war-110','ip-021','ai-130'],
-      opcionais:['con-060','dis-090','trm-140'], proibidos:[]
-    },
-    {
-      id:'ct-consultoria', nome:{pt:'Consultoria e Agência B2B',en:'Consulting & B2B Agency',es:'Consultoría y Agencia B2B'},
-      tags:['consultoria','agencia','b2b','marketing'],
-      obrigatorios:['obj-001','pay-014','con-060'],
-      recomendados:['lia-040','trm-140','dis-090'],
-      opcionais:['frm-070','nsc-120','sco-080'], proibidos:[]
-    },
-    {
-      id:'ct-rapido', nome:{pt:'Trabalho Rápido / Simples',en:'Quick / Simple Job',es:'Trabajo Rápido / Simple'},
-      tags:['geral','freelancer','basico'],
-      obrigatorios:['obj-001','del-100'],
-      recomendados:['sco-080','trm-140'],
-      opcionais:['frm-070'], proibidos:['nsc-120','ai-130','lia-040']
-    }
-  ];
-  function blocosDeTemplate(tpl, incluirOpcionais){
-    const ids=[...tpl.obrigatorios, ...tpl.recomendados, ...(incluirOpcionais?tpl.opcionais:[])];
-    return ids.map(id=>LEGAL_BLOCKS.find(b=>b.id===id)).filter(Boolean);
-  }
-  function precoSugeridoTemplate(tpl){
-    const blocos=blocosDeTemplate(tpl,false);
-    let preco=0;
-    blocos.forEach(b=>{ if(b.preco_tier==='basic') preco+=2; else if(b.preco_tier==='pro') preco+=5; });
-    return preco;
-  }
-  function abrirContratosPorProfissao(){
-    let html='<p style="font-size:12.5px;color:var(--neutral);margin-bottom:14px">'+lbl3(LEGAL_DISCLAIMER)+'</p>';
-    html+=CONTRACT_TEMPLATES.map(tpl=>{
-      const preco=precoSugeridoTemplate(tpl);
-      const nBlocos=tpl.obrigatorios.length+tpl.recomendados.length;
-      return '<div class="pick-row" onclick="verContratoTemplate(\''+tpl.id+'\')">'+
-        '<div><div class="nm">'+escapeHtml(lbl3(tpl.nome))+'</div><span class="sub">'+nBlocos+' '+t('builder.blocksCount')+' · '+(preco>0?fmtMoney(preco):t('legal.tierFree'))+'</span></div>'+
-        '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
-    }).join('');
-    openInfo(t('legal.contractsByProfession'), html);
-  }
-  function verContratoTemplate(tplId){
-    const tpl=CONTRACT_TEMPLATES.find(x=>x.id===tplId);
-    if(!tpl) return;
-    const obrigBlocos=tpl.obrigatorios.map(id=>LEGAL_BLOCKS.find(b=>b.id===id)).filter(Boolean);
-    const recBlocos=tpl.recomendados.map(id=>LEGAL_BLOCKS.find(b=>b.id===id)).filter(Boolean);
-    const preco=precoSugeridoTemplate(tpl);
-    let html='<p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">'+tpl.tags.join(' · ')+'</p>';
-    html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+t('legal.suggestedPrice')+'</div></div><b>'+(preco>0?fmtMoney(preco):t('legal.tierFree'))+'</b></div>';
-    [...obrigBlocos, ...recBlocos].forEach(b=>{
-      const tier=LEGAL_TIER_META[b.preco_tier]||LEGAL_TIER_META.free;
-      html+='<div class="sec"><div class="sec-head" onclick="toggleSec(this)"><div class="sec-l"><div class="sec-title">'+escapeHtml(lbl3(b.nome))+'</div></div>'+
-        '<span class="sig-tag" style="background:'+tier.cor+'22;color:'+tier.cor+';border:1px solid '+tier.cor+'55;flex:none">'+lbl3(tier.label)+'</span></div>'+
-        '<div class="sec-body"><p style="font-size:13px;color:var(--ink-soft);line-height:1.55">'+escapeHtml(lbl3(b.texto))+'</p></div></div>';
-    });
-    html+='<button class="btn soft" style="width:100%;margin-top:14px" onclick="abrirContratosPorProfissao()">'+t('action.back')+'</button>';
-    openInfo(lbl3(tpl.nome), html);
   }
   function infoMetodosPagamento(){
     const mp=perfilData.metodosPagamento;
