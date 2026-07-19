@@ -196,6 +196,27 @@ function parseContractFile(file) {
   return { meta, blocks, dynamicFields: [...dynamicFieldsSeen], slug: slugify(meta.contractType || path.basename(file, '.md')) };
 }
 
+// ---------- 2b. Cruzamento com o Blueprint (Purpose/Typical Use Cases) ----------
+// O Blueprint declara Purpose/Typical Use Cases por Contract Type, mas os
+// arquivos de Contracts não repetem esse texto — só o nome do contrato.
+// Cruza por nome normalizado (ignora maiúsculas/pontuação/parênteses, ex.:
+// "Non-Disclosure Agreement (NDA)" casa com "Non-Disclosure Agreement").
+function normalizeContractName(name) {
+  return (name || '')
+    .toLowerCase()
+    .replace(/\([^)]*\)/g, '')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function buildBlueprintIndex(blueprint) {
+  const byName = new Map();
+  blueprint.forEach(market => market.categories.forEach(cat => cat.subcategories.forEach(sub => sub.contractTypes.forEach(ct => {
+    byName.set(normalizeContractName(ct.name), ct);
+  }))));
+  return byName;
+}
+
 // ---------- 3. Registro de Dynamic Fields (heurística de tipo) ----------
 function inferFieldType(name) {
   if (/_DATE$/.test(name)) return 'date';
@@ -237,23 +258,38 @@ function main() {
   }).filter(Boolean);
 
   const dynamicFields = buildDynamicFieldsRegistry(contracts);
+  const blueprintIndex = buildBlueprintIndex(blueprint);
 
   fs.mkdirSync(path.join(DIST, 'contracts'), { recursive: true });
 
   const index = {
-    contractTypes: contracts.map(c => ({
-      id: c.slug,
-      slug: c.slug,
-      title: c.meta.contractType,
-      market: c.meta.market,
-      category: c.meta.category,
-      subcategory: c.meta.subcategory,
-      status: c.meta.status,
-      requiredBlockCount: c.blocks.filter(b => b.status === 'REQUIRED').length,
-      optionalBlockCount: c.blocks.filter(b => b.status === 'OPTIONAL').length,
-      conditionalBlockCount: c.blocks.filter(b => b.status === 'CONDITIONAL').length,
-      clauseCount: c.blocks.reduce((n, b) => n + b.clauses.length, 0)
-    }))
+    contractTypes: contracts.map(c => {
+      const bp = blueprintIndex.get(normalizeContractName(c.meta.contractType));
+      if (!bp) warn(c.slug, 'Sem correspondência no Blueprint por nome — desc/tags ficam vazios');
+      // prévia real do contrato: primeira cláusula do primeiro bloco
+      // obrigatório (normalmente "Identification"), truncada — não é texto
+      // fabricado, é a própria cláusula Master English do arquivo oficial.
+      const firstBlock = c.blocks.find(b => b.status === 'REQUIRED' && b.clauses.length) || c.blocks.find(b => b.clauses.length);
+      const firstClause = firstBlock && firstBlock.clauses[0];
+      const previewText = firstClause ? firstClause.text.slice(0, 300) : null;
+      return {
+        id: c.slug,
+        slug: c.slug,
+        title: c.meta.contractType,
+        market: c.meta.market,
+        category: c.meta.category,
+        subcategory: c.meta.subcategory,
+        status: c.meta.status,
+        desc: bp ? bp.purpose : null,
+        tags: bp ? bp.useCases : [],
+        previewText,
+        blocks: c.blocks.map(b => ({ name: b.name, status: b.status })),
+        requiredBlockCount: c.blocks.filter(b => b.status === 'REQUIRED').length,
+        optionalBlockCount: c.blocks.filter(b => b.status === 'OPTIONAL').length,
+        conditionalBlockCount: c.blocks.filter(b => b.status === 'CONDITIONAL').length,
+        clauseCount: c.blocks.reduce((n, b) => n + b.clauses.length, 0)
+      };
+    })
   };
 
   contracts.forEach(c => {
