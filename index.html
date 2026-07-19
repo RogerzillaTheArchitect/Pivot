@@ -2229,6 +2229,7 @@
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "library.facet.profession": { pt:"Segmento", en:"Segment", es:"Segmento" },
+    "library.facet.language": { pt:"Idioma", en:"Language", es:"Idioma" },
     "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Validação Jurídica", en:"Legal Validation", es:"Validación Jurídica" },
@@ -4206,7 +4207,7 @@
         this._catalog = (idx.contractTypes||[]).map(c=>({
           id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
           mercado: c.market, desc: c.desc||null, tags: c.tags||[], origem: 'oficial',
-          verificado: c.status === 'FINAL APPROVED',
+          verificado: c.status === 'FINAL APPROVED', idioma: c.language||'en',
           texto: c.previewText||null, blocks: c.blocks||[],
           requiredBlockCount: c.requiredBlockCount, optionalBlockCount: c.optionalBlockCount, clauseCount: c.clauseCount,
           numBlocos: (c.requiredBlockCount||0)+(c.optionalBlockCount||0) || null
@@ -4244,13 +4245,41 @@
     }
   };
   LegalLibrary.init();
-  /* Modelos "Contrato" da Biblioteca Jurídica ainda não têm gerador de
-     blocos próprio (os blocos oficiais usam nomes/estrutura do Blueprint,
-     não as 9 chaves genéricas de blocoTextos) — até essa etapa ser feita,
-     qualquer seleção cai no esqueleto genérico em branco, para nunca deixar
-     o wizard sem blocos. */
-  function blocosParaModeloBiblioteca(m){
-    return blocosModeloPadrao();
+  /* Preenche os [DYNAMIC_FIELD] de uma cláusula oficial com o que já se
+     sabe do trabalho/perfil no momento da importação — como um bloco
+     avulso (customText), isso é congelado no import, não recalculado a
+     cada render; o que não dá pra preencher fica com o placeholder
+     [ENTRE_COLCHETES] visível, para o usuário completar manualmente em
+     vez de inventarmos um valor. */
+  function valoresDynamicFieldsDoJob(job){
+    const v={};
+    if(job.client) v.CLIENT_NAME=job.client;
+    if(job.typeLabel) v.PROJECT_NAME=job.typeLabel;
+    if(job.value) v.TOTAL_VALUE=fmtMoney(job.value);
+    if(job.date) v.DELIVERY_DATE=v.START_DATE=job.date;
+    if(job.local) v.LOCATION=job.local;
+    const empresa=perfilData && perfilData.empresa;
+    if(empresa) v.PROVIDER_NAME=empresa;
+    return v;
+  }
+  /* Gera os blocos reais de um contrato da Biblioteca Jurídica oficial a
+     partir do detalhe compilado (LegalLibrary.getDetail) — um bloco por
+     Block do Blueprint (Identification, Payment, ...), com o texto de
+     todas as suas cláusulas Master English concatenado. Blocos CONDITIONAL
+     dependem de um gatilho que não avaliamos automaticamente, então ficam
+     de fora por enquanto. REQUIRED entra ligado, OPTIONAL entra desligado
+     (o usuário ativa o que quiser) — mesma convenção do esqueleto genérico. */
+  async function blocosParaModeloBiblioteca(m){
+    const rawId = m && m.id ? String(m.id).replace(/^of:/,'') : null;
+    const detail = rawId ? await LegalLibrary.getDetail(rawId) : null;
+    if(!detail || !detail.blocks || !detail.blocks.length) return blocosModeloPadrao();
+    const valores = valoresDynamicFieldsDoJob(getBuilderJob());
+    const blocosComTexto = detail.blocks.filter(b=>b.status!=='CONDITIONAL' && b.clauses && b.clauses.length);
+    if(!blocosComTexto.length) return blocosModeloPadrao();
+    return blocosComTexto.map((b,i)=>({
+      id:'lb'+i, key:null, name:b.name, on: b.status==='REQUIRED',
+      customText: b.clauses.map(c=>LegalLibrary.resolveClauseText(c.text, valores)).join('\n\n')
+    }));
   }
   function sugerirModelos(nomeTrabalho){
     const q=(nomeTrabalho||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
@@ -4384,11 +4413,11 @@
     document.getElementById('sheetTitle').textContent=m.titulo;
     renderEstrelasAvaliacao(id);
   }
-  function selecionarModeloBibliotecaNoWizard(id){
+  async function selecionarModeloBibliotecaNoWizard(id){
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    twModeloEscolhido={ nome:m.titulo, blocks:blocosParaModeloBiblioteca(m) };
+    twModeloEscolhido={ nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) };
     twEmWizard=false;
     while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
     showPanel('trabalho');
@@ -4423,12 +4452,12 @@
     if(!document.getElementById('sheet').classList.contains('show')) openSheet();
     pushPanel('comunidade-contratos');
   }
-  function duplicarModeloBiblioteca(id){
+  async function duplicarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
   function guardarModeloBiblioteca(id){
@@ -4436,12 +4465,12 @@
     renderEstrelasAvaliacao(id);
     showToast(t('toast.savedToTemplates'));
   }
-  function importarModeloBiblioteca(id){
+  async function importarModeloBiblioteca(id){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -8827,6 +8856,12 @@
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
   }
+  /* Todo o conteúdo oficial hoje está só em inglês (Master English, por
+     PLDS-001) — o campo idioma já vem do arquivo (frontmatter language:),
+     não é fabricado. O mapa cobre os 3 idiomas do app; qualquer outro
+     aparece com o próprio código. */
+  const BIB_IDIOMA_NOMES={en:'English', pt:'Português', es:'Español'};
+  function bibNomeIdioma(code){ return BIB_IDIOMA_NOMES[code] || code; }
   const BIB_CATEGORIA_AMIGAVEL={
     'Photography':'Audiovisual', 'Videography':'Audiovisual', 'Design':'Design',
     'Software Development':'Tecnologia', 'Marketing':'Marketing', 'Consulting':'Consultoria',
@@ -8858,7 +8893,7 @@
     return LegalLibrary.list().map(b=>{
       const item={
         id:'of:'+b.id, titulo:b.titulo, categoria:b.categoria, desc:b.desc, tags:b.tags||[],
-        origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[],
+        origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[], idioma:b.idioma,
         profissao:bibProfissao(b),
         numBlocos: b.numBlocos,
         coberturas: bibCoberturasDoModelo(b)
@@ -8887,6 +8922,7 @@
     if(document.getElementById('infoSheet').classList.contains('show')) refrescarSheetFiltrosBiblioteca();
   }
   const BIB_FACETAS=[
+    ['idioma','library.facet.language'],
     ['profissao','library.facet.profession'],
     ['contexto','library.facet.context'],
     ['categoriaAmigavel','library.facet.category'],
@@ -8951,7 +8987,7 @@
       const valores=bibValoresFaceta(base, fac);
       if(!valores.length) return '';
       const sel=bibFacetSel[fac];
-      const chips=valores.map(v=>'<span class="bib-fchip'+(sel===v?' on':'')+'" onclick="toggleBibFacet(\''+fac+'\',\''+escapeHtml(v).replace(/'/g,"\\'")+'\')">'+escapeHtml(v)+'</span>').join('');
+      const chips=valores.map(v=>'<span class="bib-fchip'+(sel===v?' on':'')+'" onclick="toggleBibFacet(\''+fac+'\',\''+escapeHtml(v).replace(/'/g,"\\'")+'\')">'+escapeHtml(fac==='idioma'?bibNomeIdioma(v):v)+'</span>').join('');
       return '<div class="bib-acc open"><div class="bib-acc-head" onclick="toggleBibAcc(this.parentElement)"><span>'+t(labelKey)+'</span>'+(sel?'<span class="cnt">'+escapeHtml(sel)+'</span>':'')+'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div><div class="bib-acc-body">'+chips+'</div></div>';
     }).join('');
     html+='<div class="plabel" style="margin-top:16px">'+t('library.sortLabel')+'</div>';
@@ -9084,7 +9120,7 @@
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
-    const usarOnclick = it.onclick ? it.onclick : "abrirBuilder(null)";
+    const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+id.replace(/^of:/,'')+"')";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
   }
