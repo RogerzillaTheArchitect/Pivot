@@ -24,8 +24,9 @@
      por espaçamento, sem caixa envolvendo cada item. Reaproveita o motor de
      swipe do radar (.radar-card-wrap/.radar-card) tal e qual — só o "casco"
      visual do .card é neutralizado aqui para manter o estilo de timeline. */
-  #rel-fluxo-lista .radar-card-wrap{margin-bottom:0}
-  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-radius:0;box-shadow:none;padding:13px 0}
+  #rel-fluxo-lista .radar-card-wrap{margin-bottom:0;border-radius:0}
+  #rel-fluxo-lista .radar-card-wrap:first-child .card.radar-card{border-top:none}
+  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 2px}
   #rel-fluxo-lista .card.radar-card::before{content:none}
   .rel-fluxo-item .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
   .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}

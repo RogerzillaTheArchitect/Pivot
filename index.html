@@ -401,11 +401,6 @@
 
       <!-- ============ HOJE / DASHBOARD ============ -->
       <section class="view active" id="v-hoje">
-        <div class="date-header">
-          <span class="date-month" id="hoje-mes">JUNHO</span>
-          <span class="date-year" id="hoje-ano">2026</span>
-        </div>
-
         <span class="section-label-out" data-t="home.financeTitle">Financeiro</span>
         <div class="month-summary" onclick="abrirRelatorios('faturamento')">
           <div class="ms-progress-row">
@@ -738,12 +733,9 @@
         <div class="page-title" data-t="reports.title">Relatórios</div>
 
         <!-- Card: Faturamento — as barras são o próprio elemento; o seletor de
-             mês/ano fica dentro deste mesmo card, abaixo dos gráficos. -->
+             mês/ano fica dentro deste mesmo card, no topo. -->
         <div class="card rel-card">
-          <div class="group-label" id="rel-anchor-faturamento"><span data-t="reports.billing">Faturamento</span></div>
-          <div id="rel-fat-bars" style="margin-top:16px"></div>
-          <div id="rel-linechart" style="margin-top:20px"></div>
-          <div class="rel-period-bar" style="margin-top:18px">
+          <div class="rel-period-bar">
             <div class="rel-month-row">
               <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
               <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
@@ -753,6 +745,9 @@
               <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
             </div>
           </div>
+          <div class="group-label" id="rel-anchor-faturamento" style="margin-top:16px"><span data-t="reports.billing">Faturamento</span></div>
+          <div id="rel-fat-bars" style="margin-top:16px"></div>
+          <div id="rel-linechart" style="margin-top:20px"></div>
         </div>
 
         <!-- Card: Estatísticas Operacionais — lista analítica; a barra/gráfico só
@@ -820,20 +815,20 @@
   <!-- ===== MOBILE NAV ===== -->
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11.5 12 4l8 7.5"/><rect x="6" y="11.5" width="12" height="8.5"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4"/><path d="M17.5 2.5 21.5 10h-8z"/><circle cx="6.5" cy="17.5" r="4"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.2"/></svg>
       <span id="nav-label-hoje" data-t="nav.home">Resumo</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="9" width="18" height="11" rx="1"/><path d="M8 9V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><path d="M3 13h18"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h11v13H3z"/><path d="M3 9h8M3 13h8"/><ellipse cx="17.5" cy="11.5" rx="3.5" ry="7"/></svg>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
     <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M11.5 17.3c1-1.5 1.7-1.3 2.3.1.7 1.4 1.4 1.1 2-.3"/></svg>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
     </button>
     <button id="n-relatorios" onclick="go('relatorios')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 20c1.5-4 2.5-6 4-6s2.5 2 4 6"/><path d="M5 20c2-7.5 4.5-12 7-12s5 4.5 7 12"/><path d="M14 20c1.3-4.5 2.3-6.5 3.7-6.5S21 15.5 21.5 20"/></svg>
       <span id="nav-label-relatorios" data-t="reports.title">Relatórios</span>
     </button>
   </nav>
@@ -1787,7 +1782,6 @@
     if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
     const data2 = await abrirPortalPorToken(ppToken, ppCodigo);
     if (data2 && data2.job) ppJob = data2.job;
-    if (data2 && data2.ownerEmail) dispararEmailEvento('acaoNecessaria', data2.ownerEmail, ppJob);
     renderPortalPublicoPrincipal();
   }
   /* ===== Timeline bidirecional =====
@@ -2339,7 +2333,7 @@
     "library.origin.official": { pt:"Oficial Pivot", en:"Official Pivot", es:"Oficial Pivot" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.popular": { pt:"Populares", en:"Popular", es:"Populares" },
-    "library.origin.saved": { pt:"Favoritos ★", en:"Saved ★", es:"Favoritos ★" },
+    "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
@@ -2393,8 +2387,8 @@
     "library.builderEmpty": { pt:"Ainda sem blocos. Usa a busca acima para adicionar.", en:"No blocks yet. Use the search above to add.", es:"Aún sin bloques. Usa la búsqueda de arriba para añadir." },
     "library.builderSave": { pt:"Guardar na minha biblioteca", en:"Save to my library", es:"Guardar en mi biblioteca" },
     "library.savedTemplate": { pt:"Modelo guardado na tua biblioteca.", en:"Template saved to your library.", es:"Plantilla guardada en tu biblioteca." },
-    "library.addFav": { pt:"☆ Favoritar", en:"☆ Save", es:"☆ Guardar" },
-    "library.removeFav": { pt:"★ Remover dos favoritos", en:"★ Remove from saved", es:"★ Quitar de guardados" },
+    "library.addFav": { pt:"Favoritar", en:"Save", es:"Guardar" },
+    "library.removeFav": { pt:"Remover dos favoritos", en:"Remove from saved", es:"Quitar de guardados" },
     "explore.libraryHint": { pt:"Modelos partilhados por outros profissionais", en:"Templates shared by other professionals", es:"Plantillas compartidas por otros profesionales" },
     "explore.saveCollection": { pt:"Guardar coleção", en:"Save collection", es:"Guardar colección" },
     "explore.saveTemplate": { pt:"Guardar modelo →", en:"Save template →", es:"Guardar plantilla →" },
@@ -3721,12 +3715,6 @@
     const nomesMeses=LANG==='en'?nomesMesesEn:LANG==='es'?nomesMesesEs:nomesMesesPt;
     const mesEl=document.getElementById('ms-mes-atual');
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
-    const mesHojeEl=document.getElementById('hoje-mes'), anoHojeEl=document.getElementById('hoje-ano');
-    if(mesHojeEl && anoHojeEl){
-      const hoje=new Date();
-      mesHojeEl.textContent=nomesMeses[hoje.getMonth()];
-      anoHojeEl.textContent=hoje.getFullYear();
-    }
     renderTasksList();
     updateHoje();
   }
@@ -3791,6 +3779,7 @@
      Trabalhos/Projetos) — um ícone por tipo de dado, sempre à esquerda do
      texto correspondente. */
   const CARD_ROW_ICONS={
+    calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
     money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
     moneyCircle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v9"/><path d="M14.5 9.3c0-1-.9-1.8-2.5-1.8s-2.5.7-2.5 1.7c0 1 .9 1.4 2.5 1.8s2.5.9 2.5 1.9c0 1-.9 1.7-2.5 1.7s-2.5-.8-2.5-1.8"/></svg>',
     pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
@@ -5742,9 +5731,10 @@
   function relLineRow(label, valor, max, cor){
     const pct = max>0 ? Math.min(100, Math.round(Math.sqrt(valor/max)*100)) : 0;
     return '<div class="rel-line-item">'+
-      '<div class="rel-line-value-row"><span class="rel-line-value">'+fmtMoney(valor)+'</span></div>'+
-      '<div class="rel-line-bar" style="width:'+Math.max(pct,6)+'%;background:'+cor+'"></div>'+
-      '<span class="rel-line-label">'+escapeHtml(label)+'</span></div>';
+      '<span class="rel-line-label">'+escapeHtml(label)+'</span>'+
+      '<span class="rel-line-value">'+fmtMoney(valor)+'</span>'+
+      '<div class="rel-line-bar-track"><div class="rel-line-bar" style="width:'+Math.max(pct,4)+'%;background:'+cor+'"></div></div>'+
+      '</div>';
   }
   function renderRelFatBars(s){
     const wrap=document.getElementById('rel-fat-bars'); if(!wrap) return;
@@ -9005,6 +8995,29 @@
     const concluido = fechado && !aRealizar && !aEntregar && !pagamentoPendente;
     return {fechado, aRealizar, aEntregar, executado, entregue, atrasado, pagamentoPendente, concluido};
   }
+  function fmtDataDDMM(iso){
+    if(!iso) return '';
+    const [,M,D]=iso.split('-');
+    return D+'/'+M;
+  }
+  /* mesma logica de urgencia dos cards de Tarefas (Dashboard): a data mais
+     proxima relevante do trabalho (pagamento pendente mais cedo ou data do
+     evento) decide late/soon/normal — atrasado = vermelho, hoje/amanhã =
+     amarelo, 2+ dias = verde. */
+  function proximaDataRelevanteJob(job){
+    const datas=[];
+    (job.payments||[]).forEach(p=>{ if(p.status!=='pago' && p.dueDate) datas.push(p.dueDate); });
+    if(job.dateRaw) datas.push(job.dateRaw);
+    if(!datas.length) return null;
+    datas.sort();
+    const atrasadas=datas.filter(d=>diasEntre(d)<0);
+    return atrasadas.length ? atrasadas.sort((a,b)=>diasEntre(a)-diasEntre(b))[0] : datas.find(d=>diasEntre(d)>=0) || datas[0];
+  }
+  function classificarUrgenciaJob(job){
+    const dataAlvo=proximaDataRelevanteJob(job);
+    if(!dataAlvo) return 'normal';
+    return gerarNivelPrioridade(dataAlvo)==='critica' ? 'late' : (['alta','media'].includes(gerarNivelPrioridade(dataAlvo)) ? 'soon' : 'normal');
+  }
   function updateJobCardInner(div, job){
     const c=classificarTrabalho(job);
     div.dataset.state= c.concluido?'done':(c.aEntregar?'deliver':(c.fechado?'active':'wait'));
@@ -9018,6 +9031,8 @@
     div.dataset.executado= c.executado?'1':'0';
     div.dataset.entregue= c.entregue?'1':'0';
     const signed=c.fechado;
+    const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
+    div.className='job'+(urgClasse?' '+urgClasse:'');
     /* mesmos indicadores com ícone usados nos cards de Tarefas (Dashboard) —
        cardInfoRow/CARD_ROW_ICONS — pra manter a mesma linguagem visual entre
        a versão resumida (Tarefas) e a versão completa em lista (Projetos). */
@@ -9025,9 +9040,11 @@
     if(!signed) rows+=cardInfoRow('clientDep', t('tasks.signatureLabel'));
     const proxPagamento=(job.payments||[]).find(p=>p.status!=='pago' && p.dueDate);
     if(proxPagamento) rows+=cardInfoRow('moneyCircle', fmtMoney(proxPagamento.amount));
+    if(job.dateRaw) rows+=cardInfoRow('calendar', fmtDataDDMM(job.dateRaw));
     if(job.local) rows+=cardInfoRow('pin', job.local);
-    if(job.duracaoHoras!=null) rows+=cardInfoRow('clock', formatarDuracao(job.duracaoHoras));
-    div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+' · '+escapeHtml(job.date||'data a definir')+'</div></div></div><div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div>'+
+    if(job.horaIni) rows+=cardInfoRow('clock', job.horaIni+(job.horaFim?(' - '+job.horaFim):''));
+    const tagHtml = (!c.concluido && urgClasse) ? '<span class="job-tag '+urgClasse+'">'+gerarLabelTemporal(proximaDataRelevanteJob(job), null)+'</span>' : '';
+    div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div><div class="job-top-r">'+tagHtml+'<div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div></div>'+
       (rows ? '<div class="card-rows">'+rows+'</div>' : '');
   }
   function updateJobCard(id){
@@ -9387,10 +9404,14 @@
      partilhou, oficial mostra "Pivot Oficial", jurídico mostra o escritório
      validador — um único rótulo, sem badges adicionais do lado direito
      (só o favoritar continua lá). */
+  const BIB_ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M20 6 9 17l-5-5"/></svg>';
+  const BIB_ICON_SCALE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7 2 13a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/></svg>';
+  const BIB_ICON_USER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
+  const BIB_ICON_THUMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>';
   function bibAutorLinha(item){
-    if(item.origem==='oficial') return '✅ '+t('library.origin.official');
-    if(item.verificado) return '⚖️ '+escapeHtml(item.autor||'');
-    return '👤 '+escapeHtml(item.autor||'');
+    if(item.origem==='oficial') return BIB_ICON_CHECK+t('library.origin.official');
+    if(item.verificado) return BIB_ICON_SCALE+escapeHtml(item.autor||'');
+    return BIB_ICON_USER+escapeHtml(item.autor||'');
   }
   function renderBiblioteca(){
     bibAtualizarChipFiltrar();
@@ -9405,7 +9426,7 @@
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.id);
       const rodape=[bibAutorLinha(i)];
-      if(i.usos) rodape.push('👍 '+i.usos+' '+t('library.recommendCount'));
+      if(i.usos) rodape.push(BIB_ICON_THUMB+i.usos+' '+t('library.recommendCount'));
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
@@ -9454,7 +9475,7 @@
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
     const metricas=[bibAutorLinha(it)];
-    if(it.usos) metricas.push('👍 '+it.usos+' '+t('library.recommendCount'));
+    if(it.usos) metricas.push(BIB_ICON_THUMB+it.usos+' '+t('library.recommendCount'));
     if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
     html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+metricas.join(' · ')+'</p>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
@@ -9464,7 +9485,8 @@
        mostram uma prévia legível com um botão para ver o conteúdo completo. */
     html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
-    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
+    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
+    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "abrirBuilder(null)";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
@@ -9585,10 +9607,10 @@
   let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false} } };
   const METODOS_PAGAMENTO_META=[
-    ['revolut','payment.method.revolut','@utilizador', '<path d="M13 2 3 14h6l-2 8 10-12h-6z"/>', '#B8C7A8'],
-    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', '<path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"/>', '#5E7A52'],
-    ['mbway','payment.method.mbway','+351 900 000 000', '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>', '#C9A855'],
-    ['paypal','payment.method.paypal','paypal.me/utilizador', '<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/><path d="M12 1v22"/>', '#A8B8D8']
+    ['revolut','payment.method.revolut','@utilizador', '<path d="M7 3h6a4.5 4.5 0 0 1 0 9h-2.5l5 9h-3.3l-5-9H9v9H7z"/>'],
+    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', '<path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"/>'],
+    ['mbway','payment.method.mbway','+351 900 000 000', '<rect x="7" y="2" width="10" height="20" rx="2.2"/><path d="M11 18h2"/>'],
+    ['paypal','payment.method.paypal','paypal.me/utilizador', '<path d="M8 4h6a4 4 0 0 1 0 8h-4l-1 8H6z"/><path d="M10 8h4"/>']
   ];
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
@@ -10116,15 +10138,15 @@
     openInfo(t('profile.myAccount'), `
       <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
+      <div class="prow" style="margin:0 0 13px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
       ${linhasPlano}
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
       <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
       <div style="display:flex;gap:8px">
-        <input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="flex:1;text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()">
+        <div class="field" style="flex:1;margin-bottom:0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
         <button class="btn soft" style="flex:none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
-      </div>
-      <div class="prow" style="margin-top:18px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>`);
+      </div>`);
   }
   async function resgatarCodigoPlano(){
     const input=document.getElementById('mc-codigo');
@@ -10326,12 +10348,12 @@
   }
   function infoMetodosPagamento(){
     const mp=perfilData.metodosPagamento;
-    const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone,cor])=>{
+    const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone])=>{
       const m=mp[key];
       return '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:14px 2px">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;background:'+cor+'26;color:'+cor+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--brand-10);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
         '<div class="toggle'+(m.ativo?' on':'')+'" onclick="this.classList.toggle(\'on\')" id="mp-ativo-'+key+'"><div class="kn"></div></div></div>'+
-        '<input id="mp-valor-'+key+'" placeholder="'+placeholder+'" value="'+escapeHtml(m.valor||'')+'">'+
+        '<div class="field" style="margin-bottom:0"><input id="mp-valor-'+key+'" placeholder="'+placeholder+'" value="'+escapeHtml(m.valor||'')+'"></div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)"><input type="checkbox" id="mp-padrao-'+key+'" '+(m.padrao?'checked':'')+' style="accent-color:var(--brand)"> '+t('payment.method.sendByDefault')+'</label>'+
         '</div>';
     }).join('');
