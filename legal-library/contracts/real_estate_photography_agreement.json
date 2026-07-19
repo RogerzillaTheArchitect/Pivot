@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "market": "Photography",
+    "category": "Real Estate",
+    "subcategory": "Property",
+    "contractType": "Real Estate Photography Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the real estate photography services described in [SERVICES_CONTRACTED] at [PROPERTY_ADDRESS] on [EVENT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PROPERTY_ADDRESS",
+        "EVENT_DATE"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [EVENT_DATE] at [EVENT_LOCATION], subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Commercial Usage",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "commercial_usage.listing_license",
+          "version": null,
+          "text": "Upon full payment of [TOTAL_VALUE], the Client receives a license to use the Deliverables for the marketing and sale or lease of [PROPERTY_ADDRESS], including listing syndication platforms. The Service Provider retains copyright in the Deliverables."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Drone Operation",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "drone_operation.authorization",
+          "version": null,
+          "text": "Where aerial capture is included, the Service Provider warrants that it holds any authorization required by applicable aviation regulation to operate a drone at [PROPERTY_ADDRESS], and the Client shall ensure the property permits lawful aerial operation."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Weather Policy",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "weather_policy.rescheduling",
+          "version": null,
+          "text": "If weather conditions at [EVENT_DATE] prevent adequate exterior photography at [PROPERTY_ADDRESS], the Parties shall reschedule the affected portion of the Services under the Rescheduling Clause at no additional charge."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Rescheduling",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "rescheduling.client_initiated",
+          "version": null,
+          "text": "The Client may request to reschedule [EVENT_DATE] by giving at least [RESCHEDULING_NOTICE_PERIOD_DAYS] days' written notice, subject to the Service Provider's availability."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "RESCHEDULING_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "client_responsibilities.property_access",
+          "version": null,
+          "text": "The Client shall ensure the Service Provider has access to [PROPERTY_ADDRESS] at the scheduled time on [EVENT_DATE], including keys, lockbox codes, or an on-site representative as necessary."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS",
+        "EVENT_DATE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Commercial Usage explicit and Required by default, unlike the personal-use default in Portrait, correctly reflecting that real estate images are inherently commercial. Duplication: Weather Policy and Rescheduling kept distinct — the former is the trigger condition, the latter the mechanism, consistent with the pattern established in Wedding Photography's Force Majeure/Rescheduling relationship. Loophole closed: Drone Operation Conditional Block requires photographer authorization AND client property permission jointly, closing a gap where only one party's compliance was addressed. Contradiction: none. Missing protection: Client Responsibilities upgraded to Required (property access is not optional context here — without it the Service cannot be performed at all). Complexity: minimal, reusing established Photography Market patterns. Enforceability: explicit property address anchor throughout avoids ambiguity in multi-property engagements. Attack: Photographer flies a drone without proper authorization, exposing Client to liability — mitigated by explicit warranty requirement in Drone Operation Clause. Attack: Client claims images can be freely resold to unrelated third parties beyond the listing — mitigated by Commercial Usage Clause scoping the license specifically to \"marketing and sale or lease of [PROPERTY_ADDRESS].\" Attack: Photographer arrives and cannot access a vacant property, claims a wasted trip — mitigated by Required Client Responsibilities Clause creating breach exposure for the Client if access fails. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "PROPERTY_ADDRESS",
+    "EVENT_DATE",
+    "DELIVERY_DATE",
+    "EVENT_LOCATION",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "RESCHEDULING_NOTICE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "real_estate_photography_agreement"
+}

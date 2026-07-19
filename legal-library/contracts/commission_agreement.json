@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "Commercial Relationships",
+    "subcategory": "Sales Representation",
+    "contractType": "Commission Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [COMPANY_NAME] (\"Company\") and [AGENT_NAME] (\"Agent\")."
+        }
+      ],
+      "dynamicFields": [
+        "COMPANY_NAME",
+        "AGENT_NAME"
+      ]
+    },
+    {
+      "name": "Commission Rules",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "commission_rules.calculation",
+          "version": null,
+          "text": "The Company shall pay the Agent a commission of [COMMISSION_RATE] of [COMMISSION_BASE] for each sale the Agent generates that meets the criteria in this Agreement."
+        },
+        {
+          "id": "commission_rules.earning_trigger",
+          "version": null,
+          "text": "Commission is earned when [COMMISSION_EARNING_TRIGGER] occurs, and becomes payable according to the Payment Clause."
+        }
+      ],
+      "dynamicFields": [
+        "COMMISSION_RATE",
+        "COMMISSION_BASE",
+        "COMMISSION_EARNING_TRIGGER"
+      ]
+    },
+    {
+      "name": "Territory",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "territory.scope",
+          "version": null,
+          "text": "The Agent's activities under this Agreement apply within [SALES_TERRITORY]."
+        }
+      ],
+      "dynamicFields": [
+        "SALES_TERRITORY"
+      ]
+    },
+    {
+      "name": "Exclusivity",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "exclusivity.designation",
+          "version": null,
+          "text": "The Agent's appointment under this Agreement is [EXCLUSIVITY_STATUS] within the territory defined in the Territory Clause. Where [EXCLUSIVITY_STATUS] is \"non-exclusive,\" the Company may appoint other agents in the same territory."
+        }
+      ],
+      "dynamicFields": [
+        "EXCLUSIVITY_STATUS"
+      ]
+    },
+    {
+      "name": "Non-Solicitation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "non_solicitation.restriction",
+          "version": null,
+          "text": "During the term of this Agreement and for [NON_SOLICITATION_PERIOD_MONTHS] months thereafter, the Agent shall not solicit the Company's clients for a competing business."
+        }
+      ],
+      "dynamicFields": [
+        "NON_SOLICITATION_PERIOD_MONTHS"
+      ]
+    },
+    {
+      "name": "Performance",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "performance.clawback",
+          "version": null,
+          "text": "If a sale on which commission was paid is later cancelled or refunded, the Company may deduct the corresponding commission from the Agent's future commission payments or invoice the Agent directly for that amount."
+        },
+        {
+          "id": "performance.tail_commission",
+          "version": null,
+          "text": "If this Agreement terminates while a sale the Agent substantially advanced remains pending, and that sale completes within [TAIL_COMMISSION_PERIOD_DAYS] days of termination, the Agent remains entitled to commission on that sale under the Commission Rules Clause."
+        }
+      ],
+      "dynamicFields": [
+        "TAIL_COMMISSION_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.schedule",
+          "version": null,
+          "text": "The Company shall pay earned commission to the Agent on a [COMMISSION_PAYMENT_FREQUENCY] basis, together with a statement showing the calculation for each commission payment."
+        }
+      ],
+      "dynamicFields": [
+        "COMMISSION_PAYMENT_FREQUENCY"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement without cause by giving [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed the total commission paid or payable in the [LIABILITY_LOOKBACK_PERIOD] preceding the event giving rise to the claim, except for liability arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "LIABILITY_LOOKBACK_PERIOD"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.independent_contractor_status",
+          "version": null,
+          "text": "The Agent performs its activities under this Agreement as an independent contractor and not as an employee, partner, or agent with authority to bind the Company beyond what is expressly authorized in writing."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: earning trigger explicitly separated from payment timing via two distinct clauses, resolving the single most common dispute identified in Step 1. Duplication: none — Clawback and Tail Commission address opposite scenarios (overpayment vs. underpayment risk). Loophole closed: added Clawback Clause, absent from initial draft, after Step 2 risk #2. Contradiction: Exclusivity defaults to non-exclusive only when explicitly so designated via Dynamic Field — no silent default assumption embedded in Master English. Missing protection: Tail Commission added to protect Agent from being terminated opportunistically just before a deal closes. Complexity: kept Territory and Exclusivity as separate Clauses since they are legally distinct concepts. Enforceability: independent contractor status explicit, consistent with Freelance Agreement pattern. Attack: Company terminates Agent the day before a large deal closes to avoid commission — mitigated by Tail Commission Clause. Attack: Agent claims commission on a sale later fully refunded — mitigated by Clawback Clause. Attack: Company appoints a competing agent in the same territory despite claiming exclusivity was implied — mitigated by explicit Dynamic Field-driven Exclusivity Clause with no implied default. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "COMPANY_NAME",
+    "AGENT_NAME",
+    "COMMISSION_RATE",
+    "COMMISSION_BASE",
+    "COMMISSION_EARNING_TRIGGER",
+    "SALES_TERRITORY",
+    "EXCLUSIVITY_STATUS",
+    "NON_SOLICITATION_PERIOD_MONTHS",
+    "TAIL_COMMISSION_PERIOD_DAYS",
+    "COMMISSION_PAYMENT_FREQUENCY",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "LIABILITY_LOOKBACK_PERIOD",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "commission_agreement"
+}

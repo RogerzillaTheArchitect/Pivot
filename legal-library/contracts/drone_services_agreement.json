@@ -1,0 +1,276 @@
+{
+  "meta": {
+    "market": "Videography",
+    "category": "Aerial Services",
+    "subcategory": "Drone Operations",
+    "contractType": "Drone Services Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the drone services described in [SERVICES_CONTRACTED] at [OPERATION_LOCATION] on [OPERATION_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "OPERATION_LOCATION",
+        "OPERATION_DATE"
+      ]
+    },
+    {
+      "name": "Flight Authorization",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "flight_authorization.regulatory_compliance",
+          "version": null,
+          "text": "The Service Provider warrants that it holds any license, registration, or authorization required by the applicable aviation authority to operate a drone at [OPERATION_LOCATION] on [OPERATION_DATE], and shall comply with all operational restrictions imposed by that authority."
+        }
+      ],
+      "dynamicFields": [
+        "OPERATION_LOCATION",
+        "OPERATION_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Insurance",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "insurance.coverage_requirement",
+          "version": null,
+          "text": "The Service Provider shall maintain liability insurance covering its drone operations in an amount of at least [INSURANCE_COVERAGE_AMOUNT], and shall provide proof of coverage to the Client upon request."
+        }
+      ],
+      "dynamicFields": [
+        "INSURANCE_COVERAGE_AMOUNT"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Weather Conditions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "weather_conditions.safety_standard",
+          "version": null,
+          "text": "The Service Provider may postpone or cancel a flight at [OPERATION_LOCATION] if, in its reasonable professional judgment, weather conditions would compromise the safety of the flight. A postponement or cancellation under this Clause is not a breach of this Agreement, and the Parties shall reschedule under the Timeline Clause."
+        }
+      ],
+      "dynamicFields": [
+        "OPERATION_LOCATION"
+      ]
+    },
+    {
+      "name": "Emergency Procedures",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "emergency_procedures.incident_response",
+          "version": null,
+          "text": "If an equipment malfunction, safety incident, or emergency occurs during a flight, the Service Provider shall immediately land the drone, notify the Client, and, where required by applicable law, notify the relevant aviation or safety authority."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Operational Limitations",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "operational_limitations.scope",
+          "version": null,
+          "text": "The Service Provider shall operate within the following limitations at [OPERATION_LOCATION]: maximum altitude of [MAX_ALTITUDE], and shall not fly over [RESTRICTED_AREAS] without separate written authorization from the Client and any applicable authority."
+        }
+      ],
+      "dynamicFields": [
+        "OPERATION_LOCATION",
+        "MAX_ALTITUDE",
+        "RESTRICTED_AREAS"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [OPERATION_DATE] at [OPERATION_LOCATION], subject to rescheduling under the Weather Conditions Clause."
+        }
+      ],
+      "dynamicFields": [
+        "OPERATION_DATE",
+        "OPERATION_LOCATION"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Force Majeure",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "force_majeure.regulatory_or_safety_grounding",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform to the extent that failure results from a grounding order, airspace restriction, or other event beyond that Party's reasonable control affecting [OPERATION_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "OPERATION_DATE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: Weather Conditions Clause anchors \"reasonable professional judgment\" to an explicit safety-based standard rather than leaving it undefined, satisfying PLDS-001 §12's qualifier-anchoring requirement. Duplication: Weather Conditions vs Force Majeure kept distinct — the former is an operator-initiated safety judgment call, the latter covers external regulatory/airspace events outside either Party's control; no overlap. Loophole closed: Operational Limitations Clause added, closing a gap where the operator could otherwise fly beyond agreed boundaries without consequence, addressing Step 2 risk #5. Contradiction: none — Flight Authorization (regulatory compliance) and Operational Limitations (agreed operating envelope) are complementary, not overlapping, since one addresses external law and the other addresses Party-agreed restrictions. Missing protection: Insurance Clause added given aviation-specific risk profile absent from purely ground-based Videography Contract Types. Complexity: Emergency Procedures kept as a standalone Clause given the safety-critical, non-negotiable nature of incident response. Enforceability: Flight Authorization elevated to address jurisdiction-specific regulation directly while remaining Master-English-neutral by never naming a specific statute, per PLDS-001 §4B. Attack: Operator flies without proper authorization, exposing Client to regulatory liability by association — mitigated by Flight Authorization Clause's explicit warranty. Attack: Client claims Weather Conditions Clause is being abused to justify pretextual cancellations — mitigated by anchoring the standard to \"safety of the flight\" rather than unlimited discretion, making bad-faith invocation disputable. Attack: Operator flies over a restricted area without authorization, causing a safety violation — mitigated by Operational Limitations Clause's explicit altitude and restricted-area boundaries. Attack: An in-flight incident occurs and the operator fails to report it — mitigated by Emergency Procedures Clause's mandatory immediate notification and authority-reporting obligation. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "OPERATION_LOCATION",
+    "OPERATION_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "INSURANCE_COVERAGE_AMOUNT",
+    "MAX_ALTITUDE",
+    "RESTRICTED_AREAS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "drone_services_agreement"
+}

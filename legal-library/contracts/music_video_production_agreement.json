@@ -1,0 +1,430 @@
+{
+  "meta": {
+    "market": "Videography",
+    "category": "Music",
+    "subcategory": "Music Videos",
+    "contractType": "Music Video Production Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall produce the music video described in [SERVICES_CONTRACTED] for the song [SONG_TITLE] on [PRODUCTION_DATES]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "SONG_TITLE",
+        "PRODUCTION_DATES"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.ownership",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a [LICENSE_SCOPE] license to use the Deliverables for [PERMITTED_USE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSE_SCOPE",
+        "PERMITTED_USE"
+      ]
+    },
+    {
+      "name": "Creative Direction",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "creative_direction.approval_authority",
+          "version": null,
+          "text": "The creative concept for the music video shall be approved by [CREATIVE_APPROVAL_AUTHORITY] before principal filming begins. Material deviations from the approved concept during production require the approval of [CREATIVE_APPROVAL_AUTHORITY]."
+        }
+      ],
+      "dynamicFields": [
+        "CREATIVE_APPROVAL_AUTHORITY"
+      ]
+    },
+    {
+      "name": "Production Schedule",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "production_schedule.multi_day_plan",
+          "version": null,
+          "text": "The Services shall be performed according to the production schedule agreed by the Parties for [PRODUCTION_DATES]. Changes to this schedule require written agreement of both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCTION_DATES"
+      ]
+    },
+    {
+      "name": "Drone Operation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "drone_operation.authorization",
+          "version": null,
+          "text": "Where aerial filming is included, the Service Provider warrants that it holds any authorization required by applicable aviation regulation."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Talent Release",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "talent_release.authorization",
+          "version": null,
+          "text": "Where performers or actors appear in the Deliverables, the Client shall obtain a signed talent release from each performer authorizing use of their likeness in connection with the music video for [SONG_TITLE], and shall provide a copy to the Service Provider upon request."
+        }
+      ],
+      "dynamicFields": [
+        "SONG_TITLE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Accommodation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "accommodation.reimbursement",
+          "version": null,
+          "text": "Where [PRODUCTION_DATES] require overnight travel, the Client shall provide or reimburse reasonable accommodation for the Service Provider."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCTION_DATES"
+      ]
+    },
+    {
+      "name": "Visual Effects",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "visual_effects.inclusion",
+          "version": null,
+          "text": "Where the Services include visual effects work, the Service Provider shall provide such work as described in [VFX_SCOPE] for an additional fee of [VFX_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "VFX_SCOPE",
+        "VFX_FEE"
+      ]
+    },
+    {
+      "name": "Rush Delivery",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "rush_delivery.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request delivery within [RUSH_DELIVERY_PERIOD_DAYS] days, in exchange for an additional fee of [RUSH_DELIVERY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "RUSH_DELIVERY_PERIOD_DAYS",
+        "RUSH_DELIVERY_FEE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Extended Licensing",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "extended_licensing.additional_grant",
+          "version": null,
+          "text": "Where the Client requires use of the Deliverables beyond the promotion of [SONG_TITLE], the Parties shall agree an additional license fee of [EXTENDED_LICENSE_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "SONG_TITLE",
+        "EXTENDED_LICENSE_FEE"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [PRODUCTION_DATES] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCTION_DATES"
+      ]
+    },
+    {
+      "name": "Cancellation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "cancellation.client_initiated",
+          "version": null,
+          "text": "If the Client cancels the Services more than [CANCELLATION_NOTICE_PERIOD_DAYS] days before [PRODUCTION_DATES], the Client shall forfeit [CANCELLATION_FEE_PERCENT] of [TOTAL_VALUE]. If cancellation occurs within [CANCELLATION_NOTICE_PERIOD_DAYS] days, the Client shall forfeit the full amount of [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "CANCELLATION_NOTICE_PERIOD_DAYS",
+        "PRODUCTION_DATES",
+        "CANCELLATION_FEE_PERCENT",
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Revisions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "revisions.included_rounds",
+          "version": null,
+          "text": "The Client may request up to [INCLUDED_REVISION_ROUNDS] rounds of revisions at no additional charge. Additional rounds shall be charged at [ADDITIONAL_REVISION_FEE] per round."
+        }
+      ],
+      "dynamicFields": [
+        "INCLUDED_REVISION_ROUNDS",
+        "ADDITIONAL_REVISION_FEE"
+      ]
+    },
+    {
+      "name": "Music Licensing",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "music_licensing.underlying_song_rights",
+          "version": null,
+          "text": "The Client warrants that it holds or has secured all rights necessary to use [SONG_TITLE] in connection with the music video produced under this Agreement. The Service Provider bears no responsibility for confirming the Client's rights in [SONG_TITLE]."
+        }
+      ],
+      "dynamicFields": [
+        "SONG_TITLE"
+      ]
+    },
+    {
+      "name": "Image Rights",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "image_rights.location_consent",
+          "version": null,
+          "text": "The Client shall obtain any necessary permit or consent for filming at the locations used in producing the Deliverables."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Commercial Usage",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "commercial_usage.promotional_scope",
+          "version": null,
+          "text": "Upon full payment of [TOTAL_VALUE], the Client receives a license to use the Deliverables to promote [SONG_TITLE] across all media channels. The Service Provider retains copyright in the Deliverables."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "SONG_TITLE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Force Majeure",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "force_majeure.production_disruption",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform to the extent that failure results from an event beyond that Party's reasonable control affecting [PRODUCTION_DATES], including weather or venue unavailability, provided the affected Party notifies the other without undue delay."
+        }
+      ],
+      "dynamicFields": [
+        "PRODUCTION_DATES"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: Creative Direction explicitly names an approval authority via Dynamic Field, resolving the central Step 1 risk of ambiguous creative control between commissioning party and production company. Duplication: Music Licensing here is intentionally reversed in obligation direction compared to Commercial Video Production's Music Licensing Clause (Client warrants song rights vs. Provider warrants sync-licensed tracks) — this is a deliberate, justified divergence reflecting genuinely different rights-holder realities in this Contract Type, not an inconsistency. Loophole closed: Extended Licensing required for any use beyond song promotion, preventing unbounded exploitation of the video without further compensation to the production company. Contradiction: none. Missing protection: Production Schedule added given genuinely higher multi-day coordination complexity than other Videography Contract Types. Complexity: kept Visual Effects and Rush Delivery as separate optional add-ons matching established Market pattern. Enforceability: cancellation fee scaled and tied to explicit triggers, consistent with Wedding Videography's approach adapted for production-day risk. Attack: Label licenses the video for a global ad campaign beyond simple song promotion without additional payment — mitigated by Extended Licensing Clause. Attack: Production company is sued for music copyright infringement despite having no control over the underlying song rights — mitigated by Music Licensing Clause explicitly shifting that warranty and responsibility to the Client. Attack: Artist and production company disagree mid-shoot about a major creative change, causing costly reshoots — mitigated by Creative Direction Clause requiring the named approval authority's sign-off for material deviations. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "SONG_TITLE",
+    "PRODUCTION_DATES",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "LICENSE_SCOPE",
+    "PERMITTED_USE",
+    "CREATIVE_APPROVAL_AUTHORITY",
+    "VFX_SCOPE",
+    "VFX_FEE",
+    "RUSH_DELIVERY_PERIOD_DAYS",
+    "RUSH_DELIVERY_FEE",
+    "EXTENDED_LICENSE_FEE",
+    "DELIVERY_DATE",
+    "CANCELLATION_NOTICE_PERIOD_DAYS",
+    "CANCELLATION_FEE_PERCENT",
+    "INCLUDED_REVISION_ROUNDS",
+    "ADDITIONAL_REVISION_FEE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "music_video_production_agreement"
+}

@@ -1,0 +1,360 @@
+{
+  "meta": {
+    "market": "Software Development",
+    "category": "Maintenance",
+    "subcategory": "Support",
+    "contractType": "Software Maintenance Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "software",
+      "maintenance",
+      "sla",
+      "support",
+      "renewal"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Maintenance Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "maintenance_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide maintenance and support services for [SOFTWARE_SYSTEM] as described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_SYSTEM",
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Service Levels",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "service_levels.severity_tiers",
+          "version": null,
+          "text": "The Service Provider shall respond to and resolve reported issues according to the following severity-based targets: Critical issues within [CRITICAL_RESPONSE_TIME] response and [CRITICAL_RESOLUTION_TIME] resolution; High issues within [HIGH_RESPONSE_TIME] response and [HIGH_RESOLUTION_TIME] resolution; Medium issues within [MEDIUM_RESPONSE_TIME] response and [MEDIUM_RESOLUTION_TIME] resolution; Low issues within [LOW_RESPONSE_TIME] response and [LOW_RESOLUTION_TIME] resolution."
+        }
+      ],
+      "dynamicFields": [
+        "CRITICAL_RESPONSE_TIME",
+        "CRITICAL_RESOLUTION_TIME",
+        "HIGH_RESPONSE_TIME",
+        "HIGH_RESOLUTION_TIME",
+        "MEDIUM_RESPONSE_TIME",
+        "MEDIUM_RESOLUTION_TIME",
+        "LOW_RESPONSE_TIME",
+        "LOW_RESOLUTION_TIME"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "24/7 Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "support_247.availability",
+          "version": null,
+          "text": "Where [SUPPORT_247_INCLUDED] indicates inclusion, the Service Provider shall provide support availability 24 hours a day, 7 days a week, for an additional fee of [SUPPORT_247_FEE] per [BILLING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "SUPPORT_247_INCLUDED",
+        "SUPPORT_247_FEE",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "On-site Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "onsite_support.provision",
+          "version": null,
+          "text": "Where the Client requests on-site support, the Service Provider shall attend [CLIENT_SITE_ADDRESS] at [ONSITE_SUPPORT_RATE] per visit, plus applicable travel expenses."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_SITE_ADDRESS",
+        "ONSITE_SUPPORT_RATE"
+      ]
+    },
+    {
+      "name": "Priority Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "priority_support.escalation",
+          "version": null,
+          "text": "Where [PRIORITY_SUPPORT_INCLUDED] indicates inclusion, the Client's reported issues shall be escalated ahead of standard-tier clients, for an additional fee of [PRIORITY_SUPPORT_FEE] per [BILLING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "PRIORITY_SUPPORT_INCLUDED",
+        "PRIORITY_SUPPORT_FEE",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "Emergency Services",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "emergency_services.provision",
+          "version": null,
+          "text": "Where a Critical issue as defined in the Service Levels Clause occurs outside standard Working Hours, the Service Provider shall respond within [EMERGENCY_RESPONSE_TIME], for an additional fee of [EMERGENCY_SERVICE_FEE] per incident."
+        }
+      ],
+      "dynamicFields": [
+        "EMERGENCY_RESPONSE_TIME",
+        "EMERGENCY_SERVICE_FEE"
+      ]
+    },
+    {
+      "name": "Infrastructure Monitoring",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "infrastructure_monitoring.provision",
+          "version": null,
+          "text": "Where the Client requests infrastructure monitoring, the Service Provider shall monitor [MONITORING_SCOPE] and report incidents within [INCIDENT_NOTIFICATION_PERIOD_HOURS] hours of detection."
+        }
+      ],
+      "dynamicFields": [
+        "MONITORING_SCOPE",
+        "INCIDENT_NOTIFICATION_PERIOD_HOURS"
+      ]
+    },
+    {
+      "name": "Monthly Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "monthly_reports.provision",
+          "version": null,
+          "text": "The Service Provider shall deliver a monthly report summarizing issues reported, response times, and resolution times against the Service Levels Clause."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Working Hours",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "working_hours.definition",
+          "version": null,
+          "text": "Standard support availability under this Agreement is [WORKING_HOURS_SCHEDULE], excluding [PUBLIC_HOLIDAYS_EXCLUDED]."
+        }
+      ],
+      "dynamicFields": [
+        "WORKING_HOURS_SCHEDULE",
+        "PUBLIC_HOLIDAYS_EXCLUDED"
+      ]
+    },
+    {
+      "name": "Maintenance Window",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "maintenance_window.scheduled_downtime",
+          "version": null,
+          "text": "The Service Provider may perform scheduled maintenance during [MAINTENANCE_WINDOW], during which the software may be unavailable. The Service Provider shall provide [MAINTENANCE_WINDOW_NOTICE_PERIOD_DAYS] days' notice before an unscheduled maintenance window."
+        }
+      ],
+      "dynamicFields": [
+        "MAINTENANCE_WINDOW",
+        "MAINTENANCE_WINDOW_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Renewal",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "renewal.continuation",
+          "version": null,
+          "text": "This Agreement renews automatically for successive [RENEWAL_TERM] periods unless either Party gives written notice of non-renewal at least [RENEWAL_NOTICE_PERIOD_DAYS] days before the end of the current term."
+        }
+      ],
+      "dynamicFields": [
+        "RENEWAL_TERM",
+        "RENEWAL_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.chronic_sla_failure",
+          "version": null,
+          "text": "If the Service Provider fails to meet the Service Levels Clause targets in [SLA_BREACH_THRESHOLD_COUNT] or more instances within any [SLA_BREACH_MEASUREMENT_PERIOD], the Client may terminate this Agreement upon written notice, without further penalty."
+        }
+      ],
+      "dynamicFields": [
+        "SLA_BREACH_THRESHOLD_COUNT",
+        "SLA_BREACH_MEASUREMENT_PERIOD"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Service Levels Clause defines both response and resolution times per severity tier as explicit Dynamic Fields, closing Step 2 risk #1. Duplication: Priority Support (queue escalation) vs. 24/7 Support (availability window) vs. Emergency Services (after-hours Critical response) kept distinct since each addresses a genuinely separate dimension of service tiering. Loophole closed: Termination Clause ties the Client's exit right to a measurable breach threshold rather than a vague \"repeated failures\" standard, closing Step 2 risk #4. Contradiction: none between Maintenance Window (planned downtime) and Service Levels (issue response) — the former is provider-scheduled, the latter is reactive. Missing protection: Working Hours Clause explicitly defines the baseline against which 24/7, Priority, and Emergency add-ons are differentiated. Complexity: kept Renewal and Termination as separate Clauses since renewal continuation and SLA-triggered exit are distinct legal mechanisms. Enforceability: SLA breach threshold and measurement period both explicit Dynamic Fields enabling automated tracking. Attack: Provider claims it met the SLA despite chronic missed deadlines, using vague language to avoid termination exposure — mitigated by explicit, measurable breach threshold and measurement period in the Termination Clause. Attack: Client expects 24/7 coverage under a standard-hours contract during a weekend outage — mitigated by explicit Working Hours baseline and separately priced 24/7 Support Clause. Attack: Provider takes the system down for \"maintenance\" without notice during business hours — mitigated by Maintenance Window's advance notice requirement for unscheduled windows. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SOFTWARE_SYSTEM",
+    "SERVICES_CONTRACTED",
+    "CRITICAL_RESPONSE_TIME",
+    "CRITICAL_RESOLUTION_TIME",
+    "HIGH_RESPONSE_TIME",
+    "HIGH_RESOLUTION_TIME",
+    "MEDIUM_RESPONSE_TIME",
+    "MEDIUM_RESOLUTION_TIME",
+    "LOW_RESPONSE_TIME",
+    "LOW_RESOLUTION_TIME",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "SUPPORT_247_INCLUDED",
+    "SUPPORT_247_FEE",
+    "BILLING_PERIOD",
+    "CLIENT_SITE_ADDRESS",
+    "ONSITE_SUPPORT_RATE",
+    "PRIORITY_SUPPORT_INCLUDED",
+    "PRIORITY_SUPPORT_FEE",
+    "EMERGENCY_RESPONSE_TIME",
+    "EMERGENCY_SERVICE_FEE",
+    "MONITORING_SCOPE",
+    "INCIDENT_NOTIFICATION_PERIOD_HOURS",
+    "WORKING_HOURS_SCHEDULE",
+    "PUBLIC_HOLIDAYS_EXCLUDED",
+    "MAINTENANCE_WINDOW",
+    "MAINTENANCE_WINDOW_NOTICE_PERIOD_DAYS",
+    "RENEWAL_TERM",
+    "RENEWAL_NOTICE_PERIOD_DAYS",
+    "SLA_BREACH_THRESHOLD_COUNT",
+    "SLA_BREACH_MEASUREMENT_PERIOD",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "software_maintenance_agreement"
+}

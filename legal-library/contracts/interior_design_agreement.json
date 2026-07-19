@@ -1,0 +1,311 @@
+{
+  "meta": {
+    "market": "Architecture & Engineering",
+    "category": "Interior Design",
+    "subcategory": "Space Planning",
+    "contractType": "Interior Design Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "interior-design",
+      "procurement",
+      "installation",
+      "3d-rendering"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Design Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "design_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall provide interior design services for [PROJECT_NAME] described in [SERVICES_CONTRACTED], covering [PROJECT_SITE_ADDRESS]."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME",
+        "SERVICES_CONTRACTED",
+        "PROJECT_SITE_ADDRESS"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the interior design services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Furniture Procurement",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "furniture_procurement.agency_disclaimer",
+          "version": null,
+          "text": "Where the Client authorizes the Service Provider to procure furniture and fixtures on its behalf, the Service Provider acts as the Client's agent for that procurement. The Client shall bear the cost of the procured items and the risk of supplier delay, defect, or discontinuation; the Service Provider shall not be liable for a supplier's failure to perform, but shall use reasonable efforts to select reputable suppliers."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Site Visits",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "site_visits.provision",
+          "version": null,
+          "text": "The Service Provider shall visit [PROJECT_SITE_ADDRESS] on [SITE_VISIT_DATES] as part of the Services."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS",
+        "SITE_VISIT_DATES"
+      ]
+    },
+    {
+      "name": "Installation Supervision",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "installation_supervision.scope",
+          "version": null,
+          "text": "Where the Client requests installation supervision, the Service Provider shall oversee the installation of furniture and fixtures at [PROJECT_SITE_ADDRESS] for an additional fee of [INSTALLATION_SUPERVISION_FEE]. This Clause does not include the Service Provider performing installation labor itself."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS",
+        "INSTALLATION_SUPERVISION_FEE"
+      ]
+    },
+    {
+      "name": "3D Rendering",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "3d_rendering.inclusion",
+          "version": null,
+          "text": "Where the Services include 3D rendering, the Service Provider shall deliver [NUMBER_OF_RENDERINGS] renderings for an additional fee of [RENDERING_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "NUMBER_OF_RENDERINGS",
+        "RENDERING_FEE"
+      ]
+    },
+    {
+      "name": "Additional Revisions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_revisions.pricing",
+          "version": null,
+          "text": "The Client may request up to [INCLUDED_REVISION_ROUNDS] rounds of revisions at no additional charge. Additional rounds shall be charged at [ADDITIONAL_REVISION_FEE] per round."
+        }
+      ],
+      "dynamicFields": [
+        "INCLUDED_REVISION_ROUNDS",
+        "ADDITIONAL_REVISION_FEE"
+      ]
+    },
+    {
+      "name": "Supplier Coordination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "supplier_coordination.provision",
+          "version": null,
+          "text": "The Service Provider shall coordinate delivery schedules with the suppliers engaged under the Furniture Procurement Clause, but shall not be liable for a supplier's failure to meet its own delivery commitments."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Approval Process",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "approval_process.review",
+          "version": null,
+          "text": "The Client shall review each design deliverable within [APPROVAL_PERIOD_DAYS] days. If the Client does not respond within this period, the deliverable shall be deemed approved."
+        }
+      ],
+      "dynamicFields": [
+        "APPROVAL_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Furniture Procurement explicitly frames the Service Provider as agent, not guarantor, allocating supplier-performance risk to the Client while requiring reasonable supplier vetting, closing Step 2 risk #1. Duplication: Supplier Coordination (delivery scheduling) vs. Furniture Procurement (cost/risk allocation) kept distinct — complementary, not overlapping, obligations. Loophole closed: Installation Supervision explicitly excludes hands-on labor, preventing a Client from expecting the designer to physically install items under a supervision-only fee. Contradiction: none. Missing protection: 3D Rendering explicitly priced per rendering count, avoiding an open-ended \"visualization\" expectation. Complexity: reused Additional Revisions pattern from Design Market (Brand Identity) for cross-Market consistency on an identical underlying legal concept. Enforceability: procurement risk allocation and installation-labor exclusion both stated explicitly and together with their respective triggers. Attack: A supplier delivers defective furniture months late, and the Client demands the designer cover the cost — mitigated by Furniture Procurement's explicit agent-not-guarantor risk allocation. Attack: Client expects the designer to personally install furniture under the Installation Supervision fee — mitigated by the Clause's explicit labor exclusion. Attack: Client requests unlimited space-plan revisions claiming the scope was never bounded — mitigated by Additional Revisions' explicit cap and overage fee. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "PROJECT_SITE_ADDRESS",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "SITE_VISIT_DATES",
+    "INSTALLATION_SUPERVISION_FEE",
+    "NUMBER_OF_RENDERINGS",
+    "RENDERING_FEE",
+    "INCLUDED_REVISION_ROUNDS",
+    "ADDITIONAL_REVISION_FEE",
+    "APPROVAL_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "interior_design_agreement"
+}

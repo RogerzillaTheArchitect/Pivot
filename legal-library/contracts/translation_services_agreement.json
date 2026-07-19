@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "market": "Education & Content",
+    "category": "Language Services",
+    "subcategory": "Translation",
+    "contractType": "Translation Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "translation",
+      "languages",
+      "certified-translation",
+      "glossary"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Languages",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "languages.scope",
+          "version": null,
+          "text": "The Service Provider shall translate the source materials described in [SERVICES_CONTRACTED] from [SOURCE_LANGUAGE] into [TARGET_LANGUAGES]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "SOURCE_LANGUAGE",
+        "TARGET_LANGUAGES"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the translation services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Urgent Delivery",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "urgent_delivery.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request delivery within [URGENT_DELIVERY_PERIOD_DAYS] days, in exchange for an additional fee of [URGENT_DELIVERY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "URGENT_DELIVERY_PERIOD_DAYS",
+        "URGENT_DELIVERY_FEE"
+      ]
+    },
+    {
+      "name": "Certified Translation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "certified_translation.statement",
+          "version": null,
+          "text": "Where the Client requests certified translation, the Service Provider shall provide a signed statement of accuracy for the translated documents described in [SERVICES_CONTRACTED], provided that the source material is complete and legible and that certification is permitted by applicable law."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Additional Revisions",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_revisions.pricing",
+          "version": null,
+          "text": "The Client may request up to [INCLUDED_REVISION_ROUNDS] rounds of revisions at no additional charge. Additional rounds shall be charged at [ADDITIONAL_REVISION_FEE] per round."
+        }
+      ],
+      "dynamicFields": [
+        "INCLUDED_REVISION_ROUNDS",
+        "ADDITIONAL_REVISION_FEE"
+      ]
+    },
+    {
+      "name": "Glossary Creation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "glossary_creation.term_management",
+          "version": null,
+          "text": "Where the Services include glossary creation, the Service Provider shall prepare a glossary for [GLOSSARY_SCOPE] in [GLOSSARY_LANGUAGES], for an additional fee of [GLOSSARY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "GLOSSARY_SCOPE",
+        "GLOSSARY_LANGUAGES",
+        "GLOSSARY_FEE"
+      ]
+    },
+    {
+      "name": "Formatting",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "formatting.layout_preservation",
+          "version": null,
+          "text": "Where the Services include formatting, the Service Provider shall reproduce the layout of [FORMAT_REFERENCE] as closely as reasonably possible, for an additional fee of [FORMATTING_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "FORMAT_REFERENCE",
+        "FORMATTING_FEE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall be performed according to [TIMELINE_REFERENCE]."
+        }
+      ],
+      "dynamicFields": [
+        "TIMELINE_REFERENCE"
+      ]
+    },
+    {
+      "name": "Quality Standards",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "quality_standards.fidelity_and_readability",
+          "version": null,
+          "text": "The translation shall be performed with reasonable skill and care, aiming for fidelity to the source text and readability in the target language, and shall preserve the meaning of the source materials described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.ownership",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a [LICENSE_SCOPE] license to use the Deliverables for [PERMITTED_USE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSE_SCOPE",
+        "PERMITTED_USE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Languages Clause explicitly identifies source and target language fields, providing a structured basis for multilingual work. Duplication: Certified Translation, Glossary Creation, and Formatting address distinct production concerns and are not overlapping. Loophole closed: Certified Translation includes an applicability/permitted-law condition and a completeness/legibility precondition, preventing automatic certification of deficient source material. Contradiction: none. Missing protection: Quality Standards added to anchor fidelity/readability expectations without overpromising perfection. Complexity: minimal, with translation-specific add-ons only where they materially affect accuracy or presentation. Enforceability: urgent delivery and revision fees both explicit Dynamic Fields. Attack: Client expects a sworn certified translation in a jurisdiction where the service provider cannot legally provide it — mitigated by the certified-translation applicability condition. Attack: Glossary terminology drifts across documents and the Client blames the translator — mitigated by the Glossary Creation Clause. Attack: Client expects original formatting to be duplicated for free — mitigated by the explicit Formatting fee. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "SOURCE_LANGUAGE",
+    "TARGET_LANGUAGES",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "URGENT_DELIVERY_PERIOD_DAYS",
+    "URGENT_DELIVERY_FEE",
+    "INCLUDED_REVISION_ROUNDS",
+    "ADDITIONAL_REVISION_FEE",
+    "GLOSSARY_SCOPE",
+    "GLOSSARY_LANGUAGES",
+    "GLOSSARY_FEE",
+    "FORMAT_REFERENCE",
+    "FORMATTING_FEE",
+    "TIMELINE_REFERENCE",
+    "LICENSE_SCOPE",
+    "PERMITTED_USE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "translation_services_agreement"
+}

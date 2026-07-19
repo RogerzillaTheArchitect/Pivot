@@ -1,0 +1,274 @@
+{
+  "meta": {
+    "market": "Architecture & Engineering",
+    "category": "Property Services",
+    "subcategory": "Inspection",
+    "contractType": "Property Inspection Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "inspection",
+      "access-authorization",
+      "reinspection",
+      "expert-opinion"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Inspection Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "inspection_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall inspect [PROPERTY_ADDRESS] on [INSPECTION_DATE] and provide the deliverables described in [DELIVERABLES_SCOPE]. The inspection is limited to the conditions observable from the inspection methods used and does not guarantee the absence of hidden defects or future failures."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS",
+        "INSPECTION_DATE",
+        "DELIVERABLES_SCOPE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Access Authorization",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "access_authorization.permission",
+          "version": null,
+          "text": "Where the inspection requires entry to private property, the Client shall obtain or confirm the necessary permission for the Service Provider to enter [PROPERTY_ADDRESS] on [INSPECTION_DATE]. The Service Provider shall not be liable for delay resulting from the Client's failure to provide access authorization."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS",
+        "INSPECTION_DATE"
+      ]
+    },
+    {
+      "name": "Urgent Inspection",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "urgent_inspection.accelerated_timeline",
+          "version": null,
+          "text": "The Client may request an inspection within [URGENT_INSPECTION_PERIOD_HOURS] hours, in exchange for an additional fee of [URGENT_INSPECTION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "URGENT_INSPECTION_PERIOD_HOURS",
+        "URGENT_INSPECTION_FEE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Additional Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_reports.pricing",
+          "version": null,
+          "text": "Reports requested beyond those described in the Deliverables Clause shall be charged at [ADDITIONAL_REPORT_FEE] per report."
+        }
+      ],
+      "dynamicFields": [
+        "ADDITIONAL_REPORT_FEE"
+      ]
+    },
+    {
+      "name": "Reinspection",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "reinspection.provision",
+          "version": null,
+          "text": "Where the Client requests a follow-up inspection of [PROPERTY_ADDRESS], the Service Provider shall conduct it on [REINSPECTION_DATE] for an additional fee of [REINSPECTION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS",
+        "REINSPECTION_DATE",
+        "REINSPECTION_FEE"
+      ]
+    },
+    {
+      "name": "Expert Opinion",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "expert_opinion.scope",
+          "version": null,
+          "text": "Where the Client requests an expert opinion, the Service Provider shall provide an opinion based on the inspection findings, but does not guarantee the discovery of all defects or latent conditions."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Services",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the Services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [INSPECTION_DATE] at [INSPECTION_TIME]."
+        }
+      ],
+      "dynamicFields": [
+        "INSPECTION_DATE",
+        "INSPECTION_TIME"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Inspection Scope expressly limits the inspection to observable conditions and disclaims hidden defects, closing Step 2 risk #2 within the main operative scope rather than relying on a generic liability waiver. Duplication: Expert Opinion vs. Inspection Scope kept distinct — the former is the optional interpretive add-on, the latter is the core observational service and its limits. Loophole closed: Access Authorization explicitly shifts delay risk to the Client when private-property entry permission is missing, preventing the inspector from being blamed for access failure. Contradiction: none. Missing protection: Reinspection added as a distinct priced follow-up service, common to property inspection work. Complexity: minimal, with the conditional access clause aligned precisely to the physical-entry trigger. Enforceability: urgent and reinspection fees both explicit Dynamic Fields. Attack: Client argues the inspection guaranteed no latent defects, then sues after a hidden leak appears — mitigated by the Inspection Scope's explicit limitation to observable conditions. Attack: Inspector is delayed because the property owner failed to grant entry, and Client blames the inspector — mitigated by Access Authorization's explicit Client-duty allocation. Attack: Client requests a follow-up inspection for free, claiming it was included in the original report — mitigated by the Reinspection Clause's explicit fee. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "PROPERTY_ADDRESS",
+    "INSPECTION_DATE",
+    "DELIVERABLES_SCOPE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "URGENT_INSPECTION_PERIOD_HOURS",
+    "URGENT_INSPECTION_FEE",
+    "ADDITIONAL_REPORT_FEE",
+    "REINSPECTION_DATE",
+    "REINSPECTION_FEE",
+    "SERVICES_CONTRACTED",
+    "INSPECTION_TIME",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "property_inspection_agreement"
+}

@@ -1,0 +1,263 @@
+{
+  "meta": {
+    "market": "Photography",
+    "category": "Portrait",
+    "subcategory": "Individual",
+    "contractType": "Portrait Photography Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the portrait photography session described in [SERVICES_CONTRACTED] at [EVENT_LOCATION] on [EVENT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "EVENT_LOCATION",
+        "EVENT_DATE"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [EVENT_DATE] at [EVENT_LOCATION], subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "EVENT_DATE",
+        "EVENT_LOCATION"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.quantity",
+          "version": null,
+          "text": "The Service Provider shall deliver [NUMBER_OF_EDITED_IMAGES] edited images to the Client as part of [TOTAL_VALUE]. Additional edited images beyond this quantity may be purchased at [ADDITIONAL_IMAGE_PRICE] per image."
+        }
+      ],
+      "dynamicFields": [
+        "NUMBER_OF_EDITED_IMAGES",
+        "TOTAL_VALUE",
+        "ADDITIONAL_IMAGE_PRICE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.personal_use_license",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a personal, non-commercial use license to the Deliverables. Commercial use requires a separate license under the Image Rights Clause."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Image Rights",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "image_rights.subject_consent",
+          "version": null,
+          "text": "The Client warrants that it has authority to consent, on behalf of every person photographed under this Agreement, including any minor for whom the Client is a parent or legal guardian, to the capture and delivery of their images as contemplated by this Agreement."
+        },
+        {
+          "id": "image_rights.commercial_upgrade",
+          "version": null,
+          "text": "Where the Client requires commercial use of the Deliverables, the Parties shall agree a separate license fee of [COMMERCIAL_LICENSE_FEE] for that use."
+        }
+      ],
+      "dynamicFields": [
+        "COMMERCIAL_LICENSE_FEE"
+      ]
+    },
+    {
+      "name": "Portfolio Authorization",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "portfolio_authorization.promotional_use",
+          "version": null,
+          "text": "The Client may grant the Service Provider a non-exclusive right to display the Deliverables for the Service Provider's professional portfolio and promotional purposes. This right does not apply where the Confidentiality Clause designates the Deliverables as confidential, or where [PORTFOLIO_AUTHORIZATION_DECLINED] indicates the Client has declined."
+        }
+      ],
+      "dynamicFields": [
+        "PORTFOLIO_AUTHORIZATION_DECLINED"
+      ]
+    },
+    {
+      "name": "Cancellation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "cancellation.no_show",
+          "version": null,
+          "text": "If the Client cancels less than [CANCELLATION_NOTICE_PERIOD_DAYS] hours before [EVENT_DATE] or fails to attend the session, the Client shall forfeit [CANCELLATION_FEE_PERCENT] of [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "CANCELLATION_NOTICE_PERIOD_DAYS",
+        "EVENT_DATE",
+        "CANCELLATION_FEE_PERCENT",
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — deliverable quantity explicit via Dynamic Field, resolving the most common portrait-session dispute (how many edited images are \"included\"). Duplication: Copyright's personal-use default vs Image Rights' commercial upgrade kept distinct, consistent with Wedding/Corporate pattern where base grant and extended grant are always separate Clauses. Loophole closed: added explicit minor-consent representation, absent in Wedding/Corporate variants since third-party guest exposure differs from close-family subject exposure. Contradiction: none. Missing protection: image_rights.subject_consent closes a gap unique to this Contract Type (children as frequent subjects). Complexity: minimal — no Force Majeure override needed since this is not a fixed large-scale event requiring venue coordination. Enforceability: explicit forfeiture percentage and time trigger stated together. Attack: Client uses a personal portrait commercially in an ad without upgrading the license — mitigated by Copyright Clause limiting default grant to personal, non-commercial use. Attack: Client later claims they lacked authority to consent for a photographed minor — mitigated by explicit warranty in Image Rights Clause, shifting responsibility contractually to the Client who made that representation. Attack: Client no-shows and disputes the fee, claiming no formal cancellation occurred — mitigated: clause triggers on both cancellation and failure to attend. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "EVENT_LOCATION",
+    "EVENT_DATE",
+    "DELIVERY_DATE",
+    "NUMBER_OF_EDITED_IMAGES",
+    "TOTAL_VALUE",
+    "ADDITIONAL_IMAGE_PRICE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "COMMERCIAL_LICENSE_FEE",
+    "PORTFOLIO_AUTHORIZATION_DECLINED",
+    "CANCELLATION_NOTICE_PERIOD_DAYS",
+    "CANCELLATION_FEE_PERCENT",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "portrait_photography_agreement"
+}

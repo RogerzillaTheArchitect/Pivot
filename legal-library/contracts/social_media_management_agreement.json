@@ -1,0 +1,328 @@
+{
+  "meta": {
+    "market": "Marketing",
+    "category": "Social Media",
+    "subcategory": "Management",
+    "contractType": "Social Media Management Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "marketing",
+      "social-media",
+      "content-calendar",
+      "community-management"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the social media management services described in [SERVICES_CONTRACTED] for [PLATFORM_LIST]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PLATFORM_LIST"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Approval Process",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "approval_process.review",
+          "version": null,
+          "text": "The Client shall review each proposed post within [APPROVAL_PERIOD_HOURS] hours of submission. If the Client does not respond within this period, the post shall be deemed approved and may be published as submitted."
+        }
+      ],
+      "dynamicFields": [
+        "APPROVAL_PERIOD_HOURS"
+      ]
+    },
+    {
+      "name": "Paid Media",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "paid_media.provision",
+          "version": null,
+          "text": "Where the Client requests paid media management, the Service Provider shall manage advertising spend on [PLATFORM_LIST] subject to the Client's approved budget of [PAID_MEDIA_BUDGET] per [BILLING_PERIOD], for a management fee of [PAID_MEDIA_MANAGEMENT_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "PLATFORM_LIST",
+        "PAID_MEDIA_BUDGET",
+        "BILLING_PERIOD",
+        "PAID_MEDIA_MANAGEMENT_FEE"
+      ]
+    },
+    {
+      "name": "Photography",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "photography.inclusion",
+          "version": null,
+          "text": "Where the Services include original photography for social content, the Service Provider shall provide it for an additional fee of [PHOTOGRAPHY_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "PHOTOGRAPHY_FEE"
+      ]
+    },
+    {
+      "name": "Video Production",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "video_production.inclusion",
+          "version": null,
+          "text": "Where the Services include original video content for social content, the Service Provider shall provide it for an additional fee of [VIDEO_PRODUCTION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "VIDEO_PRODUCTION_FEE"
+      ]
+    },
+    {
+      "name": "Community Management",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "community_management.scope",
+          "version": null,
+          "text": "Where [COMMUNITY_MANAGEMENT_INCLUDED] indicates inclusion, the Service Provider shall respond to comments and direct messages on [PLATFORM_LIST] within [COMMUNITY_RESPONSE_TIME], for an additional fee of [COMMUNITY_MANAGEMENT_FEE] per [BILLING_PERIOD]."
+        }
+      ],
+      "dynamicFields": [
+        "COMMUNITY_MANAGEMENT_INCLUDED",
+        "PLATFORM_LIST",
+        "COMMUNITY_RESPONSE_TIME",
+        "COMMUNITY_MANAGEMENT_FEE",
+        "BILLING_PERIOD"
+      ]
+    },
+    {
+      "name": "Emergency Content",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "emergency_content.expedited_response",
+          "version": null,
+          "text": "Where the Client requests urgent content in response to a crisis or time-sensitive event, the Service Provider shall use reasonable efforts to deliver it within [EMERGENCY_CONTENT_TURNAROUND_HOURS] hours, for an additional fee of [EMERGENCY_CONTENT_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "EMERGENCY_CONTENT_TURNAROUND_HOURS",
+        "EMERGENCY_CONTENT_FEE"
+      ]
+    },
+    {
+      "name": "Content Calendar",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "content_calendar.provision",
+          "version": null,
+          "text": "The Service Provider shall maintain a content calendar reflecting [POSTS_PER_PERIOD] posts per [BILLING_PERIOD] across [PLATFORM_LIST]."
+        }
+      ],
+      "dynamicFields": [
+        "POSTS_PER_PERIOD",
+        "BILLING_PERIOD",
+        "PLATFORM_LIST"
+      ]
+    },
+    {
+      "name": "Posting Schedule",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "posting_schedule.frequency",
+          "version": null,
+          "text": "Posts shall be published according to the schedule described in [POSTING_SCHEDULE]."
+        }
+      ],
+      "dynamicFields": [
+        "POSTING_SCHEDULE"
+      ]
+    },
+    {
+      "name": "Renewal",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "renewal.continuation",
+          "version": null,
+          "text": "This Agreement renews automatically for successive [BILLING_PERIOD] periods unless either Party gives written notice of non-renewal at least [RENEWAL_NOTICE_PERIOD_DAYS] days before the end of the current period."
+        }
+      ],
+      "dynamicFields": [
+        "BILLING_PERIOD",
+        "RENEWAL_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": null,
+          "text": "Either Party may terminate this Agreement for convenience upon [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice. The Client shall pay for Services performed up to the effective date of termination."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Approval Process elevated to Required (unlike Digital Marketing's absence of this Block), reflecting the heightened brand-voice risk of direct public-facing content, with an explicit deemed-approval fallback to prevent Provider paralysis. Duplication: Content Calendar (forward planning artifact) vs. Posting Schedule (publication timing) kept distinct, addressing genuinely separate operational concerns. Loophole closed: Community Management explicitly gated by a boolean inclusion field and a defined response time, closing Step 2 risk #2. Contradiction: none. Missing protection: Emergency Content Clause added given this Contract Type's unique reputational-crisis exposure absent from Digital Marketing's broader retainer structure. Complexity: Photography and Video Production kept as lightweight cross-references to their dedicated Market Contract Types rather than duplicating full clause libraries. Enforceability: community response time and emergency turnaround both explicit Dynamic Fields. Attack: A post goes out with a factual error the Client never approved — mitigated by Required Approval Process Clause, though tempered by the deemed-approval fallback to prevent indefinite delay. Attack: Client expects the Provider to respond to angry customer comments as part of the base retainer — mitigated by Community Management's explicit inclusion gating and separate fee. Attack: A PR crisis requires same-day content and the Provider treats it as standard-turnaround — mitigated by Emergency Content's expedited fee-based mechanism. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "PLATFORM_LIST",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "APPROVAL_PERIOD_HOURS",
+    "PAID_MEDIA_BUDGET",
+    "BILLING_PERIOD",
+    "PAID_MEDIA_MANAGEMENT_FEE",
+    "PHOTOGRAPHY_FEE",
+    "VIDEO_PRODUCTION_FEE",
+    "COMMUNITY_MANAGEMENT_INCLUDED",
+    "COMMUNITY_RESPONSE_TIME",
+    "COMMUNITY_MANAGEMENT_FEE",
+    "EMERGENCY_CONTENT_TURNAROUND_HOURS",
+    "EMERGENCY_CONTENT_FEE",
+    "POSTS_PER_PERIOD",
+    "POSTING_SCHEDULE",
+    "RENEWAL_NOTICE_PERIOD_DAYS",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "social_media_management_agreement"
+}

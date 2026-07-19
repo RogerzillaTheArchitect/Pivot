@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "market": "Photography",
+    "category": "Fashion",
+    "subcategory": "Editorial",
+    "contractType": "Fashion Photography Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the fashion photography services described in [SERVICES_CONTRACTED] on [SHOOT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "SHOOT_DATE"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [SHOOT_DATE] at [SHOOT_LOCATION], subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "SHOOT_DATE",
+        "SHOOT_LOCATION"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Image Rights",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "image_rights.model_release",
+          "version": null,
+          "text": "The Client shall obtain a signed model release from each person appearing in the Deliverables before those Deliverables are used for any purpose beyond editorial portfolio display, and shall provide a copy to the Service Provider upon request."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Model Release",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "model_release.terms",
+          "version": null,
+          "text": "Each model release obtained under the Image Rights Clause shall authorize use of the model's likeness for [PERMITTED_USE] within [MODEL_RELEASE_TERRITORY] for a period of [MODEL_RELEASE_DURATION]."
+        }
+      ],
+      "dynamicFields": [
+        "PERMITTED_USE",
+        "MODEL_RELEASE_TERRITORY",
+        "MODEL_RELEASE_DURATION"
+      ]
+    },
+    {
+      "name": "Commercial Usage",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "commercial_usage.channel_scope",
+          "version": null,
+          "text": "Upon full payment of [TOTAL_VALUE], the Client receives a license to use the Deliverables across [LICENSED_MEDIA_CHANNELS]. Use in a media channel not listed in [LICENSED_MEDIA_CHANNELS] requires the Extended Licensing Clause."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSED_MEDIA_CHANNELS"
+      ]
+    },
+    {
+      "name": "Commercial Exclusivity",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "commercial_exclusivity.restriction",
+          "version": null,
+          "text": "In consideration of [EXCLUSIVITY_FEE], the Service Provider shall not license the Deliverables to a business competing with the Client within [EXCLUSIVITY_PERIOD_MONTHS] months of [SHOOT_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "EXCLUSIVITY_FEE",
+        "EXCLUSIVITY_PERIOD_MONTHS",
+        "SHOOT_DATE"
+      ]
+    },
+    {
+      "name": "Portfolio Authorization",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "portfolio_authorization.promotional_use",
+          "version": null,
+          "text": "The Service Provider may display the Deliverables for professional portfolio and editorial self-promotion purposes, except to the extent this would breach the Commercial Exclusivity Clause where that Clause applies."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.retention",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables, subject to the license granted under the Commercial Usage Clause."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — media-channel scope explicit via Dynamic Field list rather than a blanket \"all media\" grant, addressing the tiered-licensing consensus from Step 1. Duplication: Image Rights (obligation to obtain release) vs Model Release (terms of that release) kept distinct — one is a procedural duty, the other defines substantive scope, avoiding merging two different legal rules into one Clause. Loophole closed: Portfolio Authorization now explicitly subordinated to Commercial Exclusivity, closing a gap where photographer's self-promotion could otherwise breach a paid exclusivity commitment. Contradiction: none. Missing protection: Commercial Exclusivity requires payment (`[EXCLUSIVITY_FEE]`) as consideration, consistent with the Non-Compete Contract Type's requirement that restrictions be compensated. Complexity: kept minimal despite higher structural complexity than Portrait/Wedding, justified by genuinely distinct legal risk (third-party models, media-channel tiering). Enforceability: exclusivity restriction explicitly time-bound and tied to a Dynamic Field period. Attack: Client uses images in a media channel never licensed (e.g., billboard when only digital was licensed) — mitigated by explicit channel-scoped Commercial Usage Clause requiring Extended Licensing for unlisted channels. Attack: Model later claims no valid release existed — mitigated by Required Model Release Clause with defined scope, territory, and duration, and Client's contractual obligation to obtain and produce it. Attack: Photographer showcases exclusive campaign images in a competing pitch during the exclusivity period — mitigated by Portfolio Authorization's explicit subordination to Commercial Exclusivity. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "SHOOT_DATE",
+    "DELIVERY_DATE",
+    "SHOOT_LOCATION",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "PERMITTED_USE",
+    "MODEL_RELEASE_TERRITORY",
+    "MODEL_RELEASE_DURATION",
+    "LICENSED_MEDIA_CHANNELS",
+    "EXCLUSIVITY_FEE",
+    "EXCLUSIVITY_PERIOD_MONTHS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "fashion_photography_agreement"
+}

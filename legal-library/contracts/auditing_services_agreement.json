@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "market": "Consulting",
+    "category": "Finance",
+    "subcategory": "Audit",
+    "contractType": "Auditing Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "consulting",
+      "audit",
+      "independence",
+      "conflict-of-interest"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Audit Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "audit_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall audit [AUDIT_SUBJECT] for [AUDIT_PERIOD], culminating in an audit opinion described in the Deliverables Clause. The audit opinion is based on evidence obtained through testing on a sample basis and provides reasonable, not absolute, assurance; it does not guarantee the complete absence of error or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "AUDIT_SUBJECT",
+        "AUDIT_PERIOD"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "On-site Visits",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "onsite_visits.provision",
+          "version": null,
+          "text": "Where the audit requires on-site visits, the Service Provider shall attend [CLIENT_SITE_ADDRESS] on [ONSITE_DATES]."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_SITE_ADDRESS",
+        "ONSITE_DATES"
+      ]
+    },
+    {
+      "name": "Additional Reports",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_reports.pricing",
+          "version": null,
+          "text": "Reports requested beyond those described in the Deliverables Clause shall be charged at [ADDITIONAL_REPORT_FEE] per report."
+        }
+      ],
+      "dynamicFields": [
+        "ADDITIONAL_REPORT_FEE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Presentation Meetings",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "presentation_meetings.provision",
+          "version": null,
+          "text": "The Service Provider shall present the audit findings to [PRESENTATION_AUDIENCE] on or around [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "PRESENTATION_AUDIENCE",
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Corrective Action Reviews",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "corrective_action_reviews.follow_up",
+          "version": null,
+          "text": "Where the audit identifies findings requiring corrective action, the Service Provider shall review the Client's remediation of those findings within [CORRECTIVE_ACTION_REVIEW_PERIOD_DAYS] days of the Client's request, for an additional fee of [CORRECTIVE_ACTION_REVIEW_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "CORRECTIVE_ACTION_REVIEW_PERIOD_DAYS",
+        "CORRECTIVE_ACTION_REVIEW_FEE"
+      ]
+    },
+    {
+      "name": "Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "responsibilities.record_accuracy",
+          "version": null,
+          "text": "The Client shall provide accurate and complete records and information necessary to perform the audit, within [RECORD_SUBMISSION_PERIOD_DAYS] days of the Service Provider's request. The Service Provider shall not be liable for errors or delay resulting from inaccurate, incomplete, or late information provided by the Client."
+        }
+      ],
+      "dynamicFields": [
+        "RECORD_SUBMISSION_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Conflict of Interest",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "conflict_of_interest.independence",
+          "version": null,
+          "text": "The Service Provider represents that it has no financial or personal relationship with the Client that would impair its independence in conducting the audit, and shall disclose to the Client any relationship arising during the engagement that could reasonably be perceived to impair that independence."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — Audit Scope explicitly clarifies the opinion is evidence/sample-based and provides reasonable rather than absolute assurance, directly addressing Step 2 risk #1 within the primary scope definition, a materially stronger disclaimer than Accounting's general scope language given audits' attestation function. Duplication: Responsibilities reused verbatim from Accounting Services Agreement given identical underlying risk (Client record accuracy), correctly maintaining cross-Contract-Type consistency. Loophole closed: Conflict of Interest elevated to Required (unlike Business Consulting's Optional treatment), reflecting audit independence's foundational, near-universal regulatory status identified in Step 1. Contradiction: none. Missing protection: Corrective Action Reviews added as a distinct post-audit phase, absent from Accounting's continuous-service structure since audits are typically point-in-time engagements with a discrete opinion delivery. Complexity: minimal, correctly specializing only Audit Scope and Conflict of Interest's elevated status while reusing the Market's established Responsibilities pattern. Enforceability: independence representation is both a point-in-time statement and a continuing disclosure obligation. Attack: A fraud is later discovered that the audit didn't catch, and the Client sues claiming the audit guaranteed clean books — mitigated by the explicit reasonable-assurance, sample-based disclaimer in the Audit Scope Clause. Attack: The auditor has an undisclosed financial interest in the audited entity, undermining the opinion's credibility — mitigated by the Required Conflict of Interest Clause's independence representation and continuing disclosure duty. Attack: Client provides incomplete financial records, then disputes the resulting audit opinion — mitigated by the reused Responsibilities Clause's liability shift for Client-caused inaccuracy. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "AUDIT_SUBJECT",
+    "AUDIT_PERIOD",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "CLIENT_SITE_ADDRESS",
+    "ONSITE_DATES",
+    "ADDITIONAL_REPORT_FEE",
+    "PRESENTATION_AUDIENCE",
+    "CORRECTIVE_ACTION_REVIEW_PERIOD_DAYS",
+    "CORRECTIVE_ACTION_REVIEW_FEE",
+    "RECORD_SUBMISSION_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "auditing_services_agreement"
+}

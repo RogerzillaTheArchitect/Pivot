@@ -1,0 +1,239 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "Intellectual Property",
+    "subcategory": "Licensing",
+    "contractType": "Software License Agreement",
+    "status": "Pending Human Legal Review | Version: 1.0.0",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [LICENSOR_NAME] (\"Licensor\") and [LICENSEE_NAME] (\"Licensee\") regarding [SOFTWARE_NAME]."
+        }
+      ],
+      "dynamicFields": [
+        "LICENSOR_NAME",
+        "LICENSEE_NAME",
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "License",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "license.grant",
+          "version": null,
+          "text": "The Licensor grants the Licensee a [LICENSE_TYPE], non-transferable license to use [SOFTWARE_NAME] solely for [PERMITTED_USE], limited to [NUMBER_OF_USERS] users, during the period defined in the Term Clause."
+        }
+      ],
+      "dynamicFields": [
+        "LICENSE_TYPE",
+        "SOFTWARE_NAME",
+        "PERMITTED_USE",
+        "NUMBER_OF_USERS"
+      ]
+    },
+    {
+      "name": "License Grant",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "license_grant.scope_limitation",
+          "version": null,
+          "text": "The license granted under the Grant Clause does not include the right to sublicense, resell, or distribute [SOFTWARE_NAME] to any third party without the Licensor's prior written consent."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "Restrictions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "restrictions.prohibited_uses",
+          "version": null,
+          "text": "The Licensee shall not: (a) reverse engineer, decompile, or disassemble [SOFTWARE_NAME], except to the extent this restriction is prohibited by applicable law for the purpose of achieving interoperability; (b) remove or alter any proprietary notice; or (c) use [SOFTWARE_NAME] beyond the scope defined in the License Grant Clause."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "Term",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "term.duration",
+          "version": null,
+          "text": "This Agreement commences on [LICENSE_START_DATE] and continues for [LICENSE_TERM_PERIOD], unless earlier terminated in accordance with this Agreement."
+        }
+      ],
+      "dynamicFields": [
+        "LICENSE_START_DATE",
+        "LICENSE_TERM_PERIOD"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.license_fee",
+          "version": null,
+          "text": "The Licensee shall pay the Licensor [TOTAL_VALUE] for the license granted under this Agreement, payable via [PAYMENT_METHOD]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD"
+      ]
+    },
+    {
+      "name": "Warranty Disclaimer",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "warranty_disclaimer.baseline_warranty",
+          "version": null,
+          "text": "The Licensor warrants that [SOFTWARE_NAME] shall perform substantially in accordance with its documentation for a period of [WARRANTY_PERIOD_DAYS] days from [LICENSE_START_DATE]."
+        },
+        {
+          "id": "warranty_disclaimer.disclaimer_of_other_warranties",
+          "version": null,
+          "text": "Except as expressly stated in the Baseline Warranty Clause, [SOFTWARE_NAME] is provided without any other warranty, to the maximum extent permitted by applicable law."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_NAME",
+        "WARRANTY_PERIOD_DAYS",
+        "LICENSE_START_DATE"
+      ]
+    },
+    {
+      "name": "Updates",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "updates.provision",
+          "version": null,
+          "text": "The Licensor may provide updates to [SOFTWARE_NAME] at its discretion. Updates provided under this Clause do not extend the Term unless the Parties agree otherwise in writing."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "Support",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "support.provision",
+          "version": null,
+          "text": "The Licensor may provide technical support for [SOFTWARE_NAME] under terms agreed separately between the Parties, which do not form part of this Agreement unless expressly incorporated."
+        }
+      ],
+      "dynamicFields": [
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except as provided in the Uncapped Liability Clause."
+        },
+        {
+          "id": "liability.uncapped_exceptions",
+          "version": null,
+          "text": "The cap in the Liability Cap Clause shall not apply to loss arising from a Party's gross negligence, willful misconduct, fraud, or breach of the Restrictions Clause."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "termination.for_cause",
+          "version": null,
+          "text": "Either Party may terminate this Agreement immediately by written notice if the other Party materially breaches this Agreement and fails to remedy the breach within [CURE_PERIOD_DAYS] days of receiving written notice."
+        },
+        {
+          "id": "termination.effect_of_termination",
+          "version": null,
+          "text": "Upon termination, the Licensee shall immediately cease all use of [SOFTWARE_NAME] and destroy or return all copies in its possession."
+        }
+      ],
+      "dynamicFields": [
+        "CURE_PERIOD_DAYS",
+        "SOFTWARE_NAME"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: \"substantially in accordance with documentation\" anchored to a defined warranty period, not left open-ended. Duplication: Updates vs Support kept distinct (code delivery vs. human assistance). Loophole closed: added interoperability carve-out to Restrictions to avoid an unenforceable blanket reverse-engineering ban. Contradiction: none between Warranty Disclaimer's baseline warranty and its \"disclaimer of other warranties\" — the former is a carve-in, the latter a carve-out, non-overlapping. Missing protection: added explicit post-termination cessation-of-use obligation. Complexity: license scope kept in one Clause, restrictions in a separate Clause, avoiding a single overloaded provision. Enforceability: liability cap uncapped-exceptions pattern reused consistently per PLDS-001 §14. Attack: Licensee sublicenses to an affiliate without consent, claiming affiliates are impliedly included — mitigated by explicit sublicense prohibition in License Grant Clause. Attack: Licensee continues using software after termination, claiming no explicit prohibition existed — mitigated by explicit cessation clause. Attack: Licensor claims \"at its discretion\" updates obligate no support at all while marketing implied ongoing support — mitigated by clear separation of Updates and Support as independent, non-guaranteed provisions. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "LICENSOR_NAME",
+    "LICENSEE_NAME",
+    "SOFTWARE_NAME",
+    "LICENSE_TYPE",
+    "PERMITTED_USE",
+    "NUMBER_OF_USERS",
+    "LICENSE_START_DATE",
+    "LICENSE_TERM_PERIOD",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "WARRANTY_PERIOD_DAYS",
+    "CURE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "software_license_agreement"
+}

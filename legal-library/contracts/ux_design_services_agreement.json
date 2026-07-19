@@ -1,0 +1,304 @@
+{
+  "meta": {
+    "market": "Design",
+    "category": "UX",
+    "subcategory": "Research",
+    "contractType": "UX Design Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "design",
+      "ux",
+      "research",
+      "informed-consent",
+      "data-protection"
+    ]
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Research Scope",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "research_scope.definition",
+          "version": null,
+          "text": "The Service Provider shall conduct the UX research described in [SERVICES_CONTRACTED] for [PROJECT_NAME], including the research methods specified in [RESEARCH_METHODS]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "PROJECT_NAME",
+        "RESEARCH_METHODS"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.scope",
+          "version": null,
+          "text": "The Service Provider shall perform the UX design and research services described in [SERVICES_CONTRACTED]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": null,
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Services shall take place on [DELIVERY_DATE] at , subject to any change confirmed in writing by both Parties."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Participant Recruitment",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "participant_recruitment.responsibility",
+          "version": null,
+          "text": "Where [RECRUITMENT_RESPONSIBILITY] designates the Service Provider as responsible for recruitment, the Service Provider shall recruit [NUMBER_OF_PARTICIPANTS] participants meeting the criteria in [PARTICIPANT_CRITERIA] for an additional fee of [RECRUITMENT_FEE]. Otherwise, the Client shall be responsible for recruitment."
+        }
+      ],
+      "dynamicFields": [
+        "RECRUITMENT_RESPONSIBILITY",
+        "NUMBER_OF_PARTICIPANTS",
+        "PARTICIPANT_CRITERIA",
+        "RECRUITMENT_FEE"
+      ]
+    },
+    {
+      "name": "Travel Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel_expenses.reimbursement",
+          "version": null,
+          "text": "The Client shall reimburse the Service Provider's reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Additional Research",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_research.pricing",
+          "version": null,
+          "text": "Research activities requested beyond [RESEARCH_METHODS] shall be scoped and priced separately as agreed in writing between the Parties."
+        }
+      ],
+      "dynamicFields": [
+        "RESEARCH_METHODS"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": null,
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it without the disclosing Party's prior written consent."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Source Documentation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "source_documentation.provision",
+          "version": null,
+          "text": "Raw research data and documentation shall be provided to the Client only where [SOURCE_DOCUMENTATION_INCLUDED] indicates inclusion, or upon payment of an additional fee of [SOURCE_DOCUMENTATION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "SOURCE_DOCUMENTATION_INCLUDED",
+        "SOURCE_DOCUMENTATION_FEE"
+      ]
+    },
+    {
+      "name": "Research Consent",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "research_consent.informed_consent",
+          "version": null,
+          "text": "Before involving any participant in research activities, the Party responsible for recruitment under the Participant Recruitment Clause shall obtain the participant's informed consent, explaining the purpose of the research, how their data will be used, and their right to withdraw at any time before the research findings are finalized."
+        },
+        {
+          "id": "research_consent.data_protection",
+          "version": null,
+          "text": "Any personal data collected from participants shall be handled in accordance with applicable data protection law and shall be used solely for the purpose described in the Informed Consent Clause."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Approval Process",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "approval_process.review",
+          "version": null,
+          "text": "The Client shall review each research deliverable within [APPROVAL_PERIOD_DAYS] days. If the Client does not respond within this period, the deliverable shall be deemed approved."
+        }
+      ],
+      "dynamicFields": [
+        "APPROVAL_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Copyright",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "copyright.ownership",
+          "version": null,
+          "text": "The Service Provider retains copyright in the Deliverables. Upon full payment of [TOTAL_VALUE], the Client receives a [LICENSE_SCOPE] license to use the Deliverables for [PERMITTED_USE]."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "LICENSE_SCOPE",
+        "PERMITTED_USE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. Ambiguity: none — recruitment responsibility explicitly determined by a Dynamic Field rather than assumed, closing Step 2 risk #3. Duplication: Research Consent's two Clauses address distinct concerns (informed consent vs. ongoing data handling) without overlap. Loophole closed: informed consent explicitly includes a withdrawal right before findings are finalized, addressing a gap identified when comparing to Documentary Production's more restrictive withdrawal-limitation approach — UX research ethics norms favor participant withdrawal rights more strongly than documentary/broadcast consent, a justified divergence. Contradiction: none. Missing protection: Data Protection Clause added given heightened personal-data exposure unique to this Contract Type within the Design Market. Complexity: Additional Research kept flexible (scoped separately) rather than a fixed per-unit fee, since research activities vary too widely for a single pricing formula. Enforceability: recruitment fee and participant count both explicit Dynamic Fields. Attack: A participant later claims they never understood how their data would be used — mitigated by explicit Informed Consent Clause requirements. Attack: Client and Service Provider both assume the other handles recruitment, leaving the study unstaffed — mitigated by explicit Dynamic-Field-driven responsibility allocation. Attack: Client demands additional studies under the original fee, claiming \"research\" was open-ended — mitigated by Additional Research Clause requiring separate scoping and pricing. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "RESEARCH_METHODS",
+    "DELIVERY_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "RECRUITMENT_RESPONSIBILITY",
+    "NUMBER_OF_PARTICIPANTS",
+    "PARTICIPANT_CRITERIA",
+    "RECRUITMENT_FEE",
+    "SOURCE_DOCUMENTATION_INCLUDED",
+    "SOURCE_DOCUMENTATION_FEE",
+    "APPROVAL_PERIOD_DAYS",
+    "LICENSE_SCOPE",
+    "PERMITTED_USE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "ux_design_services_agreement"
+}

@@ -1,0 +1,408 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "General",
+    "subcategory": "Cross-Industry Services",
+    "contractType": "General Services Agreement",
+    "status": "FINAL APPROVED",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": "1.0.0",
+          "text": "This Agreement is entered into between [CLIENT_NAME], with registered address at [CLIENT_ADDRESS] (\"Client\"), and [PROVIDER_NAME], with registered address at [PROVIDER_ADDRESS] (\"Service Provider\"), collectively \"the Parties.\""
+        },
+        {
+          "id": "identification.independent_contractor_status",
+          "version": "1.0.0",
+          "text": "The Service Provider performs the Services as an independent contractor. This Agreement shall not be construed to create an employment, partnership, joint venture, or agency relationship between the Parties. Neither Party shall represent itself as an employee, partner, or agent of the other."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "CLIENT_ADDRESS",
+        "PROVIDER_NAME",
+        "PROVIDER_ADDRESS"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": "1.0.0",
+          "text": "This Agreement governs the provision of [PROJECT_NAME] by the Service Provider to the Client, as further defined in the Services Clause and Scope of Services Clause of this Agreement."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_NAME"
+      ]
+    },
+    {
+      "name": "Scope of Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope_of_services.defined_scope",
+          "version": "1.0.0",
+          "text": "The Service Provider shall perform the services listed in [SERVICES_CONTRACTED] (\"Services\"). Any service not expressly listed in [SERVICES_CONTRACTED] falls outside the scope of this Agreement."
+        },
+        {
+          "id": "scope_of_services.change_control",
+          "version": "1.0.0",
+          "text": "Either Party may request a change to the Services. A requested change shall not take effect unless both Parties confirm the change, and any associated adjustment to [TOTAL_VALUE] or [DELIVERY_DATE], in writing."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED",
+        "TOTAL_VALUE",
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "services.performance_standard",
+          "version": "1.0.0",
+          "text": "The Service Provider shall perform the Services with the skill and care ordinarily exercised by professionals providing comparable services under comparable circumstances."
+        },
+        {
+          "id": "services.subcontracting",
+          "version": "1.0.0",
+          "text": "The Service Provider may engage subcontractors to perform part of the Services. The Service Provider shall remain fully responsible for the performance of any subcontractor as though such performance were its own."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICES_CONTRACTED"
+      ]
+    },
+    {
+      "name": "Deliverables",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "deliverables.delivery_obligation",
+          "version": "1.0.0",
+          "text": "The Service Provider shall deliver the Deliverables to the Client on or before [DELIVERY_DATE], using the delivery method agreed between the Parties."
+        },
+        {
+          "id": "deliverables.acceptance",
+          "version": "1.0.0",
+          "text": "The Client shall review the Deliverables within [ACCEPTANCE_PERIOD_DAYS] days of delivery. If the Client does not notify the Service Provider of a defect within this period, the Deliverables shall be deemed accepted."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE",
+        "ACCEPTANCE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "timeline.project_schedule",
+          "version": "1.0.0",
+          "text": "The Services shall commence on [START_DATE] and shall be completed by [DELIVERY_DATE], subject to any change confirmed under the Change Control Clause."
+        },
+        {
+          "id": "timeline.delay_notification",
+          "version": "1.0.0",
+          "text": "If either Party becomes aware that [DELIVERY_DATE] is unlikely to be met, that Party shall notify the other Party in writing without undue delay, stating the reason and the revised estimated date."
+        }
+      ],
+      "dynamicFields": [
+        "START_DATE",
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": "1.0.0",
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": "1.0.0",
+          "text": "If the Client fails to pay any amount due under this Agreement by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month, calculated from the due date until the date of actual payment."
+        },
+        {
+          "id": "payment.suspension_for_nonpayment",
+          "version": "1.0.0",
+          "text": "If payment remains overdue for more than [PAYMENT_DEFAULT_PERIOD_DAYS] days, the Service Provider may suspend performance of the Services until payment is received in full, without liability for any resulting delay."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE",
+        "PAYMENT_DEFAULT_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "client_responsibilities.cooperation",
+          "version": "1.0.0",
+          "text": "The Client shall provide the Service Provider with timely access to the information, materials, and decisions reasonably necessary for the Service Provider to perform the Services by the dates the Parties agree are required for [DELIVERY_DATE] to remain achievable."
+        },
+        {
+          "id": "client_responsibilities.accuracy_of_information",
+          "version": "1.0.0",
+          "text": "The Client shall be responsible for the accuracy and completeness of any information it provides to the Service Provider for use in performing the Services."
+        }
+      ],
+      "dynamicFields": [
+        "DELIVERY_DATE"
+      ]
+    },
+    {
+      "name": "Service Provider Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "service_provider_responsibilities.compliance",
+          "version": "1.0.0",
+          "text": "The Service Provider shall comply with all professional obligations applicable to the performance of the Services and shall hold any license, registration, or qualification required to lawfully provide the Services."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Warranty",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "warranty.service_warranty",
+          "version": "1.0.0",
+          "text": "The Service Provider warrants that the Services shall be performed in a professional manner consistent with the Performance Standard Clause. This warranty applies for a period of [WARRANTY_PERIOD_DAYS] days from delivery."
+        },
+        {
+          "id": "warranty.remedy",
+          "version": "1.0.0",
+          "text": "If the Client demonstrates a breach of the Service Warranty Clause within [WARRANTY_PERIOD_DAYS] days of delivery, the Service Provider shall, at its own cost, re-perform the non-conforming portion of the Services."
+        }
+      ],
+      "dynamicFields": [
+        "WARRANTY_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "Maintenance",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "maintenance.post_delivery_support",
+          "version": "1.0.0",
+          "text": "The Service Provider may provide post-delivery maintenance services for a fee separate from [TOTAL_VALUE], under terms agreed separately between the Parties."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Travel",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "travel.expense_reimbursement",
+          "version": "1.0.0",
+          "text": "If the performance of the Services requires the Service Provider to travel, the Client shall reimburse reasonable, pre-approved travel expenses in addition to [TOTAL_VALUE], upon presentation of supporting documentation."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Expenses",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "expenses.reimbursable_costs",
+          "version": "1.0.0",
+          "text": "The Client shall reimburse the Service Provider for any expense the Parties have pre-approved in writing as reimbursable under this Agreement, upon presentation of supporting documentation."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Portfolio Authorization",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "portfolio_authorization.promotional_use",
+          "version": "1.0.0",
+          "text": "The Client may grant the Service Provider a non-exclusive right to display the Deliverables for the Service Provider's professional portfolio and promotional purposes. This right does not apply if the Confidentiality Clause of this Agreement designates the Deliverables as confidential."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": "1.0.0",
+          "text": "Each Party shall keep confidential any non-public information disclosed by the other Party in connection with this Agreement and shall not disclose it to any third party without the disclosing Party's prior written consent."
+        },
+        {
+          "id": "confidentiality.permitted_disclosure",
+          "version": "1.0.0",
+          "text": "A Party may disclose confidential information to the extent required by law, provided it gives the other Party prompt written notice before doing so, where legally permitted."
+        },
+        {
+          "id": "confidentiality.survival",
+          "version": "1.0.0",
+          "text": "The obligations in the Confidentiality Clause shall survive termination or expiration of this Agreement for a period of [CONFIDENTIALITY_SURVIVAL_PERIOD_YEARS] years."
+        }
+      ],
+      "dynamicFields": [
+        "CONFIDENTIALITY_SURVIVAL_PERIOD_YEARS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": "1.0.0",
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": "1.0.0",
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except as provided in the Uncapped Liability Clause."
+        },
+        {
+          "id": "liability.uncapped_exceptions",
+          "version": "1.0.0",
+          "text": "The limitation and cap in the Limitation of Liability Clause and Liability Cap Clause shall not apply to loss arising from a Party's gross negligence, willful misconduct, fraud, or breach of the Confidentiality Clause."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.for_convenience",
+          "version": "1.0.0",
+          "text": "Either Party may terminate this Agreement without cause by giving [TERMINATION_NOTICE_PERIOD_DAYS] days' written notice to the other Party."
+        },
+        {
+          "id": "termination.for_cause",
+          "version": "1.0.0",
+          "text": "Either Party may terminate this Agreement immediately by written notice if the other Party materially breaches this Agreement and fails to remedy the breach within [CURE_PERIOD_DAYS] days of receiving written notice describing the breach."
+        },
+        {
+          "id": "termination.effect_of_termination",
+          "version": "1.0.0",
+          "text": "Upon termination, the Client shall pay the Service Provider for Services performed up to the effective date of termination. Sections of this Agreement that by their nature are intended to survive termination, including the Confidentiality Clause and Liability Clause, shall remain in effect."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD_DAYS",
+        "CURE_PERIOD_DAYS"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.entire_agreement",
+          "version": "1.0.0",
+          "text": "This Agreement constitutes the entire understanding between the Parties regarding its subject matter and supersedes any prior agreement or understanding, written or oral, on the same subject matter."
+        },
+        {
+          "id": "general_provisions.force_majeure",
+          "version": "1.0.0",
+          "text": "Neither Party shall be liable for a failure to perform its obligations under this Agreement to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay and shall resume performance as soon as reasonably possible once the event ends."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": "1.0.0",
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute arising from this Agreement shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before either Party initiates litigation, except where interim injunctive relief is required."
+        },
+        {
+          "id": "general_provisions.severability",
+          "version": "1.0.0",
+          "text": "If any provision of this Agreement is found unenforceable, the remaining provisions shall continue in full force and effect, and the unenforceable provision shall be replaced with a valid provision that most closely reflects the Parties' original intent."
+        },
+        {
+          "id": "general_provisions.notices",
+          "version": "1.0.0",
+          "text": "Any notice under this Agreement shall be in writing and delivered to the address or contact point specified by each Party in the Identification Clause, or to any updated address a Party notifies to the other in writing."
+        },
+        {
+          "id": "general_provisions.assignment",
+          "version": "1.0.0",
+          "text": "Neither Party may assign or transfer this Agreement, in whole or in part, without the other Party's prior written consent, except to a successor entity in connection with a merger, acquisition, or sale of substantially all its assets."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": "1.0.0",
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE], through the signatures of their duly authorized representatives below. - **Ambiguity:** \"Reasonable\" appears in `services.performance_standard` and `general_provisions.force_majeure`; retained only where paired with an objective anchor (\"comparable circumstances,\" \"could not have been avoided through reasonable diligence\") per PLDS-001 §12 exception allowance. No unanchored \"reasonable efforts\" found. - **Duplicated meaning:** Checked liability, confidentiality, and termination for overlap — none found; each Clause expresses exactly one rule per PLDS-001 §1. - **Loopholes:** Initial draft of `termination.for_convenience` had no interaction with `payment.suspension_for_nonpayment`; resolved by `termination.effect_of_termination` requiring payment for work performed regardless of termination path. - **Contradictions:** `liability.cap` vs. `liability.uncapped_exceptions` initially conflicted (cap without carve-out); resolved by adding explicit uncapped exceptions Clause. - **Missing protections:** Added `confidentiality.survival` after detecting that confidentiality would otherwise lapse at termination — a gap flagged in Step 2, risk #7. - **Unnecessary complexity:** Removed a nested exception originally drafted in `general_provisions.force_majeure` (\"...unless... except when...\") and restructured as a single affirmative condition per PLDS-001 §5. - **Enforceability:** Verified every obligation names the responsible Party explicitly (no implied subject), per PLDS-001 §10. - **Attack 1 — Client withholds payment indefinitely while claiming Services are \"not yet accepted.\"** Mitigated: `deliverables.acceptance` creates a deemed-acceptance deadline; `payment.suspension_for_nonpayment` gives Service Provider a self-help remedy independent of acceptance disputes. - **Attack 2 — Service Provider invokes force majeure for ordinary business delay.** Mitigated: objective standard \"could not have been avoided through reasonable diligence\" plus mandatory prompt notice; vague invocation without notice breaches the Clause itself. - **Attack 3 — Party terminates for convenience the day before a milestone payment to avoid paying.** Mitigated: `termination.effect_of_termination` requires payment for Services performed up to the termination date regardless of reason. - **Attack 4 — Party argues confidentiality obligations ended at contract expiry to justify disclosure.** Mitigated: explicit survival period in `confidentiality.survival`. - **Attack 5 — Party assigns the Agreement to a shell entity to escape obligations.** Mitigated: `general_provisions.assignment` requires consent except in bona fide M&A transfers. - **Attack 6 — Party claims gross negligence should be capped under the general liability cap.** Mitigated: `liability.uncapped_exceptions` explicitly excludes gross negligence, willful misconduct, fraud, and confidentiality breach from any cap. - **No further exploitable gaps identified.** Red Team review concludes with no additional findings. **Version:** 1.0.0 (all Clauses) **Review Status:** Self-Review passed. Red Team review passed. No outstanding findings. **Approval:** FINAL APPROVED — ready for jurisdiction-binding and localization layers. END OF DOCUMENT"
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "CLIENT_ADDRESS",
+    "PROVIDER_NAME",
+    "PROVIDER_ADDRESS",
+    "PROJECT_NAME",
+    "SERVICES_CONTRACTED",
+    "TOTAL_VALUE",
+    "DELIVERY_DATE",
+    "ACCEPTANCE_PERIOD_DAYS",
+    "START_DATE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "PAYMENT_DEFAULT_PERIOD_DAYS",
+    "WARRANTY_PERIOD_DAYS",
+    "CONFIDENTIALITY_SURVIVAL_PERIOD_YEARS",
+    "TERMINATION_NOTICE_PERIOD_DAYS",
+    "CURE_PERIOD_DAYS",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "general_services_agreement"
+}

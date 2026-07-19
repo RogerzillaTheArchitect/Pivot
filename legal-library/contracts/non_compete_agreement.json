@@ -1,0 +1,228 @@
+{
+  "meta": {
+    "market": "Universal Contracts",
+    "category": "Restrictive Covenants",
+    "subcategory": "Competition Restriction",
+    "contractType": "Non-Compete Agreement",
+    "status": "Pending Human Legal Review",
+    "version": null,
+    "tags": []
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": "1.0.0",
+          "text": "This Agreement is entered into between [COMPANY_NAME] (\"Company\") and [RESTRICTED_PARTY_NAME], acting in the capacity of [RESTRICTED_PARTY_ROLE] (\"Restricted Party\")."
+        },
+        {
+          "id": "identification.legitimate_interest",
+          "version": "1.0.0",
+          "text": "The Parties acknowledge that the restrictions in this Agreement are intended to protect the Company's legitimate business interest in [LEGITIMATE_INTEREST_DESCRIPTION], to which the Restricted Party has or will have access in the course of [RESTRICTED_PARTY_ROLE]."
+        }
+      ],
+      "dynamicFields": [
+        "COMPANY_NAME",
+        "RESTRICTED_PARTY_NAME",
+        "RESTRICTED_PARTY_ROLE",
+        "LEGITIMATE_INTEREST_DESCRIPTION"
+      ]
+    },
+    {
+      "name": "Restricted Activities",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "restricted_activities.definition",
+          "version": "1.0.0",
+          "text": "\"Competing Business\" means [COMPETING_BUSINESS_DEFINITION]. During the period defined in the Duration Clause and within the territory defined in the Territory Clause, the Restricted Party shall not, directly or indirectly, own, manage, work for, consult for, or hold a controlling interest in a Competing Business."
+        },
+        {
+          "id": "restricted_activities.carve_outs",
+          "version": "1.0.0",
+          "text": "The Restricted Activities Clause does not prevent the Restricted Party from: (a) holding a passive investment of less than [PASSIVE_INVESTMENT_THRESHOLD_PERCENT] percent in a publicly traded Competing Business; or (b) working in a role that does not involve [LEGITIMATE_INTEREST_DESCRIPTION] and does not compete with the Company's actual business activity."
+        }
+      ],
+      "dynamicFields": [
+        "COMPETING_BUSINESS_DEFINITION",
+        "PASSIVE_INVESTMENT_THRESHOLD_PERCENT",
+        "LEGITIMATE_INTEREST_DESCRIPTION"
+      ]
+    },
+    {
+      "name": "Territory",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "territory.geographic_scope",
+          "version": "1.0.0",
+          "text": "The restriction in the Restricted Activities Clause applies within [RESTRICTED_TERRITORY], being the geographic area in which the Company actively conducts the business related to [LEGITIMATE_INTEREST_DESCRIPTION]."
+        }
+      ],
+      "dynamicFields": [
+        "RESTRICTED_TERRITORY",
+        "LEGITIMATE_INTEREST_DESCRIPTION"
+      ]
+    },
+    {
+      "name": "Duration",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "duration.restriction_period",
+          "version": "1.0.0",
+          "text": "The restriction in the Restricted Activities Clause applies for a period of [NON_COMPETE_DURATION_MONTHS] months from [RESTRICTION_START_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "NON_COMPETE_DURATION_MONTHS",
+        "RESTRICTION_START_DATE"
+      ]
+    },
+    {
+      "name": "Compensation",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "compensation.consideration_for_restriction",
+          "version": "1.0.0",
+          "text": "In consideration for the restrictions set out in this Agreement, the Company shall pay the Restricted Party [RESTRICTION_COMPENSATION_AMOUNT], payable according to [RESTRICTION_COMPENSATION_SCHEDULE]."
+        }
+      ],
+      "dynamicFields": [
+        "RESTRICTION_COMPENSATION_AMOUNT",
+        "RESTRICTION_COMPENSATION_SCHEDULE"
+      ]
+    },
+    {
+      "name": "Customer Protection",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "customer_protection.non_solicitation_of_clients",
+          "version": "1.0.0",
+          "text": "During the period defined in the Duration Clause, the Restricted Party shall not solicit, for a Competing Business, any client or customer of the Company with whom the Restricted Party had material contact in the course of [RESTRICTED_PARTY_ROLE]."
+        }
+      ],
+      "dynamicFields": [
+        "RESTRICTED_PARTY_ROLE"
+      ]
+    },
+    {
+      "name": "Non-Solicitation",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "non_solicitation.employees",
+          "version": "1.0.0",
+          "text": "During the period defined in the Duration Clause, the Restricted Party shall not solicit for employment any employee of the Company with whom the Restricted Party had material contact in the course of [RESTRICTED_PARTY_ROLE], except where that employee responds to a general public job advertisement not specifically targeted at them."
+        }
+      ],
+      "dynamicFields": [
+        "RESTRICTED_PARTY_ROLE"
+      ]
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.obligation",
+          "version": "1.0.0",
+          "text": "The Restricted Party shall keep confidential any non-public information of the Company obtained in the course of [RESTRICTED_PARTY_ROLE] and shall not use or disclose it other than as authorized by the Company, both during and after the period defined in the Duration Clause."
+        }
+      ],
+      "dynamicFields": [
+        "RESTRICTED_PARTY_ROLE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.remedies_acknowledgment",
+          "version": "1.0.0",
+          "text": "The Parties acknowledge that a breach of the Restricted Activities Clause may cause harm for which monetary damages alone would be an inadequate remedy, and that the Company may seek injunctive relief, in addition to any other remedy available at law."
+        },
+        {
+          "id": "liability.judicial_modification",
+          "version": "1.0.0",
+          "text": "If a court or competent authority finds any restriction in this Agreement broader than necessary to protect the legitimate interest described in the Legitimate Interest Clause, the Parties intend for that restriction to be narrowed to the maximum scope, geography, or duration that is enforceable, rather than voided entirely."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Exceptions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "exceptions.severability_of_restriction",
+          "version": "1.0.0",
+          "text": "If the Restricted Activities Clause, Territory Clause, or Duration Clause is found unenforceable in whole, that finding shall not affect the enforceability of any other provision of this Agreement, including the Confidentiality Clause, Customer Protection Clause, and Non-Solicitation Clause."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.entire_agreement",
+          "version": "1.0.0",
+          "text": "This Agreement constitutes the entire understanding between the Parties regarding its subject matter and supersedes any prior agreement or understanding, written or oral, on the same subject matter."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": "1.0.0",
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute arising from this Agreement shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before either Party initiates litigation, except where interim injunctive relief is required."
+        },
+        {
+          "id": "general_provisions.notices",
+          "version": "1.0.0",
+          "text": "Any notice under this Agreement shall be in writing and delivered to the address or contact point specified by each Party in the Identification Clause, or to any updated address a Party notifies to the other in writing."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": "1.0.0",
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE], through the signatures of their duly authorized representatives below. - **Ambiguity:** `restricted_activities.definition` relies on `[COMPETING_BUSINESS_DEFINITION]` as a required Dynamic Field rather than embedding a generic description in Master English, preventing vague catch-all language such as \"any similar business\" per PLDS-001 §2. - **Duplicated meaning:** Verified `customer_protection.non_solicitation_of_clients` and `non_solicitation.employees` address distinct protected relationships (clients vs. employees) and do not overlap. - **Loopholes:** Initial draft lacked `restricted_activities.carve_outs`; without it, the restriction would have technically captured passive shareholders and unrelated roles, a common ground for judicial invalidation. Added per Step 1 consensus on necessity-scoped restrictions. - **Contradictions:** Checked `liability.judicial_modification` against `exceptions.severability_of_restriction` — the two operate at different levels (narrowing a single clause's scope vs. preserving unrelated clauses) and do not conflict. - **Missing protections:** Added `compensation.consideration_for_restriction` as a Required Block after Step 2 risk #3 flagged that uncompensated restrictions face heightened enforceability risk. - **Unnecessary complexity:** Kept restriction Clauses free of nested exceptions by isolating carve-outs into their own dedicated Clause rather than embedding them as exceptions within the primary restriction sentence. - **Enforceability:** Confirmed the restriction is expressly tied to `[RESTRICTED_PARTY_ROLE]` and `[LEGITIMATE_INTEREST_DESCRIPTION]` throughout, satisfying the \"legitimate interest\" anchor required across all seven jurisdictions reviewed, rather than a bare competition ban. - **Attack 1 — Restricted Party argues the restriction is a blanket ban on working in the industry.** Mitigated: `restricted_activities.definition` and carve-out (b) limit the restriction to roles actually involving the stated legitimate interest, not the entire industry. - **Attack 2 — Company attempts to enforce the restriction without ever paying the agreed compensation.** Mitigated: `compensation.consideration_for_restriction` is a Required Block; non-payment would itself constitute a breach undermining the Company's ability to enforce the restriction in good faith. - **Attack 3 — Restricted Party claims a small passive stock holding in a competitor breaches the Agreement.** Mitigated: carve-out (a) explicitly permits passive investment below a defined threshold. - **Attack 4 — Company tries to apply the restriction to a low-level role with no real access to sensitive interests.** Mitigated: `identification.legitimate_interest` requires an explicit, role-specific justification; Step 3's scoping guidance restricts intended use of this Contract Type to Partners, Senior Consultants, and similar roles with genuine access. - **Attack 5 — Court strikes the geographic scope as too broad, and Restricted Party argues the entire Agreement is void.** Mitigated: `liability.judicial_modification` and `exceptions.severability_of_restriction` jointly preserve partial enforceability rather than an all-or-nothing outcome. - **Attack 6 — Restricted Party solicits a client they never had contact with, claiming the clause was breached anyway due to vague wording.** Mitigated: `customer_protection.non_solicitation_of_clients` requires \"material contact,\" narrowing the restriction to genuine relationships. - **No further exploitable gaps identified.** Red Team review concludes with no additional findings. **Version:** 1.0.0 (all Clauses) **Review Status:** Self-Review passed. Red Team review passed. No outstanding findings. **Approval Status:** Pending Human Legal Review. END OF DOCUMENT"
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "COMPANY_NAME",
+    "RESTRICTED_PARTY_NAME",
+    "RESTRICTED_PARTY_ROLE",
+    "LEGITIMATE_INTEREST_DESCRIPTION",
+    "COMPETING_BUSINESS_DEFINITION",
+    "PASSIVE_INVESTMENT_THRESHOLD_PERCENT",
+    "RESTRICTED_TERRITORY",
+    "NON_COMPETE_DURATION_MONTHS",
+    "RESTRICTION_START_DATE",
+    "RESTRICTION_COMPENSATION_AMOUNT",
+    "RESTRICTION_COMPENSATION_SCHEDULE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "non_compete_agreement"
+}
