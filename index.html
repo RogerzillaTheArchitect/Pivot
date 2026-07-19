@@ -352,13 +352,13 @@
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">Resumo</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
     </div>
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </div>
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </div>
     <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
@@ -648,16 +648,21 @@
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
         <div class="page-head">
-          <div class="page-title" data-t="nav.libraries">Bibliotecas</div>
+          <div class="page-title" data-t="nav.libraries">Modelos</div>
         </div>
 
         <div class="card bib-page-card">
-          <div class="searchbox bib-searchbox" style="margin:0 0 14px">
+          <div class="bib-search-row" style="margin:0 0 14px">
+            <div class="bib-filter-icon-btn" id="bib-salvos-chip" onclick="abrirSalvosBiblioteca()" aria-label="Salvos">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg>
+            </div>
             <div class="bib-filter-icon-btn" id="bib-filtrar-chip" onclick="abrirFiltrosBiblioteca()" aria-label="Filtrar">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
             </div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-            <input id="bib-busca" placeholder="Procurar contratos, criadores ou palavras-chave…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
+            <div class="searchbox bib-searchbox">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+              <input id="bib-busca" placeholder="Procurar contratos, criadores ou palavras-chave…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
+            </div>
           </div>
 
           <div id="bib-lista"></div>
@@ -816,7 +821,7 @@
   <nav class="nav">
     <button class="on" id="n-hoje" onclick="go('hoje')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6.5" cy="6.5" r="4"/><path d="M17.5 2.5 21.5 10h-8z"/><circle cx="6.5" cy="17.5" r="4"/><rect x="13.5" y="13.5" width="8" height="8" rx="1.2"/></svg>
-      <span id="nav-label-hoje" data-t="nav.home">Resumo</span>
+      <span id="nav-label-hoje" data-t="nav.home">Painel</span>
     </button>
     <button id="n-trabalhos" onclick="go('trabalhos')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h11v13H3z"/><path d="M3 9h8M3 13h8"/><ellipse cx="17.5" cy="11.5" rx="3.5" ry="7"/></svg>
@@ -825,7 +830,7 @@
     <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M11.5 17.3c1-1.5 1.7-1.3 2.3.1.7 1.4 1.4 1.1 2-.3"/></svg>
-      <span id="nav-label-bibliotecas" data-t="nav.libraries">Bibliotecas</span>
+      <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </button>
     <button id="n-relatorios" onclick="go('relatorios')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1 20c1.5-4 2.5-6 4-6s2.5 2 4 6"/><path d="M5 20c2-7.5 4.5-12 7-12s5 4.5 7 12"/><path d="M14 20c1.3-4.5 2.3-6.5 3.7-6.5S21 15.5 21.5 20"/></svg>
@@ -862,7 +867,6 @@
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
           <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.reminderSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
           <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.listSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
-          <div class="sheet-item" onclick="pushPanel('modelo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg><span data-t="sheet.template">Modelo</span></div>
         </div>
       </div>
 
@@ -1020,7 +1024,7 @@
           <div id="modelos-sugeridos-lista"></div>
           <div id="tw-modelo-escolhido-status"></div>
           <div style="display:flex;gap:8px;margin:10px 0 4px">
-            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></button>
+            <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Modelos</span></button>
           </div>
           <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
@@ -1035,33 +1039,21 @@
 
       <!-- 📄 CONTRATO -->
       <div class="panel" data-panel="contrato">
-        <div class="sheet-primary" onclick="pushPanel('contrato-usar')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 11H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-5"/><path d="M9 4h6v7H9z"/></svg>
-          <div><div class="t"><span data-t="wizard.useTemplate">Usar um modelo</span></div><div class="s"><span data-t="wizard.fromSaved">dos seus modelos guardados</span></div></div>
-        </div>
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Do zero</span></span></div>
-          <div class="sheet-item" onclick="pushPanel('contrato-duplicar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg><span><span data-t="wizard.duplicate">Duplicar existente</span></span></div>
-        </div>
-        <div class="sheet-outline" onclick="pushPanel('comunidade-contratos')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg>
-          <div class="t"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></div>
+          <div class="sheet-item" onclick="abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Novo</span></span></div>
+          <div class="sheet-item" onclick="pushPanel('comunidade-contratos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><span data-t="wizard.browseLibrary">Explorar</span></div>
+          <div class="sheet-item" onclick="pushPanel('contrato-usar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg><span data-t="library.saved">Salvos</span></div>
         </div>
       </div>
 
       <div class="panel" data-panel="contrato-usar">
         <div class="field"><input id="usar-modelo-busca" oninput="renderListaUsarModelo()" placeholder="Procurar nos teus modelos" data-t-placeholder="wizard.searchTemplates"></div>
         <div id="usar-modelo-lista"></div>
-        <p style="font-size:13px;color:var(--neutral);margin-top:10px">Sem o modelo certo? <span class="inline-link" onclick="pushPanel('comunidade-contratos')"><span data-t="explore.browseLibrary">Explorar Biblioteca →</span></span></p>
-      </div>
-
-      <div class="panel" data-panel="contrato-duplicar">
-        <div class="field"><input id="dup-contrato-busca" oninput="renderListaDuplicarContrato()" placeholder="Procurar por cliente ou trabalho" data-t-placeholder="wizard.searchByClientJob"></div>
-        <div id="dup-contrato-lista"></div>
+        <p style="font-size:13px;color:var(--neutral);margin-top:10px">Sem o modelo certo? <span class="inline-link" onclick="pushPanel('comunidade-contratos')"><span data-t="explore.browseLibrary">Explorar Modelos →</span></span></p>
       </div>
 
       <div class="panel" data-panel="comunidade-contratos">
-        <div class="field"><input id="bib-contratos-busca" oninput="renderBibliotecaPanel('contratos')" placeholder="Explorar biblioteca…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
+        <div class="field"><input id="bib-contratos-busca" oninput="renderBibliotecaPanel('contratos')" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
         <div class="comm-tabs" id="bib-contratos-origem"></div>
         <div class="comm-tabs" id="bib-contratos-tabs"></div>
         <div id="bib-contratos-lista"></div>
@@ -1069,28 +1061,6 @@
 
       <div class="panel" data-panel="comunidade-contrato-detalhe">
         <div id="bib-detalhe-conteudo"></div>
-      </div>
-
-      <!-- 🧩 MODELO -->
-      <div class="panel" data-panel="modelo">
-        <div class="csec-label"><span data-t="explore.templates">Seus modelos</span></div>
-        <div class="type-grid">
-          <div class="type-card" onclick="pushPanel('contrato')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><span data-t="wizard.model.contract">Contrato</span></div>
-          <div class="type-card" onclick="abrirListaModelo('briefing')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div><span><span data-t="job.clientInfo">Informações do Cliente</span></span></div>
-          <div class="type-card" onclick="abrirListaModelo('checklist')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg></div><span data-t="wizard.model.checklist">Checklist</span></div>
-          <div class="type-card" onclick="abrirListaModelo('cronograma')"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div><span data-t="wizard.schedule">Cronograma</span></div>
-        </div>
-        <div class="sheet-primary" style="background:var(--brand)" onclick="pushPanel('modelo-colecao')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg>
-          <div><div class="t"><span data-t="explore.collection">Coleção completa</span></div><div class="s"><span data-t="explore.collectionHint">vários modelos, num único pacote</span></div></div>
-        </div>
-
-        <div class="csec-label" style="margin-top:22px"><span data-t="explore.library">Biblioteca Pivot</span></div>
-        <div class="sheet-outline" onclick="pushPanel('comunidade-modelos')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg>
-          <div style="flex:1"><div class="t"><span data-t="wizard.browseLibrary">Explorar Biblioteca</span></div><div class="s"><span data-t="explore.libraryHint">modelos prontos a usar, de outros profissionais</span></div></div>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);flex:none"><path d="m9 18 6-6-6-6"/></svg>
-        </div>
       </div>
 
       <div class="panel" data-panel="modelo-lista">
@@ -1102,78 +1072,8 @@
         </div>
         <button class="btn primary" style="width:100%;margin-top:16px" onclick="guardarModeloLista()"><span data-t="explore.saveTemplate">Guardar modelo →</span></button>
       </div>
-
-      <div class="panel" data-panel="modelo-colecao">
-        <div class="field"><label data-t="col.nameLabel">Nome da coleção</label><input id="col-nome" value="Casamento Premium"></div>
-        <p style="font-size:12.5px;color:var(--neutral);margin:-4px 0 14px" data-t="col.includes">O que esta coleção inclui:</p>
-        <div id="col-rows">
-          <div class="colrow" data-comp="contrato">
-            <div class="colrow-head" onclick="this.parentElement.classList.toggle('open')">
-              <svg class="colrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-              <div class="body"><div class="t" data-t="job.contract">Contrato</div><div class="s">Casamento completo</div></div>
-              <svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="colrow-alt">
-              <div class="colrow-opt active" onclick="setColOpt(this,'Casamento completo')">Casamento completo</div>
-              <div class="colrow-opt" onclick="setColOpt(this,'Comercial simples')">Comercial simples</div>
-              <span class="colrow-remove" onclick="removeColRow(this)" data-t="col.removeFrom">Remover da coleção</span>
-            </div>
-          </div>
-          <div class="colrow" data-comp="briefing">
-            <div class="colrow-head" onclick="this.parentElement.classList.toggle('open')">
-              <svg class="colrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              <div class="body"><div class="t"><span data-t="job.clientInfo">Informações do Cliente</span></div><div class="s">Casamento (6 perguntas)</div></div>
-              <svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="colrow-alt">
-              <div class="colrow-opt active" onclick="setColOpt(this,'Casamento (6 perguntas)')">Casamento (6 perguntas)</div>
-              <div class="colrow-opt" onclick="setColOpt(this,'Comercial (4 perguntas)')">Comercial (4 perguntas)</div>
-              <span class="colrow-remove" onclick="removeColRow(this)" data-t="col.removeFrom">Remover da coleção</span>
-            </div>
-          </div>
-          <div class="colrow" data-comp="cronograma">
-            <div class="colrow-head" onclick="this.parentElement.classList.toggle('open')">
-              <svg class="colrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
-              <div class="body"><div class="t" data-t="job.schedule">Cronograma</div><div class="s">Padrão de casamento</div></div>
-              <svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="colrow-alt">
-              <div class="colrow-opt active" onclick="setColOpt(this,'Padrão de casamento')">Padrão de casamento</div>
-              <div class="colrow-opt" onclick="setColOpt(this,'Simplificado')">Simplificado</div>
-              <span class="colrow-remove" onclick="removeColRow(this)" data-t="col.removeFrom">Remover da coleção</span>
-            </div>
-          </div>
-          <div class="colrow" data-comp="pagamentos">
-            <div class="colrow-head" onclick="this.parentElement.classList.toggle('open')">
-              <svg class="colrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
-              <div class="body"><div class="t" data-t="job.payments">Pagamentos</div><div class="s">50% / 50%</div></div>
-              <svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="colrow-alt">
-              <div class="colrow-opt active" onclick="setColOpt(this,'50% / 50%')">50% / 50%</div>
-              <div class="colrow-opt" onclick="setColOpt(this,'40% / 60%')">40% / 60%</div>
-              <span class="colrow-remove" onclick="removeColRow(this)" data-t="col.removeFrom">Remover da coleção</span>
-            </div>
-          </div>
-          <div class="colrow" data-comp="checklist">
-            <div class="colrow-head" onclick="this.parentElement.classList.toggle('open')">
-              <svg class="colrow-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg>
-              <div class="body"><div class="t" data-t="wizard.model.checklist">Checklist</div><div class="s">Entrega de casamento</div></div>
-              <svg class="chev2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
-            </div>
-            <div class="colrow-alt">
-              <div class="colrow-opt active" onclick="setColOpt(this,'Entrega de casamento')">Entrega de casamento</div>
-              <div class="colrow-opt" onclick="setColOpt(this,'Entrega comercial')">Entrega comercial</div>
-              <span class="colrow-remove" onclick="removeColRow(this)" data-t="col.removeFrom">Remover da coleção</span>
-            </div>
-          </div>
-        </div>
-        <button class="addblock" onclick="showToast(t('toast.moreComponentsSoon'))" data-t="wizard.addComponent">+ Adicionar componente</button>
-        <button class="btn primary" id="col-save" style="width:100%;margin-top:14px" onclick="guardarColecao()"><span data-t="explore.saveCollection">Guardar coleção</span></button>
-      </div>
-
       <div class="panel" data-panel="comunidade-modelos">
-        <div class="field"><input id="bib-modelos-busca" oninput="renderBibliotecaPanel('modelos')" placeholder="Explorar biblioteca…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
+        <div class="field"><input id="bib-modelos-busca" oninput="renderBibliotecaPanel('modelos')" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" autocomplete="off"></div>
         <div class="comm-tabs" id="bib-modelos-origem"></div>
         <div class="comm-tabs" id="bib-modelos-tabs"></div>
         <div id="bib-modelos-lista"></div>
@@ -2028,9 +1928,6 @@
     // --- Informações do Cliente ---
     "clientinfo.availableUntil": { pt:"Disponível até: ", en:"Available until: ", es:"Disponible hasta: " },
     // --- Coleções ---
-    "col.includes": { pt:"O que esta coleção inclui:", en:"What this collection includes:", es:"Lo que incluye esta colección:" },
-    "col.nameLabel": { pt:"Nome da coleção", en:"Collection name", es:"Nombre de la colección" },
-    "col.removeFrom": { pt:"Remover da coleção", en:"Remove from collection", es:"Quitar de la colección" },
     // --- Genérico ---
     "common.title": { pt:"Título", en:"Title", es:"Título" },
     "sheet.create": { pt:"Criar", en:"Create", es:"Crear" },
@@ -2118,9 +2015,7 @@
     "field.email": { pt:"email", en:"email", es:"email" },
     "field.phone": { pt:"telefone", en:"phone", es:"teléfono" },
     "wizard.newContract": { pt:"Novo contrato", en:"New contract", es:"Nuevo contrato" },
-    "wizard.duplicateContract": { pt:"Duplicar contrato", en:"Duplicate contract", es:"Duplicar contrato" },
     "wizard.newTemplate": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
-    "wizard.newCollection": { pt:"Nova coleção", en:"New collection", es:"Nueva colección" },
     "wizard.newClient": { pt:"Novo cliente", en:"New client", es:"Nuevo cliente" },
     "wizard.newTask": { pt:"Nova tarefa", en:"New task", es:"Nueva tarea" },
     "action.confirm": { pt:"Confirmar dados", en:"Confirm details", es:"Confirmar datos" },
@@ -2316,10 +2211,8 @@
     "email.greetingGeneric": { pt:"Olá", en:"Hi", es:"Hola" },
     "email.footer.autoNotice": { pt:"Este é um email automático, não é necessário responder.", en:"This is an automated email, no reply needed.", es:"Este es un email automático, no es necesario responder." },
     // --- Explorar ---
-    "explore.browseLibrary": { pt:"Explorar Biblioteca →", en:"Browse Library →", es:"Explorar biblioteca →" },
+    "explore.browseLibrary": { pt:"Explorar Modelos →", en:"Browse Templates →", es:"Explorar modelos →" },
     "explore.checklist": { pt:"Checklist", en:"Checklist", es:"Lista de verificación" },
-    "explore.collection": { pt:"Coleção completa", en:"Full collection", es:"Colección completa" },
-    "explore.collectionHint": { pt:"Contrato, briefing, cronograma e pagamentos", en:"Contract, briefing, schedule and payments", es:"Contrato, briefing, cronograma y pagos" },
     "explore.commercialBriefing": { pt:"Informações do Cliente — sessão comercial", en:"Client Details — commercial session", es:"Información del Cliente — sesión comercial" },
     "explore.contractBlocks": { pt:"Contrato · 5 blocos", en:"Contract · 5 blocks", es:"Contrato · 5 bloques" },
     "explore.contractModel": { pt:"Modelo · ", en:"Template · ", es:"Modelo · " },
@@ -2327,8 +2220,8 @@
     "explore.editableFlow": { pt:"Fluxo · editável", en:"Flow · editable", es:"Flujo · editable" },
     "explore.editableModel": { pt:"Modelo · editável", en:"Template · editable", es:"Modelo · editable" },
     "explore.empty": { pt:"Em crescimento. Sugere um modelo que gostarias de ver aqui.", en:"Growing. Suggest a template you’d like to see here.", es:"En crecimiento. Sugiere una plantilla que te gustaría ver aquí." },
-    "explore.library": { pt:"Biblioteca Pivot", en:"Pivot Library", es:"Biblioteca Pivot" },
-    "library.searchPlaceholder": { pt:"Explorar biblioteca…", en:"Explore library…", es:"Explorar biblioteca…" },
+    "explore.library": { pt:"Modelos Pivot", en:"Pivot Templates", es:"Modelos Pivot" },
+    "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
     "library.origin.official": { pt:"Oficial Pivot", en:"Official Pivot", es:"Oficial Pivot" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
@@ -2346,6 +2239,8 @@
     "library.viewBlock": { pt:"Visualizar", en:"View", es:"Ver" },
     "library.filter": { pt:"Filtrar", en:"Filter", es:"Filtrar" },
     "library.filterTitle": { pt:"Filtros avançados", en:"Advanced filters", es:"Filtros avanzados" },
+    "library.saved": { pt:"Salvos", en:"Saved", es:"Guardados" },
+    "library.savedEmpty": { pt:"Ainda não guardou nenhum modelo. Toque na estrela num modelo para o guardar aqui.", en:"You haven't saved any templates yet. Tap the star on a template to save it here.", es:"Aún no ha guardado ninguna plantilla. Toca la estrella en una plantilla para guardarla aquí." },
     "library.filterOrigin": { pt:"Origem", en:"Source", es:"Origen" },
     "library.sortLabel": { pt:"Ordenar por", en:"Sort by", es:"Ordenar por" },
     "library.sort.mostUsed": { pt:"Mais Utilizados", en:"Most Used", es:"Más Utilizados" },
@@ -2359,7 +2254,7 @@
     "library.protectedBlock": { pt:"Conteúdo protegido", en:"Protected content", es:"Contenido protegido" },
     "library.import": { pt:"Importar", en:"Import", es:"Importar" },
     "library.addBlockBtn": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
-    "library.blocksExplore": { pt:"Explorar Biblioteca", en:"Browse Library", es:"Explorar Biblioteca" },
+    "library.blocksExplore": { pt:"Explorar Modelos", en:"Browse Templates", es:"Explorar Modelos" },
     "library.blocksCreateNew": { pt:"Criar Novo Bloco", en:"Create New Block", es:"Crear Nuevo Bloque" },
     "library.blocksSearchPlaceholder": { pt:"Pesquisar contratos…", en:"Search contracts…", es:"Buscar contratos…" },
     "library.importNBlocks": { pt:"Importar {n} Blocos", en:"Import {n} Blocks", es:"Importar {n} Bloques" },
@@ -2390,9 +2285,7 @@
     "library.addFav": { pt:"Favoritar", en:"Save", es:"Guardar" },
     "library.removeFav": { pt:"Remover dos favoritos", en:"Remove from saved", es:"Quitar de guardados" },
     "explore.libraryHint": { pt:"Modelos partilhados por outros profissionais", en:"Templates shared by other professionals", es:"Plantillas compartidas por otros profesionales" },
-    "explore.saveCollection": { pt:"Guardar coleção", en:"Save collection", es:"Guardar colección" },
     "explore.saveTemplate": { pt:"Guardar modelo →", en:"Save template →", es:"Guardar plantilla →" },
-    "explore.templates": { pt:"Seus modelos", en:"Your templates", es:"Tus plantillas" },
     "explore.title": { pt:"Explorar", en:"Explore", es:"Explorar" },
     "explore.filter.all": { pt:"Todos", en:"All", es:"Todos" },
     "explore.filter.contracts": { pt:"Contratos", en:"Contracts", es:"Contratos" },
@@ -2780,9 +2673,9 @@
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
-    "nav.home": { pt:"Resumo", en:"Dashboard", es:"Inicio" },
+    "nav.home": { pt:"Painel", en:"Dashboard", es:"Panel" },
     "nav.jobs": { pt:"Projetos", en:"Projects", es:"Proyectos" },
-    "nav.libraries": { pt:"Bibliotecas", en:"Libraries", es:"Bibliotecas" },
+    "nav.libraries": { pt:"Modelos", en:"Templates", es:"Modelos" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
     "nav.search": { pt:"Pesquisar", en:"Search", es:"Buscar" },
     // --- Notificações ---
@@ -3036,7 +2929,6 @@
     "sheet.job": { pt:"Projeto", en:"Project", es:"Proyecto" },
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
-    "sheet.template": { pt:"Modelo", en:"Template", es:"Plantilla" },
     "sheet.contract": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "sheet.financialMovement": { pt:"Movimentação Financeira", en:"Financial Entry", es:"Movimiento Financiero" },
     "sheet.goalsLimits": { pt:"Metas e Limites", en:"Goals & Limits", es:"Metas y Límites" },
@@ -3283,7 +3175,7 @@
     "wizard.addResource": { pt:"+ Adicionar recurso", en:"+ Add resource", es:"+ Añadir recurso" },
     "wizard.address": { pt:"Endereço", en:"Address", es:"Dirección" },
     "wizard.addressPlaceholder": { pt:"Rua, número, cidade…", en:"Street, number, city…", es:"Calle, número, ciudad…" },
-    "wizard.browseLibrary": { pt:"Explorar Biblioteca", en:"Browse library", es:"Explorar biblioteca" },
+    "wizard.browseLibrary": { pt:"Explorar Modelos", en:"Browse templates", es:"Explorar modelos" },
     "wizard.canChangeAfter": { pt:"Pode ajustar depois de criado.", en:"You can adjust this after creating.", es:"Puedes ajustarlo una vez creado." },
     "wizard.checklistTitle": { pt:"Título da checklist", en:"Checklist title", es:"Título de la lista" },
     "wizard.client": { pt:"Cliente", en:"Client", es:"Cliente" },
@@ -3309,10 +3201,8 @@
     "wizard.autoRemindersHint": { pt:"Email ao cliente antes e no dia de cada pagamento", en:"Email to the client before and on each payment's due date", es:"Email al cliente antes y el día de cada pago" },
     "wizard.createTask": { pt:"Criar tarefa →", en:"Create task →", es:"Crear tarea →" },
     "wizard.date": { pt:"Data", en:"Date", es:"Fecha" },
-    "wizard.duplicate": { pt:"Duplicar existente", en:"Duplicate existing", es:"Duplicar existente" },
     "wizard.end": { pt:"Fim", en:"End", es:"Fin" },
     "wizard.fee": { pt:"Valor", en:"Fee", es:"Importe" },
-    "wizard.fromSaved": { pt:"dos seus modelos guardados", en:"from your saved templates", es:"de tus plantillas guardadas" },
     "wizard.fromScratch": { pt:"Do zero", en:"From scratch", es:"Desde cero" },
     "wizard.fullHint": { pt:"Gera contrato, briefing, cronograma e pagamentos automaticamente.", en:"Automatically generates contract, brief, schedule and payments.", es:"Genera automáticamente contrato, información del cliente, cronograma y pagos." },
     "wizard.fullMode": { pt:"Completo", en:"Full mode", es:"Completo" },
@@ -3333,7 +3223,6 @@
     "field.phonePlaceholder": { pt:"Número de telefone", en:"Phone number", es:"Número de teléfono" },
     "field.emailPlaceholder": { pt:"email@email.com", en:"email@email.com", es:"email@email.com" },
     "field.instagramPlaceholder": { pt:"@usuário", en:"@username", es:"@usuario" },
-    "wizard.searchByClientJob": { pt:"Procurar por cliente ou trabalho", en:"Search by client or job", es:"Buscar por cliente o trabajo" },
     "wizard.searchOrCreate": { pt:"Procurar ou criar…", en:"Search or create…", es:"Buscar o crear…" },
     "wizard.searchTemplates": { pt:"Procurar nos seus modelos", en:"Search your templates", es:"Buscar en tus plantillas" },
     "wizard.start": { pt:"Início", en:"Start", es:"Inicio" },
@@ -3345,7 +3234,6 @@
     "wizard.upload.file": { pt:"Carregar arquivo", en:"Upload file", es:"Subir archivo" },
     "wizard.upload.hint": { pt:"imagem, PDF ou .txt", en:"image, PDF or .txt", es:"imagen, PDF o .txt" },
     "wizard.useReferenceOrUpload": { pt:"Usa uma referência ou carrega um novo arquivo", en:"Use a reference or upload a new file", es:"Usa una referencia o sube un archivo nuevo" },
-    "wizard.useTemplate": { pt:"Usar um modelo", en:"Use a template", es:"Usar plantilla" },
     "wizard.viewReferences": { pt:"Ver referências guardadas", en:"View saved references", es:"Ver referencias guardadas" },
     "wizard.whatToSend": { pt:"O que enviar ao cliente?", en:"What to send the client?", es:"¿Qué enviar al cliente?" },
   };
@@ -4148,9 +4036,9 @@
     document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show', p.dataset.panel===name));
     const panelTitleKeys={
       home:'sheet.create', trabalho:'wizard.newJob', contrato:'wizard.newContract',
-      'contrato-usar':'wizard.useTemplate', 'contrato-duplicar':'wizard.duplicateContract',
+      'contrato-usar':'library.saved',
       'comunidade-contratos':'explore.library',
-      modelo:'wizard.newTemplate', 'modelo-lista':'wizard.newTemplate', 'modelo-colecao':'wizard.newCollection',
+      'modelo-lista':'wizard.newTemplate',
       'comunidade-modelos':'explore.library',
       cliente:'wizard.newClient', tarefa:'wizard.newTask',
       importar:'sheet.import', 'importar-texto':'sheet.import', 'importar-referencias':'sheet.import',
@@ -4197,7 +4085,6 @@
     if(name==='importar-referencias') renderReferenciasGuardadas();
     if(name==='comunidade-contratos') renderBibliotecaPanel('contratos');
     if(name==='comunidade-modelos') renderBibliotecaPanel('modelos');
-    if(name==='contrato-duplicar') renderListaDuplicarContrato();
     if(name==='contrato-usar') renderListaUsarModelo();
   }
   function panelBack(){
@@ -4450,7 +4337,7 @@
     html+='<p class="model-detail-desc">'+escapeHtml(m.desc)+'</p>';
     html+='<div class="plabel">Etiquetas</div>';
     html+='<div class="detail-structure">'+m.tags.map(t=>'<span class="struct-pill">'+escapeHtml(t)+'</span>').join('')+'</div>';
-    html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>Conteúdo da Biblioteca Pivot. Revê antes de usar — não é aconselhamento jurídico.</div></div>';
+    html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>Conteúdo dos Modelos Pivot. Revê antes de usar — não é aconselhamento jurídico.</div></div>';
     html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft" onclick="guardarModeloBiblioteca(\''+id+'\')">'+t('action.save')+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
     html+='<div class="plabel" style="margin-top:18px">Avaliação</div>';
     html+='<div id="avaliacao-stars-'+id+'"></div>';
@@ -6681,23 +6568,6 @@
     }
     renderBuilder();
     go('builder');
-  }
-  function renderListaDuplicarContrato(){
-    const wrap=document.getElementById('dup-contrato-lista');
-    if(!wrap) return;
-    const q=(document.getElementById('dup-contrato-busca').value||'').trim().toLowerCase();
-    const jobs=Object.values(jobsData).filter(j=>j.contract && j.contract.blocks && j.contract.blocks.length)
-      .filter(j=>!q || (j.client||'').toLowerCase().includes(q) || (j.typeLabel||'').toLowerCase().includes(q));
-    wrap.innerHTML = jobs.length ? jobs.map(j=>
-      '<div class="pick-row" onclick="duplicarContratoDoTrabalho(\''+j.id+'\')">'+
-      '<div><div class="nm">'+escapeHtml(j.client)+'</div><div class="sub">'+escapeHtml(j.typeLabel||'')+'</div></div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
-  }
-  function duplicarContratoDoTrabalho(jobId){
-    const origem=jobsData[jobId];
-    if(!origem) return;
-    abrirBuilderParaSelecao({ client:origem.client, nome:origem.contract.templateName||null, blocks: origem.contract.blocks.map((b,i)=>Object.assign({}, b, {id:'dup'+Date.now()+i})) });
   }
   function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go(builderVoltarView); } }
   function guardarBuilderContexto(){
@@ -9181,37 +9051,6 @@
     if(alterou) saveJobsData();
   }
 
-  /* 🧩 Modelo — Coleção */
-  function setColOpt(el,label){
-    const alt=el.closest('.colrow-alt');
-    alt.querySelectorAll('.colrow-opt').forEach(o=>o.classList.remove('active'));
-    el.classList.add('active');
-    const row=el.closest('.colrow');
-    row.querySelector('.colrow-head .s').textContent=label;
-    row.classList.remove('open');
-  }
-  function removeColRow(el){
-    el.closest('.colrow').style.display='none';
-    const visible=[...document.querySelectorAll('#col-rows .colrow')].some(r=>r.style.display!=='none');
-    const btn=document.getElementById('col-save');
-    btn.style.opacity = visible?'1':'.45';
-    btn.style.pointerEvents = visible?'auto':'none';
-  }
-  let colecoesData={};
-  function saveColecoesData(){ savePersisted('pivot-colecoesData', ()=>colecoesData); }
-  async function loadColecoesData(){ await loadPersisted('pivot-colecoesData', d=>{ colecoesData=d; }); }
-  function guardarColecao(){
-    const nome=document.getElementById('col-nome').value.trim()||'Coleção';
-    const componentes=[...document.querySelectorAll('#col-rows .colrow')].map(row=>({
-      tipo: row.dataset.comp,
-      opcao: row.querySelector('.colrow-opt.active') ? row.querySelector('.colrow-opt.active').textContent : null
-    }));
-    const id='col'+Date.now();
-    colecoesData[id]={id, nome, componentes, criadaEm:new Date().toISOString()};
-    saveColecoesData();
-    closeSheet(); showToast('"'+nome+t('toast.savedFemSuffix'));
-  }
-
   /* 🧩 Modelo — Briefing / Checklist / Cronograma (lista simples) */
   let modeloListType='briefing';
   const modeloListCopy={
@@ -9385,6 +9224,18 @@
   function abrirFiltrosBiblioteca(){
     openInfo(t('library.filterTitle'), buildBibFiltrosSheetHtml());
   }
+  /* "Salvos" — modelos pessoais do utilizador: hoje isto é exatamente o
+     conjunto de favoritos (bibFavoritos), único mecanismo de "guardar
+     modelo" que já existe no catálogo. */
+  function abrirSalvosBiblioteca(){
+    const itens=catalogoBiblioteca().filter(i=>bibFavoritos.has(i.id));
+    const linhas=itens.length ? itens.map(i=>
+      '<div class="prow" onclick="closeInfo();abrirDetalheBibliotecaPrincipal(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'+
+      '<div class="t">'+escapeHtml(i.titulo)+'</div>'+
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+    ).join('') : '<p style="font-size:13px;color:var(--ink-soft);padding:4px 2px">'+t('library.savedEmpty')+'</p>';
+    openInfo(t('library.saved'), '<div class="plist">'+linhas+'</div>');
+  }
   function limparFiltrosBiblioteca(){
     bibOrigemSel=new Set();
     bibFacetSel={categoriaAmigavel:null, profissao:null, contexto:null, coberturas:null};
@@ -9427,12 +9278,11 @@
       const fav=bibFavoritos.has(i.id);
       const rodape=[bibAutorLinha(i)];
       if(i.usos) rodape.push(BIB_ICON_THUMB+i.usos+' '+t('library.recommendCount'));
+      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
-        '<div class="bc-top"><div style="flex:1;min-width:0"><div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
-        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div></div>'+
-        '<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>'+
-        '</div>'+
-        (rodape.length?'<div class="bc-meta">'+rodape.join('<span>•</span>')+'</div>':'')+
+        '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
+        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
+        '<div class="bc-meta"><div class="bc-meta-l">'+rodape.join('<span>•</span>')+'</div>'+favBtn+'</div>'+
       '</div>';
     }).join('');
   }
@@ -9526,7 +9376,7 @@
      exatamente igual ao anterior. */
   const StorageAdapter = (function(){
     const KNOWN_KEYS=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
-      'pivot-colecoesData','pivot-referenciasData','pivot-modelosUso','pivot-servicosData',
+      'pivot-referenciasData','pivot-modelosUso','pivot-servicosData',
       'pivot-perfilData','pivot-metas','pivot-lembretesPerfil','pivot-sessao','pivot-tema'];
     const memoryStore={};
     function hasClaudeStorage(){ return typeof window!=='undefined' && !!window.storage; }
@@ -10537,7 +10387,7 @@
   const LIMITE_ARMAZENAMENTO_MB={Free:25, Plus:50, Pro:100, Business:500, Enterprise:Infinity};
   async function calcularArmazenamentoUsadoMB(){
     const chaves=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
-      'pivot-colecoesData','pivot-referenciasData','pivot-modelosUso','pivot-perfilData'];
+      'pivot-referenciasData','pivot-modelosUso','pivot-perfilData'];
     let bytes=0;
     for(const chave of chaves){
       const valor=await StorageAdapter.load(chave);
@@ -11141,7 +10991,7 @@
     await loadEquipaData();
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(), loadReceitasData(),
-      loadPerfilData(), loadMetas(), loadColecoesData(),
+      loadPerfilData(), loadMetas(),
       loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData()
     ]);
     renderMonthTicker();
