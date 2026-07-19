@@ -2248,6 +2248,9 @@
     "library.blocksCount": { pt:"blocos", en:"blocks", es:"bloques" },
     "library.protectedStructure": { pt:"Estrutura do contrato", en:"Contract structure", es:"Estructura del contrato" },
     "library.structureUnavailable": { pt:"Estrutura não disponível para pré-visualização.", en:"Structure preview not available.", es:"Estructura no disponible para vista previa." },
+    "library.blockRequired": { pt:"obrigatório", en:"required", es:"obligatorio" },
+    "library.blockOptional": { pt:"opcional", en:"optional", es:"opcional" },
+    "library.blockConditional": { pt:"condicional", en:"conditional", es:"condicional" },
     "library.protectedBlockSample": { pt:"Amostra de bloco protegido", en:"Protected block sample", es:"Muestra de bloque protegido" },
     "library.protectedBlock": { pt:"Conteúdo protegido", en:"Protected content", es:"Contenido protegido" },
     "library.import": { pt:"Importar", en:"Import", es:"Importar" },
@@ -4202,8 +4205,9 @@
         this._manifest = manifest;
         this._catalog = (idx.contractTypes||[]).map(c=>({
           id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
-          mercado: c.market, desc: null, tags: [], origem: 'oficial',
+          mercado: c.market, desc: c.desc||null, tags: c.tags||[], origem: 'oficial',
           verificado: c.status === 'FINAL APPROVED',
+          texto: c.previewText||null, blocks: c.blocks||[],
           requiredBlockCount: c.requiredBlockCount, optionalBlockCount: c.optionalBlockCount, clauseCount: c.clauseCount,
           numBlocos: (c.requiredBlockCount||0)+(c.optionalBlockCount||0) || null
         }));
@@ -8854,7 +8858,7 @@
     return LegalLibrary.list().map(b=>{
       const item={
         id:'of:'+b.id, titulo:b.titulo, categoria:b.categoria, desc:b.desc, tags:b.tags||[],
-        origem:b.origem, verificado:b.verificado,
+        origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[],
         profissao:bibProfissao(b),
         numBlocos: b.numBlocos,
         coberturas: bibCoberturasDoModelo(b)
@@ -9032,10 +9036,17 @@
     renderBiblioteca();
   }
   function bibEstruturaProtegidaHtml(item){
-    /* A composição real de blocos por contrato oficial ainda não existe
-       (ver nota em blocosParaModeloBiblioteca) — mostra o aviso padrão até
-       essa etapa ser feita, em vez de fabricar uma estrutura falsa. */
-    return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
+    /* Estrutura real de blocos do contrato oficial (nome + obrigatório/
+       opcional/condicional), vinda do Blueprint — a composição detalhada
+       de cláusulas por bloco (para import seletivo) ainda não existe, ver
+       nota em blocosParaModeloBiblioteca. */
+    if(!item.blocks || !item.blocks.length) return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
+    const pesos={REQUIRED:100, CONDITIONAL:70, OPTIONAL:45};
+    return '<div style="margin-bottom:14px">'+item.blocks.map(b=>{
+      const largura=pesos[b.status]||45;
+      const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(b.name)+' <span style="opacity:.6">· '+t(tagKey)+'</span></div><div class="bib-struct-bar"><i style="width:'+largura+'%"></i></div></div>';
+    }).join('')+'</div>';
   }
   function bibBlocoBlurHtml(item){
     const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
