@@ -421,27 +421,29 @@
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
                   <defs>
                     <linearGradient id="grad-esperado" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#C9D4BE"/>
-                      <stop offset="100%" stop-color="#9FB58C"/>
+                      <stop id="gd-esperado-0" offset="0%" stop-color="#C9D4BE"/>
+                      <stop id="gd-esperado-1" offset="100%" stop-color="#9FB58C"/>
                     </linearGradient>
                     <linearGradient id="grad-recebido" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#7A9468"/>
-                      <stop offset="100%" stop-color="#4C6B45"/>
+                      <stop id="gd-recebido-0" offset="0%" stop-color="#7A9468"/>
+                      <stop id="gd-recebido-1" offset="100%" stop-color="#4C6B45"/>
                     </linearGradient>
                     <linearGradient id="grad-despesas" x1="123" y1="123" x2="27" y2="27" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stop-color="#D9C9A0"/>
-                      <stop offset="25%" stop-color="#C9A855"/>
-                      <stop offset="50%" stop-color="#BC7C3E"/>
-                      <stop offset="75%" stop-color="#A85A38"/>
-                      <stop offset="90%" stop-color="#8B3A2E"/>
-                      <stop offset="100%" stop-color="#4A1F17"/>
+                      <stop id="gd-despesas-0" offset="0%" stop-color="#D9C9A0"/>
+                      <stop id="gd-despesas-1" offset="100%" stop-color="#4A1F17"/>
                     </linearGradient>
                   </defs>
-                  <circle class="mr-trilho mr-trilho-meta" cx="75" cy="75" r="59" stroke-width="10"/>
-                  <circle class="mr-ring mr-esperado" id="mr-esperado" cx="75" cy="75" r="59" stroke-width="10"/>
-                  <circle class="mr-ring mr-recebido" id="mr-recebido" cx="75" cy="75" r="59" stroke-width="10"/>
-                  <circle class="mr-trilho mr-trilho-teto" cx="75" cy="75" r="48" stroke-width="10"/>
-                  <circle class="mr-ring mr-despesas" id="mr-despesas" cx="75" cy="75" r="48" stroke-width="10"/>
+                  <!-- pista única compartilhada pelas 3 fitas (Esperado/Recebido/Despesas);
+                       ver pintarFita/reordenarCamadasFitas — camada 1 (voltas fechadas, círculo
+                       cheio) sempre no fundo, camada 2 (pontas, arco parcial) por cima, ordenada
+                       dinamicamente pela fração da volta atual para nenhuma ponta ficar escondida. -->
+                  <circle class="mr-trilho" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-base" id="mr-esperado-base" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-base" id="mr-recebido-base" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-base" id="mr-despesas-base" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-tip mr-esperado" id="mr-esperado" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-tip mr-recebido" id="mr-recebido" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-tip mr-despesas" id="mr-despesas" cx="75" cy="75" r="59" stroke-width="12"/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Total</span>
@@ -3363,30 +3365,85 @@
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
+  /* rampas de cor de cada fita do gráfico Financeiro — o índice é "quantas
+     vezes o valor já passou da meta/teto" (1 = 100%). Esperado/Recebido
+     apenas mantêm o tom final ao crescer além de 100%; Despesas continua
+     evoluindo (vermelho → bordô/roxo) sem limite, pra comunicar visualmente
+     que o teto foi ultrapassado sem precisar de um anel de referência
+     próprio. Ver pintarFita/reordenarCamadasFitas. */
+  const FITA_RAMPS={
+    esperado:[[0,'#C9D4BE'],[1,'#9FB58C'],[3,'#9FB58C']],
+    recebido:[[0,'#7A9468'],[1,'#4C6B45'],[3,'#4C6B45']],
+    despesas:[[0,'#D9C9A0'],[.5,'#C9A855'],[.75,'#BC7C3E'],[.9,'#A85A38'],[1,'#4A1F17'],[1.6,'#6B1E3D'],[2.4,'#3A0F26'],[4,'#2A0A1B']]
+  };
+  const FITA_STATE={};
+  function hexParaRgb(h){ h=h.replace('#',''); return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)]; }
+  function misturarCor(a,b,t){
+    const pa=hexParaRgb(a), pb=hexParaRgb(b);
+    return 'rgb('+Math.round(pa[0]+(pb[0]-pa[0])*t)+','+Math.round(pa[1]+(pb[1]-pa[1])*t)+','+Math.round(pa[2]+(pb[2]-pa[2])*t)+')';
+  }
+  function corNaRampa(ramp, ratio){
+    ratio=Math.max(0, Math.min(ratio, ramp[ramp.length-1][0]));
+    for(let i=0;i<ramp.length-1;i++){
+      const p0=ramp[i][0], c0=ramp[i][1], p1=ramp[i+1][0], c1=ramp[i+1][1];
+      if(ratio<=p1) return misturarCor(c0, c1, p1>p0 ? (ratio-p0)/(p1-p0) : 0);
+    }
+    return ramp[ramp.length-1][1];
+  }
+  /* pinta uma fita do gráfico Financeiro: camada 1 (mr-<key>-base) é um
+     círculo cheio, sólido na cor do fim da última volta completa — fica
+     sempre visível por baixo. Camada 2 (mr-<key>) é o arco da volta atual,
+     com um gradiente que começa exatamente nessa mesma cor e termina na cor
+     do valor exato de agora — por isso nunca existe salto/quebra ao virar
+     a volta. Se o valor ultrapassa 100%, o arco não reinicia: só continua
+     a crescer (e mudando de cor) a partir do zero da pista de novo. */
+  function pintarFita(key, num, den){
+    const ramp=FITA_RAMPS[key];
+    const elTip=document.getElementById('mr-'+key), elBase=document.getElementById('mr-'+key+'-base');
+    if(!elTip) return null;
+    const r=59, circ=2*Math.PI*r;
+    const ratio=den>0 ? num/den : (num>0?1:0);
+    const laps=Math.floor(ratio), frac=ratio-laps;
+    const corInicio=corNaRampa(ramp, laps), corFim=corNaRampa(ramp, ratio);
+    const s0=document.getElementById('gd-'+key+'-0'), s1=document.getElementById('gd-'+key+'-1');
+    if(s0) s0.setAttribute('stop-color', corInicio);
+    if(s1) s1.setAttribute('stop-color', corFim);
+    elTip.style.transition='none';
+    elTip.style.strokeDasharray=circ;
+    elTip.style.strokeDashoffset=circ;
+    void elTip.offsetWidth;
+    elTip.style.transition='stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)';
+    setTimeout(()=>{ elTip.style.strokeDashoffset=circ*(1-frac); }, 60);
+    if(elBase){
+      elBase.style.strokeDasharray=circ;
+      elBase.style.strokeDashoffset=0;
+      elBase.style.stroke=corInicio;
+      elBase.style.opacity=laps>0?1:0;
+    }
+    return {ratio, laps, frac};
+  }
+  /* reorganiza as camadas do gráfico Financeiro a cada render: toda fita com
+     ao menos uma volta fechada (círculo cheio) desce para o fundo — um
+     círculo cheio cobre todos os ângulos, então se ficasse por cima
+     esconderia a ponta de qualquer outra fita. As pontas (arco parcial da
+     volta atual, que nunca cobre o anel inteiro) competem só entre si: a de
+     menor fração fica por cima, senão a fita mais "cheia" na volta atual
+     engoliria a ponta de quem está começando a volta. */
+  function reordenarCamadasFitas(){
+    const svg=document.querySelector('.ms-rings-svg');
+    if(!svg) return;
+    const chaves=['esperado','recebido','despesas'];
+    chaves.forEach(k=>{ const b=document.getElementById('mr-'+k+'-base'); if(b) svg.appendChild(b); });
+    chaves.map(k=>({k, frac:(FITA_STATE[k]||{}).frac||0}))
+      .sort((a,b)=>b.frac-a.frac)
+      .forEach(d=>{ const el=document.getElementById('mr-'+d.k); if(el) svg.appendChild(el); });
+  }
   function renderRingsDashboard(recebido, esperado, custos){
     const meta=METAS.receita||1, teto=METAS.gastos||1;
-    /* 2 anéis: Meta é o trilho externo (sempre cheio, é só referência visual, sem
-       progresso próprio) com Esperado e Recebido sobrepostos no mesmo raio — a
-       barra de MENOR valor fica sempre por cima (mais acima na pilha visual),
-       a de MAIOR valor por baixo. É essa camada de baixo que mostra a "sobra"
-       de crescimento além do que a camada de cima cobre. Teto é o trilho
-       interno, com Despesas sobreposta da mesma forma. Despesas usa um
-       gradiente SVG fixo (grad-despesas) que vai do amarelo claro ao vermelho
-       conforme o arco cresce. Nenhum progresso ultrapassa o círculo completo:
-       ao chegar a 100% o anel para cheio (com sombreado a indicar que já
-       passou da meta) em vez de reiniciar do zero — ver pintarAnelComVolta. */
-    const trilhoMeta=document.querySelector('.mr-trilho-meta');
-    /* a barra de MENOR valor fica sempre por último no DOM (por cima), a de
-       MAIOR valor por baixo — reordena os elementos a cada render, recalculando
-       a hierarquia sempre que os valores mudam. */
-    const espEl=document.getElementById('mr-esperado'), recEl=document.getElementById('mr-recebido');
-    if(espEl && recEl){
-      if(esperado>=recebido) espEl.parentNode.insertBefore(espEl, recEl);
-      else espEl.parentNode.insertBefore(recEl, espEl);
-    }
-    pintarAnelComVolta('mr-esperado', 59, esperado, meta, trilhoMeta);
-    pintarAnelComVolta('mr-recebido', 59, recebido, meta, trilhoMeta);
-    pintarAnelComVolta('mr-despesas', 48, custos, teto);
+    FITA_STATE.esperado=pintarFita('esperado', esperado, meta);
+    FITA_STATE.recebido=pintarFita('recebido', recebido, meta);
+    FITA_STATE.despesas=pintarFita('despesas', custos, teto);
+    reordenarCamadasFitas();
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));

@@ -27,10 +27,15 @@
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:148px;height:148px;transform:rotate(-90deg)}
-  .mr-trilho{fill:none}
-  .mr-trilho-meta{stroke:rgba(242,245,243,.45)}
-  .mr-trilho-teto{stroke:rgba(255,255,255,.22)}
-  .mr-ring{fill:none;stroke-linecap:butt;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1px rgba(0,0,0,.2))}
+  .mr-trilho{fill:none;stroke:rgba(255,255,255,.16)}
+  .mr-ring{fill:none;stroke-linecap:butt}
+  /* camada 1 — voltas já fechadas (círculo cheio, cor "congelada" no ponto em
+     que a volta terminou); fica sempre no fundo, por isso a sombra é maior/
+     mais soft, para dar profundidade a quem está por baixo das pontas */
+  .mr-base{opacity:0;transition:opacity .3s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+  /* camada 2 — a ponta em crescimento (arco parcial da volta atual); sombra
+     mais curta/nítida, para parecer a fita de cima da pilha */
+  .mr-tip{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1px rgba(0,0,0,.2))}
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
