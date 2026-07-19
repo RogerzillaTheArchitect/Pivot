@@ -47,12 +47,14 @@
   /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo.
      Sem cantos arredondados em pílula (isso lê como progress bar de UI) — traço
      fino e reto, mais perto de um gráfico de relatório do que de um componente. */
-  .rel-line-item{margin-bottom:11px}
-  .rel-line-item:last-child{margin-bottom:0}
-  .rel-line-value-row{display:flex;justify-content:flex-end;margin-bottom:4px}
-  .rel-line-value{font-family:var(--font-numeric),inherit;font-size:15px;font-weight:600;color:var(--ink)}
-  .rel-line-bar{height:15px;border-radius:4px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
-  .rel-line-label{display:block;margin-top:4px;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-soft)}
+  /* titulo, valor e barra na mesma linha; as barras ficam coladas
+     verticalmente umas nas outras (sem espaco entre as linhas) e com
+     arestas retas, lendo como um unico bloco empilhado. */
+  .rel-line-item{display:flex;align-items:center;gap:10px}
+  .rel-line-label{width:64px;flex:none;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+  .rel-line-value{width:58px;flex:none;text-align:right;font-family:var(--font-numeric),inherit;font-size:13px;font-weight:600;color:var(--ink)}
+  .rel-line-bar-track{flex:1;height:22px;background:var(--paper-2)}
+  .rel-line-bar{height:100%;border-radius:0;transition:width .5s cubic-bezier(.2,.8,.2,1)}
   /* mesma fonte numérica usada no anel do card Financeiro (Dashboard), agora
      em todos os textos e números dos cards de Relatórios — herdada pela
      view inteira, com os elementos que já tinham fonte própria (título da
