@@ -4,6 +4,20 @@
   .date-year{font-family:var(--font-year),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;font-weight:400;color:#F5F5F2;opacity:.7;letter-spacing:.02em;margin-top:4px}
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px}
   .section-label-out:not(:first-of-type){margin-top:32px}
+  .section-label-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+  .section-label-row .section-label-out{margin:0}
+  /* aba estilo pasta: rótulo encostado no topo do card do dashboard,
+     como uma aba de pasta física, em vez de flutuar solto acima dele. */
+  .section-label-out.folder-tab,.section-label-row.folder-tab{display:inline-flex;align-items:center;margin:0 0 -1px;padding:8px 14px;
+    border-radius:var(--r) var(--r) 0 0;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);
+    border:1px solid rgba(255,255,255,.10);border-bottom:none;position:relative;z-index:1}
+  .section-label-out.folder-tab:not(:first-of-type),.section-label-row.folder-tab:not(:first-of-type){margin-top:32px}
+  .section-label-row.folder-tab .section-menu-btn{margin-left:8px}
+  .section-label-row.folder-tab+.month-summary{margin-top:-1px}
+  .section-menu-btn{flex:none;width:26px;height:26px;display:grid;place-items:center;cursor:pointer;color:var(--label-out);opacity:.75;transition:opacity .15s}
+  .section-menu-btn:hover{opacity:1}
+  .section-menu-btn svg{width:16px;height:16px}
   .month-summary{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(122,124,116,.10);border:1px solid rgba(255,255,255,.10);
     border-radius:12px;margin:12px 0 22px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
@@ -24,10 +38,15 @@
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
   .mr-despesas{stroke:url(#grad-despesas)}
-  .ms-rings-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;
+  /* apenas o número fica centrado no anel — o rótulo "Total" é ancorado
+     acima dele, fora do cálculo de centralização, para não puxar o
+     conjunto para baixo do centro. */
+  .ms-rings-center{position:absolute;inset:0;pointer-events:none;
     width:74px;height:74px;margin:auto;padding:0 4px;box-sizing:border-box}
-  .ms-rings-center-val{font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:15px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;text-align:center}
-  .ms-rings-center-lbl{display:block;font-size:8px;font-weight:600;letter-spacing:.05em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center;margin-bottom:3px}
+  .ms-rings-center-val{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font-family:var(--font-numeric),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:15px;color:var(--ink);letter-spacing:-.01em;line-height:1;white-space:nowrap;text-align:center}
+  .ms-rings-center-lbl{position:absolute;left:50%;bottom:50%;transform:translateX(-50%);margin-bottom:10px;
+    display:block;font-size:8px;font-weight:600;letter-spacing:.05em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center;white-space:nowrap}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:400;color:var(--ink-soft);padding:8px 0;cursor:pointer}
   .mrl-item:first-child{color:var(--ink)}
