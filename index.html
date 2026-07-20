@@ -4197,21 +4197,32 @@
      marketplace. */
   const LegalLibrary = {
     _catalog: [], _byId: new Map(), _detailCache: new Map(), _manifest: null, _basePath: 'legal-library/',
+    _i18nAvailable: {pt:new Set(), es:new Set()},
     async init(){
       try{
-        const [manifest, idx] = await Promise.all([
+        const [manifest, idx, i18nManifest] = await Promise.all([
           fetch(this._basePath+'manifest.json').then(r=>r.json()),
-          fetch(this._basePath+'index.json').then(r=>r.json())
+          fetch(this._basePath+'index.json').then(r=>r.json()),
+          fetch(this._basePath+'i18n/manifest.json').then(r=>r.ok?r.json():{available:{}}).catch(()=>({available:{}}))
         ]);
         this._manifest = manifest;
-        this._catalog = (idx.contractTypes||[]).map(c=>({
-          id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
-          mercado: c.market, desc: c.desc||null, tags: c.tags||[], origem: 'oficial',
-          verificado: c.status === 'FINAL APPROVED', idioma: c.language||'en',
-          texto: c.previewText||null, blocks: c.blocks||[],
-          requiredBlockCount: c.requiredBlockCount, optionalBlockCount: c.optionalBlockCount, clauseCount: c.clauseCount,
-          numBlocos: (c.requiredBlockCount||0)+(c.optionalBlockCount||0) || null
-        }));
+        this._i18nAvailable = {
+          pt: new Set((i18nManifest.available&&i18nManifest.available.pt)||[]),
+          es: new Set((i18nManifest.available&&i18nManifest.available.es)||[])
+        };
+        this._catalog = (idx.contractTypes||[]).map(c=>{
+          const idiomas=['en'];
+          if(this._i18nAvailable.pt.has(c.slug)) idiomas.push('pt');
+          if(this._i18nAvailable.es.has(c.slug)) idiomas.push('es');
+          return {
+            id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
+            mercado: c.market, desc: c.desc||null, tags: c.tags||[], origem: 'oficial',
+            verificado: c.status === 'FINAL APPROVED', idioma: idiomas,
+            texto: c.previewText||null, blocks: c.blocks||[],
+            requiredBlockCount: c.requiredBlockCount, optionalBlockCount: c.optionalBlockCount, clauseCount: c.clauseCount,
+            numBlocos: (c.requiredBlockCount||0)+(c.optionalBlockCount||0) || null
+          };
+        });
       }catch(e){
         console.warn('LegalLibrary: catálogo indisponível, seguindo com biblioteca vazia.', e);
         this._manifest = {published:false};
@@ -4231,14 +4242,36 @@
       return out;
     },
     get(id){ return this._byId.get(id) || null; },
-    async getDetail(id){
-      if(this._detailCache.has(id)) return this._detailCache.get(id);
+    /* lang: 'en' (padrão) devolve o Master English tal como compilado. 'pt'/'es'
+       tentam mesclar a tradução de legal-library/i18n/<lang>/<slug>.json por cima
+       do detalhe em inglês, casando cláusula por id — qualquer cláusula sem
+       tradução (arquivo ausente, id não encontrado) cai de volta pro inglês em
+       vez de mostrar vazio, e o inglês nunca é modificado no cache. */
+    async getDetail(id, lang='en'){
+      const cacheKey=id+'::'+lang;
+      if(this._detailCache.has(cacheKey)) return this._detailCache.get(cacheKey);
       const c=this.get(id); if(!c) return null;
+      let detail;
       try{
-        const detail = await fetch(this._basePath+'contracts/'+c.id+'.json').then(r=>r.json());
-        this._detailCache.set(id, detail);
-        return detail;
+        detail = await fetch(this._basePath+'contracts/'+c.id+'.json').then(r=>r.json());
       }catch(e){ console.warn('LegalLibrary: detalhe indisponível para', id, e); return null; }
+      if(lang!=='en' && this._i18nAvailable[lang] && this._i18nAvailable[lang].has(c.id)){
+        try{
+          const trans = await fetch(this._basePath+'i18n/'+lang+'/'+c.id+'.json').then(r=>r.json());
+          const clauseById=new Map();
+          (trans.blocks||[]).forEach(b=>(b.clauses||[]).forEach(cl=>clauseById.set(cl.id, cl.text)));
+          detail = {
+            ...detail,
+            meta: {...detail.meta, language: lang, status: trans.status||detail.meta.status},
+            blocks: detail.blocks.map(b=>({
+              ...b,
+              clauses: b.clauses.map(cl=>({...cl, text: clauseById.has(cl.id) ? clauseById.get(cl.id) : cl.text}))
+            }))
+          };
+        }catch(e){ console.warn('LegalLibrary: tradução indisponível para', id, lang, e); }
+      }
+      this._detailCache.set(cacheKey, detail);
+      return detail;
     },
     resolveClauseText(text, fieldValues={}){
       return text.replace(/\[([A-Z0-9_]+)\]/g, (m,name)=> (fieldValues[name]!=null ? fieldValues[name] : m));
@@ -4271,7 +4304,7 @@
      (o usuário ativa o que quiser) — mesma convenção do esqueleto genérico. */
   async function blocosParaModeloBiblioteca(m){
     const rawId = m && m.id ? String(m.id).replace(/^of:/,'') : null;
-    const detail = rawId ? await LegalLibrary.getDetail(rawId) : null;
+    const detail = rawId ? await LegalLibrary.getDetail(rawId, LANG) : null;
     if(!detail || !detail.blocks || !detail.blocks.length) return blocosModeloPadrao();
     const valores = valoresDynamicFieldsDoJob(getBuilderJob());
     const blocosComTexto = detail.blocks.filter(b=>b.status!=='CONDITIONAL' && b.clauses && b.clauses.length);
@@ -8856,10 +8889,10 @@
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
   }
-  /* Todo o conteúdo oficial hoje está só em inglês (Master English, por
-     PLDS-001) — o campo idioma já vem do arquivo (frontmatter language:),
-     não é fabricado. O mapa cobre os 3 idiomas do app; qualquer outro
-     aparece com o próprio código. */
+  /* item.idioma é um array (['en','pt','es', ...]) — todo contrato tem o
+     Master English (PLDS-001) e pode ter traduções em legal-library/i18n/.
+     O mapa cobre os 3 idiomas do app; qualquer outro aparece com o próprio
+     código. */
   const BIB_IDIOMA_NOMES={en:'English', pt:'Português', es:'Español'};
   function bibNomeIdioma(code){ return BIB_IDIOMA_NOMES[code] || code; }
   const BIB_CATEGORIA_AMIGAVEL={

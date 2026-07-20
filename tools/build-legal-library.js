@@ -164,24 +164,36 @@ function parseContractFile(file) {
   const blocks = [];
   let curBlock = null, curClause = null;
   const dynamicFieldsSeen = new Set();
+  // Os arquivos têm seções depois de "STEP 4 — CLAUSES" (STEP 5 — SELF-REVIEW,
+  // STEP 6 — RED TEAM, FINAL STATUS) com notas internas de revisão — não são
+  // texto contratual. Sem esse controle, a última cláusula do arquivo
+  // "engolia" esse conteúdo inteiro, porque nada resetava curClause ao sair
+  // da seção de cláusulas (só as próprias linhas de heading eram ignoradas,
+  // não o corpo de texto depois delas).
+  let inClauseSection = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     let m;
-    if ((m = line.match(/^### BLOCK: (.+?) — (REQUIRED|OPTIONAL|CONDITIONAL)/))) {
+    if ((m = line.match(/^## .*CLAUSES/i))) {
+      inClauseSection = true;
+    } else if (/^## /.test(line)) {
+      inClauseSection = false;
+      curBlock = null; curClause = null;
+    } else if (inClauseSection && (m = line.match(/^### BLOCK: (.+?) — (REQUIRED|OPTIONAL|CONDITIONAL)/))) {
       curBlock = { name: m[1].trim(), status: m[2], clauses: [], dynamicFields: [] };
       blocks.push(curBlock);
       curClause = null;
-    } else if (curBlock && (m = line.match(/^\*\*([a-z0-9_]+\.[a-z0-9_.]+)\*\*/))) {
+    } else if (inClauseSection && curBlock && (m = line.match(/^\*\*([a-z0-9_]+\.[a-z0-9_.]+)\*\*/))) {
       curClause = { id: m[1], version: null, text: '' };
       curBlock.clauses.push(curClause);
-    } else if (curClause && curClause.version === null && (m = line.match(/^v(\d+\.\d+\.\d+)\s*$/))) {
+    } else if (inClauseSection && curClause && curClause.version === null && (m = line.match(/^v(\d+\.\d+\.\d+)\s*$/))) {
       curClause.version = m[1];
-    } else if (curBlock && (m = line.match(/^Dynamic Fields:\s*(.+)$/))) {
+    } else if (inClauseSection && curBlock && (m = line.match(/^Dynamic Fields:\s*(.+)$/))) {
       const fields = [...m[1].matchAll(/\[([A-Z0-9_]+)\]/g)].map(x => x[1]);
       curBlock.dynamicFields = fields;
       fields.forEach(f => dynamicFieldsSeen.add(f));
-    } else if (curClause && line.trim() && !line.startsWith('---') && !line.startsWith('#')) {
+    } else if (inClauseSection && curClause && line.trim() && !line.startsWith('---') && !line.startsWith('#')) {
       curClause.text += (curClause.text ? ' ' : '') + line.trim();
     }
   }
