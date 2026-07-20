@@ -466,86 +466,60 @@
           <span class="fo-title" data-t="reports.opStats">Estatísticas Operacionais</span>
         </div>
         <div class="fo-divider"></div>
-        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-          <defs>
-            <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#B8C7A8"/>
-              <stop offset="50%" stop-color="#83996E"/>
-              <stop offset="100%" stop-color="#5E7A52"/>
-            </linearGradient>
-            <linearGradient id="grad-mini-progress-light" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#5A8D67"/>
-              <stop offset="50%" stop-color="#4B7A58"/>
-              <stop offset="100%" stop-color="#365C43"/>
-            </linearGradient>
-          </defs>
-        </svg>
-          <div class="jobs-stat-grid6" onclick="abrirRelatorios('operacional')">
-          <div class="jobs-stat-col">
-            <span class="ms-c-label" data-t="home.hours">Horas</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-horas" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center" style="font-size:10px"><span id="mt-horas-num">0h</span></div>
+          <div class="ops-stat-list" onclick="abrirRelatorios('operacional')">
+          <div class="ops-stat-row">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 2"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.hours">Horas</span>
+              <div class="ops-stat-value"><b id="mt-horas-num">0h</b><span class="ops-stat-den" id="mt-horas-den-wrap"> / <span id="mt-horas-den">0h</span></span></div>
+              <span class="ops-stat-trend" id="trend-horas"></span>
             </div>
-            <span class="ms-c-trend" id="trend-horas"></span>
+            <div class="ops-stat-bar" id="bar-horas"></div>
           </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
-            <span class="ms-c-label" data-t="home.pending">Pendências</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-aguardando" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-aguardando-num">0</span><span class="mini-ring-slash">/</span><span id="mt-aguardando-den">0</span></div>
+          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M10 8h6v6"/><path d="M16 8 9 15"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.pending">Pendências</span>
+              <div class="ops-stat-value"><b id="mt-aguardando-num">0</b><span class="ops-stat-den"> / <span id="mt-aguardando-den">0</span></span></div>
+              <span class="ops-stat-trend" id="trend-aguardando"></span>
             </div>
-            <span class="ms-c-trend" id="trend-aguardando"></span>
+            <div class="ops-stat-bar" id="bar-aguardando"></div>
           </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
-            <span class="ms-c-label" data-t="home.demands">Demandas</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-demandas" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-demandas-num">0</span><span class="mini-ring-slash">/</span><span id="mt-demandas-den">0</span></div>
+          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M14 8H8v6"/><path d="M8 8l7 7"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.demands">Demandas</span>
+              <div class="ops-stat-value"><b id="mt-demandas-num">0</b><span class="ops-stat-den"> / <span id="mt-demandas-den">0</span></span></div>
+              <span class="ops-stat-trend" id="trend-demandas"></span>
             </div>
-            <span class="ms-c-trend" id="trend-demandas"></span>
+            <div class="ops-stat-bar" id="bar-demandas"></div>
           </div>
-          <div class="jobs-stat-col">
-            <span class="ms-c-label" data-t="home.closed">Fechados</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-fechados-num">0</span></div>
+          <div class="ops-stat-row">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8.5 12.5 2.3 2.3L16 10"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.closed">Fechados</span>
+              <div class="ops-stat-value"><b id="mt-fechados-num">0</b></div>
+              <span class="ops-stat-trend" id="trend-fechados"></span>
             </div>
-            <span class="ms-c-trend" id="trend-fechados"></span>
+            <div class="ops-stat-bar" id="bar-fechados" style="visibility:hidden"></div>
           </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();go('historico')">
-            <span class="ms-c-label" data-t="home.executed">Executados</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-executados" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-executados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-executados-den">0</span></div>
+          <div class="ops-stat-row" onclick="event.stopPropagation();go('historico')">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5v14M12 5v14M16 5v14"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.executed">Executados</span>
+              <div class="ops-stat-value"><b id="mt-executados-num">0</b><span class="ops-stat-den"> / <span id="mt-executados-den">0</span></span></div>
+              <span class="ops-stat-trend" id="trend-executados"></span>
             </div>
-            <span class="ms-c-trend" id="trend-executados"></span>
+            <div class="ops-stat-bar" id="bar-executados"></div>
           </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
-            <span class="ms-c-label" data-t="home.completedTile">Concluídos</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-entregues" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-entregues-num">0</span><span class="mini-ring-slash">/</span><span id="mt-entregar-den">0</span></div>
+          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
+            <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 21V4h11l-2.5 3.5L17 11H6"/></svg></div>
+            <div class="ops-stat-info">
+              <span class="ops-stat-name" data-t="home.completedTile">Concluídos</span>
+              <div class="ops-stat-value"><b id="mt-entregues-num">0</b><span class="ops-stat-den"> / <span id="mt-entregar-den">0</span></span></div>
+              <span class="ops-stat-trend" id="trend-entregues"></span>
             </div>
-            <span class="ms-c-trend" id="trend-entregues"></span>
+            <div class="ops-stat-bar" id="bar-entregues"></div>
           </div>
           </div>
         </div>
@@ -2920,6 +2894,7 @@
     // --- Configurações ---
     "settings.costsMonth": { pt:"Custos do mês", en:"Monthly costs", es:"Costes del mes" },
     "settings.limitLabel": { pt:"Limite de gastos este mês", en:"Monthly spending limit", es:"Límite de gastos mensual" },
+    "settings.hoursGoalLabel": { pt:"Meta de horas mensais", en:"Monthly hours goal", es:"Meta de horas mensuales" },
     "settings.projectedLabel": { pt:"Faturamento previsto este mês", en:"Projected revenue this month", es:"Ingresos previstos este mes" },
     "settings.ringHint": { pt:"Usado para calcular as percentagens e os anéis no resumo financeiro.", en:"Used to calculate the percentages and rings in the financial summary.", es:"Usado para calcular los porcentajes y los anillos del resumen financiero." },
     "settings.title": { pt:"Configurações", en:"Settings", es:"Ajustes" },
@@ -3348,7 +3323,7 @@
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
   }
-  let METAS={receita:0, gastos:0};
+  let METAS={receita:0, gastos:0, horas:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
   async function loadMetas(){
     await loadPersisted('pivot-metas', d=>{ METAS=Object.assign({}, METAS, d); });
@@ -3358,18 +3333,33 @@
     openInfo(t('modal.setGoals'), `
       <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${METAS.receita}" placeholder="4300"></div>
       <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${METAS.gastos}" placeholder="500"></div>
+      <div class="field"><label>${t('settings.hoursGoalLabel')}</label><input type="number" min="0" id="meta-horas-input" value="${METAS.horas}" placeholder="75"></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
       <button class="btn primary" style="width:100%" onclick="guardarMetas()">${t('action.saveGoals')}</button>`);
   }
   function guardarMetas(){
     const r=parseFloat(document.getElementById('meta-receita-input').value)||0;
     const g=parseFloat(document.getElementById('meta-gastos-input').value)||0;
-    METAS.receita=r; METAS.gastos=g;
+    const h=parseFloat(document.getElementById('meta-horas-input').value)||0;
+    METAS.receita=r; METAS.gastos=g; METAS.horas=h;
     saveMetas();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
+  }
+  /* Barra segmentada das Estatísticas Operacionais: sempre 20 segmentos fixos,
+     cada um valendo 5% da meta — nunca um segmento por unidade (ver PLDS da
+     tarefa). Sem meta (den<=0), a barra fica oculta (ver "Fechados"). */
+  function renderSegBar(id, num, den){
+    const el=document.getElementById(id);
+    if(!el) return;
+    if(!den || den<=0){ el.innerHTML=''; return; }
+    const pct=Math.max(0, Math.min(100, (num/den)*100));
+    const preenchidos=Math.round(pct/5);
+    let html='';
+    for(let i=0;i<20;i++) html+='<span class="ops-seg'+(i<preenchidos?' on':'')+'"></span>';
+    el.innerHTML=html;
   }
   /* rampas de cor de cada fita do gráfico Financeiro — o índice é "quantas
      vezes o valor já passou da meta/teto" (1 = 100%). Esperado/Recebido
@@ -3628,39 +3618,41 @@
       el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
     };
     /* Fechados: sem meta — mostra só a contagem de trabalhos fechados este mês,
-       anel decorativo sempre cheio (não há "0/N" possível sem alvo). */
+       sem barra segmentada (não há "0/N" possível sem alvo). */
     set('mt-fechados-num', s.fechadosEsteMes);
-    pintarAnelComVolta('ring-fechados', 25, 1, 1);
     setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
     /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
     set('mt-executados-num', s.executadosCount);
     set('mt-executados-den', s.totalJobs);
-    pintarAnelComVolta('ring-executados', 25, s.executadosCount, s.totalJobs);
+    renderSegBar('bar-executados', s.executadosCount, s.totalJobs);
     setTrend('trend-executados', s.executadosEsteMes, s.executadosMesAnterior);
-    /* Horas: soma da duração dos trabalhos deste mês — também sem meta.
-       Formato compacto (18h / 18h30) para caber no centro do anel pequeno. */
+    /* Horas: soma da duração dos trabalhos deste mês, contra a meta mensal de
+       horas definida em Metas e Limites. Formato compacto (18h / 18h30). */
     const horasCompacto=v=>{
       v=v||0;
       const h=Math.floor(v), m=Math.round((v-h)*60);
       return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
     };
     set('mt-horas-num', horasCompacto(s.horasEsteMes));
-    pintarAnelComVolta('ring-horas', 25, 1, 1);
+    set('mt-horas-den', horasCompacto(METAS.horas));
+    const horasDenWrap=document.getElementById('mt-horas-den-wrap');
+    if(horasDenWrap) horasDenWrap.style.display = METAS.horas>0 ? '' : 'none';
+    renderSegBar('bar-horas', s.horasEsteMes, METAS.horas);
     setTrend('trend-horas', s.horasEsteMes, s.horasMesAnterior);
     /* Entregues: já era uma fração real (entregues / entregues+a entregar) */
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
+    renderSegBar('bar-entregues', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
     setTrend('trend-entregues', s.entreguesEsteMes, s.entreguesMesAnterior);
     /* Aguardando: pendências do lado do cliente sobre o total de trabalhos */
     set('mt-aguardando-num', s.pendClienteCount);
     set('mt-aguardando-den', s.totalJobs);
-    pintarAnelComVolta('ring-aguardando', 25, s.pendClienteCount, s.totalJobs);
+    renderSegBar('bar-aguardando', s.pendClienteCount, s.totalJobs);
     setTrend('trend-aguardando', s.pendClienteEsteMes, s.pendClienteMesAnterior);
     /* Demandas: pendências do meu lado sobre o total de trabalhos */
     set('mt-demandas-num', s.pendMeuCount);
     set('mt-demandas-den', s.totalJobs);
-    pintarAnelComVolta('ring-demandas', 25, s.pendMeuCount, s.totalJobs);
+    renderSegBar('bar-demandas', s.pendMeuCount, s.totalJobs);
     setTrend('trend-demandas', s.pendMeuEsteMes, s.pendMeuMesAnterior);
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
