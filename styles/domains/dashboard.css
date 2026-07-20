@@ -4,9 +4,6 @@
   .date-year{font-family:var(--font-year),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;font-weight:400;color:#F5F5F2;opacity:.7;letter-spacing:.02em;margin-top:4px}
   .section-label-out{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;display:block;margin:0 0 12px;text-align:center}
   .section-label-out:not(:first-of-type){margin-top:32px}
-  .section-menu-btn{flex:none;width:26px;height:26px;display:grid;place-items:center;cursor:pointer;color:var(--label-out);opacity:.75;transition:opacity .15s}
-  .section-menu-btn:hover{opacity:1}
-  .section-menu-btn svg{width:16px;height:16px}
   /* Financeiro + Estatísticas Operacionais vivem no mesmo card, cada um
      com seu título centrado dentro; o menu (⋮) do Financeiro fica
      ancorado à direita do próprio título, não da largura do card. */
@@ -17,13 +14,12 @@
     --ink:#F5F5F2; --ink-soft:#C9C9C2; --ink-faint:#8E8E86; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
-  .fo-title-row{position:relative;display:flex;align-items:center;justify-content:center;padding:0 18px 8px}
+  .fo-title-row{position:relative;display:flex;align-items:center;justify-content:center;padding:0 18px}
   .fo-title{font-size:12px;color:var(--label-out);letter-spacing:.12em;font-weight:600;text-transform:uppercase;text-align:center}
-  .fo-title-row .section-menu-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%)}
-  .fo-divider{height:1px;background:var(--line-soft);margin:4px 18px 14px}
+  .fo-divider{height:1px;background:var(--line-soft);margin:14px 18px}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:148px;flex:none;display:flex;flex-direction:column;align-items:center}
-  .ms-progress-row{display:grid;grid-template-columns:minmax(0,1fr) 148px;align-items:center;gap:10px;padding:16px 18px;cursor:pointer}
+  .ms-progress-row{display:grid;grid-template-columns:148px minmax(0,1fr);align-items:center;gap:18px;padding:22px 20px;cursor:pointer}
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:148px;height:148px;transform:rotate(-90deg)}
@@ -38,6 +34,7 @@
   .mr-tip{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1px rgba(0,0,0,.2))}
   .mr-esperado{stroke:url(#grad-esperado)}
   .mr-recebido{stroke:url(#grad-recebido)}
+  .mr-extras{stroke:url(#grad-extras)}
   .mr-despesas{stroke:url(#grad-despesas)}
   /* apenas o número fica centrado no anel — o rótulo "Total" é ancorado
      acima dele, fora do cálculo de centralização, para não puxar o
@@ -55,6 +52,7 @@
   .mr-meta-c{color:#F2F5F3}
   .mr-esperado-c{color:#B8C7A8}
   .mr-recebido-c{color:#5E7A52}
+  .mr-extras-c{color:#2E8577}
   .mr-gastos-c{color:#C9A855}
   .mr-teto-c{color:#A8453D}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
@@ -87,7 +85,7 @@
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
-  .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:20px 4px;padding:0 8px;cursor:pointer}
+  .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:28px 10px;padding:6px 8px 2px;cursor:pointer}
   .jobs-stat-grid6 .jobs-stat-col{border-right:none}
   .jobs-stat-col{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;cursor:pointer;padding:0 4px;text-align:center}
   .jobs-stat-col:active{transform:scale(.96)}

@@ -404,18 +404,9 @@
         <div class="card finance-ops-card">
         <div class="fo-title-row">
           <span class="fo-title" data-t="home.financeTitle">Financeiro</span>
-          <div class="section-menu-btn" onclick="event.stopPropagation();abrirMenuFinanceiro()"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="6" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="18" r="1.7"/></svg></div>
         </div>
+        <div class="fo-divider"></div>
         <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
-            <div class="ms-progress-left">
-              <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
-              </div>
-            </div>
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
@@ -428,21 +419,27 @@
                       <stop id="gd-recebido-0" offset="0%" stop-color="#7A9468"/>
                       <stop id="gd-recebido-1" offset="100%" stop-color="#4C6B45"/>
                     </linearGradient>
+                    <linearGradient id="grad-extras" x1="10" y1="10" x2="140" y2="140" gradientUnits="userSpaceOnUse">
+                      <stop id="gd-extras-0" offset="0%" stop-color="#8FC9C0"/>
+                      <stop id="gd-extras-1" offset="100%" stop-color="#2E8577"/>
+                    </linearGradient>
                     <linearGradient id="grad-despesas" x1="123" y1="123" x2="27" y2="27" gradientUnits="userSpaceOnUse">
                       <stop id="gd-despesas-0" offset="0%" stop-color="#D9C9A0"/>
                       <stop id="gd-despesas-1" offset="100%" stop-color="#4A1F17"/>
                     </linearGradient>
                   </defs>
-                  <!-- pista única compartilhada pelas 3 fitas (Esperado/Recebido/Despesas);
+                  <!-- pista única compartilhada pelas 4 fitas (Esperado/Recebido/Extras/Despesas);
                        ver pintarFita/reordenarCamadasFitas — camada 1 (voltas fechadas, círculo
                        cheio) sempre no fundo, camada 2 (pontas, arco parcial) por cima, ordenada
                        dinamicamente pela fração da volta atual para nenhuma ponta ficar escondida. -->
                   <circle class="mr-trilho" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-base" id="mr-esperado-base" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-base" id="mr-recebido-base" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-base" id="mr-extras-base" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-base" id="mr-despesas-base" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-tip mr-esperado" id="mr-esperado" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-tip mr-recebido" id="mr-recebido" cx="75" cy="75" r="59" stroke-width="12"/>
+                  <circle class="mr-ring mr-tip mr-extras" id="mr-extras" cx="75" cy="75" r="59" stroke-width="12"/>
                   <circle class="mr-ring mr-tip mr-despesas" id="mr-despesas" cx="75" cy="75" r="59" stroke-width="12"/>
                 </svg>
                 <div class="ms-rings-center">
@@ -451,13 +448,24 @@
                 </div>
               </div>
             </div>
+            <div class="ms-progress-left">
+              <div class="ms-rings-legend">
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="mrl-extras">0 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
+              </div>
+            </div>
           </div>
+        </div>
 
-        <div class="fo-divider"></div>
-
+        <div class="card finance-ops-card">
         <div class="fo-title-row">
           <span class="fo-title" data-t="reports.opStats">Estatísticas Operacionais</span>
         </div>
+        <div class="fo-divider"></div>
         <svg width="0" height="0" style="position:absolute" aria-hidden="true">
           <defs>
             <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
@@ -2340,6 +2348,7 @@
     "home.target": { pt:"Meta", en:"Target", es:"Meta" },
     "home.expected": { pt:"Esperado", en:"Expected", es:"Previsto" },
     "home.expenses": { pt:"Despesas", en:"Expenses", es:"Gastos" },
+    "home.extras": { pt:"Extras", en:"Extras", es:"Extras" },
     "home.ceiling": { pt:"Teto", en:"Ceiling", es:"Techo" },
     "home.ceilingLabel": { pt:"Teto de gastos", en:"Spending ceiling", es:"Techo de gastos" },
     "home.totalProfit": { pt:"Total", en:"Total", es:"Total" },
@@ -3339,13 +3348,6 @@
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
   }
-  function abrirMenuFinanceiro(){
-    openInfo(t('home.financeTitle'), '<div class="plist">'+
-      '<div class="prow" onclick="closeInfo();abrirRelatorios(\'faturamento\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12.5" y="8" width="3" height="10"/><rect x="18" y="5" width="3" height="13"/></svg><div class="t">'+t('reports.billing')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
-      '<div class="prow" onclick="closeInfo();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><div class="t">'+t('sheet.goalsLimits')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
-      '<div class="prow" onclick="closeInfo();abrirDespesas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><div class="t">'+t('home.expenses')+'</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
-    '</div>');
-  }
   let METAS={receita:0, gastos:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
   async function loadMetas(){
@@ -3378,6 +3380,7 @@
   const FITA_RAMPS={
     esperado:[[0,'#C9D4BE'],[1,'#9FB58C'],[3,'#9FB58C']],
     recebido:[[0,'#7A9468'],[1,'#4C6B45'],[3,'#4C6B45']],
+    extras:[[0,'#8FC9C0'],[1,'#2E8577'],[3,'#2E8577']],
     despesas:[[0,'#D9C9A0'],[.5,'#C9A855'],[.75,'#BC7C3E'],[.9,'#A85A38'],[1,'#4A1F17'],[1.6,'#6B1E3D'],[2.4,'#3A0F26'],[4,'#2A0A1B']]
   };
   const FITA_STATE={};
@@ -3436,26 +3439,29 @@
   function reordenarCamadasFitas(){
     const svg=document.querySelector('.ms-rings-svg');
     if(!svg) return;
-    const chaves=['esperado','recebido','despesas'];
+    const chaves=['esperado','recebido','extras','despesas'];
     chaves.forEach(k=>{ const b=document.getElementById('mr-'+k+'-base'); if(b) svg.appendChild(b); });
     chaves.map(k=>({k, frac:(FITA_STATE[k]||{}).frac||0}))
       .sort((a,b)=>b.frac-a.frac)
       .forEach(d=>{ const el=document.getElementById('mr-'+d.k); if(el) svg.appendChild(el); });
   }
-  function renderRingsDashboard(recebido, esperado, custos){
+  function renderRingsDashboard(recebido, esperado, custos, extras){
+    extras=extras||0;
     const meta=METAS.receita||1, teto=METAS.gastos||1;
     FITA_STATE.esperado=pintarFita('esperado', esperado, meta);
     FITA_STATE.recebido=pintarFita('recebido', recebido, meta);
+    FITA_STATE.extras=pintarFita('extras', extras, meta);
     FITA_STATE.despesas=pintarFita('despesas', custos, teto);
     reordenarCamadasFitas();
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
     set('mrl-receb', fmtMoney(recebido));
+    set('mrl-extras', fmtMoney(extras));
     set('mrl-gastos', fmtMoney(custos));
     set('mrl-teto', fmtMoney(teto));
-    /* saldo real do mês até agora: o que entrou menos o que já saiu */
-    const saldo=recebido-custos;
+    /* saldo real do mês até agora: o que entrou (trabalhos + extras) menos o que já saiu */
+    const saldo=recebido+extras-custos;
     const saldoEl=document.getElementById('mt-saldo');
     if(saldoEl){
       saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
@@ -3656,7 +3662,11 @@
     set('mt-demandas-den', s.totalJobs);
     pintarAnelComVolta('ring-demandas', 25, s.pendMeuCount, s.totalJobs);
     setTrend('trend-demandas', s.pendMeuEsteMes, s.pendMeuMesAnterior);
-    renderRingsDashboard(s.recebido, s.porReceber, s.custos);
+    /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
+       separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
+       categoria própria, sem mexer no que Relatórios entende por "Recebido". */
+    const extrasMes=receitasDoMes();
+    renderRingsDashboard(s.recebido-extrasMes, s.porReceber, s.custos, extrasMes);
     atualizarNotifDot();
     const nomesMesesPt=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     const nomesMesesEn=['January','February','March','April','May','June','July','August','September','October','November','December'];
