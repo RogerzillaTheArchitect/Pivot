@@ -384,7 +384,7 @@
         {
           "id": "signatures.execution",
           "version": null,
-          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. | Field Category | Field Name | Type | Allowed Values / Format | |---|---|---|---| | Party Role | [CLIENT_ROLE] | enum | Client, Buyer, Licensee | | Party Role | [PROVIDER_ROLE] | enum | Developer, Service Provider, Contractor | | Payment Method | [PAYMENT_METHOD] | enum | Bank Transfer, Credit Card, PayPal, Wire Transfer, Check | | Currency | [CURRENCY] | enum (ISO 4217) | USD, EUR, GBP, CAD, AUD, NZD, BRL | | Delivery Method | [DELIVERY_METHOD] | enum | Email, Cloud Storage Link, Git Repository, Physical Media, Deployment to Production | | Licensing Model | [LICENSE_TYPE] | enum | Exclusive, Non-Exclusive, Perpetual, Time-Limited | | Revision Model | [REVISION_MODEL] | enum | Fixed Rounds, Time-Boxed, Unlimited-Within-Scope | | Acceptance Method | [ACCEPTANCE_METHOD] | enum | Deemed Acceptance (silence), Explicit Written Approval, Formal Sign-off Document | | Cancellation Reason | [CANCELLATION_REASON] | enum | Client Convenience, Non-Payment, Breach, Force Majeure | | Termination Reason | [TERMINATION_REASON] | enum | For Convenience, For Cause, Non-Payment, Chronic SLA Failure, Mutual Agreement | | Intellectual Property Option | [IP_OWNERSHIP_MODEL] | enum | Full Assignment to Client, License to Client with Provider Retaining Ownership, Joint Ownership | | Confidentiality Level | [CONFIDENTIALITY_LEVEL] | enum | Public, Internal, Confidential, Highly Confidential/Trade Secret | | Notice Method | [NOTICE_METHOD] | enum | Email, Written Letter, Platform Notification, Registered Mail | | Time Unit | [TIME_UNIT] | enum | Hours, Days, Weeks, Months, Years | | Percentage Field | [PERCENTAGE_FIELDS] | number (0-100) | Applies to cancellation fees, service credits, revenue shares | | Quantity Field | [QUANTITY_FIELDS] | integer | Applies to screens, pages, revisions, users, hours | | Boolean Option | [BOOLEAN_FIELDS] | boolean | true/false — applies to inclusion flags (e.g., SOURCE_FILES_INCLUDED, DRONE_REQUIRED) | Note: Each Contract Type below inherits this baseline schema and adds Contract-Type-specific enumerations inline within its own Structured Fields subsection. | Field | Type | Allowed Values | |---|---|---| | [IP_OWNERSHIP_MODEL] | enum | Full Assignment to Client, Template License Passthrough | | [ACCEPTANCE_METHOD] | enum | Deemed Acceptance, Explicit Written Approval, Formal Sign-off Document | | [MAINTENANCE_INCLUDED] | boolean | true, false | | [HOSTING_INCLUDED] | boolean | true, false | | [DOMAIN_REGISTRATION_INCLUDED] | boolean | true, false | | [BILLING_PERIOD] | enum | Monthly, Quarterly, Annually | | [UPTIME_TARGET_PERCENT] | percentage | 0-100 | Ambiguity: none — Source Code Ownership explicitly branches on custom-vs-template via a Conditional structure, resolving Step 2 risk #1 for both scenarios. Duplication: Maintenance, Hosting, Domain Registration, Technical Support kept as distinct priced Optional Blocks since each represents a genuinely separate recurring or one-time service. Loophole closed: each optional post-launch service now gated by an explicit boolean inclusion field, preventing assumed inclusion. Contradiction: none — Warranty (defect-free period) vs. Technical Support (paid help beyond that period) are sequential, not overlapping. Missing protection: Intellectual Property Clause clarifies third-party framework/library ownership remains unaffected by the custom-code assignment. Complexity: kept structurally rich given genuinely high number of distinct optional services in this Contract Type. Enforceability: acceptance method and deemed-acceptance timeline both explicit and structured as enumerated fields for automation. Attack: Provider claims ownership of custom code despite full payment — mitigated by explicit assignment clause conditioned only on payment. Attack: Client assumes ongoing hosting is included in the original build fee — mitigated by boolean gating field plus explicit recurring fee. Attack: Post-launch bug reported at month 11 claimed under warranty when warranty was 90 days — mitigated by explicit, structured [WARRANTY_PERIOD_DAYS] field enabling automated eligibility checks. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
         }
       ],
       "dynamicFields": [
@@ -426,21 +426,7 @@
     "WARRANTY_PERIOD_DAYS",
     "APPLICABLE_LAW",
     "DISPUTE_RESOLUTION_MECHANISM",
-    "SIGNATURE_DATE",
-    "CLIENT_ROLE",
-    "PROVIDER_ROLE",
-    "CURRENCY",
-    "DELIVERY_METHOD",
-    "LICENSE_TYPE",
-    "REVISION_MODEL",
-    "CANCELLATION_REASON",
-    "TERMINATION_REASON",
-    "CONFIDENTIALITY_LEVEL",
-    "NOTICE_METHOD",
-    "TIME_UNIT",
-    "PERCENTAGE_FIELDS",
-    "QUANTITY_FIELDS",
-    "BOOLEAN_FIELDS"
+    "SIGNATURE_DATE"
   ],
   "slug": "website_development_agreement"
 }

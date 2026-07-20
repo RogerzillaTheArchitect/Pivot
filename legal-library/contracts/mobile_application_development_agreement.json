@@ -363,7 +363,7 @@
         {
           "id": "signatures.execution",
           "version": null,
-          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]. | Field Category | Field Name | Type | Allowed Values / Format | |---|---|---|---| | Party Role | [CLIENT_ROLE] | enum | Client, Buyer, Licensee | | Party Role | [PROVIDER_ROLE] | enum | Developer, Service Provider, Contractor | | Payment Method | [PAYMENT_METHOD] | enum | Bank Transfer, Credit Card, PayPal, Wire Transfer, Check | | Currency | [CURRENCY] | enum (ISO 4217) | USD, EUR, GBP, CAD, AUD, NZD, BRL | | Delivery Method | [DELIVERY_METHOD] | enum | Email, Cloud Storage Link, Git Repository, Physical Media, Deployment to Production | | Licensing Model | [LICENSE_TYPE] | enum | Exclusive, Non-Exclusive, Perpetual, Time-Limited | | Revision Model | [REVISION_MODEL] | enum | Fixed Rounds, Time-Boxed, Unlimited-Within-Scope | | Acceptance Method | [ACCEPTANCE_METHOD] | enum | Deemed Acceptance (silence), Explicit Written Approval, Formal Sign-off Document | | Cancellation Reason | [CANCELLATION_REASON] | enum | Client Convenience, Non-Payment, Breach, Force Majeure | | Termination Reason | [TERMINATION_REASON] | enum | For Convenience, For Cause, Non-Payment, Chronic SLA Failure, Mutual Agreement | | Intellectual Property Option | [IP_OWNERSHIP_MODEL] | enum | Full Assignment to Client, License to Client with Provider Retaining Ownership, Joint Ownership | | Confidentiality Level | [CONFIDENTIALITY_LEVEL] | enum | Public, Internal, Confidential, Highly Confidential/Trade Secret | | Notice Method | [NOTICE_METHOD] | enum | Email, Written Letter, Platform Notification, Registered Mail | | Time Unit | [TIME_UNIT] | enum | Hours, Days, Weeks, Months, Years | | Percentage Field | [PERCENTAGE_FIELDS] | number (0-100) | Applies to cancellation fees, service credits, revenue shares | | Quantity Field | [QUANTITY_FIELDS] | integer | Applies to screens, pages, revisions, users, hours | | Boolean Option | [BOOLEAN_FIELDS] | boolean | true/false — applies to inclusion flags (e.g., SOURCE_FILES_INCLUDED, DRONE_REQUIRED) | Note: Each Contract Type below inherits this baseline schema and adds Contract-Type-specific enumerations inline within its own Structured Fields subsection. | Field | Type | Allowed Values | |---|---|---| | [TARGET_PLATFORMS] | multi-select enum | iOS, Android, Cross-Platform | | [DEVELOPMENT_METHODOLOGY] | enum | Agile, Waterfall, Hybrid | | [MAINTENANCE_INCLUDED] | boolean | true, false | | [ACCEPTANCE_METHOD] | enum | Deemed Acceptance, Explicit Written Approval, Formal Sign-off Document | | [IP_OWNERSHIP_MODEL] | enum | Full Assignment to Client, License to Client | | [BILLING_PERIOD] | enum | Monthly, Quarterly, Annually | Ambiguity: none — device/OS compatibility explicitly enumerated as a Dynamic Field matrix rather than a vague \"compatible with modern devices\" phrase. Duplication: App Store Publication and Google Play Publication kept as separate Conditional Blocks despite similar wording, since each store's review process is independently triggered and legally distinct. Loophole closed: both store-publication disclaimers explicitly attribute delay/rejection risk to the platform's independent process, not the developer, closing Step 2 risk #1. Contradiction: none. Missing protection: Analytics and Crash Monitoring Clauses added, disclosing third-party data processing absent from Website Development given mobile's heavier reliance on SDKs. Complexity: reused Source Code Ownership and Maintenance patterns from Website Development for consistency, adapted only where mobile-specific risk required (Required rather than Conditional for Source Code Ownership since mobile apps are rarely built on off-the-shelf templates the way websites can be). Enforceability: acceptance testing tied to structured compatibility matrix, enabling automated database representation. Attack: Client blames developer for a 3-week Apple review rejection delay — mitigated by explicit App Store Publication disclaimer. Attack: Client discovers user data flows to a third-party analytics provider without prior disclosure — mitigated by Analytics Clause's explicit acknowledgment requirement. Attack: Client disputes acceptance claiming the app doesn't work on an untested old OS version — mitigated by explicit compatibility matrix defining the tested scope. No further gaps found. Version 1.0.0 — Self-Review and Red Team passed — Pending Human Legal Review."
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
         }
       ],
       "dynamicFields": [
@@ -399,21 +399,7 @@
     "QA_TEST_SCOPE",
     "APPLICABLE_LAW",
     "DISPUTE_RESOLUTION_MECHANISM",
-    "SIGNATURE_DATE",
-    "CLIENT_ROLE",
-    "PROVIDER_ROLE",
-    "CURRENCY",
-    "DELIVERY_METHOD",
-    "LICENSE_TYPE",
-    "REVISION_MODEL",
-    "CANCELLATION_REASON",
-    "TERMINATION_REASON",
-    "CONFIDENTIALITY_LEVEL",
-    "NOTICE_METHOD",
-    "TIME_UNIT",
-    "PERCENTAGE_FIELDS",
-    "QUANTITY_FIELDS",
-    "BOOLEAN_FIELDS"
+    "SIGNATURE_DATE"
   ],
   "slug": "mobile_application_development_agreement"
 }
