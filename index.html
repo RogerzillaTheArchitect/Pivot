@@ -660,24 +660,28 @@
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
         <div class="card bib-page-card">
-          <div class="searchbox bib-searchbox" style="margin:0 0 12px">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
-            <input id="bib-busca" placeholder="Procurar contratos, criadores ou palavras-chave…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
+          <div class="bib-search-row">
+            <button type="button" class="bib-icon-btn" id="bib-fav-btn" onclick="abrirSalvosBiblioteca()" aria-label="Favoritos" data-t-title="library.favorites">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>
+            </button>
+            <div class="searchbox bib-searchbox">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+              <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
+            </div>
+            <button type="button" class="bib-icon-btn" id="bib-meus-btn" onclick="abrirMeusModelosBiblioteca()" aria-label="Meus modelos" data-t-title="library.origin.mine">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            </button>
           </div>
 
-          <div class="bib-tools-row">
-            <button type="button" class="bib-tool-btn" id="bib-fav-btn" onclick="abrirSalvosBiblioteca()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>
-              <span data-t="library.favorites">Favoritos</span>
-            </button>
-            <button type="button" class="bib-tool-btn" id="bib-meus-btn" onclick="abrirMeusModelosBiblioteca()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span data-t="library.origin.mine">Meus modelos</span>
-            </button>
-            <button type="button" class="bib-tool-btn bib-tool-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
-            <button type="button" class="bib-tool-btn bib-tool-dd" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
-            <button type="button" class="bib-tool-btn bib-tool-dd" id="bib-origem-btn" onclick="abrirOrigemBiblioteca()"></button>
+          <div class="bib-dd-row">
+            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
           </div>
+
+          <div class="bib-origem-row" id="bib-origem-row"></div>
+          <p class="bib-lang-note" data-t="library.allLangsNote">Todos os idiomas são exibidos na biblioteca.</p>
 
           <div id="bib-lista"></div>
           <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
@@ -2237,10 +2241,12 @@
     "explore.library": { pt:"Modelos Pivot", en:"Pivot Templates", es:"Modelos Pivot" },
     "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
-    "library.origin.official": { pt:"Oficial Pivot", en:"Official Pivot", es:"Oficial Pivot" },
+    "library.origin.official": { pt:"Oficial Pivots", en:"Official Pivots", es:"Oficial Pivots" },
+    "library.origin.legalVerified": { pt:"Jurídico Verificado", en:"Legally Verified", es:"Jurídico Verificado" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
+    "library.allLangsNote": { pt:"Todos os idiomas são exibidos na biblioteca.", en:"All languages are shown in the library.", es:"Todos los idiomas se muestran en la biblioteca." },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
@@ -2248,7 +2254,7 @@
     "library.facet.language": { pt:"Idioma", en:"Language", es:"Idioma" },
     "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
-    "library.origin.legal": { pt:"Validação Jurídica", en:"Legal Validation", es:"Validación Jurídica" },
+    "library.origin.legal": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.recommendCount": { pt:"recomendam", en:"recommend", es:"recomiendan" },
     "library.viewBlock": { pt:"Visualizar", en:"View", es:"Ver" },
@@ -4251,15 +4257,17 @@
      marketplace. */
   const LegalLibrary = {
     _catalog: [], _byId: new Map(), _detailCache: new Map(), _manifest: null, _basePath: 'legal-library/',
-    _i18nAvailable: {pt:new Set(), es:new Set()},
+    _i18nAvailable: {pt:new Set(), es:new Set()}, _i18nMeta: {},
     async init(){
       try{
-        const [manifest, idx, i18nManifest] = await Promise.all([
+        const [manifest, idx, i18nManifest, i18nMeta] = await Promise.all([
           fetch(this._basePath+'manifest.json').then(r=>r.json()),
           fetch(this._basePath+'index.json').then(r=>r.json()),
-          fetch(this._basePath+'i18n/manifest.json').then(r=>r.ok?r.json():{available:{}}).catch(()=>({available:{}}))
+          fetch(this._basePath+'i18n/manifest.json').then(r=>r.ok?r.json():{available:{}}).catch(()=>({available:{}})),
+          fetch(this._basePath+'i18n/meta.json').then(r=>r.ok?r.json():{}).catch(()=>({}))
         ]);
         this._manifest = manifest;
+        this._i18nMeta = i18nMeta || {};
         this._i18nAvailable = {
           pt: new Set((i18nManifest.available&&i18nManifest.available.pt)||[]),
           es: new Set((i18nManifest.available&&i18nManifest.available.es)||[])
@@ -4269,7 +4277,8 @@
           if(this._i18nAvailable.pt.has(c.slug)) idiomas.push('pt');
           if(this._i18nAvailable.es.has(c.slug)) idiomas.push('es');
           return {
-            id: c.id, titulo: c.title, categoria: c.market, subcategoria: c.subcategory,
+            id: c.id, titulo: c.title, tituloEN: c.title, descEN: c.desc||null,
+            categoria: c.market, subcategoria: c.subcategory,
             mercado: c.market, desc: c.desc||null, tags: c.tags||[], origem: 'oficial',
             verificado: c.status === 'FINAL APPROVED', idioma: idiomas,
             texto: c.previewText||null, blocks: c.blocks||[],
@@ -4329,6 +4338,18 @@
     },
     resolveClauseText(text, fieldValues={}){
       return text.replace(/\[([A-Z0-9_]+)\]/g, (m,name)=> (fieldValues[name]!=null ? fieldValues[name] : m));
+    },
+    /* Título/descrição traduzidos por idioma (legal-library/i18n/meta.json).
+       'en' usa o Master; pt/es caem de volta pro Master se faltar tradução. */
+    tituloEm(item, lang){
+      if(lang==='en') return item.tituloEN||item.titulo;
+      const m=this._i18nMeta[item.id]; const tr=m&&m[lang];
+      return (tr&&tr.title) || item.tituloEN || item.titulo;
+    },
+    descEm(item, lang){
+      if(lang==='en') return item.descEN!=null?item.descEN:item.desc;
+      const m=this._i18nMeta[item.id]; const tr=m&&m[lang];
+      return (tr&&tr.desc) || (item.descEN!=null?item.descEN:item.desc);
     }
   };
   LegalLibrary.init();
@@ -4356,9 +4377,9 @@
      dependem de um gatilho que não avaliamos automaticamente, então ficam
      de fora por enquanto. REQUIRED entra ligado, OPTIONAL entra desligado
      (o usuário ativa o que quiser) — mesma convenção do esqueleto genérico. */
-  async function blocosParaModeloBiblioteca(m){
-    const rawId = m && m.id ? String(m.id).replace(/^of:/,'') : null;
-    const detail = rawId ? await LegalLibrary.getDetail(rawId, LANG) : null;
+  async function blocosParaModeloBiblioteca(m, lang){
+    const rawId = m && m.id ? String(m.id).replace(/^of:/,'').replace(/@.*$/,'') : null;
+    const detail = rawId ? await LegalLibrary.getDetail(rawId, lang||LANG) : null;
     if(!detail || !detail.blocks || !detail.blocks.length) return blocosModeloPadrao();
     const valores = valoresDynamicFieldsDoJob(getBuilderJob());
     const blocosComTexto = detail.blocks.filter(b=>b.status!=='CONDITIONAL' && b.clauses && b.clauses.length);
@@ -4552,12 +4573,13 @@
     renderEstrelasAvaliacao(id);
     showToast(t('toast.savedToTemplates'));
   }
-  async function importarModeloBiblioteca(id){
+  async function importarModeloBiblioteca(id, lang){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
+    const nome = lang ? LegalLibrary.tituloEm(m, lang) : m.titulo;
+    abrirBuilderParaSelecao({ client:'', nome, blocks: await blocosParaModeloBiblioteca(m, lang) });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -9015,23 +9037,41 @@
      cache module-level calculado antes do fetch terminar ficaria preso
      vazio para sempre. O catálogo tem no máximo algumas dezenas de itens —
      recalcular a cada chamada é barato. */
+  /* Cada contrato oficial vira um card por idioma disponível (en + pt/es
+     quando há tradução), com título/descrição no idioma correspondente —
+     assim um prestador do Brasil acha um contrato em espanhol só pesquisando,
+     sem depender de trocar o idioma do app. Favoritos são por contrato
+     (baseId), não por variação de idioma. */
   function catalogoBiblioteca(){
-    return LegalLibrary.list().map(b=>{
-      const item={
-        id:'of:'+b.id, titulo:b.titulo, categoria:b.categoria, desc:b.desc, tags:b.tags||[],
-        origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[], idioma:b.idioma,
-        profissao:bibProfissao(b),
-        numBlocos: b.numBlocos,
-        coberturas: bibCoberturasDoModelo(b)
+    const out=[];
+    LegalLibrary.list().forEach(b=>{
+      const langs=(b.idioma&&b.idioma.length)?b.idioma:['en'];
+      const base={
+        baseId:'of:'+b.id, rawId:b.id,
+        categoria:b.categoria, tags:b.tags||[],
+        origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[],
+        idioma:b.idioma, profissao:bibProfissao(b),
+        numBlocos:b.numBlocos, coberturas:bibCoberturasDoModelo(b)
       };
-      item.categoriaAmigavel=bibCategoriaAmigavel(item);
-      item.contexto=bibContexto(item);
-      return item;
+      base.categoriaAmigavel=bibCategoriaAmigavel(base);
+      base.contexto=bibContexto(base);
+      langs.forEach(lang=>{
+        out.push(Object.assign({}, base, {
+          id:'of:'+b.id+'@'+lang,
+          lang,
+          titulo: LegalLibrary.tituloEm(b, lang),
+          desc: LegalLibrary.descEm(b, lang)
+        }));
+      });
     });
+    return out;
   }
+  const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
   let bibOrigemSel=new Set();
   let bibOrdenacao='usos';
   let bibIdiomaSel=null;
+  let bibCategoriaSel=null;
+  let bibSegmentoSel=null;
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
@@ -9046,23 +9086,12 @@
   function toggleBibOrigem(org){
     if(bibOrigemSel.has(org)) bibOrigemSel.delete(org); else bibOrigemSel.add(org);
     renderBiblioteca();
-    if(document.getElementById('infoSheet').classList.contains('show')) refrescarBibOrigemSheet();
   }
   const BIB_ORDENACOES=[
     ['usos','library.sort.mostUsed'],
     ['recomendados','library.sort.mostRecommended'],
     ['az','library.sort.az']
   ];
-  function setBibOrdenacao(v){
-    bibOrdenacao=v;
-    renderBiblioteca();
-    closeInfo();
-  }
-  function setBibIdioma(v){
-    bibIdiomaSel=v;
-    renderBiblioteca();
-    closeInfo();
-  }
   function bibValoresIdioma(itens){
     const vals=new Set();
     itens.forEach(i=>(i.idioma||[]).forEach(x=>{ if(x) vals.add(x); }));
@@ -9073,48 +9102,72 @@
     if(org==='juridico') return !!item.verificado;
     return item.origem===org;
   }
+  /* Aplica só os filtros de origem (usado pela contagem das insígnias e como
+     base dos demais filtros). Dedupe por contrato fica a cargo de quem conta. */
   function bibItensFiltradosPorOrigem(){
     const todos=catalogoBiblioteca();
     if(bibOrigemSel.size===0) return todos;
     return todos.filter(i=>[...bibOrigemSel].some(org=>bibItemBateOrigem(i,org)));
   }
-  function buildBibOrigemSheetHtml(){
-    const chips=BIB_ORIGENS.map(o=>
-      '<div class="bib-badge-opt'+(bibOrigemSel.has(o.key)?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')"><span class="bib-badge '+o.cls+'">'+o.icon()+t(o.labelKey)+'</span></div>'
-    ).join('');
-    let html='<div class="bib-badge-grid">'+chips+'</div>';
-    if(bibOrigemSel.size) html+='<button class="btn ghost" style="width:100%;margin-top:16px" onclick="bibOrigemSel=new Set();renderBiblioteca();refrescarBibOrigemSheet();">'+t('library.clearFilters')+'</button>';
-    return html;
+  /* Conta contratos distintos (não variações de idioma) por origem. */
+  function bibContagemOrigem(org){
+    const vistos=new Set();
+    catalogoBiblioteca().forEach(i=>{ if(bibItemBateOrigem(i,org)) vistos.add(i.baseId); });
+    return vistos.size;
   }
-  function refrescarBibOrigemSheet(){
-    document.getElementById('infoBody').innerHTML=buildBibOrigemSheetHtml();
+  function renderBibOrigemRow(){
+    const row=document.getElementById('bib-origem-row');
+    if(!row) return;
+    row.innerHTML=BIB_ORIGENS.map(o=>{
+      const n=bibContagemOrigem(o.key);
+      const on=bibOrigemSel.has(o.key);
+      return '<button type="button" class="bib-origem-chip '+o.cls+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
+        '<span class="boc-ic">'+o.icon()+'</span>'+
+        '<span class="boc-txt"><span class="boc-lbl">'+t(o.labelKey)+'</span><span class="boc-cnt">'+n+'</span></span>'+
+      '</button>';
+    }).join('');
   }
-  function abrirOrigemBiblioteca(){
-    openInfo(t('library.filterOrigin'), buildBibOrigemSheetHtml());
-  }
-  function buildBibIdiomaSheetHtml(){
-    const valores=bibValoresIdioma(catalogoBiblioteca());
+  /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
+  function bibSheetOpcaoUnica(titulo, opcoes, atual, onPick){
     const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
-    let opts='<div class="bib-sort-opt'+(!bibIdiomaSel?' on':'')+'" onclick="setBibIdioma(null)"><span>'+t('library.origin.all')+'</span>'+check+'</div>';
-    opts+=valores.map(v=>'<div class="bib-sort-opt'+(bibIdiomaSel===v?' on':'')+'" onclick="setBibIdioma(\''+v+'\')"><span>'+escapeHtml(bibNomeIdioma(v))+'</span>'+check+'</div>').join('');
-    return '<div class="bib-sort-row">'+opts+'</div>';
+    window[onPick.name]=onPick;
+    const rows=opcoes.map(o=>
+      '<div class="bib-sort-opt'+(o.value===atual?' on':'')+'" onclick="'+onPick.name+'('+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+')"><span>'+escapeHtml(o.label)+'</span>'+check+'</div>'
+    ).join('');
+    openInfo(titulo, '<div class="bib-sort-row">'+rows+'</div>');
   }
   function abrirIdiomaBiblioteca(){
-    openInfo(t('library.facet.language'), buildBibIdiomaSheetHtml());
-  }
-  function buildBibOrdenarSheetHtml(){
-    return '<div class="bib-sort-row">'+BIB_ORDENACOES.map(([key,labelKey])=>
-      '<div class="bib-sort-opt'+(bibOrdenacao===key?' on':'')+'" onclick="setBibOrdenacao(\''+key+'\')"><span>'+t(labelKey)+'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg></div>'
-    ).join('')+'</div>';
+    const valores=bibValoresIdioma(catalogoBiblioteca());
+    const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:bibNomeIdioma(v)})));
+    bibSheetOpcaoUnica(t('library.facet.language'), opcoes, bibIdiomaSel, function setBibIdiomaPick(v){ bibIdiomaSel=v; renderBiblioteca(); closeInfo(); });
   }
   function abrirOrdenarBiblioteca(){
-    openInfo(t('library.sortLabel'), buildBibOrdenarSheetHtml());
+    const opcoes=BIB_ORDENACOES.map(([key,labelKey])=>({value:key,label:t(labelKey)}));
+    bibSheetOpcaoUnica(t('library.sortLabel'), opcoes, bibOrdenacao, function setBibOrdenarPick(v){ bibOrdenacao=v; renderBiblioteca(); closeInfo(); });
+  }
+  function abrirCategoriaBiblioteca(){
+    const valores=[...new Set(catalogoBiblioteca().map(i=>i.categoriaAmigavel).filter(Boolean))].sort();
+    const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
+    bibSheetOpcaoUnica(t('library.facet.category'), opcoes, bibCategoriaSel, function setBibCategoriaPick(v){ bibCategoriaSel=v; renderBiblioteca(); closeInfo(); });
+  }
+  function abrirSegmentoBiblioteca(){
+    const valores=[...new Set(catalogoBiblioteca().map(i=>i.profissao).filter(Boolean))].sort();
+    const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
+    bibSheetOpcaoUnica(t('library.facet.profession'), opcoes, bibSegmentoSel, function setBibSegmentoPick(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); });
   }
   /* "Salvos" — modelos pessoais do utilizador: hoje isto é exatamente o
      conjunto de favoritos (bibFavoritos), único mecanismo de "guardar
      modelo" que já existe no catálogo. */
   function abrirSalvosBiblioteca(){
-    const itens=catalogoBiblioteca().filter(i=>bibFavoritos.has(i.id));
+    /* Favoritos são por contrato (baseId); mostra uma linha por contrato,
+       preferindo a variação no idioma atual do app. */
+    const vistos=new Set();
+    const itens=catalogoBiblioteca().filter(i=>{
+      if(!bibFavoritos.has(i.baseId)) return false;
+      if(i.lang!==LANG && catalogoBiblioteca().some(x=>x.baseId===i.baseId && x.lang===LANG)) return false;
+      if(vistos.has(i.baseId)) return false;
+      vistos.add(i.baseId); return true;
+    });
     const linhas=itens.length ? itens.map(i=>
       '<div class="prow" onclick="closeInfo();abrirDetalheBibliotecaPrincipal(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'+
       '<div class="t">'+escapeHtml(i.titulo)+'</div>'+
@@ -9147,50 +9200,60 @@
   const BIB_ICON_USER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   const BIB_ICON_THUMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>';
   function bibAutorLinha(item){
-    if(item.origem==='oficial') return '<span class="bib-badge bo-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>';
-    if(item.verificado) return '<span class="bib-badge bo-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legal'))+'</span>';
-    return '<span class="bib-badge bo-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>';
+    if(item.verificado) return '<span class="bib-orig o-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legalVerified'))+'</span>';
+    if(item.origem==='comunidade') return '<span class="bib-orig o-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>';
+    return '<span class="bib-orig o-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>';
   }
   function bibBadgesItem(item){
     const badges=[bibAutorLinha(item)];
+    if((item.avaliacao||0)>=4.7) badges.push('<span class="bib-orig o-recomendados">'+BIB_ICON_THUMB+t('library.origin.recommended')+'</span>');
+    return badges;
+  }
+  /* Versão sólida (pílula colorida) para o sheet de detalhe, cujo fundo pode
+     ser claro e apagaria o texto discreto do card. */
+  function bibBadgesSolid(item){
+    const badges=[];
+    if(item.verificado) badges.push('<span class="bib-badge bo-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legalVerified'))+'</span>');
+    else if(item.origem==='comunidade') badges.push('<span class="bib-badge bo-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>');
+    else badges.push('<span class="bib-badge bo-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>');
     if((item.avaliacao||0)>=4.7) badges.push('<span class="bib-badge bo-recomendados">'+BIB_ICON_THUMB+t('library.origin.recommended')+'</span>');
     return badges;
   }
-  function bibAtualizarBotoesFiltro(){
+  function bibSetDropdownBtn(id, label, ativo){
+    const btn=document.getElementById(id);
+    if(!btn) return;
     const check='<svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>';
-    const sortBtn=document.getElementById('bib-sort-btn');
-    if(sortBtn){
-      const sortEntry=BIB_ORDENACOES.find(([k])=>k===bibOrdenacao);
-      sortBtn.classList.toggle('on', bibOrdenacao!=='usos');
-      sortBtn.innerHTML='<span>'+t(sortEntry?sortEntry[1]:'library.sortLabel')+'</span>'+check;
-    }
-    const idiomaBtn=document.getElementById('bib-idioma-btn');
-    if(idiomaBtn){
-      idiomaBtn.classList.toggle('on', !!bibIdiomaSel);
-      idiomaBtn.innerHTML='<span>'+(bibIdiomaSel?escapeHtml(bibNomeIdioma(bibIdiomaSel)):t('library.facet.language'))+'</span>'+check;
-    }
-    const origemBtn=document.getElementById('bib-origem-btn');
-    if(origemBtn){
-      origemBtn.classList.toggle('on', bibOrigemSel.size>0);
-      origemBtn.innerHTML='<span>'+t('library.filterOrigin')+(bibOrigemSel.size?' ('+bibOrigemSel.size+')':'')+'</span>'+check;
-    }
+    btn.classList.toggle('on', ativo);
+    btn.innerHTML='<span>'+escapeHtml(label)+'</span>'+check;
+  }
+  function bibAtualizarBotoesFiltro(){
+    const sortEntry=BIB_ORDENACOES.find(([k])=>k===bibOrdenacao);
+    bibSetDropdownBtn('bib-cat-btn', bibCategoriaSel||t('library.facet.category'), !!bibCategoriaSel);
+    bibSetDropdownBtn('bib-seg-btn', bibSegmentoSel||t('library.facet.profession'), !!bibSegmentoSel);
+    bibSetDropdownBtn('bib-sort-btn', t(sortEntry?sortEntry[1]:'library.sortLabel'), bibOrdenacao!=='usos');
+    bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel);
   }
   function renderBiblioteca(){
     bibAtualizarBotoesFiltro();
+    renderBibOrigemRow();
     const wrap=document.getElementById('bib-lista');
     if(!wrap) return;
     const q=(document.getElementById('bib-busca').value||'').trim().toLowerCase();
     let itens=bibItensFiltradosPorOrigem();
-    if(bibIdiomaSel) itens=itens.filter(i=>(i.idioma||[]).includes(bibIdiomaSel));
+    if(bibIdiomaSel) itens=itens.filter(i=>i.lang===bibIdiomaSel);
+    if(bibCategoriaSel) itens=itens.filter(i=>i.categoriaAmigavel===bibCategoriaSel);
+    if(bibSegmentoSel) itens=itens.filter(i=>i.profissao===bibSegmentoSel);
     if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
     itens=ordenarBibItens(itens);
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
-      const fav=bibFavoritos.has(i.id);
+      const fav=bibFavoritos.has(i.baseId);
       const rodape=bibBadgesItem(i);
-      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
+      const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
+      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
+        langTag+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
         '<div class="bc-meta"><div class="bc-meta-l">'+rodape.join('')+'</div>'+favBtn+'</div>'+
       '</div>';
@@ -9235,10 +9298,10 @@
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
     if(!it) return;
-    const fav=bibFavoritos.has(id);
+    const fav=bibFavoritos.has(it.baseId);
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
-    const metricas=[bibBadgesItem(it).join(' ')];
+    const metricas=[bibBadgesSolid(it).join(' ')+' <span class="bib-badge" style="background:var(--btn-06);color:var(--ink-soft)">'+(BIB_LANG_TAG[it.lang]||'')+'</span>'];
     if(it.usos) metricas.push(BIB_ICON_THUMB+it.usos+' '+t('library.recommendCount'));
     if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
     html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+metricas.join(' · ')+'</p>';
@@ -9250,8 +9313,8 @@
     html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
-    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+id+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
-    const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+id.replace(/^of:/,'')+"')";
+    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
+    const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
   }
