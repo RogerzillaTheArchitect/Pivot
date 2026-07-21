@@ -1,17 +1,90 @@
   /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
-  /* Card 2 (Estatísticas Operacionais) — lista analítica simples; nenhuma barra
-     visível por padrão. A barra/gráfico só aparece no histórico de 12 meses
-     abaixo, depois de tocar num indicador. */
-  .rel-stat-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
-  .rel-stat-row .l{display:flex;align-items:center;gap:9px;font-size:11.5px;font-weight:600;
-    letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
-  .rel-stat-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
-  .rel-stat-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink-soft)}
-  .rel-stat-row.selected .l{color:var(--ink)}
-  .rel-stat-row.selected .l svg{color:var(--ink)}
-  .rel-stat-row.selected .v{color:var(--ink)}
+  /* Card 2 (Estatísticas Operacionais) — spec exata: container técnico sem
+     glass/blur, layout tabular de colunas fixas (Grid — garante que ícone,
+     nome, valor e percentual nunca variam de largura entre linhas, e que a
+     barra é sempre o único elemento "Expanded"), barra segmentada tipo
+     mostrador industrial (sempre 50 segmentos; só a largura individual
+     encolhe em telas menores, via flex-shrink — nunca a contagem).
+     O shell do app é limitado a 480px (ver styles/domains/responsive.css); com
+     5 colunas fixas + 50 segmentos, o padding do card também precisa
+     encolher um pouco nas telas mais estreitas (só o padding — título, cores
+     e proporção do container continuam os mesmos), senão a aritmética não
+     fecha: mesmo no melhor caso (480px de shell) sobram ~2px por segmento
+     depois das outras colunas, então "blocos sólidos" de 7-8px como numa
+     régua maior não cabem aqui sem violar "nunca ultrapassar o card" ou
+     "sempre 50 segmentos" — min-width dos segmentos fica no piso realista. */
+  .card.stats-op-card{
+    background:#0E0E0E;border:1px solid #2A2A2A;border-radius:24px;padding:42px;
+    box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
+  }
+  .stats-op-title{
+    font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    text-align:center;text-transform:uppercase;letter-spacing:.38em;font-weight:500;
+    font-size:13px;color:#F3F3F3;
+  }
+  .stats-op-hr{height:1px;background:#262626;margin-top:28px}
+
+  .stats-op-row{position:relative;display:grid;
+    grid-template-columns:20px 76px 68px 42px minmax(0,1fr);
+    column-gap:8px;align-items:stretch;height:50px;cursor:pointer;
+    border-bottom:1px solid #242424}
+  .stats-op-row:last-child{border-bottom:none}
+
+  /* cada coluna centra o próprio conteúdo em flex (não só no eixo do grid),
+     pra ícone/nome/valor/percentual/barra ficarem sobre o mesmo eixo mesmo
+     com fontes e alturas de linha diferentes entre si */
+  .stats-op-icon{display:flex;align-items:center;justify-content:flex-start;color:#ECECEC}
+  .stats-op-icon svg{width:20px;height:20px;fill:none;display:block}
+
+  .stats-op-name{display:flex;align-items:center;line-height:1.15;
+    font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    text-transform:uppercase;font-weight:500;letter-spacing:.20em;font-size:11px;color:#F2F2F2}
+
+  .stats-op-value{display:flex;align-items:center;white-space:nowrap;line-height:1;
+    font-family:var(--font-numeric),monospace;font-weight:500;font-size:13px;color:#FFFFFF}
+
+  .stats-op-pct{display:flex;align-items:center;white-space:nowrap;line-height:1;
+    font-size:10.5px;font-weight:500;color:#86D6A3}
+  .stats-op-pct.neg{color:#F0A8A2}
+
+  .stats-op-bar{display:flex;align-items:center;gap:1px;height:40px;min-width:0;overflow:hidden;align-self:center}
+  .stats-op-seg{flex:1 1 6px;max-width:8px;min-width:2px;height:40px;border-radius:1px;
+    background:transparent;border:1px solid #5A5A5A}
+  .stats-op-seg.filled{border-color:transparent;
+    background:linear-gradient(to bottom,#FFFFFF 0%,#F1F1F1 50%,#D8D8D8 100%)}
+
+  @media (max-width:420px){
+    .card.stats-op-card{padding:28px}
+    .stats-op-row{grid-template-columns:20px 68px 62px 38px minmax(0,1fr);column-gap:6px}
+  }
+  @media (max-width:360px){
+    .card.stats-op-card{padding:20px}
+    .stats-op-row{grid-template-columns:20px 56px 52px 30px minmax(0,1fr);column-gap:4px}
+    .stats-op-name{font-size:10px;letter-spacing:.14em}
+    .stats-op-value{font-size:12px}
+  }
+
+  /* Tooltip minimalista (desktop / dispositivos com hover real) — no toque
+     (mobile) o tap abre o bottom sheet genérico #infoSheet, não o tooltip. */
+  .stats-op-tip{position:absolute;left:0;bottom:calc(100% + 8px);z-index:20;
+    max-width:230px;background:#161616;border:1px solid #2A2A2A;border-radius:8px;padding:10px 12px;
+    opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+  .stats-op-tip b{display:block;margin-bottom:4px;
+    font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;color:#F3F3F3}
+  .stats-op-tip span{display:block;font-size:12px;line-height:1.4;color:#C8C8C8}
+  @media (hover:hover) and (pointer:fine){
+    .stats-op-row:hover .stats-op-tip{opacity:1;transform:translateY(0)}
+  }
+
+  /* Conteúdo do bottom sheet (#infoBody) aberto por relAbrirInfoMetrica() */
+  .stats-op-info-desc{font-size:13.5px;line-height:1.5;color:var(--ink-soft);margin:0 0 14px}
+  .stats-op-info-row{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 0;border-top:1px solid var(--line-soft)}
+  .stats-op-info-row span{font-size:12px;color:var(--neutral)}
+  .stats-op-info-row b{font-family:var(--font-numeric),inherit;font-size:14px;font-weight:600;color:var(--ink)}
 
   /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
   .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
