@@ -2826,7 +2826,7 @@
     "reports.op.info.pendencias.desc": { pt:"Quantidade de tarefas ainda abertas que aguardam execução ou resolução.", en:"Number of tasks still open, awaiting execution or resolution.", es:"Cantidad de tareas aún abiertas que esperan ejecución o resolución." },
     "reports.op.info.demandas.desc": { pt:"Quantidade de solicitações recebidas que ainda aguardam aceite ou processamento. Representa entrada de trabalho, não conclusão.", en:"Number of requests received that are still awaiting acceptance or processing. Represents incoming work, not completion.", es:"Cantidad de solicitudes recibidas que aún esperan aceptación o procesamiento. Representa entrada de trabajo, no finalización." },
     "reports.op.info.fechados.desc": { pt:"Quantidade de projetos ou demandas oficialmente encerrados. Após fechados, não aceitam novas alterações.", en:"Number of projects or deals officially closed. Once closed, they no longer accept changes.", es:"Cantidad de proyectos o acuerdos oficialmente cerrados. Una vez cerrados, no aceptan más cambios." },
-    "reports.op.info.executados.desc": { pt:"Quantidade de atividades já realizadas, independentemente de aprovação ou conclusão. Representa execução, não entrega final.", en:"Number of activities already carried out, regardless of approval or completion. Represents execution, not final delivery.", es:"Cantidad de actividades ya realizadas, sin importar si fueron aprobadas o concluidas. Representa ejecución, no entrega final." },
+    "reports.op.info.executados.desc": { pt:"Refere-se só ao evento principal do trabalho (ex.: o casamento em si, o ensaio, a sessão) já ter acontecido — não às etapas antes ou depois dele. Representa execução, não entrega final.", en:"Refers only to the job's main event (e.g. the wedding itself, the rehearsal, the session) having already happened — not the steps before or after it. Represents execution, not final delivery.", es:"Se refiere solo a que el evento principal del trabajo (ej.: la boda en sí, el ensayo, la sesión) ya haya ocurrido, no a las etapas antes o después de él. Representa ejecución, no entrega final." },
     "reports.op.info.concluidos.desc": { pt:"Quantidade de atividades entregues e finalizadas com sucesso. É o estágio final do fluxo — executado não é o mesmo que concluído.", en:"Number of activities delivered and successfully finished. The final stage of the flow — executed does not mean completed.", es:"Cantidad de actividades entregadas y finalizadas con éxito. Es la etapa final del flujo: ejecutado no es lo mismo que concluido." },
     "reports.op.info.currentValue": { pt:"Valor atual", en:"Current value", es:"Valor actual" },
     "reports.op.info.target": { pt:"Meta", en:"Target", es:"Meta" },
@@ -3468,10 +3468,20 @@
     let executadosCount=0, executadosEsteMes=0, executadosMesAnterior=0;
     /* soma das horas dos trabalhos com data neste mês / mês anterior, a partir
        da duração calculada (hora início/fim) — card "Estatísticas Operacionais".
-       horasEsteMes = previstas (todos os trabalhos do mês); horasExecutadasEsteMes
-       = só os já marcados como concluídos (mesmo critério de "executado" usado
-       acima) — a barra de Horas mostra executadas/previstas, sem meta manual. */
-    let horasEsteMes=0, horasMesAnterior=0, horasExecutadasEsteMes=0;
+       horasEsteMes = previstas (todos os trabalhos do mês, pela data agendada);
+       horasExecutadasEsteMes = só os cujo marco principal já está "feito" — a
+       barra de Horas mostra executadas/previstas, sem meta manual. */
+    let horasEsteMes=0, horasMesAnterior=0, horasExecutadasEsteMes=0, horasExecutadasMesAnterior=0;
+    /* contadores "Atual/Total" do card Estatísticas Operacionais — todos
+       agrupados pela mesma coorte (trabalhos com dateRaw neste mês/mês
+       anterior), para que numerador e denominador de cada linha sempre
+       venham do mesmo conjunto de trabalhos e a barra segmentada represente
+       um progresso real (0–100%), não dois totais de períodos diferentes. */
+    let totalJobsEsteMes=0, totalJobsMesAnterior=0;
+    let eventosPrevistosEsteMes=0, eventosPrevistosMesAnterior=0;
+    let eventosExecutadosEsteMes=0, eventosExecutadosMesAnterior=0;
+    let entreguesPorDataEsteMes=0, entreguesPorDataMesAnterior=0;
+    let fechadosPorDataEsteMes=0, fechadosPorDataMesAnterior=0;
     /* trabalhos deletados (descartados) não entram em nenhuma estatística;
        trabalhos concluídos e arquivados continuam a contar — aconteceram de facto */
     const todos=jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado');
@@ -3495,17 +3505,24 @@
         const mm=(j.arquivado.em||'').slice(0,7);
         if(mm===mesAtualISO) executadosEsteMes++; else if(mm===mesAnteriorISO) executadosMesAnterior++;
       }
-      if(j.duracaoHoras && j.dateRaw){
-        const mm=j.dateRaw.slice(0,7);
-        if(mm===mesAtualISO){
-          horasEsteMes+=j.duracaoHoras;
-          if(j.arquivado && j.arquivado.motivo==='concluido') horasExecutadasEsteMes+=j.duracaoHoras;
-        }
-        else if(mm===mesAnteriorISO) horasMesAnterior+=j.duracaoHoras;
-      }
+      const mmJob=(j.dateRaw||'').slice(0,7);
+      if(mmJob===mesAtualISO){ totalJobsEsteMes++; if(c.fechado) fechadosPorDataEsteMes++; }
+      else if(mmJob===mesAnteriorISO){ totalJobsMesAnterior++; if(c.fechado) fechadosPorDataMesAnterior++; }
       const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
       const msEntrega=(j.milestones||[]).find(m=>m.key==='entrega');
+      if(j.duracaoHoras && j.dateRaw){
+        if(mmJob===mesAtualISO){
+          horasEsteMes+=j.duracaoHoras;
+          if(msEvento && msEvento.status==='feito') horasExecutadasEsteMes+=j.duracaoHoras;
+        }
+        else if(mmJob===mesAnteriorISO){
+          horasMesAnterior+=j.duracaoHoras;
+          if(msEvento && msEvento.status==='feito') horasExecutadasMesAnterior+=j.duracaoHoras;
+        }
+      }
       if(msEvento){
+        if(mmJob===mesAtualISO){ eventosPrevistosEsteMes++; if(msEvento.status==='feito') eventosExecutadosEsteMes++; }
+        else if(mmJob===mesAnteriorISO){ eventosPrevistosMesAnterior++; if(msEvento.status==='feito') eventosExecutadosMesAnterior++; }
         if(msEvento.status!=='feito') trabalhosRealizar++;
         else{
           trabalhosRealizados++;
@@ -3514,6 +3531,8 @@
         }
       }
       if(msEntrega){
+        if(mmJob===mesAtualISO && msEntrega.status==='feito') entreguesPorDataEsteMes++;
+        else if(mmJob===mesAnteriorISO && msEntrega.status==='feito') entreguesPorDataMesAnterior++;
         if(msEntrega.status!=='feito') trabalhosEntregar++;
         else{
           trabalhosEntregues++;
@@ -3545,7 +3564,10 @@
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
       executadosCount, executadosEsteMes, executadosMesAnterior,
-      horasEsteMes, horasMesAnterior, horasExecutadasEsteMes,
+      horasEsteMes, horasMesAnterior, horasExecutadasEsteMes, horasExecutadasMesAnterior,
+      totalJobsEsteMes, totalJobsMesAnterior,
+      eventosPrevistosEsteMes, eventosPrevistosMesAnterior, eventosExecutadosEsteMes, eventosExecutadosMesAnterior,
+      entreguesPorDataEsteMes, entreguesPorDataMesAnterior, fechadosPorDataEsteMes, fechadosPorDataMesAnterior,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
       custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
@@ -5374,7 +5396,12 @@
   function relStatsAgregadas(){
     const meses=relRangeMeses();
     if(meses.length===1) return calcularEstatisticasMes(meses[0].ano, meses[0].mes);
-    const campos=['recebido','porReceber','custos','fechadosEsteMes','realizadosEsteMes','entreguesEsteMes','horasEsteMes','pendClienteEsteMes','pendMeuEsteMes'];
+    const campos=['recebido','porReceber','custos','fechadosEsteMes','realizadosEsteMes','entreguesEsteMes',
+      'horasEsteMes','horasMesAnterior','horasExecutadasEsteMes','horasExecutadasMesAnterior',
+      'pendClienteEsteMes','pendClienteMesAnterior','pendMeuEsteMes','pendMeuMesAnterior',
+      'totalJobsEsteMes','totalJobsMesAnterior',
+      'eventosPrevistosEsteMes','eventosPrevistosMesAnterior','eventosExecutadosEsteMes','eventosExecutadosMesAnterior',
+      'entreguesPorDataEsteMes','entreguesPorDataMesAnterior','fechadosPorDataEsteMes','fechadosPorDataMesAnterior'];
     const acc={}; campos.forEach(c=>acc[c]=0);
     meses.forEach(({ano,mes})=>{
       const s=calcularEstatisticasMes(ano,mes);
@@ -5633,15 +5660,17 @@
   /* ===== Card 2 — Estatísticas Operacionais: painel técnico com barra
      segmentada e layout tabular de colunas fixas (spec exata). Tocar numa
      linha abre uma explicação da métrica — tooltip no hover (desktop) e
-     bottom sheet ao tocar (qualquer dispositivo). Usa os campos
-     "-EsteMes"/"-MesAnterior" (fluxo do mês), não os totais acumulados (que
-     não variam por mês).
-     Horas é a única métrica com meta real nos dados (horasEsteMes = previsto
-     do mês, horasExecutadasEsteMes = já executado — ver calcularEstatisticasMes)
-     por isso é a única linha exibida como "executado / meta". As demais
-     (Pendências/Demandas/Fechados/Executados/Concluídos) não têm um alvo
-     definido em nenhum lugar do app, então mostram apenas a contagem real,
-     sem fração inventada. ===== */
+     bottom sheet ao tocar (qualquer dispositivo).
+     Todas as 6 linhas seguem o formato "Atual / Total", com Atual e Total
+     sempre vindos da MESMA coorte de trabalhos (ver contadores "-EsteMes"/
+     "-MesAnterior"/"-PorData" em calcularEstatisticasMes) — a barra segmentada
+     representa exatamente Atual ÷ Total dessa linha:
+       horas       → horasExecutadasEsteMes / horasEsteMes (marco principal "feito")
+       pendências  → pendClienteEsteMes / totalJobsEsteMes
+       demandas    → pendMeuEsteMes / totalJobsEsteMes
+       fechados    → fechadosPorDataEsteMes / totalJobsEsteMes
+       executados  → eventosExecutadosEsteMes / eventosPrevistosEsteMes
+       concluídos  → entreguesPorDataEsteMes / totalJobsEsteMes ===== */
   const REL_OP_CAMPOS = {
     horas:{ label:'home.hours', desc:'reports.op.info.horas.desc', icon:ICON_OP_HORAS },
     pendencias:{ label:'home.pending', desc:'reports.op.info.pendencias.desc', icon:ICON_OP_PENDENCIAS },
@@ -5682,17 +5711,21 @@
   function renderRelOpBars(s){
     const wrap=document.getElementById('rel-op-bars'); if(!wrap) return;
     relOpDadosAtuais={};
-    const horasExec=Math.round(s.horasExecutadasEsteMes||0), horasPrev=Math.round(s.horasEsteMes||0), horasAnt=Math.round(s.horasMesAnterior||0);
-    const pend=s.pendClienteEsteMes||0, dem=s.pendMeuEsteMes||0, fech=s.fechadosEsteMes||0,
-      exec=s.realizadosEsteMes||0, conc=s.entreguesEsteMes||0;
-    const max=Math.max(pend, dem, fech, exec, conc, 1);
+    /* cada linha usa Atual/Total da MESMA coorte (trabalhos com dateRaw no
+       período) — ver comentário em calcularEstatisticasMes. A barra segmentada
+       de cada linha representa sempre Atual ÷ Total dessa própria linha, nunca
+       um máximo comparado entre métricas diferentes. */
+    const horasExec=Math.round(s.horasExecutadasEsteMes||0), horasTot=Math.round(s.horasEsteMes||0),
+      horasAnt=Math.round(s.horasExecutadasMesAnterior||0);
+    const totalJobs=s.totalJobsEsteMes||0;
+    const eventosTot=s.eventosPrevistosEsteMes||0;
     wrap.innerHTML =
-      relStatRow('horas', horasExec, horasPrev||1, horasExec+'H / '+horasPrev+'H', horasAnt, horasPrev+'H') +
-      relStatRow('pendencias', pend, max, String(pend), s.pendClienteMesAnterior) +
-      relStatRow('demandas', dem, max, String(dem), s.pendMeuMesAnterior) +
-      relStatRow('fechados', fech, max, String(fech), s.fechadosMesAnterior) +
-      relStatRow('executados', exec, max, String(exec), s.realizadosMesAnterior) +
-      relStatRow('concluidos', conc, max, String(conc), s.entreguesMesAnterior);
+      relStatRow('horas', horasExec, horasTot||1, horasExec+'h / '+horasTot+'h', horasAnt, horasTot+'h') +
+      relStatRow('pendencias', s.pendClienteEsteMes||0, totalJobs||1, (s.pendClienteEsteMes||0)+' / '+totalJobs, s.pendClienteMesAnterior, String(totalJobs)) +
+      relStatRow('demandas', s.pendMeuEsteMes||0, totalJobs||1, (s.pendMeuEsteMes||0)+' / '+totalJobs, s.pendMeuMesAnterior, String(totalJobs)) +
+      relStatRow('fechados', s.fechadosPorDataEsteMes||0, totalJobs||1, (s.fechadosPorDataEsteMes||0)+' / '+totalJobs, s.fechadosPorDataMesAnterior, String(totalJobs)) +
+      relStatRow('executados', s.eventosExecutadosEsteMes||0, eventosTot||1, (s.eventosExecutadosEsteMes||0)+' / '+eventosTot, s.eventosExecutadosMesAnterior, String(eventosTot)) +
+      relStatRow('concluidos', s.entreguesPorDataEsteMes||0, totalJobs||1, (s.entreguesPorDataEsteMes||0)+' / '+totalJobs, s.entreguesPorDataMesAnterior, String(totalJobs));
   }
   function relAbrirInfoMetrica(campo){
     const d=relOpDadosAtuais[campo]; if(!d) return;
