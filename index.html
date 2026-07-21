@@ -468,82 +468,58 @@
         <div class="fo-divider"></div>
           <div class="ops-stat-list" onclick="abrirRelatorios('operacional')">
           <div class="ops-stat-row">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 2"/></svg></div>
-              <span class="ops-stat-name" data-t="home.time">Tempo</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-tempo-num">0</b><span class="ops-stat-den"> / <span id="mt-tempo-den">0</span></span> <span class="ops-stat-unit" data-t="home.timeUnitDays">dias</span></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.time">Tempo</span>
+                <div class="ops-stat-value"><b id="mt-tempo-num">0</b><span class="ops-stat-den"> / <span id="mt-tempo-den">0</span></span> <span class="ops-stat-unit" data-t="home.timeUnitDays">dias</span></div>
                 <span class="ops-stat-trend" id="trend-tempo"></span>
-                <div class="ops-stat-bar" id="bar-tempo"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-tempo"></div>
           </div>
           <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M10 8h6v6"/><path d="M16 8 9 15"/></svg></div>
-              <span class="ops-stat-name" data-t="home.pending">Pendências</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-aguardando-num">0</b><span class="ops-stat-den"> / <span id="mt-aguardando-den">0</span></span></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.pending">Pendências</span>
+                <div class="ops-stat-value"><b id="mt-aguardando-num">0</b><span class="ops-stat-den"> / <span id="mt-aguardando-den">0</span></span></div>
                 <span class="ops-stat-trend" id="trend-aguardando"></span>
-                <div class="ops-stat-bar" id="bar-aguardando"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-aguardando"></div>
           </div>
           <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M14 8H8v6"/><path d="M8 8l7 7"/></svg></div>
-              <span class="ops-stat-name" data-t="home.demands">Demandas</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-demandas-num">0</b><span class="ops-stat-den"> / <span id="mt-demandas-den">0</span></span></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.demands">Demandas</span>
+                <div class="ops-stat-value"><b id="mt-demandas-num">0</b><span class="ops-stat-den"> / <span id="mt-demandas-den">0</span></span></div>
                 <span class="ops-stat-trend" id="trend-demandas"></span>
-                <div class="ops-stat-bar" id="bar-demandas"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-demandas"></div>
           </div>
           <div class="ops-stat-row">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8.5 12.5 2.3 2.3L16 10"/></svg></div>
-              <span class="ops-stat-name" data-t="home.closed">Fechados</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-fechados-num">0</b></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.closed">Fechados</span>
+                <div class="ops-stat-value"><b id="mt-fechados-num">0</b></div>
                 <span class="ops-stat-trend" id="trend-fechados"></span>
-                <div class="ops-stat-bar" id="bar-fechados"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-fechados"></div>
           </div>
           <div class="ops-stat-row" onclick="event.stopPropagation();go('historico')">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5v14M12 5v14M16 5v14"/></svg></div>
-              <span class="ops-stat-name" data-t="home.executed">Executados</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-executados-num">0</b><span class="ops-stat-den"> / <span id="mt-executados-den">0</span></span></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.executed">Executados</span>
+                <div class="ops-stat-value"><b id="mt-executados-num">0</b><span class="ops-stat-den"> / <span id="mt-executados-den">0</span></span></div>
                 <span class="ops-stat-trend" id="trend-executados"></span>
-                <div class="ops-stat-bar" id="bar-executados"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-executados"></div>
           </div>
           <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
-            <div class="ops-stat-head">
               <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 21V4h11l-2.5 3.5L17 11H6"/></svg></div>
-              <span class="ops-stat-name" data-t="home.completedTile">Concluídos</span>
-            </div>
-            <div class="ops-stat-body">
-              <div class="ops-stat-value"><b id="mt-entregues-num">0</b><span class="ops-stat-den"> / <span id="mt-entregar-den">0</span></span></div>
-              <div class="ops-stat-subrow">
+              <div class="ops-stat-info">
+                <span class="ops-stat-name" data-t="home.completedTile">Concluídos</span>
+                <div class="ops-stat-value"><b id="mt-entregues-num">0</b><span class="ops-stat-den"> / <span id="mt-entregar-den">0</span></span></div>
                 <span class="ops-stat-trend" id="trend-entregues"></span>
-                <div class="ops-stat-bar" id="bar-entregues"></div>
               </div>
-            </div>
+              <div class="ops-stat-bar" id="bar-entregues"></div>
           </div>
           </div>
         </div>
