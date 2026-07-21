@@ -1,21 +1,22 @@
-  /* ===== BIBLIOTECA — cards ===== */
-  .bib-card{position:relative;display:flex;flex-direction:column;height:168px;border-radius:var(--r);padding:14px;margin-bottom:9px;cursor:pointer;
-    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
-    border:1px solid rgba(255,255,255,.10);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08);
-    backdrop-filter:blur(11px) saturate(160%);-webkit-backdrop-filter:blur(11px) saturate(160%);
-    transition:border-color .15s;color:#F5F5F3;
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
-  .bib-card:hover{border-color:var(--brand)}
-  .bib-card .bc-title{font-size:14.5px;font-weight:600;color:var(--ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .bib-card .bc-desc{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.45;
+  /* ===== BIBLIOTECA — cards (título serifado, tag de idioma, insígnia) ===== */
+  .bib-card{position:relative;display:flex;flex-direction:column;border-radius:16px;padding:20px 20px 18px;margin-bottom:12px;cursor:pointer;
+    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 10px 26px -14px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05);
+    transition:border-color .15s,transform .15s;color:#F5F5F3;
+    --ink:#F5F5F3; --ink-soft:#C4C4C0; --ink-faint:#9B9B9B; --neutral:#9A9A93;
+    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.05); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+  .bib-card:hover{border-color:rgba(255,255,255,.22)}
+  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:24px;font-weight:400;line-height:1.15;color:#FAFAF8;letter-spacing:.01em}
+  .bib-card .bc-lang{align-self:flex-start;display:inline-block;margin:10px 0 12px;font-size:10.5px;font-weight:600;letter-spacing:.06em;
+    padding:3px 9px;border-radius:6px;background:rgba(255,255,255,.08);color:#CFCFCA;border:1px solid rgba(255,255,255,.10)}
+  .bib-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
-  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;padding-top:8px;font-size:11px;color:var(--neutral);font-weight:400}
+  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;font-size:11px;color:var(--neutral);font-weight:400}
   .bib-card .bc-meta-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
-  .bib-fav{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint)}
-  .bib-fav svg{width:17px;height:17px;opacity:.5}
-  .bib-fav.on{color:var(--ink)}
+  .bib-fav{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint)}
+  .bib-fav svg{width:19px;height:19px;opacity:.55}
+  .bib-fav.on{color:#F5DE8C}
   .bib-fav.on svg{opacity:1}
   .bib-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
   .bib-tag.tipo{background:var(--btn-06);color:var(--ink-soft)}
@@ -50,22 +51,63 @@
   .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}
   .res{font-size:13px;color:var(--neutral);padding:0 2px}
 
-  /* ===== BIBLIOTECA — card de topo (busca + filtro + lista) ===== */
+  /* ===== BIBLIOTECA — card de topo (busca + filtros + origem) ===== */
   .bib-page-card{padding:16px}
-  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:10px;padding:9px 12px;margin:0}
 
-  /* linha de ferramentas abaixo da busca, mesmo card: favoritos, meus
-     modelos e os 3 dropdowns (ordenar/idioma/origem) */
-  .bib-tools-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-  .bib-tool-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;border:none;
-    background:var(--btn-06);color:var(--ink-soft);font-size:12.5px;font-weight:600;cursor:pointer;
-    transition:background .15s,color .15s;font-family:inherit;white-space:nowrap}
-  .bib-tool-btn:hover{background:var(--btn-32)}
-  .bib-tool-btn.on{background:var(--ink);color:var(--paper)}
-  .bib-tool-btn svg{width:15px;height:15px;flex:none}
-  .bib-tool-btn .dd-arrow{width:11px;height:11px;opacity:.6;margin-left:1px}
+  /* linha 1: estrela (favoritos) | busca | documento (meus modelos) */
+  .bib-search-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:11px;padding:11px 13px;margin:0;flex:1;min-width:0}
+  .bib-icon-btn{flex:none;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;cursor:pointer;
+    background:var(--paper-2);border:1px solid var(--line-soft);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s}
+  .bib-icon-btn:hover{background:var(--btn-06);color:var(--ink)}
+  .bib-icon-btn.on{color:#F5DE8C;border-color:rgba(245,222,140,.4)}
+  .bib-icon-btn svg{width:20px;height:20px}
 
-  /* insígnias de origem — cores próprias por tipo, ícone atrelado ao nome */
+  /* linha 2: dropdowns (categoria, segmento, ordenar, idioma) */
+  .bib-dd-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .bib-dd{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;
+    background:var(--paper-2);border:1px solid var(--line-soft);color:var(--ink-soft);font-size:12.5px;font-weight:500;
+    cursor:pointer;transition:background .15s,color .15s,border-color .15s;font-family:inherit;white-space:nowrap}
+  .bib-dd:hover{background:var(--btn-06);color:var(--ink)}
+  .bib-dd.on{color:var(--ink);border-color:var(--line)}
+  .bib-dd .dd-arrow{width:12px;height:12px;opacity:.55;flex:none}
+
+  /* linha 3: insígnias de origem com contagem (multi-select) */
+  .bib-origem-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding-top:14px;margin-bottom:12px;border-top:1px solid var(--line-soft)}
+  .bib-origem-chip{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;cursor:pointer;
+    background:var(--paper-2);border:1px solid var(--line-soft);transition:border-color .15s,background .15s;font-family:inherit;text-align:left}
+  .bib-origem-chip .boc-ic{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
+  .bib-origem-chip .boc-ic svg{width:15px;height:15px}
+  .bib-origem-chip .boc-txt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+  .bib-origem-chip .boc-lbl{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bib-origem-chip .boc-cnt{font-size:11px;color:var(--neutral);font-variant-numeric:tabular-nums}
+  .bib-origem-chip.on{background:var(--btn-06)}
+  .bib-origem-chip.bo-oficial.on{border-color:rgba(220,220,220,.55)}
+  .bib-origem-chip.bo-oficial .boc-ic{background:linear-gradient(135deg,#EDEDED,#B9B9B9);color:#2A2A2A}
+  .bib-origem-chip.bo-juridico.on{border-color:rgba(140,20,20,.6)}
+  .bib-origem-chip.bo-juridico .boc-ic{background:#5C0A0A;color:#fff}
+  .bib-origem-chip.bo-recomendados.on{border-color:rgba(201,160,60,.6)}
+  .bib-origem-chip.bo-recomendados .boc-ic{background:linear-gradient(135deg,#F5DE8C,#C9A03C);color:#3A2A00}
+  .bib-origem-chip.bo-comunidade.on{border-color:rgba(156,106,52,.6)}
+  .bib-origem-chip.bo-comunidade .boc-ic{background:linear-gradient(135deg,#9C6A34,#6E4423);color:#F5F7FA}
+
+  .bib-lang-note{font-size:12px;color:var(--neutral);text-align:center;margin:0 0 16px}
+
+  /* Visualizar — todos os blocos do contrato (só leitura) */
+  .vis-blocos{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+  .vis-bloco{border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;background:var(--paper-2)}
+  .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .vis-bloco-tag{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--neutral);background:var(--btn-06);border-radius:20px;padding:2px 8px}
+  .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;word-break:break-word}
+
+  /* insígnias de origem no rodapé do card / detalhe — discretas (ícone + texto colorido) */
+  .bib-orig{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;white-space:nowrap}
+  .bib-orig svg{width:13px;height:13px;flex:none}
+  .bib-orig.o-oficial{color:#C9C9C4}
+  .bib-orig.o-juridico{color:#E0736B}
+  .bib-orig.o-comunidade{color:#C79A5E}
+  .bib-orig.o-recomendados{color:#E7C766}
+  /* pílula sólida (usada em sheets/detalhe quando precisa de destaque) */
   .bib-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;
     border-radius:20px;letter-spacing:.02em;white-space:nowrap}
   .bib-badge svg{width:11px;height:11px;flex:none}
@@ -73,9 +115,6 @@
   .bib-badge.bo-juridico{background:#5C0A0A;color:#FFFFFF}
   .bib-badge.bo-comunidade{background:linear-gradient(135deg,#9C6A34,#6E4423);color:#F5F7FA}
   .bib-badge.bo-recomendados{background:linear-gradient(135deg,#F5DE8C,#C9A03C);color:#3A2A00}
-  .bib-badge-grid{display:flex;flex-wrap:wrap;gap:9px}
-  .bib-badge-opt{cursor:pointer;border-radius:22px;padding:2px;border:2px solid transparent;transition:border-color .15s}
-  .bib-badge-opt.on{border-color:var(--ink)}
 
   /* ===== ACTION SHEET ===== */
   .overlay{position:absolute;inset:0;background:var(--btn-32);z-index:70;opacity:0;pointer-events:none;

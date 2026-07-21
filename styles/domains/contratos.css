@@ -43,6 +43,43 @@
   .addblock svg{width:16px;height:16px}
   .save-tpl{font-size:13.5px;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap}
 
+  /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) ===== */
+  .dynf-panel{border:1px solid var(--line);border-radius:14px;background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
+  .dynf-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
+  .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
+  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--paper);background:var(--brand);border-radius:20px;padding:2px 8px}
+  .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
+  .dynf-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:nowrap}
+  .dynf-key{flex:none;max-width:44%;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    background:var(--btn-06);border:1px solid var(--line-soft);border-radius:8px;padding:7px 10px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dynf-arrow{width:16px;height:16px;color:var(--neutral);flex:none}
+  .dynf-input{flex:1;min-width:0;font-family:inherit;font-size:13px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none}
+  .dynf-input:focus{border-color:var(--brand)}
+  .dynf-input::placeholder{color:var(--ink-faint)}
+
+  /* botão "adicionar cláusulas" dentro do bloco */
+  .addclause{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 11px;border-radius:9px;
+    border:1.5px dashed var(--line);background:none;color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+  .addclause:hover{border-color:var(--brand);color:var(--ink)}
+  .addclause svg{width:14px;height:14px}
+
+  /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
+  .pick-list{display:flex;flex-direction:column;gap:8px}
+  .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
+  .pick-check:hover{border-color:var(--brand)}
+  .pick-check.on{border-color:var(--brand);background:var(--brand-10)}
+  .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);
+    display:grid;place-items:center;color:transparent;margin-top:1px}
+  .pick-check .pc-box.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .pick-check .pc-box svg{width:13px;height:13px}
+  .pick-check .pc-main{min-width:0;flex:1}
+  .pick-check .pc-nm{font-size:14px;font-weight:600;color:var(--ink)}
+  .pick-check .pc-sub{font-size:12px;color:var(--neutral);margin-top:2px;line-height:1.4}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+
   /* ===== CALENDÁRIO ===== */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
