@@ -2284,6 +2284,15 @@
     "library.blocksExplore": { pt:"Explorar Modelos", en:"Browse Templates", es:"Explorar Modelos" },
     "library.blocksCreateNew": { pt:"Criar Novo Bloco", en:"Create New Block", es:"Crear Nuevo Bloque" },
     "library.blocksSearchPlaceholder": { pt:"Pesquisar contratos…", en:"Search contracts…", es:"Buscar contratos…" },
+    "library.clausesCount": { pt:"cláusulas", en:"clauses", es:"cláusulas" },
+    "library.blocksImportedToast": { pt:"blocos importados.", en:"blocks imported.", es:"bloques importados." },
+    "library.clausesImportedToast": { pt:"cláusulas importadas.", en:"clauses imported.", es:"cláusulas importadas." },
+    "library.addClausesBtn": { pt:"Adicionar cláusulas", en:"Add clauses", es:"Añadir cláusulas" },
+    "library.clausesAdd": { pt:"Adicionar cláusulas", en:"Add clauses", es:"Añadir cláusulas" },
+    "library.clausesExplore": { pt:"Explorar biblioteca", en:"Browse library", es:"Explorar biblioteca" },
+    "library.clausesCreateNew": { pt:"Criar nova cláusula", en:"Create new clause", es:"Crear nueva cláusula" },
+    "library.clauseTextPlaceholder": { pt:"Texto da cláusula…", en:"Clause text…", es:"Texto de la cláusula…" },
+    "library.clauseTextRequired": { pt:"Escreve o texto da cláusula.", en:"Enter the clause text.", es:"Escribe el texto de la cláusula." },
     "library.importNBlocks": { pt:"Importar {n} Blocos", en:"Import {n} Blocks", es:"Importar {n} Bloques" },
     "library.selectBlocks": { pt:"Seleciona os blocos", en:"Select blocks", es:"Selecciona los bloques" },
     "library.blocksImported": { pt:"{n} blocos importados para o contrato.", en:"{n} blocks imported into the contract.", es:"{n} bloques importados al contrato." },
@@ -6649,7 +6658,9 @@
       '<div class="block-main"><div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
       '<span>'+escapeHtml(blockName(b))+'</span>'+
       '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
-      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+escapeHtml(blockText(job,b))+'</div></div>'+
+      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+escapeHtml(blockText(job,b))+
+        ((!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '')+
+      '</div></div>'+
       '<div class="block-actions">'+
       (locked? '' : '<div class="icon-sm" title="Editar texto" onclick="editarBloco(\''+b.id+'\')">'+ICON_PENCIL+'</div>')+
       '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
@@ -6757,55 +6768,155 @@
   function abrirBibliotecaBlocos(){
     if(builderContext) return;
     const html=
-      '<div class="pick-row" onclick="abrirExplorarBibliotecaBlocos()"><div><div class="nm">'+t('library.blocksExplore')+'</div></div>'+
+      '<div class="pick-row" onclick="abrirExplorarBlocosOficiais()"><div><div class="nm">'+t('library.blocksExplore')+'</div></div>'+
       '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
       '<div class="pick-row" onclick="abrirCriarNovoBloco()"><div><div class="nm">'+t('library.blocksCreateNew')+'</div></div>'+
       '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
     openInfo(t('builder.blockLibrary'), html);
   }
-  let bibBlocosBusca='';
-  function abrirExplorarBibliotecaBlocos(){
-    bibBlocosBusca='';
-    openInfo(t('library.blocksExplore'),
-      '<div class="searchbox" style="margin-bottom:12px">'+
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>'+
-        '<input id="bib-blocos-busca" placeholder="'+t('library.blocksSearchPlaceholder')+'" oninput="bibBlocosBusca=this.value;renderBibBlocosLista()" autocomplete="off">'+
-      '</div><div id="bib-blocos-lista"></div>'
-    );
-    renderBibBlocosLista();
-  }
-  /* A composição de blocos por cláusula de um contrato oficial (import
-     seletivo de blocos individuais de um contrato da Biblioteca Jurídica
-     para dentro de outro contrato) depende do gerador de blocos oficiais
-     — ainda não implementado (ver nota em blocosParaModeloBiblioteca).
-     Até lá, este catálogo mostra só os itens avulsos (Explorar). */
-  function bibBlocosCatalogo(){
-    const out=[];
-    CATALOGO_EXPLORAR.forEach(m=>{
-      const tipo = m.cat==='checklists'?t('library.blocksTypeChecklist'):m.cat==='briefings'?t('library.blocksTypeQuestionnaire'):m.cat==='cronogramas'?t('library.blocksTypeSchedule'):t('library.blocksTypeModel');
-      out.push({kind:'avulso', titulo:t(m.tituloKey), texto:t(m.subKey), sub:tipo});
+  /* ===== Import seletivo (checkbox) de BLOCOS e CLÁUSULAS =====
+     Fluxo: entra num contrato da biblioteca, marca as checkboxes dos blocos
+     (ou, no modo cláusulas, entra num bloco e marca as cláusulas) e importa
+     para dentro do contrato em edição. Cada botão importa só blocos OU só
+     cláusulas, para manter a ordem e a coerência de edição. */
+  const BIB_CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+  const BIB_CHEVR_SVG='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+  function bibContratosParaPicker(){
+    const vistos=new Set(); const out=[]; const todos=catalogoBiblioteca();
+    todos.forEach(i=>{
+      if(vistos.has(i.baseId)) return;
+      if(i.lang!==LANG && todos.some(x=>x.baseId===i.baseId && x.lang===LANG)) return;
+      vistos.add(i.baseId); out.push(i);
     });
-    return out;
+    return out.sort((a,b)=>(a.titulo||'').localeCompare(b.titulo||''));
   }
-  let bibBlocosListaAtual=[];
-  function renderBibBlocosLista(){
-    const wrap=document.getElementById('bib-blocos-lista');
-    if(!wrap) return;
-    const q=bibBlocosBusca.trim().toLowerCase();
-    bibBlocosListaAtual=bibBlocosCatalogo().filter(i=>!q || (i.titulo||'').toLowerCase().includes(q));
-    wrap.innerHTML = bibBlocosListaAtual.length ? bibBlocosListaAtual.map((i,idx)=>{
-      return '<div class="pick-row" onclick="importarBlocoAvulso('+idx+')"><div><div class="nm">'+escapeHtml(i.titulo)+'</div>'+(i.sub?'<div class="sub">'+escapeHtml(i.sub)+'</div>':'')+'</div>'+
-        '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
-    }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>';
+  function bibPickerContratosHtml(modo){
+    const contratos=bibContratosParaPicker();
+    const fn = modo==='blocos' ? 'abrirSelecaoBlocosContrato' : 'abrirSelecaoBlocoParaClausulas';
+    return '<div class="plist">'+contratos.map(c=>
+      '<div class="prow" onclick="'+fn+'(\''+c.rawId+'\',\''+c.lang+'\',\''+escapeHtml(c.titulo).replace(/'/g,"\\'")+'\')">'+
+      '<div class="t">'+escapeHtml(c.titulo)+'</div>'+BIB_CHEVR_SVG+'</div>'
+    ).join('')+'</div>';
   }
-  function importarBlocoAvulso(idx){
-    const item=bibBlocosListaAtual[idx];
-    if(!item) return;
-    const job=getBuilderJob();
-    job.contract.blocks.push({id:genId(), key:null, name:item.titulo, customText:item.texto||'', on:true});
-    renderBuilder();
+  function bibBlocoTagKey(status){ return status==='REQUIRED'?'library.blockRequired':status==='CONDITIONAL'?'library.blockConditional':'library.blockOptional'; }
+
+  // ---- BLOCOS ----
+  function abrirExplorarBlocosOficiais(){
+    openInfo(t('library.blocksExplore'), bibPickerContratosHtml('blocos'));
+  }
+  let bibSelBlocosDetail=null, bibSelBlocosSet=new Set(), bibSelBlocosTitulo='';
+  async function abrirSelecaoBlocosContrato(rawId, lang, titulo){
+    bibSelBlocosTitulo=titulo;
+    openInfo(titulo, '<p style="font-size:13px;color:var(--neutral)">…</p>');
+    const detail=await LegalLibrary.getDetail(rawId, lang);
+    bibSelBlocosDetail={rawId, lang, blocks:(detail&&detail.blocks)||[]};
+    bibSelBlocosSet=new Set();
+    renderSelecaoBlocos();
+  }
+  function renderSelecaoBlocos(){
+    const blocks=bibSelBlocosDetail.blocks;
+    const rows=blocks.map((b,idx)=>{
+      const on=bibSelBlocosSet.has(idx);
+      const nCl=(b.clauses||[]).length;
+      return '<div class="pick-check'+(on?' on':'')+'" onclick="toggleSelBloco('+idx+')">'+
+        '<div class="pc-box'+(on?' on':'')+'">'+BIB_CHECK_SVG+'</div>'+
+        '<div class="pc-main"><div class="pc-nm">'+escapeHtml(b.name)+'</div>'+
+        '<div class="pc-sub">'+nCl+' '+t('library.clausesCount')+' · '+t(bibBlocoTagKey(b.status))+'</div></div></div>';
+    }).join('');
+    const n=bibSelBlocosSet.size;
+    document.getElementById('infoTitle').textContent=bibSelBlocosTitulo;
+    document.getElementById('infoBody').innerHTML='<div class="pick-list">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportBlocos()">'+t('library.import')+(n?' ('+n+')':'')+'</button>';
+  }
+  function toggleSelBloco(idx){ if(bibSelBlocosSet.has(idx))bibSelBlocosSet.delete(idx); else bibSelBlocosSet.add(idx); renderSelecaoBlocos(); }
+  function confirmarImportBlocos(){
+    if(!bibSelBlocosSet.size) return;
+    const job=getBuilderJob(); const fv=getBuilderFieldValues(); const blocks=bibSelBlocosDetail.blocks;
+    let added=0;
+    [...bibSelBlocosSet].sort((a,b)=>a-b).forEach(idx=>{
+      const b=blocks[idx]; if(!b||!b.clauses||!b.clauses.length) return;
+      const tpl=b.clauses.map(c=>c.text).join('\n\n');
+      job.contract.blocks.push({id:genId(), key:null, name:b.name, tpl, customText:LegalLibrary.resolveClauseText(tpl, fv), on:true});
+      added++;
+    });
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder(); closeInfo();
+    showToast(added+' '+t('library.blocksImportedToast'));
+  }
+
+  // ---- CLÁUSULAS (dentro de um bloco do contrato em edição) ----
+  let bibClauseTargetBid=null;
+  function abrirAdicionarClausulas(bid){
+    if(builderContext) return;
+    bibClauseTargetBid=bid;
+    const html=
+      '<div class="pick-row" onclick="abrirExplorarClausulasOficiais()"><div><div class="nm">'+t('library.clausesExplore')+'</div></div>'+BIB_CHEVR_SVG+'</div>'+
+      '<div class="pick-row" onclick="abrirCriarNovaClausula()"><div><div class="nm">'+t('library.clausesCreateNew')+'</div></div>'+BIB_CHEVR_SVG+'</div>';
+    openInfo(t('library.clausesAdd'), html);
+  }
+  function abrirCriarNovaClausula(){
+    openInfo(t('library.clausesCreateNew'),
+      '<div class="field"><textarea id="novaclausula-texto" rows="5" placeholder="'+t('library.clauseTextPlaceholder')+'"></textarea></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovaClausulaManual()">'+t('action.save')+'</button>'
+    );
+  }
+  function salvarNovaClausulaManual(){
+    const texto=(document.getElementById('novaclausula-texto').value||'').trim();
+    if(!texto){ showToast(t('library.clauseTextRequired')); return; }
+    appendClausulasAoBloco(bibClauseTargetBid, [texto]);
     closeInfo();
-    showToast(t('toast.blockAddedPrefix')+item.titulo+t('toast.blockAddedSuffix'));
+  }
+  function abrirExplorarClausulasOficiais(){
+    openInfo(t('library.clausesExplore'), bibPickerContratosHtml('clausulas'));
+  }
+  let bibSelClausDetail=null, bibSelClausBlockIdx=null, bibSelClausSet=new Set(), bibSelClausTitulo='';
+  async function abrirSelecaoBlocoParaClausulas(rawId, lang, titulo){
+    openInfo(titulo, '<p style="font-size:13px;color:var(--neutral)">…</p>');
+    const detail=await LegalLibrary.getDetail(rawId, lang);
+    bibSelClausDetail={blocks:(detail&&detail.blocks)||[]};
+    const rows=bibSelClausDetail.blocks.map((b,idx)=>
+      '<div class="prow" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(b.name).replace(/'/g,"\\'")+'\')">'+
+      '<div class="t">'+escapeHtml(b.name)+'</div><span class="pc-sub" style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>'
+    ).join('');
+    document.getElementById('infoTitle').textContent=titulo;
+    document.getElementById('infoBody').innerHTML='<div class="plist">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
+  }
+  function abrirSelecaoClausulasDoBloco(idx, nomeBloco){
+    bibSelClausBlockIdx=idx; bibSelClausSet=new Set(); bibSelClausTitulo=nomeBloco;
+    renderSelecaoClausulas();
+  }
+  function renderSelecaoClausulas(){
+    const clauses=(bibSelClausDetail.blocks[bibSelClausBlockIdx].clauses)||[];
+    const rows=clauses.map((c,i)=>{
+      const on=bibSelClausSet.has(i);
+      const prev=(c.text||'').slice(0,150)+((c.text||'').length>150?'…':'');
+      return '<div class="pick-check'+(on?' on':'')+'" onclick="toggleSelClaus('+i+')">'+
+        '<div class="pc-box'+(on?' on':'')+'">'+BIB_CHECK_SVG+'</div>'+
+        '<div class="pc-main"><div class="pc-sub" style="white-space:normal">'+escapeHtml(prev)+'</div></div></div>';
+    }).join('');
+    const n=bibSelClausSet.size;
+    document.getElementById('infoTitle').textContent=bibSelClausTitulo;
+    document.getElementById('infoBody').innerHTML='<div class="pick-list">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportClausulas()">'+t('library.import')+(n?' ('+n+')':'')+'</button>';
+  }
+  function toggleSelClaus(i){ if(bibSelClausSet.has(i))bibSelClausSet.delete(i); else bibSelClausSet.add(i); renderSelecaoClausulas(); }
+  function confirmarImportClausulas(){
+    if(!bibSelClausSet.size) return;
+    const clauses=(bibSelClausDetail.blocks[bibSelClausBlockIdx].clauses)||[];
+    const textos=[...bibSelClausSet].sort((a,b)=>a-b).map(i=>clauses[i].text);
+    appendClausulasAoBloco(bibClauseTargetBid, textos);
+    closeInfo();
+  }
+  function appendClausulasAoBloco(bid, textos){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b || !textos.length) return;
+    const fv=getBuilderFieldValues();
+    if(b.tpl==null) b.tpl = b.customText||'';
+    b.tpl = (b.tpl ? b.tpl+'\n\n' : '') + textos.join('\n\n');
+    b.customText = LegalLibrary.resolveClauseText(b.tpl, fv);
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    showToast(textos.length+' '+t('library.clausesImportedToast'));
   }
   const BIB_BLOCO_NOMES={
     identificacao:'Identificação', pagamento:'Pagamento', entrega:'Entrega', cancelamento:'Cancelamento',

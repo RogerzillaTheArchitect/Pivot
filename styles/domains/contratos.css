@@ -59,6 +59,27 @@
   .dynf-input:focus{border-color:var(--brand)}
   .dynf-input::placeholder{color:var(--ink-faint)}
 
+  /* botão "adicionar cláusulas" dentro do bloco */
+  .addclause{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 11px;border-radius:9px;
+    border:1.5px dashed var(--line);background:none;color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
+  .addclause:hover{border-color:var(--brand);color:var(--ink)}
+  .addclause svg{width:14px;height:14px}
+
+  /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
+  .pick-list{display:flex;flex-direction:column;gap:8px}
+  .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
+    border-radius:12px;cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
+  .pick-check:hover{border-color:var(--brand)}
+  .pick-check.on{border-color:var(--brand);background:var(--brand-10)}
+  .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);
+    display:grid;place-items:center;color:transparent;margin-top:1px}
+  .pick-check .pc-box.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .pick-check .pc-box svg{width:13px;height:13px}
+  .pick-check .pc-main{min-width:0;flex:1}
+  .pick-check .pc-nm{font-size:14px;font-weight:600;color:var(--ink)}
+  .pick-check .pc-sub{font-size:12px;color:var(--neutral);margin-top:2px;line-height:1.4}
+  .btn[disabled]{opacity:.45;pointer-events:none}
+
   /* ===== CALENDÁRIO ===== */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
