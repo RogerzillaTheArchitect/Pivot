@@ -1,33 +1,45 @@
-  /* ===== BIBLIOTECA — cards (título serifado, tag de idioma, insígnia) ===== */
-  .bib-card{position:relative;display:flex;flex-direction:column;border-radius:16px;padding:20px 20px 18px;margin-bottom:12px;cursor:pointer;
-    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:0 10px 26px -14px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05);
-    transition:border-color .15s,transform .15s;color:#F5F5F3;
-    --ink:#F5F5F3; --ink-soft:#C4C4C0; --ink-faint:#9B9B9B; --neutral:#9A9A93;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.05); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
-  .bib-card:hover{border-color:rgba(255,255,255,.22)}
-  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:24px;font-weight:400;line-height:1.15;color:#FAFAF8;letter-spacing:.01em}
-  .bib-card .bc-lang{align-self:flex-start;display:inline-block;margin:10px 0 12px;font-size:10.5px;font-weight:600;letter-spacing:.06em;
-    padding:3px 9px;border-radius:6px;background:rgba(255,255,255,.08);color:#CFCFCA;border:1px solid rgba(255,255,255,.10)}
-  .bib-card .bc-desc{font-size:13px;color:var(--ink-soft);line-height:1.5;
+  /* ===== BIBLIOTECA — paleta exata ===== */
+  #v-bibliotecas{--bib-bg:#08090D; --bib-panel:#0E0F13; --bib-card:#16171C; --bib-elev:#1F2025; --bib-input:#292B2F;
+    --bib-ink:#F3F3F1; --bib-ink-soft:#B9BAC0; --bib-ink-faint:#7C7E86; --bib-line:rgba(255,255,255,.07); --bib-line-2:rgba(255,255,255,.12)}
+  #v-bibliotecas{background:var(--bib-bg)}
+
+  /* ===== cards (título serifado, tag de idioma discreta, rodapé de metadados) ===== */
+  .bib-card{position:relative;display:flex;flex-direction:column;border-radius:12px;padding:13px 14px 11px;margin-bottom:9px;cursor:pointer;
+    background:var(--bib-card);border:1px solid var(--bib-line);transition:border-color .15s;color:var(--bib-ink);
+    --ink:#F3F3F1; --ink-soft:#B9BAC0; --ink-faint:#7C7E86; --neutral:#7C7E86;
+    --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07)}
+  .bib-card:hover{border-color:var(--bib-line-2)}
+  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:18px;font-weight:400;line-height:1.18;color:#F6F6F4;letter-spacing:.01em}
+  .bib-card .bc-lang{align-self:flex-start;display:inline-block;margin:6px 0 7px;font-size:9px;font-weight:700;letter-spacing:.08em;
+    padding:2px 6px;border-radius:5px;background:var(--bib-elev);color:#A9AAB0;border:1px solid var(--bib-line)}
+  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.42;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
-  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;font-size:11px;color:var(--neutral);font-weight:400}
-  .bib-card .bc-meta-l{display:flex;align-items:center;gap:10px;flex-wrap:wrap;min-width:0}
-  .bib-fav{flex:none;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink-faint)}
-  .bib-fav svg{width:19px;height:19px;opacity:.55}
-  .bib-fav.on{color:#F5DE8C}
+  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:11px;padding-top:10px;
+    border-top:1px solid var(--bib-line);font-size:11px;color:var(--bib-ink-faint);font-weight:400}
+  .bib-card .bc-meta-l{display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-width:0}
+  .bib-fav{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint)}
+  .bib-fav svg{width:17px;height:17px;opacity:.6}
+  .bib-fav.on{color:#E0A73B}
   .bib-fav.on svg{opacity:1}
-  .bib-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.03em}
-  .bib-tag.tipo{background:var(--btn-06);color:var(--ink-soft)}
-  .bib-tag.verif{background:#E7F3EC;color:#15532D;display:inline-flex;align-items:center;gap:3px}
-  .bib-tag.verif svg{width:10px;height:10px}
-  .bib-minitag{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:6px;background:var(--btn-06);color:var(--ink-soft);border:1px solid var(--line-soft)}
+  .bib-minitag{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:6px;background:var(--bib-elev);color:var(--bib-ink-soft);border:1px solid var(--bib-line)}
+  .bib-uses{font-size:11px;color:var(--bib-ink-faint);white-space:nowrap}
   .bib-check{width:19px;height:19px;border-radius:5px;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;color:var(--paper)}
   .bib-check.on{background:var(--ink);border-color:var(--ink)}
   .bib-check svg{width:13px;height:13px}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
-  .chip-ic svg.bib-chip-icon{width:12px;height:12px}
+
+  /* ===== insígnia de origem no estilo da referência (chip escuro + borda + ícone colorido) ===== */
+  .bib-otag{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:9px;
+    background:var(--bib-card,#16171C);border:1px solid rgba(255,255,255,.14);
+    font-size:11px;font-weight:600;color:#EFEFEE;white-space:nowrap;line-height:1}
+  .bib-otag .ot-ic{display:inline-flex;flex:none}
+  .bib-otag .ot-ic svg{width:13px;height:13px}
+  .bib-otag .ot-cnt{display:inline-flex;align-items:center;gap:7px;color:#8A8B92;font-variant-numeric:tabular-nums}
+  .bib-otag .ot-cnt::before{content:"";width:1px;height:12px;background:rgba(255,255,255,.16)}
+  .bib-otag.o-oficial{border-color:rgba(198,203,214,.30)} .bib-otag.o-oficial .ot-ic{color:#CBD0D8}
+  .bib-otag.o-juridico{border-color:rgba(229,72,77,.42)} .bib-otag.o-juridico .ot-ic{color:#E5484D}
+  .bib-otag.o-recomendados{border-color:rgba(224,167,59,.42)} .bib-otag.o-recomendados .ot-ic{color:#E0A73B}
+  .bib-otag.o-comunidade{border-color:rgba(217,138,74,.42)} .bib-otag.o-comunidade .ot-ic{color:#D98A4A}
   .bib-struct-row{margin-bottom:8px}
   .bib-struct-row .lbl{font-size:12px;color:var(--ink-soft);margin-bottom:4px;display:flex;justify-content:space-between}
   .bib-struct-bar{height:8px;border-radius:4px;background:var(--btn-06);overflow:hidden}
@@ -52,46 +64,44 @@
   .res{font-size:13px;color:var(--neutral);padding:0 2px}
 
   /* ===== BIBLIOTECA — card de topo (busca + filtros + origem) ===== */
-  .bib-page-card{padding:16px}
+  .bib-page-card{padding:12px;background:var(--bib-panel);border:1px solid var(--bib-line);
+    --ink:#F3F3F1; --ink-soft:#B9BAC0; --neutral:#7C7E86; --line:rgba(255,255,255,.12); --line-soft:rgba(255,255,255,.07)}
 
-  /* linha 1: estrela (favoritos) | busca | documento (meus modelos) */
-  .bib-search-row{display:flex;align-items:center;gap:9px;margin-bottom:12px}
-  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:11px;padding:11px 13px;margin:0;flex:1;min-width:0}
-  .bib-icon-btn{flex:none;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;cursor:pointer;
-    background:var(--paper-2);border:1px solid var(--line-soft);color:var(--ink-soft);transition:background .15s,color .15s,border-color .15s}
-  .bib-icon-btn:hover{background:var(--btn-06);color:var(--ink)}
-  .bib-icon-btn.on{color:#F5DE8C;border-color:rgba(245,222,140,.4)}
-  .bib-icon-btn svg{width:20px;height:20px}
+  /* rolagem horizontal sem barra visível (linhas únicas) */
+  .bib-hscroll{display:flex;align-items:center;gap:7px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+  .bib-hscroll::-webkit-scrollbar{display:none}
 
-  /* linha 2: dropdowns (categoria, segmento, ordenar, idioma) */
-  .bib-dd-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
-  .bib-dd{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;
-    background:var(--paper-2);border:1px solid var(--line-soft);color:var(--ink-soft);font-size:12.5px;font-weight:500;
+  /* linha 1: Meus Modelos | busca */
+  .bib-search-row{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .bib-searchbox{background:var(--bib-input);box-shadow:none;border:1px solid var(--bib-line);border-radius:10px;padding:10px 12px;margin:0;flex:1;min-width:0}
+  .bib-searchbox input{font-size:14px;color:var(--bib-ink)}
+  .bib-searchbox svg{color:var(--bib-ink-faint)}
+  .bib-mymodels-btn{flex:none;display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 13px;border-radius:10px;cursor:pointer;
+    background:var(--bib-input);border:1px solid var(--bib-line);color:var(--bib-ink);font-family:inherit;font-size:12.5px;font-weight:600;white-space:nowrap;
+    transition:border-color .15s,background .15s}
+  .bib-mymodels-btn:hover{border-color:var(--bib-line-2)}
+  .bib-mymodels-btn svg{width:16px;height:16px;color:var(--bib-ink-soft);flex:none}
+
+  /* linha 2: dropdowns (idioma, segmento, categoria, ordenar) — uma linha, mesmo tamanho */
+  .bib-dd-row{margin-bottom:10px}
+  .bib-dd{flex:1 0 0;min-width:104px;display:inline-flex;align-items:center;justify-content:space-between;gap:5px;height:38px;padding:0 11px;border-radius:10px;
+    background:var(--bib-elev);border:1px solid var(--bib-line);color:var(--bib-ink-soft);font-size:12px;font-weight:500;
     cursor:pointer;transition:background .15s,color .15s,border-color .15s;font-family:inherit;white-space:nowrap}
-  .bib-dd:hover{background:var(--btn-06);color:var(--ink)}
-  .bib-dd.on{color:var(--ink);border-color:var(--line)}
-  .bib-dd .dd-arrow{width:12px;height:12px;opacity:.55;flex:none}
+  .bib-dd>span{overflow:hidden;text-overflow:ellipsis}
+  .bib-dd:hover{border-color:var(--bib-line-2);color:var(--bib-ink)}
+  .bib-dd.on{color:var(--bib-ink);border-color:var(--bib-line-2)}
+  .bib-dd .dd-arrow{width:12px;height:12px;opacity:.5;flex:none}
 
-  /* linha 3: insígnias de origem com contagem (multi-select) */
-  .bib-origem-row{display:grid;grid-template-columns:1fr 1fr;gap:9px;padding-top:14px;margin-bottom:12px;border-top:1px solid var(--line-soft)}
-  .bib-origem-chip{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;cursor:pointer;
-    background:var(--paper-2);border:1px solid var(--line-soft);transition:border-color .15s,background .15s;font-family:inherit;text-align:left}
-  .bib-origem-chip .boc-ic{flex:none;width:26px;height:26px;border-radius:8px;display:grid;place-items:center}
-  .bib-origem-chip .boc-ic svg{width:15px;height:15px}
-  .bib-origem-chip .boc-txt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
-  .bib-origem-chip .boc-lbl{font-size:12.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .bib-origem-chip .boc-cnt{font-size:11px;color:var(--neutral);font-variant-numeric:tabular-nums}
-  .bib-origem-chip.on{background:var(--btn-06)}
-  .bib-origem-chip.bo-oficial.on{border-color:rgba(220,220,220,.55)}
-  .bib-origem-chip.bo-oficial .boc-ic{background:linear-gradient(135deg,#EDEDED,#B9B9B9);color:#2A2A2A}
-  .bib-origem-chip.bo-juridico.on{border-color:rgba(140,20,20,.6)}
-  .bib-origem-chip.bo-juridico .boc-ic{background:#5C0A0A;color:#fff}
-  .bib-origem-chip.bo-recomendados.on{border-color:rgba(201,160,60,.6)}
-  .bib-origem-chip.bo-recomendados .boc-ic{background:linear-gradient(135deg,#F5DE8C,#C9A03C);color:#3A2A00}
-  .bib-origem-chip.bo-comunidade.on{border-color:rgba(156,106,52,.6)}
-  .bib-origem-chip.bo-comunidade .boc-ic{background:linear-gradient(135deg,#9C6A34,#6E4423);color:#F5F7FA}
-
-  .bib-lang-note{font-size:12px;color:var(--neutral);text-align:center;margin:0 0 16px}
+  /* linha 3: insígnias de origem (chip da referência) com contagem, uma linha, mesmo tamanho */
+  .bib-origem-row{margin-bottom:2px;padding-top:11px;border-top:1px solid var(--bib-line)}
+  .bib-origem-row .bib-otag{flex:1 0 0;min-width:120px;justify-content:flex-start;height:42px;padding:0 12px;border-radius:11px;
+    cursor:pointer;font-size:12px;transition:border-color .15s,background .15s}
+  .bib-origem-row .bib-otag .ot-lbl{flex:1;overflow:hidden;text-overflow:ellipsis}
+  .bib-origem-row .bib-otag.on{background:var(--bib-elev)}
+  .bib-origem-row .bib-otag.o-oficial.on{border-color:rgba(198,203,214,.6)}
+  .bib-origem-row .bib-otag.o-juridico.on{border-color:rgba(229,72,77,.75)}
+  .bib-origem-row .bib-otag.o-recomendados.on{border-color:rgba(224,167,59,.75)}
+  .bib-origem-row .bib-otag.o-comunidade.on{border-color:rgba(217,138,74,.75)}
 
   /* Visualizar — todos os blocos do contrato (só leitura) */
   .vis-blocos{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
@@ -100,13 +110,6 @@
   .vis-bloco-tag{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--neutral);background:var(--btn-06);border-radius:20px;padding:2px 8px}
   .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;word-break:break-word}
 
-  /* insígnias de origem no rodapé do card / detalhe — discretas (ícone + texto colorido) */
-  .bib-orig{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;white-space:nowrap}
-  .bib-orig svg{width:13px;height:13px;flex:none}
-  .bib-orig.o-oficial{color:#C9C9C4}
-  .bib-orig.o-juridico{color:#E0736B}
-  .bib-orig.o-comunidade{color:#C79A5E}
-  .bib-orig.o-recomendados{color:#E7C766}
   /* pílula sólida (usada em sheets/detalhe quando precisa de destaque) */
   .bib-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;
     border-radius:20px;letter-spacing:.02em;white-space:nowrap}

@@ -663,27 +663,24 @@
       <section class="view" id="v-bibliotecas">
         <div class="card bib-page-card">
           <div class="bib-search-row">
-            <button type="button" class="bib-icon-btn" id="bib-fav-btn" onclick="abrirSalvosBiblioteca()" aria-label="Favoritos" data-t-title="library.favorites">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>
+            <button type="button" class="bib-mymodels-btn" id="bib-meus-btn" onclick="abrirMenuMeusModelos()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span data-t="library.origin.mine">Meus Modelos</span>
             </button>
             <div class="searchbox bib-searchbox">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
-            <button type="button" class="bib-icon-btn" id="bib-meus-btn" onclick="abrirMeusModelosBiblioteca()" aria-label="Meus modelos" data-t-title="library.origin.mine">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-            </button>
           </div>
 
-          <div class="bib-dd-row">
-            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+          <div class="bib-dd-row bib-hscroll">
             <button type="button" class="bib-dd" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
           </div>
 
-          <div class="bib-origem-row" id="bib-origem-row"></div>
-          <p class="bib-lang-note" data-t="library.allLangsNote">Todos os idiomas são exibidos na biblioteca.</p>
+          <div class="bib-origem-row bib-hscroll" id="bib-origem-row"></div>
 
           <div id="bib-lista"></div>
           <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
@@ -2251,7 +2248,6 @@
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
-    "library.allLangsNote": { pt:"Todos os idiomas são exibidos na biblioteca.", en:"All languages are shown in the library.", es:"Todos los idiomas se muestran en la biblioteca." },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
@@ -9262,6 +9258,18 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
+  /* Ícones planos (sem estilos inline) para os chips de origem .bib-otag —
+     o CSS dimensiona/colore via .ot-ic. */
+  const OTAG_ICON={
+    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5z"/><path d="m9 12 2 2 4-4"/></svg>',
+    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7 2 13a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
+    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>',
+    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5M15 20c0-2 .8-3.4 2.2-4"/></svg>'
+  };
+  function bibOtag(key, label, cnt){
+    return '<span class="bib-otag o-'+key+'"><span class="ot-ic">'+OTAG_ICON[key]+'</span>'+
+      '<span class="ot-lbl">'+escapeHtml(label)+'</span>'+(cnt!=null?'<span class="ot-cnt">'+cnt+'</span>':'')+'</span>';
+  }
   let bibOrigemSel=new Set();
   let bibOrdenacao='usos';
   let bibIdiomaSel=null;
@@ -9316,10 +9324,9 @@
     row.innerHTML=BIB_ORIGENS.map(o=>{
       const n=bibContagemOrigem(o.key);
       const on=bibOrigemSel.has(o.key);
-      return '<button type="button" class="bib-origem-chip '+o.cls+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
-        '<span class="boc-ic">'+o.icon()+'</span>'+
-        '<span class="boc-txt"><span class="boc-lbl">'+t(o.labelKey)+'</span><span class="boc-cnt">'+n+'</span></span>'+
-      '</button>';
+      return '<button type="button" class="bib-otag o-'+o.key+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
+        '<span class="ot-ic">'+OTAG_ICON[o.key]+'</span>'+
+        '<span class="ot-lbl">'+t(o.labelKey)+'</span><span class="ot-cnt">'+n+'</span></button>';
     }).join('');
   }
   /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
@@ -9349,6 +9356,18 @@
     const valores=[...new Set(catalogoBiblioteca().map(i=>i.profissao).filter(Boolean))].sort();
     const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
     bibSheetOpcaoUnica(t('library.facet.profession'), opcoes, bibSegmentoSel, function setBibSegmentoPick(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); });
+  }
+  /* Menu do botão "Meus Modelos": dá acesso a Favoritos e aos modelos
+     próprios do utilizador (substitui os dois botões separados). */
+  function abrirMenuMeusModelos(){
+    const iconFav='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
+    const iconDoc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+    const html='<div class="plist">'+
+      '<div class="prow" onclick="abrirSalvosBiblioteca()">'+iconFav+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="abrirMeusModelosBiblioteca()">'+iconDoc+'<div class="t">'+t('library.origin.mine')+'</div>'+chevr+'</div>'+
+    '</div>';
+    openInfo(t('library.origin.mine'), html);
   }
   /* "Salvos" — modelos pessoais do utilizador: hoje isto é exatamente o
      conjunto de favoritos (bibFavoritos), único mecanismo de "guardar
@@ -9395,13 +9414,13 @@
   const BIB_ICON_USER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   const BIB_ICON_THUMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>';
   function bibAutorLinha(item){
-    if(item.verificado) return '<span class="bib-orig o-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legalVerified'))+'</span>';
-    if(item.origem==='comunidade') return '<span class="bib-orig o-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>';
-    return '<span class="bib-orig o-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>';
+    if(item.verificado) return bibOtag('juridico', item.autor||t('library.origin.legalVerified'));
+    if(item.origem==='comunidade') return bibOtag('comunidade', item.autor||t('library.origin.community'));
+    return bibOtag('oficial', t('library.origin.official'));
   }
   function bibBadgesItem(item){
     const badges=[bibAutorLinha(item)];
-    if((item.avaliacao||0)>=4.7) badges.push('<span class="bib-orig o-recomendados">'+BIB_ICON_THUMB+t('library.origin.recommended')+'</span>');
+    if((item.avaliacao||0)>=4.7) badges.push(bibOtag('recomendados', t('library.origin.recommended')));
     return badges;
   }
   /* Versão sólida (pílula colorida) para o sheet de detalhe, cujo fundo pode
@@ -9444,6 +9463,7 @@
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.baseId);
       const rodape=bibBadgesItem(i);
+      if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
       const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
