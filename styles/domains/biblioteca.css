@@ -103,12 +103,16 @@
   .bib-origem-row .bib-otag.o-recomendados.on{border-color:rgba(224,167,59,.75)}
   .bib-origem-row .bib-otag.o-comunidade.on{border-color:rgba(217,138,74,.75)}
 
-  /* Visualizar — todos os blocos do contrato (só leitura) */
-  .vis-blocos{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
-  .vis-bloco{border:1px solid var(--line-soft);border-radius:12px;padding:12px 14px;background:var(--paper-2)}
-  .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:6px}
-  .vis-bloco-tag{font-size:10px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--neutral);background:var(--btn-06);border-radius:20px;padding:2px 8px}
-  .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap;word-break:break-word}
+  /* Visualizar — tela do contrato (título à esquerda, cabeçalho em linha, blocos num card) */
+  .vis-screen{--ink:#F3F3F1; --ink-soft:#B9BAC0; --neutral:#7C7E86; --line-soft:rgba(255,255,255,.07)}
+  .vis-title{font-family:var(--font-headline),Georgia,serif;font-weight:400;font-size:23px;line-height:1.15;color:#F6F6F4;text-align:left;margin:2px 0 10px}
+  .vis-head{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .vis-head .vis-meta{font-size:11.5px;font-weight:600;color:#B9BAC0;background:#1F2025;border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:5px 9px}
+  .vis-card{background:#16171C;border:1px solid rgba(255,255,255,.07);border-radius:12px;padding:6px;margin-bottom:14px;display:flex;flex-direction:column;gap:6px}
+  .vis-bloco{border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:12px 13px;background:#1F2025}
+  .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:600;color:#F3F3F1;margin-bottom:6px}
+  .vis-bloco-tag{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9BA2;background:#292B2F;border:1px solid rgba(255,255,255,.08);border-radius:20px;padding:2px 8px;white-space:nowrap}
+  .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:#B9BAC0;white-space:pre-wrap;word-break:break-word}
 
   /* pílula sólida (usada em sheets/detalhe quando precisa de destaque) */
   .bib-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;

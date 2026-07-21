@@ -639,7 +639,11 @@
           <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
           <div class="save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</div>
         </div>
-        <div class="builder-hint" id="builder-hint" data-t="builder.hint">Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.</div>
+        <div class="builder-legend" id="builder-hint">
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg><span data-t="builder.legendReorder">Arraste para reordenar</span></span>
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span data-t="builder.legendEdit">Toque no texto para editar</span></span>
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg><span data-t="builder.legendToggle">Inclua ou remova</span></span>
+        </div>
         <div class="builder-locked-notice" id="builder-locked-notice" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11V7a7 7 0 0 1 14 0v4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
           <span id="builder-locked-text" data-t="job.contract.sent">Contrato já enviado ao cliente — já não pode ser editado.</span>
@@ -655,7 +659,6 @@
         <div id="builder-progress" style="display:none;margin-top:18px">
           <button class="btn primary" style="width:100%" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
         </div>
-        <p style="font-size:12.5px;color:var(--neutral);margin-top:18px" id="lbl-modelos-editaveis" data-t="builder.disclaimer">Modelos editáveis, não aconselhamento jurídico.</p>
       </section>
 
 
@@ -1906,6 +1909,7 @@
     "action.edit": { pt:"Editar", en:"Edit", es:"Editar" },
     "action.exportData": { pt:"Exportar todos os dados (.json)", en:"Export all data (.json)", es:"Exportar todos los datos (.json)" },
     "action.save": { pt:"Guardar", en:"Save", es:"Guardar" },
+    "action.cancel": { pt:"Cancelar", en:"Cancel", es:"Cancelar" },
     "action.saveGoals": { pt:"Guardar metas", en:"Save goals", es:"Guardar metas" },
     "action.saveSignature": { pt:"Guardar assinatura", en:"Save signature", es:"Guardar firma" },
     "action.test": { pt:"Testar", en:"Test", es:"Probar" },
@@ -1919,9 +1923,10 @@
     "block.payment3": { pt:"Pagamento — 3 parcelas", en:"Payment — 3 instalments", es:"Pago — 3 cuotas" },
     // --- Construtor de contrato ---
     "builder.blockLibrary": { pt:"Biblioteca de blocos", en:"Clause library", es:"Biblioteca de cláusulas" },
-    "builder.disclaimer": { pt:"Modelos orientativos — revê sempre antes de usar.", en:"Template only — always review before sending to a client.", es:"Solo orientativo — revisa siempre antes de enviarlo al cliente." },
     "builder.generateLink": { pt:"Gerar contrato e link →", en:"Generate contract link →", es:"Generar enlace del contrato →" },
-    "builder.hint": { pt:"Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.", en:"Drag to reorder · tap the pencil to edit · toggle to include or exclude a clause.", es:"Arrastra para reordenar · toca el lápiz para editar · el interruptor incluye o excluye la cláusula." },
+    "builder.legendReorder": { pt:"Arraste para reordenar", en:"Drag to reorder", es:"Arrastra para reordenar" },
+    "builder.legendEdit": { pt:"Toque no texto para editar", en:"Tap the text to edit", es:"Toca el texto para editar" },
+    "builder.legendToggle": { pt:"Inclua ou remova", en:"Include or remove", es:"Incluye o elimina" },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
     "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
     "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato.", en:"Replace a value and it applies across the whole contract.", es:"Sustituye un valor y se aplica en todo el contrato." },
@@ -6648,23 +6653,66 @@
     document.getElementById('builder-hint').style.display= locked ? 'none' : 'block';
     document.getElementById('builder-progress').style.display= (isJob && job.contract.status==='rascunho') ? 'block':'none';
   }
+  /* Divide o texto de um bloco em cláusulas individuais (separadas por linha
+     em branco) — usado para exibir cada cláusula numerada e editável. */
+  function blocoClausulas(job,b){
+    const txt=blockText(job,b)||'';
+    const arr=txt.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    return arr.length?arr:[txt];
+  }
+  function clauseListInnerHtml(job,b,editavel){
+    return blocoClausulas(job,b).map((txt,idx)=>
+      '<div class="clause" id="cl-'+b.id+'-'+idx+'"'+(editavel?' onclick="editarClausula(\''+b.id+'\','+idx+')"':'')+'>'+
+        '<span class="clause-n">'+(idx+1)+'</span>'+
+        '<div class="clause-txt">'+escapeHtml(txt)+'</div>'+
+      '</div>'
+    ).join('');
+  }
   function blockCardHtml(job,b,locked){
+    const editavel = !locked && !(builderContext && contratoBloqueadoParaEdicao(job));
+    const addBtn = (!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '';
     return '<div class="block'+(b.on?'':' off')+(locked?' locked':'')+'" data-bid="'+b.id+'">'+
       (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
       '<div class="block-main"><div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
       '<span>'+escapeHtml(blockName(b))+'</span>'+
       '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
-      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+escapeHtml(blockText(job,b))+
-        ((!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '')+
+      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+
+        '<div class="clause-list" id="clist-'+b.id+'">'+clauseListInnerHtml(job,b,editavel)+'</div>'+addBtn+
       '</div></div>'+
       '<div class="block-actions">'+
-      (locked? '' : '<div class="icon-sm" title="Editar texto" onclick="editarBloco(\''+b.id+'\')">'+ICON_PENCIL+'</div>')+
       '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
       '</div></div>';
   }
   function toggleBlocoPreview(bid){
     const prev=document.getElementById('bprev-'+bid);
     if(prev) prev.classList.toggle('collapsed');
+  }
+  /* Edição inline por cláusula (sem botão de lápis — clicar na cláusula
+     entra em edição). Mantém customText e tpl consistentes por índice. */
+  function editarClausula(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b || (builderContext && contratoBloqueadoParaEdicao(job))) return;
+    const el=document.getElementById('cl-'+bid+'-'+idx);
+    if(!el || el.querySelector('textarea')) return;
+    const txt=blocoClausulas(job,b)[idx]||'';
+    el.classList.add('editing');
+    el.removeAttribute('onclick');
+    el.innerHTML='<span class="clause-n">'+(idx+1)+'</span>'+
+      '<div class="clause-edit"><textarea class="block-textarea" id="cedit-'+bid+'-'+idx+'">'+escapeHtml(txt)+'</textarea>'+
+      '<div class="block-edit-actions"><button class="btn soft" onclick="event.stopPropagation();cancelarEdicaoBloco(\''+bid+'\')">'+t('action.cancel')+'</button>'+
+      '<button class="btn primary" onclick="event.stopPropagation();guardarClausula(\''+bid+'\','+idx+')">'+t('action.save')+'</button></div></div>';
+    const ta=document.getElementById('cedit-'+bid+'-'+idx); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  }
+  function guardarClausula(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b) return;
+    const novo=document.getElementById('cedit-'+bid+'-'+idx).value;
+    const cur=blocoClausulas(job,b); cur[idx]=novo; b.customText=cur.join('\n\n');
+    if(b.tpl){ const tp=b.tpl.split(/\n{2,}/); if(tp.length===cur.length){ tp[idx]=novo; b.tpl=tp.join('\n\n'); } else { b.tpl=b.customText; } }
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    showToast(t('toast.blockTextUpdated'));
   }
   /* ===== Campos dinâmicos — substituição em massa =====
      Reúne todos os [PLACEHOLDERS] presentes no tpl de qualquer bloco do
@@ -6687,11 +6735,14 @@
     if(m) return m[LANG]||m.en||campo;
     return bibCapitalizar(campo);
   }
+  /* Campos que não fazem sentido durante a criação — a data de assinatura só
+     existe depois de o contrato ser efetivamente assinado pelas partes. */
+  const DYN_FIELD_EXCLUIR=new Set(['SIGNATURE_DATE','SIGNED_DATE','DATE_SIGNED']);
   function builderCamposDinamicos(job){
     const ordem=[]; const vistos=new Set(); const re=/\[([A-Z0-9_]+)\]/g;
     (job.contract.blocks||[]).forEach(b=>{
       if(!b.tpl) return;
-      let m; while((m=re.exec(b.tpl))){ if(!vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
+      let m; while((m=re.exec(b.tpl))){ if(!DYN_FIELD_EXCLUIR.has(m[1]) && !vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
     });
     return ordem;
   }
@@ -6720,32 +6771,18 @@
     const job=getBuilderJob();
     job.contract.blocks.forEach(b=>{ if(b.tpl) b.customText=LegalLibrary.resolveClauseText(b.tpl, fv); });
     if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
-    /* Atualiza as prévias no lugar (sem re-render) para não perder o foco do
+    /* Atualiza as cláusulas no lugar (sem re-render) para não perder o foco do
        input que está sendo digitado; ignora blocos em modo de edição. */
+    const editavel = !(builderContext && contratoBloqueadoParaEdicao(job));
     job.contract.blocks.forEach(b=>{
-      const p=document.getElementById('bprev-'+b.id);
-      if(p && !p.querySelector('textarea')) p.textContent=blockText(job,b);
+      const lst=document.getElementById('clist-'+b.id);
+      if(lst && !lst.querySelector('textarea')) lst.innerHTML=clauseListInnerHtml(job,b,editavel);
     });
   }
-  function editarBloco(bid){
-    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
-    if(builderContext && contratoBloqueadoParaEdicao(job)) return;
-    const prev=document.getElementById('bprev-'+bid);
-    if(!prev||!b) return;
-    prev.classList.remove('collapsed');
-    prev.innerHTML='<textarea class="block-textarea" id="bedit-'+bid+'">'+escapeHtml(blockText(job,b))+'</textarea>'+
-      '<div class="block-edit-actions"><button class="btn soft" onclick="cancelarEdicaoBloco(\''+bid+'\')">Cancelar</button>'+
-      '<button class="btn primary" onclick="guardarBlocoTexto(\''+bid+'\')">Guardar</button></div>';
-    document.getElementById('bedit-'+bid).focus();
-  }
-  function guardarBlocoTexto(bid){
-    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
-    b.customText=document.getElementById('bedit-'+bid).value;
-    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+  function cancelarEdicaoBloco(bid){
     renderBuilder();
-    showToast(t('toast.blockTextUpdated'));
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
   }
-  function cancelarEdicaoBloco(bid){ renderBuilder(); }
   function toggleBloco(bid, el){
     const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
     if(builderContext && contratoBloqueadoParaEdicao(job)) return;
@@ -9514,20 +9551,32 @@
      idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
      Importar leva ao editor com o painel de campos dinâmicos. */
   async function abrirVisualizarContratoCompleto(rawId, lang, titulo){
-    openInfo(titulo||t('library.viewBlock'), '<p style="font-size:13px;color:var(--neutral)">…</p>');
+    openInfo('', '<p style="font-size:13px;color:var(--neutral)">…</p>');
     const detail = await LegalLibrary.getDetail(rawId, lang||LANG);
     if(!detail || !detail.blocks || !detail.blocks.length){
       document.getElementById('infoBody').innerHTML='<p style="font-size:13px;color:var(--neutral)">'+t('library.structureUnavailable')+'</p>';
       return;
     }
-    const html=detail.blocks.map(b=>{
+    const it=LegalLibrary.get(rawId);
+    /* Cabeçalho numa linha: Jurídico (se verificado) · Idioma · nº de blocos. */
+    const head=[];
+    if(it && it.verificado) head.push(bibOtag('juridico', t('library.origin.legalVerified')));
+    else head.push(bibOtag('oficial', t('library.origin.official')));
+    head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
+    head.push('<span class="vis-meta">'+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
+    const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const texto=(b.clauses||[]).map(c=>c.text).join('\n\n');
       return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(b.name)+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
         '<div class="vis-bloco-txt">'+escapeHtml(texto)+'</div></div>';
     }).join('');
-    document.getElementById('infoBody').innerHTML='<div class="vis-blocos">'+html+'</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>';
+    document.getElementById('infoBody').innerHTML=
+      '<div class="vis-screen">'+
+        '<h2 class="vis-title">'+escapeHtml(titulo||(it&&it.titulo)||'')+'</h2>'+
+        '<div class="vis-head">'+head.join('')+'</div>'+
+        '<div class="vis-card">'+blocosHtml+'</div>'+
+        '<button class="btn primary" style="width:100%" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>'+
+      '</div>';
   }
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
