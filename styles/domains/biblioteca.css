@@ -1,13 +1,4 @@
-  /* ===== BIBLIOTECA — filtros sanfona + cards ===== */
-  .bib-acc{border:1px solid var(--line-soft);border-radius:12px;margin-bottom:8px;overflow:hidden;background:var(--glass-7)}
-  .bib-acc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;font-size:13.5px;font-weight:600;color:var(--ink)}
-  .bib-acc-head .cnt{font-size:11px;color:var(--brand);font-weight:600;margin-left:auto;margin-right:8px}
-  .bib-acc-head svg{width:16px;height:16px;transition:transform .2s;flex:none}
-  .bib-acc.open .bib-acc-head svg{transform:rotate(180deg)}
-  .bib-acc-body{display:none;flex-wrap:wrap;gap:7px;padding:0 14px 13px}
-  .bib-acc.open .bib-acc-body{display:flex}
-  .bib-fchip{font-size:12px;padding:6px 12px;border-radius:999px;border:1px solid var(--line);color:var(--ink-soft);cursor:pointer;transition:all .15s}
-  .bib-fchip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  /* ===== BIBLIOTECA — cards ===== */
   .bib-card{position:relative;display:flex;flex-direction:column;height:168px;border-radius:var(--r);padding:14px;margin-bottom:9px;cursor:pointer;
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
     border:1px solid rgba(255,255,255,.10);
@@ -61,16 +52,30 @@
 
   /* ===== BIBLIOTECA — card de topo (busca + filtro + lista) ===== */
   .bib-page-card{padding:16px}
-  /* filtro/salvos ficam como botoes proprios, fora do campo de busca —
-     o campo de busca fica mais compacto e com o mesmo alinhamento/altura
-     dos botoes, arestas menos arredondadas (10px, igual aos botoes). */
-  .bib-search-row{display:flex;align-items:center;gap:8px}
-  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:10px;padding:9px 12px;margin:0;flex:1;min-width:0}
-  .bib-filter-icon-btn{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;
-    cursor:pointer;color:var(--ink-soft);background:var(--btn-06);transition:background .15s,color .15s}
-  .bib-filter-icon-btn svg{width:17px;height:17px}
-  .bib-filter-icon-btn:hover{background:var(--btn-32)}
-  .bib-filter-icon-btn.on{background:var(--ink);color:var(--paper)}
+  .bib-searchbox{background:var(--paper-2);box-shadow:none;border-radius:10px;padding:9px 12px;margin:0}
+
+  /* linha de ferramentas abaixo da busca, mesmo card: favoritos, meus
+     modelos e os 3 dropdowns (ordenar/idioma/origem) */
+  .bib-tools-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .bib-tool-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;border:none;
+    background:var(--btn-06);color:var(--ink-soft);font-size:12.5px;font-weight:600;cursor:pointer;
+    transition:background .15s,color .15s;font-family:inherit;white-space:nowrap}
+  .bib-tool-btn:hover{background:var(--btn-32)}
+  .bib-tool-btn.on{background:var(--ink);color:var(--paper)}
+  .bib-tool-btn svg{width:15px;height:15px;flex:none}
+  .bib-tool-btn .dd-arrow{width:11px;height:11px;opacity:.6;margin-left:1px}
+
+  /* insígnias de origem — cores próprias por tipo, ícone atrelado ao nome */
+  .bib-badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 9px;
+    border-radius:20px;letter-spacing:.02em;white-space:nowrap}
+  .bib-badge svg{width:11px;height:11px;flex:none}
+  .bib-badge.bo-oficial{background:linear-gradient(135deg,#EDEDED,#B9B9B9);color:#2A2A2A}
+  .bib-badge.bo-juridico{background:#5C0A0A;color:#FFFFFF}
+  .bib-badge.bo-comunidade{background:linear-gradient(135deg,#9C6A34,#6E4423);color:#F5F7FA}
+  .bib-badge.bo-recomendados{background:linear-gradient(135deg,#F5DE8C,#C9A03C);color:#3A2A00}
+  .bib-badge-grid{display:flex;flex-wrap:wrap;gap:9px}
+  .bib-badge-opt{cursor:pointer;border-radius:22px;padding:2px;border:2px solid transparent;transition:border-color .15s}
+  .bib-badge-opt.on{border-color:var(--ink)}
 
   /* ===== ACTION SHEET ===== */
   .overlay{position:absolute;inset:0;background:var(--btn-32);z-index:70;opacity:0;pointer-events:none;
