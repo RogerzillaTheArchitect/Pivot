@@ -465,63 +465,6 @@
         <div class="fo-title-row">
           <span class="fo-title" data-t="reports.opStats">Estatísticas Operacionais</span>
         </div>
-        <div class="fo-divider"></div>
-          <div class="ops-stat-list" onclick="abrirRelatorios('operacional')">
-          <div class="ops-stat-row">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v4.8l3.2 2"/></svg></div>
-              <span class="ops-stat-name" data-t="home.time">Tempo</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-tempo-num">0</b><span class="ops-stat-den"> / <span id="mt-tempo-den">0</span></span> <span class="ops-stat-unit" data-t="home.timeUnitDays">dias</span></div>
-                <span class="ops-stat-trend" id="trend-tempo"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-tempo"></div>
-          </div>
-          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M10 8h6v6"/><path d="M16 8 9 15"/></svg></div>
-              <span class="ops-stat-name" data-t="home.pending">Pendências</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-aguardando-num">0</b><span class="ops-stat-den"> / <span id="mt-aguardando-den">0</span></span></div>
-                <span class="ops-stat-trend" id="trend-aguardando"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-aguardando"></div>
-          </div>
-          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M14 8H8v6"/><path d="M8 8l7 7"/></svg></div>
-              <span class="ops-stat-name" data-t="home.demands">Demandas</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-demandas-num">0</b><span class="ops-stat-den"> / <span id="mt-demandas-den">0</span></span></div>
-                <span class="ops-stat-trend" id="trend-demandas"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-demandas"></div>
-          </div>
-          <div class="ops-stat-row">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="m8.5 12.5 2.3 2.3L16 10"/></svg></div>
-              <span class="ops-stat-name" data-t="home.closed">Fechados</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-fechados-num">0</b></div>
-                <span class="ops-stat-trend" id="trend-fechados"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-fechados"></div>
-          </div>
-          <div class="ops-stat-row" onclick="event.stopPropagation();go('historico')">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5v14M12 5v14M16 5v14"/></svg></div>
-              <span class="ops-stat-name" data-t="home.executed">Executados</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-executados-num">0</b><span class="ops-stat-den"> / <span id="mt-executados-den">0</span></span></div>
-                <span class="ops-stat-trend" id="trend-executados"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-executados"></div>
-          </div>
-          <div class="ops-stat-row" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
-              <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 21V4h11l-2.5 3.5L17 11H6"/></svg></div>
-              <span class="ops-stat-name" data-t="home.completedTile">Concluídos</span>
-              <div class="ops-stat-numstack">
-                <div class="ops-stat-value"><b id="mt-entregues-num">0</b><span class="ops-stat-den"> / <span id="mt-entregar-den">0</span></span></div>
-                <span class="ops-stat-trend" id="trend-entregues"></span>
-              </div>
-              <div class="ops-stat-bar" id="bar-entregues"></div>
-          </div>
-          </div>
         </div>
 
         <span class="section-label-out" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
@@ -2332,8 +2275,6 @@
     "home.addEntryBtn": { pt:"Adicionar", en:"Add", es:"Añadir" },
     "home.executed": { pt:"Executados", en:"Executed", es:"Ejecutados" },
     "home.hours": { pt:"Horas", en:"Worktime", es:"Horas" },
-    "home.time": { pt:"Tempo", en:"Time", es:"Tiempo" },
-    "home.timeUnitDays": { pt:"dias", en:"days", es:"días" },
     "home.awaiting": { pt:"Aguardando", en:"Awaiting", es:"Esperando" },
     "home.pending": { pt:"Pendências", en:"Pending", es:"Pendientes" },
     "home.completedTile": { pt:"Concluídos", en:"Completed", es:"Concluidos" },
@@ -3347,33 +3288,6 @@
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
-  /* Barra segmentada das Estatísticas Operacionais: sempre 20 segmentos fixos,
-     cada um valendo 5% da meta — nunca um segmento por unidade (ver PLDS da
-     tarefa). Sem meta (den<=0), a barra fica oculta (ver "Fechados"). */
-  function renderSegBar(id, num, den){
-    const el=document.getElementById(id);
-    if(!el) return;
-    if(!den || den<=0){ el.innerHTML=''; return; }
-    const pct=Math.max(0, Math.min(100, (num/den)*100));
-    const preenchidos=Math.round(pct/2);
-    let html='';
-    for(let i=0;i<50;i++) html+='<span class="ops-seg'+(i<preenchidos?' on':'')+'"></span>';
-    el.innerHTML=html;
-  }
-  /* Barra adaptativa (usada só por "Fechados", que não tem meta fixa): a escala
-     de cada segmento se ajusta ao total, sempre mantendo 50 segmentos —
-     porSegmento=ceil(total/50), preenchidos=round(total/porSegmento). */
-  function renderSegBarAdaptativa(id, total){
-    const el=document.getElementById(id);
-    if(!el) return;
-    total=total||0;
-    if(total<=0){ el.innerHTML=''; return; }
-    const porSegmento=Math.max(1, Math.ceil(total/50));
-    const preenchidos=Math.max(1, Math.min(50, Math.round(total/porSegmento)));
-    let html='';
-    for(let i=0;i<50;i++) html+='<span class="ops-seg'+(i<preenchidos?' on':'')+'"></span>';
-    el.innerHTML=html;
-  }
   /* rampas de cor de cada fita do gráfico Financeiro — o índice é "quantas
      vezes o valor já passou da meta/teto" (1 = 100%). Esperado/Recebido
      apenas mantêm o tom final ao crescer além de 100%; Despesas continua
@@ -3636,39 +3550,6 @@
       el.textContent=(pct>=0?'↑':'↓')+Math.abs(pct)+'%';
       el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
     };
-    /* Fechados: sem meta fixa — a barra usa escala adaptativa (ver
-       renderSegBarAdaptativa), sempre 20 segmentos independente do total. */
-    set('mt-fechados-num', s.fechadosEsteMes);
-    renderSegBarAdaptativa('bar-fechados', s.fechadosEsteMes);
-    setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
-    /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
-    set('mt-executados-num', s.executadosCount);
-    set('mt-executados-den', s.totalJobs);
-    renderSegBar('bar-executados', s.executadosCount, s.totalJobs);
-    setTrend('trend-executados', s.executadosEsteMes, s.executadosMesAnterior);
-    /* Tempo: executado (trabalhos já concluídos) sobre previsto (todos os
-       trabalhos com data neste mês) — sem meta manual, os dois valores vêm
-       direto dos trabalhos, convertidos de horas para dias (horas ÷ 24). */
-    const diasCompacto=horas=>((horas||0)/24).toLocaleString(jsLocale(),{minimumFractionDigits:1,maximumFractionDigits:1});
-    set('mt-tempo-num', diasCompacto(s.horasExecutadasEsteMes));
-    set('mt-tempo-den', diasCompacto(s.horasEsteMes));
-    renderSegBar('bar-tempo', s.horasExecutadasEsteMes, s.horasEsteMes);
-    setTrend('trend-tempo', s.horasExecutadasEsteMes, s.horasMesAnterior);
-    /* Entregues: já era uma fração real (entregues / entregues+a entregar) */
-    set('mt-entregues-num', s.trabalhosEntregues);
-    set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    renderSegBar('bar-entregues', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
-    setTrend('trend-entregues', s.entreguesEsteMes, s.entreguesMesAnterior);
-    /* Aguardando: pendências do lado do cliente sobre o total de trabalhos */
-    set('mt-aguardando-num', s.pendClienteCount);
-    set('mt-aguardando-den', s.totalJobs);
-    renderSegBar('bar-aguardando', s.pendClienteCount, s.totalJobs);
-    setTrend('trend-aguardando', s.pendClienteEsteMes, s.pendClienteMesAnterior);
-    /* Demandas: pendências do meu lado sobre o total de trabalhos */
-    set('mt-demandas-num', s.pendMeuCount);
-    set('mt-demandas-den', s.totalJobs);
-    renderSegBar('bar-demandas', s.pendMeuCount, s.totalJobs);
-    setTrend('trend-demandas', s.pendMeuEsteMes, s.pendMeuMesAnterior);
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
        categoria própria, sem mexer no que Relatórios entende por "Recebido". */
