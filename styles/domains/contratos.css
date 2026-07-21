@@ -1,8 +1,11 @@
   /* ===== BUILDER DE CONTRATO ===== */
   .builder-top{display:flex;justify-content:space-between;align-items:flex-start;margin:14px 0 4px;gap:10px}
   .builder-hint{font-size:13px;color:var(--neutral);margin-bottom:18px}
+  .builder-legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:2px 0 16px}
+  .builder-legend .bl-item{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neutral)}
+  .builder-legend .bl-item svg{width:14px;height:14px;opacity:.75;flex:none}
   .block{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:1px solid var(--line);
-    border-radius:13px;padding:13px 12px;margin-bottom:9px;box-shadow:var(--shadow);
+    border-radius:9px;padding:12px 12px;margin-bottom:8px;box-shadow:var(--shadow);
     transition:transform .18s,box-shadow .18s,opacity .18s}
   .block.dragging{opacity:.5}
   .block.drop-target{box-shadow:0 0 0 2px var(--brand)}
@@ -18,9 +21,19 @@
   .block-main{flex:1;min-width:0}
   .block-name{font-size:14px;font-weight:600;margin-bottom:4px}
   .block-chev{width:14px;height:14px;flex:none;color:var(--neutral);transition:transform .2s}
-  .block-preview{font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word;margin-top:6px}
+  .block-preview{margin-top:9px}
   .block-preview.collapsed{display:none}
   .block.off .block-preview,.block.off .block-name{opacity:.45}
+  /* cláusulas numeradas, separadas e com hierarquia clara */
+  .clause-list{display:flex;flex-direction:column;gap:7px}
+  .clause{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line-soft);
+    border-radius:8px;background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s}
+  .clause:hover{border-color:var(--brand)}
+  .clause.editing{cursor:default;border-color:var(--line)}
+  .clause-n{flex:none;width:20px;height:20px;border-radius:6px;background:var(--btn-10);color:var(--brand);
+    font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
+  .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  .clause-edit{flex:1;min-width:0}
   .block-actions{display:flex;flex-direction:column;align-items:center;gap:9px;flex:none;padding-top:1px}
   .icon-sm{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--paper);
     display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;transition:border-color .15s,color .15s}
@@ -49,21 +62,22 @@
   .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
   .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--paper);background:var(--brand);border-radius:20px;padding:2px 8px}
   .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
-  .dynf-row{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:nowrap}
-  .dynf-key{flex:none;max-width:44%;font-size:12.5px;font-weight:600;color:var(--ink-soft);
-    background:var(--btn-06);border:1px solid var(--line-soft);border-radius:8px;padding:7px 10px;
+  .dynf-row{display:grid;grid-template-columns:132px 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
+  .dynf-key{height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    background:var(--btn-06);border:1px solid var(--line-soft);border-radius:8px;padding:0 10px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .dynf-arrow{width:16px;height:16px;color:var(--neutral);flex:none}
-  .dynf-input{flex:1;min-width:0;font-family:inherit;font-size:13px;color:var(--ink);
-    background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:8px 10px;outline:none}
+  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
+  .dynf-input{width:100%;height:38px;font-family:inherit;font-size:13px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:0 11px;outline:none}
   .dynf-input:focus{border-color:var(--brand)}
   .dynf-input::placeholder{color:var(--ink-faint)}
 
-  /* botão "adicionar cláusulas" dentro do bloco */
-  .addclause{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:7px 11px;border-radius:9px;
-    border:1.5px dashed var(--line);background:none;color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:500;cursor:pointer}
-  .addclause:hover{border-color:var(--brand);color:var(--ink)}
-  .addclause svg{width:14px;height:14px}
+  /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
+  .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:8px;
+    border:1px dashed var(--line);background:var(--btn-05);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    transition:border-color .15s,color .15s,background .15s}
+  .addclause:hover{border-color:var(--brand);color:var(--brand);background:var(--btn-10)}
+  .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
   .pick-list{display:flex;flex-direction:column;gap:8px}

@@ -639,7 +639,11 @@
           <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
           <div class="save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</div>
         </div>
-        <div class="builder-hint" id="builder-hint" data-t="builder.hint">Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.</div>
+        <div class="builder-legend" id="builder-hint">
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg><span data-t="builder.legendReorder">Arraste para reordenar</span></span>
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span data-t="builder.legendEdit">Toque no texto para editar</span></span>
+          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg><span data-t="builder.legendToggle">Inclua ou remova</span></span>
+        </div>
         <div class="builder-locked-notice" id="builder-locked-notice" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11V7a7 7 0 0 1 14 0v4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
           <span id="builder-locked-text" data-t="job.contract.sent">Contrato já enviado ao cliente — já não pode ser editado.</span>
@@ -655,7 +659,6 @@
         <div id="builder-progress" style="display:none;margin-top:18px">
           <button class="btn primary" style="width:100%" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
         </div>
-        <p style="font-size:12.5px;color:var(--neutral);margin-top:18px" id="lbl-modelos-editaveis" data-t="builder.disclaimer">Modelos editáveis, não aconselhamento jurídico.</p>
       </section>
 
 
@@ -663,27 +666,24 @@
       <section class="view" id="v-bibliotecas">
         <div class="card bib-page-card">
           <div class="bib-search-row">
-            <button type="button" class="bib-icon-btn" id="bib-fav-btn" onclick="abrirSalvosBiblioteca()" aria-label="Favoritos" data-t-title="library.favorites">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>
+            <button type="button" class="bib-mymodels-btn" id="bib-meus-btn" onclick="abrirMenuMeusModelos()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+              <span data-t="library.origin.mine">Meus Modelos</span>
             </button>
             <div class="searchbox bib-searchbox">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
-            <button type="button" class="bib-icon-btn" id="bib-meus-btn" onclick="abrirMeusModelosBiblioteca()" aria-label="Meus modelos" data-t-title="library.origin.mine">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-            </button>
           </div>
 
-          <div class="bib-dd-row">
-            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+          <div class="bib-dd-row bib-hscroll">
             <button type="button" class="bib-dd" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
           </div>
 
-          <div class="bib-origem-row" id="bib-origem-row"></div>
-          <p class="bib-lang-note" data-t="library.allLangsNote">Todos os idiomas são exibidos na biblioteca.</p>
+          <div class="bib-origem-row bib-hscroll" id="bib-origem-row"></div>
 
           <div id="bib-lista"></div>
           <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
@@ -1909,6 +1909,7 @@
     "action.edit": { pt:"Editar", en:"Edit", es:"Editar" },
     "action.exportData": { pt:"Exportar todos os dados (.json)", en:"Export all data (.json)", es:"Exportar todos los datos (.json)" },
     "action.save": { pt:"Guardar", en:"Save", es:"Guardar" },
+    "action.cancel": { pt:"Cancelar", en:"Cancel", es:"Cancelar" },
     "action.saveGoals": { pt:"Guardar metas", en:"Save goals", es:"Guardar metas" },
     "action.saveSignature": { pt:"Guardar assinatura", en:"Save signature", es:"Guardar firma" },
     "action.test": { pt:"Testar", en:"Test", es:"Probar" },
@@ -1922,9 +1923,10 @@
     "block.payment3": { pt:"Pagamento — 3 parcelas", en:"Payment — 3 instalments", es:"Pago — 3 cuotas" },
     // --- Construtor de contrato ---
     "builder.blockLibrary": { pt:"Biblioteca de blocos", en:"Clause library", es:"Biblioteca de cláusulas" },
-    "builder.disclaimer": { pt:"Modelos orientativos — revê sempre antes de usar.", en:"Template only — always review before sending to a client.", es:"Solo orientativo — revisa siempre antes de enviarlo al cliente." },
     "builder.generateLink": { pt:"Gerar contrato e link →", en:"Generate contract link →", es:"Generar enlace del contrato →" },
-    "builder.hint": { pt:"Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.", en:"Drag to reorder · tap the pencil to edit · toggle to include or exclude a clause.", es:"Arrastra para reordenar · toca el lápiz para editar · el interruptor incluye o excluye la cláusula." },
+    "builder.legendReorder": { pt:"Arraste para reordenar", en:"Drag to reorder", es:"Arrastra para reordenar" },
+    "builder.legendEdit": { pt:"Toque no texto para editar", en:"Tap the text to edit", es:"Toca el texto para editar" },
+    "builder.legendToggle": { pt:"Inclua ou remova", en:"Include or remove", es:"Incluye o elimina" },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
     "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
     "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato.", en:"Replace a value and it applies across the whole contract.", es:"Sustituye un valor y se aplica en todo el contrato." },
@@ -2251,7 +2253,6 @@
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
-    "library.allLangsNote": { pt:"Todos os idiomas são exibidos na biblioteca.", en:"All languages are shown in the library.", es:"Todos los idiomas se muestran en la biblioteca." },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
@@ -6652,23 +6653,66 @@
     document.getElementById('builder-hint').style.display= locked ? 'none' : 'block';
     document.getElementById('builder-progress').style.display= (isJob && job.contract.status==='rascunho') ? 'block':'none';
   }
+  /* Divide o texto de um bloco em cláusulas individuais (separadas por linha
+     em branco) — usado para exibir cada cláusula numerada e editável. */
+  function blocoClausulas(job,b){
+    const txt=blockText(job,b)||'';
+    const arr=txt.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    return arr.length?arr:[txt];
+  }
+  function clauseListInnerHtml(job,b,editavel){
+    return blocoClausulas(job,b).map((txt,idx)=>
+      '<div class="clause" id="cl-'+b.id+'-'+idx+'"'+(editavel?' onclick="editarClausula(\''+b.id+'\','+idx+')"':'')+'>'+
+        '<span class="clause-n">'+(idx+1)+'</span>'+
+        '<div class="clause-txt">'+escapeHtml(txt)+'</div>'+
+      '</div>'
+    ).join('');
+  }
   function blockCardHtml(job,b,locked){
+    const editavel = !locked && !(builderContext && contratoBloqueadoParaEdicao(job));
+    const addBtn = (!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '';
     return '<div class="block'+(b.on?'':' off')+(locked?' locked':'')+'" data-bid="'+b.id+'">'+
       (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
       '<div class="block-main"><div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
       '<span>'+escapeHtml(blockName(b))+'</span>'+
       '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
-      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+escapeHtml(blockText(job,b))+
-        ((!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '')+
+      '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+
+        '<div class="clause-list" id="clist-'+b.id+'">'+clauseListInnerHtml(job,b,editavel)+'</div>'+addBtn+
       '</div></div>'+
       '<div class="block-actions">'+
-      (locked? '' : '<div class="icon-sm" title="Editar texto" onclick="editarBloco(\''+b.id+'\')">'+ICON_PENCIL+'</div>')+
       '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
       '</div></div>';
   }
   function toggleBlocoPreview(bid){
     const prev=document.getElementById('bprev-'+bid);
     if(prev) prev.classList.toggle('collapsed');
+  }
+  /* Edição inline por cláusula (sem botão de lápis — clicar na cláusula
+     entra em edição). Mantém customText e tpl consistentes por índice. */
+  function editarClausula(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b || (builderContext && contratoBloqueadoParaEdicao(job))) return;
+    const el=document.getElementById('cl-'+bid+'-'+idx);
+    if(!el || el.querySelector('textarea')) return;
+    const txt=blocoClausulas(job,b)[idx]||'';
+    el.classList.add('editing');
+    el.removeAttribute('onclick');
+    el.innerHTML='<span class="clause-n">'+(idx+1)+'</span>'+
+      '<div class="clause-edit"><textarea class="block-textarea" id="cedit-'+bid+'-'+idx+'">'+escapeHtml(txt)+'</textarea>'+
+      '<div class="block-edit-actions"><button class="btn soft" onclick="event.stopPropagation();cancelarEdicaoBloco(\''+bid+'\')">'+t('action.cancel')+'</button>'+
+      '<button class="btn primary" onclick="event.stopPropagation();guardarClausula(\''+bid+'\','+idx+')">'+t('action.save')+'</button></div></div>';
+    const ta=document.getElementById('cedit-'+bid+'-'+idx); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  }
+  function guardarClausula(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b) return;
+    const novo=document.getElementById('cedit-'+bid+'-'+idx).value;
+    const cur=blocoClausulas(job,b); cur[idx]=novo; b.customText=cur.join('\n\n');
+    if(b.tpl){ const tp=b.tpl.split(/\n{2,}/); if(tp.length===cur.length){ tp[idx]=novo; b.tpl=tp.join('\n\n'); } else { b.tpl=b.customText; } }
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    showToast(t('toast.blockTextUpdated'));
   }
   /* ===== Campos dinâmicos — substituição em massa =====
      Reúne todos os [PLACEHOLDERS] presentes no tpl de qualquer bloco do
@@ -6691,11 +6735,14 @@
     if(m) return m[LANG]||m.en||campo;
     return bibCapitalizar(campo);
   }
+  /* Campos que não fazem sentido durante a criação — a data de assinatura só
+     existe depois de o contrato ser efetivamente assinado pelas partes. */
+  const DYN_FIELD_EXCLUIR=new Set(['SIGNATURE_DATE','SIGNED_DATE','DATE_SIGNED']);
   function builderCamposDinamicos(job){
     const ordem=[]; const vistos=new Set(); const re=/\[([A-Z0-9_]+)\]/g;
     (job.contract.blocks||[]).forEach(b=>{
       if(!b.tpl) return;
-      let m; while((m=re.exec(b.tpl))){ if(!vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
+      let m; while((m=re.exec(b.tpl))){ if(!DYN_FIELD_EXCLUIR.has(m[1]) && !vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
     });
     return ordem;
   }
@@ -6724,32 +6771,18 @@
     const job=getBuilderJob();
     job.contract.blocks.forEach(b=>{ if(b.tpl) b.customText=LegalLibrary.resolveClauseText(b.tpl, fv); });
     if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
-    /* Atualiza as prévias no lugar (sem re-render) para não perder o foco do
+    /* Atualiza as cláusulas no lugar (sem re-render) para não perder o foco do
        input que está sendo digitado; ignora blocos em modo de edição. */
+    const editavel = !(builderContext && contratoBloqueadoParaEdicao(job));
     job.contract.blocks.forEach(b=>{
-      const p=document.getElementById('bprev-'+b.id);
-      if(p && !p.querySelector('textarea')) p.textContent=blockText(job,b);
+      const lst=document.getElementById('clist-'+b.id);
+      if(lst && !lst.querySelector('textarea')) lst.innerHTML=clauseListInnerHtml(job,b,editavel);
     });
   }
-  function editarBloco(bid){
-    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
-    if(builderContext && contratoBloqueadoParaEdicao(job)) return;
-    const prev=document.getElementById('bprev-'+bid);
-    if(!prev||!b) return;
-    prev.classList.remove('collapsed');
-    prev.innerHTML='<textarea class="block-textarea" id="bedit-'+bid+'">'+escapeHtml(blockText(job,b))+'</textarea>'+
-      '<div class="block-edit-actions"><button class="btn soft" onclick="cancelarEdicaoBloco(\''+bid+'\')">Cancelar</button>'+
-      '<button class="btn primary" onclick="guardarBlocoTexto(\''+bid+'\')">Guardar</button></div>';
-    document.getElementById('bedit-'+bid).focus();
-  }
-  function guardarBlocoTexto(bid){
-    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
-    b.customText=document.getElementById('bedit-'+bid).value;
-    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+  function cancelarEdicaoBloco(bid){
     renderBuilder();
-    showToast(t('toast.blockTextUpdated'));
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
   }
-  function cancelarEdicaoBloco(bid){ renderBuilder(); }
   function toggleBloco(bid, el){
     const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
     if(builderContext && contratoBloqueadoParaEdicao(job)) return;
@@ -9262,6 +9295,18 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
+  /* Ícones planos (sem estilos inline) para os chips de origem .bib-otag —
+     o CSS dimensiona/colore via .ot-ic. */
+  const OTAG_ICON={
+    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5z"/><path d="m9 12 2 2 4-4"/></svg>',
+    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7 2 13a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
+    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>',
+    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5M15 20c0-2 .8-3.4 2.2-4"/></svg>'
+  };
+  function bibOtag(key, label, cnt){
+    return '<span class="bib-otag o-'+key+'"><span class="ot-ic">'+OTAG_ICON[key]+'</span>'+
+      '<span class="ot-lbl">'+escapeHtml(label)+'</span>'+(cnt!=null?'<span class="ot-cnt">'+cnt+'</span>':'')+'</span>';
+  }
   let bibOrigemSel=new Set();
   let bibOrdenacao='usos';
   let bibIdiomaSel=null;
@@ -9316,10 +9361,9 @@
     row.innerHTML=BIB_ORIGENS.map(o=>{
       const n=bibContagemOrigem(o.key);
       const on=bibOrigemSel.has(o.key);
-      return '<button type="button" class="bib-origem-chip '+o.cls+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
-        '<span class="boc-ic">'+o.icon()+'</span>'+
-        '<span class="boc-txt"><span class="boc-lbl">'+t(o.labelKey)+'</span><span class="boc-cnt">'+n+'</span></span>'+
-      '</button>';
+      return '<button type="button" class="bib-otag o-'+o.key+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
+        '<span class="ot-ic">'+OTAG_ICON[o.key]+'</span>'+
+        '<span class="ot-lbl">'+t(o.labelKey)+'</span><span class="ot-cnt">'+n+'</span></button>';
     }).join('');
   }
   /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
@@ -9349,6 +9393,18 @@
     const valores=[...new Set(catalogoBiblioteca().map(i=>i.profissao).filter(Boolean))].sort();
     const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
     bibSheetOpcaoUnica(t('library.facet.profession'), opcoes, bibSegmentoSel, function setBibSegmentoPick(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); });
+  }
+  /* Menu do botão "Meus Modelos": dá acesso a Favoritos e aos modelos
+     próprios do utilizador (substitui os dois botões separados). */
+  function abrirMenuMeusModelos(){
+    const iconFav='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
+    const iconDoc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+    const html='<div class="plist">'+
+      '<div class="prow" onclick="abrirSalvosBiblioteca()">'+iconFav+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="abrirMeusModelosBiblioteca()">'+iconDoc+'<div class="t">'+t('library.origin.mine')+'</div>'+chevr+'</div>'+
+    '</div>';
+    openInfo(t('library.origin.mine'), html);
   }
   /* "Salvos" — modelos pessoais do utilizador: hoje isto é exatamente o
      conjunto de favoritos (bibFavoritos), único mecanismo de "guardar
@@ -9395,13 +9451,13 @@
   const BIB_ICON_USER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
   const BIB_ICON_THUMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>';
   function bibAutorLinha(item){
-    if(item.verificado) return '<span class="bib-orig o-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legalVerified'))+'</span>';
-    if(item.origem==='comunidade') return '<span class="bib-orig o-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>';
-    return '<span class="bib-orig o-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>';
+    if(item.verificado) return bibOtag('juridico', item.autor||t('library.origin.legalVerified'));
+    if(item.origem==='comunidade') return bibOtag('comunidade', item.autor||t('library.origin.community'));
+    return bibOtag('oficial', t('library.origin.official'));
   }
   function bibBadgesItem(item){
     const badges=[bibAutorLinha(item)];
-    if((item.avaliacao||0)>=4.7) badges.push('<span class="bib-orig o-recomendados">'+BIB_ICON_THUMB+t('library.origin.recommended')+'</span>');
+    if((item.avaliacao||0)>=4.7) badges.push(bibOtag('recomendados', t('library.origin.recommended')));
     return badges;
   }
   /* Versão sólida (pílula colorida) para o sheet de detalhe, cujo fundo pode
@@ -9444,6 +9500,7 @@
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.baseId);
       const rodape=bibBadgesItem(i);
+      if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
       const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
@@ -9494,20 +9551,32 @@
      idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
      Importar leva ao editor com o painel de campos dinâmicos. */
   async function abrirVisualizarContratoCompleto(rawId, lang, titulo){
-    openInfo(titulo||t('library.viewBlock'), '<p style="font-size:13px;color:var(--neutral)">…</p>');
+    openInfo('', '<p style="font-size:13px;color:var(--neutral)">…</p>');
     const detail = await LegalLibrary.getDetail(rawId, lang||LANG);
     if(!detail || !detail.blocks || !detail.blocks.length){
       document.getElementById('infoBody').innerHTML='<p style="font-size:13px;color:var(--neutral)">'+t('library.structureUnavailable')+'</p>';
       return;
     }
-    const html=detail.blocks.map(b=>{
+    const it=LegalLibrary.get(rawId);
+    /* Cabeçalho numa linha: Jurídico (se verificado) · Idioma · nº de blocos. */
+    const head=[];
+    if(it && it.verificado) head.push(bibOtag('juridico', t('library.origin.legalVerified')));
+    else head.push(bibOtag('oficial', t('library.origin.official')));
+    head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
+    head.push('<span class="vis-meta">'+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
+    const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const texto=(b.clauses||[]).map(c=>c.text).join('\n\n');
       return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(b.name)+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
         '<div class="vis-bloco-txt">'+escapeHtml(texto)+'</div></div>';
     }).join('');
-    document.getElementById('infoBody').innerHTML='<div class="vis-blocos">'+html+'</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>';
+    document.getElementById('infoBody').innerHTML=
+      '<div class="vis-screen">'+
+        '<h2 class="vis-title">'+escapeHtml(titulo||(it&&it.titulo)||'')+'</h2>'+
+        '<div class="vis-head">'+head.join('')+'</div>'+
+        '<div class="vis-card">'+blocosHtml+'</div>'+
+        '<button class="btn primary" style="width:100%" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>'+
+      '</div>';
   }
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
