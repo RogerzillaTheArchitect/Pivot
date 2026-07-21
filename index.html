@@ -501,7 +501,7 @@
               <div class="ops-stat-value"><b id="mt-fechados-num">0</b></div>
               <span class="ops-stat-trend" id="trend-fechados"></span>
             </div>
-            <div class="ops-stat-bar" id="bar-fechados" style="visibility:hidden"></div>
+            <div class="ops-stat-bar" id="bar-fechados"></div>
           </div>
           <div class="ops-stat-row" onclick="event.stopPropagation();go('historico')">
             <div class="ops-stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5v14M12 5v14M16 5v14"/></svg></div>
@@ -2894,7 +2894,6 @@
     // --- Configurações ---
     "settings.costsMonth": { pt:"Custos do mês", en:"Monthly costs", es:"Costes del mes" },
     "settings.limitLabel": { pt:"Limite de gastos este mês", en:"Monthly spending limit", es:"Límite de gastos mensual" },
-    "settings.hoursGoalLabel": { pt:"Meta de horas mensais", en:"Monthly hours goal", es:"Meta de horas mensuales" },
     "settings.projectedLabel": { pt:"Faturamento previsto este mês", en:"Projected revenue this month", es:"Ingresos previstos este mes" },
     "settings.ringHint": { pt:"Usado para calcular as percentagens e os anéis no resumo financeiro.", en:"Used to calculate the percentages and rings in the financial summary.", es:"Usado para calcular los porcentajes y los anillos del resumen financiero." },
     "settings.title": { pt:"Configurações", en:"Settings", es:"Ajustes" },
@@ -3323,7 +3322,7 @@
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
   }
-  let METAS={receita:0, gastos:0, horas:0};
+  let METAS={receita:0, gastos:0};
   function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
   async function loadMetas(){
     await loadPersisted('pivot-metas', d=>{ METAS=Object.assign({}, METAS, d); });
@@ -3333,15 +3332,13 @@
     openInfo(t('modal.setGoals'), `
       <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${METAS.receita}" placeholder="4300"></div>
       <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${METAS.gastos}" placeholder="500"></div>
-      <div class="field"><label>${t('settings.hoursGoalLabel')}</label><input type="number" min="0" id="meta-horas-input" value="${METAS.horas}" placeholder="75"></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
       <button class="btn primary" style="width:100%" onclick="guardarMetas()">${t('action.saveGoals')}</button>`);
   }
   function guardarMetas(){
     const r=parseFloat(document.getElementById('meta-receita-input').value)||0;
     const g=parseFloat(document.getElementById('meta-gastos-input').value)||0;
-    const h=parseFloat(document.getElementById('meta-horas-input').value)||0;
-    METAS.receita=r; METAS.gastos=g; METAS.horas=h;
+    METAS.receita=r; METAS.gastos=g;
     saveMetas();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
@@ -3357,6 +3354,20 @@
     if(!den || den<=0){ el.innerHTML=''; return; }
     const pct=Math.max(0, Math.min(100, (num/den)*100));
     const preenchidos=Math.round(pct/5);
+    let html='';
+    for(let i=0;i<20;i++) html+='<span class="ops-seg'+(i<preenchidos?' on':'')+'"></span>';
+    el.innerHTML=html;
+  }
+  /* Barra adaptativa (usada só por "Fechados", que não tem meta fixa): a escala
+     de cada segmento se ajusta ao total, sempre mantendo 20 segmentos —
+     porSegmento=ceil(total/20), preenchidos=round(total/porSegmento). */
+  function renderSegBarAdaptativa(id, total){
+    const el=document.getElementById(id);
+    if(!el) return;
+    total=total||0;
+    if(total<=0){ el.innerHTML=''; return; }
+    const porSegmento=Math.max(1, Math.ceil(total/20));
+    const preenchidos=Math.max(1, Math.min(20, Math.round(total/porSegmento)));
     let html='';
     for(let i=0;i<20;i++) html+='<span class="ops-seg'+(i<preenchidos?' on':'')+'"></span>';
     el.innerHTML=html;
@@ -3528,8 +3539,11 @@
        do trabalho. */
     let executadosCount=0, executadosEsteMes=0, executadosMesAnterior=0;
     /* soma das horas dos trabalhos com data neste mês / mês anterior, a partir
-       da duração calculada (hora início/fim) — anel "Horas" do card Performance */
-    let horasEsteMes=0, horasMesAnterior=0;
+       da duração calculada (hora início/fim) — card "Estatísticas Operacionais".
+       horasEsteMes = previstas (todos os trabalhos do mês); horasExecutadasEsteMes
+       = só os já marcados como concluídos (mesmo critério de "executado" usado
+       acima) — a barra de Horas mostra executadas/previstas, sem meta manual. */
+    let horasEsteMes=0, horasMesAnterior=0, horasExecutadasEsteMes=0;
     /* trabalhos deletados (descartados) não entram em nenhuma estatística;
        trabalhos concluídos e arquivados continuam a contar — aconteceram de facto */
     const todos=jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado');
@@ -3555,7 +3569,10 @@
       }
       if(j.duracaoHoras && j.dateRaw){
         const mm=j.dateRaw.slice(0,7);
-        if(mm===mesAtualISO) horasEsteMes+=j.duracaoHoras;
+        if(mm===mesAtualISO){
+          horasEsteMes+=j.duracaoHoras;
+          if(j.arquivado && j.arquivado.motivo==='concluido') horasExecutadasEsteMes+=j.duracaoHoras;
+        }
         else if(mm===mesAnteriorISO) horasMesAnterior+=j.duracaoHoras;
       }
       const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
@@ -3600,7 +3617,7 @@
       trabalhosRealizar, trabalhosRealizados, trabalhosEntregar, trabalhosEntregues,
       pagamentosPendentesCount, pagamentosTotalCount, trabalhosAtivos, trabalhosConcluidos,
       executadosCount, executadosEsteMes, executadosMesAnterior,
-      horasEsteMes, horasMesAnterior,
+      horasEsteMes, horasMesAnterior, horasExecutadasEsteMes,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
       custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
@@ -3617,28 +3634,28 @@
       el.textContent=(pct>=0?'↑':'↓')+Math.abs(pct)+'%';
       el.style.color = pct<0 ? 'var(--late)' : 'var(--brand)';
     };
-    /* Fechados: sem meta — mostra só a contagem de trabalhos fechados este mês,
-       sem barra segmentada (não há "0/N" possível sem alvo). */
+    /* Fechados: sem meta fixa — a barra usa escala adaptativa (ver
+       renderSegBarAdaptativa), sempre 20 segmentos independente do total. */
     set('mt-fechados-num', s.fechadosEsteMes);
+    renderSegBarAdaptativa('bar-fechados', s.fechadosEsteMes);
     setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
     /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
     set('mt-executados-num', s.executadosCount);
     set('mt-executados-den', s.totalJobs);
     renderSegBar('bar-executados', s.executadosCount, s.totalJobs);
     setTrend('trend-executados', s.executadosEsteMes, s.executadosMesAnterior);
-    /* Horas: soma da duração dos trabalhos deste mês, contra a meta mensal de
-       horas definida em Metas e Limites. Formato compacto (18h / 18h30). */
+    /* Horas: executadas (trabalhos já concluídos) sobre previstas (todos os
+       trabalhos com data neste mês) — sem meta manual, os dois valores vêm
+       direto dos trabalhos. Formato compacto (18h / 18h30). */
     const horasCompacto=v=>{
       v=v||0;
       const h=Math.floor(v), m=Math.round((v-h)*60);
       return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
     };
-    set('mt-horas-num', horasCompacto(s.horasEsteMes));
-    set('mt-horas-den', horasCompacto(METAS.horas));
-    const horasDenWrap=document.getElementById('mt-horas-den-wrap');
-    if(horasDenWrap) horasDenWrap.style.display = METAS.horas>0 ? '' : 'none';
-    renderSegBar('bar-horas', s.horasEsteMes, METAS.horas);
-    setTrend('trend-horas', s.horasEsteMes, s.horasMesAnterior);
+    set('mt-horas-num', horasCompacto(s.horasExecutadasEsteMes));
+    set('mt-horas-den', horasCompacto(s.horasEsteMes));
+    renderSegBar('bar-horas', s.horasExecutadasEsteMes, s.horasEsteMes);
+    setTrend('trend-horas', s.horasExecutadasEsteMes, s.horasMesAnterior);
     /* Entregues: já era uma fração real (entregues / entregues+a entregar) */
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
