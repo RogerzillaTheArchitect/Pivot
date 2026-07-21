@@ -2,10 +2,16 @@
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
   /* Card 2 (Estatísticas Operacionais) — spec exata: container técnico sem
-     glass/blur, barra segmentada tipo mostrador industrial. O histórico de 12
-     meses ainda aparece abaixo ao tocar num indicador, sem alterar a
-     aparência da própria linha (nenhum destaque de "selecionado" — não faz
-     parte da spec). */
+     glass/blur, layout tabular de colunas fixas (Grid — garante que ícone,
+     nome, valor e percentual nunca variam de largura entre linhas, e que a
+     barra é sempre o único elemento "Expanded"), barra segmentada tipo
+     mostrador industrial (sempre 50 segmentos; só a largura individual
+     encolhe em telas menores, via flex-shrink — nunca a contagem).
+     O shell do app é limitado a 480px (ver styles/domains/responsive.css),
+     por isso as colunas fixas usam valores calibrados para caber com folga
+     dentro desse limite (as larguras literais 48/220/160/100px do spec
+     somadas ultrapassam os 480px do shell inteiro, então foram escaladas
+     mantendo a mesma hierarquia relativa: ícone < percentual < valor < nome). */
   .card.stats-op-card{
     background:#0E0E0E;border:1px solid #2A2A2A;border-radius:24px;padding:42px;
     box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
@@ -17,29 +23,59 @@
   }
   .stats-op-hr{height:1px;background:#262626;margin-top:28px}
 
-  .stats-op-row{display:flex;align-items:center;gap:14px;height:78px;cursor:pointer;
+  .stats-op-row{position:relative;display:grid;
+    grid-template-columns:24px 84px 62px 46px minmax(0,1fr);
+    column-gap:10px;align-items:center;height:58px;cursor:pointer;
     border-bottom:1px solid #242424}
   .stats-op-row:last-child{border-bottom:none}
 
-  .stats-op-icon{flex:none;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#ECECEC}
-  .stats-op-icon svg{width:24px;height:24px;fill:none}
+  .stats-op-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:#ECECEC}
+  .stats-op-icon svg{width:24px;height:24px;fill:none;display:block}
 
-  .stats-op-name{flex:none;width:104px;white-space:nowrap;
+  .stats-op-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    text-transform:uppercase;font-weight:500;letter-spacing:.20em;font-size:12px;line-height:24px;color:#F2F2F2}
+    text-transform:uppercase;font-weight:500;letter-spacing:.20em;font-size:11px;color:#F2F2F2}
 
-  .stats-op-value{flex:none;min-width:56px;white-space:nowrap;
-    font-family:var(--font-numeric),monospace;font-weight:500;font-size:15px;color:#FFFFFF}
+  .stats-op-value{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-family:var(--font-numeric),monospace;font-weight:500;font-size:13px;color:#FFFFFF}
 
-  .stats-op-pct{flex:none;min-width:50px;white-space:nowrap;display:flex;align-items:center;
-    font-size:11px;font-weight:500;color:#86D6A3}
+  .stats-op-pct{white-space:nowrap;display:flex;align-items:center;
+    font-size:10.5px;font-weight:500;color:#86D6A3}
   .stats-op-pct.neg{color:#F0A8A2}
 
-  .stats-op-bar{flex:1;display:flex;align-items:center;gap:1px;height:48px;min-width:0}
-  .stats-op-seg{flex:1 1 6px;max-width:6px;min-width:2px;height:48px;border-radius:1px;
+  .stats-op-bar{display:flex;align-items:center;gap:1px;height:45px;min-width:0;overflow:hidden}
+  .stats-op-seg{flex:1 1 7.5px;max-width:8px;min-width:2px;height:45px;border-radius:1px;
     background:transparent;border:1px solid #5A5A5A}
   .stats-op-seg.filled{border-color:transparent;
     background:linear-gradient(to bottom,#FFFFFF 0%,#F1F1F1 50%,#D8D8D8 100%)}
+
+  @media (max-width:420px){
+    .stats-op-row{grid-template-columns:22px 72px 54px 40px minmax(0,1fr);column-gap:7px}
+  }
+  @media (max-width:360px){
+    .stats-op-row{grid-template-columns:20px 60px 46px 34px minmax(0,1fr);column-gap:6px}
+    .stats-op-name{font-size:10px;letter-spacing:.14em}
+  }
+
+  /* Tooltip minimalista (desktop / dispositivos com hover real) — no toque
+     (mobile) o tap abre o bottom sheet genérico #infoSheet, não o tooltip. */
+  .stats-op-tip{position:absolute;left:0;bottom:calc(100% + 8px);z-index:20;
+    max-width:230px;background:#161616;border:1px solid #2A2A2A;border-radius:8px;padding:10px 12px;
+    opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
+  .stats-op-tip b{display:block;margin-bottom:4px;
+    font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    text-transform:uppercase;letter-spacing:.12em;font-size:10.5px;color:#F3F3F3}
+  .stats-op-tip span{display:block;font-size:12px;line-height:1.4;color:#C8C8C8}
+  @media (hover:hover) and (pointer:fine){
+    .stats-op-row:hover .stats-op-tip{opacity:1;transform:translateY(0)}
+  }
+
+  /* Conteúdo do bottom sheet (#infoBody) aberto por relAbrirInfoMetrica() */
+  .stats-op-info-desc{font-size:13.5px;line-height:1.5;color:var(--ink-soft);margin:0 0 14px}
+  .stats-op-info-row{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 0;border-top:1px solid var(--line-soft)}
+  .stats-op-info-row span{font-size:12px;color:var(--neutral)}
+  .stats-op-info-row b{font-family:var(--font-numeric),inherit;font-size:14px;font-weight:600;color:var(--ink)}
 
   /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
   .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
