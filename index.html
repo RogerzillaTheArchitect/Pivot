@@ -645,6 +645,8 @@
           <span id="builder-locked-text" data-t="job.contract.sent">Contrato já enviado ao cliente — já não pode ser editado.</span>
         </div>
 
+        <div id="builder-dynfields" class="dynf-panel" style="display:none"></div>
+
         <div id="blocklist" class="dyn-blocklist"></div>
 
         <button class="addblock" id="addblock-btn" onclick="abrirBibliotecaBlocos()">
@@ -1924,6 +1926,9 @@
     "builder.generateLink": { pt:"Gerar contrato e link →", en:"Generate contract link →", es:"Generar enlace del contrato →" },
     "builder.hint": { pt:"Arrasta para reordenar · toca no lápis para editar · o interruptor liga/desliga o bloco.", en:"Drag to reorder · tap the pencil to edit · toggle to include or exclude a clause.", es:"Arrastra para reordenar · toca el lápiz para editar · el interruptor incluye o excluye la cláusula." },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
+    "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
+    "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato.", en:"Replace a value and it applies across the whole contract.", es:"Sustituye un valor y se aplica en todo el contrato." },
+    "builder.dynFieldPlaceholder": { pt:"Substituir…", en:"Replace…", es:"Sustituir…" },
     "builder.title": { pt:"Editor de contrato", en:"Contract editor", es:"Editor de contrato" },
     "builder.newTemplateSub": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
     "builder.basedOnPrefix": { pt:"Baseado em: ", en:"Based on: ", es:"Basado en: " },
@@ -4377,17 +4382,21 @@
      dependem de um gatilho que não avaliamos automaticamente, então ficam
      de fora por enquanto. REQUIRED entra ligado, OPTIONAL entra desligado
      (o usuário ativa o que quiser) — mesma convenção do esqueleto genérico. */
-  async function blocosParaModeloBiblioteca(m, lang){
+  async function blocosParaModeloBiblioteca(m, lang, valores){
     const rawId = m && m.id ? String(m.id).replace(/^of:/,'').replace(/@.*$/,'') : null;
     const detail = rawId ? await LegalLibrary.getDetail(rawId, lang||LANG) : null;
     if(!detail || !detail.blocks || !detail.blocks.length) return blocosModeloPadrao();
-    const valores = valoresDynamicFieldsDoJob(getBuilderJob());
+    valores = valores || valoresDynamicFieldsDoJob(getBuilderJob());
     const blocosComTexto = detail.blocks.filter(b=>b.status!=='CONDITIONAL' && b.clauses && b.clauses.length);
     if(!blocosComTexto.length) return blocosModeloPadrao();
-    return blocosComTexto.map((b,i)=>({
-      id:'lb'+i, key:null, name:b.name, on: b.status==='REQUIRED',
-      customText: b.clauses.map(c=>LegalLibrary.resolveClauseText(c.text, valores)).join('\n\n')
-    }));
+    /* Guarda tpl (texto-modelo com os [PLACEHOLDERS] originais) além do
+       customText já resolvido — o painel de campos dinâmicos re-resolve o tpl
+       a cada substituição em massa, sem perder os placeholders. */
+    return blocosComTexto.map((b,i)=>{
+      const tpl = b.clauses.map(c=>c.text).join('\n\n');
+      return { id:'lb'+i, key:null, name:b.name, on: b.status==='REQUIRED',
+        tpl, customText: LegalLibrary.resolveClauseText(tpl, valores) };
+    });
   }
   function sugerirModelos(nomeTrabalho){
     const q=(nomeTrabalho||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
@@ -4579,7 +4588,9 @@
     if(!m) return;
     marcarModeloComoUsado(id);
     const nome = lang ? LegalLibrary.tituloEm(m, lang) : m.titulo;
-    abrirBuilderParaSelecao({ client:'', nome, blocks: await blocosParaModeloBiblioteca(m, lang) });
+    const valores = valoresDynamicFieldsDoJob(getBuilderJob());
+    const blocks = await blocosParaModeloBiblioteca(m, lang, valores);
+    abrirBuilderParaSelecao({ client:'', nome, blocks, fieldValues: valores });
     showToast(t('toast.templateImported'));
   }
   /* Equipa — dados reais (workspace_members), convite via /api/team/invite.
@@ -6505,6 +6516,15 @@
      novo de blocosModeloPadrao(), então nenhuma edição feita nesse estado
      (incluir bloco, alterar texto, etc.) sobrevivia à próxima leitura. */
   let builderBlankBlocks=null;
+  let builderBlankFieldValues={};
+  /* Devolve o objeto vivo de valores de campos dinâmicos do contexto atual do
+     Builder (job real, modelo importado ou modelo em branco), criando-o se
+     preciso — é ele que o painel de substituição em massa edita. */
+  function getBuilderFieldValues(){
+    if(builderContext){ const j=jobsData[builderContext]; if(!j.contract.fieldValues) j.contract.fieldValues={}; return j.contract.fieldValues; }
+    if(builderModeloOrigem){ if(!builderModeloOrigem.fieldValues) builderModeloOrigem.fieldValues={}; return builderModeloOrigem.fieldValues; }
+    return builderBlankFieldValues;
+  }
   function blocosModeloPadrao(){
     return [
       {id:'m1', key:'identificacao', customText:null, on:true},
@@ -6530,6 +6550,7 @@
     builderContext=jobId||null;
     builderModeloOrigem=modeloOrigem||null;
     builderBlankBlocks=null;
+    builderBlankFieldValues={};
     if(!jobId){
       const activeEl=document.querySelector('.view.active');
       if(activeEl && activeEl.id!=='v-builder') builderVoltarView=activeEl.id.replace(/^v-/,'');
@@ -6538,6 +6559,7 @@
       const job=jobsData[jobId];
       if(job){
         job.contract.blocks = modeloOrigem.blocks.map(b=>Object.assign({}, b));
+        if(modeloOrigem.fieldValues) job.contract.fieldValues = Object.assign({}, modeloOrigem.fieldValues);
         if(modeloOrigem.nome) job.contract.templateName = modeloOrigem.nome;
         if(job.contract.status==='vazio') job.contract.status='rascunho';
         marcarContratoAlterado(job);
@@ -6613,6 +6635,7 @@
     document.getElementById('builder-title').textContent= isJob? (t('job.contract')+' — '+job.client) : t('builder.title');
     document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub'));
     document.getElementById('builder-back-label').textContent= isJob? job.client : t('nav.jobs');
+    renderBuilderCampos(job, locked);
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
     document.getElementById('addblock-btn').style.display= isJob ? 'none' : 'flex';
     document.getElementById('save-tpl-btn').style.display= locked ? 'none' : 'block';
@@ -6635,6 +6658,67 @@
   function toggleBlocoPreview(bid){
     const prev=document.getElementById('bprev-'+bid);
     if(prev) prev.classList.toggle('collapsed');
+  }
+  /* ===== Campos dinâmicos — substituição em massa =====
+     Reúne todos os [PLACEHOLDERS] presentes no tpl de qualquer bloco do
+     contrato; substituir um valor aqui aplica em todas as ocorrências, em
+     todos os blocos (re-resolve o tpl). Vindo da criação por projeto, os
+     valores já preenchidos aparecem na lista e continuam editáveis. */
+  const DYN_FIELD_LABELS={
+    CLIENT_NAME:{pt:'Contratante',en:'Client',es:'Contratante'},
+    CLIENT_ADDRESS:{pt:'Endereço do contratante',en:'Client address',es:'Dirección del contratante'},
+    PROVIDER_NAME:{pt:'Prestador',en:'Provider',es:'Prestador'},
+    PROVIDER_ADDRESS:{pt:'Endereço do prestador',en:'Provider address',es:'Dirección del prestador'},
+    PROJECT_NAME:{pt:'Projeto',en:'Project',es:'Proyecto'},
+    TOTAL_VALUE:{pt:'Valor total',en:'Total value',es:'Valor total'},
+    START_DATE:{pt:'Data de início',en:'Start date',es:'Fecha de inicio'},
+    DELIVERY_DATE:{pt:'Data de entrega',en:'Delivery date',es:'Fecha de entrega'},
+    LOCATION:{pt:'Local',en:'Location',es:'Lugar'}
+  };
+  function dynFieldLabel(campo){
+    const m=DYN_FIELD_LABELS[campo];
+    if(m) return m[LANG]||m.en||campo;
+    return bibCapitalizar(campo);
+  }
+  function builderCamposDinamicos(job){
+    const ordem=[]; const vistos=new Set(); const re=/\[([A-Z0-9_]+)\]/g;
+    (job.contract.blocks||[]).forEach(b=>{
+      if(!b.tpl) return;
+      let m; while((m=re.exec(b.tpl))){ if(!vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
+    });
+    return ordem;
+  }
+  function renderBuilderCampos(job, locked){
+    const wrap=document.getElementById('builder-dynfields');
+    if(!wrap) return;
+    const campos=builderCamposDinamicos(job);
+    if(!campos.length || locked){ wrap.style.display='none'; wrap.innerHTML=''; return; }
+    const fv=getBuilderFieldValues();
+    const seta='<svg class="dynf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+    wrap.style.display='block';
+    wrap.innerHTML=
+      '<div class="dynf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'+
+        '<span>'+t('builder.dynFields')+'</span><span class="dynf-count">'+campos.length+'</span></div>'+
+      '<div class="dynf-hint">'+t('builder.dynFieldsHint')+'</div>'+
+      campos.map(c=>{
+        const val=fv[c]!=null?fv[c]:'';
+        return '<div class="dynf-row"><span class="dynf-key">['+escapeHtml(dynFieldLabel(c))+']</span>'+seta+
+          '<input class="dynf-input" value="'+escapeHtml(val)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" '+
+          'oninput="setBuilderCampo(\''+c+'\', this.value)"></div>';
+      }).join('');
+  }
+  function setBuilderCampo(campo, valor){
+    const fv=getBuilderFieldValues();
+    if(valor==='') delete fv[campo]; else fv[campo]=valor;
+    const job=getBuilderJob();
+    job.contract.blocks.forEach(b=>{ if(b.tpl) b.customText=LegalLibrary.resolveClauseText(b.tpl, fv); });
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    /* Atualiza as prévias no lugar (sem re-render) para não perder o foco do
+       input que está sendo digitado; ignora blocos em modo de edição. */
+    job.contract.blocks.forEach(b=>{
+      const p=document.getElementById('bprev-'+b.id);
+      if(p && !p.querySelector('textarea')) p.textContent=blockText(job,b);
+    });
   }
   function editarBloco(bid){
     const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
@@ -9295,6 +9379,25 @@
     const texto = it.texto || it.desc || '';
     openInfo(it.titulo, '<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;white-space:pre-wrap">'+escapeHtml(texto)+'</p>');
   }
+  /* "Visualizar" — mostra TODOS os blocos do contrato (nome + cláusulas) no
+     idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
+     Importar leva ao editor com o painel de campos dinâmicos. */
+  async function abrirVisualizarContratoCompleto(rawId, lang, titulo){
+    openInfo(titulo||t('library.viewBlock'), '<p style="font-size:13px;color:var(--neutral)">…</p>');
+    const detail = await LegalLibrary.getDetail(rawId, lang||LANG);
+    if(!detail || !detail.blocks || !detail.blocks.length){
+      document.getElementById('infoBody').innerHTML='<p style="font-size:13px;color:var(--neutral)">'+t('library.structureUnavailable')+'</p>';
+      return;
+    }
+    const html=detail.blocks.map(b=>{
+      const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
+      const texto=(b.clauses||[]).map(c=>c.text).join('\n\n');
+      return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(b.name)+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
+        '<div class="vis-bloco-txt">'+escapeHtml(texto)+'</div></div>';
+    }).join('');
+    document.getElementById('infoBody').innerHTML='<div class="vis-blocos">'+html+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>';
+  }
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
     if(!it) return;
@@ -9314,6 +9417,7 @@
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
+    if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')";
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
