@@ -461,92 +461,52 @@
           </div>
         </div>
 
-        <div class="card finance-ops-card">
-        <div class="fo-title-row">
-          <span class="fo-title" data-t="reports.opStats">Estatísticas Operacionais</span>
-        </div>
-        <div class="fo-divider"></div>
-        <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-          <defs>
-            <linearGradient id="grad-mini-progress" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#B8C7A8"/>
-              <stop offset="50%" stop-color="#83996E"/>
-              <stop offset="100%" stop-color="#5E7A52"/>
-            </linearGradient>
-            <linearGradient id="grad-mini-progress-light" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#5A8D67"/>
-              <stop offset="50%" stop-color="#4B7A58"/>
-              <stop offset="100%" stop-color="#365C43"/>
-            </linearGradient>
-          </defs>
-        </svg>
-          <div class="jobs-stat-grid6" onclick="abrirRelatorios('operacional')">
-          <div class="jobs-stat-col">
-            <span class="ms-c-label" data-t="home.hours">Horas</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-horas" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center" style="font-size:10px"><span id="mt-horas-num">0h</span></div>
+        <div class="card stats-op-card">
+          <div class="stats-op-title" data-t="reports.opStats">Estatísticas Operacionais</div>
+          <div class="stats-op-hr"></div>
+          <div id="dash-op-bars">
+            <div class="dop-row" onclick="abrirRelatorios('operacional')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></span>
+              <span class="dop-name" data-t="home.hours">Horas</span>
+              <span class="dop-bar" id="bar-horas"></span>
+              <span class="dop-value" id="mt-horas-num">0h</span>
+              <span class="dop-trend" id="trend-horas"></span>
             </div>
-            <span class="ms-c-trend" id="trend-horas"></span>
-          </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('cliente')">
-            <span class="ms-c-label" data-t="home.pending">Pendências</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-aguardando" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-aguardando-num">0</span><span class="mini-ring-slash">/</span><span id="mt-aguardando-den">0</span></div>
+            <div class="dop-row" onclick="abrirTrabalhosFiltrados('cliente')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="7" width="10" height="10"/><path d="M1 12h9"/><path d="m6 8 4 4-4 4"/></svg></span>
+              <span class="dop-name" data-t="home.pending">Pendências</span>
+              <span class="dop-bar" id="bar-aguardando"></span>
+              <span class="dop-value"><span id="mt-aguardando-num">0</span><span class="dop-slash">/</span><span id="mt-aguardando-den">0</span></span>
+              <span class="dop-trend" id="trend-aguardando"></span>
             </div>
-            <span class="ms-c-trend" id="trend-aguardando"></span>
-          </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('meucargo')">
-            <span class="ms-c-label" data-t="home.demands">Demandas</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-demandas" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-demandas-num">0</span><span class="mini-ring-slash">/</span><span id="mt-demandas-den">0</span></div>
+            <div class="dop-row" onclick="abrirTrabalhosFiltrados('meucargo')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m11 18-6-6 6-6"/></svg></span>
+              <span class="dop-name" data-t="home.demands">Demandas</span>
+              <span class="dop-bar" id="bar-demandas"></span>
+              <span class="dop-value"><span id="mt-demandas-num">0</span><span class="dop-slash">/</span><span id="mt-demandas-den">0</span></span>
+              <span class="dop-trend" id="trend-demandas"></span>
             </div>
-            <span class="ms-c-trend" id="trend-demandas"></span>
-          </div>
-          <div class="jobs-stat-col">
-            <span class="ms-c-label" data-t="home.closed">Fechados</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-fechados" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-fechados-num">0</span></div>
+            <div class="dop-row" onclick="abrirRelatorios('operacional')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+              <span class="dop-name" data-t="home.closed">Fechados</span>
+              <span class="dop-bar" id="bar-fechados"></span>
+              <span class="dop-value" id="mt-fechados-num">0</span>
+              <span class="dop-trend" id="trend-fechados"></span>
             </div>
-            <span class="ms-c-trend" id="trend-fechados"></span>
-          </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();go('historico')">
-            <span class="ms-c-label" data-t="home.executed">Executados</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-executados" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-executados-num">0</span><span class="mini-ring-slash">/</span><span id="mt-executados-den">0</span></div>
+            <div class="dop-row" onclick="go('historico')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20V10"/><path d="M12 20V4"/><path d="M18 20V14"/></svg></span>
+              <span class="dop-name" data-t="home.executed">Executados</span>
+              <span class="dop-bar" id="bar-executados"></span>
+              <span class="dop-value"><span id="mt-executados-num">0</span><span class="dop-slash">/</span><span id="mt-executados-den">0</span></span>
+              <span class="dop-trend" id="trend-executados"></span>
             </div>
-            <span class="ms-c-trend" id="trend-executados"></span>
-          </div>
-          <div class="jobs-stat-col" onclick="event.stopPropagation();abrirTrabalhosFiltrados('entregues')">
-            <span class="ms-c-label" data-t="home.completedTile">Concluídos</span>
-            <div class="mini-ring-wrap">
-              <svg class="mini-ring" viewBox="0 0 60 60">
-                <circle class="mini-ring-track" cx="30" cy="30" r="25" stroke-width="6"/>
-                <circle class="mini-ring-progress" id="ring-entregues" cx="30" cy="30" r="25" stroke-width="6"/>
-              </svg>
-              <div class="mini-ring-center"><span id="mt-entregues-num">0</span><span class="mini-ring-slash">/</span><span id="mt-entregar-den">0</span></div>
+            <div class="dop-row" onclick="abrirTrabalhosFiltrados('entregues')">
+              <span class="dop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4"/><path d="M5 4h13l-3 4 3 4H5"/></svg></span>
+              <span class="dop-name" data-t="home.completedTile">Concluídos</span>
+              <span class="dop-bar" id="bar-entregues"></span>
+              <span class="dop-value"><span id="mt-entregues-num">0</span><span class="dop-slash">/</span><span id="mt-entregar-den">0</span></span>
+              <span class="dop-trend" id="trend-entregues"></span>
             </div>
-            <span class="ms-c-trend" id="trend-entregues"></span>
-          </div>
           </div>
         </div>
 
@@ -3517,6 +3477,18 @@
      arco e a pista (o círculo imediatamente anterior no SVG) a ganhar um
      brilho/sombreado para indicar que a meta já foi ultrapassada. A volta já
      dada nunca desaparece nem é substituída por uma volta parcial nova. */
+  /* barra segmentada tipo mostrador industrial (mesma linguagem visual do
+     card Estatísticas Operacionais de Relatórios) — usada agora também no
+     card equivalente da Dashboard, no lugar dos anéis de progresso. */
+  function pintarBarraOp(elId, num, den, N){
+    const el=document.getElementById(elId); if(!el) return;
+    N=N||20;
+    const ratio = den>0 ? Math.min(1, num/den) : (num>0?1:0);
+    const preenchidos=Math.round(ratio*N);
+    let html='';
+    for(let i=0;i<N;i++) html+='<span class="dop-seg'+(i<preenchidos?' filled':'')+'"></span>';
+    el.innerHTML=html;
+  }
   function pintarAnelComVolta(elId, r, num, den, trackElOverride){
     const el=document.getElementById(elId);
     if(!el) return null;
@@ -3700,12 +3672,12 @@
     /* Fechados: sem meta — mostra só a contagem de trabalhos fechados este mês,
        anel decorativo sempre cheio (não há "0/N" possível sem alvo). */
     set('mt-fechados-num', s.fechadosEsteMes);
-    pintarAnelComVolta('ring-fechados', 25, 1, 1);
+    pintarBarraOp('bar-fechados', 1, 1);
     setTrend('trend-fechados', s.fechadosEsteMes, s.fechadosMesAnterior);
     /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
     set('mt-executados-num', s.executadosCount);
     set('mt-executados-den', s.totalJobs);
-    pintarAnelComVolta('ring-executados', 25, s.executadosCount, s.totalJobs);
+    pintarBarraOp('bar-executados', s.executadosCount, s.totalJobs);
     setTrend('trend-executados', s.executadosEsteMes, s.executadosMesAnterior);
     /* Horas: soma da duração dos trabalhos deste mês — também sem meta.
        Formato compacto (18h / 18h30) para caber no centro do anel pequeno. */
@@ -3715,22 +3687,22 @@
       return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
     };
     set('mt-horas-num', horasCompacto(s.horasEsteMes));
-    pintarAnelComVolta('ring-horas', 25, 1, 1);
+    pintarBarraOp('bar-horas', 1, 1);
     setTrend('trend-horas', s.horasEsteMes, s.horasMesAnterior);
     /* Entregues: já era uma fração real (entregues / entregues+a entregar) */
     set('mt-entregues-num', s.trabalhosEntregues);
     set('mt-entregar-den', s.trabalhosEntregues+s.trabalhosEntregar);
-    pintarAnelComVolta('ring-entregues', 25, s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
+    pintarBarraOp('bar-entregues', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar);
     setTrend('trend-entregues', s.entreguesEsteMes, s.entreguesMesAnterior);
     /* Aguardando: pendências do lado do cliente sobre o total de trabalhos */
     set('mt-aguardando-num', s.pendClienteCount);
     set('mt-aguardando-den', s.totalJobs);
-    pintarAnelComVolta('ring-aguardando', 25, s.pendClienteCount, s.totalJobs);
+    pintarBarraOp('bar-aguardando', s.pendClienteCount, s.totalJobs);
     setTrend('trend-aguardando', s.pendClienteEsteMes, s.pendClienteMesAnterior);
     /* Demandas: pendências do meu lado sobre o total de trabalhos */
     set('mt-demandas-num', s.pendMeuCount);
     set('mt-demandas-den', s.totalJobs);
-    pintarAnelComVolta('ring-demandas', 25, s.pendMeuCount, s.totalJobs);
+    pintarBarraOp('bar-demandas', s.pendMeuCount, s.totalJobs);
     setTrend('trend-demandas', s.pendMeuEsteMes, s.pendMeuMesAnterior);
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como

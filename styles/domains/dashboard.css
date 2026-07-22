@@ -83,6 +83,28 @@
   .ms-c-trend svg{width:9px;height:9px}
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
+  /* Estatísticas Operacionais (Dashboard) — linha com ícone, rótulo, barra
+     segmentada (blocos) e valor, no lugar dos anéis de progresso antigos.
+     Layout flex (não grid de colunas fixas) porque o card vive dentro do
+     shell estreito (≤480px) e o rótulo precisa poder respirar sem empurrar
+     o valor para cima da barra. */
+  .dop-row{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 0;cursor:pointer;border-bottom:1px solid #242424}
+  .dop-row:last-child{border-bottom:none}
+  .dop-icon{flex:none;display:flex;align-items:center;color:#ECECEC}
+  .dop-icon svg{width:18px;height:18px;fill:none;display:block}
+  .dop-name{flex:0 0 auto;width:76px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+    font-size:13px;font-weight:400;letter-spacing:-.01em;color:#F2F2F2}
+  .dop-bar{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:2px;height:26px;overflow:hidden}
+  .dop-seg{flex:1 1 4px;max-width:7px;min-width:2px;height:26px;border-radius:1px;background:transparent;border:1px solid #4A4A4A}
+  .dop-seg.filled{border-color:transparent;background:linear-gradient(to bottom,#FFFFFF 0%,#F1F1F1 50%,#D8D8D8 100%)}
+  .dop-value{flex:none;white-space:nowrap;font-family:var(--font-numeric),monospace;font-weight:500;font-size:13px;color:#FFFFFF;text-align:right}
+  .dop-slash{color:rgba(255,255,255,.5);margin:0 1px;font-weight:400;font-size:.85em}
+  .dop-trend{flex:none;min-width:34px;text-align:right;font-size:10px;font-weight:600;white-space:nowrap}
+  @media (max-width:360px){
+    .dop-name{width:62px;font-size:12px}
+    .dop-value{font-size:12px}
+    .dop-trend{min-width:28px;font-size:9px}
+  }
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 8px;padding:4px 8px 2px;cursor:pointer}
   .jobs-stat-grid6 .jobs-stat-col{border-right:none}
