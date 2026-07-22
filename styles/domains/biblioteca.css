@@ -162,8 +162,12 @@
   .vis-bloco-tag{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#9A9BA2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:5px;padding:2px 7px;white-space:nowrap}
   .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:var(--bib-ink-soft);white-space:pre-wrap;word-break:break-word}
 
-  /* ===== ACTION SHEET ===== */
-  .overlay{position:absolute;inset:0;background:var(--btn-32);z-index:70;opacity:0;pointer-events:none;
+  /* ===== ACTION SHEET =====
+     Backdrop neutro (preto translúcido) — chegou a usar var(--btn-32), a cor
+     da marca (verde) a 32%, o que lia como uma sombra verde indesejada
+     cobrindo a metade da tela por trás do sheet/menu. Nada aqui deve usar
+     a cor da marca; só tons de preto/cinza, como o resto do vidro da app. */
+  .overlay{position:absolute;inset:0;background:rgba(8,9,10,.55);z-index:70;opacity:0;pointer-events:none;
     transition:opacity .25s}
   .overlay.show{opacity:1;pointer-events:all}
   .sheet{position:absolute;left:0;right:0;bottom:0;background:var(--paper);border-radius:var(--r) var(--r) 0 0;
