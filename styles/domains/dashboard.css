@@ -84,13 +84,13 @@
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
   /* ===== Estatísticas Operacionais (Dashboard) — painel com barra segmentada
-     (mostrador industrial), agora com as cores do resto da app (glass card
-     padrão + var(--brand) nos blocos preenchidos, em vez da paleta azulada
-     do ficheiro de referência original). Cada barra tem sempre 20 blocos
-     fixos — cada bloco = 5% do total — e um "marcador" quadrado com o valor
-     atual substitui o penúltimo bloco preenchido, deixando o último bloco
-     cheio normal logo a seguir (não tapa a leitura da fronteira preenchido/
-     vazio). Ver pintarMetricaOp(). */
+     (mostrador industrial), cores do resto da app (glass card padrão + branco
+     gelo com opacidade reduzida nos blocos preenchidos — sem verde, que
+     destoava do resto do mostrador). Cada barra tem sempre 20 blocos fixos —
+     cada bloco = 5% do total — e uma etiqueta flutuante com o valor atual
+     paira sobre a barra, ligada por uma linha fina ao bloco de referência
+     (sempre 1 bloco antes do último bloco alcançado, pra não confundir a
+     leitura da fronteira preenchido/vazio). Ver pintarMetricaOp(). */
   .card.ops-card{
     background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);
@@ -119,6 +119,9 @@
     border-bottom:1px solid var(--line-soft);
     cursor:pointer;
   }
+  /* a primeira linha precisa de folga acima para a etiqueta flutuante não
+     colidir com o título do card */
+  .ops-card .metric:first-child{margin-top:22px}
   .ops-card .metric:last-child{min-height:44px;border-bottom:0}
   .ops-card .icon{width:18px;height:18px;color:var(--ink-soft);opacity:.93}
   .ops-card .label{font-size:12px;font-weight:400;letter-spacing:-.01em;color:var(--ink);
@@ -144,45 +147,57 @@
     height:20px;
     transform:translateY(-50%);
     border-radius:1px;
-    background:linear-gradient(90deg, var(--brand-10), transparent);
+    background:linear-gradient(90deg, rgba(240,248,255,.10), transparent);
   }
   .ops-card .segment{
     z-index:1;
     height:22px;
     border:1px solid var(--line);
     border-radius:1px;
-    background:rgba(255,255,255,.04);
+    background:rgba(255,255,255,.03);
   }
   .ops-card .segment.is-filled{
-    border-color:transparent;
-    background:linear-gradient(100deg, var(--brand), var(--brand-dk));
-    box-shadow:inset 0 1px rgba(255,255,255,.18);
+    border-color:rgba(240,248,255,.28);
+    background:rgba(240,248,255,.12);
+    box-shadow:inset 0 1px rgba(255,255,255,.12);
   }
-  /* mostrador quadrado com o valor atual — ocupa o lugar de um bloco (não
-     flutua por cima), por isso nunca é cortado pelo overflow da barra */
-  .ops-card .marker{
-    position:relative;
-    z-index:2;
-    height:22px;
-    display:flex;align-items:center;justify-content:center;
-    overflow:visible;
-    border-radius:2px;
-    background:var(--brand);
-    color:#08150F;
+  /* etiqueta flutuante com o valor atual, acima da barra, com uma linha fina
+     a apontar para o bloco de referência (overflow:visible no .track garante
+     que nunca é cortada) */
+  .ops-card .op-tag{
+    position:absolute;
+    z-index:3;
+    bottom:calc(100% + 10px);
+    transform:translateX(-50%);
+    padding:3px 6px;
+    border:1px solid rgba(255,255,255,.32);
+    border-radius:5px;
+    background:rgba(10,13,18,.94);
+    color:#F0F2F5;
     font-family:var(--font-numeric),monospace;
-    font-size:9px;
-    font-weight:700;
-    font-variant-numeric:tabular-nums;
+    font-size:10px;
+    font-weight:600;
+    line-height:1.2;
     white-space:nowrap;
-    padding:0 3px;
-    box-shadow:0 0 0 1px rgba(255,255,255,.3) inset, 0 2px 6px rgba(0,0,0,.35);
+    box-shadow:0 4px 10px rgba(0,0,0,.4);
+  }
+  .ops-card .op-tag::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:100%;
+    width:1px;
+    height:8px;
+    background:rgba(255,255,255,.35);
+    transform:translateX(-50%);
   }
   @media (max-width:360px){
     .card.ops-card{padding:12px 12px 6px}
+    .ops-card .metric:first-child{margin-top:20px}
     .ops-card .metric{grid-template-columns:20px 60px minmax(0,1fr) 26px;column-gap:6px}
     .ops-card .label{font-size:11px}
     .ops-card .value-end{font-size:11px}
-    .ops-card .marker{font-size:8px}
+    .ops-card .op-tag{font-size:9px}
   }
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 8px;padding:4px 8px 2px;cursor:pointer}
