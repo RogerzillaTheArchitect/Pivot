@@ -5,7 +5,7 @@
   .builder-legend .bl-item{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--neutral)}
   .builder-legend .bl-item svg{width:14px;height:14px;opacity:.75;flex:none}
   .block{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:1px solid var(--line);
-    border-radius:9px;padding:12px 12px;margin-bottom:8px;box-shadow:var(--shadow);
+    border-radius:var(--r);padding:12px 12px;margin-bottom:8px;box-shadow:var(--shadow);
     transition:transform .18s,box-shadow .18s,opacity .18s}
   .block.dragging{opacity:.5}
   .block.drop-target{box-shadow:0 0 0 2px var(--brand)}
@@ -16,7 +16,7 @@
   .block.locked{background:var(--paper-2)}
   .toggle.disabled{cursor:default;opacity:.55}
   .builder-locked-notice{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);
-    background:var(--paper-2);border-radius:11px;padding:11px 14px;margin-bottom:14px}
+    background:var(--paper-2);border-radius:var(--r);padding:11px 14px;margin-bottom:14px}
   .builder-locked-notice svg{width:16px;height:16px;flex:none;color:var(--neutral)}
   .block-main{flex:1;min-width:0}
   .block-name{font-size:14px;font-weight:600;margin-bottom:4px}
@@ -27,19 +27,19 @@
   /* cláusulas numeradas, separadas e com hierarquia clara */
   .clause-list{display:flex;flex-direction:column;gap:7px}
   .clause{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line-soft);
-    border-radius:8px;background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s}
+    border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
-  .clause-n{flex:none;width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.08);color:var(--ink);
+  .clause-n{flex:none;width:20px;height:20px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
     font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   .clause-edit{flex:1;min-width:0}
   .block-actions{display:flex;flex-direction:column;align-items:center;gap:9px;flex:none;padding-top:1px}
-  .icon-sm{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--paper);
+  .icon-sm{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper);
     display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;transition:border-color .15s,color .15s}
   .icon-sm:hover{border-color:var(--brand);color:var(--ink)}
   .icon-sm svg{width:14px;height:14px}
-  .block-textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-family:inherit;
+  .block-textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;font-family:inherit;
     font-size:13px;color:var(--ink);line-height:1.5;min-height:74px;resize:vertical;margin-top:2px;background:var(--paper)}
   .block-edit-actions{display:flex;gap:8px;margin-top:8px}
   .block-edit-actions .btn{padding:7px 12px;font-size:12.5px}
@@ -51,7 +51,7 @@
   .toggle.on .kn{left:18px}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
-    border:1.5px dashed var(--line);border-radius:9px;background:none;color:var(--ink-soft);font-family:inherit;
+    border:1.5px dashed var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
     font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
   .addblock svg{width:16px;height:16px}
   .save-tpl{font-size:13.5px;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap}
@@ -59,23 +59,23 @@
   /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) =====
      Acento monocromático (grafite/ink) — nada de verde da marca aqui, para
      não destoar da identidade escura da biblioteca. */
-  .dynf-panel{border:1px solid var(--line);border-radius:10px;background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
+  .dynf-panel{border:1px solid var(--line);border-radius:var(--r);background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
   .dynf-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
   .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
-  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:6px;padding:2px 8px}
+  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
   .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
   .dynf-row{display:grid;grid-template-columns:132px 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
   .dynf-key{height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
-    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:8px;padding:0 10px;
+    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--r);padding:0 10px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
   .dynf-input{width:100%;height:38px;font-family:inherit;font-size:13px;color:var(--ink);
-    background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:0 11px;outline:none}
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:0 11px;outline:none}
   .dynf-input:focus{border-color:var(--ink-soft)}
   .dynf-input::placeholder{color:var(--ink-faint)}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
-  .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:8px;
+  .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
     border:1px dashed var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
     transition:border-color .15s,color .15s,background .15s}
   .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
@@ -84,10 +84,10 @@
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
   .pick-list{display:flex;flex-direction:column;gap:8px}
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
-    border-radius:9px;cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
+    border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
   .pick-check:hover{border-color:var(--ink-soft)}
   .pick-check.on{border-color:var(--ink);background:rgba(255,255,255,.06)}
-  .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);
+  .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:var(--r);border:1.5px solid var(--line);
     display:grid;place-items:center;color:transparent;margin-top:1px}
   .pick-check .pc-box.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
   .pick-check .pc-box svg{width:13px;height:13px}
@@ -99,7 +99,7 @@
   /* ===== CALENDÁRIO ===== */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
-  .cal-day{aspect-ratio:1;border-radius:10px;border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
+  .cal-day{aspect-ratio:1;border-radius:var(--r);border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
     align-items:center;justify-content:flex-start;padding:6px 2px;font-size:12.5px;color:rgba(255,255,255,.85);
     position:relative;cursor:pointer;background:rgba(124,126,129,.34);
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}

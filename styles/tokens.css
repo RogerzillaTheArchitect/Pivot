@@ -5,7 +5,17 @@
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --label-out:rgba(255,255,255,.82);
     --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
-    --r:8px; --sb-w:236px; --nav-h:74px;
+    /* raio único do sistema — quase quadrado, aplicado sem exceção a
+       cards, botões, inputs, chips, avatares e janelas/sheets (ver
+       auditoria completa nos ficheiros de styles/domains/*.css: tudo o
+       que antes tinha valores próprios de border-radius, ou era um
+       pílula/círculo decorativo em botões/cartões, passou a usar este
+       token). As únicas exceções ficam com pontos/indicadores de status
+       genuinamente circulares (bolinhas de prioridade/estado), o
+       interruptor (.toggle), spinners de loading e o "puxador" do sheet —
+       esses precisam de permanecer redondos para continuarem legíveis
+       como o que são. */
+    --r:4px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:26,27,29; --glass-rgb-2:32,34,37; --btn-rgb:79,161,137;
     --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(124,126,129,.90); --glass-55:rgba(124,126,129,.92); --glass-6:rgba(124,126,129,.93); --glass-62:rgba(124,126,129,.94); --glass-65:rgba(124,126,129,.95); --glass-7:rgba(124,126,129,.96); --glass-85:rgba(124,126,129,.98); --glass2-75:rgba(124,126,129,.7);
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);

@@ -16,7 +16,7 @@
      régua maior não cabem aqui sem violar "nunca ultrapassar o card" ou
      "sempre 50 segmentos" — min-width dos segmentos fica no piso realista. */
   .card.stats-op-card{
-    background:#0E0E0E;border:1px solid #2A2A2A;border-radius:24px;padding:42px;
+    background:#0E0E0E;border:1px solid #2A2A2A;border-radius:var(--r);padding:42px;
     box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
   }
   .stats-op-title{
@@ -69,7 +69,7 @@
   /* Tooltip minimalista (desktop / dispositivos com hover real) — no toque
      (mobile) o tap abre o bottom sheet genérico #infoSheet, não o tooltip. */
   .stats-op-tip{position:absolute;left:0;bottom:calc(100% + 8px);z-index:20;
-    max-width:230px;background:#161616;border:1px solid #2A2A2A;border-radius:8px;padding:10px 12px;
+    max-width:230px;background:#161616;border:1px solid #2A2A2A;border-radius:var(--r);padding:10px 12px;
     opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .12s ease,transform .12s ease}
   .stats-op-tip b{display:block;margin-bottom:4px;
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -113,18 +113,18 @@
   .rel-year-nav span:hover{color:var(--ink)}
   .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
-  .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:9px;
+  .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:var(--r);
     font-size:12.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
   .rel-month-cell:hover{border-color:var(--brand)}
   .rel-month-cell.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
   /* despesas — cards com swipe para revelar editar/apagar */
-  .exp-wrap{position:relative;overflow:hidden;border-radius:12px;margin-bottom:8px;touch-action:pan-y}
+  .exp-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:8px;touch-action:pan-y}
   .exp-actions{position:absolute;top:0;right:0;height:100%;display:flex;align-items:center;gap:8px;padding:0 12px}
-  .exp-actions button{width:34px;height:34px;border-radius:50%;border:none;display:grid;place-items:center;cursor:pointer}
+  .exp-actions button{width:34px;height:34px;border-radius:var(--r);border:none;display:grid;place-items:center;cursor:pointer}
   .exp-actions .ed{background:var(--btn-06);color:var(--ink)}
   .exp-actions .rm{background:var(--late);color:#fff}
   .exp-actions svg{width:15px;height:15px}
-  .exp-card{position:relative;display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--paper);border:1px solid var(--line-soft);border-radius:12px;transition:transform .22s cubic-bezier(.2,.8,.2,1);will-change:transform}
+  .exp-card{position:relative;display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--paper);border:1px solid var(--line-soft);border-radius:var(--r);transition:transform .22s cubic-bezier(.2,.8,.2,1);will-change:transform}
   .exp-card .nm{font-size:14px;font-weight:500;color:var(--ink)}
   .exp-card .sub{font-size:11.5px;color:var(--neutral)}
   .exp-card .val{font-family:var(--font-numeric),inherit;font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;gap:12px}
