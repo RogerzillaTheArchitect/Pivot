@@ -666,23 +666,25 @@
       <section class="view" id="v-bibliotecas">
         <div class="bib-shell">
           <div class="bib-headrow">
-            <button type="button" class="bib-square-btn" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
+            <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>
             </button>
-            <div class="bib-search">
+            <div class="bib-search bib-glass">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
           </div>
 
-          <div class="bib-filters">
-            <button type="button" class="bib-filter" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
-            <button type="button" class="bib-filter" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
-            <button type="button" class="bib-filter" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
-            <button type="button" class="bib-filter" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
-          </div>
+          <div class="bib-toolbar">
+            <div class="bib-filters">
+              <button type="button" class="bib-filter bib-glass" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+            </div>
 
-          <div class="bib-seals" id="bib-origem-row"></div>
+            <div class="bib-seals" id="bib-origem-row"></div>
+          </div>
 
           <div class="bib-grid" id="bib-lista"></div>
           <p class="bib-empty" id="bib-empty" style="display:none"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
