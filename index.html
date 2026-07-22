@@ -667,10 +667,10 @@
         <div class="bib-shell">
           <div class="bib-headrow">
             <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
             </button>
             <div class="bib-search bib-glass">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
           </div>
@@ -9300,14 +9300,14 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
-  /* Selos exclusivos de origem — glifos finos, geométricos, sem preenchimento
-     ilustrativo. Um único desenho por tipo, reaproveitado em toda a
-     biblioteca (filtro, rodapé do card, sheet de detalhe, Visualizar). */
+  /* Ícones da biblioteca — Lucide, stroke 1.75, nunca preenchidos.
+     Um único desenho por conceito, reaproveitado em toda a biblioteca
+     (filtro, rodapé do card, sheet de detalhe, Visualizar). */
   const OTAG_ICON={
-    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4.5 12.5 9 17l10.5-11"/></svg>',
-    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3.5v17"/><path d="M5.5 8h13"/><path d="M5.5 8 3 13.5h5L5.5 8Z"/><path d="M18.5 8 16 13.5h5L18.5 8Z"/></svg>',
-    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M12 3.5 13.4 10.6 20.5 12 13.4 13.4 12 20.5 10.6 13.4 3.5 12 10.6 10.6 12 3.5Z"/></svg>',
-    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8.3 7.9 12 15.5M15.7 7.9 12 15.5M8.6 7h6.8"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="7" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="17" r="1.5" fill="currentColor" stroke="none"/></svg>'
+    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
+    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>',
+    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
   };
   function bibOtag(key, label){
     return '<span class="bib-seal s-'+key+'"><span class="sl-ic">'+OTAG_ICON[key]+'</span>'+
@@ -9398,8 +9398,8 @@
   /* Glifo único de bookmark, reaproveitado no botão quadrado do cabeçalho,
      no favoritar dos cards/detalhe e nas linhas deste menu — mesma marca em
      todo o sistema, nunca um ícone diferente para o mesmo conceito. */
-  const BIB_ICON_BOOKMARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>';
-  const BIB_ICON_LIBRARY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4v16M10 4v16M15 5.3v14.4M20 4v16"/></svg>';
+  const BIB_ICON_BOOKMARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
+  const BIB_ICON_LIBRARY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>';
   function abrirMenuMeusModelos(){
     const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
     const html='<div class="plist">'+
@@ -9463,7 +9463,7 @@
   function bibSetDropdownBtn(id, label, ativo){
     const btn=document.getElementById(id);
     if(!btn) return;
-    const check='<svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m6 9 6 6 6-6"/></svg>';
+    const check='<svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
     btn.classList.toggle('on', ativo);
     btn.innerHTML='<span>'+escapeHtml(label)+'</span>'+check;
   }
@@ -9491,7 +9491,7 @@
       const rodape=bibBadgesItem(i);
       if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
       const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
-      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg></div>';
+      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         langTag+
@@ -9584,7 +9584,7 @@
        mostram uma prévia legível com um botão para ver o conteúdo completo. */
     html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
-    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>';
+    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')";
