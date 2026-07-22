@@ -4627,7 +4627,7 @@
       const podeGerir = souAdmin() && !souEu;
       return '<div class="struct-row" style="align-items:center">'+
         '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+
-          '<div style="width:36px;height:36px;border-radius:10px;background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>'+
+          '<div style="width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>'+
           '<div style="min-width:0"><div class="nm">'+escapeHtml(nomeExibido)+(souEu?' <span style="font-size:10.5px;color:var(--brand);font-weight:700">'+t('team.youTag')+'</span>':'')+'</div></div>'+
         '</div>'+
         (podeGerir
@@ -7527,7 +7527,7 @@
     const msg=construirMensagemPortalCliente(job);
     openInfo(t('portal.copyAccess'), `
       <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
-      <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:10px;resize:vertical">${escapeHtml(msg)}</textarea>
+      <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
       <button class="btn primary" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemPortalEditada(){
@@ -7699,7 +7699,7 @@
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
         const sufixo=t((RECORRENCIA_FREQ[rec.frequencia]||{}).sufixoKey||'recur.per.month');
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:6px;padding:12px 2px;background:var(--paper-2);border-radius:10px;margin-bottom:8px">';
+        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:6px;padding:12px 2px;background:var(--paper-2);border-radius:var(--r);margin-bottom:8px">';
         html+='<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6"/><path d="M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg><span class="sig-tag" style="background:var(--btn-14);color:rgb(var(--btn-rgb))">'+t('recur.badge')+'</span> '+freqLabel+'</span><b style="font-size:14px">'+fmtMoney(rec.valorPorCiclo)+sufixo+'</b></div>';
         if(rec.ativa){
           html+='<div style="font-size:12.5px;color:var(--ink-soft)">'+t('recur.nextCharge')+': '+rec.proximaCobranca.split('-').reverse().join('/')+(rec.fim?(' · até '+rec.fim.split('-').reverse().join('/')):'')+'</div>';
@@ -8330,7 +8330,7 @@
       if(atividade.length){
         html+='<p class="plabel" style="margin:'+(items.length?'14px':'0')+' 2px 6px">'+t('job.clientActivity')+'</p>';
         html+=atividade.map(a=>notifCardHtml(a.id,
-          '<div style="width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><path d="M20 6 9 17l-5-5"/></svg></div>',
+          '<div style="width:22px;height:22px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><path d="M20 6 9 17l-5-5"/></svg></div>',
           a.texto, a.ts,
           'closeInfo();openJob(\''+a.jobId+'\')'
         )).join('');
@@ -8407,7 +8407,7 @@
     html+='</div>';
     const temComprovante = p.comprovativo && p.comprovativo.startsWith('data:');
     if(temComprovante){
-      if(p.comprovativo.startsWith('data:image/')) html+='<img src="'+p.comprovativo+'" style="width:100%;border-radius:11px;margin-bottom:12px">';
+      if(p.comprovativo.startsWith('data:image/')) html+='<img src="'+p.comprovativo+'" style="width:100%;border-radius:var(--r);margin-bottom:12px">';
       html+='<a href="'+p.comprovativo+'" download class="btn soft" style="width:100%;display:block;text-align:center;margin-bottom:8px">'+t('payment.downloadReceipt')+'</a>';
     } else {
       html+='<p style="font-size:13px;color:var(--neutral);margin-bottom:12px">'+t('payment.noReceiptYet')+'</p>';
@@ -10144,7 +10144,7 @@
     if(!r) return;
     let body='';
     if(r.texto) body+='<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap;line-height:1.6">'+escapeHtml(r.texto)+'</p>';
-    if(r.ficheiroDataUrl && r.ficheiroDataUrl.startsWith('data:image/')) body+='<img src="'+r.ficheiroDataUrl+'" style="width:100%;border-radius:11px;margin-top:'+(r.texto?'12px':'0')+'">';
+    if(r.ficheiroDataUrl && r.ficheiroDataUrl.startsWith('data:image/')) body+='<img src="'+r.ficheiroDataUrl+'" style="width:100%;border-radius:var(--r);margin-top:'+(r.texto?'12px':'0')+'">';
     else if(r.ficheiroNome) body+='<p style="font-size:13px;color:var(--neutral);margin-top:'+(r.texto?'12px':'0')+'">Arquivo: '+escapeHtml(r.ficheiroNome)+'</p>';
     if(!body) body='<p style="font-size:13px;color:var(--neutral)">Sem conteúdo guardado.</p>';
     openInfo(r.nome, body);
@@ -10316,7 +10316,7 @@
     const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone])=>{
       const m=mp[key];
       return '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:14px 2px">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:8px;flex:none;display:grid;place-items:center;background:var(--brand-10);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
         '<div class="toggle'+(m.ativo?' on':'')+'" onclick="this.classList.toggle(\'on\')" id="mp-ativo-'+key+'"><div class="kn"></div></div></div>'+
         '<div class="field" style="margin-bottom:0"><input id="mp-valor-'+key+'" placeholder="'+placeholder+'" value="'+escapeHtml(m.valor||'')+'"></div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)"><input type="checkbox" id="mp-padrao-'+key+'" '+(m.padrao?'checked':'')+' style="accent-color:var(--brand)"> '+t('payment.method.sendByDefault')+'</label>'+
@@ -10386,7 +10386,7 @@
   function infoAssinatura(){
     const tem=!!perfilData.assinaturaImg;
     openInfo(t('modal.signature'), `
-      <div id="perfil-sig-preview" style="border:1px solid var(--line);border-radius:13px;padding:18px;text-align:center;margin-bottom:14px;min-height:60px;display:flex;align-items:center;justify-content:center">
+      <div id="perfil-sig-preview" style="border:1px solid var(--line);border-radius:var(--r);padding:18px;text-align:center;margin-bottom:14px;min-height:60px;display:flex;align-items:center;justify-content:center">
         ${tem? '<img src="'+perfilData.assinaturaImg+'" style="max-width:100%;max-height:80px">' : '<span style="font-size:12.5px;color:var(--neutral)">'+t('signature.noneYet')+'</span>'}
       </div>
       <div class="segmented">
@@ -10528,7 +10528,7 @@
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
       <div class="prow" style="margin-top:18px" onclick="infoIdioma()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:18px 2px 8px">${t('settings.storageTitle')}</p>
-      <div style="background:var(--paper-2);border-radius:10px;height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
+      <div style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
       <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${usadoMB.toFixed(1)} MB ${t('settings.storageOf')} ${limiteTexto}</p>`);
   }
   function guardarConfiguracoes(){
