@@ -209,6 +209,7 @@ module.exports = async (req, res) => {
           body: JSON.stringify({
             from: FROM_EMAIL,
             to: email,
+            reply_to: process.env.RESEND_REPLY_TO || 'contact@pivots.app',
             subject: (quemConvidou ? quemConvidou + ' convidou-o' : 'Convidaram-no') + ' para uma equipa no Pivots',
             html: construirEmailConviteHtml(actionLink, papel, quemConvidou, nomeEmpresa)
           })

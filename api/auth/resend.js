@@ -105,6 +105,7 @@ module.exports = async (req, res) => {
           body: JSON.stringify({
             from: FROM_EMAIL,
             to: email,
+            reply_to: process.env.RESEND_REPLY_TO || 'contact@pivots.app',
             subject: 'Confirme o seu email para ativar a conta Pivots',
             html: construirEmailVerificacaoHtml(actionLink, nome)
           })

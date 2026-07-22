@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL, to, subject, html })
+      body: JSON.stringify({ from: process.env.RESEND_FROM_EMAIL, to, reply_to: process.env.RESEND_REPLY_TO || 'contact@pivots.app', subject, html })
     });
     if (!r.ok) {
       res.status(500).json({ error: 'Resend falhou.', details: await r.text() });

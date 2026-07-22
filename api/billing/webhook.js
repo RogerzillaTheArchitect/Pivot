@@ -116,6 +116,7 @@ module.exports = async (req, res) => {
         body: JSON.stringify({
           from: process.env.RESEND_FROM_EMAIL,
           to: email,
+          reply_to: process.env.RESEND_REPLY_TO || 'contact@pivots.app',
           subject: ativa ? 'A sua assinatura está ativa' : 'A sua assinatura foi cancelada',
           html: construirEmailAssinaturaHtml(plano || 'Pivot', ativa)
         })
