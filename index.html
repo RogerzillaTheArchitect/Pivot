@@ -664,29 +664,28 @@
 
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
-        <div class="card bib-page-card">
-          <div class="bib-search-row">
-            <button type="button" class="bib-mymodels-btn" id="bib-meus-btn" onclick="abrirMenuMeusModelos()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
-              <span data-t="library.origin.mine">Meus Modelos</span>
+        <div class="bib-shell">
+          <div class="bib-headrow">
+            <button type="button" class="bib-square-btn" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>
             </button>
-            <div class="searchbox bib-searchbox">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+            <div class="bib-search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
           </div>
 
-          <div class="bib-dd-row bib-hscroll">
-            <button type="button" class="bib-dd" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
-            <button type="button" class="bib-dd" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+          <div class="bib-filters">
+            <button type="button" class="bib-filter" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
+            <button type="button" class="bib-filter" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
+            <button type="button" class="bib-filter" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+            <button type="button" class="bib-filter" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
           </div>
 
-          <div class="bib-origem-row bib-hscroll" id="bib-origem-row"></div>
+          <div class="bib-seals" id="bib-origem-row"></div>
 
-          <div id="bib-lista"></div>
-          <p style="font-size:13px;color:var(--neutral);margin-top:14px;display:none" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
+          <div class="bib-grid" id="bib-lista"></div>
+          <p class="bib-empty" id="bib-empty" style="display:none"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
         </div>
       </section>
 
@@ -2249,8 +2248,10 @@
     "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
     "library.origin.official": { pt:"Oficial Pivots", en:"Official Pivots", es:"Oficial Pivots" },
+    "library.origin.officialShort": { pt:"Oficial", en:"Official", es:"Oficial" },
     "library.origin.legalVerified": { pt:"Jurídico Verificado", en:"Legally Verified", es:"Jurídico Verificado" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
+    "library.origin.communityShort": { pt:"Comun.", en:"Comm.", es:"Comun." },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
@@ -2262,12 +2263,14 @@
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
+    "library.origin.recommendedShort": { pt:"Recomend.", en:"Recomm.", es:"Recomend." },
     "library.recommendCount": { pt:"recomendam", en:"recommend", es:"recomiendan" },
     "library.viewBlock": { pt:"Visualizar", en:"View", es:"Ver" },
     "library.saved": { pt:"Salvos", en:"Saved", es:"Guardados" },
     "library.savedEmpty": { pt:"Ainda não guardou nenhum modelo. Toque na estrela num modelo para o guardar aqui.", en:"You haven't saved any templates yet. Tap the star on a template to save it here.", es:"Aún no ha guardado ninguna plantilla. Toca la estrella en una plantilla para guardarla aquí." },
     "library.filterOrigin": { pt:"Origem", en:"Source", es:"Origen" },
     "library.sortLabel": { pt:"Ordenar por", en:"Sort by", es:"Ordenar por" },
+    "library.sortLabelShort": { pt:"Ordenar", en:"Sort", es:"Ordenar" },
     "library.sort.mostUsed": { pt:"Mais Utilizados", en:"Most Used", es:"Más Utilizados" },
     "library.sort.mostRecommended": { pt:"Mais Recomendados", en:"Most Recommended", es:"Más Recomendados" },
     "library.sort.az": { pt:"A-Z", en:"A-Z", es:"A-Z" },
@@ -9295,17 +9298,18 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
-  /* Ícones planos (sem estilos inline) para os chips de origem .bib-otag —
-     o CSS dimensiona/colore via .ot-ic. */
+  /* Selos exclusivos de origem — glifos finos, geométricos, sem preenchimento
+     ilustrativo. Um único desenho por tipo, reaproveitado em toda a
+     biblioteca (filtro, rodapé do card, sheet de detalhe, Visualizar). */
   const OTAG_ICON={
-    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5z"/><path d="m9 12 2 2 4-4"/></svg>',
-    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7 2 13a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/></svg>',
-    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>',
-    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5M15 20c0-2 .8-3.4 2.2-4"/></svg>'
+    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4.5 12.5 9 17l10.5-11"/></svg>',
+    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3.5v17"/><path d="M5.5 8h13"/><path d="M5.5 8 3 13.5h5L5.5 8Z"/><path d="M18.5 8 16 13.5h5L18.5 8Z"/></svg>',
+    recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M12 3.5 13.4 10.6 20.5 12 13.4 13.4 12 20.5 10.6 13.4 3.5 12 10.6 10.6 12 3.5Z"/></svg>',
+    comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M8.3 7.9 12 15.5M15.7 7.9 12 15.5M8.6 7h6.8"/><circle cx="7" cy="7" r="1.5" fill="currentColor" stroke="none"/><circle cx="17" cy="7" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="17" r="1.5" fill="currentColor" stroke="none"/></svg>'
   };
-  function bibOtag(key, label, cnt){
-    return '<span class="bib-otag o-'+key+'"><span class="ot-ic">'+OTAG_ICON[key]+'</span>'+
-      '<span class="ot-lbl">'+escapeHtml(label)+'</span>'+(cnt!=null?'<span class="ot-cnt">'+cnt+'</span>':'')+'</span>';
+  function bibOtag(key, label){
+    return '<span class="bib-seal s-'+key+'"><span class="sl-ic">'+OTAG_ICON[key]+'</span>'+
+      '<span class="sl-lbl">'+escapeHtml(label)+'</span></span>';
   }
   let bibOrigemSel=new Set();
   let bibOrdenacao='usos';
@@ -9318,10 +9322,10 @@
   /* Origem: só as 4 insígnias reais — "Populares" saiu porque a métrica de
      usos não é representativa; só recomendações (avaliação) importam. */
   const BIB_ORIGENS=[
-    {key:'oficial', labelKey:'library.origin.official', cls:'bo-oficial', icon:()=>BIB_ICON_CHECK},
-    {key:'juridico', labelKey:'library.origin.legal', cls:'bo-juridico', icon:()=>BIB_ICON_SCALE},
-    {key:'recomendados', labelKey:'library.origin.recommended', cls:'bo-recomendados', icon:()=>BIB_ICON_THUMB},
-    {key:'comunidade', labelKey:'library.origin.community', cls:'bo-comunidade', icon:()=>BIB_ICON_USER}
+    {key:'oficial', labelKey:'library.origin.official', labelKeyShort:'library.origin.officialShort'},
+    {key:'juridico', labelKey:'library.origin.legal'},
+    {key:'recomendados', labelKey:'library.origin.recommended', labelKeyShort:'library.origin.recommendedShort'},
+    {key:'comunidade', labelKey:'library.origin.community', labelKeyShort:'library.origin.communityShort'}
   ];
   function toggleBibOrigem(org){
     if(bibOrigemSel.has(org)) bibOrigemSel.delete(org); else bibOrigemSel.add(org);
@@ -9349,21 +9353,14 @@
     if(bibOrigemSel.size===0) return todos;
     return todos.filter(i=>[...bibOrigemSel].some(org=>bibItemBateOrigem(i,org)));
   }
-  /* Conta contratos distintos (não variações de idioma) por origem. */
-  function bibContagemOrigem(org){
-    const vistos=new Set();
-    catalogoBiblioteca().forEach(i=>{ if(bibItemBateOrigem(i,org)) vistos.add(i.baseId); });
-    return vistos.size;
-  }
   function renderBibOrigemRow(){
     const row=document.getElementById('bib-origem-row');
     if(!row) return;
     row.innerHTML=BIB_ORIGENS.map(o=>{
-      const n=bibContagemOrigem(o.key);
       const on=bibOrigemSel.has(o.key);
-      return '<button type="button" class="bib-otag o-'+o.key+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
-        '<span class="ot-ic">'+OTAG_ICON[o.key]+'</span>'+
-        '<span class="ot-lbl">'+t(o.labelKey)+'</span><span class="ot-cnt">'+n+'</span></button>';
+      return '<button type="button" class="bib-seal s-'+o.key+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
+        '<span class="sl-ic">'+OTAG_ICON[o.key]+'</span>'+
+        '<span class="sl-lbl">'+t(o.labelKeyShort||o.labelKey)+'</span></button>';
     }).join('');
   }
   /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
@@ -9396,13 +9393,16 @@
   }
   /* Menu do botão "Meus Modelos": dá acesso a Favoritos e aos modelos
      próprios do utilizador (substitui os dois botões separados). */
+  /* Glifo único de bookmark, reaproveitado no botão quadrado do cabeçalho,
+     no favoritar dos cards/detalhe e nas linhas deste menu — mesma marca em
+     todo o sistema, nunca um ícone diferente para o mesmo conceito. */
+  const BIB_ICON_BOOKMARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>';
+  const BIB_ICON_LIBRARY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 4v16M10 4v16M15 5.3v14.4M20 4v16"/></svg>';
   function abrirMenuMeusModelos(){
-    const iconFav='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
-    const iconDoc='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
-    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
+    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
     const html='<div class="plist">'+
-      '<div class="prow" onclick="abrirSalvosBiblioteca()">'+iconFav+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="abrirMeusModelosBiblioteca()">'+iconDoc+'<div class="t">'+t('library.origin.mine')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="abrirSalvosBiblioteca()">'+BIB_ICON_BOOKMARK+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="abrirMeusModelosBiblioteca()">'+BIB_ICON_LIBRARY+'<div class="t">'+t('library.origin.mine')+'</div>'+chevr+'</div>'+
     '</div>';
     openInfo(t('library.origin.mine'), html);
   }
@@ -9420,9 +9420,9 @@
       vistos.add(i.baseId); return true;
     });
     const linhas=itens.length ? itens.map(i=>
-      '<div class="prow" onclick="closeInfo();abrirDetalheBibliotecaPrincipal(\''+i.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'+
+      '<div class="prow" onclick="closeInfo();abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+BIB_ICON_BOOKMARK+
       '<div class="t">'+escapeHtml(i.titulo)+'</div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg></div>'
     ).join('') : '<p style="font-size:13px;color:var(--ink-soft);padding:4px 2px">'+t('library.savedEmpty')+'</p>';
     openInfo(t('library.saved'), '<div class="plist">'+linhas+'</div>');
   }
@@ -9431,9 +9431,9 @@
   function abrirMeusModelosBiblioteca(){
     const meus=Object.values(modelosContratoData||{});
     const linhas=meus.length ? meus.map(m=>
-      '<div class="prow" onclick="closeInfo();usarModeloContrato(\''+m.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>'+
+      '<div class="prow" onclick="closeInfo();usarModeloContrato(\''+m.id+'\')">'+BIB_ICON_LIBRARY+
       '<div class="t">'+escapeHtml(m.nome)+'</div>'+
-      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'
+      '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg></div>'
     ).join('') : '<p style="font-size:13px;color:var(--ink-soft);padding:4px 2px">'+t('library.savedEmpty')+'</p>';
     openInfo(t('library.origin.mine'), '<div class="plist">'+linhas+'</div>');
   }
@@ -9445,11 +9445,9 @@
     return arr;
   }
   /* Insígnias de origem coloridas, atreladas ao nome de cada tipo — tanto
-     na linha de autor do card quanto no seletor "Origem". */
-  const BIB_ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M20 6 9 17l-5-5"/></svg>';
-  const BIB_ICON_SCALE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M5 7 2 13a3 3 0 0 0 6 0z"/><path d="M19 7l-3 6a3 3 0 0 0 6 0z"/></svg>';
-  const BIB_ICON_USER='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
-  const BIB_ICON_THUMB='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:13px;height:13px;vertical-align:-2px;margin-right:3px;flex:none"><path d="M7 11v9H4a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z"/><path d="M7 11l3.5-7a2 2 0 0 1 2 2v4h5.5a2 2 0 0 1 1.9 2.6l-1.8 6A2 2 0 0 1 16.2 20H7"/></svg>';
+     na linha de autor do card quanto no seletor "Origem". Um único
+     componente (bibOtag/.bib-seal) em toda a biblioteca — card, sheet de
+     detalhe e Visualizar usam exatamente o mesmo selo. */
   function bibAutorLinha(item){
     if(item.verificado) return bibOtag('juridico', item.autor||t('library.origin.legalVerified'));
     if(item.origem==='comunidade') return bibOtag('comunidade', item.autor||t('library.origin.community'));
@@ -9460,16 +9458,6 @@
     if((item.avaliacao||0)>=4.7) badges.push(bibOtag('recomendados', t('library.origin.recommended')));
     return badges;
   }
-  /* Versão sólida (pílula colorida) para o sheet de detalhe, cujo fundo pode
-     ser claro e apagaria o texto discreto do card. */
-  function bibBadgesSolid(item){
-    const badges=[];
-    if(item.verificado) badges.push('<span class="bib-badge bo-juridico">'+BIB_ICON_SCALE+escapeHtml(item.autor||t('library.origin.legalVerified'))+'</span>');
-    else if(item.origem==='comunidade') badges.push('<span class="bib-badge bo-comunidade">'+BIB_ICON_USER+escapeHtml(item.autor||t('library.origin.community'))+'</span>');
-    else badges.push('<span class="bib-badge bo-oficial">'+BIB_ICON_CHECK+t('library.origin.official')+'</span>');
-    if((item.avaliacao||0)>=4.7) badges.push('<span class="bib-badge bo-recomendados">'+BIB_ICON_THUMB+t('library.origin.recommended')+'</span>');
-    return badges;
-  }
   function bibSetDropdownBtn(id, label, ativo){
     const btn=document.getElementById(id);
     if(!btn) return;
@@ -9478,10 +9466,9 @@
     btn.innerHTML='<span>'+escapeHtml(label)+'</span>'+check;
   }
   function bibAtualizarBotoesFiltro(){
-    const sortEntry=BIB_ORDENACOES.find(([k])=>k===bibOrdenacao);
     bibSetDropdownBtn('bib-cat-btn', bibCategoriaSel||t('library.facet.category'), !!bibCategoriaSel);
     bibSetDropdownBtn('bib-seg-btn', bibSegmentoSel||t('library.facet.profession'), !!bibSegmentoSel);
-    bibSetDropdownBtn('bib-sort-btn', t(sortEntry?sortEntry[1]:'library.sortLabel'), bibOrdenacao!=='usos');
+    bibSetDropdownBtn('bib-sort-btn', bibOrdenacao!=='usos'?t(BIB_ORDENACOES.find(([k])=>k===bibOrdenacao)[1]):t('library.sortLabelShort'), bibOrdenacao!=='usos');
     bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel);
   }
   function renderBiblioteca(){
@@ -9502,7 +9489,7 @@
       const rodape=bibBadgesItem(i);
       if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
       const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
-      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></div>';
+      const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         langTag+
@@ -9584,10 +9571,10 @@
     const fav=bibFavoritos.has(it.baseId);
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
-    const metricas=[bibBadgesSolid(it).join(' ')+' <span class="bib-badge" style="background:var(--btn-06);color:var(--ink-soft)">'+(BIB_LANG_TAG[it.lang]||'')+'</span>'];
-    if(it.usos) metricas.push(BIB_ICON_THUMB+it.usos+' '+t('library.recommendCount'));
-    if(it.numBlocos) metricas.push(it.numBlocos+' '+t('library.blocksCount'));
-    html+='<p style="font-size:12px;color:var(--neutral);margin-bottom:14px">'+metricas.join(' · ')+'</p>';
+    const metricas=[bibBadgesItem(it).join('')+'<span class="vis-meta">'+(BIB_LANG_TAG[it.lang]||'')+'</span>'];
+    if(it.usos) metricas.push('<span class="vis-meta">'+it.usos+' '+t('library.recommendCount')+'</span>');
+    if(it.numBlocos) metricas.push('<span class="vis-meta">'+it.numBlocos+' '+t('library.blocksCount')+'</span>');
+    html+='<div class="vis-head" style="margin-bottom:14px">'+metricas.join('')+'</div>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
     html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
@@ -9595,7 +9582,7 @@
        mostram uma prévia legível com um botão para ver o conteúdo completo. */
     html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
     if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
-    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg>';
+    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.5" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="M6.5 3.75h11a.75.75 0 0 1 .75.75v15.5l-6.25-3.9-6.25 3.9V4.5a.75.75 0 0 1 .75-.75Z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
     const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')";

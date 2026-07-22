@@ -28,9 +28,9 @@
   .clause-list{display:flex;flex-direction:column;gap:7px}
   .clause{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line-soft);
     border-radius:8px;background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s}
-  .clause:hover{border-color:var(--brand)}
+  .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
-  .clause-n{flex:none;width:20px;height:20px;border-radius:6px;background:var(--btn-10);color:var(--brand);
+  .clause-n{flex:none;width:20px;height:20px;border-radius:6px;background:rgba(255,255,255,.08);color:var(--ink);
     font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   .clause-edit{flex:1;min-width:0}
@@ -51,43 +51,45 @@
   .toggle.on .kn{left:18px}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
-    border:1.5px dashed var(--line);border-radius:13px;background:none;color:var(--ink-soft);font-family:inherit;
+    border:1.5px dashed var(--line);border-radius:9px;background:none;color:var(--ink-soft);font-family:inherit;
     font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
   .addblock svg{width:16px;height:16px}
   .save-tpl{font-size:13.5px;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap}
 
-  /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) ===== */
-  .dynf-panel{border:1px solid var(--line);border-radius:14px;background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
+  /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) =====
+     Acento monocromático (grafite/ink) — nada de verde da marca aqui, para
+     não destoar da identidade escura da biblioteca. */
+  .dynf-panel{border:1px solid var(--line);border-radius:10px;background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
   .dynf-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
   .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
-  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--paper);background:var(--brand);border-radius:20px;padding:2px 8px}
+  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:6px;padding:2px 8px}
   .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
   .dynf-row{display:grid;grid-template-columns:132px 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
   .dynf-key{height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
-    background:var(--btn-06);border:1px solid var(--line-soft);border-radius:8px;padding:0 10px;
+    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:8px;padding:0 10px;
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
   .dynf-input{width:100%;height:38px;font-family:inherit;font-size:13px;color:var(--ink);
     background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:0 11px;outline:none}
-  .dynf-input:focus{border-color:var(--brand)}
+  .dynf-input:focus{border-color:var(--ink-soft)}
   .dynf-input::placeholder{color:var(--ink-faint)}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:8px;
-    border:1px dashed var(--line);background:var(--btn-05);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    border:1px dashed var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
     transition:border-color .15s,color .15s,background .15s}
-  .addclause:hover{border-color:var(--brand);color:var(--brand);background:var(--btn-10)}
+  .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
   .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
   .pick-list{display:flex;flex-direction:column;gap:8px}
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
-    border-radius:12px;cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
-  .pick-check:hover{border-color:var(--brand)}
-  .pick-check.on{border-color:var(--brand);background:var(--brand-10)}
+    border-radius:9px;cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
+  .pick-check:hover{border-color:var(--ink-soft)}
+  .pick-check.on{border-color:var(--ink);background:rgba(255,255,255,.06)}
   .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);
     display:grid;place-items:center;color:transparent;margin-top:1px}
-  .pick-check .pc-box.on{background:var(--brand);border-color:var(--brand);color:#fff}
+  .pick-check .pc-box.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
   .pick-check .pc-box svg{width:13px;height:13px}
   .pick-check .pc-main{min-width:0;flex:1}
   .pick-check .pc-nm{font-size:14px;font-weight:600;color:var(--ink)}
