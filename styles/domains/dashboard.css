@@ -83,27 +83,121 @@
   .ms-c-trend svg{width:9px;height:9px}
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
-  /* Estatísticas Operacionais (Dashboard) — linha com ícone, rótulo, barra
-     segmentada (blocos) e valor, no lugar dos anéis de progresso antigos.
-     Layout flex (não grid de colunas fixas) porque o card vive dentro do
-     shell estreito (≤480px) e o rótulo precisa poder respirar sem empurrar
-     o valor para cima da barra. */
-  .dop-row{display:flex;align-items:center;gap:8px;min-height:44px;padding:7px 0;cursor:pointer;border-bottom:1px solid #242424}
-  .dop-row:last-child{border-bottom:none}
-  .dop-icon{flex:none;display:flex;align-items:center;color:#ECECEC}
-  .dop-icon svg{width:18px;height:18px;fill:none;display:block}
-  .dop-name{flex:0 0 auto;width:76px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-    font-size:13px;font-weight:400;letter-spacing:-.01em;color:#F2F2F2}
-  .dop-bar{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:2px;height:26px;overflow:hidden}
-  .dop-seg{flex:1 1 4px;max-width:7px;min-width:2px;height:26px;border-radius:1px;background:transparent;border:1px solid #4A4A4A}
-  .dop-seg.filled{border-color:transparent;background:linear-gradient(to bottom,#FFFFFF 0%,#F1F1F1 50%,#D8D8D8 100%)}
-  .dop-value{flex:none;white-space:nowrap;font-family:var(--font-numeric),monospace;font-weight:500;font-size:13px;color:#FFFFFF;text-align:right}
-  .dop-slash{color:rgba(255,255,255,.5);margin:0 1px;font-weight:400;font-size:.85em}
-  .dop-trend{flex:none;min-width:34px;text-align:right;font-size:10px;font-weight:600;white-space:nowrap}
+  /* ===== Estatísticas Operacionais (Dashboard) — reprodução do painel técnico
+     fornecido (mostrador industrial: ícone, rótulo, barra segmentada com
+     etiqueta flutuante no ponto do preenchimento, valor à direita), no lugar
+     dos anéis de progresso antigos. Tokens de cor/tipografia idênticos ao
+     ficheiro de referência; só as larguras de coluna foram ajustadas ao
+     shell do app (≤480px, ver responsive.css) em vez da página isolada
+     original — o resto (cores, fontes, mecânica da barra/etiqueta) é igual. */
+  .card.ops-card{
+    background:
+      radial-gradient(circle at 50% 22%, rgba(43,52,62,.26), transparent 40%),
+      linear-gradient(116deg, rgba(12,18,26,.93), rgba(5,11,18,.87) 53%, rgba(13,20,29,.93));
+    border:1px solid rgba(190,203,219,.62);
+    border-radius:15px;
+    padding:26px 20px 12px;
+    box-shadow:
+      inset 0 1px 1px rgba(255,255,255,.16),
+      inset 0 0 34px rgba(103,130,162,.08),
+      0 24px 58px rgba(0,0,0,.56),
+      0 0 14px rgba(156,186,220,.1);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    color:#d8dce2;
+  }
+  .ops-card h1{
+    margin:0 0 14px;
+    color:#d8dbe1;
+    font-size:clamp(13px, 3.6vw, 17px);
+    font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    font-weight:500;
+    letter-spacing:.22em;
+    line-height:1.3;
+    text-align:center;
+  }
+  .ops-card .metric{
+    display:grid;
+    grid-template-columns:24px 74px minmax(0,1fr) 30px;
+    align-items:center;
+    column-gap:8px;
+    min-height:46px;
+    border-bottom:1px solid rgba(123,137,154,.13);
+    cursor:pointer;
+  }
+  .ops-card .metric:last-child{min-height:44px;border-bottom:0}
+  .ops-card .icon{width:18px;height:18px;color:#a9b0b9;opacity:.93}
+  .ops-card .label{font-size:12px;font-weight:400;letter-spacing:-.01em;color:#d8dce2;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ops-card .value-end{color:#b5bac3;font-size:12px;text-align:right;white-space:nowrap}
+  .ops-card .track{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(24, minmax(3px, 1fr));
+    grid-auto-flow:column;
+    grid-auto-columns:0;
+    gap:2px;
+    height:22px;
+    align-items:center;
+    overflow:hidden;
+  }
+  .ops-card .track::before{
+    content:"";
+    position:absolute;
+    z-index:0;
+    left:0;
+    top:50%;
+    width:calc(var(--fill) * 1%);
+    height:20px;
+    transform:translateY(-50%);
+    border-radius:1px;
+    background:linear-gradient(90deg, rgba(190,199,208,.21), rgba(167,178,190,.11));
+    box-shadow:0 0 15px rgba(193,210,226,.07);
+  }
+  .ops-card .segment{
+    z-index:1;
+    height:22px;
+    border:1px solid rgba(170,181,193,.32);
+    border-radius:0;
+    background:rgba(14,20,27,.52);
+    box-shadow:inset 0 0 6px rgba(0,0,0,.25);
+  }
+  .ops-card .segment.is-filled{
+    border-color:rgba(205,214,222,.68);
+    background:linear-gradient(100deg, rgba(175,184,193,.28), rgba(91,101,112,.14));
+    box-shadow:inset 0 1px rgba(255,255,255,.1), 0 0 6px rgba(210,221,235,.08);
+  }
+  .ops-card .tag{
+    position:absolute;
+    z-index:2;
+    left:calc(var(--mark) * 1%);
+    bottom:26px;
+    transform:translateX(-50%);
+    padding:1px 4px 2px;
+    border:1px solid rgba(204,215,226,.72);
+    border-radius:2px;
+    background:rgba(9,14,21,.84);
+    color:#c7ccd3;
+    font-size:9px;
+    font-weight:400;
+    line-height:1.15;
+    white-space:nowrap;
+    box-shadow:0 3px 8px rgba(0,0,0,.34), inset 0 1px rgba(255,255,255,.07);
+  }
+  .ops-card .tag::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:100%;
+    width:1px;
+    height:6px;
+    background:rgba(207,217,228,.7);
+  }
   @media (max-width:360px){
-    .dop-name{width:62px;font-size:12px}
-    .dop-value{font-size:12px}
-    .dop-trend{min-width:28px;font-size:9px}
+    .card.ops-card{padding:20px 14px 10px}
+    .ops-card .metric{grid-template-columns:20px 60px minmax(0,1fr) 26px;column-gap:6px}
+    .ops-card .label{font-size:11px}
+    .ops-card .value-end{font-size:11px}
+    .ops-card .track{grid-template-columns:repeat(18, minmax(3px, 1fr))}
   }
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 8px;padding:4px 8px 2px;cursor:pointer}
