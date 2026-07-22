@@ -3468,26 +3468,32 @@
      arco e a pista (o círculo imediatamente anterior no SVG) a ganhar um
      brilho/sombreado para indicar que a meta já foi ultrapassada. A volta já
      dada nunca desaparece nem é substituída por uma volta parcial nova. */
-  /* card Estatísticas Operacionais da Dashboard — mostrador com barra
-     segmentada e etiqueta flutuante (reprodução do design fornecido):
-     cada métrica com meta real (den>0) mostra uma etiqueta sobre a barra
-     com o valor atual, no ponto exato do preenchimento; sem meta (den=0,
-     ex. Fechados) a barra fica vazia e sem etiqueta, só o total à direita. */
+  /* card Estatísticas Operacionais da Dashboard — barra sempre com 20 blocos
+     fixos, cada um valendo 5% do total (não o valor exato), e uma etiqueta
+     flutuante com o número atual pairando sobre a barra (ligada por uma
+     linha fina ao bloco de referência). A etiqueta aponta sempre 1 bloco
+     antes do último bloco alcançado (nunca no próprio último), para não
+     confundir a leitura da fronteira preenchido/vazio: ex. 40/100 → 8 blocos
+     alcançados (40%), etiqueta a apontar para o bloco 7, bloco 8 continua um
+     bloco cheio normal. */
   function pintarMetricaOp(prefixo, num, den, textoAtual, textoTotal){
     const sec=document.getElementById('opm-'+prefixo);
     const track=document.getElementById('opm-'+prefixo+'-track');
     const end=document.getElementById('opm-'+prefixo+'-end');
     if(!sec || !track || !end) return;
-    const N=24;
+    const N=20; // cada bloco = 5% do total
     const temMeta = den>0;
     const ratio = temMeta ? Math.min(1, num/den) : 0;
     const pct = Math.round(ratio*100);
-    const ativos = Math.round(ratio*N);
+    const alcancados = Math.floor(ratio*N);
+    const marcadorIdx = (temMeta && num>0) ? Math.max(0, alcancados-2) : null;
     sec.style.setProperty('--fill', pct);
-    sec.style.setProperty('--mark', pct);
     let html='';
-    if(temMeta) html += '<span class="tag">'+escapeHtml(textoAtual)+'</span>';
-    for(let i=0;i<N;i++) html += '<span class="segment'+(i<ativos?' is-filled':'')+'"></span>';
+    for(let i=0;i<N;i++) html += '<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
+    if(marcadorIdx!=null){
+      const centro = ((marcadorIdx+0.5)/N*100).toFixed(2);
+      html += '<span class="op-tag" style="left:'+centro+'%">'+escapeHtml(textoAtual)+'</span>';
+    }
     track.innerHTML=html;
     end.textContent=textoTotal;
   }
