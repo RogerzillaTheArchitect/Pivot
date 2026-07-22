@@ -240,28 +240,36 @@
   .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
   .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
   .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
-  /* sinal de urgência do card de tarefa: um brilho suave que sangra a partir
-     das bordas pra dentro do card, dissolvendo-se no fundo escuro (inset
-     box-shadow com blur grande, em vez de uma faixa/anel de aresta dura) —
-     mesma linguagem de um halo de luz colorida ao redor de um cartão escuro.
-     Atrasado = bordô, urgente (hoje/amanhã) = amarelo leve, normal (2+ dias)
-     = verde escuro. O .radar-tag fica fixo no canto superior direito, com o
-     texto de prazo (ex.: "2 Dias atraso", "Vence Hoje", "Em 5 dias"). */
+  /* card de tarefa — antes tinha borda/glow coloridos por urgência (bordô/
+     amarelo/verde); agora um único tratamento neutro para todos os níveis:
+     borda fina cinza-escuro e um glow interno quase imperceptível, só o
+     suficiente para dar profundidade (sem nada "neon"). urgClasse continua
+     a ser calculada e atribuída (late/soon/normal) para uso futuro, mas as
+     três já não têm nenhuma diferença visual entre si. */
   .card.radar-card{
-    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10)}
-  .card.radar-card.late{border-color:rgba(122,33,56,.4);
-    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(122,33,56,.42)}
-  .card.radar-card.soon{border-color:rgba(232,197,71,.35);
-    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(232,197,71,.32)}
-  .card.radar-card.normal{border-color:rgba(31,74,52,.4);
-    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(31,74,52,.42)}
-  .radar-card .card-title{padding-right:88px}
-  .radar-tag{position:absolute;top:12px;right:12px;z-index:2;display:inline-flex;align-items:center;
-    padding:3px 10px;border-radius:var(--r);font-size:10.5px;font-weight:600;border:1px solid;
-    letter-spacing:.02em;white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
-  .radar-tag.late{color:#E8899E;border-color:rgba(122,33,56,.6);background:rgba(122,33,56,.28)}
-  .radar-tag.soon{color:#EAD07D;border-color:rgba(232,197,71,.55);background:rgba(232,197,71,.14)}
-  .radar-tag.normal{color:#6FBE93;border-color:rgba(31,74,52,.6);background:rgba(31,74,52,.3)}
+    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    border-color:rgba(255,255,255,.09);
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04)}
+  .card.radar-card.late,.card.radar-card.soon,.card.radar-card.normal{
+    border-color:rgba(255,255,255,.09);
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04)}
+  /* ===== Tarefas (Dashboard) — estrutura interna do card =====
+     Título serif elegante, cliente em sans discreta, linha de metadados com
+     separadores finos (local · data · hora · pessoas) e nota opcional. Só
+     estas classes .rtk-* — .card-title/.card-rows/.card-info-row continuam
+     intactas porque são partilhadas com os cards de Trabalhos/Projetos. */
+  #tasks-list .rtk-title{
+    font-family:var(--font-headline),Georgia,'Times New Roman',serif;
+    font-size:18px;font-weight:400;line-height:1.25;color:var(--ink);margin:0 0 7px}
+  #tasks-list .rtk-client{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);margin-bottom:11px}
+  #tasks-list .rtk-client svg{width:13px;height:13px;flex:none;color:var(--ink-faint)}
+  #tasks-list .rtk-meta{display:flex;align-items:center;flex-wrap:wrap;gap:9px;row-gap:6px}
+  #tasks-list .rtk-seg{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);min-width:0}
+  #tasks-list .rtk-seg span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #tasks-list .rtk-seg svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
+  #tasks-list .rtk-sep{width:1px;height:11px;background:var(--line-soft);flex:none}
+  #tasks-list .rtk-note{display:flex;align-items:flex-start;gap:7px;font-size:12.5px;color:var(--ink-faint);margin-top:10px}
+  #tasks-list .rtk-note svg{width:13px;height:13px;flex:none;margin-top:1px;color:var(--ink-faint)}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
@@ -275,7 +283,7 @@
      leve espaçamento entre eles, e todos com a mesma altura (min-height cobre
      o conteúdo mais alto — título + até duas linhas de indicador). */
   #tasks-list .radar-card-wrap{margin-bottom:10px}
-  #tasks-list .radar-card-wrap .card{border-radius:var(--r);min-height:112px}
+  #tasks-list .radar-card-wrap .card{border-radius:var(--r);min-height:112px;padding-top:12px}
   .card-head{display:flex;gap:11px;align-items:flex-start}
   .status-dot{width:9px;height:9px;border-radius:50%;margin-top:6px;flex:none}
   .dot-late{background:var(--late);box-shadow:0 0 0 4px rgba(217,86,76,.13)}

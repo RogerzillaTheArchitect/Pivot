@@ -3734,20 +3734,26 @@
   function gerarItensRadar(){
     const itens=[];
     jobsVisiveis().filter(j=>!j.arquivado).forEach(j=>{
+      /* campos comuns aos 3 tipos de item (contrato/pagamento/evento) — usados
+         pelo novo card de Tarefas (cliente, local, contagem de pessoas). A
+         contagem de pessoas reaproveita a lista "Pessoas Importantes" do
+         briefing (não existe um campo dedicado de nº de convidados/equipa). */
+      const cliente=j.client||'';
+      const local=j.local||null;
+      const pessoas=(j.briefing && j.briefing.pessoasImportantes && j.briefing.pessoasImportantes.length) || 0;
       if(j.structure && j.structure.contrato && j.contract && j.contract.status!=='assinado'){
-        itens.push({ dataISO:j.dateRaw||new Date().toISOString().slice(0,10), hora:null, nome:j.nome||j.client, secundaria:t('tasks.contractPending'), jobId:j.id, tipo:'contrato', idx:null });
+        itens.push({ dataISO:j.dateRaw||new Date().toISOString().slice(0,10), hora:null, nome:j.nome||j.client, cliente, local, pessoas, nota:t('tasks.contractPending'), jobId:j.id, tipo:'contrato', idx:null });
       }
       (j.payments||[]).forEach((p,i)=>{
         if(p.status==='pago' || !p.dueDate) return;
-        itens.push({ dataISO:p.dueDate, hora:null, nome:j.nome||j.client, principal:p.amount, secundaria:p.label, jobId:j.id, tipo:'pagamento', idx:i });
+        const nota=(p.label||'')+(p.amount?(' · '+fmtMoney(p.amount)):'');
+        itens.push({ dataISO:p.dueDate, hora:null, nome:j.nome||j.client, cliente, local, pessoas, nota, jobId:j.id, tipo:'pagamento', idx:i });
       });
       if(j.dateRaw){
         const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
         if(msEvento && msEvento.status!=='feito'){
-          let principal=null, secundaria=null;
-          if(j.local){ principal=j.local; if(j.duracaoHoras!=null) secundaria='Duração '+formatarDuracao(j.duracaoHoras); }
-          else if(j.duracaoHoras!=null){ principal='Duração '+formatarDuracao(j.duracaoHoras); }
-          itens.push({ dataISO:j.dateRaw, hora:j.horaIni, nome:j.nome||j.client, principal, secundaria, jobId:j.id, tipo:'evento', idx:null, typeLabel:j.typeLabel });
+          const duracaoTxt = j.duracaoHoras!=null ? formatarDuracao(j.duracaoHoras) : null;
+          itens.push({ dataISO:j.dateRaw, hora:j.horaIni, duracaoTxt, nome:j.nome||j.client, cliente, local, pessoas, jobId:j.id, tipo:'evento', idx:null, typeLabel:j.typeLabel });
         }
       }
     });
@@ -3795,26 +3801,40 @@
     const icon=CARD_ROW_ICONS[kind]||'';
     return '<div class="card-info-row">'+icon+'<span>'+escapeHtml(String(text))+'</span></div>';
   }
+  /* ícones do card de Tarefas (Dashboard) — linguagem própria (preenchidos,
+     recortes em espaço negativo), deliberadamente diferente do traço fino
+     genérico usado no resto da app (CARD_ROW_ICONS). Exclusivos deste card:
+     não reaproveitar noutro sítio. */
+  const RTK_ICONS={
+    client:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.7 3.4-7.5 7.5-7.5s7.5 2.8 7.5 7.5z"/></svg>',
+    pin:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2c4.4 0 8 3.5 8 8 0 6-8 12-8 12S4 16 4 10c0-4.5 3.6-8 8-8zm0 5.4a2.7 2.7 0 1 0 0 5.4 2.7 2.7 0 0 0 0-5.4z"/></svg>',
+    calendar:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4 9.5h4v3H9z"/><rect x="7" y="2" width="2.4" height="4" rx="1"/><rect x="14.6" y="2" width="2.4" height="4" rx="1"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2zm-.9 4h1.8v6.1l4.1 2.4-.9 1.6-5-2.9z"/></svg>',
+    team:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="15.2" cy="7.2" r="3.3"/><path d="M8.6 21c.3-3.9 3.1-6.1 6.6-6.1s6.3 2.2 6.6 6.1z" opacity=".55"/><circle cx="8.3" cy="8.1" r="3.9"/><path d="M1 21c.4-4.3 3.4-6.8 7.3-6.8s6.9 2.5 7.3 6.8z"/></svg>',
+    note:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M4 4h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H9l-4 4v-4H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zm2.5 4h11v1.7h-11zm0 3.5h7.5v1.7H6.5z"/></svg>',
+  };
+  function rtkDataLabel(dataISO){
+    const d=diasEntre(dataISO);
+    if(d===0) return t('status.today');
+    if(d===1) return t('status.tomorrow');
+    const partes=dataISO.split('-');
+    const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
+    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1)+' '+partes[0];
+  }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
-    const tagHtml='<span class="radar-tag '+urgClasse+'">'+gerarLabelTemporal(it.dataISO, it.hora)+'</span>';
-    let rows='';
-    if(it.tipo==='contrato'){
-      rows+=cardInfoRow('clientDep', t('tasks.signatureLabel'));
-    } else if(it.tipo==='pagamento'){
-      rows+=cardInfoRow('moneyCircle', fmtMoney(it.principal));
-    } else if(it.tipo==='evento'){
-      if(it.principal){
-        const isDuracao=/^Dura[cç][aã]o/i.test(it.principal);
-        rows+=cardInfoRow(isDuracao?'clock':'pin', isDuracao ? it.principal.replace(/^Dura[cç][aã]o\s*/i,'') : it.principal);
-      }
-      if(it.secundaria) rows+=cardInfoRow('clock', it.secundaria.replace(/^Dura[cç][aã]o\s*/i,''));
-    }
+    const segs=[];
+    if(it.local) segs.push('<span class="rtk-seg">'+RTK_ICONS.pin+'<span>'+escapeHtml(it.local)+'</span></span>');
+    segs.push('<span class="rtk-seg">'+RTK_ICONS.calendar+'<span>'+rtkDataLabel(it.dataISO)+'</span></span>');
+    const horaTxt=it.hora||it.duracaoTxt||null;
+    if(horaTxt) segs.push('<span class="rtk-seg">'+RTK_ICONS.clock+'<span>'+escapeHtml(horaTxt)+'</span></span>');
+    if(it.pessoas) segs.push('<span class="rtk-seg">'+RTK_ICONS.team+'<span>'+(it.pessoas===1?t('team.1person'):(it.pessoas+' '+t('team.nPersons').replace('{n}','').trim()))+'</span></span>');
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
-    card+=tagHtml;
-    card+='<div class="card-title">'+escapeHtml(it.nome)+'</div>';
-    if(rows) card+='<div class="card-rows">'+rows+'</div>';
+    card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
+    if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
+    card+='<div class="rtk-meta">'+segs.join('<span class="rtk-sep"></span>')+'</div>';
+    if(it.nota) card+='<div class="rtk-note">'+RTK_ICONS.note+'<span>'+escapeHtml(it.nota)+'</span></div>';
     card+='</div>';
     return '<div class="radar-card-wrap">'+
       '<div class="radar-swipe-actions left">'+
