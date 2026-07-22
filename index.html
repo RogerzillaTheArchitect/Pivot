@@ -3825,7 +3825,7 @@
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
     const segs=[];
-    if(it.local) segs.push('<span class="rtk-seg">'+RTK_ICONS.pin+'<span>'+escapeHtml(it.local)+'</span></span>');
+    if(it.local) segs.push('<span class="rtk-seg rtk-seg-addr">'+RTK_ICONS.pin+'<span>'+escapeHtml(it.local)+'</span></span>');
     segs.push('<span class="rtk-seg">'+RTK_ICONS.calendar+'<span>'+rtkDataLabel(it.dataISO)+'</span></span>');
     const horaTxt=it.hora||it.duracaoTxt||null;
     if(horaTxt) segs.push('<span class="rtk-seg">'+RTK_ICONS.clock+'<span>'+escapeHtml(horaTxt)+'</span></span>');
