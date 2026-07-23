@@ -84,13 +84,12 @@
   .ms-sq-trend{display:flex;flex-direction:row;align-items:center;gap:5px;text-align:left;flex:none}
   .ms-c-vs{font-size:9.5px;color:var(--ink-soft);text-transform:uppercase}
   /* ===== Estatísticas Operacionais (Dashboard) — painel com barra segmentada
-     (mostrador industrial), cores do resto da app (glass card padrão + branco
-     gelo com opacidade reduzida nos blocos preenchidos — sem verde, que
-     destoava do resto do mostrador). Cada barra tem sempre 20 blocos fixos —
-     cada bloco = 5% do total — e uma etiqueta flutuante com o valor atual
-     paira sobre a barra, ligada por uma linha fina ao bloco de referência
-     (sempre 1 bloco antes do último bloco alcançado, pra não confundir a
-     leitura da fronteira preenchido/vazio). Ver pintarMetricaOp(). */
+     (mostrador industrial), cores do resto da app (glass card padrão). Cada
+     barra tem sempre 20 blocos fixos, retangulares e sem cantos arredondados
+     — cada bloco = 5% do total (exceto "Fechados", que é contagem bruta de
+     projetos: cada bloco = 1 projeto — ver pintarMetricaOp()). Blocos vazios
+     com borda branca; preenchidos em laranja. Sem etiqueta numérica sobre a
+     barra — só o valor no texto à direita. */
   .card.ops-card{
     background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);
@@ -119,9 +118,7 @@
     border-bottom:1px solid var(--line-soft);
     cursor:pointer;
   }
-  /* a primeira linha precisa de folga acima para a etiqueta flutuante não
-     colidir com o título do card */
-  .ops-card .metric:first-child{margin-top:22px}
+  .ops-card .metric:first-child{margin-top:8px}
   .ops-card .metric:last-child{min-height:44px;border-bottom:0}
   .ops-card .icon{width:18px;height:18px;color:var(--ink-soft);opacity:.93}
   .ops-card .label{font-size:12px;font-weight:400;letter-spacing:-.01em;color:var(--ink);
@@ -146,58 +143,28 @@
     width:calc(var(--fill, 0) * 1%);
     height:20px;
     transform:translateY(-50%);
-    border-radius:var(--r);
-    background:linear-gradient(90deg, rgba(240,248,255,.10), transparent);
+    background:linear-gradient(90deg, rgba(255,151,56,.16), transparent);
   }
+  /* blocos retangulares, sem cantos arredondados; vazios com borda branca,
+     preenchidos em laranja sólido (sem etiqueta numérica por cima). */
   .ops-card .segment{
     z-index:1;
     height:22px;
-    border:1px solid var(--line);
-    border-radius:var(--r);
+    border:1px solid rgba(255,255,255,.55);
+    border-radius:0;
     background:rgba(255,255,255,.03);
   }
   .ops-card .segment.is-filled{
-    border-color:rgba(240,248,255,.28);
-    background:rgba(240,248,255,.12);
-    box-shadow:inset 0 1px rgba(255,255,255,.12);
-  }
-  /* etiqueta flutuante com o valor atual, acima da barra, com uma linha fina
-     a apontar para o bloco de referência (overflow:visible no .track garante
-     que nunca é cortada) */
-  .ops-card .op-tag{
-    position:absolute;
-    z-index:3;
-    bottom:calc(100% + 10px);
-    transform:translateX(-50%);
-    padding:3px 6px;
-    border:1px solid rgba(255,255,255,.32);
-    border-radius:var(--r);
-    background:rgba(10,13,18,.94);
-    color:#F0F2F5;
-    font-family:var(--font-numeric),monospace;
-    font-size:10px;
-    font-weight:600;
-    line-height:1.2;
-    white-space:nowrap;
-    box-shadow:0 4px 10px rgba(0,0,0,.4);
-  }
-  .ops-card .op-tag::after{
-    content:"";
-    position:absolute;
-    left:50%;
-    top:100%;
-    width:1px;
-    height:8px;
-    background:rgba(255,255,255,.35);
-    transform:translateX(-50%);
+    border-color:#FF9738;
+    background:#FF9738;
+    box-shadow:inset 0 1px rgba(255,255,255,.35);
   }
   @media (max-width:360px){
     .card.ops-card{padding:12px 12px 6px}
-    .ops-card .metric:first-child{margin-top:20px}
+    .ops-card .metric:first-child{margin-top:6px}
     .ops-card .metric{grid-template-columns:20px 60px minmax(0,1fr) 26px;column-gap:6px}
     .ops-card .label{font-size:11px}
     .ops-card .value-end{font-size:11px}
-    .ops-card .op-tag{font-size:9px}
   }
   .jobs-stat-row{display:flex;align-items:stretch;gap:6px}
   .jobs-stat-grid6{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 8px;padding:4px 8px 2px;cursor:pointer}
@@ -237,9 +204,12 @@
     font-size:11px;font-weight:600;color:#fff;cursor:pointer;border:none;font-family:inherit;
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .radar-swipe-btn svg{width:16px;height:16px}
-  .radar-swipe-btn.editar{background:rgba(141,148,156,.88)}
-  .radar-swipe-btn.concluir{background:rgba(46,184,114,.92)}
-  .radar-swipe-btn.arquivar{background:rgba(216,76,76,.92)}
+  /* vidro escuro translúcido em vez de cor sólida saturada — o tom (cinza/
+     verde/vermelho) só aparece dissolvido no fundo escuro, não como bloco
+     de cor plano */
+  .radar-swipe-btn.editar{background:rgba(38,40,44,.74)}
+  .radar-swipe-btn.concluir{background:rgba(20,46,34,.78)}
+  .radar-swipe-btn.arquivar{background:rgba(48,20,22,.78)}
   /* card de tarefa — borda fina cinza-escuro uniforme (sem cor de urgência) +
      glow quase imperceptível só na base do card (não ao redor todo), com a
      cor de urgência em tom escuro/dessaturado — nunca neon. A cor comunica
@@ -250,11 +220,11 @@
     border-color:rgba(255,255,255,.09);
     box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05)}
   .card.radar-card.late{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(122,45,50,.4)}
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(122,45,50,.65)}
   .card.radar-card.soon{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(139,113,31,.36)}
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(139,113,31,.6)}
   .card.radar-card.normal{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(53,89,50,.36)}
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(53,89,50,.6)}
   /* ===== Tarefas (Dashboard) — "próximas ações", não trabalhos completos.
      4 perguntas só: título, cliente, próxima ação, prazo. Nada de endereço/
      hora/equipa/observações aqui — isso é o Projeto (ver Trabalhos), pra não
@@ -268,12 +238,29 @@
   #tasks-list .rtk-client svg{width:13px;height:13px;flex:none;color:var(--ink-faint)}
   #tasks-list .rtk-action{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:10px}
   #tasks-list .rtk-action svg{width:14px;height:14px;flex:none;color:var(--ink-soft)}
-  /* prazo — só cor + texto, nada de moldura/pílula, pra ficar "extremamente
-     simples". Tons escuros/dessaturados (mesmos da variável do glow). */
-  #tasks-list .rtk-prazo{font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--ink-faint)}
+  /* prazo — ícone de calendário + a data em que a tarefa deve acontecer
+     (não mais "Hoje"/"Amanhã"/"N dias"). Só cor + texto, nada de moldura/
+     pílula. Tons escuros/dessaturados (mesmos da variável do glow). */
+  #tasks-list .rtk-prazo{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--ink-faint)}
+  #tasks-list .rtk-prazo svg{width:13px;height:13px;flex:none}
   .card.radar-card.late .rtk-prazo{color:#C98088}
   .card.radar-card.soon .rtk-prazo{color:#C7AC5A}
   .card.radar-card.normal .rtk-prazo{color:#7FA579}
+  /* cabeçalho "Tarefas" — em vez de um rótulo solto flutuando acima da
+     lista, agora é uma faixa com o mesmo material dos cards, cantos de
+     baixo retos encostados no primeiro card (visualmente "ligado" à
+     lista, não dois elementos soltos empilhados). */
+  .tasks-header{
+    display:block;cursor:pointer;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
+    border:1px solid rgba(255,255,255,.10);border-bottom:none;
+    border-radius:var(--r) var(--r) 0 0;
+    padding:11px 16px;margin:0;
+    font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--label-out);text-align:center;
+  }
+  #tasks-list .radar-card-wrap:first-child .card{border-top-left-radius:0;border-top-right-radius:0}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);

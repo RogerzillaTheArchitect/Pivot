@@ -521,7 +521,7 @@
           </section>
         </div>
 
-        <span class="section-label-out" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')" style="cursor:pointer">Tarefas</span>
+        <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
         <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
@@ -3492,31 +3492,32 @@
      brilho/sombreado para indicar que a meta já foi ultrapassada. A volta já
      dada nunca desaparece nem é substituída por uma volta parcial nova. */
   /* card Estatísticas Operacionais da Dashboard — barra sempre com 20 blocos
-     fixos, cada um valendo 5% do total (não o valor exato), e uma etiqueta
-     flutuante com o número atual pairando sobre a barra (ligada por uma
-     linha fina ao bloco de referência). A etiqueta aponta sempre 1 bloco
-     antes do último bloco alcançado (nunca no próprio último), para não
-     confundir a leitura da fronteira preenchido/vazio: ex. 40/100 → 8 blocos
-     alcançados (40%), etiqueta a apontar para o bloco 7, bloco 8 continua um
-     bloco cheio normal. */
-  function pintarMetricaOp(prefixo, num, den, textoAtual, textoTotal){
+     fixos, cada um valendo 5% do total. Sem etiqueta numérica flutuante — só
+     os blocos preenchidos comunicam o progresso (o valor exato já aparece
+     no texto à direita da barra).
+     "Fechados" é a única métrica sem percentual de um total (é a contagem
+     bruta de projetos fechados no período, começando em 0): em vez de 5%
+     por bloco, cada bloco ali vale exatamente 1 projeto — passar
+     modo='contagem' pra essa. */
+  function pintarMetricaOp(prefixo, num, den, textoAtual, textoTotal, modo){
     const sec=document.getElementById('opm-'+prefixo);
     const track=document.getElementById('opm-'+prefixo+'-track');
     const end=document.getElementById('opm-'+prefixo+'-end');
     if(!sec || !track || !end) return;
-    const N=20; // cada bloco = 5% do total
-    const temMeta = den>0;
-    const ratio = temMeta ? Math.min(1, num/den) : 0;
-    const pct = Math.round(ratio*100);
-    const alcancados = Math.floor(ratio*N);
-    const marcadorIdx = (temMeta && num>0) ? Math.max(0, alcancados-2) : null;
+    const N=20;
+    let alcancados, pct;
+    if(modo==='contagem'){
+      alcancados=Math.max(0, Math.min(N, Math.round(num)));
+      pct=Math.round(alcancados/N*100);
+    } else {
+      const temMeta = den>0;
+      const ratio = temMeta ? Math.min(1, num/den) : 0;
+      pct = Math.round(ratio*100);
+      alcancados = Math.floor(ratio*N); // cada bloco = 5% do total
+    }
     sec.style.setProperty('--fill', pct);
     let html='';
     for(let i=0;i<N;i++) html += '<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
-    if(marcadorIdx!=null){
-      const centro = ((marcadorIdx+0.5)/N*100).toFixed(2);
-      html += '<span class="op-tag" style="left:'+centro+'%">'+escapeHtml(textoAtual)+'</span>';
-    }
     track.innerHTML=html;
     end.textContent=textoTotal;
   }
@@ -3701,8 +3702,10 @@
     pintarMetricaOp('pendencias', s.pendClienteCount, s.totalJobs, String(s.pendClienteCount), String(s.totalJobs));
     /* Demandas (lado próprio) sobre o total de trabalhos */
     pintarMetricaOp('demandas', s.pendMeuCount, s.totalJobs, String(s.pendMeuCount), String(s.totalJobs));
-    /* Fechados: sem meta — barra vazia, só a contagem deste mês à direita */
-    pintarMetricaOp('fechados', 0, 0, '', String(s.fechadosEsteMes));
+    /* Fechados: sem percentual de um total — é a contagem bruta de projetos
+       fechados no período. Começa em 0 e vai enchendo 1 bloco por vez a
+       cada novo projeto fechado (cada bloco = 1 projeto, não 5%). */
+    pintarMetricaOp('fechados', s.fechadosEsteMes, 0, '', String(s.fechadosEsteMes), 'contagem');
     /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
     pintarMetricaOp('executados', s.executadosCount, s.totalJobs, String(s.executadosCount), String(s.totalJobs));
     /* Concluídos: entregues sobre entregues+a entregar */
@@ -3822,7 +3825,16 @@
   const RTK_ICONS={
     client:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.7 3.4-7.5 7.5-7.5s7.5 2.8 7.5 7.5z"/></svg>',
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
+    calendar:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4 9.5h4v3H9z"/><rect x="7" y="2" width="2.4" height="4" rx="1"/><rect x="14.6" y="2" width="2.4" height="4" rx="1"/></svg>',
   };
+  /* data literal (dd Mmm aaaa) — o prazo deixou de mostrar "Hoje"/"Amanhã"/
+     "N dias" e passa a mostrar sempre a data exata em que a tarefa deve
+     acontecer, com um ícone de calendário à esquerda. */
+  function rtkDataCompleta(dataISO){
+    const partes=dataISO.split('-');
+    const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
+    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1)+' '+partes[0];
+  }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
@@ -3830,7 +3842,7 @@
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
-    card+='<div class="rtk-prazo">'+gerarLabelTemporal(it.dataISO, null)+'</div>';
+    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
     card+='</div>';
     return '<div class="radar-card-wrap">'+
       '<div class="radar-swipe-actions left">'+
