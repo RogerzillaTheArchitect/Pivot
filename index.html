@@ -421,11 +421,8 @@
 
       <!-- ============ HOJE / DASHBOARD ============ -->
       <section class="view active" id="v-hoje">
+        <div class="tasks-header" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
         <div class="card finance-ops-card">
-        <div class="fo-title-row">
-          <span class="fo-title" data-t="home.financeTitle">Financeiro</span>
-        </div>
-        <div class="fo-divider"></div>
         <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
@@ -481,8 +478,8 @@
           </div>
         </div>
 
+        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">ESTATÍSTICAS OPERACIONAIS</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
-          <h1 id="dash-op-title" data-t="reports.opStats">ESTATÍSTICAS OPERACIONAIS</h1>
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
             <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
             <div class="label" data-t="home.hours">Horas</div>
@@ -767,15 +764,18 @@
           <div id="rel-op-bars"></div>
         </div>
 
-        <!-- Card: Fluxo de Tarefas -->
-        <div class="card rel-card">
-          <div class="group-label" id="rel-anchor-tarefas"><span data-t="reports.taskFlow">Fluxo de Tarefas</span></div>
+        <!-- Card: Fluxo de Tarefas — mesmo padrão de cabeçalho conectado. -->
+        <div class="rel-card-header" id="rel-anchor-tarefas" data-t="reports.taskFlow">Fluxo de Tarefas</div>
+        <div class="card rel-card rel-card-body">
           <div id="rel-op-extra" style="margin-top:8px"></div>
         </div>
 
-        <!-- Card: Fluxo Financeiro — timeline -->
-        <div class="card rel-card">
-          <div class="group-label"><span data-t="reports.cashFlow">Fluxo Financeiro</span></div>
+        <!-- Card: Fluxo Financeiro — timeline. Cabeçalho conectado (título
+             centralizado); filtros e lista sem padding horizontal do card
+             (rel-card-body-flush), pra irem até a borda do card em vez de
+             ficarem com um respiro só neste card e não nos outros. -->
+        <div class="rel-card-header" data-t="reports.cashFlow">Fluxo Financeiro</div>
+        <div class="card rel-card rel-card-body rel-card-body-flush">
           <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
             <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
             <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>

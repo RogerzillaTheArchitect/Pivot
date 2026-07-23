@@ -62,6 +62,14 @@
   .rel-card-header + .rel-card-body{
     border-top-left-radius:0;border-top-right-radius:0;margin-top:0;
   }
+  /* Fluxo Financeiro — filtros e lista precisam ir até a borda do próprio
+     card (sem o respiro horizontal padrão de 16px), então zera o padding
+     lateral do card aqui; título fica no .rel-card-header (já centralizado)
+     e cada linha da lista ganha o próprio padding interno (ver
+     #rel-fluxo-lista .card.radar-card) — como todo mundo aqui usa
+     box-sizing:border-box, a borda/divisória de cada elemento continua
+     tocando a borda real do card mesmo com esse padding interno. */
+  .rel-card-body-flush{padding-left:0;padding-right:0}
 
   .stats-op-row{position:relative;display:grid;
     grid-template-columns:20px 76px 68px 42px minmax(0,1fr);
@@ -136,7 +144,7 @@
      visual do .card é neutralizado aqui para manter o estilo de timeline. */
   #rel-fluxo-lista .radar-card-wrap{margin-bottom:0;border-radius:0}
   #rel-fluxo-lista .radar-card-wrap:first-child .card.radar-card{border-top:none}
-  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 2px}
+  #rel-fluxo-lista .card.radar-card{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 18px}
   #rel-fluxo-lista .card.radar-card::before{content:none}
   .rel-fluxo-item .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
   .rel-fluxo-meta{display:flex;align-items:center;gap:10px;margin-top:4px;flex-wrap:wrap}

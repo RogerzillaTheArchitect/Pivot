@@ -14,9 +14,6 @@
     --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
     --c-icon-bg:rgba(255,255,255,.10); --c-track-lt:rgba(255,255,255,.14)}
-  .fo-title-row{position:relative;display:flex;align-items:center;justify-content:center;padding:0 18px}
-  .fo-title{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;color:var(--label-out);letter-spacing:.1em;font-weight:600;text-transform:uppercase;text-align:center}
-  .fo-divider{height:1px;background:var(--line-soft);margin:8px 18px}
   .ms-mes-atual{font-size:12.5px;font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:155px;flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:grid;grid-template-columns:155px minmax(0,1fr);align-items:center;gap:10px;padding:6px 10px 12px;cursor:pointer}
@@ -261,6 +258,11 @@
     color:var(--label-out);text-align:center;
   }
   #tasks-list .radar-card-wrap:first-child .card{border-top-left-radius:0;border-top-right-radius:0}
+  /* Financeiro e Estatísticas Operacionais (mesma seção do Dashboard)
+     reaproveitam o cabeçalho "Tarefas" — o card logo abaixo encosta nele
+     (cantos de cima retos, sem o respiro/margem que teria como card solto). */
+  .tasks-header + .card.finance-ops-card{border-top-left-radius:0;border-top-right-radius:0;margin-top:0}
+  .tasks-header + .card.ops-card{border-top-left-radius:0;border-top-right-radius:0;margin-top:0}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
