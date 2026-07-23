@@ -43,8 +43,8 @@
   .job-footer-btn.concluir{color:var(--brand);border-color:var(--btn-32)}
   .job{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease;
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
-    border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:15px 16px;
-    margin-bottom:0;cursor:pointer;box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.09);border-radius:var(--r);padding:15px 16px;
+    margin-bottom:0;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05);
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
@@ -52,28 +52,39 @@
     color:#F5F5F3;min-height:112px;
     --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
-  /* mesmo sinal de urgência dos cards de Tarefas (Dashboard): halo suave nas
-     bordas — atrasado = bordô, hoje/amanhã = amarelo, 2+ dias = verde. */
-  .job.late{border-color:rgba(122,33,56,.4);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(122,33,56,.42)}
-  .job.soon{border-color:rgba(232,197,71,.35);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(232,197,71,.32)}
-  .job.normal{border-color:rgba(31,74,52,.4);
-    box-shadow:0 12px 28px -10px rgba(15,20,15,.28),inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 30px 2px rgba(31,74,52,.42)}
-  .job-top-r{display:flex;align-items:center;gap:6px;flex:none}
-  .job-tag{display:inline-flex;align-items:center;padding:3px 10px;border-radius:var(--r);font-size:10.5px;font-weight:600;
-    border:1px solid;letter-spacing:.02em;white-space:nowrap;flex:none}
-  .job-tag.late{color:#E8899E;border-color:rgba(122,33,56,.6);background:rgba(122,33,56,.28)}
-  .job-tag.soon{color:#EAD07D;border-color:rgba(232,197,71,.55);background:rgba(232,197,71,.14)}
-  .job-tag.normal{color:#6FBE93;border-color:rgba(31,74,52,.6);background:rgba(31,74,52,.3)}
+  /* exatamente o mesmo sistema visual do card Tarefas (Dashboard,
+     .card.radar-card): borda fina cinza-escuro uniforme (sem cor de
+     urgência), glow quase imperceptível só na base — a cor comunica o
+     estado (bordô=atrasado, amarelo escuro=hoje/amanhã, verde escuro=2+
+     dias), nunca a borda inteira. */
+  .job.late{box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(122,45,50,.65)}
+  .job.soon{box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(139,113,31,.6)}
+  .job.normal{box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(53,89,50,.6)}
   .job:nth-child(1){animation-delay:.02s} .job:nth-child(2){animation-delay:.07s} .job:nth-child(3){animation-delay:.12s}
   .job:nth-child(4){animation-delay:.17s} .job:nth-child(5){animation-delay:.22s} .job:nth-child(n+6){animation-delay:.26s}
   @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .job:active{transform:scale(.97)}
-  .job-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
-  .job-top-l{display:flex;align-items:center;gap:11px;min-width:0}
   .client-avatar{border-radius:var(--r);display:flex;align-items:center;justify-content:center;
     font-weight:600;color:#fff;flex:none;font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
+  /* card de Projeto — só responde "que projeto é este" e "em que etapa está":
+     4 linhas fixas (título, cliente, data/hora, etapa), sempre as mesmas,
+     pra todos os cards terem a mesma altura/espaçamento — nada de linhas
+     opcionais que fazem um card crescer mais que os outros. */
+  .job-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;
+    font-size:17px;font-weight:400;line-height:1.25;color:var(--ink);margin:0 0 9px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .job-client-row{display:flex;align-items:center;gap:9px;margin-bottom:9px;min-width:0}
+  .job-client-row span{font-size:13.5px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .job-datetime{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:10px}
+  .job-datetime svg{width:13px;height:13px;flex:none;color:var(--ink-soft)}
+  .job-stage{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--ink-soft);padding:4px 10px;border-radius:var(--r);
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10)}
+  /* ===== Cards do Histórico (concluídos/arquivados) — versão simples,
+     reaproveitada de htmlCardArquivado(); não faz parte da listagem
+     principal, mantém o layout próprio (avatar/cliente/tipo + estado). */
+  .job-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .job-top-l{display:flex;align-items:center;gap:11px;min-width:0}
   .job-client{font-size:16px;font-weight:500}
   .job-type{font-size:12.5px;color:var(--neutral);margin-top:1px}
   .state{font-size:11px;font-weight:600;letter-spacing:.03em;padding:4px 9px;text-transform:uppercase;
