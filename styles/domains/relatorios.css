@@ -1,6 +1,26 @@
   /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
+  /* Card "Segmentação Financeira" — identidade visual premium do Pivot: preto
+     fosco/cinzas do .card padrão, branco gelo, alto contraste, sem cor
+     chamativa. Uma linha por segmento (nome, barra, receita • projetos • %),
+     ordenados por maior receita. Barra: fundo cinza escuro, preenchimento em
+     gradiente sutil branco-gelo → cinza claro, com transição suave no load
+     (ver renderRelSegmentacaoFinanceira — largura muda de 0 pra final depois
+     do primeiro paint). */
+  .seg-fin-title{font-size:15px;font-weight:600;color:var(--ink)}
+  .seg-fin-sub{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+  .seg-fin-row{margin-bottom:18px}
+  .seg-fin-row:last-child{margin-bottom:0}
+  .seg-fin-name{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+  .seg-fin-bar-track{height:10px;border-radius:var(--r);background:rgba(255,255,255,.05);overflow:hidden}
+  .seg-fin-bar-fill{display:block;height:100%;width:0;border-radius:var(--r);
+    background:linear-gradient(90deg,#F2F5F3,#B9BDC2);
+    transition:width .9s cubic-bezier(.2,.8,.2,1)}
+  .seg-fin-meta{font-size:12px;color:var(--ink-soft);margin-top:7px}
+  .seg-fin-empty-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
+  .seg-fin-empty-text{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin:0}
+
   /* Card 2 (Estatísticas Operacionais) — spec exata: container técnico sem
      glass/blur, layout tabular de colunas fixas (Grid — garante que ícone,
      nome, valor e percentual nunca variam de largura entre linhas, e que a
