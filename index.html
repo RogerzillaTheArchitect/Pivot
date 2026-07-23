@@ -2283,6 +2283,7 @@
     "explore.editableModel": { pt:"Modelo · editável", en:"Template · editable", es:"Modelo · editable" },
     "explore.empty": { pt:"Em crescimento. Sugere um modelo que gostarias de ver aqui.", en:"Growing. Suggest a template you’d like to see here.", es:"En crecimiento. Sugiere una plantilla que te gustaría ver aquí." },
     "explore.library": { pt:"Modelos Pivot", en:"Pivot Templates", es:"Modelos Pivot" },
+    "explore.contractLibrary": { pt:"Biblioteca de Contratos", en:"Contract Library", es:"Biblioteca de Contratos" },
     "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
     "library.origin.official": { pt:"Oficial Pivots", en:"Official Pivots", es:"Oficial Pivots" },
@@ -4247,7 +4248,7 @@
     const panelTitleKeys={
       home:'sheet.create', trabalho:'wizard.newJob', contrato:'wizard.newContract',
       'contrato-usar':'library.saved',
-      'comunidade-contratos':'explore.library',
+      'comunidade-contratos':'explore.contractLibrary',
       'modelo-lista':'wizard.newTemplate',
       'comunidade-modelos':'explore.library',
       cliente:'wizard.newClient', tarefa:'wizard.newTask',
@@ -8228,18 +8229,20 @@
       <button class="btn ghost" style="width:100%;margin-top:10px" onclick="abrirBibliotecaContratoColaboradoresMassa('${jobId}')">${t('collab.addContractForCollabs')}</button>`);
     renderContratosColaboradoresLista(jobId);
   }
+  /* mesmo bloco vertical organizado do card Colaboradores (.collab-block/
+     .collab-field) — nome no topo, cada campo na própria linha. */
   function renderContratosColaboradoresLista(jobId){
     const wrap=document.getElementById('contratos-colab-lista');
     if(!wrap) return;
     const lista=colaboradoresCache[jobId]||[];
     wrap.innerHTML = lista.map(c=>
-      '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:12px 0">'+
-        '<div class="nm">'+escapeHtml(c.email)+'</div>'+
-        '<div class="field" style="margin-bottom:0"><label style="font-size:11px">'+t('collab.role')+'</label><input value="'+escapeHtml(c.funcao||'')+'" placeholder="'+t('collab.rolePlaceholder')+'" onblur="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'funcao\',this.value)"></div>'+
-        '<div class="field" style="margin-bottom:0"><label style="font-size:11px">'+t('collab.permission')+'</label><select onchange="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'permissao\',this.value)">'+
+      '<div class="collab-block">'+
+        '<div class="collab-block-top"><div class="nm">'+escapeHtml(c.email)+'</div></div>'+
+        '<div class="field" style="margin:0"><label style="font-size:11px">'+t('collab.role')+'</label><input value="'+escapeHtml(c.funcao||'')+'" placeholder="'+t('collab.rolePlaceholder')+'" onblur="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'funcao\',this.value)"></div>'+
+        '<div class="collab-field"><span class="k">'+t('collab.permission')+'</span><select onchange="salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'permissao\',this.value)">'+
           PERMISSOES_CONTRATO_COLAB.map(([key,labelKey])=>'<option value="'+key+'"'+((c.permissao||'leitor')===key?' selected':'')+'>'+t(labelKey)+'</option>').join('')+
         '</select></div>'+
-        '<div class="struct-row" style="padding:0"><div class="struct-l"><div class="nm" style="font-size:12.5px">'+t('collab.receivesContract')+'</div></div><div class="toggle'+(c.recebe_contrato?' on':'')+'" onclick="this.classList.toggle(\'on\');salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'recebe_contrato\',this.classList.contains(\'on\'))"><div class="kn"></div></div></div>'+
+        '<div class="collab-field"><span class="k">'+t('collab.receivesContract')+'</span><div class="toggle'+(c.recebe_contrato?' on':'')+'" onclick="this.classList.toggle(\'on\');salvarCampoColaborador(\''+jobId+'\',\''+c.id+'\',\'recebe_contrato\',this.classList.contains(\'on\'))"><div class="kn"></div></div></div>'+
       '</div>'
     ).join('');
   }
