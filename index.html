@@ -878,6 +878,30 @@
         <div class="moment" data-moment="1">
           <div class="field"><label data-t="wizard.jobTitle">Título</label><input id="tw-nome" placeholder="Ex: Casamento Sofia &amp; João" data-t-placeholder="wizard.jobNamePlaceholder"></div>
 
+          <!-- Categoria/Segmento — mesclados ao título, alimentam a
+               classificação da Segmentação Financeira (Relatórios) com muito
+               mais exatidão do que só o texto do título/contrato. -->
+          <div class="field-row">
+            <div class="field">
+              <label data-t="wizard.category">Categoria</label>
+              <select id="tw-categoria" onchange="onCategoriaWizardChange()">
+                <option value="" data-t="wizard.categoryPlaceholder">Selecionar categoria…</option>
+              </select>
+              <div class="field" id="tw-categoria-custom-field" style="display:none;margin-top:8px">
+                <input id="tw-categoria-custom" placeholder="Nome da categoria…" data-t-placeholder="wizard.categoryCustomPlaceholder">
+              </div>
+            </div>
+            <div class="field">
+              <label data-t="wizard.segment">Segmento</label>
+              <select id="tw-segmento" disabled onchange="onSegmentoWizardChange()">
+                <option value="" data-t="wizard.segmentPlaceholder">Selecionar segmento…</option>
+              </select>
+              <div class="field" id="tw-segmento-custom-field" style="display:none;margin-top:8px">
+                <input id="tw-segmento-custom" placeholder="Nome do segmento…" data-t-placeholder="wizard.segmentCustomPlaceholder">
+              </div>
+            </div>
+          </div>
+
           <div class="field" style="position:relative">
             <label data-t="wizard.client">Cliente</label>
             <input id="tw-cliente" placeholder="Procurar ou criar…" data-t-placeholder="wizard.searchOrCreate" autocomplete="off" oninput="checkNovoCliente()" onfocus="checkNovoCliente()">
@@ -1996,6 +2020,13 @@
     "timeline.status.progress": { pt:"Em andamento", en:"In progress", es:"En curso" },
     "timeline.status.late": { pt:"Atrasado", en:"Late", es:"Atrasado" },
     "wizard.jobTitle": { pt:"Título", en:"Title", es:"Título" },
+    "wizard.category": { pt:"Categoria", en:"Category", es:"Categoría" },
+    "wizard.segment": { pt:"Segmento", en:"Segment", es:"Segmento" },
+    "wizard.categoryPlaceholder": { pt:"Selecionar categoria…", en:"Select category…", es:"Seleccionar categoría…" },
+    "wizard.segmentPlaceholder": { pt:"Selecionar segmento…", en:"Select segment…", es:"Seleccionar segmento…" },
+    "wizard.customOption": { pt:"+ Personalizado", en:"+ Custom", es:"+ Personalizado" },
+    "wizard.categoryCustomPlaceholder": { pt:"Nome da categoria…", en:"Category name…", es:"Nombre de la categoría…" },
+    "wizard.segmentCustomPlaceholder": { pt:"Nome do segmento…", en:"Segment name…", es:"Nombre del segmento…" },
     "wizard.dateStart": { pt:"Data de início", en:"Start date", es:"Fecha de inicio" },
     "wizard.dateEnd": { pt:"Data de fim", en:"End date", es:"Fecha de fin" },
     "wizard.responsibles": { pt:"Responsáveis pelo trabalho", en:"Responsible for this job", es:"Responsables del trabajo" },
@@ -4241,7 +4272,7 @@
   function pushPanel(name){
     panelStack.push(name);
     showPanel(name);
-    if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); }
+    if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); populateCategoriaWizardSelect(); }
     if(name==='tarefa') populateTrabalhoSelects();
     if(name==='importar-referencias') renderReferenciasGuardadas();
     if(name==='comunidade-contratos') renderBibliotecaPanel('contratos');
@@ -5327,8 +5358,15 @@
     const emailInline=(emailInlineEl&&emailInlineEl.value||'').trim();
     const telInline=(telInlineEl&&telInlineEl.value||'').trim();
     const clienteExistente=upsertClientePorNome(cliente, {email:emailInline, telefone:telInline});
+    /* categoria/segmento — mesclados ao título na classificação da
+       Segmentação Financeira (Relatórios). "+ Personalizado" já grava o
+       valor na lista pessoal da conta dentro de lerCategoriaWizard/
+       lerSegmentoWizard, antes de devolver o valor final. */
+    const categoriaInfo=lerCategoriaWizard();
+    const segmentoVal=lerSegmentoWizard(categoriaInfo.id);
     const id='job'+Date.now()+Math.random().toString(36).slice(2,7);
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
+      categoria:categoriaInfo.label, segmento:segmentoVal,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
       date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
@@ -5484,9 +5522,14 @@
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
-    ['tw-cliente','tw-nome','tw-data','tw-data-fim','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-novo-email','tw-novo-tel'].forEach(id=>{
+    ['tw-cliente','tw-nome','tw-data','tw-data-fim','tw-hora','tw-hora-fim','tw-local','tw-valor','tw-novo-email','tw-novo-tel','tw-categoria-custom','tw-segmento-custom'].forEach(id=>{
       const el=document.getElementById(id); if(el) el.value='';
     });
+    const catSel=document.getElementById('tw-categoria'); if(catSel) catSel.value='';
+    const segSel=document.getElementById('tw-segmento');
+    if(segSel){ segSel.innerHTML='<option value="">'+t('wizard.segmentPlaceholder')+'</option>'; segSel.disabled=true; }
+    const catCustomField=document.getElementById('tw-categoria-custom-field'); if(catCustomField) catCustomField.style.display='none';
+    const segCustomField=document.getElementById('tw-segmento-custom-field'); if(segCustomField) segCustomField.style.display='none';
     const durCalc=document.getElementById('tw-duracao-calc'); if(durCalc) durCalc.textContent='';
     recursosAdicionaisAtuais=[]; renderRecursosLista();
     const dd=document.getElementById('tw-addr-dropdown'); if(dd) dd.style.display='none';
@@ -5869,10 +5912,131 @@
     return 'outros';
   }
   function classificarSegmentoJob(job){
-    return classificarSegmentoTexto((job.nome||'')+' '+((job.contract&&job.contract.templateName)||''));
+    /* categoria escolhida manualmente na criação do trabalho é o sinal mais
+       confiável — se bate direto com uma categoria conhecida, usa sem
+       precisar varrer palavra por palavra. Senão (categoria personalizada,
+       ou nenhuma escolhida), cai pro dicionário de palavras-chave, agora
+       considerando também categoria+segmento no texto analisado — mais
+       contexto, classificação mais precisa. */
+    if(job.categoria){
+      const direta=SEGMENTOS_FINANCEIROS.find(s=>s.label.toLowerCase()===String(job.categoria).toLowerCase());
+      if(direta) return direta.id;
+    }
+    const texto=[job.categoria, job.segmento, job.nome, job.contract&&job.contract.templateName].filter(Boolean).join(' ');
+    return classificarSegmentoTexto(texto);
   }
   function segmentoLabel(id){
     return id==='outros' ? t('reports.segFin.others') : ((SEGMENTOS_FINANCEIROS.find(s=>s.id===id)||{}).label||id);
+  }
+  /* ===== Categoria / Segmento (etapa de criação do trabalho) =====
+     Categoria reaproveita os mesmos 16 ids/labels de SEGMENTOS_FINANCEIROS —
+     uma única fonte da verdade entre o que a pessoa escolhe ao criar o
+     trabalho e o que a Segmentação Financeira usa pra classificar. Segmento
+     é uma escolha mais granular dentro da categoria, também baseada nas
+     subcategorias reais da biblioteca oficial de contratos. "+ Personalizado"
+     grava o valor digitado na lista pessoal da conta (catalogoPersonalizado),
+     que passa a aparecer nas próximas criações — sem exigir nenhuma
+     configuração prévia, só cresce com o uso. */
+  const SEGMENTOS_POR_CATEGORIA = {
+    casamentos: ['Casamento Civil','Casamento Religioso','Cerimônia Íntima / Elopement','Noivado'],
+    corporativo: ['Institucional','Evento Corporativo','Treinamento','Retrato Corporativo','Apresentação Executiva'],
+    eventos: ['Aniversário','Formatura','Festival','Conferência','Confraternização','Evento Social'],
+    imobiliario: ['Residencial','Comercial','Hotelaria','Lançamento Imobiliário'],
+    construcao: ['Residencial','Comercial','Industrial','Reforma','Inspeção Predial'],
+    arquitetura: ['Projeto Residencial','Projeto Comercial','Design de Interiores'],
+    engenharia: ['Civil','Elétrica','Mecânica','Hidráulica'],
+    moda: ['Editorial','Campanha Publicitária','Lookbook','Desfile'],
+    produto_ecommerce: ['Catálogo','Lançamento de Produto','Publicidade'],
+    marketing: ['Redes Sociais','Tráfego Pago','SEO','Marketing de Conteúdo'],
+    consultoria: ['Empresarial','Financeira / Contábil','Recursos Humanos','Coaching / Mentoria','Auditoria'],
+    educacao: ['Curso Online','Workshop','Podcast','Tradução','Redação'],
+    tecnologia: ['Website','Aplicativo Mobile','Software Sob Medida','SaaS','API / Integração','Manutenção'],
+    design: ['Identidade Visual','UI/UX','Design Gráfico','Web Design'],
+    fotografia: ['Retrato','Ensaio','Book Fotográfico','Fotografia de Produto'],
+    videografia: ['Institucional','Documentário','Videoclipe','Drone','Vídeo para Redes Sociais'],
+  };
+  let catalogoPersonalizado={ categorias:[], segmentosPorCategoria:{} };
+  function saveCatalogoPersonalizado(){ savePersisted('pivot-catalogoPersonalizado', ()=>catalogoPersonalizado); }
+  async function loadCatalogoPersonalizado(){
+    await loadPersisted('pivot-catalogoPersonalizado', d=>{ catalogoPersonalizado = d || { categorias:[], segmentosPorCategoria:{} }; });
+  }
+  function listaCategorias(){
+    const base=SEGMENTOS_FINANCEIROS.map(s=>({id:s.id, label:s.label}));
+    const custom=(catalogoPersonalizado.categorias||[]).map(nome=>({id:'custom:'+nome, label:nome}));
+    return base.concat(custom);
+  }
+  function listaSegmentos(categoriaId){
+    if(!categoriaId) return [];
+    const base=SEGMENTOS_POR_CATEGORIA[categoriaId]||[];
+    const custom=(catalogoPersonalizado.segmentosPorCategoria&&catalogoPersonalizado.segmentosPorCategoria[categoriaId])||[];
+    return base.concat(custom);
+  }
+  function registrarCategoriaPersonalizada(nome){
+    nome=(nome||'').trim(); if(!nome) return;
+    if(!catalogoPersonalizado.categorias) catalogoPersonalizado.categorias=[];
+    const jaExiste=listaCategorias().some(c=>c.label.toLowerCase()===nome.toLowerCase());
+    if(!jaExiste){ catalogoPersonalizado.categorias.push(nome); saveCatalogoPersonalizado(); }
+  }
+  function registrarSegmentoPersonalizado(categoriaId, nome){
+    nome=(nome||'').trim(); if(!nome || !categoriaId) return;
+    if(!catalogoPersonalizado.segmentosPorCategoria) catalogoPersonalizado.segmentosPorCategoria={};
+    if(!catalogoPersonalizado.segmentosPorCategoria[categoriaId]) catalogoPersonalizado.segmentosPorCategoria[categoriaId]=[];
+    const jaExiste=listaSegmentos(categoriaId).some(s=>s.toLowerCase()===nome.toLowerCase());
+    if(!jaExiste){ catalogoPersonalizado.segmentosPorCategoria[categoriaId].push(nome); saveCatalogoPersonalizado(); }
+  }
+  /* opções do <select> Categoria — sempre com "+ Personalizado" no fim */
+  function categoriaOptionsHtml(selecionado){
+    return listaCategorias().map(c=>'<option value="'+c.id+'"'+(c.id===selecionado?' selected':'')+'>'+escapeHtml(c.label)+'</option>').join('')+
+      '<option value="__custom__">'+t('wizard.customOption')+'</option>';
+  }
+  function populateCategoriaWizardSelect(){
+    const sel=document.getElementById('tw-categoria'); if(!sel) return;
+    sel.innerHTML='<option value="" data-t="wizard.categoryPlaceholder">'+t('wizard.categoryPlaceholder')+'</option>'+categoriaOptionsHtml(null);
+  }
+  function segmentoOptionsHtml(categoriaId, selecionado){
+    const opts=listaSegmentos(categoriaId);
+    return '<option value="">'+t('wizard.segmentPlaceholder')+'</option>'+
+      opts.map(s=>'<option value="'+escapeHtml(s)+'"'+(s===selecionado?' selected':'')+'>'+escapeHtml(s)+'</option>').join('')+
+      '<option value="__custom__">'+t('wizard.customOption')+'</option>';
+  }
+  function onCategoriaWizardChange(){
+    const sel=document.getElementById('tw-categoria');
+    const customField=document.getElementById('tw-categoria-custom-field');
+    const isCustom=sel.value==='__custom__';
+    customField.style.display=isCustom?'':'none';
+    const segSel=document.getElementById('tw-segmento');
+    segSel.innerHTML=segmentoOptionsHtml(isCustom?null:sel.value, null);
+    segSel.disabled=isCustom;
+    document.getElementById('tw-segmento-custom-field').style.display='none';
+  }
+  function onSegmentoWizardChange(){
+    const sel=document.getElementById('tw-segmento');
+    document.getElementById('tw-segmento-custom-field').style.display=(sel.value==='__custom__')?'':'none';
+  }
+  /* resolve o valor final de categoria/segmento no submit do wizard — se for
+     "+ Personalizado", lê o texto digitado e já regista na lista da conta. */
+  function lerCategoriaWizard(){
+    const sel=document.getElementById('tw-categoria');
+    if(!sel || !sel.value) return {id:null, label:null};
+    if(sel.value==='__custom__'){
+      const nome=(document.getElementById('tw-categoria-custom').value||'').trim();
+      if(!nome) return {id:null, label:null};
+      registrarCategoriaPersonalizada(nome);
+      return {id:'custom:'+nome, label:nome};
+    }
+    const info=listaCategorias().find(c=>c.id===sel.value);
+    return info ? {id:info.id, label:info.label} : {id:null, label:null};
+  }
+  function lerSegmentoWizard(categoriaId){
+    const sel=document.getElementById('tw-segmento');
+    if(!sel || !sel.value || sel.disabled) return null;
+    if(sel.value==='__custom__'){
+      const nome=(document.getElementById('tw-segmento-custom').value||'').trim();
+      if(!nome) return null;
+      if(categoriaId) registrarSegmentoPersonalizado(categoriaId, nome);
+      return nome;
+    }
+    return sel.value;
   }
   /* soma receita (job.value) e contagem de projetos por segmento, dentro do
      mesmo período selecionado no topo de Relatórios (mês/trimestre/ano/
@@ -11268,7 +11432,7 @@
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(), loadReceitasData(),
       loadPerfilData(), loadMetas(),
-      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData()
+      loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData(), loadCatalogoPersonalizado()
     ]);
     renderMonthTicker();
   }
