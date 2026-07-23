@@ -57,21 +57,29 @@
   .pp-timeline-step .sub{font-size:12px;color:var(--neutral)}
   .pp-timeline-step.done .sub{color:var(--brand)}
 
-  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa real minimalista (CartoDB, tons de cinza) + pin + rota inteligente ===== */
-  .map-card{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px;background:var(--paper);
-    box-shadow:0 6px 20px var(--btn-06)}
-  .map-visual{position:relative;height:104px;background:#E7E7E4;overflow:hidden}
-  [data-theme="dark"] .map-visual{background:#232320}
+  /* ===== CARTÃO DE LOCALIZAÇÃO — mapa real minimalista (CartoDB, tons de
+     cinza) + pin + rota inteligente. Mesmo material/glass exato do .sec
+     (Contrato/Timeline/Pagamentos/…) — cabeçalho → divisória → mapa →
+     divisória → rodapé (endereço + botão "Abrir rota"), sem exceção ao
+     padrão dos outros cards da página do Projeto. */
+  .map-card{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(124,126,129,.34);
+    border:2px solid rgba(255,255,255,.30);border-radius:var(--r);margin:11px 0;overflow:hidden;
+    backdrop-filter:blur(22px) saturate(160%);-webkit-backdrop-filter:blur(22px) saturate(160%);
+    box-shadow:0 4px 16px rgba(15,20,15,.2);
+    color:#F5F5F3;
+    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
+    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+  .map-card-head{display:flex;align-items:center;gap:11px;padding:15px 16px}
+  .map-card-hr{height:1px;background:var(--line-soft)}
+  .map-visual{position:relative;height:104px;background:rgba(255,255,255,.04);overflow:hidden}
   .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-95%)}
-  .map-pin svg{width:28px;height:28px;color:var(--ink);filter:drop-shadow(0 3px 5px rgba(0,0,0,.22))}
-  .map-tag{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-85);backdrop-filter:blur(6px);
-    font-size:10px;font-weight:600;letter-spacing:.04em;color:var(--ink-soft);
-    padding:4px 8px;border-radius:var(--r)}
+  .map-pin svg{width:28px;height:28px;color:var(--ink);filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
   .map-info{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
   .map-addr{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35}
-  .map-link{font-size:12.5px;font-weight:600;color:var(--ink);text-decoration:none;white-space:nowrap;flex:none}
-  .map-leaflet{width:100%;height:148px;background:#E7E7E4}
-  [data-theme="dark"] .map-leaflet{background:#1A1A18}
+  .map-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink);
+    text-decoration:none;white-space:nowrap;flex:none}
+  .map-link svg{width:14px;height:14px;flex:none}
+  .map-leaflet{width:100%;height:148px;background:rgba(255,255,255,.04)}
   /* Atribuição legal obrigatória, mas discreta — sem os links técnicos
      (Report a problem / Donate / Terms) que o embed.html do OSM sempre trazia */
   .map-leaflet .leaflet-control-attribution{font-size:9px;background:var(--glass-85);color:var(--ink-faint);padding:1px 5px;border-radius:4px 0 0 0}
