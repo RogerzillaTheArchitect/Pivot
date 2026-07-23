@@ -4645,8 +4645,16 @@
   }
   /* Contrato de Colaborador vai direto à Biblioteca — sem passar pela tela
      antiga "Novo Contrato" (Novo / Duplicar existente / Usar modelo
-     guardado), que não faz sentido neste fluxo. */
+     guardado), que não faz sentido neste fluxo.
+     BUG real corrigido aqui: este fluxo é sempre chamado a partir de um
+     openInfo() já aberto (lista de colaboradores / configurar colaborador),
+     que usa o #infoSheet (z-index 85) — mais alto que o #sheet da
+     Biblioteca (z-index 80). Sem fechar o #infoSheet antes, as duas folhas
+     ficavam abertas ao mesmo tempo, a de baixo (Biblioteca) parcialmente
+     tapada pela de cima, dando a impressão de interface quebrada/sem
+     botões. */
   function abrirPainelBibliotecaContratoDireto(){
+    if(document.getElementById('infoSheet').classList.contains('show')) closeInfo();
     if(!document.getElementById('sheet').classList.contains('show')) openSheet();
     pushPanel('comunidade-contratos');
   }
