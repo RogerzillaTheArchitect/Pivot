@@ -533,32 +533,35 @@
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
 
-        <div class="card">
-          <div class="rel-month-row">
-            <button class="rel-nav-tall" id="cal-prev" onclick="calNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
-            <div class="rel-month-center">
-              <span class="rel-mes-big" id="cal-mes-label">JUNHO</span>
-              <span class="rel-ano-small" id="cal-ano-label">2026</span>
-            </div>
-            <button class="rel-nav-tall" id="cal-next" onclick="calNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+        <!-- Calendário — mesmo padrão de cabeçalho conectado do card Financeiro
+             (Dashboard): faixa com o próprio material do card, título/nav no
+             cabeçalho, linha divisória (a própria borda do card logo abaixo)
+             separando do resto do calendário. -->
+        <div class="tasks-header cal-header">
+          <button class="rel-nav-tall" id="cal-prev" onclick="calNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+          <div class="rel-month-center">
+            <span class="rel-mes-big" id="cal-mes-label">JUNHO</span>
+            <span class="rel-ano-small" id="cal-ano-label">2026</span>
           </div>
+          <button class="rel-nav-tall" id="cal-next" onclick="calNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+        <div class="card rel-card-body">
           <div class="cal-grid" id="calgrid"></div>
           <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
         </div>
 
+        <!-- Filtros simplificados — sem "Todos" (estado padrão, nenhum chip
+             ativo, já mostra os projetos ativos); atrasados deixou de ser
+             categoria (ver ordenação, não é mais filtro). -->
         <div class="filter-row" style="margin-top:22px">
-          <div class="chip on" data-key="todos" onclick="filterJobs(this,'todos')"><span data-t="jobs.filter.all">Todos</span></div>
-          <div class="chip" data-key="ativos" onclick="filterJobs(this,'ativos')"><span data-t="jobs.filter.active">Ativos</span></div>
-          <div class="chip" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span data-t="jobs.filter.mine">A meu cargo</span></div>
-          <div class="chip" data-key="cliente" onclick="filterJobs(this,'cliente')"><span data-t="jobs.filter.client">Com o cliente</span></div>
-          <div class="chip" data-key="atrasados" onclick="filterJobs(this,'atrasados')"><span data-t="jobs.filter.overdue">Atrasados</span></div>
-          <div class="chip" data-key="concluidos" onclick="filterJobs(this,'concluidos')"><span data-t="jobs.filter.done">Concluídos</span></div>
-          <div class="chip" data-key="arquivados" onclick="filterJobs(this,'arquivados')"><span data-t="jobs.filter.archived">Arquivados</span></div>
+          <div class="chip" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span data-t="jobs.filter.mine">Demandas</span></div>
+          <div class="chip" data-key="cliente" onclick="filterJobs(this,'cliente')"><span data-t="jobs.filter.client">Pendências</span></div>
+          <div class="chip" data-key="historico" onclick="filterJobs(this,'historico')"><span data-t="jobs.filter.history">Histórico</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
           <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div>
-          <h3 style="font-size:19px" data-t="jobs.emptyFilter">Nada neste filtro.</h3><p><span data-t="home.tryAll">Tenta "Todos" para ver a carteira completa.</span></p>
+          <h3 style="font-size:19px" data-t="jobs.emptyFilter">Nada neste filtro.</h3>
         </div>
         <div id="jobsArquivadosList" style="display:none"></div>
       </section>
@@ -2528,8 +2531,9 @@
     "jobs.emptyFilter": { pt:"Nada neste filtro.", en:"Nothing in this filter.", es:"Nada en este filtro." },
     "jobs.filter.active": { pt:"Ativos", en:"Active", es:"Activos" },
     "jobs.filter.all": { pt:"Todos", en:"All", es:"Todos" },
-    "jobs.filter.mine": { pt:"A meu cargo", en:"On me", es:"A mi cargo" },
-    "jobs.filter.client": { pt:"Com o cliente", en:"With client", es:"Con el cliente" },
+    "jobs.filter.mine": { pt:"Demandas", en:"Demands", es:"Demandas" },
+    "jobs.filter.client": { pt:"Pendências", en:"Pending", es:"Pendientes" },
+    "jobs.filter.history": { pt:"Histórico", en:"History", es:"Historial" },
     "jobs.archivedEmpty": { pt:"Ainda sem trabalhos arquivados.", en:"No archived jobs yet.", es:"Aún no hay trabajos archivados." },
     "jobs.filter.archived": { pt:"Arquivados", en:"Archived", es:"Archivados" },
     "jobs.filter.awaiting": { pt:"Aguardando assinatura", en:"Awaiting signature", es:"Esperando firma" },
@@ -2544,6 +2548,14 @@
     "jobs.history.deleted": { pt:"Deletado", en:"Deleted", es:"Eliminado" },
     "jobs.status.active": { pt:"Ativo", en:"Active", es:"Activo" },
     "jobs.status.done": { pt:"Concluído", en:"Completed", es:"Completado" },
+    "jobs.dateNotSet": { pt:"Data a definir", en:"Date to be set", es:"Fecha por definir" },
+    "jobs.stage.signature": { pt:"Assinatura", en:"Signature", es:"Firma" },
+    "jobs.stage.briefing": { pt:"Briefing", en:"Briefing", es:"Briefing" },
+    "jobs.stage.event": { pt:"Evento", en:"Event", es:"Evento" },
+    "jobs.stage.selection": { pt:"Seleção", en:"Selection", es:"Selección" },
+    "jobs.stage.editing": { pt:"Edição", en:"Editing", es:"Edición" },
+    "jobs.stage.delivery": { pt:"Entrega", en:"Delivery", es:"Entrega" },
+    "jobs.stage.done": { pt:"Concluído", en:"Completed", es:"Completado" },
     "jobs.sessionToday": { pt:"Sessão hoje", en:"Session today", es:"Sesión hoy" },
     "jobtype.wedding": { pt:"Casamento", en:"Wedding", es:"Boda" },
     "jobtype.commercial": { pt:"Comercial", en:"Commercial", es:"Comercial" },
@@ -3848,31 +3860,12 @@
      (alta/média) = amarelo, demais tarefas do mês (normal) = verde. Todo nível
      agora usa a mesma linguagem visual (tag + degradê), nada de ícone de alerta
      nem bolinha solta. */
-  /* ícones dos indicadores de conteúdo dos cards (Tarefas do Dashboard e
-     Trabalhos/Projetos) — um ícone por tipo de dado, sempre à esquerda do
-     texto correspondente. */
-  const CARD_ROW_ICONS={
-    calendar:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>',
-    money:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-    moneyCircle:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v9"/><path d="M14.5 9.3c0-1-.9-1.8-2.5-1.8s-2.5.7-2.5 1.7c0 1 .9 1.4 2.5 1.8s2.5.9 2.5 1.9c0 1-.9 1.7-2.5 1.7s-2.5-.8-2.5-1.8"/></svg>',
-    pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
-    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
-    pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>',
-    client:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>',
-    clientDep:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 5H6a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h3"/><path d="M11 12h8"/><path d="m15 8 4 4-4 4"/></svg>',
-    mineDep:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M15 5h3a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-3"/><path d="M13 12H5"/><path d="m9 8-4 4 4 4"/></svg>'
-  };
-  function cardInfoRow(kind, text){
-    if(!text) return '';
-    const icon=CARD_ROW_ICONS[kind]||'';
-    return '<div class="card-info-row">'+icon+'<span>'+escapeHtml(String(text))+'</span></div>';
-  }
-  /* ícones do card de Tarefas (Dashboard) — linguagem própria (preenchidos,
-     recortes em espaço negativo), deliberadamente diferente do traço fino
-     genérico usado no resto da app (CARD_ROW_ICONS). Exclusivos deste card:
-     não reaproveitar noutro sítio. Só 2 ícones agora — cliente e "próxima
-     ação" — o card foi reduzido às 4 perguntas essenciais (título, cliente,
-     ação, prazo); endereço/hora/equipa/observações só existem no Projeto. */
+  /* ícones dos cards de Tarefas (Dashboard) e Projetos (Trabalhos) —
+     linguagem própria (preenchidos, recortes em espaço negativo),
+     deliberadamente diferente do traço fino genérico do resto da app.
+     .calendar é reaproveitado por ambos (mesma linguagem visual entre a
+     versão resumida e a listagem completa); client/action são exclusivos
+     do card de Tarefas. */
   const RTK_ICONS={
     client:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.7 3.4-7.5 7.5-7.5s7.5 2.8 7.5 7.5z"/></svg>',
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
@@ -5565,10 +5558,10 @@
   let clientContext=null;
 
   function fmtMoney(v){ return Math.round(v||0).toLocaleString(jsLocale())+'€'; }
-  const AVATAR_COLORS=['#B23A1E','#5C4A1E','#1F6E66','#A8631A','#B8466E','#4C7A3D'];
+  /* fundo neutro (grafite/preto fosco) pra todo avatar sem foto — sem cor
+     aleatória por nome; só as iniciais identificam a pessoa. */
   function avatarColor(name){
-    let h=0; for(let i=0;i<name.length;i++) h=(h*31+name.charCodeAt(i))>>>0;
-    return AVATAR_COLORS[h%AVATAR_COLORS.length];
+    return '#26272A';
   }
   function avatarInitials(name){
     const parts=(name||'?').trim().split(/\s+/).filter(Boolean);
@@ -9175,8 +9168,7 @@
     div.setAttribute('onclick',"onJobCardClick(event,this)");
     updateJobCardInner(div, job);
     wrap.appendChild(div);
-    const empty=document.getElementById('jobsEmpty');
-    empty.parentElement.insertBefore(wrap, empty);
+    inserirJobCardOrdenado(wrap, job);
     ativarSwipeJobs();
   }
   function onJobCardClick(e, card){
@@ -9322,11 +9314,6 @@
     const concluido = fechado && !aRealizar && !aEntregar && !pagamentoPendente;
     return {fechado, aRealizar, aEntregar, executado, entregue, atrasado, pagamentoPendente, concluido};
   }
-  function fmtDataDDMM(iso){
-    if(!iso) return '';
-    const [,M,D]=iso.split('-');
-    return D+'/'+M;
-  }
   /* mesma logica de urgencia dos cards de Tarefas (Dashboard): a data mais
      proxima relevante do trabalho (pagamento pendente mais cedo ou data do
      evento) decide late/soon/normal — atrasado = vermelho, hoje/amanhã =
@@ -9345,6 +9332,60 @@
     if(!dataAlvo) return 'normal';
     return gerarNivelPrioridade(dataAlvo)==='critica' ? 'late' : (['alta','media'].includes(gerarNivelPrioridade(dataAlvo)) ? 'soon' : 'normal');
   }
+  /* Ordenação da lista de Projetos: atrasado não é categoria, é prioridade —
+     continua aparecendo na lista normal, só que sempre primeiro. Ordem:
+     atrasados (mais atrasado primeiro) → hoje → mais próximos → futuros →
+     sem data nenhuma por último. Mesma data-alvo usada pelo indicador de
+     prioridade (proximaDataRelevanteJob), pra ordenação e cor baterem certo. */
+  function scoreOrdemJob(job){
+    const dataAlvo=proximaDataRelevanteJob(job);
+    return dataAlvo ? diasEntre(dataAlvo) : 900000;
+  }
+  function inserirJobCardOrdenado(wrap, job){
+    const lista=document.getElementById('v-trabalhos');
+    const empty=document.getElementById('jobsEmpty');
+    const score=scoreOrdemJob(job);
+    const existentes=[...lista.querySelectorAll('.job-card-wrap')];
+    const proximo=existentes.find(w=>{
+      const outroId=w.querySelector('.job')?.dataset.jobId;
+      const outroJob=outroId && jobsData[outroId];
+      return outroJob && scoreOrdemJob(outroJob)>score;
+    });
+    lista.insertBefore(wrap, proximo||empty);
+  }
+  /* Etapa atual do projeto (linha 4 do card) — o "gargalo" de agora, na
+     ordem natural do fluxo: Assinatura → Briefing → Evento → Seleção →
+     Edição → Entrega → Concluído. Reaproveita os mesmos campos já usados
+     em classificarTrabalho()/construirTimelineBidirecional() — nenhuma
+     lógica nova, só a etiqueta de qual etapa está pendente agora. */
+  function etapaAtualJob(job){
+    const c=classificarTrabalho(job);
+    if(c.concluido) return t('jobs.stage.done');
+    if(!c.fechado) return t('jobs.stage.signature');
+    if(job.structure && job.structure.briefing && job.briefing && !job.briefing.respondido) return t('jobs.stage.briefing');
+    if(c.aRealizar) return t('jobs.stage.event');
+    const e=job.entrega||{};
+    if((e.triagem && !e.triagemConcluida) || (e.selecao && !e.selecaoConcluida)) return t('jobs.stage.selection');
+    if(e.permiteAjustes && (e.ajustes||[]).some(a=>a.status==='utilizado')) return t('jobs.stage.editing');
+    if(c.aEntregar) return t('jobs.stage.delivery');
+    return t('jobs.stage.done');
+  }
+  /* Linha 3 — data + horário do evento principal numa única linha
+     ("12 Ago • 14:00–22:00"), pra reduzir a altura do card. */
+  function fmtDataHoraLinhaJob(job){
+    if(!job.dateRaw) return t('jobs.dateNotSet');
+    const partes=job.dateRaw.split('-');
+    const mn=mesAbrev(parseInt(partes[1],10)-1);
+    let s=parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
+    if(job.horaIni) s+=' • '+job.horaIni+(job.horaFim?('–'+job.horaFim):'');
+    return s;
+  }
+  /* Card de Projeto — só responde 2 perguntas (que projeto é este, em que
+     etapa está): título, cliente (avatar+nome), data/hora numa linha, etapa
+     atual. Endereço/valor/observações/equipa só existem na página interna
+     do projeto (ver #v-detalhe), pra não duplicar informação em duas
+     listas. Prioridade (atrasado/hoje/futuro) é só o glow inferior do
+     card — mesmo sistema visual do card Tarefas (Dashboard) — nunca texto. */
   function updateJobCardInner(div, job){
     const c=classificarTrabalho(job);
     div.dataset.state= c.concluido?'done':(c.aEntregar?'deliver':(c.fechado?'active':'wait'));
@@ -9357,27 +9398,20 @@
     div.dataset.entregar= c.aEntregar?'1':'0';
     div.dataset.executado= c.executado?'1':'0';
     div.dataset.entregue= c.entregue?'1':'0';
-    const signed=c.fechado;
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
     div.className='job'+(urgClasse?' '+urgClasse:'');
-    /* mesmos indicadores com ícone usados nos cards de Tarefas (Dashboard) —
-       cardInfoRow/CARD_ROW_ICONS — pra manter a mesma linguagem visual entre
-       a versão resumida (Tarefas) e a versão completa em lista (Projetos). */
-    let rows='';
-    if(!signed) rows+=cardInfoRow('clientDep', t('tasks.signatureLabel'));
-    const proxPagamento=(job.payments||[]).find(p=>p.status!=='pago' && p.dueDate);
-    if(proxPagamento) rows+=cardInfoRow('moneyCircle', fmtMoney(proxPagamento.amount));
-    if(job.dateRaw) rows+=cardInfoRow('calendar', fmtDataDDMM(job.dateRaw));
-    if(job.local) rows+=cardInfoRow('pin', job.local);
-    if(job.horaIni) rows+=cardInfoRow('clock', job.horaIni+(job.horaFim?(' - '+job.horaFim):''));
-    const tagHtml = (!c.concluido && urgClasse) ? '<span class="job-tag '+urgClasse+'">'+gerarLabelTemporal(proximaDataRelevanteJob(job), null)+'</span>' : '';
-    div.innerHTML='<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div><div class="job-top-r">'+tagHtml+'<div class="state '+(signed?'s-active':'s-wait')+'">'+(signed?t('jobs.status.active'):t('jobs.status.waiting'))+'</div></div></div>'+
-      (rows ? '<div class="card-rows">'+rows+'</div>' : '');
+    div.innerHTML='<div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
+      '<div class="job-client-row">'+avatarHtml(job.client,26)+'<span>'+escapeHtml(job.client)+'</span></div>'+
+      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataHoraLinhaJob(job))+'</span></div>'+
+      '<div class="job-stage">'+escapeHtml(etapaAtualJob(job))+'</div>';
   }
   function updateJobCard(id){
     const job=jobsData[id];
     const div=document.querySelector('.job[data-job-id="'+id+'"]');
-    if(div) updateJobCardInner(div, job);
+    if(!div) return;
+    updateJobCardInner(div, job);
+    const wrap=div.closest('.job-card-wrap');
+    if(wrap) inserirJobCardOrdenado(wrap, job);
   }
 
   /* persistência real entre sessões — via StorageAdapter (ver mais abaixo) */
@@ -11000,11 +11034,19 @@
       else df.style.display='none';
     }
   }
+  /* sem chip "Todos" — estado padrão (nenhum filtro ativo) mostra os projetos
+     ativos normalmente. Tocar num chip já ativo desliga-o e volta a esse
+     padrão, em vez de ficar sempre um filtro obrigatoriamente selecionado. */
   function filterJobs(el, key){
+    const jaAtivo = !!(el && el.classList.contains('on'));
     document.querySelectorAll('#v-trabalhos .filter-row .chip').forEach(c=>c.classList.remove('on'));
-    if(el) el.classList.add('on');
-    calFiltroAtivo=key;
-    if(key==='arquivados'){
+    if(jaAtivo){
+      calFiltroAtivo='todos';
+    } else {
+      if(el) el.classList.add('on');
+      calFiltroAtivo=key;
+    }
+    if(calFiltroAtivo==='historico'){
       renderJobsArquivadosList();
     } else {
       const arqWrap=document.getElementById('jobsArquivadosList');

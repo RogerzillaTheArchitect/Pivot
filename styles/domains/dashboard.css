@@ -225,9 +225,7 @@
   /* ===== Tarefas (Dashboard) — "próximas ações", não trabalhos completos.
      4 perguntas só: título, cliente, próxima ação, prazo. Nada de endereço/
      hora/equipa/observações aqui — isso é o Projeto (ver Trabalhos), pra não
-     duplicar a mesma informação em duas listas. Só estas classes .rtk-* —
-     .card-title/.card-rows/.card-info-row continuam intactas porque são
-     partilhadas com os cards de Trabalhos/Projetos. */
+     duplicar a mesma informação em duas listas. */
   #tasks-list .rtk-title{
     font-family:var(--font-headline),Georgia,'Times New Roman',serif;
     font-size:18px;font-weight:400;line-height:1.25;color:var(--ink);margin:0 0 7px}
@@ -258,11 +256,16 @@
     color:var(--label-out);text-align:center;
   }
   #tasks-list .radar-card-wrap:first-child .card{border-top-left-radius:0;border-top-right-radius:0}
-  /* Financeiro e Estatísticas Operacionais (mesma seção do Dashboard)
-     reaproveitam o cabeçalho "Tarefas" — o card logo abaixo encosta nele
-     (cantos de cima retos, sem o respiro/margem que teria como card solto). */
-  .tasks-header + .card.finance-ops-card{border-top-left-radius:0;border-top-right-radius:0;margin-top:0}
-  .tasks-header + .card.ops-card{border-top-left-radius:0;border-top-right-radius:0;margin-top:0}
+  /* Qualquer card logo abaixo de um .tasks-header encosta nele (cantos de
+     cima retos, sem o respiro/margem que teria como card solto) — usado por
+     Financeiro/Estatísticas Operacionais (Dashboard) e pelo calendário de
+     Projetos (Trabalhos). */
+  .tasks-header + .card{border-top-left-radius:0;border-top-right-radius:0;margin-top:0}
+  /* variante com navegação (◄ mês ►) em vez de texto simples — usada no
+     calendário de Projetos, mesmo material/tipografia do cabeçalho, só o
+     layout interno muda pra caber as setas nas extremidades. */
+  .tasks-header.cal-header{display:flex;align-items:stretch;justify-content:space-between;
+    gap:10px;cursor:default;padding:0 6px}
   .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
@@ -286,14 +289,6 @@
   .btn:disabled,.btn.done{opacity:.5;cursor:default;pointer-events:none}
   .card-title{font-size:15.5px;font-weight:500}
   .card-meta{font-size:13px;color:var(--ink-soft);margin-top:2px}
-  /* linhas de indicador com ícone (valor, endereço, duração, assinatura
-     pendente…) — ícone à esquerda, texto à direita, uma por tipo de dado
-     presente no card. Usado tanto nos cards de Tarefas (Dashboard) quanto
-     nos cards de Trabalhos/Projetos (lista completa). */
-  .card-rows{display:flex;flex-direction:column;gap:5px;margin-top:8px}
-  .card-info-row{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);min-width:0}
-  .card-info-row span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .card-info-row svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
   .card-info{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px;padding-top:12px;
     border-top:1px solid var(--btn-07)}
   .card-info-item{display:flex;flex-direction:column;gap:3px;min-width:0}
