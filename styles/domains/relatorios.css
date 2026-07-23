@@ -8,7 +8,6 @@
      gradiente sutil branco-gelo → cinza claro, com transição suave no load
      (ver renderRelSegmentacaoFinanceira — largura muda de 0 pra final depois
      do primeiro paint). */
-  .seg-fin-title{font-size:15px;font-weight:600;color:var(--ink)}
   .seg-fin-sub{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
   .seg-fin-row{margin-bottom:18px}
   .seg-fin-row:last-child{margin-bottom:0}
@@ -39,12 +38,30 @@
     background:#0E0E0E;border:1px solid #2A2A2A;border-radius:var(--r);padding:42px;
     box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;
   }
-  .stats-op-title{
+
+  /* Cabeçalho conectado dos cards de Relatórios — mesmo padrão visual do
+     cabeçalho "Tarefas" no Dashboard (styles/domains/dashboard.css
+     .tasks-header): faixa com o próprio material do card, cantos de baixo
+     retos encostados no card de conteúdo logo abaixo, em vez do título
+     solto dentro do card. .tech é a variante para o card técnico/opaco
+     (Estatísticas Operacionais); sem o modificador usa o mesmo glass do
+     .card padrão (Segmentação Financeira). */
+  .rel-card-header{
+    display:block;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
+    border:1px solid rgba(255,255,255,.10);border-bottom:none;
+    border-radius:var(--r) var(--r) 0 0;
+    padding:11px 16px;margin:0;
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    text-align:center;text-transform:uppercase;letter-spacing:.38em;font-weight:500;
-    font-size:13px;color:#F3F3F3;
+    font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--label-out);text-align:center;
   }
-  .stats-op-hr{height:1px;background:#262626;margin-top:28px}
+  .rel-card-header.tech{
+    background:#161616;border-color:#2A2A2A;letter-spacing:.3em;color:#F3F3F3;
+  }
+  .rel-card-header + .rel-card-body{
+    border-top-left-radius:0;border-top-right-radius:0;margin-top:0;
+  }
 
   .stats-op-row{position:relative;display:grid;
     grid-template-columns:20px 76px 68px 42px minmax(0,1fr);
