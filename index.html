@@ -1772,16 +1772,45 @@
         acaoLabel: (pendentes>0 && todosComLink) ? t('action.complete') : null,
         acaoFn: (pendentes>0 && todosComLink) ? ('concluirAjustesPendentesJob(\''+job.id+'\')') : null});
     }
+    /* Entrega Final só pode ser concluída depois de anexar o link real do
+       material (Drive/Dropbox/WeTransfer/etc) — nunca vira "feito" sem
+       link. Mesmo depois de concluída, continua editável (o botão some,
+       mas o link fica disponível no #detalhe e é reenviado ao cliente
+       automaticamente via marcarMilestoneFeito → dispararEmailEvento). */
     const entregaMs=(job.milestones||[]).find(m=>m.key==='entrega');
     const entregaFeita = entregaMs && entregaMs.status==='feito';
-    const precisaLinkEntrega = e.formatoEntrega==='digital' && !e.linkDownload;
     passos.push({label:t('milestone.finalDelivery'), quem:'equipe', feito: entregaFeita,
-      status: entregaFeita?'done':(precisaLinkEntrega?'progress':'pending'),
-      desc: entregaFeita ? t('timeline.desc.delivered') : (precisaLinkEntrega ? t('timeline.desc.awaitingDeliveryMaterial') : t('timeline.desc.deliveryPending')),
+      status: entregaFeita?'done':'pending',
+      desc: entregaFeita ? (e.linkDownload||t('timeline.desc.delivered')) : t('timeline.desc.deliveryPending'),
       data: e.dataEntrega ? e.dataEntrega.split('-').reverse().join('/') : null,
-      acaoLabel: entregaFeita ? null : (precisaLinkEntrega ? t('entrega.attachDeliveryLink') : t('action.complete')),
-      acaoFn: entregaFeita ? null : (precisaLinkEntrega ? ('abrirAnexarLinkEntrega(\''+job.id+'\')') : ('marcarMilestoneFeito(\''+job.id+'\',\'entrega\')'))});
+      acaoLabel: entregaFeita ? t('entrega.editDeliveryLink') : t('action.complete'),
+      acaoFn: 'abrirConcluirEntregaFinal(\''+job.id+'\')'});
     return passos;
+  }
+  function abrirConcluirEntregaFinal(jobId){
+    const job=jobsData[jobId];
+    const linkAtual=(job.entrega&&job.entrega.linkDownload)||'';
+    openInfo(t('entrega.finalDeliveryTitle'), `
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:12px">${t('entrega.finalDeliveryHint')}</p>
+      <div class="field"><label>${t('entrega.downloadLink')}</label><input id="link-entrega-final-input" placeholder="https://…" value="${escapeHtml(linkAtual)}"></div>
+      <button class="btn dark" style="width:100%;margin-top:10px" onclick="salvarEntregaFinalComLink('${jobId}')">${t('action.save')}</button>`);
+  }
+  function salvarEntregaFinalComLink(jobId){
+    const link=(document.getElementById('link-entrega-final-input').value||'').trim();
+    if(!link){ showToast(t('entrega.linkRequired')); return; }
+    const job=jobsData[jobId];
+    if(!job.entrega) job.entrega={};
+    job.entrega.linkDownload=link;
+    const ms=(job.milestones||[]).find(m=>m.key==='entrega');
+    const jaEstavaFeita = ms && ms.status==='feito';
+    saveJobsData();
+    closeInfo();
+    if(jaEstavaFeita){
+      renderJobDetailDynamic(jobId);
+      showToast(t('toast.changesSaved'));
+    } else {
+      marcarMilestoneFeito(jobId,'entrega');
+    }
   }
   function abrirAnexarLinkAjuste(jobId, idx){
     const job=jobsData[jobId]; const a=job.entrega.ajustes[idx];
@@ -1794,22 +1823,6 @@
     if(!link) return;
     const job=jobsData[jobId];
     job.entrega.ajustes[idx].link=link;
-    saveJobsData();
-    closeInfo();
-    renderJobDetailDynamic(jobId);
-    showToast(t('toast.changesSaved'));
-  }
-  function abrirAnexarLinkEntrega(jobId){
-    const job=jobsData[jobId];
-    openInfo(t('entrega.attachDeliveryLink'), `
-      <div class="field"><label>${t('entrega.downloadLink')}</label><input id="link-entrega-input" placeholder="https://…" value="${escapeHtml((job.entrega&&job.entrega.linkDownload)||'')}"></div>
-      <button class="btn primary" style="width:100%" onclick="salvarLinkEntrega('${jobId}')">${t('action.save')}</button>`);
-  }
-  function salvarLinkEntrega(jobId){
-    const link=(document.getElementById('link-entrega-input').value||'').trim();
-    if(!link) return;
-    const job=jobsData[jobId];
-    job.entrega.linkDownload=link;
     saveJobsData();
     closeInfo();
     renderJobDetailDynamic(jobId);
@@ -1997,6 +2010,10 @@
     "entrega.downloadLink": { pt:"Link de Download", en:"Download Link", es:"Enlace de Descarga" },
     "entrega.attachMaterialLink": { pt:"Anexar Link do Material", en:"Attach Material Link", es:"Adjuntar Enlace del Material" },
     "entrega.attachDeliveryLink": { pt:"Anexar Link da Entrega", en:"Attach Delivery Link", es:"Adjuntar Enlace de la Entrega" },
+    "entrega.finalDeliveryTitle": { pt:"Concluir Entrega Final", en:"Complete Final Delivery", es:"Concluir Entrega Final" },
+    "entrega.finalDeliveryHint": { pt:"Cole o link onde o cliente vai encontrar o material (Drive, Dropbox, WeTransfer ou outro). O link fica salvo no projeto e pode ser reenviado ao cliente pelo Portal.", en:"Paste the link where the client will find the material (Drive, Dropbox, WeTransfer or other). The link is saved on the project and can be resent to the client via the Portal.", es:"Pega el enlace donde el cliente encontrará el material (Drive, Dropbox, WeTransfer u otro). El enlace queda guardado en el proyecto y puede reenviarse al cliente por el Portal." },
+    "entrega.editDeliveryLink": { pt:"Editar Link da Entrega", en:"Edit Delivery Link", es:"Editar Enlace de la Entrega" },
+    "entrega.linkRequired": { pt:"Cole o link da entrega antes de concluir.", en:"Paste the delivery link before completing.", es:"Pega el enlace de la entrega antes de concluir." },
     "entrega.deliveryDate": { pt:"Data de Entrega", en:"Delivery Date", es:"Fecha de Entrega" },
     "entrega.observations": { pt:"Observações", en:"Notes", es:"Observaciones" },
     "entrega.observationsPlaceholder": { pt:"Ex: trocar foto da capa, corrigir cor da cena 4, remover pessoa do fundo…", en:"E.g.: swap the cover photo, fix the color in scene 4, remove a person from the background…", es:"Ej.: cambiar la foto de portada, corregir el color de la escena 4, quitar a una persona del fondo…" },
@@ -2482,8 +2499,9 @@
     "job.portalShare": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
     "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
     "job.clientEmailHint": { pt:"{client} ainda não tem email registado. Adiciona um para poder enviar as notificações por email.", en:"{client} has no email on file yet. Add one so email notifications can be sent.", es:"{client} aún no tiene email registrado. Añade uno para poder enviar las notificaciones por email." },
-    "portal.shareTitle": { pt:"Portal do Cliente", en:"Client Portal", es:"Portal del Cliente" },
-    "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing y firme el contrato." },
+    "portal.shareTitle": { pt:"Compartilhar Portal", en:"Share Portal", es:"Compartir Portal" },
+    "portal.shareGenerateHint": { pt:"Gera um link exclusivo para o cliente preencher o briefing, acompanhar o projeto, visualizar documentos e assinar o contrato.", en:"Generate a unique link for the client to fill in the briefing, follow the project, view documents and sign the contract.", es:"Genera un enlace exclusivo para que el cliente complete el briefing, siga el proyecto, vea documentos y firme el contrato." },
+    "portal.shareActiveHint": { pt:"O cliente já pode acessar o portal para preencher o briefing, acompanhar o projeto, visualizar documentos e assinar o contrato.", en:"The client can already access the portal to fill in the briefing, follow the project, view documents and sign the contract.", es:"El cliente ya puede acceder al portal para completar el briefing, seguir el proyecto, ver documentos y firmar el contrato." },
     "portal.resendEmail": { pt:"Reenviar Email", en:"Resend Email", es:"Reenviar Email" },
     "portal.editMessageHint": { pt:"Pode editar a mensagem antes de copiar, se quiser.", en:"You can edit the message before copying, if you'd like.", es:"Puede editar el mensaje antes de copiarlo, si lo desea." },
     "portal.shareMessageGreeting": { pt:"Olá.", en:"Hi.", es:"Hola." },
@@ -3152,8 +3170,9 @@
     "action.done": { pt:"Concluir", en:"Done", es:"Listo" },
     "collab.invite": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "collab.invited": { pt:"Colaborador adicionado.", en:"Collaborator added.", es:"Colaborador añadido." },
-    "collab.agreementSigned": { pt:"acordo assinado", en:"agreement signed", es:"acuerdo firmado" },
-    "collab.agreementPending": { pt:"acordo por assinar", en:"agreement pending", es:"acuerdo por firmar" },
+    "collab.agreementSigned": { pt:"Assinado", en:"Signed", es:"Firmado" },
+    "collab.agreementPending": { pt:"Pendente", en:"Pending", es:"Pendiente" },
+    "collab.contractStatus": { pt:"Status do contrato", en:"Contract status", es:"Estado del contrato" },
     "collab.noneAssigned": { pt:"Ainda não fazes parte de nenhuma colaboração externa.", en:"You're not part of any external collaboration yet.", es:"Aún no formas parte de ninguna colaboración externa." },
     "collab.agreementTitle": { pt:"Acordo de Colaboração", en:"Collaboration Agreement", es:"Acuerdo de Colaboración" },
     "collab.signAndAccess": { pt:"Assinar e aceder", en:"Sign and access", es:"Firmar y acceder" },
@@ -7412,7 +7431,7 @@
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">Define até quando o cliente pode assinar o contrato e preencher o briefing. Depois deste prazo, o link deixa de funcionar.</p>
       <div class="field"><label>Disponível até</label><input type="date" id="pp-prazo-input" value="${daqui14}"></div>
       ${metodosHtml ? ('<p class="plabel" style="margin:14px 2px 9px">'+t('payment.method.selectTitle')+'</p>'+metodosHtml) : ''}
-      <button class="btn primary" style="width:100%;margin-top:14px" onclick="confirmarPrazoEGerarLink('${id}')">Gerar link</button>`);
+      <button class="btn dark" style="width:100%;margin-top:14px" onclick="confirmarPrazoEGerarLink('${id}')">Gerar link</button>`);
   }
   function confirmarPrazoEGerarLink(id){
     const prazo=document.getElementById('pp-prazo-input').value;
@@ -7849,17 +7868,21 @@
       t('portal.shareMessageCodeLabel')+' '+(job.contract.codigoAcesso||'')+'\n\n'+
       t('portal.shareMessageSecurity');
   }
+  /* Botões do modal do Portal sempre no mesmo componente neutro (.btn.dark)
+     — nada de verde de marca aqui, é uma ação de compartilhamento, não a
+     ação primária da tela. */
   function abrirCompartilharPortal(id){
     const job=jobsData[id];
     if(!job){ showToast(t('toast.jobNotFound')); return; }
     if(!job.contract.link){
       openInfo(t('portal.shareTitle'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('portal.shareGenerateHint')}</p>
-        <button class="btn primary" style="width:100%" onclick="abrirDefinirPrazoPortal('${id}')">${t('job.contract.getLink')}</button>`);
+        <button class="btn dark" style="width:100%" onclick="abrirDefinirPrazoPortal('${id}')">${t('job.contract.getLink')}</button>`);
     } else {
       openInfo(t('portal.shareTitle'), `
-        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('portal.resendEmail')}</button>
-        <button class="btn soft" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('portal.copyAccess')}</button>`);
+        <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('portal.shareActiveHint')}</p>
+        <button class="btn dark" style="width:100%;margin-bottom:8px" onclick="enviarPorEmail('${id}')">${t('portal.resendEmail')}</button>
+        <button class="btn dark" style="width:100%" onclick="abrirCopiarMensagemPortal('${id}')">${t('portal.copyAccess')}</button>`);
     }
   }
   function abrirCopiarMensagemPortal(id){
@@ -7869,7 +7892,7 @@
     openInfo(t('portal.copyAccess'), `
       <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
       <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
-      <button class="btn primary" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
+      <button class="btn dark" style="width:100%;margin-top:10px" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemPortalEditada(){
     const texto=document.getElementById('portal-msg-editavel').value;
@@ -7909,7 +7932,9 @@
     pending: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5l-2.6 1.8"/></svg>',
     late: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>'
   };
-  const STATUS_COLORS={done:'var(--done)', progress:'var(--progress)', pending:'var(--pend)', late:'var(--late)'};
+  /* só as 4 cores da paleta desta página (verde escuro/âmbar escuro/cinza
+     quente/vermelho) — nunca azul, nunca cores saturadas. */
+  const STATUS_COLORS={done:'var(--c-text-green)', progress:'var(--pend)', pending:'var(--ink-soft)', late:'var(--c-text-red)'};
   function statusEmoji(status){
     const s=STATUS_ICONS[status]?status:'pending';
     return '<span style="display:inline-flex;vertical-align:-3px;width:15px;height:15px;color:'+STATUS_COLORS[s]+'">'+STATUS_ICONS[s]+'</span>';
@@ -7939,11 +7964,19 @@
      principais do evento (cliente · data · hora), mesmos ícones/peso/
      opacidade do resto do app (iconWrap, stroke 1.7). Sem valor financeiro
      aqui — isso já tem card próprio na secção de Pagamentos. */
+  /* job.date é um texto já formatado (dia/mês abreviado + hora, ex.
+     "22 de jul., 04:28") pensado pro card de lista — errado aqui: a data
+     nunca deve levar horário (isso é o item seguinte, próprio) e precisa
+     do mês por extenso. Formata direto a partir de job.dateRaw (ISO). */
+  function fmtDataExtenso(dataISO){
+    const dt=new Date(dataISO+'T00:00:00');
+    return dt.toLocaleDateString(jsLocale(), {day:'numeric', month:'long', year:'numeric'});
+  }
   function detailMetaRowHtml(job){
     const itens=[];
     itens.push('<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>');
-    if(job.date) itens.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(job.date)+'</span></span>');
-    if(job.horaIni) itens.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?('–'+job.horaFim):''))+'</span></span>');
+    if(job.dateRaw) itens.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
+    if(job.horaIni) itens.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' — '+job.horaFim):''))+'</span></span>');
     return itens.join('<span class="dm-sep"></span>');
   }
   function renderJobDetailDynamic(id){
@@ -8153,23 +8186,24 @@
     colaboradoresCache[jobId] = error ? [] : (data||[]);
     renderSecaoColaboradoresExternos(jobId);
   }
-  /* cada colaborador é um pequeno bloco organizado: email + função (ou
-     "sem função definida", nunca um "—" solto) numa coluna, permissão e
-     estado do acordo como badges na outra. */
+  /* cada colaborador é um bloco vertical organizado — nome, função,
+     permissão e status do contrato sempre em linhas próprias, nunca vários
+     badges comprimidos lado a lado. Prioriza organização sobre economia de
+     espaço (quebra em 2 linhas se precisar). */
   function renderSecaoColaboradoresExternos(jobId){
     const wrap=document.getElementById('colab-lista-'+jobId);
     if(!wrap) return;
     const lista=colaboradoresCache[jobId]||[];
     wrap.innerHTML = lista.length ? lista.map(c=>{
       const permissaoLabel = (PERMISSOES_CONTRATO_COLAB.find(x=>x[0]===(c.permissao||'leitor'))||[])[1];
-      return '<div class="collab-row">'+
-        '<div class="collab-info"><div class="nm">'+escapeHtml(c.email)+'</div>'+
-          '<div class="sub'+(c.funcao?'':' muted')+'">'+(c.funcao?escapeHtml(c.funcao):t('collab.noRole'))+'</div></div>'+
-        '<div class="collab-right">'+
-          (permissaoLabel?'<span class="sig-tag gray">'+t(permissaoLabel)+'</span>':'')+
-          (c.acordo&&c.acordo.modelo?('<span class="sig-tag '+(c.acordo.assinado?'green':'amber')+'">'+(c.acordo.assinado?t('collab.agreementSigned'):t('collab.agreementPending'))+'</span>'):'')+
+      let campos='<div class="collab-field"><span class="k">'+t('collab.role')+'</span><span class="v'+(c.funcao?'':' muted')+'">'+(c.funcao?escapeHtml(c.funcao):t('collab.noRole'))+'</span></div>';
+      if(permissaoLabel) campos+='<div class="collab-field"><span class="k">'+t('collab.permission')+'</span><span class="sig-tag gray">'+t(permissaoLabel)+'</span></div>';
+      if(c.acordo && c.acordo.modelo) campos+='<div class="collab-field"><span class="k">'+t('collab.contractStatus')+'</span><span class="sig-tag '+(c.acordo.assinado?'green':'amber')+'">'+(c.acordo.assinado?t('collab.agreementSigned'):t('collab.agreementPending'))+'</span></div>';
+      return '<div class="collab-block">'+
+        '<div class="collab-block-top"><div class="nm">'+escapeHtml(c.email)+'</div>'+
           '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
-        '</div></div>';
+        '</div>'+campos+
+      '</div>';
     }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
   }
   async function removerColaboradorExterno(id, jobId){

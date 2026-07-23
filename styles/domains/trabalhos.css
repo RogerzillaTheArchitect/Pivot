@@ -34,29 +34,31 @@
   .job-swipe-btn.editar{background:rgba(200,200,196,.42)}
   .job-swipe-btn.concluir{background:rgba(79,161,137,.42)}
   .job-swipe-btn.deletar{background:rgba(217,127,121,.42)}
-  /* 3 botões finais — mesma altura/largura/espaçamento, um único conjunto
-     visual, cada um com o tom translúcido próprio (glass escuro, nunca cor
-     vibrante): arquivar = bordô, editar = cinza neutro, concluir = verde. */
+  /* 3 botões finais — mesmo componente, mesmo fundo translúcido escuro pros
+     3 (glass, nunca vermelho/verde preenchido) — a diferenciação é só na
+     borda/ícone/texto (que herdam de "color" via currentColor). */
   .detalhe-footer-actions{display:flex;gap:10px;margin-top:28px;padding-bottom:10px}
   .job-footer-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-    padding:14px 8px;border-radius:var(--r);border:1px solid rgba(255,255,255,.10);
-    color:#F5F5F3;font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:filter .15s;
+    padding:14px 8px;border-radius:var(--r);border:1px solid rgba(255,255,255,.14);
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(255,255,255,.04);
+    color:#F5F5F3;font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
-  .job-footer-btn:hover{filter:brightness(1.12)}
+  .job-footer-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,0) 45%),rgba(255,255,255,.07)}
   .job-footer-btn svg{width:18px;height:18px}
-  .job-footer-btn.editar{background:rgba(38,40,44,.74);color:#F5F5F3}
-  .job-footer-btn.arquivar{background:rgba(48,20,22,.78);color:#E8899E}
-  .job-footer-btn.concluir{background:rgba(20,46,34,.78);color:#7FBE9C}
-  /* colaboradores — cada um é um pequeno bloco: email/função à esquerda,
-     badges de permissão/acordo à direita. */
-  .collab-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 2px;
-    border-bottom:1px solid var(--line-soft)}
-  .collab-row:last-child{border-bottom:none}
-  .collab-info{min-width:0}
-  .collab-info .nm{font-size:13.5px;font-weight:600;color:var(--ink)}
-  .collab-info .sub{font-size:12px;color:var(--ink-soft);margin-top:2px}
-  .collab-info .sub.muted{color:var(--ink-faint);font-style:italic}
-  .collab-right{display:flex;align-items:center;gap:7px;flex:none}
+  .job-footer-btn.editar{border-color:rgba(255,255,255,.18);color:#F5F5F3}
+  .job-footer-btn.arquivar{border-color:rgba(217,127,121,.5);color:#E8899E}
+  .job-footer-btn.concluir{border-color:rgba(79,161,137,.5);color:#7FBE9C}
+  /* colaboradores — bloco vertical: nome no topo, cada campo (função/
+     permissão/status do contrato) na sua própria linha, nunca badges
+     comprimidos lado a lado. Prioriza organização, não economia de espaço. */
+  .collab-block{padding:13px 2px;border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:8px}
+  .collab-block:last-child{border-bottom:none}
+  .collab-block-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .collab-block-top .nm{font-size:13.5px;font-weight:600;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .collab-field{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .collab-field .k{font-size:11.5px;color:var(--ink-faint);flex:none}
+  .collab-field .v{font-size:12.5px;color:var(--ink-soft);text-align:right}
+  .collab-field .v.muted{color:var(--ink-faint);font-style:italic}
   .job{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease;
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
     border:1px solid rgba(255,255,255,.09);border-radius:var(--r);padding:15px 16px;
@@ -117,16 +119,23 @@
   .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft);cursor:pointer;
     margin:14px 0 12px;font-weight:500}
   .back svg{width:16px;height:16px}
-  .detail-head-row{display:flex;gap:15px;align-items:center;margin:14px 0 18px}
-  .detail-head-info{flex:1;min-width:0}
-  .detail-h{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:19px;line-height:1.3;letter-spacing:.03em;text-transform:uppercase}
+  /* topo do avatar = topo do título, sempre (align-items:flex-start em vez
+     de center — com center o bloco de texto, mais baixo que o avatar de
+     64px, ficava visualmente "empurrado" para baixo). */
+  .detail-head-row{display:flex;gap:15px;align-items:flex-start;margin:14px 0 18px}
+  .detail-head-info{flex:1;min-width:0;padding-top:1px}
+  .detail-h{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:19px;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;margin:0}
   .detail-sub{color:var(--neutral);font-size:13.5px;margin-top:4px}
   /* linha única de meta-informação do cabeçalho (cliente · data · hora) —
-     mesmo ícone (tamanho/espessura/opacidade), mesma distância do texto,
-     separador discreto entre cada item. Sem valor financeiro aqui. */
-  .detail-meta-row{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:6px}
-  .dm-item{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft)}
-  .dm-item svg{width:14px;height:14px;flex:none;opacity:.8}
+     nunca quebra: o item do cliente (o mais longo/variável) encolhe com
+     reticências antes de qualquer coisa quebrar linha; data e hora são
+     sempre exibidas por inteiro. Mesmo ícone entre si (tamanho/espessura/
+     opacidade), mesma distância do texto. Sem valor financeiro aqui. */
+  .detail-meta-row{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;margin-top:6px;overflow:hidden}
+  .dm-item{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-soft);flex:none;min-width:0}
+  .dm-item:first-child{flex-shrink:1}
+  .dm-item:first-child span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .dm-item svg{width:13px;height:13px;flex:none;opacity:.75}
   .dm-sep{width:3px;height:3px;border-radius:50%;background:var(--ink-faint);flex:none}
   /* botão "Portal do Cliente" premium — mesmo glass do resto do app, sem
      borda pontilhada verde nem aparência provisória. */
@@ -145,16 +154,17 @@
     color:#F5F5F3;
     --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
-  .sec-head{display:flex;align-items:center;justify-content:space-between;padding:15px 16px;cursor:pointer}
-  .sec-l{display:flex;align-items:center;gap:11px}
+  .sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px;cursor:pointer}
+  .sec-l{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
   .sec-l svg{width:17px;height:17px;color:var(--ink-soft)}
+  .sec-head>div:last-child{flex:none}
   .sec-icon{width:32px;height:32px;display:grid;place-items:center;flex:none;color:var(--ink-soft);
     background:rgba(255,255,255,.06);border-radius:var(--r)}
   .sec-icon svg{width:18px;height:18px}
   .sec-icon.sm{width:25px;height:25px}
   .sec-icon.sm svg{width:16px;height:16px}
   .c-contrato,.c-briefing,.c-cronograma,.c-pagamentos,.c-lembretes,.c-historico,.c-entrega{color:#fff}
-  .sec-title{font-size:14.5px;font-weight:600}
+  .sec-title{font-size:14.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .sec-state{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:var(--r);background:rgba(255,255,255,.06);white-space:nowrap}
   /* badge de status do contrato/pagamento — só tons derivados da paleta do
      app (--pend/--done/--late), nunca amarelo forte nem cor solta. */

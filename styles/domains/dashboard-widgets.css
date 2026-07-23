@@ -74,15 +74,22 @@
   .map-visual{position:relative;height:104px;background:rgba(255,255,255,.04);overflow:hidden}
   .map-pin{position:absolute;top:50%;left:50%;transform:translate(-50%,-95%)}
   .map-pin svg{width:28px;height:28px;color:var(--ink);filter:drop-shadow(0 3px 5px rgba(0,0,0,.35))}
-  .map-info{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .map-addr{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35}
+  /* endereço com flex:1 pra aproveitar toda a largura disponível antes de
+     quebrar (align-items:flex-start pra alinhar bem no topo se quebrar em
+     2 linhas); o botão de rota nunca encolhe/quebra. */
+  .map-info{padding:13px 16px;display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+  .map-addr{flex:1;min-width:0;font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.4}
   .map-link{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--ink);
-    text-decoration:none;white-space:nowrap;flex:none}
+    text-decoration:none;white-space:nowrap;flex:none;margin-top:1px}
   .map-link svg{width:14px;height:14px;flex:none}
   .map-leaflet{width:100%;height:148px;background:rgba(255,255,255,.04)}
-  /* Atribuição legal obrigatória, mas discreta — sem os links técnicos
-     (Report a problem / Donate / Terms) que o embed.html do OSM sempre trazia */
-  .map-leaflet .leaflet-control-attribution{font-size:9px;background:var(--glass-85);color:var(--ink-faint);padding:1px 5px;border-radius:4px 0 0 0}
+  /* Atribuição legal obrigatória (termos CARTO/OpenStreetMap não permitem
+     removê-la) — minimizada ao máximo: texto bem pequeno, quase
+     transparente, sem os links técnicos (Report a problem / Donate /
+     Terms) que o embed.html do OSM sempre trazia. */
+  .map-leaflet .leaflet-control-attribution{font-size:8px;line-height:1.4;background:rgba(10,10,11,.55);
+    color:rgba(200,200,200,.55);padding:1px 5px;border-radius:4px 0 0 0;opacity:.85}
+  .map-leaflet .leaflet-control-attribution:hover{opacity:1}
   .map-leaflet .leaflet-control-attribution a{color:var(--ink-faint)}
 
   .addr-dropdown{position:absolute;left:0;right:0;top:100%;margin-top:4px;background:var(--paper);
