@@ -8627,10 +8627,10 @@
   let notifSeenIds=new Set();
   function saveNotifDismissed(){ savePersisted('pivot-notifDismissed', ()=>[...notifDismissed]); }
   async function loadNotifDismissed(){ await loadPersisted('pivot-notifDismissed', d=>{ notifDismissed=new Set(d||[]); }); }
-  function notifCardHtml(id, dotHtml, texto, sub, onclick){
+  function notifCardHtml(id, texto, sub, onclick){
     return '<div class="notif-wrap" data-notif="'+id+'">'+
         '<div class="notif-dismiss-action" onclick="event.stopPropagation();descartarNotificacao(\''+id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
-        '<div class="notif-card" onclick="'+onclick+'">'+dotHtml+
+        '<div class="notif-card" onclick="'+onclick+'">'+
           '<div><div class="nm">'+escapeHtml(texto)+'</div><div class="sub">'+escapeHtml(sub)+'</div></div>'+
         '</div>'+
       '</div>';
@@ -8647,7 +8647,6 @@
       html+='<button class="btn soft notif-clear-btn" onclick="limparNotificacoes()">'+t('notif.clearAll')+'</button>';
       if(items.length){
         html+=items.map(it=>notifCardHtml(it.id,
-          '<span class="priority-dot '+it.prioridade+'"></span>',
           it.texto, it.sub,
           'closeInfo();'+(it.jobId?('openJob(\''+it.jobId+'\')'):'')
         )).join('');
@@ -8655,7 +8654,6 @@
       if(atividade.length){
         html+='<p class="plabel" style="margin:'+(items.length?'14px':'0')+' 2px 6px">'+t('job.clientActivity')+'</p>';
         html+=atividade.map(a=>notifCardHtml(a.id,
-          '<div style="width:22px;height:22px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" style="width:11px;height:11px"><path d="M20 6 9 17l-5-5"/></svg></div>',
           a.texto, a.ts,
           'closeInfo();openJob(\''+a.jobId+'\')'
         )).join('');
