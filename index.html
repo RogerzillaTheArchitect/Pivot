@@ -747,9 +747,11 @@
 
         <!-- Card: Segmentação Financeira — classifica cada projeto por nicho
              (título + nome do contrato usado, contra um dicionário interno de
-             palavras-chave, sem IA) e soma receita/projetos por segmento. -->
-        <div class="card rel-card" id="rel-anchor-segmentacao">
-          <div class="seg-fin-title" data-t="reports.segFin.title">Segmentação Financeira</div>
+             palavras-chave, sem IA) e soma receita/projetos por segmento.
+             Cabeçalho conectado ao card, mesmo padrão visual do "Tarefas" no
+             Dashboard, em vez do título solto dentro do card. -->
+        <div class="rel-card-header" id="rel-anchor-segmentacao" data-t="reports.segFin.title">Segmentação Financeira</div>
+        <div class="card rel-card rel-card-body">
           <div class="seg-fin-sub" data-t="reports.segFin.subtitle">Descubra quais segmentos geram a maior parte da sua receita.</div>
           <div id="rel-seg-financeira" style="margin-top:18px"></div>
         </div>
@@ -757,10 +759,11 @@
         <!-- Card: Estatísticas Operacionais — spec exata: container técnico
              sem glass, barra segmentada tipo mostrador industrial, layout em
              colunas fixas. Tocar numa linha explica a métrica (tooltip no
-             desktop / bottom sheet no mobile). -->
-        <div class="card rel-card stats-op-card" id="rel-anchor-operacional">
-          <div class="stats-op-title" data-t="reports.opStats">Estatísticas Operacionais</div>
-          <div class="stats-op-hr"></div>
+             desktop / bottom sheet no mobile). Cabeçalho conectado no mesmo
+             tom técnico/opaco do card (variante .tech), mesmo padrão do
+             "Tarefas". -->
+        <div class="rel-card-header tech" id="rel-anchor-operacional" data-t="reports.opStats">Estatísticas Operacionais</div>
+        <div class="card rel-card stats-op-card rel-card-body">
           <div id="rel-op-bars"></div>
         </div>
 
