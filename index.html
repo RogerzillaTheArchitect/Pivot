@@ -745,6 +745,15 @@
           <div id="rel-linechart" style="margin-top:20px"></div>
         </div>
 
+        <!-- Card: Segmentação Financeira — classifica cada projeto por nicho
+             (título + nome do contrato usado, contra um dicionário interno de
+             palavras-chave, sem IA) e soma receita/projetos por segmento. -->
+        <div class="card rel-card" id="rel-anchor-segmentacao">
+          <div class="seg-fin-title" data-t="reports.segFin.title">Segmentação Financeira</div>
+          <div class="seg-fin-sub" data-t="reports.segFin.subtitle">Descubra quais segmentos geram a maior parte da sua receita.</div>
+          <div id="rel-seg-financeira" style="margin-top:18px"></div>
+        </div>
+
         <!-- Card: Estatísticas Operacionais — spec exata: container técnico
              sem glass, barra segmentada tipo mostrador industrial, layout em
              colunas fixas. Tocar numa linha explica a métrica (tooltip no
@@ -2890,6 +2899,13 @@
     "reports.billing": { pt:"Faturamento", en:"Billing", es:"Facturación" },
     "reports.taskFlow": { pt:"Fluxo de Tarefas", en:"Task Flow", es:"Flujo de Tareas" },
     "reports.cashFlow": { pt:"Fluxo Financeiro", en:"Cash Flow", es:"Flujo Financiero" },
+    "reports.segFin.title": { pt:"Segmentação Financeira", en:"Financial Segmentation", es:"Segmentación Financiera" },
+    "reports.segFin.subtitle": { pt:"Descubra quais segmentos geram a maior parte da sua receita.", en:"Discover which segments generate most of your revenue.", es:"Descubra qué segmentos generan la mayor parte de sus ingresos." },
+    "reports.segFin.project": { pt:"projeto", en:"project", es:"proyecto" },
+    "reports.segFin.projects": { pt:"projetos", en:"projects", es:"proyectos" },
+    "reports.segFin.emptyTitle": { pt:"Ainda não há dados suficientes", en:"Not enough data yet", es:"Aún no hay datos suficientes" },
+    "reports.segFin.emptyText": { pt:"Conforme novos projetos forem criados, este relatório mostrará quais segmentos geram a maior parte da sua receita.", en:"As new projects are created, this report will show which segments generate most of your revenue.", es:"A medida que se creen nuevos proyectos, este informe mostrará qué segmentos generan la mayor parte de sus ingresos." },
+    "reports.segFin.others": { pt:"Outros", en:"Other", es:"Otros" },
     "reports.params": { pt:"Parâmetros", en:"Parameters", es:"Parámetros" },
     "reports.addBtn": { pt:"Adicionar", en:"Add", es:"Añadir" },
     "reports.flowAll": { pt:"Todos", en:"All", es:"Todos" },
@@ -5795,6 +5811,122 @@
     });
   }
 
+  /* ===== Segmentação Financeira (Relatórios) =====
+     Classifica cada projeto por nicho de mercado usando só um dicionário
+     interno de palavras-chave — sem IA, sem API externa, tudo local e
+     instantâneo. Compara o texto (título do projeto + nome do contrato
+     usado) contra os segmentos NESTA ORDEM; o primeiro que bater vence.
+     A ordem importa: segmentos de nicho/indústria do cliente vêm antes dos
+     genéricos de tipo de serviço (Fotografia/Videografia/Design/Tecnologia),
+     senão um "Vídeo Institucional Empresa XPTO" seria lido como Videografia
+     em vez de Corporativo (que é o nicho real do cliente).
+     Os segmentos e palavras-chave vieram de uma análise da biblioteca
+     oficial de contratos do Pivot (legal-library/index.json, 61 modelos,
+     9 mercados) — cada segmento aqui corresponde a um ou mais desses
+     modelos/subcategorias reais, não a uma lista inventada. Estrutura
+     modular: para adicionar um segmento novo (ex. quando a biblioteca
+     ganhar modelos de um mercado ainda não coberto) basta acrescentar um
+     objeto {id, label, keywords} — nada mais na função muda. */
+  const SEGMENTOS_FINANCEIROS = [
+    { id:'casamentos', label:'Casamentos', keywords:['casamento','casamentos','noivo','noiva','noivos','wedding','cerimônia','cerimonia','núpcias','nupcias','matrimônio','matrimonio','elopement'] },
+    { id:'corporativo', label:'Corporativo', keywords:['corporativo','corporate','empresa','empresarial','institucional','conferência','conferencia','congresso','executivo','companhia'] },
+    { id:'eventos', label:'Eventos', keywords:['evento','eventos','festa','aniversário','aniversario','festival','seminário','seminario','celebração','celebracao','formatura'] },
+    { id:'imobiliario', label:'Imobiliário', keywords:['imóvel','imovel','imobiliário','imobiliario','propriedade','apartamento','condomínio','condominio','aluguel','residência','residencia','hotel','pousada','resort','hospedagem'] },
+    { id:'construcao', label:'Construção Civil', keywords:['construção','construcao','obra','reforma','edificação','edificacao','canteiro','inspeção predial','inspecao predial'] },
+    { id:'arquitetura', label:'Arquitetura', keywords:['arquitetura','arquitetônico','arquitetonico','arquiteto','interiores','decoração','decoracao'] },
+    { id:'engenharia', label:'Engenharia', keywords:['engenharia','engenheiro','estrutural','elétrica','eletrica','mecânica','mecanica','hidráulica','hidraulica'] },
+    { id:'moda', label:'Moda', keywords:['moda','fashion','editorial','lookbook','desfile','coleção','colecao'] },
+    { id:'produto_ecommerce', label:'Produto & E-commerce', keywords:['produto','ecommerce','e-commerce','catálogo','catalogo','loja virtual','revenda'] },
+    { id:'marketing', label:'Marketing', keywords:['marketing','redes sociais','anúncios','anuncios','tráfego pago','trafego pago','seo','campanha publicitária','campanha publicitaria'] },
+    { id:'consultoria', label:'Consultoria', keywords:['consultoria','coaching','mentoria','contabilidade','auditoria','recursos humanos','rh'] },
+    { id:'educacao', label:'Educação & Conteúdo', keywords:['educação','educacao','curso','workshop','tradução','traducao','podcast','redação','redacao','ensino','aula'] },
+    { id:'tecnologia', label:'Tecnologia', keywords:['site','website','aplicativo','app','software','sistema','saas','api','tecnologia','desenvolvimento','plataforma'] },
+    { id:'design', label:'Design', keywords:['design','identidade visual','logo','logotipo','branding','gráfico','grafico','ui','ux'] },
+    { id:'fotografia', label:'Fotografia', keywords:['fotografia','foto','fotógrafo','fotografo','fotógrafa','fotografa','retrato','ensaio fotográfico','ensaio fotografico','book fotográfico','book fotografico'] },
+    { id:'videografia', label:'Videografia', keywords:['vídeo','video','filmagem','videografia','videomaker','drone','documentário','documentario','videoclipe'] },
+  ];
+  /* substring simples (indexOf/includes) daria falso positivo — ex. "gráfico"
+     (Design) bateria dentro de "fotográfico" (Fotografia), ou "api" (Tecnologia)
+     dentro de "capital" (Consultoria). Confere que os caracteres antes/depois
+     da ocorrência não são letras, pra só contar quando a palavra aparece
+     inteira, não como pedaço de outra. */
+  function ehLetra(ch){ return /[a-zà-öø-ÿ]/i.test(ch); }
+  function contemPalavra(alvo, chave){
+    let idx=alvo.indexOf(chave);
+    while(idx!==-1){
+      const antes = idx>0 ? alvo[idx-1] : ' ';
+      const depois = (idx+chave.length<alvo.length) ? alvo[idx+chave.length] : ' ';
+      if(!ehLetra(antes) && !ehLetra(depois)) return true;
+      idx=alvo.indexOf(chave, idx+1);
+    }
+    return false;
+  }
+  function classificarSegmentoTexto(texto){
+    const alvo=' '+(texto||'').toLowerCase()+' ';
+    for(const seg of SEGMENTOS_FINANCEIROS){
+      if(seg.keywords.some(k=>contemPalavra(alvo,k))) return seg.id;
+    }
+    return 'outros';
+  }
+  function classificarSegmentoJob(job){
+    return classificarSegmentoTexto((job.nome||'')+' '+((job.contract&&job.contract.templateName)||''));
+  }
+  function segmentoLabel(id){
+    return id==='outros' ? t('reports.segFin.others') : ((SEGMENTOS_FINANCEIROS.find(s=>s.id===id)||{}).label||id);
+  }
+  /* soma receita (job.value) e contagem de projetos por segmento, dentro do
+     mesmo período selecionado no topo de Relatórios (mês/trimestre/ano/
+     intervalo — relRangeMeses()); trabalhos deletados nunca entram, os
+     demais (mesmo arquivados/concluídos) contam, igual ao resto da página. */
+  function calcularSegmentacaoFinanceira(){
+    const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
+    const acc={};
+    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado').forEach(j=>{
+      const mm=(j.dateRaw||'').slice(0,7);
+      if(!mesesSet.has(mm)) return;
+      if(!j.value) return;
+      const segId=classificarSegmentoJob(j);
+      if(!acc[segId]) acc[segId]={receita:0, projetos:0};
+      acc[segId].receita+=j.value;
+      acc[segId].projetos+=1;
+    });
+    const totalReceita=Object.values(acc).reduce((s,x)=>s+x.receita,0);
+    const linhas=Object.keys(acc).map(id=>({
+      id, label:segmentoLabel(id), receita:acc[id].receita, projetos:acc[id].projetos,
+      pct: totalReceita>0 ? Math.round(acc[id].receita/totalReceita*100) : 0
+    }));
+    /* ordenar sempre por maior receita → menor receita, nunca por nº de projetos */
+    linhas.sort((a,b)=>b.receita-a.receita);
+    return { linhas, totalReceita };
+  }
+  function renderRelSegmentacaoFinanceira(){
+    const wrap=document.getElementById('rel-seg-financeira'); if(!wrap) return;
+    const { linhas } = calcularSegmentacaoFinanceira();
+    if(!linhas.length){
+      wrap.innerHTML='<div class="seg-fin-empty"><div class="seg-fin-empty-title">'+t('reports.segFin.emptyTitle')+'</div><p class="seg-fin-empty-text">'+t('reports.segFin.emptyText')+'</p></div>';
+      return;
+    }
+    const maxReceita=linhas[0].receita;
+    wrap.innerHTML=linhas.map((l,i)=>{
+      const larguraPct = maxReceita>0 ? Math.round(l.receita/maxReceita*100) : 0;
+      const rotuloProjetos = l.projetos===1 ? t('reports.segFin.project') : t('reports.segFin.projects');
+      return '<div class="seg-fin-row">'+
+        '<div class="seg-fin-name">'+escapeHtml(l.label)+'</div>'+
+        '<div class="seg-fin-bar-track"><div class="seg-fin-bar-fill" id="seg-fin-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
+        '<div class="seg-fin-meta">'+fmtMoney(l.receita)+' • '+l.projetos+' '+rotuloProjetos+' • '+l.pct+'%</div>'+
+      '</div>';
+    }).join('');
+    /* anima a barra de 0 até a largura final — precisa de um tick entre o
+       innerHTML (width:0 do CSS) e a mudança de largura pra a transição
+       correr, mesmo truque já usado em pintarAnelComVolta(). */
+    setTimeout(()=>{
+      linhas.forEach((l,i)=>{
+        const el=document.getElementById('seg-fin-bar-'+i);
+        if(el) el.style.width=el.dataset.w+'%';
+      });
+    }, 60);
+  }
+
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
      etc) — reaproveitada aqui, não uma cor nova, só a mesma legenda aplicada
      também às barras de Faturamento */
@@ -6103,6 +6235,7 @@
 
     renderRelFatBars(s);
     renderRelLineChart();
+    renderRelSegmentacaoFinanceira();
     renderRelOpBars(s);
     renderRelOpStats();
     renderRelFluxoFinanceiro();
