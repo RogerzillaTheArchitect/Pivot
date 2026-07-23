@@ -303,6 +303,14 @@
   .btn.primary:hover{background:var(--btn-86)}
   .btn.soft{background:var(--paper-2)}
   .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-soft);padding-left:6px}
+  /* variante neutra premium — glassmorphism escuro, sem cor de marca. Usada
+     em ações onde o verde do .primary destoaria (ex.: modal do Portal do
+     Cliente), mas ainda precisa se destacar de um .soft/.ghost comum. */
+  .btn.dark{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(255,255,255,.05);
+    border-color:rgba(255,255,255,.14);color:var(--ink);font-weight:600;
+    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
+    box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06)}
+  .btn.dark:hover{background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,0) 45%),rgba(255,255,255,.08)}
   .actions .btn{background:var(--btn-74)!important;backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     border:none!important;color:var(--paper)!important;font-weight:600;box-shadow:0 3px 10px var(--btn-14)}
   .actions .btn:hover{background:var(--btn-88)!important}
