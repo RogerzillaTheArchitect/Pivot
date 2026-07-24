@@ -17,6 +17,7 @@
     --bib-mat-line:rgba(255,255,255,.10);
     --bib-mat-shadow:0 8px 30px rgba(0,0,0,.15);
     /* selos — mesmo material, com tint de pigmento por tipo (sem glow) */
+    --bib-wine-base:rgba(47,23,28,.72); --bib-wine-ink:#C9909A;
     --bib-brass-base:rgba(56,45,25,.72); --bib-brass-ink:#C4A76C;
     --bib-bronze-base:rgba(50,36,27,.72); --bib-bronze-ink:#BA8F6C;
     --bib-silver-ink:#C9CDD4;
@@ -102,6 +103,7 @@
   .bib-seal .sl-ic svg{width:100%;height:100%}
   .bib-seal .sl-lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bib-seal.s-oficial{color:var(--bib-silver-ink)}
+  .bib-seal.s-juridico{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-wine-base);color:var(--bib-wine-ink)}
   .bib-seal.s-recomendados{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-brass-base);color:var(--bib-brass-ink)}
   .bib-seal.s-comunidade{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-bronze-base);color:var(--bib-bronze-ink)}
   /* versão inline (rodapé do card / cabeçalho de sheets) — largura ao conteúdo, ícone rente ao texto */
@@ -123,13 +125,14 @@
     --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.07)}
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
   .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:17px;font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
-  /* badge de idioma — quadradinho branco pequeno (era uma caixa de vidro
-     32×32, pesada demais pra uma etiqueta de 2 letras), seguido de um
+  /* badge de idioma — quadrado branco de verdade, sem arredondamento
+     nenhum (era uma caixa de vidro 32×32 com var(--r), pesada e ainda
+     arredondada demais pra uma etiqueta de 2 letras), seguido de um
      separador e da contagem de blocos na mesma linha. */
   .bib-card .bc-lang-row{align-self:flex-start;display:flex;align-items:center;gap:7px;margin:8px 0}
   .bib-card .bc-lang{flex:none;width:20px;height:20px;
     display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;letter-spacing:.02em;
-    border-radius:var(--r);color:#1A1B1D;background:#F5F5F3}
+    border-radius:0;color:#1A1B1D;background:#F5F5F3}
   .bib-card .bc-lang-sep{width:3px;height:3px;border-radius:50%;background:var(--bib-ink-faint);flex:none}
   .bib-card .bc-lang-blocks{font-size:11px;color:var(--bib-ink-faint);white-space:nowrap}
   .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;
