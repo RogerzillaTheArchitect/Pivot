@@ -3111,7 +3111,6 @@
     "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
     "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
     "collab.contractAppliedHint": { pt:"O contrato foi aplicado e um email de aviso foi enviado a cada colaborador selecionado.", en:"The contract was applied and a notification email was sent to each selected collaborator.", es:"El contrato fue aplicado y se envió un email de aviso a cada colaborador seleccionado." },
-    "collab.editContractHint": { pt:"Revise e edite o texto do contrato antes de enviar para os colaboradores.", en:"Review and edit the contract text before sending it to the collaborators.", es:"Revise y edite el texto del contrato antes de enviarlo a los colaboradores." },
     "collab.addAnotherContract": { pt:"Adicionar Outro Contrato", en:"Add Another Contract", es:"Añadir Otro Contrato" },
     "collab.role": { pt:"Função", en:"Role", es:"Función" },
     "collab.noRole": { pt:"Sem função definida", en:"No role defined", es:"Sin función definida" },
@@ -6888,6 +6887,12 @@
      nunca lia builderModeloOrigem sozinho. Sem isto, o card de Contrato
      continuava a mostrar "vazio" mesmo depois de escolher um modelo. */
   let builderVoltarView='trabalhos';
+  /* Contexto de edição de contrato de colaborador — {modo, jobId} enquanto o
+     utilizador edita blocos/cláusulas no builder normal antes de escolher os
+     destinatários; distinto de builderContext (job real) e do modo "novo
+     modelo em branco". Reaproveita o builder completo em vez de duplicar a
+     interface de edição (blocos, cláusulas, campos dinâmicos). */
+  let builderColabCtx=null;
   function abrirBuilder(jobId, modeloOrigem){
     builderContext=jobId||null;
     builderModeloOrigem=modeloOrigem||null;
@@ -6911,8 +6916,22 @@
     renderBuilder();
     go('builder');
   }
-  function voltarDoBuilder(){ if(builderContext){ openJob(builderContext); } else { go(builderVoltarView); } }
+  function voltarDoBuilder(){
+    if(builderColabCtx){ builderColabCtx=null; go('detalhe'); return; }
+    if(builderContext){ openJob(builderContext); } else { go(builderVoltarView); }
+  }
   function guardarBuilderContexto(){
+    if(builderColabCtx){
+      const ctx=builderColabCtx;
+      builderColabCtx=null;
+      const modeloOrigem={ nome:(builderModeloOrigem&&builderModeloOrigem.nome)||null,
+        blocks: getBuilderJob().contract.blocks.map(b=>Object.assign({}, b)),
+        fieldValues: Object.assign({}, getBuilderFieldValues()) };
+      go('detalhe');
+      if(ctx.modo==='colaboradorMassa') abrirAplicarContratoMassa(ctx.jobId, modeloOrigem);
+      else aplicarContratoEscolhidoAoColaborador(ctx.jobId, modeloOrigem);
+      return;
+    }
     if(builderContext){ saveJobsData(); showToast(t('toast.changesSaved')); return; }
     openInfo(t('builder.saveTemplateTitle'), `
       <div class="field"><label data-t="field.name">Nome</label><input id="modelo-contrato-nome" placeholder="${t('builder.templateNamePlaceholder')}"></div>
@@ -6976,11 +6995,13 @@
     const locked = isJob && contratoBloqueadoParaEdicao(job);
     document.getElementById('builder-title').textContent= isJob? (t('job.contract')+' — '+job.client) : t('builder.title');
     document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub'));
-    document.getElementById('builder-back-label').textContent= isJob? job.client : t('nav.jobs');
+    document.getElementById('builder-back-label').textContent= isJob? job.client : (builderColabCtx ? t('collab.contractsSection') : t('nav.jobs'));
     renderBuilderCampos(job, locked);
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
     document.getElementById('addblock-btn').style.display= isJob ? 'none' : 'flex';
-    document.getElementById('save-tpl-btn').style.display= locked ? 'none' : 'block';
+    const saveTplBtn=document.getElementById('save-tpl-btn');
+    saveTplBtn.style.display= locked ? 'none' : 'block';
+    saveTplBtn.textContent= builderColabCtx ? t('wizard.continue') : t('action.save');
     document.getElementById('builder-locked-notice').style.display= locked ? 'flex' : 'none';
     document.getElementById('builder-hint').style.display= locked ? 'none' : 'block';
     document.getElementById('builder-progress').style.display= (isJob && job.contract.status==='rascunho') ? 'block':'none';
@@ -8281,36 +8302,8 @@
     closeInfo();
     go('bibliotecas');
   }
-  /* Texto final do contrato de colaborador — se já passou pela revisão
-     (abrirRevisarContratoColaborador), usa o texto editado tal e qual;
-     senão (fluxo antigo do __wizard__, sem passo de edição) renderiza a
-     partir dos blocks, como sempre. */
   function textoDoModeloColaborador(job, modeloOrigem){
-    if(modeloOrigem.textoFinal!=null) return modeloOrigem.textoFinal;
     return renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks||[]);
-  }
-  let _colabRevisaoCtx=null, _colabRevisaoNome=null;
-  /* Passo de revisão/edição — como em qualquer outro contrato do app, antes
-     de enviar o texto pro colaborador pode-se editar livremente (é só
-     texto simples, sem os blocos/campos dinâmicos do builder do contrato
-     do próprio trabalho, que não se aplicam aqui). */
-  function abrirRevisarContratoColaborador(ctx, modeloOrigem){
-    _colabRevisaoCtx=ctx; _colabRevisaoNome=modeloOrigem.nome||null;
-    const job=jobsData[ctx.jobId]||{};
-    const texto=renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks||[]);
-    openInfo(modeloOrigem.nome||t('collab.contractsSection'), `
-      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:10px">${t('collab.editContractHint')}</p>
-      <textarea id="colab-contrato-revisao" style="width:100%;min-height:220px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(texto)}</textarea>
-      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarContratoRevisadoColaborador()">${t('wizard.continue')}</button>`);
-  }
-  function confirmarContratoRevisadoColaborador(){
-    const ctx=_colabRevisaoCtx;
-    if(!ctx) return;
-    const texto=document.getElementById('colab-contrato-revisao').value;
-    const modeloFinal={ nome:_colabRevisaoNome, textoFinal:texto };
-    _colabRevisaoCtx=null; _colabRevisaoNome=null;
-    if(ctx.modo==='colaboradorMassa') abrirAplicarContratoMassa(ctx.jobId, modeloFinal);
-    else aplicarContratoEscolhidoAoColaborador(ctx.jobId, modeloFinal);
   }
   function abrirAplicarContratoMassa(jobId, modeloOrigem){
     modeloEscolhidoParaMassa=modeloOrigem;
@@ -10109,8 +10102,8 @@
     const valores=valoresDynamicFieldsDoJob(job);
     const blocks=await blocosParaModeloBiblioteca(m, lang, valores);
     const modeloOrigem={ client:job.client||'', nome, blocks, fieldValues:valores };
-    go('detalhe');
-    abrirRevisarContratoColaborador(ctx, modeloOrigem);
+    builderColabCtx=ctx;
+    abrirBuilder(null, modeloOrigem);
   }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
