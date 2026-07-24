@@ -174,7 +174,13 @@
     color:#F5F5F3;
     --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
     --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
-  .sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px;cursor:pointer}
+  /* Faixa de título sempre mais escura que o corpo do card logo abaixo —
+     vidro frost escuro + linha de separação, mesmo padrão de .tasks-header/
+     .rel-card-header (Dashboard/Relatórios), pra "título" nunca ler como a
+     mesma superfície que "conteúdo". */
+  .sec-head{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:15px 16px;cursor:pointer;
+    background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0) 45%),rgba(6,6,7,.42);
+    border-bottom:1px solid rgba(255,255,255,.08)}
   .sec-l{display:flex;align-items:center;gap:11px;min-width:0;flex:1}
   .sec-l svg{width:17px;height:17px;color:var(--ink-soft)}
   .sec-head>div:last-child{flex:none}
@@ -184,7 +190,8 @@
   .sec-icon.sm{width:25px;height:25px}
   .sec-icon.sm svg{width:16px;height:16px}
   .c-contrato,.c-briefing,.c-cronograma,.c-pagamentos,.c-lembretes,.c-historico,.c-entrega{color:#fff}
-  .sec-title{font-size:14.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+  .sec-title{flex:1;font-size:14.5px;font-weight:600;text-align:center;color:var(--ink);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
   .sec-state{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:var(--r);background:rgba(255,255,255,.06);white-space:nowrap}
   /* badge de status do contrato/pagamento — só tons derivados da paleta do
      app (--pend/--done/--late), nunca amarelo forte nem cor solta. */

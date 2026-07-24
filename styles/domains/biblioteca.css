@@ -23,14 +23,19 @@
     --bib-silver-ink:#C9CDD4;
   }
 
-  /* fundo: um único radial grande, transição quase imperceptível
-     (quase preto → grafite profundo → leve verde petróleo dessaturado → preto) */
-  #v-bibliotecas{background:#0C0D10}
+  /* Sem background próprio na view — como em qualquer outra tela, deixa o
+     gradiente do .shell (index.html, multi-radial + linear escuro) aparecer
+     por trás; antes #v-bibliotecas pintava um #0C0D10 sólido por cima,
+     substituindo esse gradiente por uma caixa cinza plana só nesta tela —
+     era isso que destoava do resto do app. O radial abaixo continua a dar o
+     tom quase-preto → grafite → verde petróleo característico da Biblioteca,
+     só que agora como um tint translúcido sobre o gradiente do shell, não
+     uma camada opaca que o esconde. */
   .bib-shell{display:flex;flex-direction:column;position:relative;isolation:isolate}
   .bib-shell::before{
     content:"";position:absolute;inset:-24px -18px;z-index:-2;pointer-events:none;
     background:radial-gradient(150% 110% at 50% -12%,
-      #1A1C1E 0%, #16181A 32%, #131A19 56%, #0C0D10 100%);
+      rgba(26,28,30,.55) 0%, rgba(22,24,26,.55) 32%, rgba(19,26,25,.5) 56%, rgba(12,13,16,.55) 100%);
   }
   /* micro grão sobre todo o material — extremamente sutil */
   .bib-shell::after{
