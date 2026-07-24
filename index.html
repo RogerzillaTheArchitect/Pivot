@@ -636,6 +636,10 @@
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
         <div class="bib-shell">
+          <div class="bib-pick-banner" id="bib-pick-banner" style="display:none">
+            <span id="bib-pick-banner-txt"></span>
+            <span class="inline-link" onclick="cancelarSelecaoBiblioteca()" data-t="action.cancel">Cancelar</span>
+          </div>
           <div class="bib-headrow">
             <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
@@ -3099,6 +3103,8 @@
     "collab.sectionTitle": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
     "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
     "collab.addContractForCollabs": { pt:"Adicionar Contrato para Colaboradores", en:"Add Contract for Collaborators", es:"Añadir Contrato para Colaboradores" },
+    "library.pickForCollab": { pt:"Escolha um contrato para anexar ao colaborador.", en:"Choose a contract to attach to the collaborator.", es:"Elige un contrato para adjuntar al colaborador." },
+    "library.pickForCollabMassa": { pt:"Escolha um contrato para aplicar aos colaboradores selecionados.", en:"Choose a contract to apply to the selected collaborators.", es:"Elige un contrato para aplicar a los colaboradores seleccionados." },
     "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
     "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
     "collab.contractAppliedHint": { pt:"O contrato foi aplicado aos colaboradores selecionados.", en:"The contract was applied to the selected collaborators.", es:"El contrato fue aplicado a los colaboradores seleccionados." },
@@ -4622,13 +4628,6 @@
     renderModeloEscolhidoWizard();
   }
   function abrirBuilderParaSelecao(modeloOrigem){
-    if(contratoParaColaboradoresMassaJobId){
-      const jobId=contratoParaColaboradoresMassaJobId;
-      contratoParaColaboradoresMassaJobId=null;
-      closeSheet();
-      abrirAplicarContratoMassa(jobId, modeloOrigem||{blocks:[]});
-      return;
-    }
     if(contratoParaColaboradorJobId){
       const jobId=contratoParaColaboradorJobId;
       contratoParaColaboradorJobId=null;
@@ -8264,12 +8263,18 @@
   /* Aplicação em massa usa a MESMA Biblioteca de Contratos: escolhe-se um
      modelo real (ex. "Contrato de Fotógrafo"), depois quem o recebe — nunca
      uma lista de texto solta. Repetível via "Adicionar Outro Contrato". */
-  let contratoParaColaboradoresMassaJobId=null;
   let modeloEscolhidoParaMassa=null;
+  /* Escolher contrato pra colaborador usa a MESMA Biblioteca completa (tela
+     "Modelos" — filtros de idioma/categoria/segmento, favoritos, ordenação)
+     em vez de um painel reduzido dentro do sheet — não faz sentido manter
+     duas interfaces pra explorar o mesmo catálogo. bibPickModeCallback
+     guarda pra onde volta o contrato escolhido; abrirDetalheBibliotecaPrincipal
+     já sabe rotear o botão Importar pra bibSelecionarParaDestino() quando
+     está setado. */
   function abrirBibliotecaContratoColaboradoresMassa(jobId){
-    contratoParaColaboradoresMassaJobId=jobId;
-    twEmWizard=false;
-    abrirPainelBibliotecaContratoDireto();
+    bibPickModeCallback={modo:'colaboradorMassa', jobId};
+    closeInfo();
+    go('bibliotecas');
   }
   function abrirAplicarContratoMassa(jobId, modeloOrigem){
     modeloEscolhidoParaMassa=modeloOrigem;
@@ -8468,9 +8473,20 @@
     abrirSelecionarContratoColaborador(jobId);
   }
   function abrirSelecionarContratoColaborador(jobId){
-    contratoParaColaboradorJobId=jobId;
-    twEmWizard=false;
-    abrirPainelBibliotecaContratoDireto();
+    /* __wizard__ = a meio da criação do trabalho (o job ainda não existe,
+       não há pra onde "voltar" fora do sheet) — mantém o painel reduzido
+       dentro do próprio sheet do assistente. Job já existente (Portal
+       Operacional) = usa a Biblioteca completa (tela "Modelos"), mesma
+       interface rica de sempre, sem duplicar UI. */
+    if(jobId==='__wizard__'){
+      contratoParaColaboradorJobId=jobId;
+      twEmWizard=false;
+      abrirPainelBibliotecaContratoDireto();
+      return;
+    }
+    bibPickModeCallback={modo:'colaborador', jobId};
+    closeInfo();
+    go('bibliotecas');
   }
   function renderizarTextoModeloParaColaborador(job, blocks){
     return blocks.filter(b=>b.on!==false).map(b=>blockName(b)+'\n'+blockText(job,b)).join('\n\n');
@@ -9734,6 +9750,12 @@
   let bibIdiomaSel=null;
   let bibCategoriaSel=null;
   let bibSegmentoSel=null;
+  /* "Modo de seleção" da Biblioteca — setado antes de navegar pra cá quando
+     alguém precisa ESCOLHER um contrato pra usar noutro lugar (ex.: anexar
+     a um colaborador), em vez de só navegar/gerenciar a biblioteca. Quando
+     setado, o botão Importar do detalhe (abrirDetalheBibliotecaPrincipal)
+     volta pro destino certo em vez do fluxo padrão de criação de trabalho. */
+  let bibPickModeCallback=null;
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
@@ -9890,6 +9912,12 @@
     bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel);
   }
   function renderBiblioteca(){
+    const banner=document.getElementById('bib-pick-banner');
+    if(banner){
+      banner.style.display = bibPickModeCallback ? 'flex' : 'none';
+      if(bibPickModeCallback) document.getElementById('bib-pick-banner-txt').textContent =
+        t(bibPickModeCallback.modo==='colaboradorMassa' ? 'library.pickForCollabMassa' : 'library.pickForCollab');
+    }
     bibAtualizarBotoesFiltro();
     renderBibOrigemRow();
     const wrap=document.getElementById('bib-lista');
@@ -10003,9 +10031,36 @@
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
-    const usarOnclick = it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')";
+    const usarOnclick = bibPickModeCallback
+      ? "bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
+      : (it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
     html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
     openInfo(it.titulo, html);
+  }
+  function cancelarSelecaoBiblioteca(){
+    bibPickModeCallback=null;
+    renderBiblioteca();
+  }
+  /* Aplica o contrato escolhido na Biblioteca completa ao destino que pediu
+     a seleção (colaborador único ou aplicação em massa) — mesmo motor de
+     blocos/campos dinâmicos do import normal (importarModeloBiblioteca),
+     só que devolve o resultado pro fluxo de colaboradores em vez de ir pro
+     builder de contrato do trabalho. */
+  async function bibSelecionarParaDestino(rawId, lang){
+    const ctx=bibPickModeCallback;
+    if(!ctx) return;
+    bibPickModeCallback=null;
+    const m=LegalLibrary.get(rawId);
+    if(!m) return;
+    marcarModeloComoUsado(rawId);
+    const job=jobsData[ctx.jobId]||{};
+    const nome = lang ? LegalLibrary.tituloEm(m, lang) : m.titulo;
+    const valores=valoresDynamicFieldsDoJob(job);
+    const blocks=await blocosParaModeloBiblioteca(m, lang, valores);
+    const modeloOrigem={ client:job.client||'', nome, blocks, fieldValues:valores };
+    go('detalhe');
+    if(ctx.modo==='colaboradorMassa') abrirAplicarContratoMassa(ctx.jobId, modeloOrigem);
+    else aplicarContratoEscolhidoAoColaborador(ctx.jobId, modeloOrigem);
   }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
