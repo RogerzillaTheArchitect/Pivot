@@ -765,6 +765,25 @@
           <div id="rel-seg-financeira" style="margin-top:18px"></div>
         </div>
 
+        <!-- Card: Distribuição Financeira — receita por segmento (verde) e
+             gastos por categoria (amarelo→laranja), cada um crescendo a
+             partir do eixo central, sem linha divisória desenhada — o centro
+             é só o eixo de alinhamento das duas colunas do grid. -->
+        <div class="rel-card-header" data-t="reports.distFin.title">Distribuição Financeira</div>
+        <div class="card rel-card rel-card-body">
+          <div class="distfin-divider"></div>
+          <div class="distfin-cols">
+            <div class="distfin-col distfin-col-income">
+              <div class="distfin-col-title" data-t="reports.distFin.income">Receitas</div>
+              <div id="rel-distfin-receitas"></div>
+            </div>
+            <div class="distfin-col distfin-col-expenses">
+              <div class="distfin-col-title" data-t="reports.distFin.expenses">Gastos</div>
+              <div id="rel-distfin-gastos"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Card: Estatísticas Operacionais — spec exata: container técnico
              sem glass, barra segmentada tipo mostrador industrial, layout em
              colunas fixas. Tocar numa linha explica a métrica (tooltip no
@@ -3150,6 +3169,15 @@
     "reports.addExpense": { pt:"Adicionar despesa", en:"Add expense", es:"Añadir gasto" },
     "reports.editExpense": { pt:"Editar despesa", en:"Edit expense", es:"Editar gasto" },
     "reports.saveExpense": { pt:"Guardar", en:"Save", es:"Guardar" },
+    "reports.expenseCategory": { pt:"Categoria", en:"Category", es:"Categoría" },
+    "reports.expenseCategoryPlaceholder": { pt:"Equipamentos, Marketing…", en:"Equipment, Marketing…", es:"Equipamiento, Marketing…" },
+    // --- Distribuição Financeira ---
+    "reports.distFin.title": { pt:"Distribuição Financeira", en:"Financial Distribution", es:"Distribución Financiera" },
+    "reports.distFin.income": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "reports.distFin.expenses": { pt:"Gastos", en:"Expenses", es:"Gastos" },
+    "reports.distFin.emptyIncome": { pt:"Sem receita neste período.", en:"No income this period.", es:"Sin ingresos en este período." },
+    "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
+    "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
     // --- Heatmaps ---
     "reports.heatmap.title": { pt:"Heatmaps", en:"Heatmaps", es:"Mapas de Calor" },
     "reports.heatmap.tabTemporal": { pt:"Temporal", en:"Temporal", es:"Temporal" },
@@ -6220,7 +6248,7 @@
     });
   }
   function registrarAnalyticsDespesa(despesa){
-    registrarAnalyticsEvento('expense_added', { event_date: despesa.data, value: despesa.valor });
+    registrarAnalyticsEvento('expense_added', { event_date: despesa.data, value: despesa.valor, segment: despesa.categoria||null });
   }
   /* ===== Categoria / Segmento (etapa de criação do trabalho) =====
      Categoria reaproveita os mesmos 16 ids/labels de SEGMENTOS_FINANCEIROS —
@@ -6357,6 +6385,26 @@
     linhas.sort((a,b)=>b.receita-a.receita);
     return { linhas, totalReceita };
   }
+  /* Agrupa as despesas do período selecionado pela categoria real digitada
+     na criação (ver DESPESA_CATEGORIAS_SUGERIDAS) — nunca inventa uma
+     categoria por palavra-chave; despesas sem categoria (inclusive as
+     criadas antes desse campo existir) caem em "Sem categoria". */
+  function calcularGastosPorCategoria(){
+    const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
+    const acc={};
+    Object.values(custosData).forEach(c=>{
+      const mm=(c.data||'').slice(0,7);
+      if(!mesesSet.has(mm)) return;
+      const valor=Number(c.valor)||0;
+      if(!valor) return;
+      const nome=(c.categoria||'').trim() || t('reports.distFin.uncategorized');
+      if(!acc[nome]) acc[nome]=0;
+      acc[nome]+=valor;
+    });
+    const linhas=Object.entries(acc).map(([label,valor])=>({label, valor}));
+    linhas.sort((a,b)=>b.valor-a.valor);
+    return linhas;
+  }
   function renderRelSegmentacaoFinanceira(){
     const wrap=document.getElementById('rel-seg-financeira'); if(!wrap) return;
     const { linhas } = calcularSegmentacaoFinanceira();
@@ -6383,6 +6431,58 @@
         if(el) el.style.width=el.dataset.w+'%';
       });
     }, 60);
+  }
+
+  /* ===== Distribuição Financeira — receitas por segmento (verde, mais
+     escuro = maior) à esquerda e gastos por categoria (amarelo→laranja,
+     mais intenso = maior) à direita, ambos crescendo a partir do eixo
+     central, cada lado com sua própria normalização. Mesmo componente de
+     barra segmentada da Estatísticas Operacionais — segmentos retos,
+     cor sólida, sem gradiente. */
+  const DISTFIN_N_SEGMENTOS=14;
+  const DISTFIN_MAX_LINHAS=5;
+  const DISTFIN_VERDES=['#33472E','#44603C','#5E7A52','#7FA070','#A8C39C'];
+  const DISTFIN_LARANJAS=['#C25A26','#CF7530','#DC9138','#E7AC42','#F0C650'];
+  function renderRelDistribuicaoFinanceira(){
+    const wrapReceitas=document.getElementById('rel-distfin-receitas');
+    const wrapGastos=document.getElementById('rel-distfin-gastos');
+    if(!wrapReceitas || !wrapGastos) return;
+    const receitas=calcularSegmentacaoFinanceira().linhas.slice(0, DISTFIN_MAX_LINHAS);
+    const gastos=calcularGastosPorCategoria().slice(0, DISTFIN_MAX_LINHAS);
+    if(!receitas.length){
+      wrapReceitas.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyIncome')+'</p>';
+    } else {
+      const max=receitas[0].receita;
+      wrapReceitas.innerHTML=receitas.map((l,i)=>{
+        const cheios = max>0 ? Math.round(l.receita/max*DISTFIN_N_SEGMENTOS) : 0;
+        const cor=DISTFIN_VERDES[Math.min(i,DISTFIN_VERDES.length-1)];
+        const segs=Array.from({length:DISTFIN_N_SEGMENTOS},(_,s)=>
+          '<span class="distfin-seg'+(s>=DISTFIN_N_SEGMENTOS-cheios?' on':'')+'"'+(s>=DISTFIN_N_SEGMENTOS-cheios?' style="background:'+cor+'"':'')+'></span>'
+        ).join('');
+        return '<div class="distfin-row">'+
+          '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
+          '<div class="distfin-value" style="color:'+cor+'">'+fmtMoney(l.receita)+'</div>'+
+          '<div class="distfin-track">'+segs+'</div>'+
+        '</div>';
+      }).join('');
+    }
+    if(!gastos.length){
+      wrapGastos.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyExpenses')+'</p>';
+    } else {
+      const max=gastos[0].valor;
+      wrapGastos.innerHTML=gastos.map((l,i)=>{
+        const cheios = max>0 ? Math.round(l.valor/max*DISTFIN_N_SEGMENTOS) : 0;
+        const cor=DISTFIN_LARANJAS[Math.min(i,DISTFIN_LARANJAS.length-1)];
+        const segs=Array.from({length:DISTFIN_N_SEGMENTOS},(_,s)=>
+          '<span class="distfin-seg'+(s<cheios?' on':'')+'"'+(s<cheios?' style="background:'+cor+'"':'')+'></span>'
+        ).join('');
+        return '<div class="distfin-row">'+
+          '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
+          '<div class="distfin-value" style="color:'+cor+'">'+fmtMoney(l.valor)+'</div>'+
+          '<div class="distfin-track">'+segs+'</div>'+
+        '</div>';
+      }).join('');
+    }
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
@@ -6697,6 +6797,7 @@
     renderRelOpBars(s);
     renderRelOpStats();
     renderRelFluxoFinanceiro();
+    renderRelDistribuicaoFinanceira();
     renderRelHeatmaps();
   }
 
@@ -6954,6 +7055,14 @@
   /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
      sem estar ligado a um trabalho. Despesa cai em custosData (já existente);
      Recebido cai em receitasData (novo, mesmo formato). ===== */
+  /* Sugestões de categoria de despesa — o campo é sempre texto livre (nunca
+     um valor forçado); isto só ajuda a digitar consistente, pra "Distribuição
+     Financeira" conseguir agrupar gastos por categoria de verdade, em vez de
+     um "categoria" que nunca foi preenchido por ninguém. */
+  const DESPESA_CATEGORIAS_SUGERIDAS=['Freelancers','Equipamentos','Marketing','Softwares','Viagens','Assinaturas','Deslocação','Outros'];
+  function despesaCategoriaDatalistHtml(){
+    return '<datalist id="despesa-categorias-lista">'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('')+'</datalist>';
+  }
   function abrirRegistroManual(){
     const hoje=new Date().toISOString().slice(0,10);
     const html='<div class="chip on" id="reg-tipo-despesa" style="display:inline-block;margin-right:8px" onclick="selecionarTipoRegistro(\'despesa\')" data-t="home.entryExpense">Despesa</div>'+
@@ -6961,12 +7070,16 @@
       '<div class="field" style="margin-top:14px"><label data-t="reports.expenseName">Nome</label><input id="reg-nome" placeholder="Uber, freelance extra…"></div>'+
       '<div class="field-row"><div class="field"><label data-t="reports.expenseValue">Valor</label><input id="reg-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')salvarRegistroManual()"></div>'+
       '<div class="field"><label data-t="field.date">Data</label><input id="reg-data" type="date" value="'+hoje+'"></div></div>'+
+      '<div class="field" id="reg-categoria-wrap"><label data-t="reports.expenseCategory">Categoria</label><input id="reg-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
+      despesaCategoriaDatalistHtml()+
       '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarRegistroManual()" data-t="home.addEntryBtn">Adicionar</button>';
     openInfo(t('home.addEntryTitle'), html);
   }
   function selecionarTipoRegistro(tipo){
     document.getElementById('reg-tipo-despesa').classList.toggle('on', tipo==='despesa');
     document.getElementById('reg-tipo-recebido').classList.toggle('on', tipo==='recebido');
+    const catWrap=document.getElementById('reg-categoria-wrap');
+    if(catWrap) catWrap.style.display = tipo==='despesa' ? 'block':'none';
   }
   function salvarRegistroManual(){
     const tipo = document.getElementById('reg-tipo-recebido').classList.contains('on') ? 'recebido' : 'despesa';
@@ -6975,7 +7088,8 @@
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     if(tipo==='despesa'){
       const id='cst'+Date.now();
-      custosData[id]={ id, descricao:desc, valor, categoria:'', data };
+      const categoria=(document.getElementById('reg-categoria').value||'').trim();
+      custosData[id]={ id, descricao:desc, valor, categoria, data };
       saveCustosData();
       registrarAnalyticsDespesa(custosData[id]);
     } else {
@@ -7060,20 +7174,22 @@
   function abrirDespesas(){
     const html='<div class="field-row" style="margin-bottom:2px"><div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
       '<div class="field" style="max-width:110px"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div></div>'+
+      '<div class="field" style="margin-bottom:10px"><label data-t="reports.expenseCategory">Categoria</label><input id="exp-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
+      despesaCategoriaDatalistHtml()+
       '<button class="btn primary" style="width:100%;margin:4px 0 14px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>'+
       '<div class="sheet-divider"></div><div id="exp-lista" style="margin-top:12px"></div>';
     openInfo(t('reports.expensesTitle'), html);
     renderDespesasLista();
   }
   function guardarDespesaNova(){
-    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor');
-    const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value);
+    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor'), catEl=document.getElementById('exp-categoria');
+    const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), categoria=(catEl&&catEl.value||'').trim();
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     const id='cst'+Date.now();
-    custosData[id]={ id, descricao:desc, valor, categoria:'', data:new Date().toISOString().slice(0,10) };
+    custosData[id]={ id, descricao:desc, valor, categoria, data:new Date().toISOString().slice(0,10) };
     saveCustosData();
     registrarAnalyticsDespesa(custosData[id]);
-    nomeEl.value=''; valEl.value=''; nomeEl.focus();
+    nomeEl.value=''; valEl.value=''; if(catEl) catEl.value=''; nomeEl.focus();
     renderDespesasLista();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
     showToast(t('toast.costAdded'));
