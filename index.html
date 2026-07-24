@@ -2420,7 +2420,6 @@
     "library.blockRequired": { pt:"obrigatório", en:"required", es:"obligatorio" },
     "library.blockOptional": { pt:"opcional", en:"optional", es:"opcional" },
     "library.blockConditional": { pt:"condicional", en:"conditional", es:"condicional" },
-    "library.protectedBlockSample": { pt:"Amostra do conteúdo", en:"Content sample", es:"Muestra del contenido" },
     "library.import": { pt:"Importar", en:"Import", es:"Importar" },
     "library.addBlockBtn": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
     "library.blocksExplore": { pt:"Explorar Modelos", en:"Browse Templates", es:"Explorar Modelos" },
@@ -7727,7 +7726,25 @@
   const BIB_CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
   const BIB_CHEVR_SVG='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
   function bibBlocoTagKey(status){ return status==='REQUIRED'?'library.blockRequired':status==='CONDITIONAL'?'library.blockConditional':'library.blockOptional'; }
-  function voltaBuilderAposSelecao(){ closeInfo(); bibPickModeCallback=null; go('builder'); }
+  /* Volta pro Builder depois de importar — se um bloco alvo for passado,
+     rola até ele (expandido) em vez de simplesmente deixar o go('builder')
+     resetar o scroll pro topo da página, que era a queixa: o utilizador
+     perdia de vista onde os itens tinham acabado de ser importados. */
+  function voltaBuilderAposSelecao(bidParaFoco){
+    closeInfo(); bibPickModeCallback=null; go('builder');
+    if(!bidParaFoco) return;
+    setTimeout(()=>{
+      const prev=document.getElementById('bprev-'+bidParaFoco);
+      if(!prev) return;
+      prev.classList.remove('collapsed');
+      const blockEl=prev.closest('.block');
+      if(blockEl){
+        blockEl.scrollIntoView({behavior:'smooth', block:'center'});
+        blockEl.classList.add('campo-flash');
+        setTimeout(()=>blockEl.classList.remove('campo-flash'), 1300);
+      }
+    }, 60);
+  }
 
   // ---- BLOCOS ----
   function abrirExplorarBlocosOficiais(){
@@ -7764,16 +7781,18 @@
   function confirmarImportBlocos(){
     if(!bibSelBlocosSet.size) return;
     const job=getBuilderJob(); const fv=getBuilderFieldValues(); const blocks=bibSelBlocosDetail.blocks;
-    let added=0;
+    let added=0, primeiroBid=null;
     [...bibSelBlocosSet].sort((a,b)=>a-b).forEach(idx=>{
       const b=blocks[idx]; if(!b||!b.clauses||!b.clauses.length) return;
       const tpl=b.clauses.map(c=>c.text).join('\n\n');
-      job.contract.blocks.push({id:genId(), key:null, name:b.name, tpl, customText:LegalLibrary.resolveClauseText(tpl, fv), on:true});
+      const novoBid=genId();
+      job.contract.blocks.push({id:novoBid, key:null, name:b.name, tpl, customText:LegalLibrary.resolveClauseText(tpl, fv), on:true});
+      if(!primeiroBid) primeiroBid=novoBid;
       added++;
     });
     if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
     renderBuilder();
-    voltaBuilderAposSelecao();
+    voltaBuilderAposSelecao(primeiroBid);
     showToast(added+' '+t('library.blocksImportedToast'));
   }
 
@@ -7848,7 +7867,7 @@
     const clauses=(bibSelClausDetail.blocks[bibSelClausBlockIdx].clauses)||[];
     const textos=[...bibSelClausSet].sort((a,b)=>a-b).map(i=>clauses[i].text);
     appendClausulasAoBloco(bibClauseTargetBid, textos);
-    voltaBuilderAposSelecao();
+    voltaBuilderAposSelecao(bibClauseTargetBid);
   }
   function appendClausulasAoBloco(bid, textos){
     const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
@@ -11130,32 +11149,23 @@
     /* Estrutura real de blocos do contrato oficial (nome + obrigatório/
        opcional/condicional), vinda do Blueprint — a composição detalhada
        de cláusulas por bloco (para import seletivo) ainda não existe, ver
-       nota em blocosParaModeloBiblioteca. Cada bloco vira uma tira de 5
-       mini-blocos quadrados laranjas: quantos vêm preenchidos é o "score"
-       de cobertura jurídica do bloco (obrigatório cobre mais que opcional),
-       lido de forma imediata em vez de uma barra de progresso genérica. */
+       nota em blocosParaModeloBiblioteca. Cada bloco vira uma tira de 20
+       mini-blocos preenchendo a linha toda — mesmo padrão visual (grid de
+       segmentos + gradiente --fill) do card "Estatísticas Operacionais" da
+       Dashboard, só que numa versão pequena — o "score" de cobertura
+       jurídica do bloco (obrigatório cobre mais que opcional) fica visível
+       de forma imediata em vez de uma barra de progresso genérica. */
     if(!item.blocks || !item.blocks.length) return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
-    const PESOS_CHIPS={REQUIRED:5, CONDITIONAL:3, OPTIONAL:2};
-    const TOTAL_CHIPS=5;
+    const N=20;
+    const PESOS_PCT={REQUIRED:100, CONDITIONAL:70, OPTIONAL:45};
     return '<div class="bib-struct-list">'+item.blocks.map(b=>{
-      const cheios=PESOS_CHIPS[b.status]||2;
+      const pct=PESOS_PCT[b.status]||45;
+      const cheios=Math.round(pct/100*N);
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
-      const chips=Array.from({length:TOTAL_CHIPS},(_,i)=>'<i'+(i<cheios?' class="on"':'')+'></i>').join('');
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-chips">'+chips+'</div></div>';
+      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' is-filled':'')+'"></span>').join('');
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-track" style="--fill:'+pct+'">'+segs+'</div></div>';
     }).join('')+'</div>';
-  }
-  function bibBlocoVisivelHtml(item){
-    const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
-    const preview = (texto||'').slice(0,180);
-    return '<div class="bib-preview-block"><div class="txt">'+escapeHtml(preview)+(texto.length>180?'…':'')+'</div>'+
-      '<button class="btn soft" style="width:100%" onclick="event.stopPropagation();abrirVisualizarBlocoBiblioteca(\''+item.id+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button></div>';
-  }
-  function abrirVisualizarBlocoBiblioteca(id){
-    const it=catalogoBiblioteca().find(i=>i.id===id);
-    if(!it) return;
-    const texto = it.texto || it.desc || '';
-    openInfo(it.titulo, '<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;white-space:pre-wrap">'+escapeHtml(texto)+'</p>');
   }
   /* "Visualizar" — mostra TODOS os blocos do contrato (nome + cláusulas) no
      idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
@@ -11217,8 +11227,6 @@
     html+='<div class="vis-head" style="margin-bottom:14px">'+metricas.join('')+'</div>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
-    html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
-    html+=bibBlocoVisivelHtml(it);
     const tagsExibidas=it.tagsBusca||it.tags||[];
     if(tagsExibidas.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
