@@ -879,8 +879,8 @@
           <div class="sheet-item" onclick="closeSheet();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span data-t="sheet.goalsLimits">Metas e Limites</span></div>
           <div class="sheet-item" onclick="closeSheet();abrirNovoServico()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><span data-t="sheet.services">Serviços</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
-          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.reminderSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
-          <div class="sheet-item" onclick="closeSheet();showToast(t('sheet.listSoon'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
+          <div class="sheet-item" onclick="abrirNovoLembrete()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
+          <div class="sheet-item" onclick="abrirNovaLista()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
         </div>
       </div>
 
@@ -1190,6 +1190,41 @@
           </div>
         </div>
         <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarTarefa()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
+      </div>
+
+      <!-- 🔔 LEMBRETE -->
+      <div class="panel" data-panel="lembrete">
+        <div class="field"><label data-t="field.taskTitle">Título</label><input id="lb-titulo" placeholder="Do que precisa de se lembrar?" data-t-placeholder="reminder.titlePlaceholder"></div>
+        <div class="field"><label data-t="field.date">Data</label><input type="date" id="lb-data"></div>
+        <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="lb-hora"></div>
+        <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
+          <select id="lb-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
+        </div>
+        <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="lb-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
+        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarLembrete()"><span data-t="reminder.create">Criar lembrete →</span></button>
+      </div>
+
+      <!-- ☑️ LISTA -->
+      <div class="panel" data-panel="lista">
+        <div class="field"><label data-t="wizard.checklistTitle">Título da lista</label><input id="ls-titulo" placeholder="Título da lista" data-t-placeholder="list.titlePlaceholder"></div>
+        <div id="ls-items"></div>
+        <div class="addlist-input">
+          <input id="ls-newitem" placeholder="Adicionar item…" data-t-placeholder="task.addItemPlaceholder" onkeydown="if(event.key==='Enter'){addListaItem();event.preventDefault();}">
+          <button class="btn soft" onclick="addListaItem()">+</button>
+        </div>
+        <div class="field" style="margin-top:14px"><label data-t="field.date">Data (opcional)</label><input type="date" id="ls-data"></div>
+        <div class="field">
+          <label data-t="field.priority">Prioridade</label>
+          <div class="priority-picker" id="ls-prioridade-picker">
+            <div class="priority-opt on" data-val="Normal" onclick="selecionarPrioridade(this)"><span class="priority-dot normal"></span><span data-t="priority.normal">Normal</span></div>
+            <div class="priority-opt" data-val="Importante" onclick="selecionarPrioridade(this)"><span class="priority-dot media"></span><span data-t="priority.important">Importante</span></div>
+            <div class="priority-opt" data-val="Urgente" onclick="selecionarPrioridade(this)"><span class="priority-dot urgente"></span><span data-t="priority.urgent">Urgente</span></div>
+          </div>
+        </div>
+        <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
+          <select id="ls-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
+        </div>
+        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarLista()"><span data-t="list.create">Criar lista →</span></button>
       </div>
 
       <!-- 📥 IMPORTAR -->
@@ -3101,8 +3136,6 @@
     "toast.serviceDeleted": { pt:"Serviço eliminado.", en:"Service deleted.", es:"Servicio eliminado." },
     "sheet.reminder": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
     "sheet.list": { pt:"Lista", en:"List", es:"Lista" },
-    "sheet.reminderSoon": { pt:"Lembretes avulsos em breve.", en:"Standalone reminders coming soon.", es:"Recordatorios independientes próximamente." },
-    "sheet.listSoon": { pt:"Listas avulsas em breve.", en:"Standalone lists coming soon.", es:"Listas independientes próximamente." },
     // --- Assinatura ---
     "signature.clear": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "signature.noneYet": { pt:"Ainda sem assinatura guardada", en:"No signature saved yet", es:"Aún sin firma guardada" },
@@ -3125,6 +3158,25 @@
     "task.linkToJob": { pt:"Associar a trabalho", en:"Link to a job", es:"Asociar a un trabajo" },
     "task.priorityNormal": { pt:"Normal", en:"Normal", es:"Normal" },
     "task.titlePlaceholder": { pt:"O que precisa de ser feito?", en:"What needs to be done?", es:"¿Qué hay que hacer?" },
+    // --- lembrete ---
+    "reminder.titlePlaceholder": { pt:"Do que precisa de se lembrar?", en:"What do you need to remember?", es:"¿De qué necesita acordarse?" },
+    "field.timeOptional": { pt:"Hora (opcional)", en:"Time (optional)", es:"Hora (opcional)" },
+    "reminder.create": { pt:"Criar lembrete →", en:"Create reminder →", es:"Crear recordatorio →" },
+    "reminder.dateRequired": { pt:"Escolhe uma data para o lembrete.", en:"Pick a date for the reminder.", es:"Elige una fecha para el recordatorio." },
+    "reminder.historyCreated": { pt:"Lembrete criado: ", en:"Reminder created: ", es:"Recordatorio creado: " },
+    "reminder.sectionTitle": { pt:"Lembretes", en:"Reminders", es:"Recordatorios" },
+    "reminder.action": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
+    "toast.createdMascSuffix": { pt:"\" criado.", en:"\" created.", es:"\" creado." },
+    "toast.reminderPrefix": { pt:"Lembrete \"", en:"Reminder \"", es:"Recordatorio \"" },
+    "toast.removed": { pt:"Removido.", en:"Removed.", es:"Eliminado." },
+    // --- lista ---
+    "list.titlePlaceholder": { pt:"Título da lista", en:"List title", es:"Título de la lista" },
+    "list.create": { pt:"Criar lista →", en:"Create list →", es:"Crear lista →" },
+    "list.historyCreated": { pt:"Lista criada: ", en:"List created: ", es:"Lista creada: " },
+    "list.sectionTitle": { pt:"Listas", en:"Lists", es:"Listas" },
+    "list.action": { pt:"Lista", en:"List", es:"Lista" },
+    "list.untitled": { pt:"Lista", en:"List", es:"Lista" },
+    "toast.listPrefix": { pt:"Lista \"", en:"List \"", es:"Lista \"" },
     // --- Equipa ---
     "team.1person": { pt:"1 pessoa", en:"1 person", es:"1 persona" },
     "team.add": { pt:"+ Adicionar pessoa à equipe", en:"+ Add team member", es:"+ Añadir miembro al equipo" },
@@ -3912,6 +3964,20 @@
         if(dataEntrega) itens.push({ dataISO:dataEntrega, nome:j.nome||j.client, cliente, acao:t('milestone.finalDelivery'), jobId:j.id, tipo:'entrega', idx:null });
       }
     });
+    /* Lembretes soltos (sem trabalho) entram sempre que tiverem data — os
+       vinculados a um trabalho não aparecem aqui, ficam só na secção
+       "Lembretes" dentro da página do trabalho. */
+    Object.values(lembretesData).forEach(l=>{
+      if(l.feito || l.jobId || !l.data) return;
+      itens.push({ dataISO:l.data, hora:l.hora||'', nome:l.titulo, cliente:'', acao:t('reminder.action'), jobId:null, tipo:'lembrete', idx:l.id });
+    });
+    /* Listas soltas só entram se tiverem data E prioridade — sem isso não há
+       como ordená-las entre os outros itens do radar. Vinculadas a um
+       trabalho ficam sempre na secção "Listas" da página do trabalho. */
+    Object.values(listasData).forEach(ls=>{
+      if(ls.feito || ls.jobId || !ls.data || !ls.prioridade) return;
+      itens.push({ dataISO:ls.data, hora:'', nome:ls.titulo, cliente:'', acao:t('list.action'), jobId:null, tipo:'lista', idx:ls.id });
+    });
     const mesAtualISO=new Date().toISOString().slice(0,7);
     const itensDoMes=itens.filter(it=> diasEntre(it.dataISO)<0 || it.dataISO.slice(0,7)===mesAtualISO);
     itensDoMes.sort((a,b)=> a.dataISO!==b.dataISO ? a.dataISO.localeCompare(b.dataISO) : (a.hora||'').localeCompare(b.hora||''));
@@ -3959,16 +4025,18 @@
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
-    let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+it.jobId+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    const solto = it.tipo==='lembrete' || it.tipo==='lista';
+    let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
     card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
     card+='</div>';
+    const editarAction = solto
+      ? '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();abrirDetalheItemSolto(\''+it.tipo+'\',\''+it.idx+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>'
+      : '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();openJob(\''+it.jobId+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>';
     return '<div class="radar-card-wrap">'+
-      '<div class="radar-swipe-actions left">'+
-        '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();openJob(\''+it.jobId+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>'+
-      '</div>'+
+      '<div class="radar-swipe-actions left">'+editarAction+'</div>'+
       '<div class="radar-swipe-actions right">'+
         '<button class="radar-swipe-btn concluir" onclick="event.stopPropagation();concluirItemRadar(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Concluir</button>'+
         '<button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();arquivarItemRadar(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>Arquivar</button>'+
@@ -3988,21 +4056,29 @@
   }
   function onRadarCardClick(e, card){
     if(card.dataset.swiped==='1'){ e.preventDefault(); e.stopPropagation(); return; }
+    const tipo=card.dataset.tipo;
+    if(tipo==='lembrete'||tipo==='lista'){ abrirDetalheItemSolto(tipo, card.dataset.idx); return; }
     openJob(card.dataset.jobId);
   }
   function concluirItemRadar(btn){
     const card=btn.closest('.radar-card-wrap').querySelector('.radar-card');
     const jobId=card.dataset.jobId, tipo=card.dataset.tipo, idx=card.dataset.idx;
-    const job=jobsData[jobId];
-    if(!job){ showToast(t('toast.jobNotFound')); return; }
-    if(tipo==='pagamento'){
-      marcarPagoDynamic(jobId, parseInt(idx,10));
-    } else if(tipo==='contrato'){
-      openJob(jobId);
-      return;
+    if(tipo==='lembrete'){
+      if(lembretesData[idx]){ lembretesData[idx].feito=true; saveLembretesData(); }
+    } else if(tipo==='lista'){
+      if(listasData[idx]){ listasData[idx].feito=true; saveListasData(); }
     } else {
-      const ms=(job.milestones||[]).find(m=>m.key==='principal');
-      if(ms){ ms.status='feito'; ms.feitoEm=new Date().toISOString(); pushHistory(job,t('toast.markedDone')); saveJobsData(); }
+      const job=jobsData[jobId];
+      if(!job){ showToast(t('toast.jobNotFound')); return; }
+      if(tipo==='pagamento'){
+        marcarPagoDynamic(jobId, parseInt(idx,10));
+      } else if(tipo==='contrato'){
+        openJob(jobId);
+        return;
+      } else {
+        const ms=(job.milestones||[]).find(m=>m.key==='principal');
+        if(ms){ ms.status='feito'; ms.feitoEm=new Date().toISOString(); pushHistory(job,t('toast.markedDone')); saveJobsData(); }
+      }
     }
     card.closest('.radar-card-wrap').style.display='none';
     renderMonthTicker();
@@ -4347,7 +4423,7 @@
     panelStack.push(name);
     showPanel(name);
     if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); populateCategoriaWizardSelect(); }
-    if(name==='tarefa') populateTrabalhoSelects();
+    if(name==='tarefa'||name==='lembrete'||name==='lista') populateTrabalhoSelects();
     if(name==='importar-referencias') renderReferenciasGuardadas();
     if(name==='comunidade-contratos') renderBibliotecaPanel('contratos');
     if(name==='comunidade-modelos') renderBibliotecaPanel('modelos');
@@ -7387,6 +7463,12 @@
   const BADGE_HIST=badge('c-historico', ICON_HIST);
   const ICON_TEAM=iconWrap('<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>');
   const BADGE_TEAM=badge('c-entrega', ICON_TEAM);
+  /* Alarme (Lembretes) e checklist (Listas) — distintos do sino da secção
+     Tarefas (BADGE_BELL) pra não ler como o mesmo conceito. */
+  const ICON_ALARM=iconWrap('<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 1.5"/><path d="m5 3-2.5 2.5"/><path d="m19 3 2.5 2.5"/>');
+  const BADGE_ALARM=badge('c-lembretes', ICON_ALARM);
+  const ICON_CHECKLIST=iconWrap('<rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/>');
+  const BADGE_CHECKLIST=badge('c-historico', ICON_CHECKLIST);
   const ICON_GRIP='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg>';
   const ICON_PENCIL=iconWrap('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/>');
   const ICON_LINK=iconWrap('<path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/>');
@@ -8203,6 +8285,25 @@
       html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_BELL+'<div class="sec-title" data-t="cost.tasks">Tarefas</div></div><div class="sec-state" style="color:var(--ink-soft)">'+tarefasJob.filter(t=>!t.feito).length+' por fazer</div></div><div class="sec-body" style="display:block">';
       tarefasJob.forEach(t=>{
         html+='<div class="struct-row"><div class="struct-l"><div class="nm" style="display:flex;align-items:center;'+(t.feito?'text-decoration:line-through;color:var(--neutral)':'')+'"><span class="priority-dot '+prioClasse(t.prioridade)+'"></span>'+escapeHtml(t.titulo)+'</div><span class="sub">'+(t.prioridade||t('task.priorityNormal'))+(t.data?(' · '+t.data.split('-').reverse().slice(0,2).join('/')):'')+'</span></div><div class="toggle'+(t.feito?' on':'')+'" onclick="toggleTarefaItem(\''+t.id+'\',this)"><div class="kn"></div></div></div>';
+      });
+      html+='</div></div>';
+    }
+
+    const lembretesJob=Object.values(lembretesData).filter(l=>l.jobId===id);
+    if(lembretesJob.length){
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_ALARM+'<div class="sec-title" data-t="reminder.sectionTitle">Lembretes</div></div><div class="sec-state" style="color:var(--ink-soft)">'+lembretesJob.filter(l=>!l.feito).length+' por fazer</div></div><div class="sec-body" style="display:block">';
+      lembretesJob.forEach(l=>{
+        html+='<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(l.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(l.titulo)+'</div><span class="sub">'+l.data.split('-').reverse().join('/')+(l.hora?(' · '+l.hora):'')+'</span></div><div class="toggle'+(l.feito?' on':'')+'" onclick="toggleLembreteItem(\''+l.id+'\',this)"><div class="kn"></div></div></div>';
+      });
+      html+='</div></div>';
+    }
+
+    const listasJob=Object.values(listasData).filter(ls=>ls.jobId===id);
+    if(listasJob.length){
+      html+='<div class="sec"><div class="sec-head" style="cursor:default"><div class="sec-l">'+BADGE_CHECKLIST+'<div class="sec-title" data-t="list.sectionTitle">Listas</div></div></div><div class="sec-body" style="display:block">';
+      listasJob.forEach(ls=>{
+        const feitos=(ls.itens||[]).filter(it=>it.feito).length;
+        html+='<div class="struct-row" style="cursor:pointer" onclick="abrirDetalheItemSolto(\'lista\',\''+ls.id+'\')"><div class="struct-l"><div class="nm">'+escapeHtml(ls.titulo)+'</div><span class="sub">'+feitos+'/'+(ls.itens||[]).length+'</span></div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>';
       });
       html+='</div></div>';
     }
@@ -10296,7 +10397,7 @@
      sobrevive a um refresh). O comportamento dentro do Claude.ai mantém-se
      exatamente igual ao anterior. */
   const StorageAdapter = (function(){
-    const KNOWN_KEYS=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
+    const KNOWN_KEYS=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-lembretesData','pivot-listasData','pivot-custosData',
       'pivot-referenciasData','pivot-modelosUso','pivot-servicosData',
       'pivot-perfilData','pivot-metas','pivot-lembretesPerfil','pivot-sessao','pivot-tema'];
     const memoryStore={};
@@ -10479,7 +10580,10 @@
        funcionar) apareciam aqui pra associar uma tarefa nova, o que não
        faz sentido pra um trabalho já fechado. */
     const optsReal=jobsVisiveis().filter(j=>!j.arquivado).map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
-    const sel2=document.getElementById('ta-trabalho'); if(sel2) sel2.innerHTML='<option value="">'+t('field.optionalDropdown')+'</option>'+optsReal;
+    ['ta-trabalho','lb-trabalho','ls-trabalho'].forEach(selId=>{
+      const sel=document.getElementById(selId);
+      if(sel) sel.innerHTML='<option value="">'+t('field.optionalDropdown')+'</option>'+optsReal;
+    });
   }
 
   /* 👤 Cliente */
@@ -10849,6 +10953,160 @@
     const prioPicker=document.getElementById('ta-prioridade-picker');
     if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
     const items=document.getElementById('ta-cl-items'); if(items) items.innerHTML='';
+  }
+
+  /* 🔔 Lembrete — igual a Tarefa/Simples na estrutura (data + trabalho
+     opcional), mas sem prioridade: um lembrete não é urgente/normal, é só
+     "não te esqueças disto nesta data". Solto (sem jobId) entra no radar de
+     Tarefas do Dashboard; vinculado a um trabalho aparece na secção
+     "Lembretes" dentro da própria página do trabalho. */
+  let lembretesData={};
+  function saveLembretesData(){ savePersisted('pivot-lembretesData', ()=>lembretesData); }
+  async function loadLembretesData(){ await loadPersisted('pivot-lembretesData', d=>{ lembretesData=d||{}; }); }
+  function criarLembrete(){
+    const tituloEl=document.getElementById('lb-titulo');
+    const titulo=tituloEl.value.trim();
+    if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
+    const data=document.getElementById('lb-data').value;
+    if(!data){ showToast(t('reminder.dateRequired')); return; }
+    const id='lbr'+Date.now();
+    const jobId=document.getElementById('lb-trabalho').value||null;
+    lembretesData[id]={ id, titulo, data, hora:document.getElementById('lb-hora').value||null,
+      jobId, notas:document.getElementById('lb-notas').value.trim(), feito:false, criadoEm:new Date().toISOString() };
+    saveLembretesData();
+    if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], t('reminder.historyCreated')+titulo); saveJobsData(); }
+    showToast(t('toast.reminderPrefix')+titulo+t('toast.createdMascSuffix'));
+    renderMonthTicker();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(jobId && currentJobId===jobId && document.getElementById('detalhe-dynamic').style.display!=='none'){
+      renderJobDetailDynamic(jobId);
+    }
+    closeSheet();
+    limparFormularioLembrete();
+  }
+  function limparFormularioLembrete(){
+    ['lb-titulo','lb-data','lb-hora','lb-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    const sel=document.getElementById('lb-trabalho'); if(sel) sel.value='';
+  }
+  /* Sempre parte de um formulário limpo — mesmo cuidado do "+ Contato"
+     (abrirNovoContato): sem isto, cancelar a meio de um lembrete e abrir
+     "+ Lembrete" de novo deixava os campos anteriores por lá. */
+  function abrirNovoLembrete(){
+    limparFormularioLembrete();
+    pushPanel('lembrete');
+  }
+  function toggleLembreteItem(id, el){
+    const l=lembretesData[id];
+    if(!l) return;
+    l.feito=!l.feito;
+    el.classList.toggle('on');
+    saveLembretesData();
+    if(l.jobId) renderJobDetailDynamic(l.jobId);
+  }
+  function marcarLembreteFeito(id){
+    const l=lembretesData[id];
+    if(!l) return;
+    l.feito=true;
+    saveLembretesData();
+    closeInfo();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(l.jobId) renderJobDetailDynamic(l.jobId);
+    showToast(t('toast.done'));
+  }
+  function excluirLembrete(id){
+    const l=lembretesData[id];
+    const jobId=l&&l.jobId;
+    delete lembretesData[id];
+    saveLembretesData();
+    closeInfo();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(jobId) renderJobDetailDynamic(jobId);
+    showToast(t('toast.removed'));
+  }
+
+  /* ☑️ Lista — checklist avulsa, mesmo mecanismo de itens do modo Checklist
+     de Tarefa (addlist-row/#ls-items). Solta, só entra no radar de Tarefas
+     se tiver data E prioridade definidas (sem isso não há como ordená-la
+     entre os outros itens); vinculada a um trabalho aparece sempre na
+     secção "Listas" da página do trabalho, sem precisar de data/prioridade. */
+  let listasData={};
+  function saveListasData(){ savePersisted('pivot-listasData', ()=>listasData); }
+  async function loadListasData(){ await loadPersisted('pivot-listasData', d=>{ listasData=d||{}; }); }
+  function addListaItem(){
+    const inp=document.getElementById('ls-newitem'); const v=inp.value.trim(); if(!v) return;
+    const row=document.createElement('div'); row.className='addlist-row';
+    row.innerHTML='<span class="dots">⠿</span><span class="tx">'+escapeHtml(v)+'</span><span class="rm" onclick="this.parentElement.remove()">✕</span>';
+    document.getElementById('ls-items').appendChild(row);
+    inp.value='';
+  }
+  function criarLista(){
+    const titulo=document.getElementById('ls-titulo').value.trim()||t('list.untitled');
+    const itens=[...document.querySelectorAll('#ls-items .tx')].map(el=>({t:el.textContent, feito:false}));
+    if(!itens.length){ showToast(t('toast.addAtLeastOneItem')); return; }
+    const id='lst'+Date.now();
+    const jobId=document.getElementById('ls-trabalho').value||null;
+    const prioEl=document.querySelector('#ls-prioridade-picker .priority-opt.on');
+    listasData[id]={ id, titulo, itens, jobId,
+      data:document.getElementById('ls-data').value||null,
+      prioridade: prioEl ? prioEl.dataset.val : null,
+      feito:false, criadoEm:new Date().toISOString() };
+    saveListasData();
+    if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], t('list.historyCreated')+titulo); saveJobsData(); }
+    showToast(t('toast.listPrefix')+titulo+t('toast.createdFemSuffix'));
+    renderMonthTicker();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(jobId && currentJobId===jobId && document.getElementById('detalhe-dynamic').style.display!=='none'){
+      renderJobDetailDynamic(jobId);
+    }
+    closeSheet();
+    limparFormularioLista();
+  }
+  function limparFormularioLista(){
+    ['ls-titulo','ls-data'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    const items=document.getElementById('ls-items'); if(items) items.innerHTML='';
+    const sel=document.getElementById('ls-trabalho'); if(sel) sel.value='';
+    const prioPicker=document.getElementById('ls-prioridade-picker');
+    if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
+  }
+  function abrirNovaLista(){
+    limparFormularioLista();
+    pushPanel('lista');
+  }
+  function toggleListaItem(id, i, el){
+    const ls=listasData[id];
+    if(!ls) return;
+    ls.itens[i].feito=!ls.itens[i].feito;
+    el.classList.toggle('on');
+    saveListasData();
+    abrirDetalheItemSolto('lista', id);
+    if(ls.jobId) renderJobDetailDynamic(ls.jobId);
+  }
+  function excluirLista(id){
+    const ls=listasData[id];
+    const jobId=ls&&ls.jobId;
+    delete listasData[id];
+    saveListasData();
+    closeInfo();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(jobId) renderJobDetailDynamic(jobId);
+    showToast(t('toast.removed'));
+  }
+  /* Detalhe rápido de um lembrete/lista solto — aberto a partir do card do
+     radar de Tarefas (Dashboard) quando não há trabalho pra abrir. */
+  function abrirDetalheItemSolto(tipo, id){
+    if(tipo==='lembrete'){
+      const l=lembretesData[id]; if(!l) return;
+      openInfo(l.titulo,
+        '<p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">'+t('field.date')+': '+l.data.split('-').reverse().join('/')+(l.hora?(' · '+l.hora):'')+'</p>'+
+        (l.notas?('<p style="font-size:13.5px;color:var(--ink-soft);white-space:pre-wrap;margin-bottom:14px">'+escapeHtml(l.notas)+'</p>'):'')+
+        (l.feito?'':'<button class="btn primary" style="width:100%;margin-bottom:8px" onclick="marcarLembreteFeito(\''+id+'\')">'+t('action.complete')+'</button>')+
+        '<button class="btn ghost" style="width:100%" onclick="excluirLembrete(\''+id+'\')">'+t('action.remove')+'</button>');
+    } else if(tipo==='lista'){
+      const ls=listasData[id]; if(!ls) return;
+      const itensHtml=(ls.itens||[]).map((it,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(it.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(it.t)+'</div></div><div class="toggle'+(it.feito?' on':'')+'" onclick="toggleListaItem(\''+id+'\','+i+',this)"><div class="kn"></div></div></div>').join('');
+      openInfo(ls.titulo, itensHtml+
+        '<button class="btn ghost" style="width:100%;margin-top:14px" onclick="excluirLista(\''+id+'\')">'+t('action.remove')+'</button>');
+    }
   }
 
   /* 📥 Importar — conversa / print / pdf */
@@ -11302,7 +11560,7 @@
   }
   const LIMITE_ARMAZENAMENTO_MB={Free:25, Plus:50, Pro:100, Business:500, Enterprise:Infinity};
   async function calcularArmazenamentoUsadoMB(){
-    const chaves=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-custosData',
+    const chaves=['pivot-jobsData','pivot-clientesData','pivot-tarefasData','pivot-lembretesData','pivot-listasData','pivot-custosData',
       'pivot-referenciasData','pivot-modelosUso','pivot-perfilData'];
     let bytes=0;
     for(const chave of chaves){
@@ -11347,7 +11605,7 @@
       <button class="btn soft" style="width:100%;color:var(--ink);border-color:var(--late)" onclick="confirmarApagarDados()">${t('action.deleteAccount')}</button>`);
   }
   function exportarDadosReal(){
-    const pacote={ exportadoEm:new Date().toISOString(), trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, custos:custosData, referencias:referenciasData };
+    const pacote={ exportadoEm:new Date().toISOString(), trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
     const blob=new Blob([JSON.stringify(pacote,null,2)], {type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
@@ -11914,7 +12172,7 @@
        para filtrar a lista de trabalhos assim que ela é renderizada abaixo. */
     await loadEquipaData();
     await Promise.all([
-      loadJobsData(), loadClientesData(), loadTarefasData(), loadCustosData(), loadReceitasData(),
+      loadJobsData(), loadClientesData(), loadTarefasData(), loadLembretesData(), loadListasData(), loadCustosData(), loadReceitasData(),
       loadPerfilData(), loadMetas(),
       loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData(), loadCatalogoPersonalizado()
     ]);
