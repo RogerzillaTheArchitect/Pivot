@@ -7446,7 +7446,7 @@
     const isJob=!!builderContext;
     const locked = isJob && contratoBloqueadoParaEdicao(job);
     document.getElementById('builder-title').textContent= isJob? (t('job.contract')+' — '+job.client) : t('builder.title');
-    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderColabCtx ? (builderModeloOrigem&&builderModeloOrigem.nome||'') : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub')));
+    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderColabCtx ? (builderModeloOrigem&&builderModeloOrigem.nome||'') : (builderModeloOrigem ? (builderModeloOrigem.client ? t('builder.basedOnPrefix')+builderModeloOrigem.client : builderModeloOrigem.nome||t('builder.newTemplateSub')) : t('builder.newTemplateSub')));
     document.getElementById('builder-back-label').textContent= isJob? job.client : (builderColabCtx ? t('collab.contractsSection') : t('nav.jobs'));
     renderBuilderCampos(job, locked);
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
@@ -12441,9 +12441,9 @@
     const langMap = {'Português':'pt','English':'en','Español':'es'};
     const atual = langMap[perfilData.idiomaUI] || 'pt';
     openInfo(t('lang.selector'), `
-      <div class="pick-row${atual==='pt'?' selected':''}" onclick="setIdiomaUI('Português')"><div class="nm">${t('lang.pt')}</div><svg class="pick-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <div class="pick-row${atual==='en'?' selected':''}" onclick="setIdiomaUI('English')"><div class="nm">${t('lang.en')}</div><svg class="pick-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
-      <div class="pick-row${atual==='es'?' selected':''}" onclick="setIdiomaUI('Español')"><div class="nm">${t('lang.es')}</div><svg class="pick-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="pick-row${atual==='pt'?' selected':''}" onclick="setIdiomaUI('Português')"><div class="nm">${t('lang.pt')}</div><svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="pick-row${atual==='en'?' selected':''}" onclick="setIdiomaUI('English')"><div class="nm">${t('lang.en')}</div><svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <div class="pick-row${atual==='es'?' selected':''}" onclick="setIdiomaUI('Español')"><div class="nm">${t('lang.es')}</div><svg class="lang-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg></div>
     `);
   }
   function setIdiomaUI(nome){
