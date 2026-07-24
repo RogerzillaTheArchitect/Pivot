@@ -61,6 +61,17 @@
   .collab-field .v.muted{color:var(--ink-faint);font-style:italic}
   .collab-field select{border:1px solid var(--line);border-radius:var(--r);background:var(--paper-2);
     color:var(--ink);font-family:inherit;font-size:12px;padding:5px 8px;flex:none}
+  /* checklist "quem recebe o contrato" — checkbox de tamanho fixo + texto
+     com grid próprio (nunca quebra feio: email e função truncam com
+     reticências em vez de dividir a palavra no meio). */
+  .collab-select-row{display:flex;align-items:center;gap:12px;padding:12px 14px;
+    border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;cursor:pointer;
+    background:var(--paper-2);transition:border-color .15s}
+  .collab-select-row:hover{border-color:var(--brand)}
+  .collab-select-row input[type="checkbox"]{flex:none;width:18px;height:18px;accent-color:var(--brand);margin:0}
+  .collab-select-row .info{flex:1;min-width:0}
+  .collab-select-row .nm{font-size:14px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .collab-select-row .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .job{transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease;
     background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
     border:1px solid rgba(255,255,255,.09);border-radius:var(--r);padding:15px 16px;

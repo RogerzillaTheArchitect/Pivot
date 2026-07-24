@@ -2135,6 +2135,9 @@
     "email.title.jobCollabAdded": { pt:"Agora você colabora neste trabalho", en:"You're now a collaborator on this job", es:"Ahora colabora en este trabajo" },
     "email.body.jobCollabAdded": { pt:"Foi adicionado como colaborador num trabalho no Pivots. Entre na app para ver os detalhes.", en:"You've been added as a collaborator on a job on Pivots. Open the app to see the details.", es:"Fue añadido como colaborador en un trabajo en Pivots. Entre en la app para ver los detalles." },
     "email.cta.jobCollabAdded": { pt:"Abrir no Pivots", en:"Open Pivots", es:"Abrir Pivots" },
+    "email.title.jobCollabContract": { pt:"Tem um contrato pronto para revisar", en:"You have a contract ready to review", es:"Tiene un contrato listo para revisar" },
+    "email.body.jobCollabContract": { pt:"Preparámos um contrato para a sua colaboração num trabalho no Pivots. Entre na app para revisar e assinar.", en:"We've prepared a contract for your collaboration on a job on Pivots. Open the app to review and sign it.", es:"Preparamos un contrato para su colaboración en un trabajo en Pivots. Entre en la app para revisarlo y firmarlo." },
+    "email.cta.jobCollabContract": { pt:"Rever contrato", en:"Review contract", es:"Revisar contrato" },
     "email.feature.team.title": { pt:"Trabalhe em equipa", en:"Work as a team", es:"Trabaje en equipo" },
     "email.feature.team.desc": { pt:"Colabore com o seu time num só lugar.", en:"Collaborate with your team in one place.", es:"Colabore con su equipo en un solo lugar." },
     "email.feature.projects.title": { pt:"Acesse trabalhos", en:"Access jobs", es:"Acceda a trabajos" },
@@ -3107,7 +3110,8 @@
     "library.pickForCollabMassa": { pt:"Escolha um contrato para aplicar aos colaboradores selecionados.", en:"Choose a contract to apply to the selected collaborators.", es:"Elige un contrato para aplicar a los colaboradores seleccionados." },
     "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
     "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
-    "collab.contractAppliedHint": { pt:"O contrato foi aplicado aos colaboradores selecionados.", en:"The contract was applied to the selected collaborators.", es:"El contrato fue aplicado a los colaboradores seleccionados." },
+    "collab.contractAppliedHint": { pt:"O contrato foi aplicado e um email de aviso foi enviado a cada colaborador selecionado.", en:"The contract was applied and a notification email was sent to each selected collaborator.", es:"El contrato fue aplicado y se envió un email de aviso a cada colaborador seleccionado." },
+    "collab.editContractHint": { pt:"Revise e edite o texto do contrato antes de enviar para os colaboradores.", en:"Review and edit the contract text before sending it to the collaborators.", es:"Revise y edite el texto del contrato antes de enviarlo a los colaboradores." },
     "collab.addAnotherContract": { pt:"Adicionar Outro Contrato", en:"Add Another Contract", es:"Añadir Otro Contrato" },
     "collab.role": { pt:"Função", en:"Role", es:"Función" },
     "collab.noRole": { pt:"Sem função definida", en:"No role defined", es:"Sin función definida" },
@@ -7766,6 +7770,7 @@
     conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted', heroIcon:'hero-check' },
     colaboradorJobConvite:  { badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabInvite', bodyKey:'email.body.jobCollabInvite', ctaKey:'email.cta.jobCollabInvite', features:['team','folder','bell'] },
     colaboradorJobAdicionado:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabAdded',  bodyKey:'email.body.jobCollabAdded',  ctaKey:'email.cta.jobCollabAdded', features:['team','folder','bell'] },
+    colaboradorContratoPronto:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabContract', bodyKey:'email.body.jobCollabContract', ctaKey:'email.cta.jobCollabContract', features:['team','folder','bell'] },
     novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true, heroIcon:'hero-alert' },
     alteracaoCritica:     { badgeKey:'email.badge.criticalChange',       titleKey:'email.title.criticalChange',        bodyKey:'email.body.criticalChange',        ctaKey:'email.cta.criticalChange', alerta:true, heroIcon:'hero-alert' },
     atividadeSuspeita:    { badgeKey:'email.badge.suspiciousActivity',   titleKey:'email.title.suspiciousActivity',    bodyKey:'email.body.suspiciousActivity',    ctaKey:'email.cta.suspiciousActivity', alerta:true, heroIcon:'hero-alert' },
@@ -8276,13 +8281,44 @@
     closeInfo();
     go('bibliotecas');
   }
+  /* Texto final do contrato de colaborador — se já passou pela revisão
+     (abrirRevisarContratoColaborador), usa o texto editado tal e qual;
+     senão (fluxo antigo do __wizard__, sem passo de edição) renderiza a
+     partir dos blocks, como sempre. */
+  function textoDoModeloColaborador(job, modeloOrigem){
+    if(modeloOrigem.textoFinal!=null) return modeloOrigem.textoFinal;
+    return renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks||[]);
+  }
+  let _colabRevisaoCtx=null, _colabRevisaoNome=null;
+  /* Passo de revisão/edição — como em qualquer outro contrato do app, antes
+     de enviar o texto pro colaborador pode-se editar livremente (é só
+     texto simples, sem os blocos/campos dinâmicos do builder do contrato
+     do próprio trabalho, que não se aplicam aqui). */
+  function abrirRevisarContratoColaborador(ctx, modeloOrigem){
+    _colabRevisaoCtx=ctx; _colabRevisaoNome=modeloOrigem.nome||null;
+    const job=jobsData[ctx.jobId]||{};
+    const texto=renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks||[]);
+    openInfo(modeloOrigem.nome||t('collab.contractsSection'), `
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:10px">${t('collab.editContractHint')}</p>
+      <textarea id="colab-contrato-revisao" style="width:100%;min-height:220px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(texto)}</textarea>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarContratoRevisadoColaborador()">${t('wizard.continue')}</button>`);
+  }
+  function confirmarContratoRevisadoColaborador(){
+    const ctx=_colabRevisaoCtx;
+    if(!ctx) return;
+    const texto=document.getElementById('colab-contrato-revisao').value;
+    const modeloFinal={ nome:_colabRevisaoNome, textoFinal:texto };
+    _colabRevisaoCtx=null; _colabRevisaoNome=null;
+    if(ctx.modo==='colaboradorMassa') abrirAplicarContratoMassa(ctx.jobId, modeloFinal);
+    else aplicarContratoEscolhidoAoColaborador(ctx.jobId, modeloFinal);
+  }
   function abrirAplicarContratoMassa(jobId, modeloOrigem){
     modeloEscolhidoParaMassa=modeloOrigem;
     const lista=colaboradoresCache[jobId]||[];
     openInfo(modeloOrigem.nome||t('collab.contractsSection'), `
       <p style="font-size:12.5px;color:var(--neutral);margin-bottom:10px">${t('collab.selectWhoReceives')}</p>
       <div id="bulk-colab-checklist">${lista.map(c=>
-        '<label class="pick-row"><input type="checkbox" class="bulk-colab-check" value="'+c.id+'" style="margin-right:10px"><div><div class="nm">'+escapeHtml(c.email)+'</div>'+(c.funcao?'<div class="sub">'+escapeHtml(c.funcao)+'</div>':'')+'</div></label>'
+        '<label class="collab-select-row"><input type="checkbox" class="bulk-colab-check" value="'+c.id+'"><div class="info"><div class="nm">'+escapeHtml(c.email)+'</div>'+(c.funcao?'<div class="sub">'+escapeHtml(c.funcao)+'</div>':'')+'</div></label>'
       ).join('')}</div>
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="aplicarContratoEmMassa('${jobId}')">${t('collab.apply')}</button>`);
   }
@@ -8290,10 +8326,25 @@
     const ids=[...document.querySelectorAll('.bulk-colab-check:checked')].map(el=>el.value);
     if(!ids.length || !modeloEscolhidoParaMassa){ showToast(t('toast.writePersonName')); return; }
     const job=jobsData[jobId]||{};
-    const texto=renderizarTextoModeloParaColaborador(job, modeloEscolhidoParaMassa.blocks);
+    const texto=textoDoModeloColaborador(job, modeloEscolhidoParaMassa);
     const acordo={ modelo:'biblioteca', nome:modeloEscolhidoParaMassa.nome||null, texto, assinado:false };
     const { error } = await sb.from('external_collaborators').update({acordo, recebe_contrato:true}).in('id', ids);
     if(error){ showToast(t('toast.inviteError')); return; }
+    /* BUG corrigido: aplicar o contrato só atualizava a base — ninguém era
+       avisado de que havia um contrato novo à espera. Agora envia o mesmo
+       email de notificação usado no resto do app (dispararEmailConta),
+       um por colaborador selecionado. */
+    const selecionados=(colaboradoresCache[jobId]||[]).filter(c=>ids.includes(c.id));
+    const jobNome=job.nome||job.typeLabel;
+    const remetente=perfilData.nome||t('defaults.userName');
+    const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+    const remetenteFoto=(perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+    selecionados.forEach(c=>{
+      const ctaUrl = c.token ? (window.location.origin+'/?colab='+c.token) : window.location.origin;
+      dispararEmailConta('colaboradorContratoPronto', c.email, { nome:c.email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> preparou um contrato para a sua colaboração em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+    });
     modeloEscolhidoParaMassa=null;
     await carregarColaboradoresJob(jobId);
     closeInfo();
@@ -8493,7 +8544,7 @@
   }
   function aplicarContratoEscolhidoAoColaborador(jobId, modeloOrigem){
     const job=jobsData[jobId] || {};
-    colabExternoAcordo = { modelo:'biblioteca', nome:modeloOrigem.nome||null, texto: renderizarTextoModeloParaColaborador(job, modeloOrigem.blocks), assinado:false };
+    colabExternoAcordo = { modelo:'biblioteca', nome:modeloOrigem.nome||null, texto: textoDoModeloColaborador(job, modeloOrigem), assinado:false };
     abrirConfigurarColaboradorExterno(jobId);
   }
   async function convidarColaboradorExterno(jobId){
@@ -10059,8 +10110,7 @@
     const blocks=await blocosParaModeloBiblioteca(m, lang, valores);
     const modeloOrigem={ client:job.client||'', nome, blocks, fieldValues:valores };
     go('detalhe');
-    if(ctx.modo==='colaboradorMassa') abrirAplicarContratoMassa(ctx.jobId, modeloOrigem);
-    else aplicarContratoEscolhidoAoColaborador(ctx.jobId, modeloOrigem);
+    abrirRevisarContratoColaborador(ctx, modeloOrigem);
   }
   function abrirListaModelo(tipo){
     modeloListType=tipo;
