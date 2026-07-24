@@ -1377,7 +1377,7 @@
     return data;
   }
   let ppToken=null, ppJob=null, ppJobId=null, ppExpiresAt=null, ppCodigo=null;
-  let colabToken=null, colabData=null;
+  let colabToken=null, colabData=null, colabCodigo=null;
   /* convite de equipa: o link gerado por api/team/invite.js aponta para
      APP_URL+"?convite=1" — a própria Supabase já autentica a pessoa ao seguir
      o link (isso serve de verificação do email), mas falta definir nome e
@@ -1397,8 +1397,31 @@
     document.getElementById('landing-page').style.display='none';
     document.querySelector('.shell').style.display='none';
     document.getElementById('colab-publico').style.display='block';
-    const { data, error } = await sb.rpc('colab_get', { p_token: colabToken });
+    const { data, error } = await sb.rpc('colab_get', { p_token: colabToken, p_codigo: colabCodigo||null });
     if (error || !data){ renderColabPublicoEstado('<h3>Link inválido</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link não é válido ou já não existe.</p>'); return; }
+    if (data.needsCode){ renderColabCodigoAcessoForm(); return; }
+    colabData = data;
+    renderColabPublicoPrincipal();
+  }
+  /* Igual ao código de acesso do portal do cliente (ver renderPortalCodigoAcessoForm) —
+     o link sozinho não basta quando não há conta Pivots por trás. */
+  function renderColabCodigoAcessoForm(){
+    renderColabPublicoEstado(`
+      <h3 style="margin:0 0 6px">${t('portal.codeTitle')}</h3>
+      <p style="color:var(--ink-soft);font-size:13.5px;margin:0 0 16px">${t('portal.codeHint')}</p>
+      <div class="field"><input id="colab-codigo-input" inputmode="numeric" maxlength="6" placeholder="000000" style="letter-spacing:4px;font-size:18px;text-align:center"></div>
+      <p id="colab-codigo-erro" style="color:#B23A2E;font-size:12.5px;display:none;margin:4px 2px 0">${t('portal.codeWrong')}</p>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarCodigoAcessoColab()">${t('portal.codeConfirm')}</button>`);
+    setTimeout(()=>{ const el=document.getElementById('colab-codigo-input'); if(el) el.focus(); }, 60);
+  }
+  async function confirmarCodigoAcessoColab(){
+    const codigo=(document.getElementById('colab-codigo-input').value||'').trim();
+    const { data, error } = await sb.rpc('colab_get', { p_token: colabToken, p_codigo: codigo });
+    if (error || !data || data.needsCode){
+      const erro=document.getElementById('colab-codigo-erro'); if(erro) erro.style.display='block';
+      return;
+    }
+    colabCodigo=codigo;
     colabData = data;
     renderColabPublicoPrincipal();
   }
@@ -1447,7 +1470,7 @@
     const signatureImg=canvas.toDataURL('image/png');
     const { data, error } = await sb.rpc('colab_sign_agreement', { p_token: colabToken, p_signer_name: nome, p_signature_data_url: signatureImg });
     if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
-    const r = await sb.rpc('colab_get', { p_token: colabToken });
+    const r = await sb.rpc('colab_get', { p_token: colabToken, p_codigo: colabCodigo||null });
     if (r.data) colabData = r.data;
     renderColabPublicoPrincipal();
   }
@@ -1458,7 +1481,7 @@
     const entrega={ link, notas, enviadoEm:new Date().toISOString() };
     const { data, error } = await sb.rpc('colab_submit_delivery', { p_token: colabToken, p_entrega: entrega });
     if (error || !data || !data.ok){ showToast(t('toast.inviteError')); return; }
-    const r = await sb.rpc('colab_get', { p_token: colabToken });
+    const r = await sb.rpc('colab_get', { p_token: colabToken, p_codigo: colabCodigo||null });
     if (r.data) colabData = r.data;
     showToast(t('collab.deliverySent'));
     document.getElementById('colab-entrega-link').value='';
@@ -2132,9 +2155,9 @@
     "email.title.jobCollabInvite": { pt:"Convidaram-no para colaborar num trabalho", en:"You've been invited to collaborate on a job", es:"Le invitaron a colaborar en un trabajo" },
     "email.body.jobCollabInvite": { pt:"Foi convidado a colaborar num trabalho no Pivots. Aceite o convite para aceder aos detalhes.", en:"You've been invited to collaborate on a job on Pivots. Accept the invite to see the details.", es:"Fue invitado a colaborar en un trabajo en Pivots. Acepte la invitación para ver los detalles." },
     "email.cta.jobCollabInvite": { pt:"Aceitar convite", en:"Accept invite", es:"Aceptar invitación" },
-    "email.title.jobCollabAdded": { pt:"Agora você colabora neste trabalho", en:"You're now a collaborator on this job", es:"Ahora colabora en este trabajo" },
-    "email.body.jobCollabAdded": { pt:"Foi adicionado como colaborador num trabalho no Pivots. Entre na app para ver os detalhes.", en:"You've been added as a collaborator on a job on Pivots. Open the app to see the details.", es:"Fue añadido como colaborador en un trabajo en Pivots. Entre en la app para ver los detalles." },
-    "email.cta.jobCollabAdded": { pt:"Abrir no Pivots", en:"Open Pivots", es:"Abrir Pivots" },
+    "email.title.jobCollabAdded": { pt:"Tem um convite de colaboração pendente", en:"You have a pending collaboration invite", es:"Tiene una invitación de colaboración pendiente" },
+    "email.body.jobCollabAdded": { pt:"Foi convidado como colaborador num trabalho no Pivots. Entre na app com a sua conta para aceitar o convite.", en:"You've been invited as a collaborator on a job on Pivots. Log into the app with your account to accept the invite.", es:"Fue invitado como colaborador en un trabajo en Pivots. Entre en la app con su cuenta para aceptar la invitación." },
+    "email.cta.jobCollabAdded": { pt:"Ver convite", en:"View invite", es:"Ver invitación" },
     "email.title.jobCollabContract": { pt:"Tem um contrato pronto para revisar", en:"You have a contract ready to review", es:"Tiene un contrato listo para revisar" },
     "email.body.jobCollabContract": { pt:"Preparámos um contrato para a sua colaboração num trabalho no Pivots. Entre na app para revisar e assinar.", en:"We've prepared a contract for your collaboration on a job on Pivots. Open the app to review and sign it.", es:"Preparamos un contrato para su colaboración en un trabajo en Pivots. Entre en la app para revisarlo y firmarlo." },
     "email.cta.jobCollabContract": { pt:"Rever contrato", en:"Review contract", es:"Revisar contrato" },
@@ -3139,6 +3162,7 @@
     "collab.addNew": { pt:"Adicionar novo colaborador", en:"Add new collaborator", es:"Añadir nuevo colaborador" },
     "collab.startTyping": { pt:"Digite pelo menos 3 letras para ver sugestões, ou digite um email completo para adicionar alguém novo.", en:"Type at least 3 letters to see suggestions, or type a full email to add someone new.", es:"Escribe al menos 3 letras para ver sugerencias, o escribe un email completo para añadir a alguien nuevo." },
     "collab.linkHint": { pt:"Esta pessoa ainda não tem conta no Pivots. Envie este link e ela acessa direto, sem precisar se cadastrar.", en:"This person doesn't have a Pivots account yet. Send them this link so they get direct access, no sign-up needed.", es:"Esta persona aún no tiene cuenta en Pivots. Envíale este enlace y accede directamente, sin necesidad de registrarse." },
+    "collab.codeHintOwner": { pt:"O código de acesso {codigo} já foi enviado por email a esta pessoa — só é pedido uma vez, junto com o link.", en:"The access code {codigo} was already emailed to this person — it's only asked for once, together with the link.", es:"El código de acceso {codigo} ya fue enviado por email a esta persona — solo se pide una vez, junto con el enlace." },
     "action.copyLink": { pt:"Copiar link", en:"Copy link", es:"Copiar enlace" },
     "collab.permissionsTitle": { pt:"O que pode ver", en:"What they can see", es:"Qué puede ver" },
     "collab.perm.briefing": { pt:"Briefing", en:"Briefing", es:"Briefing" },
@@ -3184,6 +3208,11 @@
     "collab.agreementPending": { pt:"Pendente", en:"Pending", es:"Pendiente" },
     "collab.contractStatus": { pt:"Status do contrato", en:"Contract status", es:"Estado del contrato" },
     "collab.noneAssigned": { pt:"Ainda não fazes parte de nenhuma colaboração externa.", en:"You're not part of any external collaboration yet.", es:"Aún no formas parte de ninguna colaboración externa." },
+    "collab.pendingTag": { pt:"Convite pendente", en:"Pending invite", es:"Invitación pendiente" },
+    "collab.accept": { pt:"Aceitar", en:"Accept", es:"Aceptar" },
+    "collab.decline": { pt:"Recusar", en:"Decline", es:"Rechazar" },
+    "collab.acceptedToast": { pt:"Convite aceite.", en:"Invite accepted.", es:"Invitación aceptada." },
+    "collab.declinedToast": { pt:"Convite recusado.", en:"Invite declined.", es:"Invitación rechazada." },
     "collab.agreementTitle": { pt:"Acordo de Colaboração", en:"Collaboration Agreement", es:"Acuerdo de Colaboración" },
     "collab.signAndAccess": { pt:"Assinar e aceder", en:"Sign and access", es:"Firmar y acceder" },
     "collab.deliveries": { pt:"Entregas", en:"Deliveries", es:"Entregas" },
@@ -5474,14 +5503,15 @@
     const contrato = p.permissoes.contrato ? {status:job.contract.status} : null;
     const financeiro = p.permissoes.financeiro ? {value:job.value, payments:[]} : null;
     const semConta = !p.userId;
-    const token = semConta ? (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'') : null;
+    const token = semConta ? gerarTokenColaborador() : null;
+    const codigo = semConta ? gerarCodigoAcessoPortal() : null;
     const row={
       workspace_id: currentWorkspaceId, job_id: job.id, user_id: p.userId, email: p.email, token,
       nivel_acesso: p.nivel_acesso, permissoes: p.permissoes, funcao: p.funcao||null, recebe_contrato: !!(p.acordo && p.acordo.texto),
       escopo: { briefing, datas, contrato, financeiro, horasPrevistas: job.duracaoHoras||null,
         checklist: job.checklist?job.checklist.itens.map(c=>({t:c.t,feito:false})):[], tarefas:[], documentos:[],
-        jobNome: job.nome||job.typeLabel, jobCliente: job.client },
-      acordo: p.acordo, entregas: [], status: semConta?'convidado':'ativo'
+        jobNome: job.nome||job.typeLabel, jobCliente: job.client, codigoAcesso: codigo },
+      acordo: p.acordo, entregas: [], status:'convidado'
     };
     const { error } = await sb.from('external_collaborators').insert(row);
     if(error){ console.error('Erro ao convidar colaborador externo:', error); return; }
@@ -5489,16 +5519,7 @@
     const remetente = perfilData.nome||t('defaults.userName');
     const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
     const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
-    if(semConta){
-      const link=window.location.origin+'/?colab='+token;
-      dispararEmailConta('colaboradorJobConvite', p.email, { nome:p.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
-    } else {
-      dispararEmailConta('colaboradorJobAdicionado', p.email, { nome:p.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
-    }
+    await enviarEmailConviteColaborador({semConta, email:p.email, jobNome, remetente, remetenteAvatarCor, remetenteIniciais, remetenteFoto, token, codigo});
   }
   function gerarDatasEventoICS(job){
     if(!job.dateRaw) return null;
@@ -7789,7 +7810,7 @@
     assinaturaCancelada:  { badgeKey:'email.badge.subscriptionCancelled', titleKey:'email.title.subscriptionCancelled', bodyKey:'email.body.subscriptionCancelled', ctaKey:'email.cta.subscriptionCancelled', heroIcon:'hero-folder' },
     conviteEquipe:        { badgeKey:'email.badge.teamInvite',           titleKey:'email.title.teamInvite',            bodyKey:'email.body.teamInvite',            ctaKey:'email.cta.teamInvite', features:['team','folder','bell'] },
     conviteAceito:        { badgeKey:'email.badge.inviteAccepted',       titleKey:'email.title.inviteAccepted',        bodyKey:'email.body.inviteAccepted',        ctaKey:'email.cta.inviteAccepted', heroIcon:'hero-check' },
-    colaboradorJobConvite:  { badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabInvite', bodyKey:'email.body.jobCollabInvite', ctaKey:'email.cta.jobCollabInvite', features:['team','folder','bell'] },
+    colaboradorJobConvite:  { badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabInvite', bodyKey:'email.body.jobCollabInvite', ctaKey:'email.cta.jobCollabInvite', codigo:true, features:['team','folder','bell'] },
     colaboradorJobAdicionado:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabAdded',  bodyKey:'email.body.jobCollabAdded',  ctaKey:'email.cta.jobCollabAdded', features:['team','folder','bell'] },
     colaboradorContratoPronto:{ badgeKey:'email.badge.jobCollab', titleKey:'email.title.jobCollabContract', bodyKey:'email.body.jobCollabContract', ctaKey:'email.cta.jobCollabContract', features:['team','folder','bell'] },
     novoLogin:            { badgeKey:'email.badge.newLogin',             titleKey:'email.title.newLogin',              bodyKey:'email.body.newLogin',              ctaKey:'email.cta.newLogin', alerta:true, heroIcon:'hero-alert' },
@@ -8572,12 +8593,16 @@
     if(!permissoes.arquivos) escopo.documentos=[];
     if(!permissoes.horas) escopo.horasPrevistas=null;
     const semConta = !u.userId;
-    const token = semConta ? (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,'') : null;
+    const token = semConta ? gerarTokenColaborador() : null;
+    const codigo = semConta ? gerarCodigoAcessoPortal() : null;
     const row={
       workspace_id: currentWorkspaceId, job_id: jobId, user_id: u.userId, email: u.email, token,
       nivel_acesso: colabExternoNivel, permissoes, funcao, recebe_contrato: !!(colabExternoAcordo && colabExternoAcordo.texto),
-      escopo: Object.assign({}, escopo, {briefing, datas, contrato, financeiro, jobNome: job.nome||job.typeLabel, jobCliente: job.client}),
-      acordo: colabExternoAcordo, entregas: [], status: semConta?'convidado':'ativo'
+      escopo: Object.assign({}, escopo, {briefing, datas, contrato, financeiro, jobNome: job.nome||job.typeLabel, jobCliente: job.client, codigoAcesso: codigo}),
+      /* Sempre 'convidado' — mesmo já tendo conta Pivots, a pessoa só passa a
+         ver o trabalho depois de aceitar o convite (ver aceitarColaboracaoExterna),
+         nunca automaticamente. */
+      acordo: colabExternoAcordo, entregas: [], status:'convidado'
     };
     const { error } = await sb.from('external_collaborators').insert(row);
     if(error){ console.error(error); showToast(t('toast.inviteError')); return; }
@@ -8586,36 +8611,48 @@
     await carregarColaboradoresJob(jobId);
     const jobNome = job.nome||job.typeLabel;
     const remetente = perfilData.nome||t('defaults.userName');
-    /* Antes estes dois avisos iam por enviarEmailColaborador() com HTML cru
-       (uns <p> soltos, sem marca nem botão) — pareciam spam. Agora usam o
-       mesmo sistema de templates dos outros emails de conta (Pivots, badge,
-       botão de ação), com o trabalho e quem convidou nos detalhes. */
     const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
-    // perfilData.fotoUrl só é usado se for um URL real (enviarImagemParaStorage);
-    // contas antigas que ainda tenham um data URI guardado caem para iniciais.
     const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+    await enviarEmailConviteColaborador({semConta, email:u.email, jobNome, remetente, remetenteAvatarCor, remetenteIniciais, remetenteFoto, token, codigo});
     if(semConta){
       const link=window.location.origin+'/?colab='+token;
-      dispararEmailConta('colaboradorJobConvite', u.email, { nome:u.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
       openInfo(t('collab.invited'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:12px">${t('collab.emailSent')}</p>
         <div class="field"><label>${t('collab.linkHint')}</label><input readonly value="${escapeHtml(link)}" onclick="this.select()"></div>
+        <p style="font-size:12.5px;color:var(--neutral);margin-top:10px">${t('collab.codeHintOwner').replace('{codigo}', codigo)}</p>
         <button class="btn primary" style="width:100%;margin-top:10px" onclick="navigator.clipboard.writeText('${link}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>`);
     } else {
-      dispararEmailConta('colaboradorJobAdicionado', u.email, { nome:u.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> adicionou-o(a) como colaborador em <b>"'+escapeHtml(jobNome)+'"</b>.' }, true);
       showToast(t('collab.notifiedInApp'));
     }
   }
+  function gerarTokenColaborador(){ return (crypto.randomUUID?crypto.randomUUID():Math.random().toString(36)).replace(/-/g,''); }
+  /* Convite de colaborador — dois caminhos: quem já tem conta Pivots recebe
+     um convite para aceitar dentro da app (ver aceitarColaboracaoExterna);
+     quem não tem recebe um link de portal (?colab=token) + um código de
+     acesso de 6 dígitos por email, igual ao portal do cliente — sem o
+     código, o link sozinho não mostra nada (ver colab_get no Supabase). */
+  async function enviarEmailConviteColaborador({semConta, email, jobNome, remetente, remetenteAvatarCor, remetenteIniciais, remetenteFoto, token, codigo}){
+    if(semConta){
+      const link=window.location.origin+'/?colab='+token;
+      await dispararEmailConta('colaboradorJobConvite', email, { nome:email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link, codigo,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+    } else {
+      await dispararEmailConta('colaboradorJobAdicionado', email, { nome:email,
+        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
+        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) para colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots. Entre na app com a sua conta para aceitar.' }, true);
+    }
+  }
 
-  /* ===== Área do próprio colaborador externo ===== */
+  /* ===== Área do próprio colaborador externo =====
+     Quem já tem conta Pivots nunca entra automaticamente num trabalho —
+     fica em status 'convidado' até aceitar aqui (aceitarColaboracaoExterna),
+     tal como quem não tem conta só entra depois de confirmar o código de
+     acesso no portal público (?colab=token). */
   let minhasColaboracoesExternas=[];
   async function carregarMinhasColaboracoes(){
     if(!currentUser) return;
-    const { data, error } = await sb.from('external_collaborators').select('*').eq('user_id', currentUser.id).eq('status','ativo');
+    const { data, error } = await sb.from('external_collaborators').select('*').eq('user_id', currentUser.id).in('status',['ativo','convidado']);
     minhasColaboracoesExternas = error ? [] : (data||[]);
     const navItem=document.getElementById('sb-item-colaboracoes');
     if(navItem) navItem.style.display = minhasColaboracoesExternas.length ? 'flex' : 'none';
@@ -8623,13 +8660,36 @@
   function renderColaboracoesView(){
     const wrap=document.getElementById('colaboracoes-lista');
     if(!wrap) return;
-    wrap.innerHTML = minhasColaboracoesExternas.length ? minhasColaboracoesExternas.map(c=>
-      '<div class="job" onclick="abrirColaboracaoExterna(\''+c.id+'\')"><div class="job-top"><div><div class="job-client">'+escapeHtml((c.escopo&&c.escopo.jobCliente)||'')+'</div><div class="job-type">'+escapeHtml((c.escopo&&c.escopo.jobNome)||'')+' · '+papelNomeColaborador(c.nivel_acesso)+'</div></div></div></div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.noneAssigned')+'</p>';
+    wrap.innerHTML = minhasColaboracoesExternas.length ? minhasColaboracoesExternas.map(c=>{
+      const pendente = c.status==='convidado';
+      const info = '<div><div class="job-client">'+escapeHtml((c.escopo&&c.escopo.jobCliente)||'')+'</div><div class="job-type">'+escapeHtml((c.escopo&&c.escopo.jobNome)||'')+' · '+papelNomeColaborador(c.nivel_acesso)+'</div></div>';
+      if(pendente){
+        return '<div class="job"><div class="job-top">'+info+'<span class="collab-pending-tag">'+t('collab.pendingTag')+'</span></div>'+
+          '<div style="display:flex;gap:8px;margin-top:10px">'+
+          '<button class="btn primary" style="flex:1" onclick="event.stopPropagation();aceitarColaboracaoExterna(\''+c.id+'\')">'+t('collab.accept')+'</button>'+
+          '<button class="btn ghost" style="flex:1" onclick="event.stopPropagation();recusarColaboracaoExterna(\''+c.id+'\')">'+t('collab.decline')+'</button>'+
+          '</div></div>';
+      }
+      return '<div class="job" onclick="abrirColaboracaoExterna(\''+c.id+'\')"><div class="job-top">'+info+'</div></div>';
+    }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.noneAssigned')+'</p>';
+  }
+  async function aceitarColaboracaoExterna(id){
+    const { error } = await sb.from('external_collaborators').update({status:'ativo'}).eq('id',id);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    showToast(t('collab.acceptedToast'));
+    await carregarMinhasColaboracoes();
+    renderColaboracoesView();
+  }
+  async function recusarColaboracaoExterna(id){
+    const { error } = await sb.from('external_collaborators').update({status:'removido'}).eq('id',id);
+    if(error){ showToast(t('toast.inviteError')); return; }
+    showToast(t('collab.declinedToast'));
+    await carregarMinhasColaboracoes();
+    renderColaboracoesView();
   }
   function abrirColaboracaoExterna(id){
     const c=minhasColaboracoesExternas.find(x=>x.id===id);
-    if(!c) return;
+    if(!c || c.status!=='ativo') return;
     if(c.acordo && c.acordo.modelo && !c.acordo.assinado){ renderAssinarAcordoColaboracao(c); return; }
     renderDetalheColaboracaoExterna(c);
   }
