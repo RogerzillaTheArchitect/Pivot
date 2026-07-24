@@ -40,6 +40,11 @@
   .clause-n{flex:none;width:20px;height:20px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
     font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
+     só esta ocorrência ou todas as ocorrências da mesma tag no contrato. */
+  .dynf-tag{display:inline;padding:1px 5px;border-radius:3px;background:rgba(232,118,58,.18);
+    border:1px solid rgba(232,118,58,.4);color:var(--ink);font-weight:600;cursor:pointer;white-space:normal}
+  .dynf-tag:hover{background:rgba(232,118,58,.28)}
   .clause-edit{flex:1;min-width:0}
   .block-actions{display:flex;flex-direction:column;align-items:center;gap:9px;flex:none;padding-top:1px}
   .icon-sm{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper);
@@ -74,15 +79,19 @@
   .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
   .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
   .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
-  /* Caixa em destaque laranja — clicar leva ao ponto do contrato onde o
-     campo aparece e depois abre o popup de edição (abrirCampoDinamicoComContexto). */
-  .dynf-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px;
-    padding:9px 11px;border-radius:var(--r);cursor:pointer;background:rgba(232,118,58,.10);border:1px solid rgba(232,118,58,.35);
-    transition:background .15s,border-color .15s}
-  .dynf-row:hover{background:rgba(232,118,58,.16);border-color:rgba(232,118,58,.5)}
-  .dynf-key{font-size:12.5px;font-weight:600;color:var(--ink-soft);white-space:normal;overflow-wrap:break-word;line-height:1.25}
-  .dynf-val{font-size:13px;font-weight:600;color:var(--ink);text-align:right;white-space:normal;overflow-wrap:break-word;line-height:1.25}
-  .dynf-val.empty{color:var(--ink-faint);font-weight:500;font-style:italic}
+  .dynf-row{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
+  /* Nome do campo (lado esquerdo) é clicável — leva até a cláusula onde ele
+     aparece no contrato (localizarCampoNoBuilder), pra ver o contexto antes
+     de editar o valor no input ao lado. */
+  .dynf-key{min-height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
+    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--r);padding:8px 10px;
+    white-space:normal;overflow-wrap:break-word;line-height:1.25;cursor:pointer}
+  .dynf-key:hover{border-color:var(--ink-soft);color:var(--ink)}
+  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
+  .dynf-input{width:100%;min-height:38px;font-family:inherit;font-size:13px;color:var(--ink);
+    background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:0 11px;outline:none;box-sizing:border-box}
+  .dynf-input:focus{border-color:var(--ink-soft)}
+  .dynf-input::placeholder{color:var(--ink-faint)}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
