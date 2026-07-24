@@ -87,7 +87,10 @@
      Mesmo material do Header com um tint de pigmento por tipo — pequenas
      diferenças de material, não gradientes fortes; sem glow, sem borda
      iluminada. */
-  .bib-seals{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  /* 2x2 em vez de 4 colunas na mesma linha — a 1fr/4 não tinha espaço pra
+     palavras inteiras como "Recomendados"/"Comunidade", que ficavam cortadas
+     em reticências. */
+  .bib-seals{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
   .bib-seal{height:36px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:0 8px;border-radius:var(--r);
     cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
@@ -200,8 +203,16 @@
   .sheet-primary .s{font-size:12.5px;opacity:.65}
   .sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   [data-panel="home"] .sheet-grid{grid-template-columns:repeat(3,1fr)}
-  .sheet-item{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px;border:1px solid var(--line);
-    border-radius:var(--r);cursor:pointer;background:var(--paper)}
+  /* Mesmo vidro escuro premium dos outros cards do app (.job/.card/.btn.dark)
+     — antes era um preenchimento chapado (var(--paper), sem gradiente/blur),
+     o que destoava do resto da interface. */
+  .sheet-item{display:flex;flex-direction:column;align-items:flex-start;gap:9px;padding:14px;
+    border:1px solid rgba(255,255,255,.10);border-radius:var(--r);cursor:pointer;
+    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
+    box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05);
+    transition:background .15s,border-color .15s}
+  .sheet-item:hover{background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,0) 45%),rgba(14,13,12,.16);border-color:rgba(255,255,255,.16)}
   .sheet-item svg{width:18px;height:18px;color:var(--ink-soft)}
-  .sheet-item span{font-size:13.5px;font-weight:500}
+  .sheet-item span{font-size:13.5px;font-weight:500;line-height:1.3}
 
