@@ -2046,11 +2046,10 @@
     "builder.legendToggle": { pt:"Inclua ou remova", en:"Include or remove", es:"Incluye o elimina" },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
     "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
-    "builder.dynFieldsHint": { pt:"Toque num campo para ver onde aparece no contrato e editar o valor.", en:"Tap a field to see where it appears in the contract and edit its value.", es:"Toca un campo para ver dónde aparece en el contrato y editar el valor." },
+    "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato. Toque no nome do campo para ver onde ele aparece.", en:"Replace a value and it applies across the whole contract. Tap the field name to see where it appears.", es:"Sustituye un valor y se aplica en todo el contrato. Toca el nombre del campo para ver dónde aparece." },
     "builder.dynFieldPlaceholder": { pt:"Substituir…", en:"Replace…", es:"Sustituir…" },
-    "builder.dynFieldEmpty": { pt:"Por preencher", en:"Not filled in", es:"Sin completar" },
     "builder.dynFieldApply": { pt:"Aplicar", en:"Apply", es:"Aplicar" },
-    "builder.dynFieldApplyAll": { pt:"Aplicar a todos os campos iguais", en:"Apply to all matching fields", es:"Aplicar a todos los campos iguales" },
+    "builder.dynFieldApplyAll": { pt:"Aplicar a todos", en:"Apply to all", es:"Aplicar a todos" },
     "builder.title": { pt:"Editor de Modelo", en:"Template Editor", es:"Editor de Modelo" },
     "builder.newTemplateSub": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
     "builder.basedOnPrefix": { pt:"Baseado em: ", en:"Based on: ", es:"Basado en: " },
@@ -7451,7 +7450,7 @@
     document.getElementById('builder-back-label').textContent= isJob? job.client : (builderColabCtx ? t('collab.contractsSection') : t('nav.jobs'));
     renderBuilderCampos(job, locked);
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
-    document.getElementById('addblock-btn').style.display= isJob ? 'none' : 'flex';
+    document.getElementById('addblock-btn').style.display= locked ? 'none' : 'flex';
     const saveTplBtn=document.getElementById('save-tpl-btn');
     saveTplBtn.style.display= locked ? 'none' : 'block';
     saveTplBtn.textContent= builderColabCtx ? t('wizard.continue') : t('action.save');
@@ -7466,17 +7465,98 @@
     const arr=txt.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
     return arr.length?arr:[txt];
   }
+  /* Renderiza o texto de UMA cláusula (a partir do tpl, que ainda tem os
+     [PLACEHOLDERS]) destacando cada campo dinâmico como uma tag clicável —
+     mostra o valor já preenchido (ou o nome do campo entre colchetes, se
+     vazio) e abre o popup Aplicar/Aplicar a Todos ao tocar. Escapa o resto
+     do texto manualmente porque só os trechos que caem fora dos
+     placeholders vêm direto da string crua do contrato. */
+  function clauseTextComTagsHtml(bid, clauseIdx, tplTexto){
+    const re=/\[([A-Z0-9_]+)\]/g;
+    const fv=getBuilderFieldValues();
+    const contadores={};
+    let out=''; let lastIndex=0; let m;
+    while((m=re.exec(tplTexto))){
+      out += escapeHtml(tplTexto.slice(lastIndex, m.index));
+      const campo=m[1];
+      const ocorrencia = contadores[campo]==null ? 0 : contadores[campo];
+      contadores[campo]=ocorrencia+1;
+      const valor = fv[campo];
+      const texto = valor!=null ? escapeHtml(valor) : '['+escapeHtml(dynFieldLabel(campo))+']';
+      out += '<span class="dynf-tag" onclick="event.stopPropagation();abrirPopupOcorrenciaCampo(\''+bid+'\','+clauseIdx+',\''+campo+'\','+ocorrencia+')">'+texto+'</span>';
+      lastIndex=re.lastIndex;
+    }
+    out += escapeHtml(tplTexto.slice(lastIndex));
+    return out;
+  }
   function clauseListInnerHtml(job,b,editavel){
-    return blocoClausulas(job,b).map((txt,idx)=>
+    const clausesTxt=blocoClausulas(job,b);
+    const clausesTpl = b.tpl!=null ? b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean) : null;
+    const usarTags = clausesTpl && clausesTpl.length===clausesTxt.length;
+    return clausesTxt.map((txt,idx)=>
       '<div class="clause" id="cl-'+b.id+'-'+idx+'"'+(editavel?' onclick="editarClausula(\''+b.id+'\','+idx+')"':'')+'>'+
         '<span class="clause-n">'+(idx+1)+'</span>'+
-        '<div class="clause-txt">'+escapeHtml(txt)+'</div>'+
+        '<div class="clause-txt">'+(usarTags ? clauseTextComTagsHtml(b.id, idx, clausesTpl[idx]) : escapeHtml(txt))+'</div>'+
       '</div>'
     ).join('');
   }
+  /* Popup de edição de UMA ocorrência de campo dinâmico dentro do texto —
+     "Aplicar" muda só esta ocorrência (congela o valor nesse ponto exato do
+     tpl, independente do resto); "Aplicar a Todos" usa o mesmo mecanismo
+     global já existente (setBuilderCampo), que já resolve todas as
+     ocorrências dessa tag em todos os blocos do contrato. */
+  function abrirPopupOcorrenciaCampo(bid, clauseIdx, campo, ocorrencia){
+    const fv=getBuilderFieldValues();
+    const valorAtual=fv[campo]||'';
+    const html='<div class="field"><input id="dynf-tag-input" value="'+escapeHtml(valorAtual)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" autocomplete="off"></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="aplicarPopupOcorrenciaCampo(\''+bid+'\','+clauseIdx+',\''+campo+'\','+ocorrencia+',false)">'+t('builder.dynFieldApply')+'</button>'+
+      '<button class="btn soft" style="width:100%;margin-top:8px" onclick="aplicarPopupOcorrenciaCampo(\''+bid+'\','+clauseIdx+',\''+campo+'\','+ocorrencia+',true)">'+t('builder.dynFieldApplyAll')+'</button>';
+    openInfo(dynFieldLabel(campo), html);
+    setTimeout(()=>{ const el=document.getElementById('dynf-tag-input'); if(el){ el.focus(); el.select(); } },0);
+  }
+  function aplicarPopupOcorrenciaCampo(bid, clauseIdx, campo, ocorrencia, todasOcorrencias){
+    const valor=document.getElementById('dynf-tag-input').value||'';
+    if(todasOcorrencias){
+      setBuilderCampo(campo, valor);
+      closeInfo();
+      renderBuilderCampos(getBuilderJob(), false);
+    } else {
+      aplicarValorOcorrencia(bid, clauseIdx, campo, ocorrencia, valor);
+    }
+  }
+  /* "Congela" só esta ocorrência do campo: substitui o [PLACEHOLDER] exato
+     (contando ocorrências dentro da própria cláusula) pelo valor literal no
+     tpl do bloco — as demais ocorrências da mesma tag, neste ou noutros
+     blocos, continuam ligadas ao valor global e não são afetadas. */
+  function aplicarValorOcorrencia(bid, clauseIdx, campo, ocorrencia, valor){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b || b.tpl==null) return;
+    const partes=b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+    const alvo=partes[clauseIdx];
+    if(alvo==null) return;
+    const marcador='['+campo+']';
+    let idx=-1, count=-1, searchFrom=0;
+    while(true){
+      idx=alvo.indexOf(marcador, searchFrom);
+      if(idx===-1) break;
+      count++;
+      if(count===ocorrencia) break;
+      searchFrom=idx+marcador.length;
+    }
+    if(idx===-1) return;
+    partes[clauseIdx] = alvo.slice(0,idx) + valor + alvo.slice(idx+marcador.length);
+    b.tpl = partes.join('\n\n');
+    const fv=getBuilderFieldValues();
+    b.customText = LegalLibrary.resolveClauseText(b.tpl, fv);
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    closeInfo();
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    renderBuilderCampos(job, builderContext && contratoBloqueadoParaEdicao(job));
+  }
   function blockCardHtml(job,b,locked){
     const editavel = !locked && !(builderContext && contratoBloqueadoParaEdicao(job));
-    const addBtn = (!locked && !builderContext) ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '';
+    const addBtn = !locked ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '';
     return '<div class="block'+(b.on?'':' off')+(locked?' locked':'')+'" data-bid="'+b.id+'">'+
       (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
       '<div class="block-main"><div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
@@ -7558,6 +7638,7 @@
     const campos=builderCamposDinamicos(job);
     if(!campos.length || locked){ wrap.style.display='none'; wrap.innerHTML=''; return; }
     const fv=getBuilderFieldValues();
+    const seta='<svg class="dynf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
     wrap.style.display='block';
     wrap.innerHTML=
       '<div class="dynf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'+
@@ -7565,21 +7646,15 @@
       '<div class="dynf-hint">'+t('builder.dynFieldsHint')+'</div>'+
       campos.map(c=>{
         const val=fv[c]!=null?fv[c]:'';
-        return '<div class="dynf-row" onclick="abrirCampoDinamicoComContexto(\''+c+'\')">'+
-          '<span class="dynf-key">'+escapeHtml(dynFieldLabel(c))+'</span>'+
-          '<span class="dynf-val'+(val?'':' empty')+'">'+(val?escapeHtml(val):t('builder.dynFieldEmpty'))+'</span></div>';
+        return '<div class="dynf-row"><span class="dynf-key" onclick="localizarCampoNoBuilder(\''+c+'\')">'+escapeHtml(dynFieldLabel(c))+'</span>'+seta+
+          '<input class="dynf-input" value="'+escapeHtml(val)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" '+
+          'oninput="setBuilderCampo(\''+c+'\', this.value)"></div>';
       }).join('');
   }
-  /* Categoria de um campo dinâmico = último token do nome (CLIENT_NAME,
-     PROVIDER_NAME → NAME; START_DATE, DELIVERY_DATE → DATE) — usada só para
-     "Aplicar a todos os campos iguais", nunca pra resolver o texto em si. */
-  function bibCampoCategoria(campo){
-    const partes=(campo||'').split('_');
-    return partes[partes.length-1]||campo;
-  }
-  /* Antes de abrir o popup de edição, mostra ao usuário ONDE esse campo
-     aparece no contrato (expande o bloco, rola até a cláusula certa e faz um
-     flash) — pra decidir o valor com contexto em vez de trocar às cegas. */
+  /* Toca no nome do campo (lado esquerdo) → leva até a cláusula onde ele
+     aparece no contrato (expande o bloco, rola e dá um flash), pra mostrar o
+     contexto ANTES de editar — o valor continua editável ali mesmo, no
+     input à direita, sem popup nenhum. */
   function localizarCampoNoBuilder(campo){
     const job=getBuilderJob();
     const blocos=job.contract.blocks||[];
@@ -7597,31 +7672,6 @@
       }
       return;
     }
-  }
-  function abrirCampoDinamicoComContexto(campo){
-    localizarCampoNoBuilder(campo);
-    setTimeout(()=>abrirEditarCampoDinamico(campo), 450);
-  }
-  function abrirEditarCampoDinamico(campo){
-    const fv=getBuilderFieldValues();
-    const valorAtual=fv[campo]||'';
-    const cat=bibCampoCategoria(campo);
-    const outrosNaCategoria=builderCamposDinamicos(getBuilderJob()).filter(c=>c!==campo && bibCampoCategoria(c)===cat);
-    let html='<div class="field"><input id="dynf-edit-input" value="'+escapeHtml(valorAtual)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" autocomplete="off"></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="aplicarCampoDinamicoPopup(\''+campo+'\',false)">'+t('builder.dynFieldApply')+'</button>';
-    if(outrosNaCategoria.length) html+='<button class="btn soft" style="width:100%;margin-top:8px" onclick="aplicarCampoDinamicoPopup(\''+campo+'\',true)">'+t('builder.dynFieldApplyAll')+'</button>';
-    openInfo(dynFieldLabel(campo), html);
-    setTimeout(()=>{ const el=document.getElementById('dynf-edit-input'); if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); } },0);
-  }
-  function aplicarCampoDinamicoPopup(campo, aplicarATodos){
-    const valor=document.getElementById('dynf-edit-input').value||'';
-    setBuilderCampo(campo, valor);
-    if(aplicarATodos){
-      const cat=bibCampoCategoria(campo);
-      builderCamposDinamicos(getBuilderJob()).filter(c=>c!==campo && bibCampoCategoria(c)===cat).forEach(c=>setBuilderCampo(c, valor));
-    }
-    closeInfo();
-    renderBuilderCampos(getBuilderJob(), false);
   }
   function setBuilderCampo(campo, valor){
     const fv=getBuilderFieldValues();
@@ -7657,7 +7707,7 @@
   }
 
   function abrirBibliotecaBlocos(){
-    if(builderContext) return;
+    if(builderContext && contratoBloqueadoParaEdicao(getBuilderJob())) return;
     const html=
       '<div class="pick-row" onclick="abrirExplorarBlocosOficiais()"><div><div class="nm">'+t('library.blocksExplore')+'</div></div>'+
       '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>'+
@@ -7730,7 +7780,7 @@
   // ---- CLÁUSULAS (dentro de um bloco do contrato em edição) ----
   let bibClauseTargetBid=null;
   function abrirAdicionarClausulas(bid){
-    if(builderContext) return;
+    if(builderContext && contratoBloqueadoParaEdicao(getBuilderJob())) return;
     bibClauseTargetBid=bid;
     const html=
       '<div class="pick-row" onclick="abrirExplorarClausulasOficiais()"><div><div class="nm">'+t('library.clausesExplore')+'</div></div>'+BIB_CHEVR_SVG+'</div>'+
