@@ -2540,6 +2540,10 @@
     "portal.shareMessageLinkLabel": { pt:"Link:", en:"Link:", es:"Enlace:" },
     "portal.shareMessageCodeLabel": { pt:"Código de acesso:", en:"Access code:", es:"Código de acceso:" },
     "portal.shareMessageSecurity": { pt:"Por segurança, mantenha estas informações em sigilo. Qualquer pessoa com o link e o código poderá acessar informações deste projeto.", en:"For your security, keep this information confidential. Anyone with the link and the code will be able to access this project's information.", es:"Por seguridad, mantenga esta información en secreto. Cualquier persona con el enlace y el código podrá acceder a la información de este proyecto." },
+    "collab.shareMessageIntro": { pt:"Segue o seu acesso ao trabalho \"{job}\" no Pivots.", en:"Here's your access to the job \"{job}\" on Pivots.", es:"Aquí tienes tu acceso al trabajo \"{job}\" en Pivots." },
+    "collab.resendAccess": { pt:"Reenviar acesso", en:"Resend access", es:"Reenviar acceso" },
+    "collab.resendAccessTitle": { pt:"Acesso do Colaborador", en:"Collaborator Access", es:"Acceso del Colaborador" },
+    "collab.resendAccessHint": { pt:"O código de acesso só é enviado por email uma vez. Pode reenviar o email ou copiar o link e o código para enviar por outro meio.", en:"The access code is only emailed once. You can resend the email or copy the link and code to send another way.", es:"El código de acceso solo se envía por email una vez. Puede reenviar el email o copiar el enlace y el código para enviarlo por otro medio." },
     "portal.codeTitle": { pt:"Código de acesso", en:"Access code", es:"Código de acceso" },
     "portal.codeHint": { pt:"Digite o código de 6 dígitos que recebeu junto com o link para acessar o portal.", en:"Enter the 6-digit code you received along with the link to access the portal.", es:"Ingrese el código de 6 dígitos que recibió junto con el enlace para acceder al portal." },
     "portal.codeWrong": { pt:"Código incorreto. Verifique e tente novamente.", en:"Incorrect code. Please check and try again.", es:"Código incorrecto. Verifique e intente de nuevo." },
@@ -8028,11 +8032,13 @@
     return dt.toLocaleDateString(jsLocale(), {day:'numeric', month:'long', year:'numeric'});
   }
   function detailMetaRowHtml(job){
-    const itens=[];
-    itens.push('<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>');
-    if(job.dateRaw) itens.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
-    if(job.horaIni) itens.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' — '+job.horaFim):''))+'</span></span>');
-    return itens.join('<span class="dm-sep"></span>');
+    const linha1='<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
+    const itens2=[];
+    if(job.dateRaw) itens2.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
+    if(job.horaIni) itens2.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' — '+job.horaFim):''))+'</span></span>');
+    let html='<div class="dm-row">'+linha1+'</div>';
+    if(itens2.length) html+='<div class="dm-row">'+itens2.join('<span class="dm-sep"></span>')+'</div>';
+    return html;
   }
   function renderJobDetailDynamic(id){
     const job=jobsData[id];
@@ -8254,9 +8260,11 @@
       let campos='<div class="collab-field"><span class="k">'+t('collab.role')+'</span><span class="v'+(c.funcao?'':' muted')+'">'+(c.funcao?escapeHtml(c.funcao):t('collab.noRole'))+'</span></div>';
       if(permissaoLabel) campos+='<div class="collab-field"><span class="k">'+t('collab.permission')+'</span><span class="sig-tag gray">'+t(permissaoLabel)+'</span></div>';
       if(c.acordo && c.acordo.modelo) campos+='<div class="collab-field"><span class="k">'+t('collab.contractStatus')+'</span><span class="sig-tag '+(c.acordo.assinado?'green':'amber')+'">'+(c.acordo.assinado?t('collab.agreementSigned'):t('collab.agreementPending'))+'</span></div>';
+      const acoes = (c.token ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="abrirReenviarAcessoColaborador(\''+c.id+'\',\''+jobId+'\')"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>' : '')+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg>';
       return '<div class="collab-block">'+
         '<div class="collab-block-top"><div class="nm">'+escapeHtml(c.email)+'</div>'+
-          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer;flex:none" onclick="removerColaboradorExterno(\''+c.id+'\',\''+jobId+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
+          '<div style="display:flex;gap:10px;flex:none">'+acoes+'</div>'+
         '</div>'+campos+
       '</div>';
     }).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('collab.none')+'</p>';
@@ -8266,6 +8274,54 @@
     if(error){ showToast(t('toast.inviteError')); return; }
     await carregarColaboradoresJob(jobId);
     showToast(t('toast.personRemoved'));
+  }
+  /* O código de acesso só sai no email de convite original — se a pessoa o
+     perder (ou o envio automático falhar), reenviar o mesmo email ou copiar
+     link+código continua possível a qualquer momento, sem gerar um código
+     novo (senão invalidava o que já foi usado noutro dispositivo). Mesmo
+     padrão do "Copiar Acesso" do portal do cliente (construirMensagemPortalCliente). */
+  function construirMensagemAcessoColaborador(c, jobNome){
+    const link=window.location.origin+'/?colab='+c.token;
+    const codigo=(c.escopo && c.escopo.codigoAcesso) || '';
+    return t('portal.shareMessageGreeting')+'\n\n'+t('collab.shareMessageIntro').replace('{job}', jobNome)+'\n\n'+
+      t('portal.shareMessageLinkLabel')+' '+link+'\n\n'+
+      t('portal.shareMessageCodeLabel')+' '+codigo+'\n\n'+
+      t('portal.shareMessageSecurity');
+  }
+  function abrirReenviarAcessoColaborador(id, jobId){
+    const c=(colaboradoresCache[jobId]||[]).find(x=>x.id===id);
+    if(!c) return;
+    openInfo(t('collab.resendAccessTitle'), `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('collab.resendAccessHint')}</p>
+      <button class="btn dark" style="width:100%;margin-bottom:8px" onclick="reenviarEmailAcessoColaborador('${id}','${jobId}')">${t('portal.resendEmail')}</button>
+      <button class="btn dark" style="width:100%" onclick="abrirCopiarMensagemColaborador('${id}','${jobId}')">${t('portal.copyAccess')}</button>`);
+  }
+  async function reenviarEmailAcessoColaborador(id, jobId){
+    const c=(colaboradoresCache[jobId]||[]).find(x=>x.id===id);
+    const job=jobsData[jobId];
+    if(!c || !job) return;
+    const remetente = perfilData.nome||t('defaults.userName');
+    const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
+    const remetenteFoto = (perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
+    await enviarEmailConviteColaborador({semConta:true, email:c.email, jobNome:job.nome||job.typeLabel, remetente, remetenteAvatarCor, remetenteIniciais, remetenteFoto, token:c.token, codigo:(c.escopo&&c.escopo.codigoAcesso)});
+    closeInfo();
+    showToast(t('collab.emailSent'));
+  }
+  function abrirCopiarMensagemColaborador(id, jobId){
+    const c=(colaboradoresCache[jobId]||[]).find(x=>x.id===id);
+    const job=jobsData[jobId];
+    if(!c || !job) return;
+    const msg=construirMensagemAcessoColaborador(c, job.nome||job.typeLabel);
+    openInfo(t('portal.copyAccess'), `
+      <p style="font-size:12.5px;color:var(--neutral);margin-bottom:8px">${t('portal.editMessageHint')}</p>
+      <textarea id="colab-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
+      <button class="btn dark" style="width:100%;margin-top:10px" onclick="copiarMensagemColaboradorEditada()">${t('action.copyLink')}</button>`);
+  }
+  function copiarMensagemColaboradorEditada(){
+    const texto=document.getElementById('colab-msg-editavel').value;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(texto).then(()=>{ showToast(t('toast.linkCopied')); closeInfo(); }).catch(()=>showToast(texto));
+    } else { showToast(texto); }
   }
 
   /* ===== Contratos de Colaboradores =====
@@ -9422,12 +9478,25 @@
   /* arquivo de trabalhos: Concluir e Deletar são ações distintas, ambas reversíveis —
      o trabalho sai da lista ativa (e do calendário) e passa a viver no Histórico,
      de onde pode ser restaurado a qualquer momento. */
+  /* Concluir/Arquivar encerram o acesso do cliente ao portal na hora — não
+     faz sentido o link continuar válido para um trabalho parado. Expira
+     TODOS os tokens já gerados para este trabalho (o link muda a cada vez
+     que se "Gera Link" de novo — ver gerarLinkContrato —, então pode haver
+     mais que um token na tabela), não só o mais recente. Enviar o link
+     (gerarLinkContrato) nunca chama esta função — continua sendo só mais um
+     passo do fluxo, não conclui nada sozinho. */
+  async function expirarPortalCliente(job){
+    try{
+      await sb.from('portal_tokens').update({expires_at:new Date().toISOString()}).eq('workspace_id', currentWorkspaceId).eq('job_id', job.id);
+    }catch(e){ console.error('Erro ao expirar o portal do cliente:', e); }
+  }
   function arquivarTrabalho(id, motivo){
     const job=jobsData[id];
     if(!job) return;
     job.arquivado={ motivo, em:new Date().toISOString() };
     pushHistory(job, motivo==='concluido' ? t('history.jobArchivedDone') : t('history.jobArchivedDeleted'));
     saveJobsData();
+    expirarPortalCliente(job);
     const existente=document.querySelector('.job[data-job-id="'+id+'"]');
     if(existente){ const w=existente.closest('.job-card-wrap'); (w||existente).remove(); }
     const empty=document.getElementById('jobsEmpty');
