@@ -1286,7 +1286,7 @@
   <div class="sheet" id="infoSheet" style="z-index:85;max-height:80vh">
     <div class="sheet-grab"></div>
     <div class="sheet-header">
-      <div style="width:30px;flex:none"></div>
+      <div class="sheet-back" id="infoBackBtn" style="width:30px;flex:none;display:none;cursor:pointer" onclick="if(window.__infoBackHandler)window.__infoBackHandler();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
       <h3 id="infoTitle">Título</h3>
       <div class="sheet-x" onclick="closeInfo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
     </div>
@@ -2412,6 +2412,9 @@
     "library.blocksCount": { pt:"blocos", en:"blocks", es:"bloques" },
     "library.protectedStructure": { pt:"Estrutura do contrato", en:"Contract structure", es:"Estructura del contrato" },
     "library.structureUnavailable": { pt:"Estrutura não disponível para pré-visualização.", en:"Structure preview not available.", es:"Estructura no disponible para vista previa." },
+    "library.tags": { pt:"Etiquetas", en:"Tags", es:"Etiquetas" },
+    "library.legalWarning": { pt:"Conteúdo dos Modelos Pivot. Revê antes de usar — não é aconselhamento jurídico.", en:"Pivot Templates content. Review before use — not legal advice.", es:"Contenido de las Plantillas Pivot. Revisa antes de usar — no es asesoramiento jurídico." },
+    "library.rating": { pt:"Avaliação", en:"Rating", es:"Valoración" },
     "library.blockRequired": { pt:"obrigatório", en:"required", es:"obligatorio" },
     "library.blockOptional": { pt:"opcional", en:"optional", es:"opcional" },
     "library.blockConditional": { pt:"condicional", en:"conditional", es:"condicional" },
@@ -3218,6 +3221,9 @@
     "collab.addContractForCollabs": { pt:"Adicionar Contrato para Colaboradores", en:"Add Contract for Collaborators", es:"Añadir Contrato para Colaboradores" },
     "library.pickForCollab": { pt:"Escolha um contrato para anexar ao colaborador.", en:"Choose a contract to attach to the collaborator.", es:"Elige un contrato para adjuntar al colaborador." },
     "library.pickForCollabMassa": { pt:"Escolha um contrato para aplicar aos colaboradores selecionados.", en:"Choose a contract to apply to the selected collaborators.", es:"Elige un contrato para aplicar a los colaboradores seleccionados." },
+    "library.pickForBlocks": { pt:"Escolha um contrato para ver e importar os seus blocos.", en:"Choose a contract to view and import its blocks.", es:"Elige un contrato para ver e importar sus bloques." },
+    "library.pickForClauses": { pt:"Escolha um contrato para ver e importar cláusulas de um dos seus blocos.", en:"Choose a contract to view and import clauses from one of its blocks.", es:"Elige un contrato para ver e importar cláusulas de uno de sus bloques." },
+    "library.viewBlocksBtn": { pt:"Ver Blocos", en:"View Blocks", es:"Ver Bloques" },
     "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
     "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
     "collab.contractAppliedHint": { pt:"O contrato foi aplicado e um email de aviso foi enviado a cada colaborador selecionado.", en:"The contract was applied and a notification email was sent to each selected collaborator.", es:"El contrato fue aplicado y se envió un email de aviso a cada colaborador seleccionado." },
@@ -4748,12 +4754,12 @@
     html+='</div>';
     html+='<p class="model-detail-desc">'+escapeHtml(m.desc||'')+'</p>';
     if((m.tags||[]).length){
-      html+='<div class="plabel">Etiquetas</div>';
+      html+='<div class="plabel">'+t('library.tags')+'</div>';
       html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     }
-    html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>Conteúdo dos Modelos Pivot. Revê antes de usar — não é aconselhamento jurídico.</div></div>';
+    html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>'+t('library.legalWarning')+'</div></div>';
     html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft" onclick="guardarModeloBiblioteca(\''+id+'\')">'+t('action.save')+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
-    html+='<div class="plabel" style="margin-top:18px">Avaliação</div>';
+    html+='<div class="plabel" style="margin-top:18px">'+t('library.rating')+'</div>';
     html+='<div id="avaliacao-stars-'+id+'"></div>';
     document.getElementById('bib-detalhe-conteudo').innerHTML=html;
     pushPanel('comunidade-contrato-detalhe');
@@ -6972,7 +6978,320 @@
     en:'The templates provided are informational content and an editable starting point. They do not constitute legal advice and do not replace consulting a lawyer qualified in the applicable jurisdiction. Pivot and the template authors accept no liability for the use made of these documents. Professional review before signature is recommended.',
     es:'Las plantillas facilitadas son contenido informativo y un punto de partida editable. No constituyen asesoramiento jurídico ni sustituyen la consulta de un abogado habilitado en la jurisdicción aplicable. Pivot y los autores de las plantillas no se responsabilizan del uso dado a estos documentos. Se recomienda revisión profesional antes de la firma.'
   };
-  function blockName(b){ return b.key ? blocoNomes[b.key] : (b.name||'Bloco'); }
+  const BIB_BLOCK_LABELS={
+    "24/7 Support":{pt:"Suporte 24/7",es:"Soporte 24/7"},
+    "3D Rendering":{pt:"Renderização 3D",es:"Renderizado 3D"},
+    "API Versioning":{pt:"Versionamento de API",es:"Versionado de API"},
+    "Acceptance":{pt:"Aceitação",es:"Aceptación"},
+    "Acceptance Criteria":{pt:"Critérios de Aceitação",es:"Criterios de Aceptación"},
+    "Acceptance Testing":{pt:"Testes de Aceitação",es:"Pruebas de Aceptación"},
+    "Access Authorization":{pt:"Autorização de Acesso",es:"Autorización de Acceso"},
+    "Accommodation":{pt:"Alojamento",es:"Alojamiento"},
+    "Accounting Scope":{pt:"Âmbito Contabilístico",es:"Alcance Contable"},
+    "Additional Audits":{pt:"Auditorias Adicionais",es:"Auditorías Adicionales"},
+    "Additional Campaigns":{pt:"Campanhas Adicionais",es:"Campañas Adicionales"},
+    "Additional Consultations":{pt:"Consultas Adicionais",es:"Consultas Adicionales"},
+    "Additional Deliverables":{pt:"Entregáveis Adicionais",es:"Entregables Adicionales"},
+    "Additional Hours":{pt:"Horas Adicionais",es:"Horas Adicionales"},
+    "Additional Materials":{pt:"Materiais Adicionais",es:"Materiales Adicionales"},
+    "Additional Pages":{pt:"Páginas Adicionais",es:"Páginas Adicionales"},
+    "Additional Platforms":{pt:"Plataformas Adicionais",es:"Plataformas Adicionales"},
+    "Additional Positions":{pt:"Posições Adicionais",es:"Posiciones Adicionales"},
+    "Additional Reports":{pt:"Relatórios Adicionais",es:"Informes Adicionales"},
+    "Additional Research":{pt:"Pesquisa Adicional",es:"Investigación Adicional"},
+    "Additional Revisions":{pt:"Revisões Adicionais",es:"Revisiones Adicionales"},
+    "Additional Screens":{pt:"Ecrãs Adicionais",es:"Pantallas Adicionales"},
+    "Additional Sessions":{pt:"Sessões Adicionais",es:"Sesiones Adicionales"},
+    "Additional Versions":{pt:"Versões Adicionais",es:"Versiones Adicionales"},
+    "Advertising Scope":{pt:"Âmbito Publicitário",es:"Alcance Publicitario"},
+    "Album":{pt:"Álbum",es:"Álbum"},
+    "Analytics":{pt:"Análises",es:"Analítica"},
+    "Analytics Reports":{pt:"Relatórios de Análise",es:"Informes de Analítica"},
+    "App Store Publication":{pt:"Publicação na App Store",es:"Publicación en App Store"},
+    "Approval Process":{pt:"Processo de Aprovação",es:"Proceso de Aprobación"},
+    "Approvals":{pt:"Aprovações",es:"Aprobaciones"},
+    "Architect Responsibilities":{pt:"Responsabilidades do Arquiteto",es:"Responsabilidades del Arquitecto"},
+    "Architecture":{pt:"Arquitetura",es:"Arquitectura"},
+    "Archival Footage Licensing":{pt:"Licenciamento de Imagens de Arquivo",es:"Licencia de Metraje de Archivo"},
+    "Assessment Tools":{pt:"Ferramentas de Avaliação",es:"Herramientas de Evaluación"},
+    "Assignment":{pt:"Cessão",es:"Cesión"},
+    "Audit Scope":{pt:"Âmbito da Auditoria",es:"Alcance de la Auditoría"},
+    "Authentication":{pt:"Autenticação",es:"Autenticación"},
+    "Availability":{pt:"Disponibilidade",es:"Disponibilidad"},
+    "Brand Strategy Workshop":{pt:"Workshop de Estratégia de Marca",es:"Taller de Estrategia de Marca"},
+    "Brand Usage":{pt:"Uso da Marca",es:"Uso de la Marca"},
+    "Budget Responsibility":{pt:"Responsabilidade Orçamental",es:"Responsabilidad Presupuestaria"},
+    "Business Consulting":{pt:"Consultoria Empresarial",es:"Consultoría Empresarial"},
+    "Business Requirements":{pt:"Requisitos de Negócio",es:"Requisitos de Negocio"},
+    "Campaign Management":{pt:"Gestão de Campanhas",es:"Gestión de Campañas"},
+    "Cancellation":{pt:"Cancelamento",es:"Cancelación"},
+    "Candidate Guarantees":{pt:"Garantias do Candidato",es:"Garantías del Candidato"},
+    "Certificates":{pt:"Certificados",es:"Certificados"},
+    "Certification":{pt:"Certificação",es:"Certificación"},
+    "Certified Translation":{pt:"Tradução Certificada",es:"Traducción Certificada"},
+    "Client Responsibilities":{pt:"Responsabilidades do Cliente",es:"Responsabilidades del Cliente"},
+    "Cloud Hosting":{pt:"Alojamento na Cloud",es:"Alojamiento en la Nube"},
+    "Cloud Infrastructure":{pt:"Infraestrutura Cloud",es:"Infraestructura en la Nube"},
+    "Commercial Exclusivity":{pt:"Exclusividade Comercial",es:"Exclusividad Comercial"},
+    "Commercial Usage":{pt:"Uso Comercial",es:"Uso Comercial"},
+    "Commercial Usage Rights":{pt:"Direitos de Uso Comercial",es:"Derechos de Uso Comercial"},
+    "Commission Rules":{pt:"Regras de Comissão",es:"Reglas de Comisión"},
+    "Community Access":{pt:"Acesso à Comunidade",es:"Acceso a la Comunidad"},
+    "Community Management":{pt:"Gestão de Comunidade",es:"Gestión de Comunidad"},
+    "Compensation":{pt:"Remuneração",es:"Compensación"},
+    "Confidential Information":{pt:"Informação Confidencial",es:"Información Confidencial"},
+    "Confidentiality":{pt:"Confidencialidade",es:"Confidencialidad"},
+    "Conflict of Interest":{pt:"Conflito de Interesses",es:"Conflicto de Interés"},
+    "Consulting Hours":{pt:"Horas de Consultoria",es:"Horas de Consultoría"},
+    "Consulting Scope":{pt:"Âmbito da Consultoria",es:"Alcance de la Consultoría"},
+    "Content Calendar":{pt:"Calendário de Conteúdos",es:"Calendario de Contenidos"},
+    "Content Production":{pt:"Produção de Conteúdo",es:"Producción de Contenido"},
+    "Contract Object":{pt:"Objeto do Contrato",es:"Objeto del Contrato"},
+    "Copyright":{pt:"Direitos de Autor",es:"Derechos de Autor"},
+    "Corrective Action Reviews":{pt:"Revisões de Ações Corretivas",es:"Revisiones de Acciones Correctivas"},
+    "Course Recording":{pt:"Gravação do Curso",es:"Grabación del Curso"},
+    "Course Scope":{pt:"Âmbito do Curso",es:"Alcance del Curso"},
+    "Crash Monitoring":{pt:"Monitorização de Falhas",es:"Monitoreo de Fallos"},
+    "Creative Brief":{pt:"Briefing Criativo",es:"Brief Creativo"},
+    "Creative Direction":{pt:"Direção Criativa",es:"Dirección Creativa"},
+    "Creative Production":{pt:"Produção Criativa",es:"Producción Creativa"},
+    "Curriculum":{pt:"Currículo",es:"Currículo"},
+    "Customer Protection":{pt:"Proteção do Cliente",es:"Protección del Cliente"},
+    "Data Protection":{pt:"Proteção de Dados",es:"Protección de Datos"},
+    "Deadlines":{pt:"Prazos",es:"Plazos"},
+    "Definition of Confidential Information":{pt:"Definição de Informação Confidencial",es:"Definición de Información Confidencial"},
+    "Deliverables":{pt:"Entregáveis",es:"Entregables"},
+    "Design Scope":{pt:"Âmbito do Design",es:"Alcance del Diseño"},
+    "Design System":{pt:"Sistema de Design",es:"Sistema de Diseño"},
+    "DevOps":{pt:"DevOps",es:"DevOps"},
+    "Developer Responsibilities":{pt:"Responsabilidades do Programador",es:"Responsabilidades del Desarrollador"},
+    "Developer Support":{pt:"Suporte ao Programador",es:"Soporte al Desarrollador"},
+    "Development Methodology":{pt:"Metodologia de Desenvolvimento",es:"Metodología de Desarrollo"},
+    "Dispute Resolution":{pt:"Resolução de Litígios",es:"Resolución de Disputas"},
+    "Documentation":{pt:"Documentação",es:"Documentación"},
+    "Domain Registration":{pt:"Registo de Domínio",es:"Registro de Dominio"},
+    "Drone Operation":{pt:"Operação de Drone",es:"Operación de Dron"},
+    "Drone Services":{pt:"Serviços de Drone",es:"Servicios de Dron"},
+    "Duration":{pt:"Duração",es:"Duración"},
+    "Editorial Calendar":{pt:"Calendário Editorial",es:"Calendario Editorial"},
+    "Editorial Scope":{pt:"Âmbito Editorial",es:"Alcance Editorial"},
+    "Emergency Campaigns":{pt:"Campanhas de Emergência",es:"Campañas de Emergencia"},
+    "Emergency Content":{pt:"Conteúdo de Emergência",es:"Contenido de Emergencia"},
+    "Emergency Procedures":{pt:"Procedimentos de Emergência",es:"Procedimientos de Emergencia"},
+    "Emergency Services":{pt:"Serviços de Emergência",es:"Servicios de Emergencia"},
+    "Emergency Support":{pt:"Suporte de Emergência",es:"Soporte de Emergencia"},
+    "Endpoints":{pt:"Endpoints",es:"Endpoints"},
+    "Equipment Rental":{pt:"Aluguer de Equipamento",es:"Alquiler de Equipo"},
+    "Escalation":{pt:"Escalonamento",es:"Escalamiento"},
+    "Exceptions":{pt:"Exceções",es:"Excepciones"},
+    "Exclusive Assignment":{pt:"Cessão Exclusiva",es:"Cesión Exclusiva"},
+    "Exclusive Territory":{pt:"Território Exclusivo",es:"Territorio Exclusivo"},
+    "Exclusivity":{pt:"Exclusividade",es:"Exclusividad"},
+    "Expenses":{pt:"Despesas",es:"Gastos"},
+    "Expert Opinion":{pt:"Parecer de Especialista",es:"Opinión de Experto"},
+    "Express Delivery":{pt:"Entrega Expresso",es:"Entrega Exprés"},
+    "Extended Licensing":{pt:"Licenciamento Alargado",es:"Licencia Extendida"},
+    "Extended Usage Rights":{pt:"Direitos de Uso Alargados",es:"Derechos de Uso Extendidos"},
+    "Extra Revision Rounds":{pt:"Rondas de Revisão Extra",es:"Rondas de Revisión Adicionales"},
+    "Extra Videos":{pt:"Vídeos Extra",es:"Vídeos Adicionales"},
+    "Financial Planning":{pt:"Planeamento Financeiro",es:"Planificación Financiera"},
+    "Flight Authorization":{pt:"Autorização de Voo",es:"Autorización de Vuelo"},
+    "Follow-up Meetings":{pt:"Reuniões de Acompanhamento",es:"Reuniones de Seguimiento"},
+    "Follow-up Support":{pt:"Suporte de Acompanhamento",es:"Soporte de Seguimiento"},
+    "Force Majeure":{pt:"Força Maior",es:"Fuerza Mayor"},
+    "Formatting":{pt:"Formatação",es:"Formato"},
+    "Furniture Procurement":{pt:"Aquisição de Mobiliário",es:"Adquisición de Mobiliario"},
+    "Future Works":{pt:"Trabalhos Futuros",es:"Trabajos Futuros"},
+    "General Provisions":{pt:"Disposições Gerais",es:"Disposiciones Generales"},
+    "Glossary Creation":{pt:"Criação de Glossário",es:"Creación de Glosario"},
+    "Google Play Publication":{pt:"Publicação na Google Play",es:"Publicación en Google Play"},
+    "Governance":{pt:"Governação",es:"Gobernanza"},
+    "Graphic Design":{pt:"Design Gráfico",es:"Diseño Gráfico"},
+    "Guarantees":{pt:"Garantias",es:"Garantías"},
+    "Hosting":{pt:"Alojamento",es:"Alojamiento"},
+    "Identification":{pt:"Identificação",es:"Identificación"},
+    "Image Rights":{pt:"Direitos de Imagem",es:"Derechos de Imagen"},
+    "Implementation Support":{pt:"Suporte à Implementação",es:"Soporte de Implementación"},
+    "Infrastructure":{pt:"Infraestrutura",es:"Infraestructura"},
+    "Infrastructure Monitoring":{pt:"Monitorização de Infraestrutura",es:"Monitoreo de Infraestructura"},
+    "Inspection Scope":{pt:"Âmbito da Inspeção",es:"Alcance de la Inspección"},
+    "Installation Supervision":{pt:"Supervisão de Instalação",es:"Supervisión de Instalación"},
+    "Instructor Responsibilities":{pt:"Responsabilidades do Instrutor",es:"Responsabilidades del Instructor"},
+    "Insurance":{pt:"Seguro",es:"Seguro"},
+    "Intellectual Property":{pt:"Propriedade Intelectual",es:"Propiedad Intelectual"},
+    "Interactive Prototype":{pt:"Protótipo Interativo",es:"Prototipo Interactivo"},
+    "Interview Authorization":{pt:"Autorização de Entrevista",es:"Autorización de Entrevista"},
+    "Interview Release":{pt:"Liberação de Entrevista",es:"Liberación de Entrevista"},
+    "Investment Reports":{pt:"Relatórios de Investimento",es:"Informes de Inversión"},
+    "Jurisdiction":{pt:"Jurisdição",es:"Jurisdicción"},
+    "Keyword Research":{pt:"Pesquisa de Palavras-chave",es:"Investigación de Palabras Clave"},
+    "Landing Pages":{pt:"Landing Pages",es:"Landing Pages"},
+    "Languages":{pt:"Idiomas",es:"Idiomas"},
+    "Liability":{pt:"Responsabilidade",es:"Responsabilidad"},
+    "License":{pt:"Licença",es:"Licencia"},
+    "License Grant":{pt:"Concessão de Licença",es:"Concesión de Licencia"},
+    "Licensing":{pt:"Licenciamento",es:"Licenciamiento"},
+    "Liquidated Damages":{pt:"Cláusula Penal",es:"Cláusula Penal"},
+    "Maintenance":{pt:"Manutenção",es:"Mantenimiento"},
+    "Maintenance Scope":{pt:"Âmbito da Manutenção",es:"Alcance del Mantenimiento"},
+    "Maintenance Window":{pt:"Janela de Manutenção",es:"Ventana de Mantenimiento"},
+    "Maintenance Windows":{pt:"Janelas de Manutenção",es:"Ventanas de Mantenimiento"},
+    "Management Scope":{pt:"Âmbito de Gestão",es:"Alcance de Gestión"},
+    "Marketing":{pt:"Marketing",es:"Marketing"},
+    "Marketing Scope":{pt:"Âmbito de Marketing",es:"Alcance de Marketing"},
+    "Marketing Support":{pt:"Suporte de Marketing",es:"Soporte de Marketing"},
+    "Meeting Schedule":{pt:"Calendário de Reuniões",es:"Calendario de Reuniones"},
+    "Meetings":{pt:"Reuniões",es:"Reuniones"},
+    "Mentorship Scope":{pt:"Âmbito da Mentoria",es:"Alcance de la Mentoría"},
+    "Milestones":{pt:"Marcos",es:"Hitos"},
+    "Minimum Sales":{pt:"Vendas Mínimas",es:"Ventas Mínimas"},
+    "Model Release":{pt:"Liberação de Modelo",es:"Liberación de Modelo"},
+    "Monitoring":{pt:"Monitorização",es:"Monitoreo"},
+    "Monthly Meetings":{pt:"Reuniões Mensais",es:"Reuniones Mensuales"},
+    "Monthly Renewals":{pt:"Renovações Mensais",es:"Renovaciones Mensuales"},
+    "Monthly Reports":{pt:"Relatórios Mensais",es:"Informes Mensuales"},
+    "Moral Rights":{pt:"Direitos Morais",es:"Derechos Morales"},
+    "Municipal Approval":{pt:"Aprovação Municipal",es:"Aprobación Municipal"},
+    "Music Licensing":{pt:"Licenciamento Musical",es:"Licencia Musical"},
+    "Musician Hiring":{pt:"Contratação de Músicos",es:"Contratación de Músicos"},
+    "Negotiation Representation":{pt:"Representação em Negociação",es:"Representación en Negociación"},
+    "Non-Circumvention":{pt:"Não Contornação",es:"No Circunvención"},
+    "Non-Solicitation":{pt:"Não Aliciamento",es:"No Solicitación"},
+    "Objectives":{pt:"Objetivos",es:"Objetivos"},
+    "Obligations":{pt:"Obrigações",es:"Obligaciones"},
+    "On-site Consulting":{pt:"Consultoria no Local",es:"Consultoría en Sitio"},
+    "On-site Support":{pt:"Suporte no Local",es:"Soporte en Sitio"},
+    "On-site Visits":{pt:"Visitas no Local",es:"Visitas en Sitio"},
+    "Online Meetings":{pt:"Reuniões Online",es:"Reuniones en Línea"},
+    "Online Sessions":{pt:"Sessões Online",es:"Sesiones en Línea"},
+    "Operational Limitations":{pt:"Limitações Operacionais",es:"Limitaciones Operativas"},
+    "Paid Media":{pt:"Media Paga",es:"Medios Pagados"},
+    "Participant Recruitment":{pt:"Recrutamento de Participantes",es:"Reclutamiento de Participantes"},
+    "Payment":{pt:"Pagamento",es:"Pago"},
+    "Payroll":{pt:"Processamento Salarial",es:"Nómina"},
+    "Penalties":{pt:"Penalidades",es:"Penalizaciones"},
+    "Performance":{pt:"Desempenho",es:"Desempeño"},
+    "Performance Bonus":{pt:"Bónus de Desempenho",es:"Bono de Desempeño"},
+    "Performance Bonuses":{pt:"Bónus de Desempenho",es:"Bonos de Desempeño"},
+    "Permitted Use":{pt:"Uso Permitido",es:"Uso Permitido"},
+    "Photography":{pt:"Fotografia",es:"Fotografía"},
+    "Portfolio Authorization":{pt:"Autorização de Portefólio",es:"Autorización de Portafolio"},
+    "Posting Schedule":{pt:"Calendário de Publicações",es:"Calendario de Publicaciones"},
+    "Presentation Meetings":{pt:"Reuniões de Apresentação",es:"Reuniones de Presentación"},
+    "Pricing":{pt:"Preços",es:"Precios"},
+    "Printing":{pt:"Impressão",es:"Impresión"},
+    "Printing Coordination":{pt:"Coordenação de Impressão",es:"Coordinación de Impresión"},
+    "Priority Matrix":{pt:"Matriz de Prioridades",es:"Matriz de Prioridades"},
+    "Priority Support":{pt:"Suporte Prioritário",es:"Soporte Prioritario"},
+    "Production Schedule":{pt:"Calendário de Produção",es:"Calendario de Producción"},
+    "Production Scope":{pt:"Âmbito de Produção",es:"Alcance de Producción"},
+    "Products":{pt:"Produtos",es:"Productos"},
+    "Professional Liability":{pt:"Responsabilidade Profissional",es:"Responsabilidad Profesional"},
+    "Progress Reports":{pt:"Relatórios de Progresso",es:"Informes de Progreso"},
+    "Project Revisions":{pt:"Revisões do Projeto",es:"Revisiones del Proyecto"},
+    "Project Scope":{pt:"Âmbito do Projeto",es:"Alcance del Proyecto"},
+    "Property Visits":{pt:"Visitas ao Imóvel",es:"Visitas a la Propiedad"},
+    "Publishing":{pt:"Publicação",es:"Publicación"},
+    "Publishing Schedule":{pt:"Calendário de Publicação",es:"Calendario de Publicación"},
+    "Quality Standards":{pt:"Padrões de Qualidade",es:"Estándares de Calidad"},
+    "Recruitment Scope":{pt:"Âmbito de Recrutamento",es:"Alcance de Reclutamiento"},
+    "Reinspection":{pt:"Reinspeção",es:"Reinspección"},
+    "Renewal":{pt:"Renovação",es:"Renovación"},
+    "Reports":{pt:"Relatórios",es:"Informes"},
+    "Representation Before Authorities":{pt:"Representação Perante Autoridades",es:"Representación Ante Autoridades"},
+    "Requirements":{pt:"Requisitos",es:"Requisitos"},
+    "Rescheduling":{pt:"Reagendamento",es:"Reprogramación"},
+    "Research Consent":{pt:"Consentimento de Pesquisa",es:"Consentimiento de Investigación"},
+    "Research Scope":{pt:"Âmbito da Pesquisa",es:"Alcance de la Investigación"},
+    "Resolution Time":{pt:"Tempo de Resolução",es:"Tiempo de Resolución"},
+    "Response Time":{pt:"Tempo de Resposta",es:"Tiempo de Respuesta"},
+    "Responsibilities":{pt:"Responsabilidades",es:"Responsabilidades"},
+    "Restricted Activities":{pt:"Atividades Restritas",es:"Actividades Restringidas"},
+    "Restrictions":{pt:"Restrições",es:"Restricciones"},
+    "Return of Information":{pt:"Devolução de Informação",es:"Devolución de Información"},
+    "Revenue Sharing":{pt:"Partilha de Receitas",es:"Reparto de Ingresos"},
+    "Revisions":{pt:"Revisões",es:"Revisiones"},
+    "Risk Management":{pt:"Gestão de Risco",es:"Gestión de Riesgos"},
+    "Royalties":{pt:"Royalties",es:"Regalías"},
+    "Rush Delivery":{pt:"Entrega Urgente",es:"Entrega Urgente"},
+    "SEO":{pt:"SEO",es:"SEO"},
+    "SEO Optimization":{pt:"Otimização SEO",es:"Optimización SEO"},
+    "SEO Scope":{pt:"Âmbito de SEO",es:"Alcance de SEO"},
+    "SLA":{pt:"SLA",es:"SLA"},
+    "Safety Requirements":{pt:"Requisitos de Segurança",es:"Requisitos de Seguridad"},
+    "Schedule":{pt:"Cronograma",es:"Cronograma"},
+    "Scope of Services":{pt:"Âmbito dos Serviços",es:"Alcance de los Servicios"},
+    "Second Photographer":{pt:"Segundo Fotógrafo",es:"Segundo Fotógrafo"},
+    "Second Videographer":{pt:"Segundo Videógrafo",es:"Segundo Videógrafo"},
+    "Security":{pt:"Segurança",es:"Seguridad"},
+    "Security Audit":{pt:"Auditoria de Segurança",es:"Auditoría de Seguridad"},
+    "Service Credits":{pt:"Créditos de Serviço",es:"Créditos de Servicio"},
+    "Service Level Agreement":{pt:"Acordo de Nível de Serviço",es:"Acuerdo de Nivel de Servicio"},
+    "Service Levels":{pt:"Níveis de Serviço",es:"Niveles de Servicio"},
+    "Service Provider Responsibilities":{pt:"Responsabilidades do Prestador de Serviços",es:"Responsabilidades del Proveedor de Servicios"},
+    "Services":{pt:"Serviços",es:"Servicios"},
+    "Session Recording":{pt:"Gravação de Sessão",es:"Grabación de Sesión"},
+    "Session Schedule":{pt:"Calendário de Sessões",es:"Calendario de Sesiones"},
+    "Signatures":{pt:"Assinaturas",es:"Firmas"},
+    "Site Inspections":{pt:"Inspeções ao Local",es:"Inspecciones del Sitio"},
+    "Site Supervision":{pt:"Supervisão do Local",es:"Supervisión del Sitio"},
+    "Site Visits":{pt:"Visitas ao Local",es:"Visitas al Sitio"},
+    "Social Clips":{pt:"Clipes para Redes Sociais",es:"Clips para Redes Sociales"},
+    "Source Code Ownership":{pt:"Propriedade do Código-Fonte",es:"Propiedad del Código Fuente"},
+    "Source Documentation":{pt:"Documentação de Origem",es:"Documentación de Origen"},
+    "Source Files":{pt:"Ficheiros de Origem",es:"Archivos de Origen"},
+    "Student Responsibilities":{pt:"Responsabilidades do Aluno",es:"Responsabilidades del Alumno"},
+    "Studio Rental":{pt:"Aluguer de Estúdio",es:"Alquiler de Estudio"},
+    "Subtitles":{pt:"Legendas",es:"Subtítulos"},
+    "Supplier Coordination":{pt:"Coordenação de Fornecedores",es:"Coordinación de Proveedores"},
+    "Supplier Responsibilities":{pt:"Responsabilidades do Fornecedor",es:"Responsabilidades del Proveedor"},
+    "Support":{pt:"Suporte",es:"Soporte"},
+    "Support Materials":{pt:"Materiais de Suporte",es:"Materiales de Soporte"},
+    "Support Period":{pt:"Período de Suporte",es:"Período de Soporte"},
+    "Talent Release":{pt:"Liberação de Talento",es:"Liberación de Talento"},
+    "Technical Assistance":{pt:"Assistência Técnica",es:"Asistencia Técnica"},
+    "Technical Implementation":{pt:"Implementação Técnica",es:"Implementación Técnica"},
+    "Technical Requirements":{pt:"Requisitos Técnicos",es:"Requisitos Técnicos"},
+    "Technical Responsibility":{pt:"Responsabilidade Técnica",es:"Responsabilidad Técnica"},
+    "Technical Scope":{pt:"Âmbito Técnico",es:"Alcance Técnico"},
+    "Technical Specifications":{pt:"Especificações Técnicas",es:"Especificaciones Técnicas"},
+    "Technical Stack":{pt:"Stack Técnico",es:"Stack Técnico"},
+    "Technical Support":{pt:"Suporte Técnico",es:"Soporte Técnico"},
+    "Term":{pt:"Prazo",es:"Plazo"},
+    "Termination":{pt:"Rescisão",es:"Rescisión"},
+    "Territory":{pt:"Território",es:"Territorio"},
+    "Testing":{pt:"Testes",es:"Pruebas"},
+    "Timeline":{pt:"Cronograma",es:"Cronograma"},
+    "Tracking Setup":{pt:"Configuração de Rastreamento",es:"Configuración de Seguimiento"},
+    "Trademark Responsibility":{pt:"Responsabilidade sobre Marca Registada",es:"Responsabilidad sobre Marca Registrada"},
+    "Training":{pt:"Formação",es:"Capacitación"},
+    "Training Programs":{pt:"Programas de Formação",es:"Programas de Capacitación"},
+    "Transcription":{pt:"Transcrição",es:"Transcripción"},
+    "Transferred Works":{pt:"Obras Transferidas",es:"Obras Transferidas"},
+    "Translations":{pt:"Traduções",es:"Traducciones"},
+    "Travel":{pt:"Deslocações",es:"Viajes"},
+    "Travel Expenses":{pt:"Despesas de Deslocação",es:"Gastos de Viaje"},
+    "Updates":{pt:"Atualizações",es:"Actualizaciones"},
+    "Urgent Delivery":{pt:"Entrega Urgente",es:"Entrega Urgente"},
+    "Urgent Inspection":{pt:"Inspeção Urgente",es:"Inspección Urgente"},
+    "Urgent Requests":{pt:"Pedidos Urgentes",es:"Solicitudes Urgentes"},
+    "Video Podcast":{pt:"Podcast em Vídeo",es:"Podcast en Vídeo"},
+    "Video Production":{pt:"Produção de Vídeo",es:"Producción de Vídeo"},
+    "Virtual Tour":{pt:"Tour Virtual",es:"Tour Virtual"},
+    "Visual Effects":{pt:"Efeitos Visuais",es:"Efectos Visuales"},
+    "Voice Talent":{pt:"Talento de Voz",es:"Talento de Voz"},
+    "Voice-over":{pt:"Voz Off",es:"Voz en Off"},
+    "Voting Rights":{pt:"Direitos de Voto",es:"Derechos de Voto"},
+    "Warranty":{pt:"Garantia",es:"Garantía"},
+    "Warranty Disclaimer":{pt:"Exclusão de Garantia",es:"Exclusión de Garantía"},
+    "Weather Conditions":{pt:"Condições Climatéricas",es:"Condiciones Climáticas"},
+    "Weather Policy":{pt:"Política Climática",es:"Política Climática"},
+    "Weekly Reports":{pt:"Relatórios Semanais",es:"Informes Semanales"},
+    "Working Hours":{pt:"Horário de Trabalho",es:"Horario de Trabajo"},
+    "Worldwide Rights":{pt:"Direitos Mundiais",es:"Derechos Mundiales"},
+    "Writing Scope":{pt:"Âmbito de Redação",es:"Alcance de Redacción"}
+  };
+  function blockName(b){ if(b.key) return blocoNomes[b.key]; const m=BIB_BLOCK_LABELS[b.name]; if(m){ if(LANG==='pt') return m.pt; if(LANG==='es') return m.es; return b.name; } return b.name||'Bloco'; }
   function blockText(job,b){ return (b.customText!=null) ? b.customText : (b.key ? blocoTextos[b.key](job,b.params) : ''); }
   function contractSummaryHtml(job){
     let html='<div style="font-size:13.5px;line-height:1.85;margin-bottom:4px">';
@@ -7219,7 +7538,7 @@
   function dynFieldLabel(campo){
     const m=DYN_FIELD_LABELS[campo];
     if(m) return m[LANG]||m.en||campo;
-    return bibCapitalizar(campo);
+    return bibTraduzirCampo(campo);
   }
   /* Campos que não fazem sentido durante a criação — a data de assinatura só
      existe depois de o contrato ser efetivamente assinado pelas partes. */
@@ -7294,34 +7613,24 @@
     openInfo(t('builder.blockLibrary'), html);
   }
   /* ===== Import seletivo (checkbox) de BLOCOS e CLÁUSULAS =====
-     Fluxo: entra num contrato da biblioteca, marca as checkboxes dos blocos
-     (ou, no modo cláusulas, entra num bloco e marca as cláusulas) e importa
-     para dentro do contrato em edição. Cada botão importa só blocos OU só
-     cláusulas, para manter a ordem e a coerência de edição. */
+     Fluxo: vai até a Biblioteca de Modelos completa (mesma tela "Modelos",
+     com busca/filtros/badges — bibPickModeCallback marca o modo 'blocos' ou
+     'clausulas' e abrirDetalheBibliotecaPrincipal roteia o botão principal
+     pra cá em vez de importar o modelo inteiro), escolhe um contrato, entra
+     nele, marca as checkboxes dos blocos (ou, no modo cláusulas, entra num
+     bloco e marca as cláusulas) e importa de volta pro contrato em edição
+     no Builder — sem destruir o estado do Builder, que fica intacto durante
+     a navegação (voltaBuilderAposSelecao devolve a view). */
   const BIB_CHECK_SVG='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
   const BIB_CHEVR_SVG='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>';
-  function bibContratosParaPicker(){
-    const vistos=new Set(); const out=[]; const todos=catalogoBiblioteca();
-    todos.forEach(i=>{
-      if(vistos.has(i.baseId)) return;
-      if(i.lang!==LANG && todos.some(x=>x.baseId===i.baseId && x.lang===LANG)) return;
-      vistos.add(i.baseId); out.push(i);
-    });
-    return out.sort((a,b)=>(a.titulo||'').localeCompare(b.titulo||''));
-  }
-  function bibPickerContratosHtml(modo){
-    const contratos=bibContratosParaPicker();
-    const fn = modo==='blocos' ? 'abrirSelecaoBlocosContrato' : 'abrirSelecaoBlocoParaClausulas';
-    return '<div class="plist">'+contratos.map(c=>
-      '<div class="prow" onclick="'+fn+'(\''+c.rawId+'\',\''+c.lang+'\',\''+escapeHtml(c.titulo).replace(/'/g,"\\'")+'\')">'+
-      '<div class="t">'+escapeHtml(c.titulo)+'</div>'+BIB_CHEVR_SVG+'</div>'
-    ).join('')+'</div>';
-  }
   function bibBlocoTagKey(status){ return status==='REQUIRED'?'library.blockRequired':status==='CONDITIONAL'?'library.blockConditional':'library.blockOptional'; }
+  function voltaBuilderAposSelecao(){ closeInfo(); bibPickModeCallback=null; go('builder'); }
 
   // ---- BLOCOS ----
   function abrirExplorarBlocosOficiais(){
-    openInfo(t('library.blocksExplore'), bibPickerContratosHtml('blocos'));
+    bibPickModeCallback={modo:'blocos'};
+    closeInfo();
+    go('bibliotecas');
   }
   let bibSelBlocosDetail=null, bibSelBlocosSet=new Set(), bibSelBlocosTitulo='';
   async function abrirSelecaoBlocosContrato(rawId, lang, titulo){
@@ -7339,7 +7648,7 @@
       const nCl=(b.clauses||[]).length;
       return '<div class="pick-check'+(on?' on':'')+'" onclick="toggleSelBloco('+idx+')">'+
         '<div class="pc-box'+(on?' on':'')+'">'+BIB_CHECK_SVG+'</div>'+
-        '<div class="pc-main"><div class="pc-nm">'+escapeHtml(b.name)+'</div>'+
+        '<div class="pc-main"><div class="pc-nm">'+escapeHtml(blockName({key:null,name:b.name}))+'</div>'+
         '<div class="pc-sub">'+nCl+' '+t('library.clausesCount')+' · '+t(bibBlocoTagKey(b.status))+'</div></div></div>';
     }).join('');
     const n=bibSelBlocosSet.size;
@@ -7359,7 +7668,8 @@
       added++;
     });
     if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
-    renderBuilder(); closeInfo();
+    renderBuilder();
+    voltaBuilderAposSelecao();
     showToast(added+' '+t('library.blocksImportedToast'));
   }
 
@@ -7374,9 +7684,11 @@
     openInfo(t('library.clausesAdd'), html);
   }
   function abrirCriarNovaClausula(){
+    const bid=bibClauseTargetBid;
     openInfo(t('library.clausesCreateNew'),
       '<div class="field"><textarea id="novaclausula-texto" rows="5" placeholder="'+t('library.clauseTextPlaceholder')+'"></textarea></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovaClausulaManual()">'+t('action.save')+'</button>'
+      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovaClausulaManual()">'+t('action.save')+'</button>',
+      ()=>abrirAdicionarClausulas(bid)
     );
   }
   function salvarNovaClausulaManual(){
@@ -7386,17 +7698,22 @@
     closeInfo();
   }
   function abrirExplorarClausulasOficiais(){
-    openInfo(t('library.clausesExplore'), bibPickerContratosHtml('clausulas'));
+    bibPickModeCallback={modo:'clausulas'};
+    closeInfo();
+    go('bibliotecas');
   }
   let bibSelClausDetail=null, bibSelClausBlockIdx=null, bibSelClausSet=new Set(), bibSelClausTitulo='';
+  let bibSelClausContratoCtx=null;
   async function abrirSelecaoBlocoParaClausulas(rawId, lang, titulo){
+    bibSelClausContratoCtx={rawId, lang, titulo};
     openInfo(titulo, '<p style="font-size:13px;color:var(--neutral)">…</p>');
     const detail=await LegalLibrary.getDetail(rawId, lang);
     bibSelClausDetail={blocks:(detail&&detail.blocks)||[]};
-    const rows=bibSelClausDetail.blocks.map((b,idx)=>
-      '<div class="prow" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(b.name).replace(/'/g,"\\'")+'\')">'+
-      '<div class="t">'+escapeHtml(b.name)+'</div><span class="pc-sub" style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>'
-    ).join('');
+    const rows=bibSelClausDetail.blocks.map((b,idx)=>{
+      const nomeTraduzido=blockName({key:null,name:b.name});
+      return '<div class="prow" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(nomeTraduzido).replace(/'/g,"\\'")+'\')">'+
+      '<div class="t">'+escapeHtml(nomeTraduzido)+'</div><span class="pc-sub" style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>';
+    }).join('');
     document.getElementById('infoTitle').textContent=titulo;
     document.getElementById('infoBody').innerHTML='<div class="plist">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
   }
@@ -7417,6 +7734,9 @@
     document.getElementById('infoTitle').textContent=bibSelClausTitulo;
     document.getElementById('infoBody').innerHTML='<div class="pick-list">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>'+
       '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportClausulas()">'+t('library.import')+(n?' ('+n+')':'')+'</button>';
+    const ctx=bibSelClausContratoCtx;
+    window.__infoBackHandler = ctx ? (()=>abrirSelecaoBlocoParaClausulas(ctx.rawId, ctx.lang, ctx.titulo)) : null;
+    document.getElementById('infoBackBtn').style.display = ctx ? 'flex' : 'none';
   }
   function toggleSelClaus(i){ if(bibSelClausSet.has(i))bibSelClausSet.delete(i); else bibSelClausSet.add(i); renderSelecaoClausulas(); }
   function confirmarImportClausulas(){
@@ -7424,7 +7744,7 @@
     const clauses=(bibSelClausDetail.blocks[bibSelClausBlockIdx].clauses)||[];
     const textos=[...bibSelClausSet].sort((a,b)=>a-b).map(i=>clauses[i].text);
     appendClausulasAoBloco(bibClauseTargetBid, textos);
-    closeInfo();
+    voltaBuilderAposSelecao();
   }
   function appendClausulasAoBloco(bid, textos){
     const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
@@ -7435,6 +7755,7 @@
     b.customText = LegalLibrary.resolveClauseText(b.tpl, fv);
     if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
     renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
     showToast(textos.length+' '+t('library.clausesImportedToast'));
   }
   const BIB_BLOCO_NOMES={
@@ -7447,7 +7768,8 @@
     openInfo(t('library.blocksCreateNew'),
       '<div class="field"><input id="novobloco-nome" placeholder="'+t('library.blockNamePlaceholder')+'" autocomplete="off"></div>'+
       '<div class="field"><textarea id="novobloco-texto" rows="5" placeholder="'+t('library.blockTextPlaceholder')+'"></textarea></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovoBlocoManual()">'+t('action.save')+'</button>'
+      '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarNovoBlocoManual()">'+t('action.save')+'</button>',
+      abrirBibliotecaBlocos
     );
   }
   function salvarNovoBlocoManual(){
@@ -9973,8 +10295,413 @@
   function bibCoberturasDoModelo(b){
     return [];
   }
+  const BIB_FIELD_WORD_MAP={
+    "A":{pt:"Um",es:"Un"},
+    "ACCEPTANCE":{pt:"Aceitação",es:"Aceptación"},
+    "ACCESS":{pt:"Acesso",es:"Acceso"},
+    "ACCOUNTING":{pt:"Contabilidade",es:"Contabilidad"},
+    "ACCREDITATION":{pt:"Credenciamento",es:"Acreditación"},
+    "ACTION":{pt:"Ação",es:"Acción"},
+    "AD":{pt:"Anúncio",es:"Anuncio"},
+    "ADDITIONAL":{pt:"Adicional",es:"Adicional"},
+    "ADDRESS":{pt:"Endereço",es:"Dirección"},
+    "AGENT":{pt:"Agente",es:"Agente"},
+    "AGREEMENT":{pt:"Acordo",es:"Acuerdo"},
+    "ALLOCATION":{pt:"Alocação",es:"Asignación"},
+    "ALTITUDE":{pt:"Altitude",es:"Altitud"},
+    "AMOUNT":{pt:"Valor",es:"Monto"},
+    "ANALYTICS":{pt:"Análises",es:"Analítica"},
+    "API":{pt:"API",es:"API"},
+    "APPLICABLE":{pt:"Aplicável",es:"Aplicable"},
+    "APPROVAL":{pt:"Aprovação",es:"Aprobación"},
+    "ARCHITECTURE":{pt:"Arquitetura",es:"Arquitectura"},
+    "ARCHIVAL":{pt:"Arquivo",es:"Archivo"},
+    "AREAS":{pt:"Áreas",es:"Áreas"},
+    "ASSESSMENT":{pt:"Avaliação",es:"Evaluación"},
+    "ASSIGNEE":{pt:"Cessionário",es:"Cesionario"},
+    "ASSIGNMENT":{pt:"Cessão",es:"Cesión"},
+    "ASSIGNOR":{pt:"Cedente",es:"Cedente"},
+    "ASSISTANCE":{pt:"Assistência",es:"Asistencia"},
+    "ATTRIBUTION":{pt:"Atribuição",es:"Atribución"},
+    "AUDIENCE":{pt:"Público",es:"Audiencia"},
+    "AUDIT":{pt:"Auditoria",es:"Auditoría"},
+    "AUTHENTICATION":{pt:"Autenticação",es:"Autenticación"},
+    "AUTHORITY":{pt:"Autoridade",es:"Autoridad"},
+    "AUTHORIZATION":{pt:"Autorização",es:"Autorización"},
+    "B":{pt:"Dois",es:"Dos"},
+    "BASE":{pt:"Base",es:"Base"},
+    "BASELINE":{pt:"Linha de Base",es:"Línea Base"},
+    "BILLING":{pt:"Faturação",es:"Facturación"},
+    "BONUS":{pt:"Bónus",es:"Bono"},
+    "BREACH":{pt:"Incumprimento",es:"Incumplimiento"},
+    "BRIEF":{pt:"Briefing",es:"Brief"},
+    "BROWSER":{pt:"Navegador",es:"Navegador"},
+    "BUDGET":{pt:"Orçamento",es:"Presupuesto"},
+    "BUSINESS":{pt:"Negócio",es:"Negocio"},
+    "BY":{pt:"Por",es:"Por"},
+    "CALENDAR":{pt:"Calendário",es:"Calendario"},
+    "CAMPAIGN":{pt:"Campanha",es:"Campaña"},
+    "CANCELLATION":{pt:"Cancelamento",es:"Cancelación"},
+    "CANDIDATE":{pt:"Candidato",es:"Candidato"},
+    "CAP":{pt:"Limite",es:"Límite"},
+    "CATEGORY":{pt:"Categoria",es:"Categoría"},
+    "CHANNELS":{pt:"Canais",es:"Canales"},
+    "CHRONIC":{pt:"Crónico",es:"Crónico"},
+    "CIRCUMVENTION":{pt:"Contornação",es:"Circunvención"},
+    "CLIENT":{pt:"Cliente",es:"Cliente"},
+    "CLIPS":{pt:"Clipes",es:"Clips"},
+    "CLOUD":{pt:"Cloud",es:"Nube"},
+    "COMMERCIAL":{pt:"Comercial",es:"Comercial"},
+    "COMMISSION":{pt:"Comissão",es:"Comisión"},
+    "COMMUNITY":{pt:"Comunidade",es:"Comunidad"},
+    "COMPANY":{pt:"Empresa",es:"Empresa"},
+    "COMPATIBILITY":{pt:"Compatibilidade",es:"Compatibilidad"},
+    "COMPENSATION":{pt:"Remuneração",es:"Compensación"},
+    "COMPETE":{pt:"Concorrer",es:"Competir"},
+    "COMPETING":{pt:"Concorrente",es:"Competidor"},
+    "CONFIDENTIALITY":{pt:"Confidencialidade",es:"Confidencialidad"},
+    "CONSULTATION":{pt:"Consulta",es:"Consulta"},
+    "CONSULTING":{pt:"Consultoria",es:"Consultoría"},
+    "CONTACT":{pt:"Contacto",es:"Contacto"},
+    "CONTENT":{pt:"Conteúdo",es:"Contenido"},
+    "CONTRACTED":{pt:"Contratado",es:"Contratado"},
+    "CONTRIBUTION":{pt:"Contribuição",es:"Contribución"},
+    "CORRECTIVE":{pt:"Corretiva",es:"Correctiva"},
+    "COUNT":{pt:"Contagem",es:"Cantidad"},
+    "COURSE":{pt:"Curso",es:"Curso"},
+    "COVERAGE":{pt:"Cobertura",es:"Cobertura"},
+    "CRASH":{pt:"Falha",es:"Fallo"},
+    "CREATIVE":{pt:"Criativo",es:"Creativo"},
+    "CREDIT":{pt:"Crédito",es:"Crédito"},
+    "CRITERIA":{pt:"Critérios",es:"Criterios"},
+    "CRITICAL":{pt:"Crítico",es:"Crítico"},
+    "CURE":{pt:"Correção",es:"Corrección"},
+    "CURRICULUM":{pt:"Currículo",es:"Currículo"},
+    "CUTOFF":{pt:"Corte",es:"Corte"},
+    "DAMAGES":{pt:"Danos",es:"Daños"},
+    "DATE":{pt:"Data",es:"Fecha"},
+    "DATES":{pt:"Datas",es:"Fechas"},
+    "DAYS":{pt:"Dias",es:"Días"},
+    "DEADLINE":{pt:"Prazo",es:"Plazo"},
+    "DEADLOCK":{pt:"Impasse",es:"Punto Muerto"},
+    "DECISION":{pt:"Decisão",es:"Decisión"},
+    "DECLINED":{pt:"Recusado",es:"Rechazado"},
+    "DEFAULT":{pt:"Padrão",es:"Predeterminado"},
+    "DEFINITION":{pt:"Definição",es:"Definición"},
+    "DELIVERABLES":{pt:"Entregáveis",es:"Entregables"},
+    "DELIVERY":{pt:"Entrega",es:"Entrega"},
+    "DEPRECATION":{pt:"Descontinuação",es:"Obsolescencia"},
+    "DESCRIPTION":{pt:"Descrição",es:"Descripción"},
+    "DESIGN":{pt:"Design",es:"Diseño"},
+    "DEVELOPER":{pt:"Programador",es:"Desarrollador"},
+    "DEVELOPMENT":{pt:"Desenvolvimento",es:"Desarrollo"},
+    "DEVICE":{pt:"Dispositivo",es:"Dispositivo"},
+    "DIRECTION":{pt:"Direção",es:"Dirección"},
+    "DISCLOSING":{pt:"Divulgador",es:"Divulgador"},
+    "DISCLOSURE":{pt:"Divulgação",es:"Divulgación"},
+    "DISPUTE":{pt:"Litígio",es:"Disputa"},
+    "DOCUMENT":{pt:"Documento",es:"Documento"},
+    "DOCUMENTATION":{pt:"Documentação",es:"Documentación"},
+    "DOMAIN":{pt:"Domínio",es:"Dominio"},
+    "DURATION":{pt:"Duração",es:"Duración"},
+    "EARNING":{pt:"Rendimento",es:"Ganancia"},
+    "EDITED":{pt:"Editado",es:"Editado"},
+    "EDITORIAL":{pt:"Editorial",es:"Editorial"},
+    "EFFECTIVE":{pt:"Efetivo",es:"Efectivo"},
+    "EMERGENCY":{pt:"Emergência",es:"Emergencia"},
+    "EMPLOYEES":{pt:"Funcionários",es:"Empleados"},
+    "ENDPOINT":{pt:"Endpoint",es:"Endpoint"},
+    "ESCALATION":{pt:"Escalonamento",es:"Escalamiento"},
+    "ESTIMATED":{pt:"Estimado",es:"Estimado"},
+    "EVENT":{pt:"Evento",es:"Evento"},
+    "EXCLUDED":{pt:"Excluído",es:"Excluido"},
+    "EXCLUSIVITY":{pt:"Exclusividade",es:"Exclusividad"},
+    "EXPENSE":{pt:"Despesa",es:"Gasto"},
+    "EXPRESS":{pt:"Expresso",es:"Exprés"},
+    "EXTENDED":{pt:"Alargado",es:"Extendido"},
+    "FAILURE":{pt:"Falha",es:"Fallo"},
+    "FEE":{pt:"Taxa",es:"Tarifa"},
+    "FILES":{pt:"Ficheiros",es:"Archivos"},
+    "FILING":{pt:"Registo",es:"Registro"},
+    "FINANCIAL":{pt:"Financeiro",es:"Financiero"},
+    "FOLLOW":{pt:"Acompanhamento",es:"Seguimiento"},
+    "FORCE":{pt:"Força",es:"Fuerza"},
+    "FORMAT":{pt:"Formato",es:"Formato"},
+    "FORMATTING":{pt:"Formatação",es:"Formato"},
+    "FORMULA":{pt:"Fórmula",es:"Fórmula"},
+    "FREQUENCY":{pt:"Frequência",es:"Frecuencia"},
+    "FUTURE":{pt:"Futuro",es:"Futuro"},
+    "GLOSSARY":{pt:"Glossário",es:"Glosario"},
+    "GRAPHIC":{pt:"Gráfico",es:"Gráfico"},
+    "GUARANTEE":{pt:"Garantia",es:"Garantía"},
+    "HIGH":{pt:"Alto",es:"Alto"},
+    "HIRING":{pt:"Contratação",es:"Contratación"},
+    "HOLIDAYS":{pt:"Feriados",es:"Días Festivos"},
+    "HOSTING":{pt:"Alojamento",es:"Alojamiento"},
+    "HOUR":{pt:"Hora",es:"Hora"},
+    "HOURLY":{pt:"Por Hora",es:"Por Hora"},
+    "HOURS":{pt:"Horas",es:"Horas"},
+    "IMAGE":{pt:"Imagem",es:"Imagen"},
+    "IMAGES":{pt:"Imagens",es:"Imágenes"},
+    "IMPLEMENTATION":{pt:"Implementação",es:"Implementación"},
+    "INCIDENT":{pt:"Incidente",es:"Incidente"},
+    "INCLUDED":{pt:"Incluído",es:"Incluido"},
+    "INDEMNITY":{pt:"Indemnização",es:"Indemnización"},
+    "INFRASTRUCTURE":{pt:"Infraestrutura",es:"Infraestructura"},
+    "INSPECTION":{pt:"Inspeção",es:"Inspección"},
+    "INSTALLATION":{pt:"Instalação",es:"Instalación"},
+    "INSURANCE":{pt:"Seguro",es:"Seguro"},
+    "INTEREST":{pt:"Juros",es:"Interés"},
+    "INVESTMENT":{pt:"Investimento",es:"Inversión"},
+    "IP":{pt:"PI",es:"PI"},
+    "JOINT":{pt:"Conjunto",es:"Conjunto"},
+    "KEYWORD":{pt:"Palavra-chave",es:"Palabra Clave"},
+    "LANDING":{pt:"Landing",es:"Landing"},
+    "LANGUAGE":{pt:"Idioma",es:"Idioma"},
+    "LANGUAGES":{pt:"Idiomas",es:"Idiomas"},
+    "LATE":{pt:"Atraso",es:"Retraso"},
+    "LAW":{pt:"Lei",es:"Ley"},
+    "LEGITIMATE":{pt:"Legítimo",es:"Legítimo"},
+    "LEVELS":{pt:"Níveis",es:"Niveles"},
+    "LIABILITY":{pt:"Responsabilidade",es:"Responsabilidad"},
+    "LICENSE":{pt:"Licença",es:"Licencia"},
+    "LICENSED":{pt:"Licenciado",es:"Licenciado"},
+    "LICENSEE":{pt:"Licenciado",es:"Licenciatario"},
+    "LICENSOR":{pt:"Licenciante",es:"Licenciante"},
+    "LIQUIDATED":{pt:"Pré-fixados",es:"Liquidados"},
+    "LIST":{pt:"Lista",es:"Lista"},
+    "LOCATION":{pt:"Local",es:"Lugar"},
+    "LOOKBACK":{pt:"Retroativo",es:"Retroactivo"},
+    "LOW":{pt:"Baixo",es:"Bajo"},
+    "MAINTENANCE":{pt:"Manutenção",es:"Mantenimiento"},
+    "MAJEURE":{pt:"Maior",es:"Mayor"},
+    "MAKING":{pt:"Tomada",es:"Toma"},
+    "MANAGEMENT":{pt:"Gestão",es:"Gestión"},
+    "MATERIAL":{pt:"Material",es:"Material"},
+    "MATERIALS":{pt:"Materiais",es:"Materiales"},
+    "MATRIX":{pt:"Matriz",es:"Matriz"},
+    "MATTER":{pt:"Assunto",es:"Asunto"},
+    "MAX":{pt:"Máximo",es:"Máximo"},
+    "MEASUREMENT":{pt:"Medição",es:"Medición"},
+    "MEASURES":{pt:"Medidas",es:"Medidas"},
+    "MECHANISM":{pt:"Mecanismo",es:"Mecanismo"},
+    "MEDIA":{pt:"Media",es:"Medios"},
+    "MEDIUM":{pt:"Médio",es:"Medio"},
+    "MEETING":{pt:"Reunião",es:"Reunión"},
+    "MEETINGS":{pt:"Reuniões",es:"Reuniones"},
+    "METHOD":{pt:"Método",es:"Método"},
+    "METHODOLOGY":{pt:"Metodologia",es:"Metodología"},
+    "METHODS":{pt:"Métodos",es:"Métodos"},
+    "METRIC":{pt:"Métrica",es:"Métrica"},
+    "METRICS":{pt:"Métricas",es:"Métricas"},
+    "MILESTONE":{pt:"Marco",es:"Hito"},
+    "MINIMUM":{pt:"Mínimo",es:"Mínimo"},
+    "MODEL":{pt:"Modelo",es:"Modelo"},
+    "MONITORING":{pt:"Monitorização",es:"Monitoreo"},
+    "MONTHS":{pt:"Meses",es:"Meses"},
+    "MUNICIPAL":{pt:"Municipal",es:"Municipal"},
+    "MUSICIAN":{pt:"Músico",es:"Músico"},
+    "NAME":{pt:"Nome",es:"Nombre"},
+    "NON":{pt:"Não",es:"No"},
+    "NOTICE":{pt:"Aviso",es:"Aviso"},
+    "NOTIFICATION":{pt:"Notificação",es:"Notificación"},
+    "NUMBER":{pt:"Número",es:"Número"},
+    "OBJECTIVE":{pt:"Objetivo",es:"Objetivo"},
+    "OF":{pt:"De",es:"De"},
+    "ONLINE":{pt:"Online",es:"En Línea"},
+    "ONSITE":{pt:"No Local",es:"En Sitio"},
+    "OPERATION":{pt:"Operação",es:"Operación"},
+    "OS":{pt:"SO",es:"SO"},
+    "OVER":{pt:"Acima",es:"Sobre"},
+    "OVERTIME":{pt:"Horas Extra",es:"Horas Extra"},
+    "OWNERSHIP":{pt:"Propriedade",es:"Propiedad"},
+    "PAGE":{pt:"Página",es:"Página"},
+    "PAGES":{pt:"Páginas",es:"Páginas"},
+    "PAID":{pt:"Pago",es:"Pagado"},
+    "PARTICIPANT":{pt:"Participante",es:"Participante"},
+    "PARTICIPANTS":{pt:"Participantes",es:"Participantes"},
+    "PARTNER":{pt:"Parceiro",es:"Socio"},
+    "PARTNERSHIP":{pt:"Parceria",es:"Asociación"},
+    "PARTY":{pt:"Parte",es:"Parte"},
+    "PASSIVE":{pt:"Passivo",es:"Pasivo"},
+    "PAYMENT":{pt:"Pagamento",es:"Pago"},
+    "PAYROLL":{pt:"Folha Salarial",es:"Nómina"},
+    "PER":{pt:"Por",es:"Por"},
+    "PERCENT":{pt:"Percentagem",es:"Porcentaje"},
+    "PERFORMANCE":{pt:"Desempenho",es:"Desempeño"},
+    "PERIOD":{pt:"Período",es:"Período"},
+    "PERMITTED":{pt:"Permitido",es:"Permitido"},
+    "PHASES":{pt:"Fases",es:"Fases"},
+    "PHOTOGRAPHY":{pt:"Fotografia",es:"Fotografía"},
+    "PIECES":{pt:"Peças",es:"Piezas"},
+    "PLANNING":{pt:"Planeamento",es:"Planificación"},
+    "PLATFORM":{pt:"Plataforma",es:"Plataforma"},
+    "PLATFORMS":{pt:"Plataformas",es:"Plataformas"},
+    "PODCAST":{pt:"Podcast",es:"Podcast"},
+    "PORTFOLIO":{pt:"Portefólio",es:"Portafolio"},
+    "POSITION":{pt:"Posição",es:"Posición"},
+    "POSTING":{pt:"Publicação",es:"Publicación"},
+    "POSTS":{pt:"Publicações",es:"Publicaciones"},
+    "PRESENTATION":{pt:"Apresentação",es:"Presentación"},
+    "PRICE":{pt:"Preço",es:"Precio"},
+    "PRIORITY":{pt:"Prioridade",es:"Prioridad"},
+    "PRODUCT":{pt:"Produto",es:"Producto"},
+    "PRODUCTION":{pt:"Produção",es:"Producción"},
+    "PROFESSIONAL":{pt:"Profissional",es:"Profesional"},
+    "PROGRAM":{pt:"Programa",es:"Programa"},
+    "PROGRESS":{pt:"Progresso",es:"Progreso"},
+    "PROJECT":{pt:"Projeto",es:"Proyecto"},
+    "PROPERTY":{pt:"Propriedade",es:"Propiedad"},
+    "PROTOTYPE":{pt:"Protótipo",es:"Prototipo"},
+    "PROVIDER":{pt:"Prestador",es:"Proveedor"},
+    "PROVISION":{pt:"Disposição",es:"Disposición"},
+    "PUBLIC":{pt:"Público",es:"Público"},
+    "PUBLISHING":{pt:"Publicação",es:"Publicación"},
+    "PURPOSE":{pt:"Finalidade",es:"Propósito"},
+    "QA":{pt:"QA",es:"QA"},
+    "RATE":{pt:"Taxa",es:"Tarifa"},
+    "RECEIVING":{pt:"Recetor",es:"Receptor"},
+    "RECORD":{pt:"Registo",es:"Registro"},
+    "RECORDING":{pt:"Gravação",es:"Grabación"},
+    "RECRUITMENT":{pt:"Recrutamento",es:"Reclutamiento"},
+    "REFERENCE":{pt:"Referência",es:"Referencia"},
+    "REGISTRATION":{pt:"Registo",es:"Registro"},
+    "REINSPECTION":{pt:"Reinspeção",es:"Reinspección"},
+    "RELEASE":{pt:"Liberação",es:"Liberación"},
+    "RENDERING":{pt:"Renderização",es:"Renderizado"},
+    "RENDERINGS":{pt:"Renderizações",es:"Renderizados"},
+    "RENEWAL":{pt:"Renovação",es:"Renovación"},
+    "RENTAL":{pt:"Aluguer",es:"Alquiler"},
+    "REPORT":{pt:"Relatório",es:"Informe"},
+    "REPORTING":{pt:"Relatórios",es:"Informes"},
+    "REPRESENTATION":{pt:"Representação",es:"Representación"},
+    "REQUIREMENTS":{pt:"Requisitos",es:"Requisitos"},
+    "RESALE":{pt:"Revenda",es:"Reventa"},
+    "RESCHEDULING":{pt:"Reagendamento",es:"Reprogramación"},
+    "RESEARCH":{pt:"Pesquisa",es:"Investigación"},
+    "RESELLER":{pt:"Revendedor",es:"Revendedor"},
+    "RESOLUTION":{pt:"Resolução",es:"Resolución"},
+    "RESPONSE":{pt:"Resposta",es:"Respuesta"},
+    "RESPONSIBILITY":{pt:"Responsabilidade",es:"Responsabilidad"},
+    "RESTRICTED":{pt:"Restrito",es:"Restringido"},
+    "RESTRICTION":{pt:"Restrição",es:"Restricción"},
+    "RETENTION":{pt:"Retenção",es:"Retención"},
+    "RETURN":{pt:"Devolução",es:"Devolución"},
+    "REVENUE":{pt:"Receita",es:"Ingreso"},
+    "REVIEW":{pt:"Revisão",es:"Revisión"},
+    "REVISION":{pt:"Revisão",es:"Revisión"},
+    "ROLE":{pt:"Função",es:"Rol"},
+    "ROUNDS":{pt:"Rondas",es:"Rondas"},
+    "ROYALTY":{pt:"Royalty",es:"Regalía"},
+    "RUSH":{pt:"Urgente",es:"Urgente"},
+    "SALES":{pt:"Vendas",es:"Ventas"},
+    "SCHEDULE":{pt:"Cronograma",es:"Cronograma"},
+    "SCHEME":{pt:"Esquema",es:"Esquema"},
+    "SCOPE":{pt:"Âmbito",es:"Alcance"},
+    "SCREEN":{pt:"Ecrã",es:"Pantalla"},
+    "SCREENS":{pt:"Ecrãs",es:"Pantallas"},
+    "SECOND":{pt:"Segundo",es:"Segundo"},
+    "SECURITY":{pt:"Segurança",es:"Seguridad"},
+    "SEO":{pt:"SEO",es:"SEO"},
+    "SERVICE":{pt:"Serviço",es:"Servicio"},
+    "SERVICES":{pt:"Serviços",es:"Servicios"},
+    "SESSION":{pt:"Sessão",es:"Sesión"},
+    "SESSIONS":{pt:"Sessões",es:"Sesiones"},
+    "SHARING":{pt:"Partilha",es:"Reparto"},
+    "SHOOT":{pt:"Sessão de Fotos",es:"Sesión de Fotos"},
+    "SIGNATURE":{pt:"Assinatura",es:"Firma"},
+    "SITE":{pt:"Local",es:"Sitio"},
+    "SLA":{pt:"SLA",es:"SLA"},
+    "SOCIAL":{pt:"Social",es:"Social"},
+    "SOFTWARE":{pt:"Software",es:"Software"},
+    "SOLICITATION":{pt:"Aliciamento",es:"Solicitación"},
+    "SONG":{pt:"Música",es:"Canción"},
+    "SOURCE":{pt:"Origem",es:"Origen"},
+    "SPEND":{pt:"Gasto",es:"Gasto"},
+    "STACK":{pt:"Stack",es:"Stack"},
+    "START":{pt:"Início",es:"Inicio"},
+    "STATUS":{pt:"Estado",es:"Estado"},
+    "STUDIO":{pt:"Estúdio",es:"Estudio"},
+    "SUBJECT":{pt:"Assunto",es:"Asunto"},
+    "SUBMISSION":{pt:"Submissão",es:"Envío"},
+    "SUBTITLE":{pt:"Legenda",es:"Subtítulo"},
+    "SUPERVISION":{pt:"Supervisão",es:"Supervisión"},
+    "SUPPLIER":{pt:"Fornecedor",es:"Proveedor"},
+    "SUPPORT":{pt:"Suporte",es:"Soporte"},
+    "SURVIVAL":{pt:"Sobrevivência",es:"Supervivencia"},
+    "SYSTEM":{pt:"Sistema",es:"Sistema"},
+    "TAIL":{pt:"Cauda",es:"Cola"},
+    "TALENT":{pt:"Talento",es:"Talento"},
+    "TARGET":{pt:"Alvo",es:"Objetivo"},
+    "TAX":{pt:"Imposto",es:"Impuesto"},
+    "TECHNICAL":{pt:"Técnico",es:"Técnico"},
+    "TECHNOLOGY":{pt:"Tecnologia",es:"Tecnología"},
+    "TERM":{pt:"Prazo",es:"Plazo"},
+    "TERMINATION":{pt:"Rescisão",es:"Rescisión"},
+    "TERMS":{pt:"Termos",es:"Términos"},
+    "TERRITORY":{pt:"Território",es:"Territorio"},
+    "TEST":{pt:"Teste",es:"Prueba"},
+    "THRESHOLD":{pt:"Limiar",es:"Umbral"},
+    "TIME":{pt:"Tempo",es:"Tiempo"},
+    "TIMELINE":{pt:"Cronograma",es:"Cronograma"},
+    "TITLE":{pt:"Título",es:"Título"},
+    "TOOL":{pt:"Ferramenta",es:"Herramienta"},
+    "TOOLS":{pt:"Ferramentas",es:"Herramientas"},
+    "TOPIC":{pt:"Tópico",es:"Tema"},
+    "TOTAL":{pt:"Total",es:"Total"},
+    "TOUR":{pt:"Tour",es:"Tour"},
+    "TRACKED":{pt:"Rastreado",es:"Rastreado"},
+    "TRACKING":{pt:"Rastreamento",es:"Seguimiento"},
+    "TRAINING":{pt:"Formação",es:"Capacitación"},
+    "TRANSACTION":{pt:"Transação",es:"Transacción"},
+    "TRANSCRIPTION":{pt:"Transcrição",es:"Transcripción"},
+    "TRANSLATION":{pt:"Tradução",es:"Traducción"},
+    "TRIGGER":{pt:"Gatilho",es:"Disparador"},
+    "TURNAROUND":{pt:"Prazo de Entrega",es:"Tiempo de Entrega"},
+    "TYPE":{pt:"Tipo",es:"Tipo"},
+    "UP":{pt:"Acima",es:"Arriba"},
+    "UPTIME":{pt:"Disponibilidade",es:"Tiempo Activo"},
+    "URGENT":{pt:"Urgente",es:"Urgente"},
+    "URL":{pt:"URL",es:"URL"},
+    "USAGE":{pt:"Uso",es:"Uso"},
+    "USE":{pt:"Uso",es:"Uso"},
+    "USERS":{pt:"Utilizadores",es:"Usuarios"},
+    "VALUE":{pt:"Valor",es:"Valor"},
+    "VERSION":{pt:"Versão",es:"Versión"},
+    "VERSIONING":{pt:"Versionamento",es:"Versionado"},
+    "VERSIONS":{pt:"Versões",es:"Versiones"},
+    "VFX":{pt:"VFX",es:"VFX"},
+    "VIDEO":{pt:"Vídeo",es:"Vídeo"},
+    "VIDEOGRAPHER":{pt:"Videógrafo",es:"Videógrafo"},
+    "VIDEOS":{pt:"Vídeos",es:"Vídeos"},
+    "VIRTUAL":{pt:"Virtual",es:"Virtual"},
+    "VISIT":{pt:"Visita",es:"Visita"},
+    "VOICE":{pt:"Voz",es:"Voz"},
+    "VOLUME":{pt:"Volume",es:"Volumen"},
+    "VOTING":{pt:"Votação",es:"Votación"},
+    "WAIVED":{pt:"Renunciado",es:"Renunciado"},
+    "WARRANTY":{pt:"Garantia",es:"Garantía"},
+    "WEBSITE":{pt:"Website",es:"Sitio Web"},
+    "WEIGHT":{pt:"Peso",es:"Peso"},
+    "WHOLESALE":{pt:"Atacado",es:"Mayorista"},
+    "WINDOW":{pt:"Janela",es:"Ventana"},
+    "WORK":{pt:"Trabalho",es:"Trabajo"},
+    "WORKING":{pt:"Trabalho",es:"Trabajo"},
+    "WORKS":{pt:"Obras",es:"Obras"},
+    "WORKSHOP":{pt:"Workshop",es:"Taller"},
+    "YEARS":{pt:"Anos",es:"Años"}
+  };
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
+  }
+  function bibTraduzirCampo(campo){
+    if(LANG==='en') return bibCapitalizar(campo);
+    const palavras=(campo||'').split(/[_-]+/).filter(Boolean);
+    return palavras.map(w=>{
+      const m=BIB_FIELD_WORD_MAP[w.toUpperCase()];
+      const tr = m ? (m[LANG]||m.pt) : (w.charAt(0).toUpperCase()+w.slice(1).toLowerCase());
+      return tr;
+    }).join(' ');
   }
   /* item.idioma é um array (['en','pt','es', ...]) — todo contrato tem o
      Master English (PLDS-001) e pode ter traduções em legal-library/i18n/.
@@ -9983,12 +10710,17 @@
   const BIB_IDIOMA_NOMES={en:'English', pt:'Português', es:'Español'};
   function bibNomeIdioma(code){ return BIB_IDIOMA_NOMES[code] || code; }
   const BIB_CATEGORIA_AMIGAVEL={
-    'Photography':'Audiovisual', 'Videography':'Audiovisual', 'Design':'Design',
-    'Software Development':'Tecnologia', 'Marketing':'Marketing', 'Consulting':'Consultoria',
-    'Architecture & Engineering':'Arquitetura & Engenharia', 'Education & Content':'Educação & Conteúdo',
-    'Universal Contracts':'Geral'
+    'Photography':{pt:'Audiovisual', en:'Audiovisual', es:'Audiovisual'},
+    'Videography':{pt:'Audiovisual', en:'Audiovisual', es:'Audiovisual'},
+    'Design':{pt:'Design', en:'Design', es:'Diseño'},
+    'Software Development':{pt:'Tecnologia', en:'Technology', es:'Tecnología'},
+    'Marketing':{pt:'Marketing', en:'Marketing', es:'Marketing'},
+    'Consulting':{pt:'Consultoria', en:'Consulting', es:'Consultoría'},
+    'Architecture & Engineering':{pt:'Arquitetura & Engenharia', en:'Architecture & Engineering', es:'Arquitectura e Ingeniería'},
+    'Education & Content':{pt:'Educação & Conteúdo', en:'Education & Content', es:'Educación y Contenido'},
+    'Universal Contracts':{pt:'Geral', en:'General', es:'General'}
   };
-  function bibCategoriaAmigavel(it){ return BIB_CATEGORIA_AMIGAVEL[it.categoria] || it.categoria; }
+  function bibCategoriaAmigavel(it){ const m=BIB_CATEGORIA_AMIGAVEL[it.categoria]; return m ? (m[LANG]||m.en) : it.categoria; }
   function bibProfissao(it){
     const s=((it.categoria||'')+' '+((it.tags||[]).join(' '))).toLowerCase();
     if(/video|drone|aftermovie/.test(s)) return 'Videomaker';
@@ -10234,7 +10966,10 @@
     if(banner){
       banner.style.display = bibPickModeCallback ? 'flex' : 'none';
       if(bibPickModeCallback) document.getElementById('bib-pick-banner-txt').textContent =
-        t(bibPickModeCallback.modo==='colaboradorMassa' ? 'library.pickForCollabMassa' : 'library.pickForCollab');
+        t(bibPickModeCallback.modo==='colaboradorMassa' ? 'library.pickForCollabMassa'
+          : bibPickModeCallback.modo==='blocos' ? 'library.pickForBlocks'
+          : bibPickModeCallback.modo==='clausulas' ? 'library.pickForClauses'
+          : 'library.pickForCollab');
     }
     bibAtualizarBotoesFiltro();
     renderBibOrigemRow();
@@ -10279,7 +11014,7 @@
     return '<div style="margin-bottom:14px">'+item.blocks.map(b=>{
       const largura=pesos[b.status]||45;
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(b.name)+' <span style="opacity:.6">· '+t(tagKey)+'</span></div><div class="bib-struct-bar"><i style="width:'+largura+'%"></i></div></div>';
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span style="opacity:.6">· '+t(tagKey)+'</span></div><div class="bib-struct-bar"><i style="width:'+largura+'%"></i></div></div>';
     }).join('')+'</div>';
   }
   function bibBlocoBlurHtml(item){
@@ -10320,7 +11055,7 @@
     const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const texto=(b.clauses||[]).map(c=>c.text).join('\n\n');
-      return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(b.name)+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
+      return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(blockName({key:null,name:b.name}))+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
         '<div class="vis-bloco-txt">'+escapeHtml(texto)+'</div></div>';
     }).join('');
     document.getElementById('infoBody').innerHTML=
@@ -10351,10 +11086,15 @@
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
+    const tituloEscapado=escapeHtml(it.titulo).replace(/'/g,"\\'");
+    const pickBlocosOuClausulas = bibPickModeCallback && (bibPickModeCallback.modo==='blocos'||bibPickModeCallback.modo==='clausulas');
     const usarOnclick = bibPickModeCallback
-      ? "bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
-      : (it.onclick ? it.onclick : "importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button class="btn primary" style="width:100%" onclick="closeInfo();'+usarOnclick.replace(/"/g,'&quot;')+'">'+t('library.import')+'</button>';
+      ? (bibPickModeCallback.modo==='blocos' ? "abrirSelecaoBlocosContrato('"+it.rawId+"','"+it.lang+"','"+tituloEscapado+"')"
+        : bibPickModeCallback.modo==='clausulas' ? "abrirSelecaoBlocoParaClausulas('"+it.rawId+"','"+it.lang+"','"+tituloEscapado+"')"
+        : "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')")
+      : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
+    const usarLabel = pickBlocosOuClausulas ? t('library.viewBlocksBtn') : t('library.import');
+    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+usarLabel+'</button>';
     openInfo(it.titulo, html);
   }
   function cancelarSelecaoBiblioteca(){
@@ -11263,11 +12003,13 @@
   }
 
   /* ===== INFO SHEET — Perfil, Builder (funções reais e contidas) ===== */
-  function openInfo(title, bodyHtml){
+  function openInfo(title, bodyHtml, onBack){
     document.getElementById('infoTitle').textContent=title;
     document.getElementById('infoBody').innerHTML=bodyHtml;
     document.getElementById('infoOverlay').classList.add('show');
     document.getElementById('infoSheet').classList.add('show');
+    window.__infoBackHandler = onBack||null;
+    document.getElementById('infoBackBtn').style.display = onBack ? 'flex' : 'none';
     document.querySelectorAll('#infoBody [data-t]').forEach(el=>{
       const val=t(el.dataset.t);
       if(val&&val!==el.dataset.t)el.textContent=val;
@@ -11280,6 +12022,8 @@
   function closeInfo(){
     document.getElementById('infoOverlay').classList.remove('show');
     document.getElementById('infoSheet').classList.remove('show');
+    window.__infoBackHandler=null;
+    document.getElementById('infoBackBtn').style.display='none';
   }
   function infoMinhaConta(){
     const planoAtual = perfilData.plano||'Free';
