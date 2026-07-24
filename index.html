@@ -701,7 +701,7 @@
       <section class="view" id="v-perfil">
         <div class="profile-head">
           <div class="p-avatar-wrap">
-            <div class="p-avatar">B</div>
+            <div class="p-avatar p-avatar-profile">B</div>
             <div class="p-avatar-edit" onclick="document.getElementById('avatar-file-input').click()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
             </div>
@@ -873,7 +873,7 @@
       <div class="panel show" data-panel="home">
         <div class="sheet-grid">
           <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
-          <div class="sheet-item" onclick="pushPanel('cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
+          <div class="sheet-item" onclick="abrirNovoContato()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
           <div class="sheet-item" onclick="pushPanel('contrato')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span data-t="sheet.contract">Contrato</span></div>
           <div class="sheet-item" onclick="closeSheet();abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span data-t="sheet.financialMovement">Movimentação Financeira</span></div>
           <div class="sheet-item" onclick="closeSheet();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span data-t="sheet.goalsLimits">Metas e Limites</span></div>
@@ -2330,11 +2330,11 @@
     "explore.contractLibrary": { pt:"Biblioteca de Contratos", en:"Contract Library", es:"Biblioteca de Contratos" },
     "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
-    "library.origin.official": { pt:"Oficial Pivots", en:"Official Pivots", es:"Oficial Pivots" },
-    "library.origin.officialShort": { pt:"Oficial", en:"Official", es:"Oficial" },
-    "library.origin.legalVerified": { pt:"Jurídico Verificado", en:"Legally Verified", es:"Jurídico Verificado" },
+    "library.origin.official": { pt:"Pivots", en:"Pivots", es:"Pivots" },
+    "library.origin.officialShort": { pt:"Pivots", en:"Pivots", es:"Pivots" },
+    "library.origin.legalVerified": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
-    "library.origin.communityShort": { pt:"Comun.", en:"Comm.", es:"Comun." },
+    "library.origin.communityShort": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
@@ -2346,7 +2346,7 @@
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
-    "library.origin.recommendedShort": { pt:"Recomend.", en:"Recomm.", es:"Recomend." },
+    "library.origin.recommendedShort": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.recommendCount": { pt:"recomendam", en:"recommend", es:"recomiendan" },
     "library.viewBlock": { pt:"Visualizar", en:"View", es:"Ver" },
     "library.saved": { pt:"Salvos", en:"Saved", es:"Guardados" },
@@ -9905,7 +9905,11 @@
         categoria:b.categoria, tags:b.tags||[],
         origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[],
         idioma:b.idioma, profissao:bibProfissao(b),
-        numBlocos:b.numBlocos, coberturas:bibCoberturasDoModelo(b)
+        numBlocos:b.numBlocos, coberturas:bibCoberturasDoModelo(b),
+        /* Avaliação própria do utilizador (avaliarModelo/avaliacoesUtilizador,
+           1-5 estrelas) — sem isto "avaliacao" nunca existia em nenhum item e
+           o filtro Recomendados (>=4.7) nunca encontrava nada. */
+        avaliacao: avaliacoesUtilizador[b.id]||0
       };
       base.categoriaAmigavel=bibCategoriaAmigavel(base);
       base.contexto=bibContexto(base);
@@ -9925,7 +9929,11 @@
      Um único desenho por conceito, reaproveitado em toda a biblioteca
      (filtro, rodapé do card, sheet de detalhe, Visualizar). */
   const OTAG_ICON={
-    oficial:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+    /* Escudo preenchido (prata, via currentColor) com o check em espaço
+       negativo — o "buraco" é uma máscara, não um traço por cima, pra ler
+       como um recorte no metal do escudo, não como um ícone de check
+       genérico ao lado do nome. */
+    oficial:'<svg viewBox="0 0 24 24" fill="none"><mask id="pivotShieldCut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path d="M8.5 12.4 11 14.9l4.5-5" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" fill="currentColor" mask="url(#pivotShieldCut)"/></svg>',
     juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
     recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>',
     comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
@@ -10449,7 +10457,11 @@
     document.querySelectorAll('.sb-profile .pl').forEach(el=>el.textContent=nomePlanoAtual());
     const sub=document.querySelector('.p-sub'); if(sub) sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+nomePlanoAtual();
     const inicial=(nomeExibido||'U').charAt(0).toUpperCase();
-    document.querySelectorAll('.sb-avatar, .p-avatar').forEach(el=>{
+    /* Só o avatar de perfil de verdade (.p-avatar-profile) — .p-avatar
+       sozinho também é usado como preview de foto de contacto e de empresa,
+       que têm as suas próprias imagens e nunca devem ser substituídas pela
+       foto pessoal do utilizador. */
+    document.querySelectorAll('.sb-avatar, .p-avatar-profile').forEach(el=>{
       if(perfilData.fotoUrl){
         el.textContent='';
         el.style.backgroundImage='url('+perfilData.fotoUrl+')';
@@ -10463,7 +10475,12 @@
   }
   async function loadTarefasData(){ await loadPersisted('pivot-tarefasData', d=>{ tarefasData=d; }); }
   function populateTrabalhoSelects(){
-    const optsReal=jobsVisiveis().map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
+    /* Só trabalhos ativos — jobsVisiveis() filtra só por permissão, nunca
+       por estado, então concluídos/arquivados (job.arquivado ainda fica em
+       jobsData, só sai da lista visível, pro histórico continuar a
+       funcionar) apareciam aqui pra associar uma tarefa nova, o que não
+       faz sentido pra um trabalho já fechado. */
+    const optsReal=jobsVisiveis().filter(j=>!j.arquivado).map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
     const sel2=document.getElementById('ta-trabalho'); if(sel2) sel2.innerHTML='<option value="">'+t('field.optionalDropdown')+'</option>'+optsReal;
   }
 
@@ -10529,6 +10546,15 @@
     if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
     const btn=document.getElementById('cl-submit-btn');
     if(btn) btn.textContent=t('wizard.createContact');
+  }
+  /* Entrada do "+ Contato" — sempre parte de um formulário limpo. Sem isto,
+     abrir "Contato" logo depois de ter usado "Editar" nalgum contacto (mesmo
+     sem gravar) deixava o nome/foto/campos antigos por preencher no
+     formulário do próximo contacto novo — o mesmo painel serve os dois
+     fluxos, então o reset tem de acontecer sempre que se entra por aqui. */
+  function abrirNovoContato(){
+    limparFormularioContato();
+    pushPanel('cliente');
   }
   /* Abre o mesmo painel "cliente" (criar/editar são o mesmo formulário) já
      preenchido com os dados atuais do contacto. Se o contacto só existe por
