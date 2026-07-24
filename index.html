@@ -674,7 +674,10 @@
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
         </div>
-        <input id="ct-busca" placeholder="Procurar contacto…" data-t-placeholder="contacts.search" style="width:100%;margin-bottom:14px" oninput="renderContatos()">
+        <div class="searchbox" style="margin:0 0 14px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
+          <input id="ct-busca" placeholder="Procurar contacto…" data-t-placeholder="contacts.search" oninput="renderContatos()">
+        </div>
         <div id="contatos-lista"></div>
         <div class="empty" id="contatosEmpty" style="display:none;padding:40px 16px">
           <div class="empty-mark" style="border-color:var(--neutral);color:var(--neutral)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/></svg></div>
@@ -1116,6 +1119,17 @@
 
       <!-- 👤 CLIENTE -->
       <div class="panel" data-panel="cliente">
+        <div class="field" style="display:flex;justify-content:center">
+          <div class="p-avatar-wrap">
+            <div class="p-avatar" id="cl-foto-preview" style="width:64px;height:64px;font-size:24px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:24px;height:24px"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+            <div class="p-avatar-edit" onclick="document.getElementById('cl-foto-input').click()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
+            </div>
+            <input type="file" id="cl-foto-input" accept="image/*" style="display:none" onchange="onContatoFotoSelecionada(this)">
+          </div>
+        </div>
         <div class="field">
           <label data-t="contact.type">Tipo de contacto</label>
           <div class="priority-picker" id="cl-tipo-picker">
@@ -5625,8 +5639,9 @@
     if(parts.length>=2) return (parts[0][0]+parts[1][0]).toUpperCase();
     return (name||'?').slice(0,2).toUpperCase();
   }
-  function avatarHtml(name,size){
+  function avatarHtml(name,size,foto){
     size=size||30;
+    if(foto) return '<div class="client-avatar" style="width:'+size+'px;height:'+size+'px;background-image:url('+foto+');background-size:cover;background-position:center"></div>';
     return '<div class="client-avatar" style="width:'+size+'px;height:'+size+'px;font-size:'+Math.round(size*0.4)+'px;background:'+avatarColor(name||'?')+'">'+avatarInitials(name)+'</div>';
   }
 
@@ -10473,6 +10488,32 @@
     el.classList.add('on');
     contatoTipoAtual=el.dataset.val;
   }
+  /* Foto do contacto — mesma compressão em canvas usada nos documentos de
+     escopo do colaborador (arquivoParaDataUrlComprimido), só que numa
+     dimensão de thumb (240px) já que aqui só serve pra avatar, nunca pra
+     visualização em tamanho grande. Guardada como data URL diretamente em
+     clientesData (sem Supabase Storage) — ao contrário da foto de perfil,
+     nunca é usada em emails, então não precisa de um URL público estável. */
+  let clContatoFotoDataUrl=null;
+  async function onContatoFotoSelecionada(input){
+    const file=input.files[0]; if(!file) return;
+    try{
+      clContatoFotoDataUrl=await imagemComprimidaDataUrl(file, 240, 0.85);
+      const preview=document.getElementById('cl-foto-preview');
+      preview.style.backgroundImage='url('+clContatoFotoDataUrl+')';
+      preview.style.backgroundSize='cover'; preview.style.backgroundPosition='center';
+      preview.innerHTML='';
+    }catch(e){ showToast(t('toast.imageError')); }
+    input.value='';
+  }
+  function resetarFotoContatoForm(){
+    clContatoFotoDataUrl=null;
+    const preview=document.getElementById('cl-foto-preview');
+    if(preview){
+      preview.style.backgroundImage=''; preview.style.backgroundSize=''; preview.style.backgroundPosition='';
+      preview.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:24px;height:24px"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
+    }
+  }
   function criarCliente(){
     const nomeEl=document.getElementById('cl-nome');
     const nome=nomeEl.value.trim();
@@ -10486,11 +10527,13 @@
       empresa:document.getElementById('cl-empresa').value.trim(),
       instagram:document.getElementById('cl-instagram').value.trim(),
       notas:document.getElementById('cl-obs').value.trim(),
+      foto:clContatoFotoDataUrl,
       criadoEm:new Date().toISOString() };
     saveClientesData();
     closeSheet();
     showToast(t('toast.contactCreated')+nome);
     ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    resetarFotoContatoForm();
     contatoTipoAtual='Cliente';
     const picker=document.getElementById('cl-tipo-picker');
     if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
@@ -10529,7 +10572,8 @@
     const mapa={};
     Object.values(clientesData).forEach(c=>{
       if((c.tipo||'Cliente')==='Cliente')
-        mapa[c.nome.toLowerCase()]={ nome:c.nome, email:c.email||'', telefone:c.telefone||'', empresa:c.empresa||'', tipo:'Cliente' };
+        mapa[c.nome.toLowerCase()]={ nome:c.nome, email:c.email||'', telefone:c.telefone||'', empresa:c.empresa||'', tipo:'Cliente',
+          instagram:c.instagram||'', notas:c.notas||'', foto:c.foto||null };
     });
     jobsVisiveis().forEach(j=>{
       if(!j.client) return;
@@ -10548,7 +10592,8 @@
       else if(!mapa[k].email && email) mapa[k].email=email;
     };
     Object.values(clientesData).forEach(c=>{
-      if((c.tipo||'Cliente')!=='Cliente') add(c.nome, c.email, { tipo:c.tipo||'Colaborador', telefone:c.telefone||'', empresa:c.empresa||'' });
+      if((c.tipo||'Cliente')!=='Cliente') add(c.nome, c.email, { tipo:c.tipo||'Colaborador', telefone:c.telefone||'', empresa:c.empresa||'',
+        instagram:c.instagram||'', notas:c.notas||'', foto:c.foto||null });
     });
     (colaboradoresExternosTodos||[]).forEach(c=>add(c.nome||c.email, c.email, { tipo:'Colaborador' }));
     (membrosEquipa||[]).forEach(m=>{ if(currentUser && m.user_id===currentUser.id) return; add(m.nome||m.email, m.email, { tipo:'Equipa' }); });
@@ -10574,15 +10619,23 @@
       const njobs = contatosSubAtiva==='clientes' ? trabalhosDoCliente(c.nome).length : trabalhosDoColaborador(c.email).length;
       const sub = (c.email||t('contacts.noEmail')) + (njobs? (' · '+njobs+' '+(njobs===1?t('contacts.jobCount1'):t('contacts.jobsCount'))) : '');
       const key = contatosSubAtiva==='clientes' ? ('cli:'+c.nome) : ('col:'+(c.email||c.nome));
-      const tag = (c.tipo && c.tipo!=='Cliente') ? ' <span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft);font-size:10px">'+escapeHtml(c.tipo)+'</span>' : '';
+      /* Nome, tag e info em linhas próprias (divs empilhados, não texto
+         concatenado dentro de .nm) — antes a tag entrava no mesmo fluxo de
+         texto do nome e quebrava de forma imprevisível (ora colada ao nome,
+         ora empurrada pra baixo dele) por não ter layout próprio. */
+      const tag = (c.tipo && c.tipo!=='Cliente') ? '<div style="margin:3px 0 1px"><span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft);font-size:10px">'+escapeHtml(c.tipo)+'</span></div>' : '';
       return '<div class="pick-row" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
-        '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+avatarHtml(c.nome,34)+
-        '<div style="min-width:0"><div class="nm">'+escapeHtml(c.nome)+tag+'</div><div class="sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div></div></div>'+
+        '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+avatarHtml(c.nome,34,c.foto)+
+        '<div style="min-width:0">'+
+          '<div class="nm" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(c.nome)+'</div>'+
+          tag+
+          '<div class="sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div>'+
+        '</div></div>'+
         '<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex:none"><path d="m9 18 6-6-6-6"/></svg></div>';
     }).join('');
   }
   function linhaInfoContato(label,val){
-    return '<div class="prow" style="cursor:default"><div style="flex:1"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500">'+escapeHtml(val)+'</div></div></div>';
+    return '<div class="prow" style="cursor:default"><div style="flex:1"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500;white-space:pre-wrap">'+escapeHtml(val)+'</div></div></div>';
   }
   function abrirContatoDetalhe(key){
     const sep=key.indexOf(':');
@@ -10603,14 +10656,16 @@
       else if(j.value){ faturado+=Number(j.value)||0; }
     });
     const porReceber=Math.max(0, faturado-recebido);
-    let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52)+
+    let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52,c.foto)+
       '<div style="min-width:0"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
       '<div style="font-size:12.5px;color:var(--ink-soft)">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div></div>';
     html+='<div class="plist" style="margin-bottom:16px">';
     if(c.email) html+=linhaInfoContato('Email', c.email);
     if(c.telefone) html+=linhaInfoContato(t('profile.company.phone'), c.telefone);
     if(c.empresa) html+=linhaInfoContato(t('field.company'), c.empresa);
-    if(!c.email && !c.telefone && !c.empresa) html+='<div class="prow" style="cursor:default"><div class="sub" style="color:var(--neutral)">'+t('contacts.noEmail')+'</div></div>';
+    if(c.instagram) html+=linhaInfoContato('Instagram', c.instagram);
+    if(c.notas) html+=linhaInfoContato(t('wizard.client.notes'), c.notas);
+    if(!c.email && !c.telefone && !c.empresa && !c.instagram && !c.notas) html+='<div class="prow" style="cursor:default"><div class="sub" style="color:var(--neutral)">'+t('contacts.noEmail')+'</div></div>';
     html+='</div>';
     if(tipo==='cli'){
       html+='<div class="ct-stats">'+
