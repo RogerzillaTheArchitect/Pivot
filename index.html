@@ -795,6 +795,46 @@
           </div>
           <div id="rel-fluxo-lista"></div>
         </div>
+
+        <!-- Card: Heatmaps — mapa de calor temporal (dia/semana/mês/ano por
+             métrica) e geográfico (ranking por cidade), respondendo perguntas
+             tipo "quando trabalho/ganho mais", "onde tenho mais clientes". -->
+        <div class="rel-card-header" id="rel-anchor-heatmaps" data-t="reports.heatmap.title">Heatmaps</div>
+        <div class="card rel-card rel-card-body">
+          <div class="segmented" id="heat-aba-seg">
+            <button class="on" data-a="temporal" onclick="heatSetAba('temporal')"><span data-t="reports.heatmap.tabTemporal">Temporal</span></button>
+            <button data-a="geografico" onclick="heatSetAba('geografico')"><span data-t="reports.heatmap.tabGeo">Geográfico</span></button>
+          </div>
+
+          <div id="heat-temporal-wrap">
+            <div class="segmented" id="heat-periodo-seg" style="margin-top:14px">
+              <button data-p="dia" onclick="heatSetPeriodo('dia')"><span data-t="reports.heatmap.period.day">Dia</span></button>
+              <button data-p="semana" onclick="heatSetPeriodo('semana')"><span data-t="reports.heatmap.period.week">Semana</span></button>
+              <button class="on" data-p="mes" onclick="heatSetPeriodo('mes')"><span data-t="reports.heatmap.period.month">Mês</span></button>
+              <button data-p="ano" onclick="heatSetPeriodo('ano')"><span data-t="reports.heatmap.period.year">Ano</span></button>
+            </div>
+            <div class="heat-toolbar">
+              <button class="heat-metric-btn" id="heat-metrica-btn" onclick="heatAbrirMetricaSheet()"></button>
+              <div class="heat-nav" id="heat-nav-wrap">
+                <button class="heat-nav-btn" onclick="heatNav(-1)" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+                <span class="heat-nav-label" id="heat-nav-label"></span>
+                <button class="heat-nav-btn" onclick="heatNav(1)" aria-label="Próximo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+              </div>
+            </div>
+            <div id="heat-temporal-grid" class="heat-grid"></div>
+            <div class="heat-legend"><span data-t="reports.heatmap.low">Menos</span><div class="heat-legend-bar"></div><span data-t="reports.heatmap.high">Mais</span></div>
+            <div class="heat-insight" id="heat-insight"></div>
+          </div>
+
+          <div id="heat-geo-wrap" style="display:none">
+            <div class="heat-toolbar" style="margin-top:14px">
+              <button class="heat-metric-btn" id="heat-geo-metrica-btn" onclick="heatGeoAbrirMetricaSheet()"></button>
+              <button class="heat-metric-btn" id="heat-geo-segmento-btn" onclick="heatGeoAbrirSegmentoSheet()"></button>
+            </div>
+            <p class="heat-geo-note" data-t="reports.heatmap.geoNote">Agrupado por cidade — o app ainda não registra país/estado separadamente.</p>
+            <div id="heat-geo-lista" style="margin-top:10px"></div>
+          </div>
+        </div>
       </section>
 
       <!-- ============ EQUIPA ============ -->
@@ -3110,6 +3150,35 @@
     "reports.addExpense": { pt:"Adicionar despesa", en:"Add expense", es:"Añadir gasto" },
     "reports.editExpense": { pt:"Editar despesa", en:"Edit expense", es:"Editar gasto" },
     "reports.saveExpense": { pt:"Guardar", en:"Save", es:"Guardar" },
+    // --- Heatmaps ---
+    "reports.heatmap.title": { pt:"Heatmaps", en:"Heatmaps", es:"Mapas de Calor" },
+    "reports.heatmap.tabTemporal": { pt:"Temporal", en:"Temporal", es:"Temporal" },
+    "reports.heatmap.tabGeo": { pt:"Geográfico", en:"Geographic", es:"Geográfico" },
+    "reports.heatmap.period.day": { pt:"Dia", en:"Day", es:"Día" },
+    "reports.heatmap.period.week": { pt:"Semana", en:"Week", es:"Semana" },
+    "reports.heatmap.period.month": { pt:"Mês", en:"Month", es:"Mes" },
+    "reports.heatmap.period.year": { pt:"Ano", en:"Year", es:"Año" },
+    "reports.heatmap.metric.revenue": { pt:"Receita", en:"Revenue", es:"Ingresos" },
+    "reports.heatmap.metric.profit": { pt:"Lucro", en:"Profit", es:"Beneficio" },
+    "reports.heatmap.metric.projects": { pt:"Projetos", en:"Projects", es:"Proyectos" },
+    "reports.heatmap.metric.hours": { pt:"Horas Trabalhadas", en:"Hours Worked", es:"Horas Trabajadas" },
+    "reports.heatmap.metric.ticket": { pt:"Ticket Médio", en:"Average Ticket", es:"Ticket Medio" },
+    "reports.heatmap.metric.clients": { pt:"Clientes Conquistados", en:"Clients Won", es:"Clientes Conseguidos" },
+    "reports.heatmap.metric.expenses": { pt:"Gastos", en:"Expenses", es:"Gastos" },
+    "reports.heatmap.metricLabel": { pt:"Métrica", en:"Metric", es:"Métrica" },
+    "reports.heatmap.low": { pt:"Menos", en:"Less", es:"Menos" },
+    "reports.heatmap.high": { pt:"Mais", en:"More", es:"Más" },
+    "reports.heatmap.empty": { pt:"Ainda não há dados suficientes para este período.", en:"Not enough data yet for this period.", es:"Aún no hay datos suficientes para este período." },
+    "reports.heatmap.best": { pt:"Melhor período", en:"Best period", es:"Mejor período" },
+    "reports.heatmap.hoursShort": { pt:"h", en:"h", es:"h" },
+    "reports.heatmap.projectsShort": { pt:"projetos", en:"projects", es:"proyectos" },
+    "reports.heatmap.clientsShort": { pt:"clientes", en:"clients", es:"clientes" },
+    "reports.heatmap.geoSegmentAll": { pt:"Todos os segmentos", en:"All segments", es:"Todos los segmentos" },
+    "reports.heatmap.geoSegmentLabel": { pt:"Segmento", en:"Segment", es:"Segmento" },
+    "reports.heatmap.geoRankTitle": { pt:"Localizações que mais rendem", en:"Top-performing locations", es:"Ubicaciones que más rinden" },
+    "reports.heatmap.geoEmpty": { pt:"Ainda não há trabalhos com localização registada.", en:"No jobs with a saved location yet.", es:"Aún no hay trabajos con ubicación registrada." },
+    "reports.heatmap.geoNoLocation": { pt:"Sem localização", en:"No location", es:"Sin ubicación" },
+    "reports.heatmap.geoNote": { pt:"Agrupado por cidade — o app ainda não registra país/estado separadamente.", en:"Grouped by city — the app doesn't track country/state separately yet.", es:"Agrupado por ciudad — la app aún no registra país/estado por separado." },
     // --- Papéis de equipa ---
     "role.admin.name": { pt:"Admin", en:"Admin", es:"Admin" },
     "role.editor.name": { pt:"Editor", en:"Editor", es:"Editor" },
@@ -5906,7 +5975,7 @@
        a mover-se e falha silenciosamente (o ecrã fica preso no topo). Espera
        a animação acabar antes de rolar. */
     setTimeout(()=>{
-      const mapa={ faturamento:'rel-anchor-faturamento', operacional:'rel-anchor-operacional', tarefas:'rel-anchor-tarefas' };
+      const mapa={ faturamento:'rel-anchor-faturamento', operacional:'rel-anchor-operacional', tarefas:'rel-anchor-tarefas', heatmaps:'rel-anchor-heatmaps' };
       const el=document.getElementById(mapa[tab]||'rel-anchor-faturamento');
       if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
     }, 480);
@@ -6570,6 +6639,254 @@
     renderRelOpBars(s);
     renderRelOpStats();
     renderRelFluxoFinanceiro();
+    renderRelHeatmaps();
+  }
+
+  /* ===== HEATMAPS =====
+     Temporal: agrupa receita/lucro/projetos/horas/ticket médio/clientes
+     conquistados/gastos por dia, semana, mês ou ano, e pinta cada "bucket"
+     com uma cor cuja intensidade reflete o valor relativo ao máximo do
+     período visível — responde "quando trabalho/ganho mais".
+     Geográfico: mesma ideia, mas agrupado por cidade (única granularidade de
+     localização que a app guarda de forma confiável hoje — não há campos
+     separados de país/estado, só o texto livre do endereço + lat/lon
+     opcionais), com filtro por segmento — responde "onde tenho mais
+     clientes/faturamento/ticket". */
+  let heatAba='temporal';
+  let heatPeriodo='mes';
+  const HEAT_METRICAS=['receita','lucro','projetos','horas','ticket','clientes','gastos'];
+  let heatMetrica='receita';
+  let heatAnoRef=new Date().getFullYear();
+  let heatMesRef=new Date().getMonth()+1; // 1-12, usado só na granularidade 'dia'
+  let heatGeoSegmento=null; // null = todos
+  const HEAT_GEO_METRICAS=['receita','lucro','projetos','ticket'];
+  let heatGeoMetrica='receita';
+  function heatMetricaLabel(m){
+    return t('reports.heatmap.metric.'+{receita:'revenue',lucro:'profit',projetos:'projects',horas:'hours',ticket:'ticket',clientes:'clients',gastos:'expenses'}[m]);
+  }
+  function heatFmtValor(metrica, valor){
+    if(metrica==='projetos') return String(Math.round(valor))+' '+t('reports.heatmap.projectsShort');
+    if(metrica==='clientes') return String(Math.round(valor))+' '+t('reports.heatmap.clientsShort');
+    if(metrica==='horas') return (Math.round(valor*10)/10)+t('reports.heatmap.hoursShort');
+    return fmtMoney(valor);
+  }
+  /* Um único passe por todos os trabalhos/receitas/despesas, indexado por dia
+     ISO (YYYY-MM-DD) — depois é só somar os dias de cada "bucket" (semana,
+     mês, ano ou cidade), sem repetir a varredura dos dados por granularidade. */
+  function heatIndiceDiario(){
+    const idx={};
+    function dia(iso){
+      if(!idx[iso]) idx[iso]={receita:0,despesa:0,projetos:0,horas:0,valorSum:0,valorCount:0,clientesNovos:0};
+      return idx[iso];
+    }
+    const jobs=jobsVisiveis();
+    jobs.forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        const d=p.pagoEm||p.dueDate; if(!d) return;
+        dia(d.slice(0,10)).receita+=Number(p.amount)||0;
+      });
+    });
+    Object.values(receitasData).forEach(r=>{ if(r.data) dia(r.data.slice(0,10)).receita+=Number(r.valor)||0; });
+    Object.values(custosData).forEach(c=>{ if(c.data) dia(c.data.slice(0,10)).despesa+=Number(c.valor)||0; });
+    jobs.forEach(j=>{
+      if(!j.dateRaw) return;
+      const d=dia(j.dateRaw);
+      d.projetos+=1;
+      d.horas+=Number(j.duracaoHoras)||0;
+      if(j.value){ d.valorSum+=Number(j.value)||0; d.valorCount+=1; }
+    });
+    const primeiraDataPorCliente={};
+    jobs.forEach(j=>{
+      if(!j.client || !j.dateRaw) return;
+      if(!primeiraDataPorCliente[j.client] || j.dateRaw<primeiraDataPorCliente[j.client]) primeiraDataPorCliente[j.client]=j.dateRaw;
+    });
+    Object.values(primeiraDataPorCliente).forEach(d=>dia(d).clientesNovos+=1);
+    return idx;
+  }
+  function heatNumeroSemanaISO(dt){
+    const d=new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate()));
+    d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));
+    const inicioAno=new Date(Date.UTC(d.getUTCFullYear(),0,1));
+    return { ano:d.getUTCFullYear(), semana:Math.ceil((((d-inicioAno)/86400000)+1)/7) };
+  }
+  function heatChaveBucket(iso, periodo){
+    if(periodo==='dia') return iso;
+    if(periodo==='mes') return iso.slice(0,7);
+    if(periodo==='ano') return iso.slice(0,4);
+    const {ano,semana}=heatNumeroSemanaISO(new Date(iso+'T00:00:00'));
+    return ano+'-W'+String(semana).padStart(2,'0');
+  }
+  function heatValorBucket(bucket, metrica){
+    if(!bucket) return 0;
+    if(metrica==='receita') return bucket.receita;
+    if(metrica==='lucro') return bucket.receita-bucket.despesa;
+    if(metrica==='projetos') return bucket.projetos;
+    if(metrica==='horas') return bucket.horas;
+    if(metrica==='ticket') return bucket.valorCount ? bucket.valorSum/bucket.valorCount : 0;
+    if(metrica==='clientes') return bucket.clientesNovos;
+    if(metrica==='gastos') return bucket.despesa;
+    return 0;
+  }
+  function heatAgregarBuckets(periodo){
+    const indice=heatIndiceDiario();
+    const buckets={};
+    Object.entries(indice).forEach(([iso,vals])=>{
+      const chave=heatChaveBucket(iso, periodo);
+      if(!buckets[chave]) buckets[chave]={receita:0,despesa:0,projetos:0,horas:0,valorSum:0,valorCount:0,clientesNovos:0};
+      const b=buckets[chave];
+      b.receita+=vals.receita; b.despesa+=vals.despesa; b.projetos+=vals.projetos; b.horas+=vals.horas;
+      b.valorSum+=vals.valorSum; b.valorCount+=vals.valorCount; b.clientesNovos+=vals.clientesNovos;
+    });
+    return buckets;
+  }
+  /* Cor de "menos" (quase transparente) a "mais" (laranja sólido) — mesmo
+     laranja já usado nas tags de campo dinâmico e na estrutura da Biblioteca,
+     pra manter uma única cor de "destaque/intensidade" em todo o app. */
+  function heatCorIntensidade(ratio){
+    const r=Math.max(0, Math.min(1, ratio));
+    if(r<=0) return 'rgba(255,255,255,.04)';
+    const alpha=.12+r*.78;
+    return 'rgba(232,118,58,'+alpha.toFixed(2)+')';
+  }
+  function heatSetAba(aba){
+    heatAba=aba;
+    document.querySelectorAll('#heat-aba-seg button').forEach(b=>b.classList.toggle('on', b.dataset.a===aba));
+    document.getElementById('heat-temporal-wrap').style.display = aba==='temporal' ? 'block':'none';
+    document.getElementById('heat-geo-wrap').style.display = aba==='geografico' ? 'block':'none';
+    renderRelHeatmaps();
+  }
+  function heatSetPeriodo(p){
+    heatPeriodo=p;
+    document.querySelectorAll('#heat-periodo-seg button').forEach(b=>b.classList.toggle('on', b.dataset.p===p));
+    renderRelHeatmaps();
+  }
+  function heatAbrirMetricaSheet(){
+    const opcoes=HEAT_METRICAS.map(m=>({value:m, label:heatMetricaLabel(m)}));
+    bibSheetOpcaoUnica(t('reports.heatmap.metricLabel'), opcoes, heatMetrica, function heatSetMetricaPick(v){ heatMetrica=v; closeInfo(); renderRelHeatmaps(); });
+  }
+  function heatGeoAbrirMetricaSheet(){
+    const opcoes=HEAT_GEO_METRICAS.map(m=>({value:m, label:heatMetricaLabel(m)}));
+    bibSheetOpcaoUnica(t('reports.heatmap.metricLabel'), opcoes, heatGeoMetrica, function heatGeoSetMetricaPick(v){ heatGeoMetrica=v; closeInfo(); renderRelHeatmaps(); });
+  }
+  function heatGeoAbrirSegmentoSheet(){
+    const opcoes=[{value:null, label:t('reports.heatmap.geoSegmentAll')}].concat(listaCategorias().map(c=>({value:c.id, label:c.label})));
+    bibSheetOpcaoUnica(t('reports.heatmap.geoSegmentLabel'), opcoes, heatGeoSegmento, function heatGeoSetSegmentoPick(v){ heatGeoSegmento=v; closeInfo(); renderRelHeatmaps(); });
+  }
+  function heatNav(dir){
+    if(heatPeriodo==='dia'){
+      heatMesRef+=dir;
+      if(heatMesRef<1){ heatMesRef=12; heatAnoRef--; }
+      else if(heatMesRef>12){ heatMesRef=1; heatAnoRef++; }
+    } else if(heatPeriodo!=='ano'){
+      heatAnoRef+=dir;
+    } else return; // 'ano' mostra todos os anos com dados, sem navegação
+    renderRelHeatmaps();
+  }
+  /* Extrai um nome de cidade do texto livre do endereço — última parte depois
+     da vírgula, sem o código postal na frente (ex.: "Rua X, 1200 Lisboa" →
+     "Lisboa"). É a única granularidade de localização confiável hoje. */
+  function heatCidadeDoJob(job){
+    const texto=job.localCompleto||job.local||'';
+    if(!texto.trim()) return null;
+    const partes=texto.split(',');
+    let ultima=(partes[partes.length-1]||'').trim();
+    ultima=ultima.replace(/^\d[\d\- ]*/,'').trim();
+    return ultima || null;
+  }
+  function renderRelHeatmaps(){
+    if(!document.getElementById('rel-anchor-heatmaps')) return;
+    if(heatAba==='temporal') renderHeatmapTemporal(); else renderHeatmapGeografico();
+  }
+  function renderHeatmapTemporal(){
+    const btn=document.getElementById('heat-metrica-btn');
+    if(btn) btn.innerHTML='<span>'+escapeHtml(heatMetricaLabel(heatMetrica))+'</span><svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
+    const buckets=heatAgregarBuckets(heatPeriodo);
+    const navWrap=document.getElementById('heat-nav-wrap');
+    let celulas=[]; // {chave,label,valor}
+    if(heatPeriodo==='dia'){
+      navWrap.style.visibility='visible';
+      document.getElementById('heat-nav-label').textContent=mesCompleto(heatMesRef-1).toUpperCase()+' '+heatAnoRef;
+      const diasNoMes=new Date(heatAnoRef, heatMesRef, 0).getDate();
+      for(let i=1;i<=diasNoMes;i++){
+        const iso=heatAnoRef+'-'+String(heatMesRef).padStart(2,'0')+'-'+String(i).padStart(2,'0');
+        celulas.push({ chave:iso, label:String(i), valor:heatValorBucket(buckets[iso], heatMetrica) });
+      }
+    } else if(heatPeriodo==='mes'){
+      navWrap.style.visibility='visible';
+      document.getElementById('heat-nav-label').textContent=String(heatAnoRef);
+      for(let m=1;m<=12;m++){
+        const chave=heatAnoRef+'-'+String(m).padStart(2,'0');
+        celulas.push({ chave, label:mesCompleto(m-1).slice(0,3).toUpperCase(), valor:heatValorBucket(buckets[chave], heatMetrica) });
+      }
+    } else if(heatPeriodo==='semana'){
+      navWrap.style.visibility='visible';
+      document.getElementById('heat-nav-label').textContent=String(heatAnoRef);
+      const totalSemanas=heatNumeroSemanaISO(new Date(heatAnoRef,11,31)).semana || 52;
+      for(let sNum=1;sNum<=Math.max(totalSemanas,52);sNum++){
+        const chave=heatAnoRef+'-W'+String(sNum).padStart(2,'0');
+        celulas.push({ chave, label:String(sNum), valor:heatValorBucket(buckets[chave], heatMetrica) });
+      }
+    } else { // ano
+      navWrap.style.visibility='hidden';
+      const anos=Object.keys(buckets).filter(k=>/^\d{4}$/.test(k)).sort();
+      const listaAnos = anos.length ? anos : [String(heatAnoRef)];
+      listaAnos.forEach(a=>celulas.push({ chave:a, label:a, valor:heatValorBucket(buckets[a], heatMetrica) }));
+    }
+    const wrap=document.getElementById('heat-temporal-grid');
+    const insight=document.getElementById('heat-insight');
+    const valores=celulas.map(c=>c.valor).filter(v=>v>0);
+    if(!valores.length){
+      wrap.innerHTML='<p class="heat-empty">'+t('reports.heatmap.empty')+'</p>';
+      wrap.className='heat-grid-empty';
+      insight.textContent='';
+      return;
+    }
+    const max=Math.max(...valores);
+    wrap.className='heat-grid heat-grid-'+heatPeriodo;
+    wrap.innerHTML=celulas.map(c=>{
+      const ratio = max>0 ? c.valor/max : 0;
+      const titulo=c.label+': '+heatFmtValor(heatMetrica, c.valor);
+      const tituloJs=titulo.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+      return '<div class="heat-cell" style="background:'+heatCorIntensidade(ratio)+'" title="'+escapeHtml(titulo)+'" onclick="showToast(\''+tituloJs+'\')"><span>'+escapeHtml(c.label)+'</span></div>';
+    }).join('');
+    const melhor=celulas.reduce((a,b)=>b.valor>a.valor?b:a, celulas[0]);
+    insight.textContent = melhor.valor>0 ? (t('reports.heatmap.best')+': '+melhor.label+' — '+heatFmtValor(heatMetrica, melhor.valor)) : '';
+  }
+  function renderHeatmapGeografico(){
+    const btnM=document.getElementById('heat-geo-metrica-btn');
+    if(btnM) btnM.innerHTML='<span>'+escapeHtml(heatMetricaLabel(heatGeoMetrica))+'</span><svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
+    const btnS=document.getElementById('heat-geo-segmento-btn');
+    const segLabel = heatGeoSegmento ? (listaCategorias().find(c=>c.id===heatGeoSegmento)||{}).label||heatGeoSegmento : t('reports.heatmap.geoSegmentAll');
+    if(btnS) btnS.innerHTML='<span>'+escapeHtml(segLabel)+'</span><svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>';
+    const porCidade={};
+    jobsVisiveis().forEach(j=>{
+      if(heatGeoSegmento && classificarSegmentoJob(j)!==heatGeoSegmento) return;
+      const cidade=heatCidadeDoJob(j) || t('reports.heatmap.geoNoLocation');
+      if(!porCidade[cidade]) porCidade[cidade]={receita:0,despesa:0,projetos:0,valorSum:0,valorCount:0};
+      const c=porCidade[cidade];
+      (j.payments||[]).forEach(p=>{ if(p.status==='pago') c.receita+=Number(p.amount)||0; });
+      c.projetos+=1;
+      if(j.value){ c.valorSum+=Number(j.value)||0; c.valorCount+=1; }
+    });
+    const linhas=Object.entries(porCidade).map(([cidade,c])=>({
+      cidade,
+      valor: heatGeoMetrica==='receita'?c.receita : heatGeoMetrica==='lucro'?(c.receita-c.despesa) : heatGeoMetrica==='projetos'?c.projetos : (c.valorCount?c.valorSum/c.valorCount:0)
+    })).filter(l=>l.valor>0).sort((a,b)=>b.valor-a.valor).slice(0,12);
+    const wrap=document.getElementById('heat-geo-lista');
+    if(!linhas.length){ wrap.innerHTML='<div class="seg-fin-empty"><p class="seg-fin-empty-text">'+t('reports.heatmap.geoEmpty')+'</p></div>'; return; }
+    const max=linhas[0].valor;
+    wrap.innerHTML=linhas.map((l,i)=>{
+      const larguraPct = max>0 ? Math.round(l.valor/max*100) : 0;
+      return '<div class="seg-fin-row">'+
+        '<div class="seg-fin-name">'+escapeHtml(l.cidade)+'</div>'+
+        '<div class="seg-fin-bar-track"><div class="seg-fin-bar-fill heat-bar-fill" id="heat-geo-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
+        '<div class="seg-fin-meta">'+heatFmtValor(heatGeoMetrica, l.valor)+'</div>'+
+      '</div>';
+    }).join('');
+    setTimeout(()=>{
+      linhas.forEach((l,i)=>{ const el=document.getElementById('heat-geo-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; });
+    }, 60);
   }
 
   /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
