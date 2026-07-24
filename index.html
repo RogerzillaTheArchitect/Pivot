@@ -1157,7 +1157,7 @@
         <div class="field"><label><span data-t="field.company">Empresa</span> <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-empresa" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
         <div class="field"><label>Instagram <span style="color:var(--neutral);font-weight:400" data-t="field.optional">(opcional)</span></label><input id="cl-instagram" placeholder="@utilizador" data-t-placeholder="field.instagramPlaceholder"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="cl-obs" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-        <button class="btn primary" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
+        <button class="btn primary" id="cl-submit-btn" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
       </div>
 
       <!-- ✅ TAREFA -->
@@ -3082,6 +3082,7 @@
     "contact.type.other": { pt:"Outro", en:"Other", es:"Otro" },
     "wizard.createContact": { pt:"Criar contacto →", en:"Create contact →", es:"Crear contacto →" },
     "toast.contactCreated": { pt:"Contacto criado: ", en:"Contact created: ", es:"Contacto creado: " },
+    "toast.contactUpdated": { pt:"Contacto atualizado.", en:"Contact updated.", es:"Contacto actualizado." },
     "sheet.job": { pt:"Projeto", en:"Project", es:"Proyecto" },
     "sheet.jobHint": { pt:"gera cronograma, contrato e briefing", en:"generates schedule, contract and client brief", es:"genera cronograma, contrato e información del cliente" },
     "sheet.task": { pt:"Tarefa", en:"Task", es:"Tarea" },
@@ -10483,6 +10484,11 @@
     clienteDuplicadoEncontrado=null;
   }
   let contatoTipoAtual='Cliente';
+  /* Não-nulo quando o painel "cliente" está a editar um contacto já
+     existente (abrirEditarContato) em vez de criar um novo — o mesmo
+     formulário serve pros dois casos, só muda o que criarCliente() faz ao
+     confirmar (update em vez de insert) e o texto do botão/título. */
+  let contatoEditandoId=null;
   function selecionarTipoContato(el){
     document.querySelectorAll('#cl-tipo-picker .priority-opt').forEach(o=>o.classList.remove('on'));
     el.classList.add('on');
@@ -10514,13 +10520,50 @@
       preview.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="width:24px;height:24px"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
     }
   }
+  function limparFormularioContato(){
+    ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    resetarFotoContatoForm();
+    contatoTipoAtual='Cliente';
+    contatoEditandoId=null;
+    const picker=document.getElementById('cl-tipo-picker');
+    if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
+    const btn=document.getElementById('cl-submit-btn');
+    if(btn) btn.textContent=t('wizard.createContact');
+  }
+  /* Abre o mesmo painel "cliente" (criar/editar são o mesmo formulário) já
+     preenchido com os dados atuais do contacto. Se o contacto só existe por
+     ter aparecido num trabalho/colaboração (nunca foi guardado à parte em
+     clientesData), a edição cria o registo próprio na hora — sem isso não
+     haveria onde gravar as alterações. */
+  function abrirEditarContato(key){
+    const sep=key.indexOf(':');
+    const tipo=key.slice(0,sep), id=key.slice(sep+1);
+    const c = tipo==='cli' ? (coletarClientes().find(x=>x.nome===id)||{nome:id}) : (coletarColaboradores().find(x=>(x.email||x.nome)===id)||{nome:id,email:id});
+    const existente = Object.values(clientesData).find(x=>x.nome.toLowerCase()===(c.nome||'').toLowerCase());
+    contatoEditandoId = existente ? existente.id : ('cli'+Date.now());
+    openSheet();
+    pushPanel('cliente');
+    document.getElementById('cl-nome').value=c.nome||'';
+    document.getElementById('cl-email').value=c.email||'';
+    document.getElementById('cl-tel').value=c.telefone||'';
+    document.getElementById('cl-empresa').value=c.empresa||'';
+    document.getElementById('cl-instagram').value=c.instagram||'';
+    document.getElementById('cl-obs').value=c.notas||'';
+    contatoTipoAtual=c.tipo||'Cliente';
+    document.getElementById('cl-tipo-picker').querySelectorAll('.priority-opt').forEach(o=>o.classList.toggle('on', o.dataset.val===contatoTipoAtual));
+    clContatoFotoDataUrl=c.foto||null;
+    const preview=document.getElementById('cl-foto-preview');
+    if(c.foto){ preview.style.backgroundImage='url('+c.foto+')'; preview.style.backgroundSize='cover'; preview.style.backgroundPosition='center'; preview.innerHTML=''; }
+    document.getElementById('cl-submit-btn').textContent=t('action.save');
+  }
   function criarCliente(){
     const nomeEl=document.getElementById('cl-nome');
     const nome=nomeEl.value.trim();
     const err=document.getElementById('cl-nome-err');
     if(!nome){ err.style.display='block'; nomeEl.focus(); return; }
     err.style.display='none';
-    const id='cli'+Date.now();
+    const editando=!!contatoEditandoId;
+    const id=contatoEditandoId||('cli'+Date.now());
     clientesData[id]={ id, nome, tipo:contatoTipoAtual||'Cliente',
       email:document.getElementById('cl-email').value.trim(),
       telefone:document.getElementById('cl-tel').value.trim(),
@@ -10528,15 +10571,16 @@
       instagram:document.getElementById('cl-instagram').value.trim(),
       notas:document.getElementById('cl-obs').value.trim(),
       foto:clContatoFotoDataUrl,
-      criadoEm:new Date().toISOString() };
+      criadoEm:(editando && clientesData[id] && clientesData[id].criadoEm) || new Date().toISOString() };
     saveClientesData();
     closeSheet();
-    showToast(t('toast.contactCreated')+nome);
-    ['cl-nome','cl-email','cl-tel','cl-empresa','cl-instagram','cl-obs'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
-    resetarFotoContatoForm();
-    contatoTipoAtual='Cliente';
-    const picker=document.getElementById('cl-tipo-picker');
-    if(picker){ picker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
+    showToast(editando ? t('toast.contactUpdated') : (t('toast.contactCreated')+nome));
+    limparFormularioContato();
+    /* Depois de editar, volta pra lista em vez de tentar adivinhar a mesma
+       key de detalhe — o tipo do contacto pode ter mudado no próprio
+       formulário (ex.: Cliente → Colaborador), o que muda em qual aba/key
+       ele passa a viver. */
+    if(editando){ go('contatos'); renderContatos(); }
   }
 
   /* ===================== CONTATOS — diretório unificado =====================
@@ -10657,8 +10701,9 @@
     });
     const porReceber=Math.max(0, faturado-recebido);
     let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52,c.foto)+
-      '<div style="min-width:0"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
-      '<div style="font-size:12.5px;color:var(--ink-soft)">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div></div>';
+      '<div style="min-width:0;flex:1"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
+      '<div style="font-size:12.5px;color:var(--ink-soft)">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div>'+
+      '<button class="btn dark" style="flex:none" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
     html+='<div class="plist" style="margin-bottom:16px">';
     if(c.email) html+=linhaInfoContato('Email', c.email);
     if(c.telefone) html+=linhaInfoContato(t('profile.company.phone'), c.telefone);
