@@ -7553,19 +7553,26 @@
     const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
     renderBuilderCampos(job, builderContext && contratoBloqueadoParaEdicao(job));
   }
+  /* O handle de arraste e o toggle ficam só na linha do cabeçalho (flex row);
+     a lista de cláusulas é filha direta do .block, sem colunas ao lado —
+     antes, handle+toggle formavam duas colunas que corriam a ALTURA TODA do
+     bloco (por serem flex-items ao lado de .block-main), deixando uma faixa
+     vazia enorme à esquerda/direita de cada cláusula mesmo só ocupando a
+     altura do cabeçalho. Reservar esse espaço só onde ele é usado devolve
+     a largura total pro texto. */
   function blockCardHtml(job,b,locked){
     const editavel = !locked && !(builderContext && contratoBloqueadoParaEdicao(job));
     const addBtn = !locked ? '<button class="addclause" onclick="event.stopPropagation();abrirAdicionarClausulas(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('library.addClausesBtn')+'</button>' : '';
     return '<div class="block'+(b.on?'':' off')+(locked?' locked':'')+'" data-bid="'+b.id+'">'+
-      (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
-      '<div class="block-main"><div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')" style="cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px">'+
-      '<span>'+escapeHtml(blockName(b))+'</span>'+
-      '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
+      '<div class="block-header">'+
+        (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
+        '<div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')">'+
+        '<span>'+escapeHtml(blockName(b))+'</span>'+
+        '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
+        '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
+      '</div>'+
       '<div class="block-preview collapsed" id="bprev-'+b.id+'">'+
         '<div class="clause-list" id="clist-'+b.id+'">'+clauseListInnerHtml(job,b,editavel)+'</div>'+addBtn+
-      '</div></div>'+
-      '<div class="block-actions">'+
-      '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
       '</div></div>';
   }
   function toggleBlocoPreview(bid){
