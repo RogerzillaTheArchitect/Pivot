@@ -7,8 +7,15 @@
   .block{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:1px solid var(--line);
     border-radius:var(--r);padding:12px 12px;margin-bottom:8px;box-shadow:var(--shadow);
     transition:transform .18s,box-shadow .18s,opacity .18s}
-  .block.dragging{opacity:.5}
-  .block.drop-target{box-shadow:0 0 0 2px var(--brand)}
+  .block.dragging{opacity:.92;transition:none;position:relative;z-index:5;box-shadow:0 10px 24px rgba(0,0,0,.35);cursor:grabbing}
+  /* Flash breve ao localizar um campo dinâmico dentro do texto do contrato
+     (abrirCampoDinamicoComContexto) — chama atenção sem travar a leitura. */
+  .block.campo-flash,.clause.campo-flash{animation:campoFlash 1.3s ease-out}
+  @keyframes campoFlash{
+    0%{box-shadow:0 0 0 2px var(--bib-orange,#E8763A)}
+    75%{box-shadow:0 0 0 2px var(--bib-orange,#E8763A)}
+    100%{box-shadow:none}
+  }
   .handle{cursor:grab;color:var(--neutral);touch-action:none;flex:none;padding:4px;display:flex;margin-top:2px}
   .handle svg{width:16px;height:16px}
   .handle:active{cursor:grabbing}
@@ -57,7 +64,7 @@
     border:1.5px dashed var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
     font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
   .addblock svg{width:16px;height:16px}
-  .save-tpl{font-size:13.5px;color:var(--ink);font-weight:600;cursor:pointer;white-space:nowrap}
+  .save-tpl{flex:none;white-space:nowrap;margin-top:2px}
 
   /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) =====
      Acento monocromático (grafite/ink) — nada de verde da marca aqui, para
@@ -67,15 +74,15 @@
   .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
   .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
   .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
-  .dynf-row{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
-  .dynf-key{min-height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
-    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--r);padding:8px 10px;
-    white-space:normal;overflow-wrap:break-word;line-height:1.25}
-  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
-  .dynf-input{width:100%;min-height:38px;font-family:inherit;font-size:13px;color:var(--ink);
-    background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:0 11px;outline:none;box-sizing:border-box}
-  .dynf-input:focus{border-color:var(--ink-soft)}
-  .dynf-input::placeholder{color:var(--ink-faint)}
+  /* Caixa em destaque laranja — clicar leva ao ponto do contrato onde o
+     campo aparece e depois abre o popup de edição (abrirCampoDinamicoComContexto). */
+  .dynf-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px;
+    padding:9px 11px;border-radius:var(--r);cursor:pointer;background:rgba(232,118,58,.10);border:1px solid rgba(232,118,58,.35);
+    transition:background .15s,border-color .15s}
+  .dynf-row:hover{background:rgba(232,118,58,.16);border-color:rgba(232,118,58,.5)}
+  .dynf-key{font-size:12.5px;font-weight:600;color:var(--ink-soft);white-space:normal;overflow-wrap:break-word;line-height:1.25}
+  .dynf-val{font-size:13px;font-weight:600;color:var(--ink);text-align:right;white-space:normal;overflow-wrap:break-word;line-height:1.25}
+  .dynf-val.empty{color:var(--ink-faint);font-weight:500;font-style:italic}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);

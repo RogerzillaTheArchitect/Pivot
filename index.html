@@ -610,7 +610,7 @@
         <div class="back" onclick="voltarDoBuilder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span id="builder-back-label" data-t="nav.jobs">Trabalhos</span></div>
         <div class="builder-top">
           <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
-          <div class="save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</div>
+          <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
         </div>
         <div class="builder-legend" id="builder-hint">
           <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg><span data-t="builder.legendReorder">Arraste para reordenar</span></span>
@@ -640,7 +640,7 @@
         <div class="bib-shell">
           <div class="bib-pick-banner" id="bib-pick-banner" style="display:none">
             <span id="bib-pick-banner-txt"></span>
-            <span class="inline-link" onclick="cancelarSelecaoBiblioteca()" data-t="action.cancel">Cancelar</span>
+            <span class="inline-link" onclick="cancelarSelecaoBiblioteca()" data-t="action.back">Voltar</span>
           </div>
           <div class="bib-headrow">
             <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
@@ -2046,9 +2046,12 @@
     "builder.legendToggle": { pt:"Inclua ou remova", en:"Include or remove", es:"Incluye o elimina" },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
     "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
-    "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato.", en:"Replace a value and it applies across the whole contract.", es:"Sustituye un valor y se aplica en todo el contrato." },
+    "builder.dynFieldsHint": { pt:"Toque num campo para ver onde aparece no contrato e editar o valor.", en:"Tap a field to see where it appears in the contract and edit its value.", es:"Toca un campo para ver dónde aparece en el contrato y editar el valor." },
     "builder.dynFieldPlaceholder": { pt:"Substituir…", en:"Replace…", es:"Sustituir…" },
-    "builder.title": { pt:"Editor de contrato", en:"Contract editor", es:"Editor de contrato" },
+    "builder.dynFieldEmpty": { pt:"Por preencher", en:"Not filled in", es:"Sin completar" },
+    "builder.dynFieldApply": { pt:"Aplicar", en:"Apply", es:"Aplicar" },
+    "builder.dynFieldApplyAll": { pt:"Aplicar a todos os campos iguais", en:"Apply to all matching fields", es:"Aplicar a todos los campos iguales" },
+    "builder.title": { pt:"Editor de Modelo", en:"Template Editor", es:"Editor de Modelo" },
     "builder.newTemplateSub": { pt:"Novo modelo", en:"New template", es:"Nueva plantilla" },
     "builder.basedOnPrefix": { pt:"Baseado em: ", en:"Based on: ", es:"Basado en: " },
     "builder.saveTemplateTitle": { pt:"Guardar modelo", en:"Save template", es:"Guardar modelo" },
@@ -2418,8 +2421,7 @@
     "library.blockRequired": { pt:"obrigatório", en:"required", es:"obligatorio" },
     "library.blockOptional": { pt:"opcional", en:"optional", es:"opcional" },
     "library.blockConditional": { pt:"condicional", en:"conditional", es:"condicional" },
-    "library.protectedBlockSample": { pt:"Amostra de bloco protegido", en:"Protected block sample", es:"Muestra de bloque protegido" },
-    "library.protectedBlock": { pt:"Conteúdo protegido", en:"Protected content", es:"Contenido protegido" },
+    "library.protectedBlockSample": { pt:"Amostra do conteúdo", en:"Content sample", es:"Muestra del contenido" },
     "library.import": { pt:"Importar", en:"Import", es:"Importar" },
     "library.addBlockBtn": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
     "library.blocksExplore": { pt:"Explorar Modelos", en:"Browse Templates", es:"Explorar Modelos" },
@@ -3223,7 +3225,6 @@
     "library.pickForCollabMassa": { pt:"Escolha um contrato para aplicar aos colaboradores selecionados.", en:"Choose a contract to apply to the selected collaborators.", es:"Elige un contrato para aplicar a los colaboradores seleccionados." },
     "library.pickForBlocks": { pt:"Escolha um contrato para ver e importar os seus blocos.", en:"Choose a contract to view and import its blocks.", es:"Elige un contrato para ver e importar sus bloques." },
     "library.pickForClauses": { pt:"Escolha um contrato para ver e importar cláusulas de um dos seus blocos.", en:"Choose a contract to view and import clauses from one of its blocks.", es:"Elige un contrato para ver e importar cláusulas de uno de sus bloques." },
-    "library.viewBlocksBtn": { pt:"Ver Blocos", en:"View Blocks", es:"Ver Bloques" },
     "collab.selectWhoReceives": { pt:"Selecione quem receberá este contrato.", en:"Select who will receive this contract.", es:"Seleccione quién recibirá este contrato." },
     "collab.contractApplied": { pt:"Contrato aplicado", en:"Contract applied", es:"Contrato aplicado" },
     "collab.contractAppliedHint": { pt:"O contrato foi aplicado e um email de aviso foi enviado a cada colaborador selecionado.", en:"The contract was applied and a notification email was sent to each selected collaborator.", es:"El contrato fue aplicado y se envió un email de aviso a cada colaborador seleccionado." },
@@ -7557,7 +7558,6 @@
     const campos=builderCamposDinamicos(job);
     if(!campos.length || locked){ wrap.style.display='none'; wrap.innerHTML=''; return; }
     const fv=getBuilderFieldValues();
-    const seta='<svg class="dynf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
     wrap.style.display='block';
     wrap.innerHTML=
       '<div class="dynf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'+
@@ -7565,10 +7565,63 @@
       '<div class="dynf-hint">'+t('builder.dynFieldsHint')+'</div>'+
       campos.map(c=>{
         const val=fv[c]!=null?fv[c]:'';
-        return '<div class="dynf-row"><span class="dynf-key">['+escapeHtml(dynFieldLabel(c))+']</span>'+seta+
-          '<input class="dynf-input" value="'+escapeHtml(val)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" '+
-          'oninput="setBuilderCampo(\''+c+'\', this.value)"></div>';
+        return '<div class="dynf-row" onclick="abrirCampoDinamicoComContexto(\''+c+'\')">'+
+          '<span class="dynf-key">'+escapeHtml(dynFieldLabel(c))+'</span>'+
+          '<span class="dynf-val'+(val?'':' empty')+'">'+(val?escapeHtml(val):t('builder.dynFieldEmpty'))+'</span></div>';
       }).join('');
+  }
+  /* Categoria de um campo dinâmico = último token do nome (CLIENT_NAME,
+     PROVIDER_NAME → NAME; START_DATE, DELIVERY_DATE → DATE) — usada só para
+     "Aplicar a todos os campos iguais", nunca pra resolver o texto em si. */
+  function bibCampoCategoria(campo){
+    const partes=(campo||'').split('_');
+    return partes[partes.length-1]||campo;
+  }
+  /* Antes de abrir o popup de edição, mostra ao usuário ONDE esse campo
+     aparece no contrato (expande o bloco, rola até a cláusula certa e faz um
+     flash) — pra decidir o valor com contexto em vez de trocar às cegas. */
+  function localizarCampoNoBuilder(campo){
+    const job=getBuilderJob();
+    const blocos=job.contract.blocks||[];
+    for(const b of blocos){
+      if(!b.tpl || !b.tpl.includes('['+campo+']')) continue;
+      const prev=document.getElementById('bprev-'+b.id);
+      if(prev) prev.classList.remove('collapsed');
+      const tplClauses=b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean);
+      const idx=tplClauses.findIndex(c=>c.includes('['+campo+']'));
+      const alvo = (idx>=0 && document.getElementById('cl-'+b.id+'-'+idx)) || (prev&&prev.closest('.block'));
+      if(alvo){
+        alvo.scrollIntoView({behavior:'smooth', block:'center'});
+        alvo.classList.add('campo-flash');
+        setTimeout(()=>alvo.classList.remove('campo-flash'), 1300);
+      }
+      return;
+    }
+  }
+  function abrirCampoDinamicoComContexto(campo){
+    localizarCampoNoBuilder(campo);
+    setTimeout(()=>abrirEditarCampoDinamico(campo), 450);
+  }
+  function abrirEditarCampoDinamico(campo){
+    const fv=getBuilderFieldValues();
+    const valorAtual=fv[campo]||'';
+    const cat=bibCampoCategoria(campo);
+    const outrosNaCategoria=builderCamposDinamicos(getBuilderJob()).filter(c=>c!==campo && bibCampoCategoria(c)===cat);
+    let html='<div class="field"><input id="dynf-edit-input" value="'+escapeHtml(valorAtual)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" autocomplete="off"></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="aplicarCampoDinamicoPopup(\''+campo+'\',false)">'+t('builder.dynFieldApply')+'</button>';
+    if(outrosNaCategoria.length) html+='<button class="btn soft" style="width:100%;margin-top:8px" onclick="aplicarCampoDinamicoPopup(\''+campo+'\',true)">'+t('builder.dynFieldApplyAll')+'</button>';
+    openInfo(dynFieldLabel(campo), html);
+    setTimeout(()=>{ const el=document.getElementById('dynf-edit-input'); if(el){ el.focus(); el.setSelectionRange(el.value.length, el.value.length); } },0);
+  }
+  function aplicarCampoDinamicoPopup(campo, aplicarATodos){
+    const valor=document.getElementById('dynf-edit-input').value||'';
+    setBuilderCampo(campo, valor);
+    if(aplicarATodos){
+      const cat=bibCampoCategoria(campo);
+      builderCamposDinamicos(getBuilderJob()).filter(c=>c!==campo && bibCampoCategoria(c)===cat).forEach(c=>setBuilderCampo(c, valor));
+    }
+    closeInfo();
+    renderBuilderCampos(getBuilderJob(), false);
   }
   function setBuilderCampo(campo, valor){
     const fv=getBuilderFieldValues();
@@ -7646,15 +7699,16 @@
     const rows=blocks.map((b,idx)=>{
       const on=bibSelBlocosSet.has(idx);
       const nCl=(b.clauses||[]).length;
+      const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
       return '<div class="pick-check'+(on?' on':'')+'" onclick="toggleSelBloco('+idx+')">'+
         '<div class="pc-box'+(on?' on':'')+'">'+BIB_CHECK_SVG+'</div>'+
         '<div class="pc-main"><div class="pc-nm">'+escapeHtml(blockName({key:null,name:b.name}))+'</div>'+
-        '<div class="pc-sub">'+nCl+' '+t('library.clausesCount')+' · '+t(bibBlocoTagKey(b.status))+'</div></div></div>';
+        '<div class="pc-sub">'+nCl+' '+t('library.clausesCount')+' <span class="bib-struct-tag">'+icone+t(bibBlocoTagKey(b.status))+'</span></div></div></div>';
     }).join('');
     const n=bibSelBlocosSet.size;
     document.getElementById('infoTitle').textContent=bibSelBlocosTitulo;
     document.getElementById('infoBody').innerHTML='<div class="pick-list">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportBlocos()">'+t('library.import')+(n?' ('+n+')':'')+'</button>';
+      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportBlocos()">'+BIB_ICON_ARROW+t('library.import')+(n?' ('+n+')':'')+'</button>';
   }
   function toggleSelBloco(idx){ if(bibSelBlocosSet.has(idx))bibSelBlocosSet.delete(idx); else bibSelBlocosSet.add(idx); renderSelecaoBlocos(); }
   function confirmarImportBlocos(){
@@ -7733,7 +7787,7 @@
     const n=bibSelClausSet.size;
     document.getElementById('infoTitle').textContent=bibSelClausTitulo;
     document.getElementById('infoBody').innerHTML='<div class="pick-list">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>'+
-      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportClausulas()">'+t('library.import')+(n?' ('+n+')':'')+'</button>';
+      '<button class="btn primary" style="width:100%;margin-top:10px"'+(n?'':' disabled')+' onclick="confirmarImportClausulas()">'+BIB_ICON_ARROW+t('library.import')+(n?' ('+n+')':'')+'</button>';
     const ctx=bibSelClausContratoCtx;
     window.__infoBackHandler = ctx ? (()=>abrirSelecaoBlocoParaClausulas(ctx.rawId, ctx.lang, ctx.titulo)) : null;
     document.getElementById('infoBackBtn').style.display = ctx ? 'flex' : 'none';
@@ -10752,7 +10806,7 @@
       const langs=(b.idioma&&b.idioma.length)?b.idioma:['en'];
       const base={
         baseId:'of:'+b.id, rawId:b.id,
-        categoria:b.categoria, tags:b.tags||[],
+        categoria:b.categoria, subcategoria:b.subcategoria, tags:b.tags||[],
         origem:b.origem, verificado:b.verificado, texto:b.texto, blocks:b.blocks||[],
         idioma:b.idioma, profissao:bibProfissao(b),
         numBlocos:b.numBlocos, coberturas:bibCoberturasDoModelo(b),
@@ -10763,6 +10817,15 @@
       };
       base.categoriaAmigavel=bibCategoriaAmigavel(base);
       base.contexto=bibContexto(base);
+      /* Tags de busca/identificação combinam as tags reais do contrato com
+         facetas já calculadas (categoria amigável, subcategoria, segmento,
+         contexto) — sem isto o contrato só era achável pelas poucas tags
+         brutas do catálogo, insuficiente pra busca e pra identificar o
+         contrato "em mais âmbitos" como pedido. */
+      base.tagsBusca=[...new Set([
+        ...(base.tags||[]),
+        base.categoriaAmigavel, base.subcategoria, base.profissao, base.contexto
+      ].filter(Boolean))];
       langs.forEach(lang=>{
         out.push(Object.assign({}, base, {
           id:'of:'+b.id+'@'+lang,
@@ -10775,6 +10838,15 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
+  /* Ícones "sharp mid-century": traço reto (miter/square), sem curvas
+     desnecessárias — usados nos botões Visualizar (olho) e Importar (seta)
+     e nas etiquetas obrigatório/opcional/condicional da estrutura, no lugar
+     dos "·" genéricos. */
+  const BIB_ICON_EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><rect x="9.5" y="9.5" width="5" height="5"/></svg>';
+  const BIB_ICON_ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 12h16M13 5l7 7-7 7"/></svg>';
+  const BIB_ICON_REQUIRED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="4.5" y="11" width="15" height="9"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+  const BIB_ICON_OPTIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="4.5" y="4.5" width="15" height="15"/></svg>';
+  const BIB_ICON_CONDITIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 3 21 12 12 21 3 12Z"/></svg>';
   /* Ícones da biblioteca — Lucide, stroke 1.75, nunca preenchidos.
      Um único desenho por conceito, reaproveitado em toda a biblioteca
      (filtro, rodapé do card, sheet de detalhe, Visualizar). */
@@ -10980,7 +11052,7 @@
     if(bibIdiomaSel) itens=itens.filter(i=>i.lang===bibIdiomaSel);
     if(bibCategoriaSel) itens=itens.filter(i=>i.categoriaAmigavel===bibCategoriaSel);
     if(bibSegmentoSel) itens=itens.filter(i=>i.profissao===bibSegmentoSel);
-    if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
+    if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tagsBusca||i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
     itens=ordenarBibItens(itens);
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
@@ -10990,7 +11062,7 @@
       const langTag='<div class="bc-lang-row"><span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>'+
         (i.numBlocos?('<span class="bc-lang-sep"></span><span class="bc-lang-blocks">'+i.numBlocos+' '+t('builder.blocksCount')+'</span>'):'')+'</div>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
-      return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
+      return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
         langTag+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
@@ -11008,25 +11080,26 @@
     /* Estrutura real de blocos do contrato oficial (nome + obrigatório/
        opcional/condicional), vinda do Blueprint — a composição detalhada
        de cláusulas por bloco (para import seletivo) ainda não existe, ver
-       nota em blocosParaModeloBiblioteca. */
+       nota em blocosParaModeloBiblioteca. Cada bloco vira uma tira de 5
+       mini-blocos quadrados laranjas: quantos vêm preenchidos é o "score"
+       de cobertura jurídica do bloco (obrigatório cobre mais que opcional),
+       lido de forma imediata em vez de uma barra de progresso genérica. */
     if(!item.blocks || !item.blocks.length) return '<p style="font-size:12.5px;color:var(--neutral);margin-bottom:12px">'+t('library.structureUnavailable')+'</p>';
-    const pesos={REQUIRED:100, CONDITIONAL:70, OPTIONAL:45};
-    return '<div style="margin-bottom:14px">'+item.blocks.map(b=>{
-      const largura=pesos[b.status]||45;
+    const PESOS_CHIPS={REQUIRED:5, CONDITIONAL:3, OPTIONAL:2};
+    const TOTAL_CHIPS=5;
+    return '<div class="bib-struct-list">'+item.blocks.map(b=>{
+      const cheios=PESOS_CHIPS[b.status]||2;
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span style="opacity:.6">· '+t(tagKey)+'</span></div><div class="bib-struct-bar"><i style="width:'+largura+'%"></i></div></div>';
+      const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
+      const chips=Array.from({length:TOTAL_CHIPS},(_,i)=>'<i'+(i<cheios?' class="on"':'')+'></i>').join('');
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-chips">'+chips+'</div></div>';
     }).join('')+'</div>';
-  }
-  function bibBlocoBlurHtml(item){
-    const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
-    const preview = (texto||'').slice(0,180);
-    return '<div class="bib-blur-block"><div class="txt">'+escapeHtml(preview)+'</div><div class="lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>'+t('library.protectedBlock')+'</div></div>';
   }
   function bibBlocoVisivelHtml(item){
     const texto = item.texto || ((item.desc||'')+' '+(item.desc||''));
     const preview = (texto||'').slice(0,180);
     return '<div class="bib-preview-block"><div class="txt">'+escapeHtml(preview)+(texto.length>180?'…':'')+'</div>'+
-      '<button class="btn soft" style="width:100%" onclick="event.stopPropagation();abrirVisualizarBlocoBiblioteca(\''+item.id+'\')">'+t('library.viewBlock')+'</button></div>';
+      '<button class="btn soft" style="width:100%" onclick="event.stopPropagation();abrirVisualizarBlocoBiblioteca(\''+item.id+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button></div>';
   }
   function abrirVisualizarBlocoBiblioteca(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
@@ -11054,8 +11127,9 @@
     head.push('<span class="vis-meta">'+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
     const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
+      const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
       const texto=(b.clauses||[]).map(c=>c.text).join('\n\n');
-      return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(blockName({key:null,name:b.name}))+'<span class="vis-bloco-tag">'+t(tagKey)+'</span></div>'+
+      return '<div class="vis-bloco"><div class="vis-bloco-h">'+escapeHtml(blockName({key:null,name:b.name}))+'<span class="vis-bloco-tag">'+icone+t(tagKey)+'</span></div>'+
         '<div class="vis-bloco-txt">'+escapeHtml(texto)+'</div></div>';
     }).join('');
     document.getElementById('infoBody').innerHTML=
@@ -11063,8 +11137,23 @@
         '<h2 class="vis-title">'+escapeHtml(titulo||(it&&it.titulo)||'')+'</h2>'+
         '<div class="vis-head">'+head.join('')+'</div>'+
         '<div class="vis-card">'+blocosHtml+'</div>'+
-        '<button class="btn primary" style="width:100%" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+t('library.import')+'</button>'+
+        '<button class="btn primary" style="width:100%" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+BIB_ICON_ARROW+t('library.import')+'</button>'+
       '</div>';
+  }
+  /* Em modo de seleção de blocos/cláusulas (Builder → Adicionar Bloco/
+     Cláusulas), a tela de detalhe do contrato (descrição, estrutura, tags,
+     favoritar) não serve pra nada — o utilizador só quer entrar direto nos
+     blocos pra escolher o que importar. Pular direto evita um passo morto
+     e a falsa impressão de que "abre a visualização" em vez dos blocos. */
+  function abrirItemBiblioteca(id){
+    if(bibPickModeCallback && (bibPickModeCallback.modo==='blocos'||bibPickModeCallback.modo==='clausulas')){
+      const it=catalogoBiblioteca().find(i=>i.id===id);
+      if(!it) return;
+      if(bibPickModeCallback.modo==='blocos') abrirSelecaoBlocosContrato(it.rawId, it.lang, it.titulo);
+      else abrirSelecaoBlocoParaClausulas(it.rawId, it.lang, it.titulo);
+      return;
+    }
+    abrirDetalheBibliotecaPrincipal(id);
   }
   function abrirDetalheBibliotecaPrincipal(id){
     const it=catalogoBiblioteca().find(i=>i.id===id);
@@ -11079,26 +11168,33 @@
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
     html+='<div class="plabel">'+t('library.protectedBlockSample')+'</div>';
-    /* só contratos com validação jurídica mantêm o bloco borrado — os demais
-       mostram uma prévia legível com um botão para ver o conteúdo completo. */
-    html+= it.verificado ? bibBlocoBlurHtml(it) : bibBlocoVisivelHtml(it);
-    if(it.tags&&it.tags.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+it.tags.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
+    html+=bibBlocoVisivelHtml(it);
+    const tagsExibidas=it.tagsBusca||it.tags||[];
+    if(tagsExibidas.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
-    html+='<button class="btn '+(fav?'soft':'ghost')+'" style="width:100%;margin-bottom:8px" onclick="toggleFavBiblioteca(\''+it.baseId+'\');closeInfo()">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
-    if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+t('library.viewBlock')+'</button>';
-    const tituloEscapado=escapeHtml(it.titulo).replace(/'/g,"\\'");
-    const pickBlocosOuClausulas = bibPickModeCallback && (bibPickModeCallback.modo==='blocos'||bibPickModeCallback.modo==='clausulas');
+    html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
+    if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
+    /* Chega aqui só fora do modo de seleção de blocos/cláusulas (abrirItemBiblioteca
+       roteia esses direto pros blocos, sem passar por este ecrã) — sobram o
+       fluxo normal de import e o de escolher contrato pra colaborador. */
     const usarOnclick = bibPickModeCallback
-      ? (bibPickModeCallback.modo==='blocos' ? "abrirSelecaoBlocosContrato('"+it.rawId+"','"+it.lang+"','"+tituloEscapado+"')"
-        : bibPickModeCallback.modo==='clausulas' ? "abrirSelecaoBlocoParaClausulas('"+it.rawId+"','"+it.lang+"','"+tituloEscapado+"')"
-        : "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')")
+      ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    const usarLabel = pickBlocosOuClausulas ? t('library.viewBlocksBtn') : t('library.import');
-    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+usarLabel+'</button>';
-    openInfo(it.titulo, html);
+    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
+    openInfo(it.titulo, html, undefined, 'bib-title-font');
+  }
+  /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
+     fechamento abrupto reportado noutras telas) — reabre o mesmo detalhe no
+     lugar, só que com o ícone/rótulo do botão já refletindo o novo estado. */
+  function toggleFavEReabrirDetalhe(baseId, itemId){
+    toggleFavBiblioteca(baseId);
+    abrirDetalheBibliotecaPrincipal(itemId);
   }
   function cancelarSelecaoBiblioteca(){
+    const ctx=bibPickModeCallback;
     bibPickModeCallback=null;
+    if(ctx && (ctx.modo==='blocos'||ctx.modo==='clausulas')){ go('builder'); return; }
+    if(ctx && (ctx.modo==='colaborador'||ctx.modo==='colaboradorMassa')){ go('detalhe'); return; }
     renderBiblioteca();
   }
   /* Aplica o contrato escolhido na Biblioteca completa ao destino que pediu
@@ -12003,8 +12099,10 @@
   }
 
   /* ===== INFO SHEET — Perfil, Builder (funções reais e contidas) ===== */
-  function openInfo(title, bodyHtml, onBack){
-    document.getElementById('infoTitle').textContent=title;
+  function openInfo(title, bodyHtml, onBack, titleClass){
+    const titleEl=document.getElementById('infoTitle');
+    titleEl.textContent=title;
+    titleEl.className = titleClass||'';
     document.getElementById('infoBody').innerHTML=bodyHtml;
     document.getElementById('infoOverlay').classList.add('show');
     document.getElementById('infoSheet').classList.add('show');
@@ -12706,34 +12804,52 @@
   }
   renderCalendar();
 
+  /* Arrastar um bloco: o item segue o dedo/cursor em tempo real (translateY)
+     e só troca de posição com o vizinho imediato quando o centro do bloco
+     arrastado cruza o centro dele — nunca varre todos os blocos a cada
+     movimento (era isso que causava trocas múltiplas e erráticas por
+     evento, a experiência "abrupta" reportada). */
   (function enableDrag(){
     const list=document.getElementById('blocklist');
-    let dragEl=null;
+    let dragEl=null, startY=0;
 
     list.addEventListener('pointerdown', e=>{
       const handle=e.target.closest('[data-handle]');
       if(!handle) return;
       dragEl=handle.closest('.block');
       dragEl.classList.add('dragging');
+      startY=e.clientY;
       try{ handle.setPointerCapture(e.pointerId); }catch(err){}
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
     });
     function onMove(e){
       if(!dragEl) return;
-      const siblings=[...list.querySelectorAll('.block')].filter(b=>b!==dragEl);
-      for(const sib of siblings){
-        const r=sib.getBoundingClientRect();
-        if(e.clientY>r.top && e.clientY<r.bottom){
-          sib.classList.add('drop-target');
-          if(e.clientY < r.top + r.height/2){ list.insertBefore(dragEl, sib); }
-          else { list.insertBefore(dragEl, sib.nextSibling); }
-        } else sib.classList.remove('drop-target');
+      const dy=e.clientY-startY;
+      dragEl.style.transform='translateY('+dy+'px)';
+      const dragRect=dragEl.getBoundingClientRect();
+      const dragCenter=dragRect.top+dragRect.height/2;
+      const prev=dragEl.previousElementSibling;
+      const next=dragEl.nextElementSibling;
+      if(prev){
+        const r=prev.getBoundingClientRect();
+        if(dragCenter < r.top+r.height/2){
+          list.insertBefore(dragEl, prev);
+          startY=e.clientY; dragEl.style.transform='translateY(0px)';
+          return;
+        }
+      }
+      if(next){
+        const r=next.getBoundingClientRect();
+        if(dragCenter > r.top+r.height/2){
+          list.insertBefore(dragEl, next.nextElementSibling);
+          startY=e.clientY; dragEl.style.transform='translateY(0px)';
+          return;
+        }
       }
     }
     function onUp(){
-      if(dragEl) dragEl.classList.remove('dragging');
-      list.querySelectorAll('.block').forEach(b=>b.classList.remove('drop-target'));
+      if(dragEl){ dragEl.classList.remove('dragging'); dragEl.style.transform=''; }
       dragEl=null;
       document.removeEventListener('pointermove', onMove);
       document.removeEventListener('pointerup', onUp);
