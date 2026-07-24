@@ -23,20 +23,16 @@
     --bib-silver-ink:#C9CDD4;
   }
 
-  /* Sem background próprio na view — como em qualquer outra tela, deixa o
-     gradiente do .shell (index.html, multi-radial + linear escuro) aparecer
-     por trás; antes #v-bibliotecas pintava um #0C0D10 sólido por cima,
-     substituindo esse gradiente por uma caixa cinza plana só nesta tela —
-     era isso que destoava do resto do app. O radial abaixo continua a dar o
-     tom quase-preto → grafite → verde petróleo característico da Biblioteca,
-     só que agora como um tint translúcido sobre o gradiente do shell, não
-     uma camada opaca que o esconde. */
+  /* Sem background/painel próprio na view nem no shell — mesmo tratamento de
+     qualquer outra tela: cards direto sobre o gradiente do .shell (index.html,
+     multi-radial + linear escuro), sem nenhuma camada tintada no meio. Havia
+     dois problemas empilhados aqui: #v-bibliotecas pintava um #0C0D10 sólido
+     (removido antes), e o .bib-shell::before mantinha um radial-gradient
+     translúcido cobrindo toda a tela por trás dos cards — mesmo semi-
+     transparente, isso ainda lia como "uma camada extra entre o fundo e os
+     cards" (o que o resto do app nunca tem). Removido: a Biblioteca agora usa
+     exatamente o mesmo fundo — nenhum — que todas as outras telas. */
   .bib-shell{display:flex;flex-direction:column;position:relative;isolation:isolate}
-  .bib-shell::before{
-    content:"";position:absolute;inset:-24px -18px;z-index:-2;pointer-events:none;
-    background:radial-gradient(150% 110% at 50% -12%,
-      rgba(26,28,30,.55) 0%, rgba(22,24,26,.55) 32%, rgba(19,26,25,.5) 56%, rgba(12,13,16,.55) 100%);
-  }
   /* micro grão sobre todo o material — extremamente sutil */
   .bib-shell::after{
     content:"";position:absolute;inset:-24px -18px;z-index:2;pointer-events:none;opacity:.03;mix-blend-mode:overlay;
