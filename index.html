@@ -2332,7 +2332,6 @@
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
     "library.origin.official": { pt:"Pivots", en:"Pivots", es:"Pivots" },
     "library.origin.officialShort": { pt:"Pivots", en:"Pivots", es:"Pivots" },
-    "library.origin.legalVerified": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.communityShort": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
@@ -2344,7 +2343,6 @@
     "library.facet.language": { pt:"Idioma", en:"Language", es:"Idioma" },
     "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
-    "library.origin.legal": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
     "library.origin.recommended": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.origin.recommendedShort": { pt:"Recomendados", en:"Recommended", es:"Recomendados" },
     "library.recommendCount": { pt:"recomendam", en:"recommend", es:"recomiendan" },
@@ -9934,7 +9932,6 @@
        como um recorte no metal do escudo, não como um ícone de check
        genérico ao lado do nome. */
     oficial:'<svg viewBox="0 0 24 24" fill="none"><mask id="pivotShieldCut" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24"><rect width="24" height="24" fill="#fff"/><path d="M8.5 12.4 11 14.9l4.5-5" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></mask><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" fill="currentColor" mask="url(#pivotShieldCut)"/></svg>',
-    juridico:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/></svg>',
     recomendados:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>',
     comunidade:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>'
   };
@@ -9956,11 +9953,12 @@
   let bibFavoritos=new Set();
   function saveBibFavoritos(){ savePersisted('pivot-bibFavoritos', ()=>[...bibFavoritos]); }
   async function loadBibFavoritos(){ await loadPersisted('pivot-bibFavoritos', d=>{ bibFavoritos=new Set(d||[]); }); }
-  /* Origem: só as 4 insígnias reais — "Populares" saiu porque a métrica de
-     usos não é representativa; só recomendações (avaliação) importam. */
+  /* Origem: só as 3 insígnias reais. "Jurídico" saiu — nenhum modelo da
+     biblioteca foi ainda validado por juristas (são todos gerados por IA),
+     então marcá-los como "verificado" era incorreto; todos ficam só com a
+     tag Pivots até existir uma revisão jurídica real. */
   const BIB_ORIGENS=[
     {key:'oficial', labelKey:'library.origin.official', labelKeyShort:'library.origin.officialShort'},
-    {key:'juridico', labelKey:'library.origin.legal'},
     {key:'recomendados', labelKey:'library.origin.recommended', labelKeyShort:'library.origin.recommendedShort'},
     {key:'comunidade', labelKey:'library.origin.community', labelKeyShort:'library.origin.communityShort'}
   ];
@@ -9980,7 +9978,6 @@
   }
   function bibItemBateOrigem(item, org){
     if(org==='recomendados') return (item.avaliacao||0)>=4.7;
-    if(org==='juridico') return !!item.verificado;
     return item.origem===org;
   }
   /* Aplica só os filtros de origem (usado pela contagem das insígnias e como
@@ -10086,7 +10083,6 @@
      componente (bibOtag/.bib-seal) em toda a biblioteca — card, sheet de
      detalhe e Visualizar usam exatamente o mesmo selo. */
   function bibAutorLinha(item){
-    if(item.verificado) return bibOtag('juridico', item.autor||t('library.origin.legalVerified'));
     if(item.origem==='comunidade') return bibOtag('comunidade', item.autor||t('library.origin.community'));
     return bibOtag('oficial', t('library.origin.official'));
   }
@@ -10131,7 +10127,8 @@
       const fav=bibFavoritos.has(i.baseId);
       const rodape=bibBadgesItem(i);
       if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
-      const langTag='<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>';
+      const langTag='<div class="bc-lang-row"><span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>'+
+        (i.numBlocos?('<span class="bc-lang-sep"></span><span class="bc-lang-blocks">'+i.numBlocos+' '+t('builder.blocksCount')+'</span>'):'')+'</div>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirDetalheBibliotecaPrincipal(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
@@ -10188,10 +10185,11 @@
       return;
     }
     const it=LegalLibrary.get(rawId);
-    /* Cabeçalho numa linha: Jurídico (se verificado) · Idioma · nº de blocos. */
+    /* Cabeçalho numa linha: Pivots · Idioma · nº de blocos. Nenhum modelo
+       ainda passou por revisão jurídica real (são todos gerados por IA),
+       então a tag Jurídico não é usada aqui — só Pivots. */
     const head=[];
-    if(it && it.verificado) head.push(bibOtag('juridico', t('library.origin.legalVerified')));
-    else head.push(bibOtag('oficial', t('library.origin.official')));
+    head.push(bibOtag('oficial', t('library.origin.official')));
     head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
     head.push('<span class="vis-meta">'+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
     const blocosHtml=detail.blocks.map(b=>{
