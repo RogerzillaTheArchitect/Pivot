@@ -47,7 +47,10 @@
     flex:none;transition:background .2s}
   .toggle .kn{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
     transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
-  .toggle.on{background:var(--brand)}
+  /* "On" escurecido/dessaturado (era var(--brand), o verde vivo de marca) —
+     mesma família de acento contido usada nos outros indicadores de estado
+     "concluído" do app (ex.: .job-footer-btn.concluir). */
+  .toggle.on{background:rgba(70,130,108,.65)}
   .toggle.on .kn{left:18px}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;

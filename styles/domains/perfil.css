@@ -1,10 +1,15 @@
   /* ===== PERFIL ===== */
   .profile-head{display:flex;align-items:center;gap:14px;margin:18px 0 22px}
-  .p-avatar{width:54px;height:54px;border-radius:var(--r);background:var(--ink);color:var(--paper);
+  /* Fundo escuro (era var(--ink), quase branco, com texto escuro por cima —
+     um círculo claro sobrando no meio de um app "vidro preto"). Mesmo tom
+     neutro do avatar-padrão sem foto usado no resto do app (avatarColor()). */
+  .p-avatar{width:54px;height:54px;border-radius:var(--r);background:#26272A;color:#F5F5F3;
     font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center}
   .p-avatar-wrap{position:relative;flex:none}
-  .p-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:var(--r);background:var(--brand);
-    color:#fff;display:grid;place-items:center;cursor:pointer;border:2px solid var(--paper)}
+  /* Selo de editar escuro/glass (era var(--brand), verde de marca sólido). */
+  .p-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:var(--r);
+    background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(20,20,20,.85);
+    color:#F5F5F3;display:grid;place-items:center;cursor:pointer;border:2px solid var(--paper)}
   .p-avatar-edit svg{width:11px;height:11px}
   .p-name{font-size:17px;font-weight:600}
   .p-sub{font-size:13px;color:var(--neutral)}
