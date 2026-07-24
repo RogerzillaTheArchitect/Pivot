@@ -6994,7 +6994,7 @@
     const isJob=!!builderContext;
     const locked = isJob && contratoBloqueadoParaEdicao(job);
     document.getElementById('builder-title').textContent= isJob? (t('job.contract')+' — '+job.client) : t('builder.title');
-    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub'));
+    document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderColabCtx ? (builderModeloOrigem&&builderModeloOrigem.nome||'') : (builderModeloOrigem ? t('builder.basedOnPrefix')+builderModeloOrigem.client : t('builder.newTemplateSub')));
     document.getElementById('builder-back-label').textContent= isJob? job.client : (builderColabCtx ? t('collab.contractsSection') : t('nav.jobs'));
     renderBuilderCampos(job, locked);
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
@@ -10097,11 +10097,17 @@
     const m=LegalLibrary.get(rawId);
     if(!m) return;
     marcarModeloComoUsado(rawId);
-    const job=jobsData[ctx.jobId]||{};
     const nome = lang ? LegalLibrary.tituloEm(m, lang) : m.titulo;
-    const valores=valoresDynamicFieldsDoJob(job);
+    /* Contrato de colaborador é um acordo à parte do contrato do cliente do
+       trabalho — não deve herdar CLIENT_NAME/valor/data/local do projeto
+       (senão o modelo já vem preenchido com o nome do cliente do job, o que
+       não faz sentido para um acordo com o colaborador). Só o nome da
+       própria empresa/prestador é reaproveitado; o resto fica em branco
+       para o utilizador preencher pelos campos dinâmicos do Builder. */
+    const empresa=perfilData && perfilData.empresa;
+    const valores=empresa ? {PROVIDER_NAME:empresa} : {};
     const blocks=await blocosParaModeloBiblioteca(m, lang, valores);
-    const modeloOrigem={ client:job.client||'', nome, blocks, fieldValues:valores };
+    const modeloOrigem={ client:'', nome, blocks, fieldValues:valores };
     builderColabCtx=ctx;
     abrirBuilder(null, modeloOrigem);
   }
