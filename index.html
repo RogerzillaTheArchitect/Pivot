@@ -5287,6 +5287,7 @@
   /* ===== Endereço — um único campo, geocodificação real (OpenStreetMap/Nominatim, sem chave) com fallback local ===== */
   let twGeoTimer=null;
   let twSelectedGeo=null;
+  let twSelectedGeoAddr=null; // {city,state,country} — vem do address estruturado do Nominatim
   let twColaboradoresExternosPendentes=[];
   let twEmWizard=false;
   let twModeloEscolhido=null;
@@ -5319,7 +5320,7 @@
   function onEnderecoInput(){
     const q=document.getElementById('tw-local').value.trim();
     const complementando = twSelectedAddrBase && q.startsWith(twSelectedAddrBase);
-    if(!complementando){ twSelectedGeo=null; twSelectedAddrBase=null; }
+    if(!complementando){ twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; }
     clearTimeout(twGeoTimer);
     const dd=document.getElementById('tw-addr-dropdown');
     if(q.length<2){ dd.style.display='none'; return; }
@@ -5376,10 +5377,16 @@
   }
   function selecionarEnderecoReal(i){
     const r=_twAddrResults[i];
-    const completo=montarEnderecoCompleto(r.address||{}, (r.display_name||'').split(',')[0]);
+    const a=r.address||{};
+    const completo=montarEnderecoCompleto(a, (r.display_name||'').split(',')[0]);
     const valor=completo||r.display_name;
     document.getElementById('tw-local').value=valor;
     twSelectedGeo={lat:parseFloat(r.lat), lon:parseFloat(r.lon)};
+    /* Cidade/estado/país estruturados — o Nominatim já devolve isto, mas até
+       aqui só a string livre (montarEnderecoCompleto) era guardada; isso
+       fica no job (ver trabalhoCreate) pra alimentar o Heatmap Geográfico e
+       o analytics interno com dado real, não texto adivinhado depois. */
+    twSelectedGeoAddr={ city:a.city||a.town||a.village||a.municipality||null, state:a.state||null, country:a.country||null };
     twSelectedAddrBase=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
   }
@@ -5388,6 +5395,7 @@
     document.getElementById('tw-local').value=valor;
     document.getElementById('tw-addr-dropdown').style.display='none';
     twSelectedGeo=null;
+    twSelectedGeoAddr=null;
     twSelectedAddrBase=valor;
   }
   document.addEventListener('click', e=>{
@@ -5573,6 +5581,9 @@
     const local=lerEndereco();
     const localCompleto=lerEnderecoCompleto();
     const geo=twSelectedGeo;
+    const cidadeGeo=(twSelectedGeoAddr&&twSelectedGeoAddr.city)||null;
+    const estadoGeo=(twSelectedGeoAddr&&twSelectedGeoAddr.state)||null;
+    const paisGeo=(twSelectedGeoAddr&&twSelectedGeoAddr.country)||null;
     const valorTxt=document.getElementById('tw-valor').value.trim();
     const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
     const typeLabel=nomeTrabalho||t('job.typeDefault');
@@ -5611,7 +5622,7 @@
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
       categoria:categoriaInfo.label, segmento:segmentoVal,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
-      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, value:valorNum, structure,
+      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, cidadeGeo, estadoGeo, paisGeo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
@@ -5653,6 +5664,7 @@
     jobsData[id]=job;
     renderJobCard(job);
     saveJobsData();
+    registrarAnalyticsJobCriado(job);
     /* Espera as inserções de colaboradores terminarem ANTES de abrir o
        Portal Operacional — sem isto, o card de Colaboradores fazia a sua
        leitura antes das linhas existirem no Supabase (condição de corrida)
@@ -5753,7 +5765,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -6163,6 +6175,52 @@
   }
   function segmentoLabel(id){
     return id==='outros' ? t('reports.segFin.others') : ((SEGMENTOS_FINANCEIROS.find(s=>s.id===id)||{}).label||id);
+  }
+  /* ===== Analytics interno (backend) =====
+     Escreve eventos estruturados na tabela analytics_events do Supabase —
+     workspace_id, tipo, data, valor, segmento, geografia — pra permitir
+     análise cruzada entre workspaces fora do produto (SQL/BI direto no
+     Supabase, via service_role). A tabela só tem policy de INSERT pro
+     client (nenhuma de SELECT): o próprio app NUNCA lê isto de volta, e um
+     usuário não consegue ver dado de outro. Best-effort só — nunca deve
+     bloquear nem falhar visivelmente pro usuário. */
+  async function registrarAnalyticsEvento(tipo, dados){
+    if(!currentWorkspaceId) return;
+    try{
+      await sb.from('analytics_events').insert({
+        workspace_id: currentWorkspaceId,
+        job_id: dados.job_id||null,
+        event_type: tipo,
+        event_date: dados.event_date||null,
+        value: dados.value!=null ? dados.value : null,
+        hours: dados.hours!=null ? dados.hours : null,
+        segment: dados.segment||null,
+        city: dados.city||null,
+        state: dados.state||null,
+        country: dados.country||null,
+        lat: (dados.lat!=null && !isNaN(dados.lat)) ? dados.lat : null,
+        lon: (dados.lon!=null && !isNaN(dados.lon)) ? dados.lon : null
+      });
+    }catch(e){ /* silencioso de propósito */ }
+  }
+  function registrarAnalyticsJobCriado(job){
+    registrarAnalyticsEvento('job_created', {
+      job_id: job.id, event_date: job.dateRaw, value: job.value, hours: job.duracaoHoras,
+      segment: classificarSegmentoJob(job),
+      city: job.cidadeGeo||null, state: job.estadoGeo||null, country: job.paisGeo||null,
+      lat: job.geo&&job.geo.lat, lon: job.geo&&job.geo.lon
+    });
+  }
+  function registrarAnalyticsPagamento(job, pagamento){
+    registrarAnalyticsEvento('payment_received', {
+      job_id: job.id, event_date: pagamento.pagoEm||pagamento.dueDate, value: pagamento.amount,
+      segment: classificarSegmentoJob(job),
+      city: job.cidadeGeo||null, state: job.estadoGeo||null, country: job.paisGeo||null,
+      lat: job.geo&&job.geo.lat, lon: job.geo&&job.geo.lon
+    });
+  }
+  function registrarAnalyticsDespesa(despesa){
+    registrarAnalyticsEvento('expense_added', { event_date: despesa.data, value: despesa.valor });
   }
   /* ===== Categoria / Segmento (etapa de criação do trabalho) =====
      Categoria reaproveita os mesmos 16 ids/labels de SEGMENTOS_FINANCEIROS —
@@ -6787,6 +6845,10 @@
      da vírgula, sem o código postal na frente (ex.: "Rua X, 1200 Lisboa" →
      "Lisboa"). É a única granularidade de localização confiável hoje. */
   function heatCidadeDoJob(job){
+    /* Prioriza o campo estruturado (job.cidadeGeo, vindo do Nominatim na
+       criação do trabalho) — só cai pra extrair da string livre em
+       trabalhos criados antes dessa captura existir. */
+    if(job.cidadeGeo) return job.cidadeGeo;
     const texto=job.localCompleto||job.local||'';
     if(!texto.trim()) return null;
     const partes=texto.split(',');
@@ -6915,6 +6977,7 @@
       const id='cst'+Date.now();
       custosData[id]={ id, descricao:desc, valor, categoria:'', data };
       saveCustosData();
+      registrarAnalyticsDespesa(custosData[id]);
     } else {
       const id='rec'+Date.now();
       receitasData[id]={ id, descricao:desc, valor, data };
@@ -7009,6 +7072,7 @@
     const id='cst'+Date.now();
     custosData[id]={ id, descricao:desc, valor, categoria:'', data:new Date().toISOString().slice(0,10) };
     saveCustosData();
+    registrarAnalyticsDespesa(custosData[id]);
     nomeEl.value=''; valEl.value=''; nomeEl.focus();
     renderDespesasLista();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
@@ -8852,6 +8916,7 @@
     saveJobsData(); renderJobDetailDynamic(id); updateJobCard(id); renderMonthTicker();
     showToast(viaComprovativo? t('payment.confirmed') : t('payment.markedPaid'));
     dispararEmailEvento('pagamentoRecebido', job.email, job);
+    registrarAnalyticsPagamento(job, job.payments[i]);
   }
   /* Termina a recorrência: não gera mais ciclos, mas mantém as cobranças já
      criadas (incluindo pendentes) para não apagar histórico financeiro. */
