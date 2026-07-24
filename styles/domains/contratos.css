@@ -7,8 +7,8 @@
   .builder-legend{display:flex;flex-direction:column;gap:7px;margin:2px 0 16px}
   .builder-legend .bl-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--neutral)}
   .builder-legend .bl-item svg{width:15px;height:15px;opacity:.8;flex:none}
-  .block{display:flex;align-items:flex-start;gap:10px;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r);padding:12px 12px;margin-bottom:8px;box-shadow:var(--shadow);
+  .block{display:flex;align-items:flex-start;gap:8px;background:var(--paper);border:1px solid var(--line);
+    border-radius:var(--r);padding:12px 8px;margin-bottom:8px;box-shadow:var(--shadow);
     transition:transform .18s,box-shadow .18s,opacity .18s}
   .block.dragging{opacity:.92;transition:none;position:relative;z-index:5;box-shadow:0 10px 24px rgba(0,0,0,.35);cursor:grabbing}
   /* Flash breve ao localizar um campo dinâmico dentro do texto do contrato
@@ -19,7 +19,7 @@
     75%{box-shadow:0 0 0 2px var(--bib-orange,#E8763A)}
     100%{box-shadow:none}
   }
-  .handle{cursor:grab;color:var(--neutral);touch-action:none;flex:none;padding:4px;display:flex;margin-top:2px}
+  .handle{cursor:grab;color:var(--neutral);touch-action:none;flex:none;padding:2px;display:flex;margin-top:2px}
   .handle svg{width:16px;height:16px}
   .handle:active{cursor:grabbing}
   .handle-spacer{width:24px;flex:none}
@@ -35,13 +35,13 @@
   .block-preview.collapsed{display:none}
   .block.off .block-preview,.block.off .block-name{opacity:.45}
   /* cláusulas numeradas, separadas e com hierarquia clara */
-  .clause-list{display:flex;flex-direction:column;gap:7px}
-  .clause{display:flex;gap:10px;align-items:flex-start;padding:9px 10px;border:1px solid var(--line-soft);
-    border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s}
+  .clause-list{display:flex;flex-direction:column;gap:7px;width:100%}
+  .clause{display:flex;gap:8px;align-items:flex-start;padding:9px 8px;border:1px solid var(--line-soft);
+    border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
-  .clause-n{flex:none;width:20px;height:20px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
-    font-size:11px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
+  .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
+    font-size:10px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
      só esta ocorrência ou todas as ocorrências da mesma tag no contrato. */
