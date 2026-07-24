@@ -180,3 +180,34 @@
   .exp-card .val .fx{display:flex;gap:10px}
   .exp-card .val .fx svg{width:15px;height:15px;color:var(--neutral);cursor:pointer}
 
+
+  /* ===== HEATMAPS =====
+     Mesmo laranja de destaque/intensidade já usado nas tags de campo dinâmico
+     do Builder e na estrutura da Biblioteca — uma única cor de "calor" em
+     todo o app, não uma paleta nova por tela. */
+  .heat-metric-btn{height:36px;flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:6px;
+    padding:0 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper-2);
+    color:var(--ink);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+  .heat-metric-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .heat-metric-btn .dd-arrow{width:12px;height:12px;flex:none;opacity:.6}
+  .heat-toolbar{display:flex;align-items:center;gap:8px;margin-top:12px}
+  .heat-nav{display:flex;align-items:center;gap:6px;flex:none}
+  .heat-nav-btn{width:30px;height:30px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper-2);
+    color:var(--ink-soft);display:grid;place-items:center;cursor:pointer;flex:none}
+  .heat-nav-btn svg{width:15px;height:15px}
+  .heat-nav-label{font-size:12px;font-weight:600;color:var(--ink-soft);min-width:64px;text-align:center;white-space:nowrap}
+  .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
+  .heat-grid-mes{grid-template-columns:repeat(4,1fr)}
+  .heat-grid-ano{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
+  .heat-grid-semana{grid-template-columns:repeat(auto-fill,minmax(28px,1fr));gap:3px}
+  .heat-cell{aspect-ratio:1;border-radius:3px;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
+    font-size:10px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:transform .12s}
+  .heat-cell:active{transform:scale(.92)}
+  .heat-grid-semana .heat-cell{font-size:8px}
+  .heat-grid-empty{margin-top:14px}
+  .heat-empty{font-size:12.5px;color:var(--neutral);padding:14px 0;text-align:center}
+  .heat-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--neutral)}
+  .heat-legend-bar{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(232,118,58,.9))}
+  .heat-insight{font-size:12.5px;color:var(--ink-soft);margin-top:10px;min-height:16px}
+  .heat-geo-note{font-size:11.5px;color:var(--neutral);margin-top:10px;line-height:1.4}
+  .heat-bar-fill{background:linear-gradient(90deg,#5A3620,var(--bib-orange,#E8763A))!important}
