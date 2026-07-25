@@ -811,6 +811,15 @@
           </div>
         </div>
 
+        <!-- 4 botões de acesso às listas completas (add/editar/excluir),
+             sem gráfico nenhum nessas telas — só o essencial de navegação. -->
+        <div class="rel-fin-actions">
+          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirGerenciamentoFluxo('recebidos')"><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
+        </div>
+
         <!-- Card: Fluxo — só análise, sem gerenciamento: Top 5 subcategorias
              que mais faturaram (verde, esquerda) vs Top 5 subcategorias com
              maior gasto (laranja, direita), sempre 5 linhas fixas cada lado
@@ -826,13 +835,11 @@
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo</div>
         <div class="card rel-card rel-card-body distfin-card">
           <div class="distfin-heads">
-            <span class="distfin-head-inc distfin-head-click" onclick="abrirGerenciamentoFluxo('recebidos')">
+            <span class="distfin-head-inc">
               <span data-t="reports.distFin.income">Recebidos</span>
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
             </span>
-            <span class="distfin-head-exp distfin-head-click" onclick="abrirGerenciamentoFluxo('despesas')">
+            <span class="distfin-head-exp">
               <span data-t="reports.distFin.expenses">Despesas</span>
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </span>
           </div>
           <div class="distfin-rule-soft"></div>
@@ -934,8 +941,6 @@
               <tbody id="rel-mercado-tabela-body"></tbody>
             </table>
           </div>
-          <div class="rel-geo-divider"></div>
-          <div id="rel-mercado-insights" style="padding:12px 16px 4px"></div>
         </div>
       </section>
 
@@ -3266,6 +3271,10 @@
     "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
     "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
     "reports.distFin.others": { pt:"Outros", en:"Others", es:"Otros" },
+    "reports.finBtn.metas": { pt:"Metas", en:"Goals", es:"Metas" },
+    "reports.finBtn.limites": { pt:"Limites", en:"Limits", es:"Límites" },
+    "reports.finBtn.receitas": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "reports.finBtn.despesas": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     // --- Reorganização de Relatórios: áreas, Resumo, Fluxo, Carga, Evolução, Rentabilidade, Indicadores, Mercado Regional ---
     "reports.stats.title": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.area.financial": { pt:"Financeiro", en:"Financial", es:"Financiero" },
@@ -7235,30 +7244,16 @@
   }
   function renderRelMercadoRegional(){
     const wrapTable=document.getElementById('rel-mercado-tabela-body');
-    const wrapInsights=document.getElementById('rel-mercado-insights');
-    if(!wrapTable || !wrapInsights) return;
+    if(!wrapTable) return;
     const linhas=calcularMercadoRegional();
     if(!linhas.length){
       wrapTable.innerHTML='';
-      wrapInsights.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
       return;
     }
     wrapTable.innerHTML=linhas.map(l=>
       '<tr><td>'+escapeHtml(l.cidade)+'</td><td>'+l.eventos+'</td><td>'+fmtMoney(l.receita)+'</td><td>'+fmtMoney(l.ticketMedio)+'</td></tr>'
     ).join('');
     wrapTable.querySelectorAll('tr').forEach((tr,i)=>{ tr.onclick=()=>relAbrirCidade(linhas[i].cidade); });
-    const porTicket=[...linhas].sort((a,b)=>b.ticketMedio-a.ticketMedio)[0];
-    const porHora=[...linhas].sort((a,b)=>b.porHora-a.porHora)[0];
-    const porEventos=[...linhas].sort((a,b)=>b.eventos-a.eventos)[0];
-    const top=linhas[0];
-    const insights=[
-      t('reports.regional.insight.topRevenue').replace('{cidade}', top.cidade).replace('{valor}', fmtMoney(top.receita)),
-      t('reports.regional.insight.topTicket').replace('{cidade}', porTicket.cidade).replace('{valor}', fmtMoney(porTicket.ticketMedio)),
-      t('reports.regional.insight.topHourly').replace('{cidade}', porHora.cidade).replace('{valor}', fmtMoney(porHora.porHora)),
-      t('reports.regional.insight.topCount').replace('{cidade}', porEventos.cidade).replace('{valor}', String(porEventos.eventos)),
-      t('reports.regional.insight.concentration').replace('{cidade}', top.cidade).replace('{pct}', String(top.pctReceita)),
-    ];
-    wrapInsights.innerHTML=insights.map(txt=>'<div class="rel-insight-row">'+txt+'</div>').join('');
   }
 
   /* ===== HEATMAPS =====
