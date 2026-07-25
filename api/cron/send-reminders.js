@@ -7,9 +7,23 @@
  * ao cliente (se o trabalho tiver email), e marca os lembretes como
  * enviados de volta na kv_store.
  *
- * Não usa nenhuma dependência nova — só fetch nativo do runtime Node do
- * Vercel, contra a REST API do Supabase e a API HTTP do Resend.
+ * job.reminders são sempre sobre o pagamento final do trabalho (ver
+ * gerarLembretes em index.html) — o cliente recebe o template real
+ * "Payment Reminder" (email-templates-v2/10-...); o profissional recebe só
+ * um aviso simples de que o lembrete foi enviado ("Generic Account
+ * Notification"), já que ele não é quem paga.
  */
+const { renderTemplate } = require('../_lib/emailTemplates');
+
+function fmtMoneyEUR(v) {
+  return new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(Number(v) || 0);
+}
+function fmtDataPt(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  return d.toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
 module.exports = async (req, res) => {
   if (req.headers['authorization'] !== 'Bearer ' + process.env.CRON_SECRET) {
     res.status(401).json({ error: 'Não autorizado.' });
@@ -75,13 +89,30 @@ module.exports = async (req, res) => {
         const ownerId = members && members[0] && members[0].user_id;
         const ownerEmail = ownerId ? await emailDoDono(ownerId) : null;
 
-        const assunto = 'Lembrete: ' + job.client + ' — ' + (job.typeLabel || 'trabalho');
-        const corpo = '<p>Lembrete automático do Pivot.</p><p><b>' + job.client + '</b> — ' +
-          (job.typeLabel || '') + '<br>Data: ' + (job.date || '') + '</p>';
+        const projeto = job.nome || job.typeLabel || '';
+        const pendente = (job.payments || []).find(p => p.status !== 'pago') || null;
+        const valor = fmtMoneyEUR(pendente ? pendente.amount : job.value);
+        const vencimento = fmtDataPt(pendente ? pendente.dueDate : job.dateRaw);
 
-        const destinatarios = [...new Set([ownerEmail, job.email].filter(Boolean))];
-        for (const destinatario of destinatarios) {
-          await enviarEmail(destinatario, assunto, corpo);
+        if (job.email) {
+          const htmlCliente = renderTemplate('paymentReminder', {
+            __blocks: { PAYMENT_METHOD_ROW: false },
+            REMINDER_HEADING: 'Seu pagamento<br>vence hoje.', REMINDER_TIMING: 'vence hoje',
+            CLIENT_NAME: job.client, PROJECT_NAME: projeto, PAYMENT_AMOUNT: valor, DUE_DATE: vencimento,
+            ACTION_URL: (job.contract && job.contract.link) || undefined,
+            PREHEADER: 'Seu pagamento vence hoje.',
+          });
+          await enviarEmail(job.email, 'Seu pagamento vence hoje — ' + projeto, htmlCliente);
+        }
+        if (ownerEmail) {
+          const htmlDono = renderTemplate('accountNotification', {
+            __blocks: { CTA_BLOCK: false },
+            EVENT_TITLE: 'Lembrete de pagamento enviado',
+            EVENT_DESCRIPTION: 'Enviamos um lembrete de pagamento a ' + job.client + ' sobre o projeto "' + projeto + '" (' + valor + ', vencimento ' + vencimento + ').',
+            EVENT_TIME: fmtDataPt(hojeISO), USER_EMAIL: ownerEmail,
+            PREHEADER: 'Lembrete de pagamento enviado a ' + job.client + '.',
+          });
+          await enviarEmail(ownerEmail, 'Lembrete de pagamento enviado — ' + job.client, htmlDono);
         }
 
         devidos.forEach(r => { r.enviado = true; });

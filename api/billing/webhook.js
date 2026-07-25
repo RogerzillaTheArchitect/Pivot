@@ -9,31 +9,9 @@
  * crypto nativo do Node — sem adicionar a biblioteca "stripe".
  */
 const crypto = require('crypto');
+const { renderTemplate } = require('../_lib/emailTemplates');
 
 module.exports.config = { api: { bodyParser: false } };
-
-/* Email de confirmação/cancelamento de assinatura — versão mínima, server-side,
-   sem depender do bundle do frontend (que só existe no browser). Reaproveita
-   a mesma paleta dos templates de email do Pivot (ver construirEmailContaInline
-   em index.html), mas escrita à parte porque este ficheiro corre no Node do
-   Vercel, isolado do JS da app. */
-function construirEmailAssinaturaHtml(plano, ativa) {
-  const VERDE = '#15532D', VERDE_CLARO = '#EAF3EC', CINZA = '#6B6459', LINHA = '#E7E2D6';
-  const badge = ativa ? 'Assinatura ativa' : 'Assinatura cancelada';
-  const titulo = ativa ? 'A sua assinatura está ativa' : 'A sua assinatura foi cancelada';
-  const corpo = ativa
-    ? 'Obrigado por assinar o Pivot. O seu plano ' + plano + ' já está ativo e pronto a usar.'
-    : 'Confirmamos o cancelamento da sua assinatura. Vai continuar a ter acesso até ao fim do período já pago.';
-  return '<table role="presentation" width="100%" style="max-width:520px;margin:0 auto;border-collapse:collapse;background:#fff;border:1px solid ' + LINHA + ';border-radius:16px;overflow:hidden;font-family:Arial,sans-serif">' +
-    '<tr><td style="padding:28px 24px;text-align:center;background:' + VERDE + '"><div style="color:#fff;font-size:19px;font-weight:700;letter-spacing:.04em;text-transform:uppercase">Pivot</div></td></tr>' +
-    '<tr><td style="padding:22px 24px 26px">' +
-      '<span style="display:inline-block;background:' + VERDE_CLARO + ';color:' + VERDE + ';font-size:11px;font-weight:700;padding:5px 11px;border-radius:20px">' + badge + '</span>' +
-      '<h2 style="font-size:20px;font-weight:700;margin:12px 0 8px;color:#111">' + titulo + '</h2>' +
-      '<p style="font-size:13px;color:' + CINZA + ';margin:0">' + corpo + '</p>' +
-    '</td></tr>' +
-    '<tr><td style="padding:14px 24px;border-top:1px solid ' + LINHA + ';text-align:center;font-size:11px;color:' + CINZA + '">Pivot &nbsp;·&nbsp; Este é um email automático — não é necessário responder.</td></tr>' +
-    '</table>';
-}
 
 function lerCorpoCru(req) {
   return new Promise((resolve, reject) => {
@@ -107,9 +85,24 @@ module.exports = async (req, res) => {
     return data && data.email;
   }
 
+  /* Template real "Generic Account Notification" (email-templates-v2/06-...)
+     — mesmo motor de api/emails/send-event.js, nunca um HTML próprio aqui. */
   async function notificarAssinatura(email, plano, ativa) {
     if (!email || !process.env.RESEND_API_KEY) return;
     try {
+      const titulo = ativa ? 'Sua assinatura está ativa' : 'Sua assinatura foi cancelada';
+      const html = renderTemplate('accountNotification', {
+        __blocks: { CTA_BLOCK: !!process.env.APP_URL },
+        EVENT_TITLE: titulo,
+        EVENT_DESCRIPTION: ativa
+          ? 'Obrigado por assinar o Pivots. Seu plano ' + (plano || 'Pivots') + ' já está ativo e pronto para usar.'
+          : 'Confirmamos o cancelamento da sua assinatura. Você continuará com acesso até o fim do período já pago.',
+        EVENT_TIME: new Date().toLocaleDateString('pt-PT', { day: '2-digit', month: '2-digit', year: 'numeric' }),
+        USER_EMAIL: email,
+        ACTION_URL: (process.env.APP_URL || 'https://pivots.app') + '/?view=configuracoes',
+        ACTION_CTA_LABEL: 'Ver assinatura',
+        PREHEADER: titulo,
+      });
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: { Authorization: 'Bearer ' + process.env.RESEND_API_KEY, 'Content-Type': 'application/json' },
@@ -117,8 +110,8 @@ module.exports = async (req, res) => {
           from: process.env.RESEND_FROM_EMAIL,
           to: email,
           reply_to: process.env.RESEND_REPLY_TO || 'contact@pivots.app',
-          subject: ativa ? 'A sua assinatura está ativa' : 'A sua assinatura foi cancelada',
-          html: construirEmailAssinaturaHtml(plano || 'Pivot', ativa)
+          subject: titulo,
+          html
         })
       });
     } catch (e) { /* falha de envio não deve travar a atualização do plano */ }

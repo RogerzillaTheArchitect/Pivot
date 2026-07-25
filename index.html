@@ -5898,7 +5898,7 @@
       job.contract.codigoAcesso = gerarCodigoAcessoPortal();
       saveJobsData();
       if(job.email){
-        dispararEmailConta('portalCriado', job.email, { nome: job.client, ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso }, true);
+        dispararEmailConta('portalCriado', job.email, { nome: job.client, projeto: job.nome||job.typeLabel||'', ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso }, true);
       }
     }catch(e){ console.error('Erro ao gerar portal automático:', e); }
   }
@@ -9271,13 +9271,26 @@
      nada chegava (ex.: RESEND_API_KEY em falta no servidor). Agora o chamador
      pode avisar quando o envio realmente falha. `silencioso` evita o aviso nos
      disparos automáticos onde não queremos interromper o fluxo. */
+  /* Envio real: manda só o TIPO do evento + os dados brutos do trabalho —
+     é o servidor (api/emails/send-event.js) que escolhe qual dos 12
+     templates reais usar e monta o HTML final. construirEmailUniversal/
+     construirEmailUniversalInline continuam existindo só para a pré-
+     visualização dentro do próprio Portal do Cliente (ver openClient), não
+     fazem parte do envio de verdade. */
   async function dispararEmailEvento(tipo, destinatario, job, prazoTexto, silencioso){
     if(!destinatario) return false;
-    const cfg=TIPOS_EMAIL[tipo];
-    if(!cfg) return false;
+    const dados={
+      nome: job.client, projeto: job.nome||job.typeLabel||'',
+      ctaUrl: (job.contract&&job.contract.link) || window.location.origin,
+      prazo: prazoTexto||null, codigo: job.contract&&job.contract.codigoAcesso,
+    };
+    if(tipo==='pagamentoRecebido'){
+      dados.valor=fmtMoney(job.value||0);
+      dados.data=new Date().toLocaleDateString(jsLocale(),{day:'2-digit',month:'2-digit',year:'numeric'});
+    }
     try{
       const r=await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailUniversalInline(job, tipo, prazoTexto)})});
+        body:JSON.stringify({to:destinatario, tipo, dados})});
       if(!r.ok){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
       return true;
     }catch(e){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
@@ -9344,13 +9357,16 @@
       footerReason: dados.footerReason || t('email.footer.autoNotice')
     });
   }
+  /* Envio real (mesmo espírito de dispararEmailEvento acima): manda só o
+     tipo + dados brutos, o servidor escolhe o template certo entre os 12
+     reais. `dados` aqui usa o vocabulário novo (remetente/projeto/email/
+     ctaUrl/codigo/novoUsuario...), não mais o formato antigo de
+     construirEmailContaInline (eyebrow/avatarLetras/bodyOverride...). */
   async function dispararEmailConta(tipo, destinatario, dados, silencioso){
     if(!destinatario) return false;
-    const cfg=TIPOS_EMAIL_CONTA[tipo];
-    if(!cfg) return false;
     try{
       const r=await fetch('/api/emails/send-event', {method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({to:destinatario, subject:t(cfg.titleKey), html:construirEmailContaInline(tipo, dados)})});
+        body:JSON.stringify({to:destinatario, tipo, dados})});
       if(!r.ok){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
       return true;
     }catch(e){ if(!silencioso) showToast(t('toast.emailFailed')); return false; }
@@ -9397,7 +9413,7 @@
     const job=jobsData[id];
     if(!job.email){ pedirEmailCliente(id, ()=>enviarPorEmail(id)); return; }
     if(!job.contract.link || !job.contract.codigoAcesso) await gerarPortalClienteAutomatico(job);
-    const ok=await dispararEmailConta('portalCriado', job.email, { nome: job.client, ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso });
+    const ok=await dispararEmailConta('portalCriado', job.email, { nome: job.client, projeto: job.nome||job.typeLabel||'', ctaUrl: job.contract.link, codigo: job.contract.codigoAcesso });
     pushHistory(job,t('history.emailClientOpened'));
     saveJobsData();
     closeInfo();
@@ -9917,13 +9933,9 @@
     const selecionados=(colaboradoresCache[jobId]||[]).filter(c=>ids.includes(c.id));
     const jobNome=job.nome||job.typeLabel;
     const remetente=perfilData.nome||t('defaults.userName');
-    const remetenteAvatarCor=avatarColor(remetente), remetenteIniciais=avatarInitials(remetente);
-    const remetenteFoto=(perfilData.fotoUrl && !/^data:/i.test(perfilData.fotoUrl)) ? perfilData.fotoUrl : null;
     selecionados.forEach(c=>{
       const ctaUrl = c.token ? (window.location.origin+'/?colab='+c.token) : window.location.origin;
-      dispararEmailConta('colaboradorContratoPronto', c.email, { nome:c.email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> preparou um contrato para a sua colaboração em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+      dispararEmailConta('colaboradorContratoPronto', c.email, { nome:c.email, remetente, projeto:jobNome, ctaUrl }, true);
     });
     modeloEscolhidoParaMassa=null;
     await carregarColaboradoresJob(jobId);
@@ -10200,13 +10212,9 @@
   async function enviarEmailConviteColaborador({semConta, email, jobNome, remetente, remetenteAvatarCor, remetenteIniciais, remetenteFoto, token, codigo}){
     if(semConta){
       const link=window.location.origin+'/?colab='+token;
-      await dispararEmailConta('colaboradorJobConvite', email, { nome:email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:link, codigo,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) a colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots.' }, true);
+      await dispararEmailConta('colaboradorJobConvite', email, { remetente, projeto:jobNome, ctaUrl:link, codigo }, true);
     } else {
-      await dispararEmailConta('colaboradorJobAdicionado', email, { nome:email,
-        eyebrow:remetente, avatarLetras:remetenteIniciais, avatarCor:remetenteAvatarCor, avatarFoto:remetenteFoto, ctaUrl:window.location.origin,
-        bodyOverride:'<b>'+escapeHtml(remetente)+'</b> convidou-o(a) para colaborar em <b>"'+escapeHtml(jobNome)+'"</b> no Pivots. Entre na app com a sua conta para aceitar.' }, true);
+      await dispararEmailConta('colaboradorJobAdicionado', email, { remetente, projeto:jobNome, email, ctaUrl:window.location.origin }, true);
     }
   }
 
