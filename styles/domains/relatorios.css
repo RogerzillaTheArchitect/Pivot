@@ -278,26 +278,29 @@
   .rel-indic-label{font-size:13px;color:var(--ink-soft)}
   .rel-indic-val{font-family:var(--font-numeric);font-size:13px;font-weight:600;color:var(--ink)}
 
-  /* Evolução Mensal — duas colunas espelhadas: melhorias (nome/valor à
-     esquerda, % perto do centro) e quedas (% perto do centro, nome/valor à
-     direita) — mesma ordem de leitura visual em ambas, só invertida. */
-  .rel-evo-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
-  .rel-evo-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
-  .rel-evo-row:last-child{border-bottom:0}
-  .rel-evo-col-down .rel-evo-row{flex-direction:row-reverse}
-  .rel-evo-nv{min-width:0}
-  .rel-evo-name{font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .rel-evo-val{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
-  .rel-evo-col-down .rel-evo-name, .rel-evo-col-down .rel-evo-val{text-align:right}
-  .rel-evo-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap}
-  .rel-evo-pct.pos{color:var(--done)}
-  .rel-evo-pct.neg{color:var(--late)}
+  /* ===== .rel-mrow — linha padrão OBRIGATÓRIA de qualquer card comparativo
+     (Evolução Mensal, Rentabilidade): nome alinhado pelo topo, valor sempre
+     abaixo do nome, percentual (quando existir) sempre na zona central,
+     nunca colado no nome/valor. Altura fixa — nenhuma linha pode crescer
+     mais que outra, o texto sempre trunca (ellipsis) em vez de empurrar. Um
+     único componente reaproveitado nos dois cards, pra ambos nascerem da
+     mesma grade quando lado a lado. */
+  .rel-mrow{display:grid;grid-template-columns:1fr;align-items:center;column-gap:10px;height:44px;border-bottom:1px solid var(--line-soft)}
+  .rel-mrow:last-child{border-bottom:0}
+  .rel-mrow.rel-mrow-pct-l{grid-template-columns:1fr auto}
+  .rel-mrow.rel-mrow-pct-r{grid-template-columns:auto 1fr}
+  .rel-mrow-side{display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .rel-mrow-side.al-l{align-items:flex-start;text-align:left}
+  .rel-mrow-side.al-r{align-items:flex-end;text-align:right}
+  .rel-mrow-name{font-size:12px;color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-mrow-value{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);margin-top:3px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-mrow-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap;text-align:center}
+  .rel-mrow-pct.pos{color:var(--done)}
+  .rel-mrow-pct.neg{color:var(--late)}
 
-  /* Rentabilidade — duas colunas simétricas, mesmo componente do card
-     Indicadores (.rel-indic-row), sem barra/sem botão de ordenar. */
-  .rel-rent-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
-  .rel-rent-col-low .rel-indic-row{flex-direction:row-reverse}
-  .rel-rent-col-low .rel-indic-label{text-align:right}
+  /* Evolução Mensal e Rentabilidade — mesmas duas colunas 50/50, mesmo token
+     de espaçamento entre elas; cada coluna é só uma pilha de .rel-mrow. */
+  .rel-evo-cols, .rel-rent-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
 
 
   .rel-table-wrap{overflow-x:auto}
