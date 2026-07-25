@@ -479,7 +479,7 @@
           </div>
         </div>
 
-        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">ESTATÍSTICAS OPERACIONAIS</div>
+        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
             <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
@@ -752,15 +752,13 @@
           </div>
         </div>
 
-        <!-- ================= ÁREA 1 — FINANCEIRO ================= -->
-        <div class="group-label rel-area-label" style="margin-top:20px"><span data-t="reports.area.financial">Financeiro</span></div>
-
-        <!-- Card: Resumo Financeiro — mesmo gráfico de anéis (Meta/Esperado/
+        <!-- Card: Financeiro — mesmo gráfico de anéis (Meta/Esperado/
              Recebido/Extras/Despesas/Teto) já usado no Dashboard, aqui com
              ids/gradientes próprios (prefixo rf-) pra não colidir, e os
              valores recalculados pro período selecionado em Relatórios em
-             vez de fixos no mês corrente. -->
-        <div class="rel-card-header" id="rel-anchor-financeiro" data-t="reports.summary.title">Resumo Financeiro</div>
+             vez de fixos no mês corrente. O card já identifica a seção —
+             sem rótulo de área solto acima. -->
+        <div class="rel-card-header" id="rel-anchor-financeiro" data-t="reports.summary.title" style="margin-top:20px">Financeiro</div>
         <div class="card rel-card rel-card-body">
           <div class="ms-progress-row">
             <div class="ms-rings-wrap-outer">
@@ -813,20 +811,24 @@
           </div>
         </div>
 
-        <!-- Card: Fluxo Financeiro — só análise, sem gerenciamento: Top 10
-             subcategorias que mais faturaram (verde, esquerda) vs Top 10
-             subcategorias com maior gasto (laranja, direita), em ticks
-             pareadas nascendo do eixo central. As linhas NÃO são clicáveis —
-             só os títulos "Recebidos"/"Despesas" (com seta) abrem a tela de
+        <!-- Card: Fluxo — só análise, sem gerenciamento: Top 5 subcategorias
+             que mais faturaram (verde, esquerda) vs Top 5 subcategorias com
+             maior gasto (laranja, direita), sempre 5 linhas fixas cada lado
+             (preenche com "Sem dados" se faltar), no mesmo grid dividido
+             .rel-split usado em Rentabilidade/Evolução Mensal: divisória
+             vertical exata no centro, linhas horizontais atravessando a
+             largura toda do card. Barras no mesmo estilo do card Operacional
+             (.track/.segment, 20 blocos), só recoloridas verde/laranja.
+             Linhas NÃO são clicáveis — só os títulos "Recebidos"/"Despesas"
+             (com seta apontando pro próprio lado) abrem a tela de
              gerenciamento (abrirGerenciamentoFluxo), que reaproveita a mesma
-             lista/timeline de sempre (editar/excluir/adicionar), agora fora
-             do card em vez de expandida dentro dele. -->
-        <div class="rel-card-header" data-t="reports.cashFlow">Fluxo Financeiro</div>
+             lista/timeline de sempre (editar/excluir/adicionar). -->
+        <div class="rel-card-header" data-t="reports.cashFlow">Fluxo</div>
         <div class="card rel-card rel-card-body distfin-card">
           <div class="distfin-heads">
             <span class="distfin-head-inc distfin-head-click" onclick="abrirGerenciamentoFluxo('recebidos')">
+              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
               <span data-t="reports.distFin.income">Recebidos</span>
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </span>
             <span class="distfin-head-exp distfin-head-click" onclick="abrirGerenciamentoFluxo('despesas')">
               <span data-t="reports.distFin.expenses">Despesas</span>
@@ -834,20 +836,17 @@
             </span>
           </div>
           <div class="distfin-rule-soft"></div>
-          <div class="distfin-rows" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
+          <div class="rel-split" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
         </div>
 
-        <!-- ================= ÁREA 2 — OPERACIONAL ================= -->
-        <div class="group-label rel-area-label" style="margin-top:26px"><span data-t="reports.area.operational">Operacional</span></div>
-
-        <!-- Card: Estatísticas — reaproveita EXATAMENTE o mesmo componente
+        <!-- Card: Operacional — reaproveita EXATAMENTE o mesmo componente
              "Estatísticas Operacionais" da Dashboard (.ops-card/.metric/
              .track/.segment, mesmos ícones, mesma barra de 20 blocos): só
              os ids têm o prefixo "ropm-" pra não colidir com os da
              Dashboard (pintarMetricaOp(...,'ropm-')), com os dados
              recalculados pro período selecionado em Relatórios em vez do
              mês corrente fixo. Nenhuma classe/estilo novo. -->
-        <div class="rel-card-header tech" id="rel-anchor-operacional" data-t="reports.stats.title">Estatísticas</div>
+        <div class="rel-card-header tech" id="rel-anchor-operacional" data-t="reports.stats.title">Operacional</div>
         <div class="card ops-card" style="margin-top:0;border-radius:0 0 var(--r) var(--r)">
           <section class="metric" id="ropm-horas">
             <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
@@ -895,33 +894,29 @@
              colunas espelhadas de sempre 5 indicadores cada (altura fixa),
              melhorias à esquerda e quedas à direita, sem título de seção.
              O card "Carga de Trabalho" saiu daqui — a métrica "Horas
-             trabalhadas" incorpora essa mesma comparação de período. -->
+             trabalhadas" incorpora essa mesma comparação de período. Mesmo
+             grid dividido .rel-split das demais (divisória vertical
+             central, linhas horizontais de borda a borda). -->
         <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Evolução Mensal</div>
         <div class="card rel-card rel-card-body">
-          <div class="rel-evo-cols">
-            <div class="rel-evo-col rel-evo-col-up" id="rel-evolucao-melhorias"></div>
-            <div class="rel-evo-col rel-evo-col-down" id="rel-evolucao-quedas"></div>
-          </div>
+          <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
 
-        <!-- ================= ÁREA 3 — EFICIÊNCIA ================= -->
-        <div class="group-label rel-area-label" style="margin-top:26px"><span data-t="reports.area.efficiency">Eficiência</span></div>
-
-        <!-- Card: Rentabilidade — duas colunas: mais rentáveis (esquerda) vs
-             menos rentáveis (direita), sempre ordenado automaticamente, sem
-             botão de inverter ordenação. -->
+        <!-- Card: Rentabilidade — duas colunas no mesmo grid dividido
+             .rel-split (divisória vertical central, linhas horizontais de
+             borda a borda): mais rentáveis (esquerda) vs menos rentáveis
+             (direita), sempre ordenado automaticamente, 5 linhas fixas cada
+             lado (preenche com "Sem dados" se faltar), sem botão de
+             inverter ordenação. -->
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
-          <div class="rel-rent-cols">
-            <div class="rel-rent-col" id="rel-rentabilidade-top"></div>
-            <div class="rel-rent-col rel-rent-col-low" id="rel-rentabilidade-low"></div>
-          </div>
+          <div class="rel-split" id="rel-rentabilidade-grid"></div>
         </div>
 
-        <!-- Card: Indicadores — 5 médias do período: ticket médio, receita
+        <!-- Card: Eficiência — 5 médias do período: ticket médio, receita
              por hora, receita por projeto, lucro médio por projeto, margem
-             média. -->
-        <div class="rel-card-header" data-t="reports.indicators.title">Indicadores</div>
+             média. O card já identifica a seção — sem rótulo de área. -->
+        <div class="rel-card-header" data-t="reports.indicators.title">Eficiência</div>
         <div class="card rel-card rel-card-body">
           <div id="rel-indicadores-lista"></div>
         </div>
@@ -3215,10 +3210,10 @@
     "reports.noIncome": { pt:"Ainda sem recebidos este mês.", en:"No income yet this month.", es:"Aún sin ingresos este mes." },
     "reports.contractLabel": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "reports.manualLabel": { pt:"Manual", en:"Manual", es:"Manual" },
-    "reports.opStats": { pt:"Estatísticas Operacionais", en:"Operational Stats", es:"Estadísticas Operativas" },
+    "reports.opStats": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.billing": { pt:"Faturamento", en:"Billing", es:"Facturación" },
     "reports.taskFlow": { pt:"Fluxo de Tarefas", en:"Task Flow", es:"Flujo de Tareas" },
-    "reports.cashFlow": { pt:"Fluxo Financeiro", en:"Cash Flow", es:"Flujo Financiero" },
+    "reports.cashFlow": { pt:"Fluxo", en:"Flow", es:"Flujo" },
     "reports.segFin.title": { pt:"Segmentação Financeira", en:"Financial Segmentation", es:"Segmentación Financiera" },
     "reports.segFin.subtitle": { pt:"Descubra quais segmentos geram a maior parte da sua receita.", en:"Discover which segments generate most of your revenue.", es:"Descubra qué segmentos generan la mayor parte de sus ingresos." },
     "reports.segFin.project": { pt:"projeto", en:"project", es:"proyecto" },
@@ -3271,11 +3266,11 @@
     "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
     "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
     // --- Reorganização de Relatórios: áreas, Resumo, Fluxo, Carga, Evolução, Rentabilidade, Indicadores, Mercado Regional ---
-    "reports.stats.title": { pt:"Estatísticas", en:"Statistics", es:"Estadísticas" },
+    "reports.stats.title": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.area.financial": { pt:"Financeiro", en:"Financial", es:"Financiero" },
     "reports.area.operational": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.area.efficiency": { pt:"Eficiência", en:"Efficiency", es:"Eficiencia" },
-    "reports.summary.title": { pt:"Resumo Financeiro", en:"Financial Summary", es:"Resumen Financiero" },
+    "reports.summary.title": { pt:"Financeiro", en:"Financial", es:"Financiero" },
     "reports.flow.byCategory": { pt:"Por categoria", en:"By category", es:"Por categoría" },
     "reports.flow.bySubcategory": { pt:"Por subcategoria", en:"By subcategory", es:"Por subcategoría" },
     "reports.flow.bySubcategoryIncome": { pt:"Recebidos por subcategoria", en:"Income by subcategory", es:"Recibidos por subcategoría" },
@@ -3299,7 +3294,8 @@
     "reports.profitability.sortDesc": { pt:"Mais rentáveis primeiro", en:"Most profitable first", es:"Más rentables primero" },
     "reports.profitability.sortAsc": { pt:"Menos rentáveis primeiro", en:"Least profitable first", es:"Menos rentables primero" },
     "reports.profitability.empty": { pt:"Sem dados de rentabilidade neste período.", en:"No profitability data this period.", es:"Sin datos de rentabilidad en este período." },
-    "reports.indicators.title": { pt:"Indicadores", en:"Indicators", es:"Indicadores" },
+    "reports.indicators.title": { pt:"Eficiência", en:"Efficiency", es:"Eficiencia" },
+    "reports.noData": { pt:"Sem dados", en:"No data", es:"Sin datos" },
     "reports.indicators.ticket": { pt:"Ticket médio", en:"Average ticket", es:"Ticket medio" },
     "reports.indicators.revenuePerHour": { pt:"Receita por hora", en:"Revenue per hour", es:"Ingresos por hora" },
     "reports.indicators.revenuePerProject": { pt:"Receita por projeto", en:"Revenue per project", es:"Ingresos por proyecto" },
@@ -6592,62 +6588,58 @@
     }, 60);
   }
 
-  /* ===== Distribuição Financeira — receitas por segmento (verde, mais
-     escuro = maior) à esquerda e gastos por categoria (amarelo→laranja,
-     mais intenso = maior) à direita, ambos nascendo no eixo central de
-     cada linha e crescendo pra fora em barras de "ticks" (blocos fixos
-     com folga entre eles, não uma barra contínua). Layout/paleta exatos
-     do mockup de referência enviado pelo usuário — só os dados é que
-     vêm de calcularSegmentacaoFinanceira()/calcularGastosPorCategoria(). */
-  const DISTFIN_TICKS=16;
-  const DISTFIN_MAX_LINHAS=10;
-  function distfinTone(i){ return Math.min(i,4)+1; }
-  function distfinBarHtml(ratio, lado, tone, tipo){
-    const cheios=Math.max(1, Math.round(ratio*DISTFIN_TICKS));
-    const w='calc((100% - '+((DISTFIN_TICKS-1)*2)+'px) / '+DISTFIN_TICKS+')';
-    const cls='distfin-b-'+tipo+'-'+tone;
-    let ticks='';
-    for(let i=0;i<cheios;i++) ticks+='<span class="distfin-tick '+cls+'" style="width:'+w+'"></span>';
-    return '<div class="distfin-bar distfin-bar-'+lado+'">'+ticks+'</div>';
+  /* ===== .rel-split — grid dividido OBRIGATÓRIO de qualquer card comparativo
+     de 2 colunas em Relatórios (Fluxo, Evolução Mensal, Rentabilidade):
+     divisória vertical exata no centro (border-right nas células da
+     esquerda), linhas horizontais atravessando a largura toda do card
+     (border-bottom em ambas as células da mesma linha, coladas sem gap —
+     visualmente uma linha só), sempre N linhas fixas (preenchidas com "Sem
+     dados" quando falta item real, pra altura do card nunca variar). ===== */
+  function relSplitCellVazia(lado){
+    return '<div class="rel-split-cell '+lado+' empty"><div class="rel-mrow-name">'+t('reports.noData')+'</div></div>';
   }
-  /* Card Fluxo Financeiro — só análise: Top 10 subcategorias que mais
-     faturaram (verde, esquerda, calcularReceitaPorSubcategoria/job.segmento)
-     vs Top 10 subcategorias com maior gasto (laranja, direita, a única
-     categorização real que existe pra despesas hoje é custosData.categoria —
-     não existe um 2º nível pra despesas, então usamos essa mesma, sem
-     inventar dado novo). Linhas NÃO clicáveis — só os títulos das colunas
-     abrem o gerenciamento (abrirGerenciamentoFluxo). */
-  function renderRelFluxoSubcategoriaTicks(){
+  /* N pares (esquerda,direita) intercalados na ordem que o grid de 2
+     colunas espera (l1,r1,l2,r2,...) — cellFn(item,indice) devolve o HTML
+     da célula preenchida; null/undefined no array vira célula "Sem dados". */
+  function relSplitBuild(n, itensEsq, itensDir, cellFnEsq, cellFnDir){
+    let html='';
+    for(let i=0;i<n;i++){
+      const e=itensEsq[i], d=itensDir[i];
+      html += e!=null ? cellFnEsq(e,i) : relSplitCellVazia('l');
+      html += d!=null ? cellFnDir(d,i) : relSplitCellVazia('r');
+    }
+    return html;
+  }
+  /* barra no MESMO estilo do card Operacional (.track/.segment, 20 blocos,
+     reaproveitado tal e qual — só a cor muda via classe .green). */
+  function opsBarHtml(ratio, corClasse){
+    const N=20;
+    const r=Math.max(0, Math.min(1, ratio||0));
+    const cheios=Math.floor(r*N);
+    let segs='';
+    for(let i=0;i<N;i++) segs+='<span class="segment'+(i<cheios?' is-filled':'')+'"></span>';
+    return '<div class="track'+(corClasse?(' '+corClasse):'')+'" style="--fill:'+Math.round(r*100)+'">'+segs+'</div>';
+  }
+  const REL_SPLIT_N=5;
+  /* Card Fluxo — só análise: Top 5 subcategorias que mais faturaram (verde,
+     esquerda, calcularReceitaPorSubcategoria/job.segmento) vs Top 5
+     subcategorias com maior gasto (laranja, direita — a única categorização
+     real que existe pra despesas hoje é custosData.categoria, não existe um
+     2º nível pra despesas, então usamos essa mesma, sem inventar dado novo).
+     Linhas NÃO clicáveis — só os títulos das colunas abrem o gerenciamento
+     (abrirGerenciamentoFluxo). */
+  function renderRelFluxoGrid(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
-    const receitas=calcularReceitaPorSubcategoria().slice(0, DISTFIN_MAX_LINHAS);
-    const gastos=calcularGastosPorCategoria().slice(0, DISTFIN_MAX_LINHAS);
-    if(!receitas.length && !gastos.length){
-      wrap.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyIncome')+'</p>';
-      return;
-    }
+    const receitas=calcularReceitaPorSubcategoria().slice(0, REL_SPLIT_N);
+    const gastos=calcularGastosPorCategoria().slice(0, REL_SPLIT_N);
     const maxI=receitas.length?receitas[0].valor:0;
     const maxE=gastos.length?gastos[0].valor:0;
-    const linhas=Math.max(receitas.length, gastos.length);
-    let html='';
-    for(let i=0;i<linhas;i++){
-      const inc=receitas[i], exp=gastos[i];
-      const iT=distfinTone(i), eT=distfinTone(i);
-      html+='<div class="distfin-row">'+
-        '<div class="distfin-lbl distfin-lbl-l">'+
-          (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
-          '<div class="distfin-val distfin-c-i-'+iT+'">'+fmtMoney(inc.valor)+'</div>'):'')+
-        '</div>'+
-        '<div>'+(inc?distfinBarHtml(maxI>0?inc.valor/maxI:0,'l',iT,'i'):'')+'</div>'+
-        '<div aria-hidden="true"></div>'+
-        '<div>'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r',eT,'e'):'')+'</div>'+
-        '<div class="distfin-lbl distfin-lbl-r">'+
-          (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
-          '<div class="distfin-val distfin-c-e-'+eT+'">'+fmtMoney(exp.valor)+'</div>'):'')+
-        '</div>'+
-      '</div>';
-    }
-    wrap.innerHTML=html;
+    const celEsq=l=>'<div class="rel-split-cell l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div>'+
+      '<div class="rel-mrow-value">'+fmtMoney(l.valor)+'</div>'+opsBarHtml(maxI>0?l.valor/maxI:0,'green')+'</div>';
+    const celDir=l=>'<div class="rel-split-cell r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div>'+
+      '<div class="rel-mrow-value">'+fmtMoney(l.valor)+'</div>'+opsBarHtml(maxE>0?l.valor/maxE:0,'')+'</div>';
+    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, receitas, gastos, celEsq, celDir);
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
@@ -6753,7 +6745,7 @@
     return linhas;
   }
   function renderRelFluxoFinanceiro(){
-    renderRelFluxoSubcategoriaTicks();
+    renderRelFluxoGrid();
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
@@ -7022,26 +7014,25 @@
      vermelho) segue a coluna, não o sinal bruto. Se houver menos de 12
      métricas com dado real no período, as colunas mostram o que existe
      (sem inventar linha vazia). */
+  /* mesmo grid dividido .rel-split das outras (divisória central, linhas de
+     borda a borda), 5+5 fixo — se sobrarem menos de 5 métricas reais de
+     cada lado, completa com "Sem dados". */
   function renderRelEvolucaoMensal(){
-    const wrapUp=document.getElementById('rel-evolucao-melhorias'), wrapDown=document.getElementById('rel-evolucao-quedas');
-    if(!wrapUp || !wrapDown) return;
+    const wrap=document.getElementById('rel-evolucao-grid');
+    if(!wrap) return;
     const metrics=relMetricasEvolucao().sort((a,b)=>b.score-a.score);
-    const melhorias=metrics.slice(0,5);
-    const quedas=metrics.slice(-5).reverse();
+    const melhorias=metrics.slice(0,REL_SPLIT_N);
+    const quedas=metrics.slice(-REL_SPLIT_N).reverse();
     const seta=m=>m.pct<0?'↓':'↑';
-    /* linha padrão (.rel-mrow) reaproveitada também na Rentabilidade — nome
-       em cima, valor embaixo, percentual sempre na zona central da própria
-       metade do card (nunca colado no nome/valor). */
-    const linhaUp=m=>'<div class="rel-mrow rel-mrow-pct-l">'+
-        '<div class="rel-mrow-side al-l"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
+    const celEsq=m=>'<div class="rel-split-cell l"><div class="rel-split-inner">'+
+        '<div class="rel-mrow-side-txt"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
         '<div class="rel-mrow-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
-      '</div>';
-    const linhaDown=m=>'<div class="rel-mrow rel-mrow-pct-r">'+
+      '</div></div>';
+    const celDir=m=>'<div class="rel-split-cell r"><div class="rel-split-inner">'+
         '<div class="rel-mrow-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
-        '<div class="rel-mrow-side al-r"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
-      '</div>';
-    wrapUp.innerHTML = melhorias.length ? melhorias.map(linhaUp).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
-    wrapDown.innerHTML = quedas.length ? quedas.map(linhaDown).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
+        '<div class="rel-mrow-side-txt"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
+      '</div></div>';
+    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, melhorias, quedas, celEsq, celDir);
   }
 
   /* ===== Rentabilidade — receita/hora por categoria de serviço no período,
@@ -7066,23 +7057,17 @@
   /* duas colunas: mais rentáveis (esquerda, sempre nessa ordem, sem botão
      pra inverter) vs menos rentáveis (direita, pior primeiro) — até 5 cada,
      sem barra, só nome + €/h (mesmo espírito compacto do card Indicadores). */
+  /* mesmo grid dividido .rel-split das outras, 5+5 fixo — sem a zona de
+     percentual, só nome em cima, €/h embaixo, mesma altura/grade. */
   function renderRelRentabilidade(){
-    const wrapTop=document.getElementById('rel-rentabilidade-top'), wrapLow=document.getElementById('rel-rentabilidade-low');
-    if(!wrapTop || !wrapLow) return;
+    const wrap=document.getElementById('rel-rentabilidade-grid');
+    if(!wrap) return;
     const linhas=calcularRentabilidade().sort((a,b)=>b.porHora-a.porHora);
-    if(!linhas.length){
-      wrapTop.innerHTML='<p class="distfin-empty">'+t('reports.profitability.empty')+'</p>';
-      wrapLow.innerHTML='';
-      return;
-    }
-    const top=linhas.slice(0,5);
-    const low=linhas.slice(-5).reverse();
-    /* mesma linha padrão (.rel-mrow) da Evolução Mensal, sem a zona de
-       percentual — só nome em cima, €/h embaixo, mesma altura/grade. */
-    const linhaTop=l=>'<div class="rel-mrow"><div class="rel-mrow-side al-l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div></div>';
-    const linhaLow=l=>'<div class="rel-mrow"><div class="rel-mrow-side al-r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div></div>';
-    wrapTop.innerHTML=top.map(linhaTop).join('');
-    wrapLow.innerHTML=low.map(linhaLow).join('');
+    const top=linhas.slice(0,REL_SPLIT_N);
+    const low=linhas.slice(-REL_SPLIT_N).reverse();
+    const celEsq=l=>'<div class="rel-split-cell l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div>';
+    const celDir=l=>'<div class="rel-split-cell r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div>';
+    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, top, low, celEsq, celDir);
   }
 
   /* ===== Indicadores — 5 médias do período selecionado. ===== */
