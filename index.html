@@ -827,8 +827,8 @@
         <div class="card rel-card rel-card-body distfin-card">
           <div class="distfin-heads">
             <span class="distfin-head-inc distfin-head-click" onclick="abrirGerenciamentoFluxo('recebidos')">
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
               <span data-t="reports.distFin.income">Recebidos</span>
+              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
             </span>
             <span class="distfin-head-exp distfin-head-click" onclick="abrirGerenciamentoFluxo('despesas')">
               <span data-t="reports.distFin.expenses">Despesas</span>
@@ -6611,12 +6611,14 @@
     return html;
   }
   const REL_SPLIT_N=5;
-  /* barra do card Fluxo — mesmos blocos retangulares/espaçamento/cantos do
-     card Operacional (.segment), só que SEM segmentos vazios: a barra é
-     composta só pelos blocos preenchidos, cujo número varia com o valor
-     (proporcional ao maior item do próprio lado). Nasce no eixo central
-     (justify-content:flex-end no lado esquerdo, flex-start no direito — ver
-     .distfin-bar-l/r) e cresce pra fora, nunca em direção ao centro. */
+  /* barra do card Fluxo — mesmos blocos retangulares/altura/espaçamento/
+     cantos do card Operacional (.segment: 22px de altura, 2px de gap,
+     border-radius 0), só que SEM segmentos vazios: a barra é composta só
+     pelos blocos preenchidos, cujo número varia com o valor (proporcional
+     ao maior item do próprio lado). Encostada no eixo central — zero gap
+     entre o último/primeiro segmento e a linha (justify-content:flex-end
+     no lado esquerdo, flex-start no direito) — e cresce pra fora, nunca em
+     direção ao centro. */
   function distfinBarHtml(ratio, lado, corClasse){
     const N=20;
     const cheios=Math.max(1, Math.round((ratio||0)*N));
@@ -6625,15 +6627,20 @@
     return '<div class="distfin-bar2 distfin-bar2-'+lado+'">'+segs+'</div>';
   }
   /* Card Fluxo — gráfico espelhado, exatamente a referência visual da
-     Distribuição Financeira: eixo vertical fixo no centro, Recebidos
-     (verde) cresce do centro pra esquerda, Despesas (laranja) cresce do
-     centro pra direita. Top 5 subcategorias que mais faturaram
-     (calcularReceitaPorSubcategoria/job.segmento) vs Top 5 subcategorias
-     com maior gasto (calcularGastosPorCategoria — única categorização real
-     que existe pra despesas hoje é custosData.categoria, sem inventar dado
-     novo). Sempre 5 linhas fixas — preenche com "Sem dados" se faltar.
-     Linhas NÃO clicáveis — só os títulos das colunas (com seta) abrem o
-     gerenciamento (abrirGerenciamentoFluxo). */
+     Distribuição Financeira: eixo vertical fixo no centro (grid de 3
+     colunas: metade-esq 1fr | eixo 2px | metade-dir 1fr, column-gap:0 —
+     crítico pra a barra encostar na linha sem nenhum respiro). Cada metade
+     é uma pilha de 3 linhas (nome no topo alinhado pra fora, barra no
+     meio encostada no eixo, valor embaixo perto do eixo) — nome e valor
+     NUNCA na mesma altura da barra. Recebidos (verde) cresce do centro pra
+     esquerda, Despesas (laranja) cresce do centro pra direita. Top 5
+     subcategorias que mais faturaram (calcularReceitaPorSubcategoria/
+     job.segmento) vs Top 5 subcategorias com maior gasto
+     (calcularGastosPorCategoria — única categorização real que existe pra
+     despesas hoje é custosData.categoria, sem inventar dado novo). Sempre
+     5 linhas fixas — preenche com "Sem dados" se faltar. Linhas NÃO
+     clicáveis — só os títulos das colunas (com seta) abrem o gerenciamento
+     (abrirGerenciamentoFluxo). */
   function renderRelFluxoGrid(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
@@ -6641,23 +6648,28 @@
     const gastos=calcularGastosPorCategoria().slice(0, REL_SPLIT_N);
     const maxI=receitas.length?receitas[0].valor:0;
     const maxE=gastos.length?gastos[0].valor:0;
+    const meiaEsq=(l)=>{
+      if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
+      return '<div class="distfin-half l">'+
+        '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
+        distfinBarHtml(maxI>0?l.valor/maxI:0,'l','green')+
+        '<div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div>'+
+      '</div>';
+    };
+    const meiaDir=(l)=>{
+      if(!l) return '<div class="distfin-half r"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
+      return '<div class="distfin-half r">'+
+        '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
+        distfinBarHtml(maxE>0?l.valor/maxE:0,'r','orange')+
+        '<div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div>'+
+      '</div>';
+    };
     let html='';
     for(let i=0;i<REL_SPLIT_N;i++){
-      const inc=receitas[i], exp=gastos[i];
       html+='<div class="distfin-row">'+
-        '<div class="distfin-lbl distfin-lbl-l">'+
-          (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
-          '<div class="distfin-val distfin-c-inc">'+fmtMoney(inc.valor)+'</div>')
-          :('<div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div>'))+
-        '</div>'+
-        '<div class="distfin-bar-col">'+(inc?distfinBarHtml(maxI>0?inc.valor/maxI:0,'l','green'):'')+'</div>'+
+        meiaEsq(receitas[i])+
         '<div class="distfin-vline"></div>'+
-        '<div class="distfin-bar-col">'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r','orange'):'')+'</div>'+
-        '<div class="distfin-lbl distfin-lbl-r">'+
-          (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
-          '<div class="distfin-val distfin-c-exp">'+fmtMoney(exp.valor)+'</div>')
-          :('<div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div>'))+
-        '</div>'+
+        meiaDir(gastos[i])+
       '</div>';
     }
     wrap.innerHTML=html;
