@@ -813,29 +813,28 @@
           </div>
         </div>
 
-        <!-- Card: Fluxo Financeiro — receita por categoria (segmento de
-             mercado) e por subcategoria (segmento granular do trabalho),
-             gastos por categoria (texto real digitado nas despesas). Cada
-             linha é clicável e abre a lista detalhada correspondente,
-             reaproveitando relFluxoPeriodo() (já existia como timeline). -->
+        <!-- Card: Fluxo Financeiro — só análise, sem gerenciamento: Top 10
+             subcategorias que mais faturaram (verde, esquerda) vs Top 10
+             subcategorias com maior gasto (laranja, direita), em ticks
+             pareadas nascendo do eixo central. As linhas NÃO são clicáveis —
+             só os títulos "Recebidos"/"Despesas" (com seta) abrem a tela de
+             gerenciamento (abrirGerenciamentoFluxo), que reaproveita a mesma
+             lista/timeline de sempre (editar/excluir/adicionar), agora fora
+             do card em vez de expandida dentro dele. -->
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo Financeiro</div>
         <div class="card rel-card rel-card-body distfin-card">
           <div class="distfin-heads">
-            <span class="distfin-head-inc" data-t="reports.distFin.income">Recebidos</span>
-            <span class="distfin-head-exp" data-t="reports.distFin.expenses">Despesas</span>
+            <span class="distfin-head-inc distfin-head-click" onclick="abrirGerenciamentoFluxo('recebidos')">
+              <span data-t="reports.distFin.income">Recebidos</span>
+              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </span>
+            <span class="distfin-head-exp distfin-head-click" onclick="abrirGerenciamentoFluxo('despesas')">
+              <span data-t="reports.distFin.expenses">Despesas</span>
+              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            </span>
           </div>
           <div class="distfin-rule-soft"></div>
-          <div class="rel-subhead-sub" style="text-align:center;margin-top:14px" data-t="reports.flow.byCategory">Por categoria</div>
-          <div class="distfin-rows" id="rel-fluxo-rows-categoria"></div>
-          <div class="rel-subhead-sub" style="margin-top:18px" data-t="reports.flow.bySubcategoryIncome">Recebidos por subcategoria</div>
-          <div id="rel-fluxo-receita-subcategoria"></div>
-          <div class="distfin-rule-soft" style="margin-top:18px"></div>
-          <div class="segmented" id="rel-fluxo-seg" style="margin-top:14px;margin-bottom:0">
-            <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
-            <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
-            <button data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></button>
-          </div>
-          <div id="rel-fluxo-lista"></div>
+          <div class="distfin-rows" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
         </div>
 
         <!-- ================= ÁREA 2 — OPERACIONAL ================= -->
@@ -6570,7 +6569,7 @@
      do mockup de referência enviado pelo usuário — só os dados é que
      vêm de calcularSegmentacaoFinanceira()/calcularGastosPorCategoria(). */
   const DISTFIN_TICKS=16;
-  const DISTFIN_MAX_LINHAS=5;
+  const DISTFIN_MAX_LINHAS=10;
   function distfinTone(i){ return Math.min(i,4)+1; }
   function distfinBarHtml(ratio, lado, tone, tipo){
     const cheios=Math.max(1, Math.round(ratio*DISTFIN_TICKS));
@@ -6580,21 +6579,23 @@
     for(let i=0;i<cheios;i++) ticks+='<span class="distfin-tick '+cls+'" style="width:'+w+'"></span>';
     return '<div class="distfin-bar distfin-bar-'+lado+'">'+ticks+'</div>';
   }
-  /* renderiza os pares receita-por-categoria (verde, esquerda) / gasto-por-
-     categoria (laranja, direita) do card Fluxo Financeiro, exatamente na
-     estrutura de ticks do mockup de referência — cada linha é clicável e
-     abre a lista detalhada dessa categoria específica dentro do mesmo card
-     (ver relFiltrarPorCategoria), não num card separado. */
-  function renderRelFluxoCategoriaTicks(){
-    const wrap=document.getElementById('rel-fluxo-rows-categoria');
+  /* Card Fluxo Financeiro — só análise: Top 10 subcategorias que mais
+     faturaram (verde, esquerda, calcularReceitaPorSubcategoria/job.segmento)
+     vs Top 10 subcategorias com maior gasto (laranja, direita, a única
+     categorização real que existe pra despesas hoje é custosData.categoria —
+     não existe um 2º nível pra despesas, então usamos essa mesma, sem
+     inventar dado novo). Linhas NÃO clicáveis — só os títulos das colunas
+     abrem o gerenciamento (abrirGerenciamentoFluxo). */
+  function renderRelFluxoSubcategoriaTicks(){
+    const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
-    const receitas=calcularSegmentacaoFinanceira().linhas.slice(0, DISTFIN_MAX_LINHAS);
+    const receitas=calcularReceitaPorSubcategoria().slice(0, DISTFIN_MAX_LINHAS);
     const gastos=calcularGastosPorCategoria().slice(0, DISTFIN_MAX_LINHAS);
     if(!receitas.length && !gastos.length){
       wrap.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyIncome')+'</p>';
       return;
     }
-    const maxI=receitas.length?receitas[0].receita:0;
+    const maxI=receitas.length?receitas[0].valor:0;
     const maxE=gastos.length?gastos[0].valor:0;
     const linhas=Math.max(receitas.length, gastos.length);
     let html='';
@@ -6602,27 +6603,20 @@
       const inc=receitas[i], exp=gastos[i];
       const iT=distfinTone(i), eT=distfinTone(i);
       html+='<div class="distfin-row">'+
-        '<div class="distfin-lbl distfin-lbl-l'+(inc?' distfin-clicavel':'')+'" data-lado="inc" data-idx="'+i+'">'+
+        '<div class="distfin-lbl distfin-lbl-l">'+
           (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
-          '<div class="distfin-val distfin-c-i-'+iT+'">'+fmtMoney(inc.receita)+'</div>'):'')+
+          '<div class="distfin-val distfin-c-i-'+iT+'">'+fmtMoney(inc.valor)+'</div>'):'')+
         '</div>'+
-        '<div>'+(inc?distfinBarHtml(maxI>0?inc.receita/maxI:0,'l',iT,'i'):'')+'</div>'+
+        '<div>'+(inc?distfinBarHtml(maxI>0?inc.valor/maxI:0,'l',iT,'i'):'')+'</div>'+
         '<div aria-hidden="true"></div>'+
         '<div>'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r',eT,'e'):'')+'</div>'+
-        '<div class="distfin-lbl distfin-lbl-r'+(exp?' distfin-clicavel':'')+'" data-lado="exp" data-idx="'+i+'">'+
+        '<div class="distfin-lbl distfin-lbl-r">'+
           (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
           '<div class="distfin-val distfin-c-e-'+eT+'">'+fmtMoney(exp.valor)+'</div>'):'')+
         '</div>'+
       '</div>';
     }
     wrap.innerHTML=html;
-    wrap.querySelectorAll('.distfin-clicavel').forEach(el=>{
-      el.onclick=()=>{
-        const i=parseInt(el.dataset.idx,10);
-        if(el.dataset.lado==='inc') relFiltrarPorCategoria('receitaCategoria', receitas[i].id, receitas[i].label);
-        else relFiltrarPorCategoria('gastoCategoria', gastos[i].label, gastos[i].label);
-      };
-    });
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
@@ -6739,25 +6733,30 @@
 
   /* ===== Card 4 — Fluxo Financeiro: lista unificada (recebidos + despesas) do
      mês selecionado, filtrável. Reaproveita listaRecebidosDoMes/
-     listaDespesasDoMes tal como já eram usadas — só o consumidor mudou. ===== */
+     listaDespesasDoMes tal como já eram usadas — só o consumidor mudou.
+     Não vive mais dentro do card de análise — só abre via
+     abrirGerenciamentoFluxo(), clicando em "Recebidos"/"Despesas". ===== */
   let relFiltroFluxo='todos'; // 'todos'|'recebidos'|'despesas'
   function relSetFiltroFluxo(f){
     relFiltroFluxo=f;
-    relFiltroFluxoCategoria=null;
     renderRelFluxoLista();
     document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===f));
   }
-  /* clicar numa linha de "receita/gasto por categoria" filtra a mesma lista
-     detalhada já existente (#rel-fluxo-lista) por essa categoria específica,
-     além do filtro recebidos/despesas — não é uma lista nova. */
-  let relFiltroFluxoCategoria=null;
-  function relFiltrarPorCategoria(tipo, valor, label){
-    relFiltroFluxoCategoria={tipo, valor, label};
-    relFiltroFluxo = tipo==='gastoCategoria' ? 'despesas' : 'recebidos';
+  /* abre a tela de gerenciamento (editar/excluir/adicionar) já existente —
+     mesma lista/timeline de sempre, só que agora num bottom sheet em vez de
+     expandida dentro do card de análise. */
+  function abrirGerenciamentoFluxo(filtroInicial){
+    relFiltroFluxo=filtroInicial;
+    const html='<div class="segmented" id="rel-fluxo-seg" style="margin-bottom:14px">'+
+        '<button data-f="todos" onclick="relSetFiltroFluxo(\'todos\')"><span data-t="reports.flowAll">Todos</span></button>'+
+        '<button data-f="recebidos" onclick="relSetFiltroFluxo(\'recebidos\')"><span data-t="reports.flowIncome">Recebidos</span></button>'+
+        '<button data-f="despesas" onclick="relSetFiltroFluxo(\'despesas\')"><span data-t="reports.flowExpense">Despesas</span></button>'+
+      '</div>'+
+      '<button class="btn soft" style="width:100%;margin-bottom:14px" onclick="abrirRegistroManual()">+ '+t('home.addEntryBtn')+'</button>'+
+      '<div id="rel-fluxo-lista"></div>';
+    openInfo(filtroInicial==='despesas' ? t('reports.flowExpense') : t('reports.flowIncome'), html);
+    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===filtroInicial));
     renderRelFluxoLista();
-    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===relFiltroFluxo));
-    const listaEl=document.getElementById('rel-fluxo-lista');
-    if(listaEl) listaEl.scrollIntoView({behavior:'smooth', block:'center'});
   }
   function calcularReceitaPorSubcategoria(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
@@ -6774,32 +6773,8 @@
     linhas.sort((a,b)=>b.valor-a.valor);
     return linhas;
   }
-  /* lista genérica de barras clicáveis (Segmentação Financeira/Distribuição
-     Financeira já usavam esse mesmo padrão .seg-fin-row) — reaproveitada
-     aqui pras 3 sub-listas do card Fluxo Financeiro. */
-  function relMontaListaBarras(linhas, wrapId, valKey, fmtValorFn, onClickFn){
-    const wrap=document.getElementById(wrapId); if(!wrap) return;
-    if(!linhas.length){ wrap.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>'; return; }
-    const max=linhas[0][valKey];
-    wrap.innerHTML=linhas.map((l,i)=>{
-      const larguraPct = max>0 ? Math.round(l[valKey]/max*100) : 0;
-      return '<div class="seg-fin-row" data-idx="'+i+'">'+
-        '<div class="seg-fin-name">'+escapeHtml(l.label)+'</div>'+
-        '<div class="seg-fin-bar-track"><div class="seg-fin-bar-fill" id="'+wrapId+'-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
-        '<div class="seg-fin-meta">'+fmtValorFn(l)+'</div>'+
-      '</div>';
-    }).join('');
-    setTimeout(()=>{
-      linhas.forEach((l,i)=>{ const el=document.getElementById(wrapId+'-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; });
-    }, 60);
-    wrap.querySelectorAll('.seg-fin-row').forEach((row,i)=>{ row.onclick=()=>onClickFn(linhas[i]); });
-  }
   function renderRelFluxoFinanceiro(){
-    renderRelFluxoCategoriaTicks();
-    const receitaSub=calcularReceitaPorSubcategoria();
-    relMontaListaBarras(receitaSub, 'rel-fluxo-receita-subcategoria', 'valor', l=>fmtMoney(l.valor),
-      l=>relFiltrarPorCategoria('receitaSubcategoria', l.label, l.label));
-    renderRelFluxoLista();
+    renderRelFluxoSubcategoriaTicks();
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
@@ -6838,22 +6813,6 @@
     let itens=relFluxoPeriodo();
     if(relFiltroFluxo==='recebidos') itens=itens.filter(i=>i.tipo==='recebido');
     else if(relFiltroFluxo==='despesas') itens=itens.filter(i=>i.tipo==='despesa');
-    if(relFiltroFluxoCategoria){
-      const f=relFiltroFluxoCategoria;
-      itens=itens.filter(it=>{
-        if(f.tipo==='gastoCategoria'){
-          if(it.tipo!=='despesa') return false;
-          const c=custosData[it.id];
-          const nome=((c&&c.categoria)||'').trim() || t('reports.distFin.uncategorized');
-          return nome===f.valor;
-        }
-        if(it.tipo!=='recebido' || it.manual) return false;
-        const job=jobsData[it.jobId]; if(!job) return false;
-        if(f.tipo==='receitaCategoria') return classificarSegmentoJob(job)===f.valor;
-        const nome=(job.segmento||'').trim() || t('reports.distFin.uncategorized');
-        return nome===f.valor;
-      });
-    }
     wrap.innerHTML = itens.length ? itens.map(it=>{
       const cor = it.tipo==='recebido' ? 'var(--brand)' : 'var(--late)';
       const sinal = it.tipo==='recebido' ? '+' : '−';
