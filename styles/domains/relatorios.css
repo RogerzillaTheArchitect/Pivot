@@ -199,29 +199,37 @@
   .rel-indic-label{font-size:13px;color:var(--ink-soft)}
   .rel-indic-val{font-family:var(--font-numeric);font-size:13px;font-weight:600;color:var(--ink)}
 
-  /* ===== .rel-mrow — linha padrão OBRIGATÓRIA de qualquer card comparativo
-     (Evolução Mensal, Rentabilidade): nome alinhado pelo topo, valor sempre
-     abaixo do nome, percentual (quando existir) sempre na zona central,
-     nunca colado no nome/valor. Altura fixa — nenhuma linha pode crescer
-     mais que outra, o texto sempre trunca (ellipsis) em vez de empurrar. Um
-     único componente reaproveitado nos dois cards, pra ambos nascerem da
-     mesma grade quando lado a lado. */
-  .rel-mrow{display:grid;grid-template-columns:1fr;align-items:center;column-gap:10px;height:44px;border-bottom:1px solid var(--line-soft)}
-  .rel-mrow:last-child{border-bottom:0}
-  .rel-mrow.rel-mrow-pct-l{grid-template-columns:1fr auto}
-  .rel-mrow.rel-mrow-pct-r{grid-template-columns:auto 1fr}
-  .rel-mrow-side{display:flex;flex-direction:column;justify-content:center;min-width:0}
-  .rel-mrow-side.al-l{align-items:flex-start;text-align:left}
-  .rel-mrow-side.al-r{align-items:flex-end;text-align:right}
+  /* ===== .rel-split — grid dividido OBRIGATÓRIO de qualquer card
+     comparativo de 2 colunas em Relatórios (Fluxo, Evolução Mensal,
+     Rentabilidade): divisória vertical exata no centro (border-right nas
+     células da esquerda), linhas horizontais atravessando a largura toda
+     do card (border-bottom colado nas duas células da mesma linha — sem
+     column-gap, então as duas metades da borda ficam uma encostada na
+     outra e formam uma linha só, nunca "quebrada"), sempre N linhas fixas
+     de altura idêntica (texto trunca em ellipsis, nunca empurra a linha).
+     Um único componente reaproveitado nos três cards, pra todos nascerem
+     da mesma grade quando lado a lado. */
+  .rel-split{display:grid;grid-template-columns:1fr 1fr;column-gap:0;row-gap:0}
+  .rel-split-cell{min-height:52px;padding:9px 14px;border-bottom:1px solid var(--line-soft);
+    display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .rel-split-cell.l{border-right:1px solid var(--line-soft);align-items:flex-start;text-align:left}
+  .rel-split-cell.r{align-items:flex-end;text-align:right}
+  .rel-split-cell:nth-last-child(-n+2){border-bottom:0}
+  .rel-split-cell.empty .rel-mrow-name{color:var(--neutral)}
+  .rel-split-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
+  .rel-mrow-side-txt{min-width:0}
   .rel-mrow-name{font-size:12px;color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-mrow-value{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);margin-top:3px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-mrow-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap;text-align:center}
   .rel-mrow-pct.pos{color:var(--done)}
   .rel-mrow-pct.neg{color:var(--late)}
-
-  /* Evolução Mensal e Rentabilidade — mesmas duas colunas 50/50, mesmo token
-     de espaçamento entre elas; cada coluna é só uma pilha de .rel-mrow. */
-  .rel-evo-cols, .rel-rent-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+  /* barra do card Fluxo — mesmo .track/.segment do card Operacional
+     (dashboard.css), só recolorida: verde pro lado Recebidos, laranja
+     nativo (sem override) pro lado Despesas. */
+  .rel-split-cell .track{width:100%;margin-top:6px;height:14px}
+  .rel-split-cell .segment{height:14px}
+  .rel-split-cell .track.green .segment.is-filled{border-color:#5E7A52;background:#5E7A52}
+  .rel-split-cell .track.green::before{background:linear-gradient(90deg, rgba(94,122,82,.16), transparent)}
 
 
   .rel-table-wrap{overflow-x:auto}
