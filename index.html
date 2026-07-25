@@ -7042,8 +7042,17 @@
     const melhorias=metrics.slice(0,5);
     const quedas=metrics.slice(-5).reverse();
     const seta=m=>m.pct<0?'↓':'↑';
-    const linhaUp=m=>'<div class="rel-evo-row"><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div><div class="rel-evo-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div></div>';
-    const linhaDown=m=>'<div class="rel-evo-row"><div class="rel-evo-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div></div>';
+    /* linha padrão (.rel-mrow) reaproveitada também na Rentabilidade — nome
+       em cima, valor embaixo, percentual sempre na zona central da própria
+       metade do card (nunca colado no nome/valor). */
+    const linhaUp=m=>'<div class="rel-mrow rel-mrow-pct-l">'+
+        '<div class="rel-mrow-side al-l"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
+        '<div class="rel-mrow-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
+      '</div>';
+    const linhaDown=m=>'<div class="rel-mrow rel-mrow-pct-r">'+
+        '<div class="rel-mrow-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
+        '<div class="rel-mrow-side al-r"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
+      '</div>';
     wrapUp.innerHTML = melhorias.length ? melhorias.map(linhaUp).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
     wrapDown.innerHTML = quedas.length ? quedas.map(linhaDown).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
   }
@@ -7081,9 +7090,12 @@
     }
     const top=linhas.slice(0,5);
     const low=linhas.slice(-5).reverse();
-    const linha=l=>'<div class="rel-indic-row"><span class="rel-indic-label">'+escapeHtml(l.label)+'</span><span class="rel-indic-val">'+fmtMoney(l.porHora)+'/h</span></div>';
-    wrapTop.innerHTML=top.map(linha).join('');
-    wrapLow.innerHTML=low.map(linha).join('');
+    /* mesma linha padrão (.rel-mrow) da Evolução Mensal, sem a zona de
+       percentual — só nome em cima, €/h embaixo, mesma altura/grade. */
+    const linhaTop=l=>'<div class="rel-mrow"><div class="rel-mrow-side al-l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div></div>';
+    const linhaLow=l=>'<div class="rel-mrow"><div class="rel-mrow-side al-r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div></div>';
+    wrapTop.innerHTML=top.map(linhaTop).join('');
+    wrapLow.innerHTML=low.map(linhaLow).join('');
   }
 
   /* ===== Indicadores — 5 médias do período selecionado. ===== */
