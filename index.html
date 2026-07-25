@@ -849,40 +849,39 @@
           <div id="rel-op-bars"></div>
         </div>
 
-        <!-- Card: Carga de Trabalho — dias/semanas/meses com mais horas
-             trabalhadas no período, cada lista reaproveitando heatIndiceDiario()
-             (mesmo índice diário já usado nos Heatmaps) e o componente de
-             barra da Segmentação Financeira, sem grade/mapa — só ranking. -->
+        <!-- Card: Carga de Trabalho — só os dias do período com mais horas
+             trabalhadas, num ranking horizontal compacto (reaproveita
+             heatIndiceDiario(), mesmo índice diário já usado nos Heatmaps).
+             Sem semanas/meses — o período já É o filtro selecionado. -->
         <div class="rel-card-header" id="rel-anchor-carga" data-t="reports.workload.title">Carga de Trabalho</div>
         <div class="card rel-card rel-card-body">
-          <div class="rel-subhead-sub" data-t="reports.workload.days">Dias</div>
           <div id="rel-carga-dias"></div>
-          <div class="rel-subhead-sub" style="margin-top:16px" data-t="reports.workload.weeks">Semanas</div>
-          <div id="rel-carga-semanas"></div>
-          <div class="rel-subhead-sub" style="margin-top:16px" data-t="reports.workload.months">Meses</div>
-          <div id="rel-carga-meses"></div>
         </div>
 
         <!-- Card: Evolução Mensal — compara automaticamente o período atual
-             contra o período anterior equivalente (mesmo nº de meses),
-             ranking das métricas que mais melhoraram/pioraram por %. -->
+             contra o período anterior equivalente (mesmo nº de meses); duas
+             colunas espelhadas de sempre 5 indicadores cada (altura fixa),
+             melhorias à esquerda e quedas à direita, sem título de seção. -->
         <div class="rel-card-header" data-t="reports.evolution.title">Evolução Mensal</div>
         <div class="card rel-card rel-card-body">
-          <div class="rel-subhead-sub" data-t="reports.evolution.improvements">Top 5 melhorias</div>
-          <div id="rel-evolucao-melhorias"></div>
-          <div class="rel-subhead-sub" style="margin-top:16px" data-t="reports.evolution.declines">Top 5 quedas</div>
-          <div id="rel-evolucao-quedas"></div>
+          <div class="rel-evo-cols">
+            <div class="rel-evo-col rel-evo-col-up" id="rel-evolucao-melhorias"></div>
+            <div class="rel-evo-col rel-evo-col-down" id="rel-evolucao-quedas"></div>
+          </div>
         </div>
 
         <!-- ================= ÁREA 3 — EFICIÊNCIA ================= -->
         <div class="group-label rel-area-label" style="margin-top:26px"><span data-t="reports.area.efficiency">Eficiência</span></div>
 
-        <!-- Card: Rentabilidade — ranking de retorno por hora (receita/horas)
-             por categoria de serviço no período, com ordenação invertível. -->
+        <!-- Card: Rentabilidade — duas colunas: mais rentáveis (esquerda) vs
+             menos rentáveis (direita), sempre ordenado automaticamente, sem
+             botão de inverter ordenação. -->
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
-          <button class="rel-rent-toggle" id="rel-rentabilidade-ordem-btn" onclick="relToggleRentabilidade()"></button>
-          <div id="rel-rentabilidade-lista" style="margin-top:10px"></div>
+          <div class="rel-rent-cols">
+            <div class="rel-rent-col" id="rel-rentabilidade-top"></div>
+            <div class="rel-rent-col rel-rent-col-low" id="rel-rentabilidade-low"></div>
+          </div>
         </div>
 
         <!-- Card: Indicadores — 5 médias do período: ticket médio, receita
@@ -6968,56 +6967,36 @@
     renderRelMercadoRegional();
   }
 
-  /* ===== Carga de Trabalho — dias/semanas/meses com mais horas trabalhadas
-     no período, reaproveitando o mesmo índice diário dos Heatmaps
-     (heatIndiceDiario), só que agrupado em ranking simples (top 5), sem
-     grade/mapa. ===== */
+  /* ===== Carga de Trabalho — só os dias do período com mais horas
+     trabalhadas, ranking horizontal compacto (nome + barra + valor numa
+     única linha), reaproveitando heatIndiceDiario() (mesmo índice diário já
+     usado nos Heatmaps). Sem semanas/meses — o período selecionado já é o
+     filtro; top 8 pra manter altura fixa mesmo em meses cheios. */
+  const CARGA_TOP_N=8;
   function calcularCargaTrabalho(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const indice=heatIndiceDiario();
-    const entradas=Object.entries(indice).filter(([iso])=>mesesSet.has(iso.slice(0,7)) && indice[iso].horas>0);
-    const dias=entradas.map(([iso,v])=>({label:fmtDataCurta(iso), horas:v.horas})).sort((a,b)=>b.horas-a.horas);
-    const semanasAcc={};
-    entradas.forEach(([iso,v])=>{
-      const {ano,semana}=heatNumeroSemanaISO(new Date(iso+'T00:00:00'));
-      const chave=ano+'-W'+String(semana).padStart(2,'0');
-      semanasAcc[chave]=(semanasAcc[chave]||0)+v.horas;
-    });
-    const semanas=Object.entries(semanasAcc).map(([chave,horas])=>{
-      const [ano,w]=chave.split('-W');
-      return { label:t('reports.workload.weekLabel')+' '+parseInt(w,10)+' · '+ano, horas };
-    }).sort((a,b)=>b.horas-a.horas);
-    const mesesAcc={};
-    entradas.forEach(([iso,v])=>{
-      const chave=iso.slice(0,7);
-      mesesAcc[chave]=(mesesAcc[chave]||0)+v.horas;
-    });
-    const mesesList=Object.entries(mesesAcc).map(([chave,horas])=>{
-      const [ano,mes]=chave.split('-').map(Number);
-      return { label:mesCompleto(mes-1)+' '+ano, horas };
-    }).sort((a,b)=>b.horas-a.horas);
-    return { dias:dias.slice(0,5), semanas:semanas.slice(0,5), meses:mesesList.slice(0,5) };
+    const dias=Object.entries(indice)
+      .filter(([iso])=>mesesSet.has(iso.slice(0,7)) && indice[iso].horas>0)
+      .map(([iso,v])=>({label:fmtDataCurta(iso), horas:v.horas}))
+      .sort((a,b)=>b.horas-a.horas);
+    return dias.slice(0, CARGA_TOP_N);
   }
   function renderRelCargaTrabalho(){
-    if(!document.getElementById('rel-carga-dias')) return;
-    const { dias, semanas, meses } = calcularCargaTrabalho();
-    const monta=(linhas, wrapId)=>{
-      const wrap=document.getElementById(wrapId); if(!wrap) return;
-      if(!linhas.length){ wrap.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>'; return; }
-      const max=linhas[0].horas;
-      wrap.innerHTML=linhas.map((l,i)=>{
-        const larguraPct=max>0?Math.round(l.horas/max*100):0;
-        return '<div class="seg-fin-row">'+
-          '<div class="seg-fin-name">'+escapeHtml(l.label)+'</div>'+
-          '<div class="seg-fin-bar-track"><div class="seg-fin-bar-fill" id="'+wrapId+'-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
-          '<div class="seg-fin-meta">'+l.horas.toFixed(1)+'h</div>'+
-        '</div>';
-      }).join('');
-      setTimeout(()=>{ linhas.forEach((l,i)=>{ const el=document.getElementById(wrapId+'-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; }); }, 60);
-    };
-    monta(dias, 'rel-carga-dias');
-    monta(semanas, 'rel-carga-semanas');
-    monta(meses, 'rel-carga-meses');
+    const wrap=document.getElementById('rel-carga-dias');
+    if(!wrap) return;
+    const dias=calcularCargaTrabalho();
+    if(!dias.length){ wrap.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>'; return; }
+    const max=dias[0].horas;
+    wrap.innerHTML=dias.map((l,i)=>{
+      const larguraPct=max>0?Math.round(l.horas/max*100):0;
+      return '<div class="rel-rank-row">'+
+        '<div class="rel-rank-name">'+escapeHtml(l.label)+'</div>'+
+        '<div class="rel-rank-bar-track"><div class="rel-rank-bar-fill" id="carga-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
+        '<div class="rel-rank-val">'+l.horas.toFixed(1)+'h</div>'+
+      '</div>';
+    }).join('');
+    setTimeout(()=>{ dias.forEach((l,i)=>{ const el=document.getElementById('carga-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; }); }, 60);
   }
 
   /* ===== Evolução Mensal — período atual vs período anterior equivalente
@@ -7076,15 +7055,22 @@
     ];
     return metrics.filter(m=>!(!m.a && !m.p)).map(m=>({...m, pct:relPctVariacao(m.a, m.p||0)}));
   }
+  /* duas colunas espelhadas, sempre 5 indicadores cada (o pool de
+     relMetricasEvolucao tem 10 métricas) — melhorias são as 5 com maior %,
+     quedas as 5 com menor %, cada uma ordenada da mais extrema pra menos
+     extrema dentro da própria coluna. Se houver menos de 10 métricas com
+     dado real no período, as colunas simplesmente mostram o que existe
+     (sem inventar linha vazia). */
   function renderRelEvolucaoMensal(){
     const wrapUp=document.getElementById('rel-evolucao-melhorias'), wrapDown=document.getElementById('rel-evolucao-quedas');
     if(!wrapUp || !wrapDown) return;
-    const metrics=relMetricasEvolucao();
-    const melhorias=metrics.filter(m=>m.pct>0).sort((a,b)=>b.pct-a.pct).slice(0,5);
-    const quedas=metrics.filter(m=>m.pct<0).sort((a,b)=>a.pct-b.pct).slice(0,5);
-    const linha=m=>'<div class="rel-evo-row"><span class="rel-evo-label">'+escapeHtml(m.label)+'</span><span class="rel-evo-val">'+m.fmt(m.a)+'</span><span class="rel-evo-pct '+(m.pct<0?'neg':'pos')+'">'+(m.pct<0?'↓':'↑')+' '+Math.abs(m.pct)+'%</span></div>';
-    wrapUp.innerHTML = melhorias.length ? melhorias.map(linha).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
-    wrapDown.innerHTML = quedas.length ? quedas.map(linha).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
+    const metrics=relMetricasEvolucao().sort((a,b)=>b.pct-a.pct);
+    const melhorias=metrics.slice(0,5);
+    const quedas=metrics.slice(-5).reverse();
+    const linhaUp=m=>'<div class="rel-evo-row"><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div><div class="rel-evo-pct '+(m.pct<0?'neg':'pos')+'">'+(m.pct<0?'↓':'↑')+' '+Math.abs(m.pct)+'%</div></div>';
+    const linhaDown=m=>'<div class="rel-evo-row"><div class="rel-evo-pct '+(m.pct<0?'neg':'pos')+'">'+(m.pct<0?'↓':'↑')+' '+Math.abs(m.pct)+'%</div><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div></div>';
+    wrapUp.innerHTML = melhorias.length ? melhorias.map(linhaUp).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
+    wrapDown.innerHTML = quedas.length ? quedas.map(linhaDown).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
   }
 
   /* ===== Rentabilidade — receita/hora por categoria de serviço no período,
@@ -7103,25 +7089,23 @@
     });
     return Object.keys(acc).map(id=>({ id, label:segmentoLabel(id), porHora: acc[id].horas>0 ? acc[id].receita/acc[id].horas : 0 }));
   }
-  let relRentabilidadeOrdem='desc';
-  function relToggleRentabilidade(){ relRentabilidadeOrdem = relRentabilidadeOrdem==='desc' ? 'asc' : 'desc'; renderRelRentabilidade(); }
+  /* duas colunas: mais rentáveis (esquerda, sempre nessa ordem, sem botão
+     pra inverter) vs menos rentáveis (direita, pior primeiro) — até 5 cada,
+     sem barra, só nome + €/h (mesmo espírito compacto do card Indicadores). */
   function renderRelRentabilidade(){
-    const wrap=document.getElementById('rel-rentabilidade-lista'); if(!wrap) return;
-    const btn=document.getElementById('rel-rentabilidade-ordem-btn');
-    if(btn) btn.textContent = relRentabilidadeOrdem==='desc' ? t('reports.profitability.sortDesc') : t('reports.profitability.sortAsc');
-    let linhas=calcularRentabilidade();
-    linhas.sort((a,b)=> relRentabilidadeOrdem==='desc' ? b.porHora-a.porHora : a.porHora-b.porHora);
-    if(!linhas.length){ wrap.innerHTML='<p class="distfin-empty">'+t('reports.profitability.empty')+'</p>'; return; }
-    const max=Math.max.apply(null, linhas.map(l=>l.porHora).concat(1));
-    wrap.innerHTML=linhas.map((l,i)=>{
-      const larguraPct=max>0?Math.round(l.porHora/max*100):0;
-      return '<div class="seg-fin-row">'+
-        '<div class="seg-fin-name">'+escapeHtml(l.label)+'</div>'+
-        '<div class="seg-fin-bar-track"><div class="seg-fin-bar-fill" id="rent-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
-        '<div class="seg-fin-meta">'+fmtMoney(l.porHora)+'/h</div>'+
-      '</div>';
-    }).join('');
-    setTimeout(()=>{ linhas.forEach((l,i)=>{ const el=document.getElementById('rent-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; }); }, 60);
+    const wrapTop=document.getElementById('rel-rentabilidade-top'), wrapLow=document.getElementById('rel-rentabilidade-low');
+    if(!wrapTop || !wrapLow) return;
+    const linhas=calcularRentabilidade().sort((a,b)=>b.porHora-a.porHora);
+    if(!linhas.length){
+      wrapTop.innerHTML='<p class="distfin-empty">'+t('reports.profitability.empty')+'</p>';
+      wrapLow.innerHTML='';
+      return;
+    }
+    const top=linhas.slice(0,5);
+    const low=linhas.slice(-5).reverse();
+    const linha=l=>'<div class="rel-indic-row"><span class="rel-indic-label">'+escapeHtml(l.label)+'</span><span class="rel-indic-val">'+fmtMoney(l.porHora)+'/h</span></div>';
+    wrapTop.innerHTML=top.map(linha).join('');
+    wrapLow.innerHTML=low.map(linha).join('');
   }
 
   /* ===== Indicadores — 5 médias do período selecionado. ===== */
