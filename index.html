@@ -6652,23 +6652,22 @@
       if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
       return '<div class="distfin-half l">'+
         '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-        distfinBarHtml(maxI>0?l.valor/maxI:0,'l','green')+
         '<div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div>'+
+        distfinBarHtml(maxI>0?l.valor/maxI:0,'l','green')+
       '</div>';
     };
     const meiaDir=(l)=>{
       if(!l) return '<div class="distfin-half r"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
       return '<div class="distfin-half r">'+
         '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-        distfinBarHtml(maxE>0?l.valor/maxE:0,'r','orange')+
         '<div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div>'+
+        distfinBarHtml(maxE>0?l.valor/maxE:0,'r','orange')+
       '</div>';
     };
-    let html='';
+    let html='<div class="distfin-vline"></div>';
     for(let i=0;i<REL_SPLIT_N;i++){
       html+='<div class="distfin-row">'+
         meiaEsq(receitas[i])+
-        '<div class="distfin-vline"></div>'+
         meiaDir(gastos[i])+
       '</div>';
     }

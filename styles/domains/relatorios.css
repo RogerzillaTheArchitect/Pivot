@@ -155,15 +155,16 @@
   .distfin-head-inc{color:#5E7A52}
   .distfin-head-exp{color:#FF9738}
   .distfin-rule-soft{height:1px;background:var(--line-soft);width:100%;margin-top:10px}
-  .distfin-rows{margin-top:6px}
+  .distfin-rows{margin-top:6px;position:relative}
   .distfin-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
+  /* eixo central único, contínuo — atravessa as 5 linhas de uma vez só (não
+     é um segmento por linha), sobreposto por cima do grid via position. */
+  .distfin-vline{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-1px);background:var(--line-soft);z-index:1}
   .distfin-row{
-    display:grid;grid-template-columns:1fr 2px 1fr;column-gap:0;row-gap:0;
-    align-items:stretch;min-height:76px;border-bottom:1px solid var(--line-soft);
+    display:grid;grid-template-columns:1fr 1fr;column-gap:0;row-gap:0;
+    align-items:stretch;min-height:56px;
   }
-  .distfin-row:last-child{border-bottom:0}
-  .distfin-vline{background:var(--line-soft)}
-  .distfin-half{display:flex;flex-direction:column;justify-content:center;gap:5px;min-width:0;padding:10px 0}
+  .distfin-half{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;padding:6px 0}
   .distfin-half.l{align-items:flex-start;padding-right:0}
   .distfin-half.r{align-items:flex-end;padding-left:0}
   .distfin-name{max-width:100%;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
