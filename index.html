@@ -840,13 +840,51 @@
         <!-- ================= ÁREA 2 — OPERACIONAL ================= -->
         <div class="group-label rel-area-label" style="margin-top:26px"><span data-t="reports.area.operational">Operacional</span></div>
 
-        <!-- Card: Estatísticas — spec exata: container técnico sem glass,
-             barra segmentada tipo mostrador industrial. Só os 5 indicadores
-             pedidos (Pendências/Demandas/Fechados/Executados/Concluídos);
-             "Horas" saiu daqui, agora é o próprio card Carga de Trabalho. -->
+        <!-- Card: Estatísticas — reaproveita EXATAMENTE o mesmo componente
+             "Estatísticas Operacionais" da Dashboard (.ops-card/.metric/
+             .track/.segment, mesmos ícones, mesma barra de 20 blocos): só
+             os ids têm o prefixo "ropm-" pra não colidir com os da
+             Dashboard (pintarMetricaOp(...,'ropm-')), com os dados
+             recalculados pro período selecionado em Relatórios em vez do
+             mês corrente fixo. Nenhuma classe/estilo novo. -->
         <div class="rel-card-header tech" id="rel-anchor-operacional" data-t="reports.stats.title">Estatísticas</div>
-        <div class="card rel-card stats-op-card rel-card-body">
-          <div id="rel-op-bars"></div>
+        <div class="card ops-card" style="margin-top:0;border-radius:0 0 var(--r) var(--r)">
+          <section class="metric" id="ropm-horas">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
+            <div class="label" data-t="home.hours">Horas</div>
+            <div class="track" id="ropm-horas-track"></div>
+            <div class="value-end" id="ropm-horas-end"></div>
+          </section>
+          <section class="metric" id="ropm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 20h17l-7-8m7 8-7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <div class="label" data-t="home.pending">Pendências</div>
+            <div class="track" id="ropm-pendencias-track"></div>
+            <div class="value-end" id="ropm-pendencias-end"></div>
+          </section>
+          <section class="metric" id="ropm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M31 20H14l7-8m-7 8 7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <div class="label" data-t="home.demands">Demandas</div>
+            <div class="track" id="ropm-demandas-track"></div>
+            <div class="value-end" id="ropm-demandas-end"></div>
+          </section>
+          <section class="metric" id="ropm-fechados">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="3" width="36" height="34" fill="currentColor"/><path d="m10 20 7 7 14-15" fill="none" stroke="#0b1017" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <div class="label" data-t="home.closed">Fechados</div>
+            <div class="track" id="ropm-fechados-track"></div>
+            <div class="value-end" id="ropm-fechados-end"></div>
+          </section>
+          <section class="metric" id="ropm-executados" onclick="go('historico')">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 8h26v28H7Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 8V6a6 6 0 0 1 12 0v2" fill="none" stroke="currentColor" stroke-width="3"/><path d="M13 19h14M13 26h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+            <div class="label" data-t="home.executed">Executados</div>
+            <div class="track" id="ropm-executados-track"></div>
+            <div class="value-end" id="ropm-executados-end"></div>
+          </section>
+          <section class="metric" id="ropm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
+            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M3 2h4v36H3Zm4 1h29L24 15l12 12H7Z" fill="currentColor"/></svg>
+            <div class="label" data-t="home.completedTile">Concluídos</div>
+            <div class="track" id="ropm-concluidos-track"></div>
+            <div class="value-end" id="ropm-concluidos-end"></div>
+          </section>
         </div>
 
         <!-- Card: Evolução Mensal — compara automaticamente o período atual
@@ -3945,10 +3983,11 @@
      bruta de projetos fechados no período, começando em 0): em vez de 5%
      por bloco, cada bloco ali vale exatamente 1 projeto — passar
      modo='contagem' pra essa. */
-  function pintarMetricaOp(prefixo, num, den, textoAtual, textoTotal, modo){
-    const sec=document.getElementById('opm-'+prefixo);
-    const track=document.getElementById('opm-'+prefixo+'-track');
-    const end=document.getElementById('opm-'+prefixo+'-end');
+  function pintarMetricaOp(prefixo, num, den, textoAtual, textoTotal, modo, idPrefix){
+    idPrefix=idPrefix||'opm-';
+    const sec=document.getElementById(idPrefix+prefixo);
+    const track=document.getElementById(idPrefix+prefixo+'-track');
+    const end=document.getElementById(idPrefix+prefixo+'-end');
     if(!sec || !track || !end) return;
     const N=20;
     let alcancados, pct;
@@ -4135,13 +4174,13 @@
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
       custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
   }
+  function horasCompacto(v){
+    v=v||0;
+    const h=Math.floor(v), m=Math.round((v-h)*60);
+    return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
+  }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
-    const horasCompacto=v=>{
-      v=v||0;
-      const h=Math.floor(v), m=Math.round((v-h)*60);
-      return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
-    };
     /* Horas: executadas (marco principal "feito") sobre o total previsto no mês */
     pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasCompacto(s.horasExecutadasEsteMes), horasCompacto(s.horasEsteMes));
     /* Pendências (lado do cliente) sobre o total de trabalhos */
@@ -6643,84 +6682,32 @@
       relLineRow(t('home.ceiling'), teto, max, REL_C_TETO);
   }
 
-  /* ===== Card 2 — Estatísticas Operacionais: painel técnico com barra
-     segmentada e layout tabular de colunas fixas (spec exata). Tocar numa
-     linha abre uma explicação da métrica — tooltip no hover (desktop) e
-     bottom sheet ao tocar (qualquer dispositivo).
-     Todas as 6 linhas seguem o formato "Atual / Total", com Atual e Total
-     sempre vindos da MESMA coorte de trabalhos (ver contadores "-EsteMes"/
-     "-MesAnterior"/"-PorData" em calcularEstatisticasMes) — a barra segmentada
-     representa exatamente Atual ÷ Total dessa linha:
-       horas       → horasExecutadasEsteMes / horasEsteMes (marco principal "feito")
+  /* ===== Card "Estatísticas" (Relatórios) — reaproveita EXATAMENTE o mesmo
+     componente ops-card/pintarMetricaOp da Dashboard (mesmos ícones, mesma
+     barra de 20 blocos, mesma tipografia), só com o prefixo de id "ropm-" e
+     os números recalculados pro período selecionado em Relatórios em vez
+     do mês corrente fixo. Todas as 6 linhas usam Atual/Total da MESMA
+     coorte (trabalhos com dateRaw no período), igual ao painel antigo:
+       horas       → horasExecutadasEsteMes / horasEsteMes
        pendências  → pendClienteEsteMes / totalJobsEsteMes
        demandas    → pendMeuEsteMes / totalJobsEsteMes
-       fechados    → fechadosPorDataEsteMes / totalJobsEsteMes
+       fechados    → fechadosPorDataEsteMes (contagem bruta, sem %)
        executados  → eventosExecutadosEsteMes / eventosPrevistosEsteMes
        concluídos  → entreguesPorDataEsteMes / totalJobsEsteMes ===== */
-  const REL_OP_CAMPOS = {
-    horas:{ label:'home.hours', desc:'reports.op.info.horas.desc', icon:ICON_OP_HORAS },
-    pendencias:{ label:'home.pending', desc:'reports.op.info.pendencias.desc', icon:ICON_OP_PENDENCIAS },
-    demandas:{ label:'home.demands', desc:'reports.op.info.demandas.desc', icon:ICON_OP_DEMANDAS },
-    fechados:{ label:'home.closed', desc:'reports.op.info.fechados.desc', icon:ICON_OP_FECHADOS },
-    executados:{ label:'home.executed', desc:'reports.op.info.executados.desc', icon:ICON_OP_EXECUTADOS },
-    concluidos:{ label:'home.completedTile', desc:'reports.op.info.concluidos.desc', icon:ICON_OP_CONCLUIDOS },
-  };
-  let relOpDadosAtuais={};
   function relPctVariacao(atual, anterior){
     if(!anterior) return atual>0 ? 100 : 0;
     return Math.round(((atual-anterior)/anterior)*100);
   }
-  function relStatBarSegments(valor, max){
-    const N=50;
-    const pct = max>0 ? Math.min(1, valor/max) : 0;
-    const preenchidos = Math.round(pct*N);
-    let html='';
-    for(let i=0;i<N;i++) html += '<span class="stats-op-seg'+(i<preenchidos?' filled':'')+'"></span>';
-    return html;
-  }
-  function relStatRow(campo, valorBarra, maxBarra, valorTexto, anterior, metaTexto){
-    const info=REL_OP_CAMPOS[campo];
-    const label=t(info.label), descricao=t(info.desc);
-    const pct = relPctVariacao(valorBarra, anterior||0);
-    const seta = pct<0 ? '↓' : '↑';
-    const pctTexto = seta+' '+Math.abs(pct)+'%';
-    relOpDadosAtuais[campo]={ label, descricao, valorTexto, metaTexto, pctTexto };
-    return '<div class="stats-op-row" onclick="relAbrirInfoMetrica(\''+campo+'\')">'+
-      '<span class="stats-op-icon">'+info.icon+'</span>'+
-      '<span class="stats-op-name">'+escapeHtml(label)+'</span>'+
-      '<span class="stats-op-value">'+valorTexto+'</span>'+
-      '<span class="stats-op-pct'+(pct<0?' neg':'')+'">'+pctTexto+'</span>'+
-      '<span class="stats-op-bar">'+relStatBarSegments(valorBarra, maxBarra)+'</span>'+
-      '<div class="stats-op-tip"><b>'+escapeHtml(label)+'</b><span>'+escapeHtml(descricao)+'</span></div>'+
-      '</div>';
-  }
   function renderRelOpBars(s){
-    const wrap=document.getElementById('rel-op-bars'); if(!wrap) return;
-    relOpDadosAtuais={};
-    /* cada linha usa Atual/Total da MESMA coorte (trabalhos com dateRaw no
-       período) — ver comentário em calcularEstatisticasMes. A barra segmentada
-       de cada linha representa sempre Atual ÷ Total dessa própria linha, nunca
-       um máximo comparado entre métricas diferentes. */
+    if(!document.getElementById('ropm-horas')) return;
     const totalJobs=s.totalJobsEsteMes||0;
     const eventosTot=s.eventosPrevistosEsteMes||0;
-    wrap.innerHTML =
-      relStatRow('pendencias', s.pendClienteEsteMes||0, totalJobs||1, (s.pendClienteEsteMes||0)+' / '+totalJobs, s.pendClienteMesAnterior, String(totalJobs)) +
-      relStatRow('demandas', s.pendMeuEsteMes||0, totalJobs||1, (s.pendMeuEsteMes||0)+' / '+totalJobs, s.pendMeuMesAnterior, String(totalJobs)) +
-      relStatRow('fechados', s.fechadosPorDataEsteMes||0, totalJobs||1, (s.fechadosPorDataEsteMes||0)+' / '+totalJobs, s.fechadosPorDataMesAnterior, String(totalJobs)) +
-      relStatRow('executados', s.eventosExecutadosEsteMes||0, eventosTot||1, (s.eventosExecutadosEsteMes||0)+' / '+eventosTot, s.eventosExecutadosMesAnterior, String(eventosTot)) +
-      relStatRow('concluidos', s.entreguesPorDataEsteMes||0, totalJobs||1, (s.entreguesPorDataEsteMes||0)+' / '+totalJobs, s.entreguesPorDataMesAnterior, String(totalJobs));
-  }
-  function relAbrirInfoMetrica(campo){
-    const d=relOpDadosAtuais[campo]; if(!d) return;
-    const linhaMeta = d.metaTexto!=null ?
-      '<div class="stats-op-info-row"><span>'+t('reports.op.info.target')+'</span><b>'+d.metaTexto+'</b></div>' : '';
-    const html =
-      '<p class="stats-op-info-desc">'+escapeHtml(d.descricao)+'</p>'+
-      '<div class="stats-op-info-row"><span>'+t('reports.op.info.currentValue')+'</span><b>'+d.valorTexto+'</b></div>'+
-      linhaMeta+
-      '<div class="stats-op-info-row"><span>'+t('reports.op.info.percent')+'</span><b>'+d.pctTexto+'</b></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:16px" onclick="closeInfo()">'+t('reports.op.info.gotIt')+'</button>';
-    openInfo(d.label, html);
+    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasCompacto(s.horasExecutadasEsteMes), horasCompacto(s.horasEsteMes), null, 'ropm-');
+    pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs), null, 'ropm-');
+    pintarMetricaOp('demandas', s.pendMeuEsteMes||0, totalJobs, String(s.pendMeuEsteMes||0), String(totalJobs), null, 'ropm-');
+    pintarMetricaOp('fechados', s.fechadosPorDataEsteMes||0, 0, '', String(s.fechadosPorDataEsteMes||0), 'contagem', 'ropm-');
+    pintarMetricaOp('executados', s.eventosExecutadosEsteMes||0, eventosTot, String(s.eventosExecutadosEsteMes||0), String(eventosTot), null, 'ropm-');
+    pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs), null, 'ropm-');
   }
 
   /* ===== Card 4 — Fluxo Financeiro: lista unificada (recebidos + despesas) do
