@@ -910,6 +910,10 @@
              receita/projeto, lucro médio/projeto, margem média). -->
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
+          <div class="rel-split-subhead">
+            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Rentabilidade por Hora</div>
+            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Indicadores Gerais</div>
+          </div>
           <div class="rel-split" id="rel-rentabilidade-grid"></div>
         </div>
 
@@ -926,7 +930,6 @@
                 <th data-t="reports.regional.events">Eventos</th>
                 <th data-t="reports.regional.revenue">Receita</th>
                 <th data-t="reports.regional.ticket">Ticket Médio</th>
-                <th data-t="reports.regional.perHour">€/h</th>
               </tr></thead>
               <tbody id="rel-mercado-tabela-body"></tbody>
             </table>
@@ -3288,6 +3291,8 @@
     "reports.profitability.sortDesc": { pt:"Mais rentáveis primeiro", en:"Most profitable first", es:"Más rentables primero" },
     "reports.profitability.sortAsc": { pt:"Menos rentáveis primeiro", en:"Least profitable first", es:"Menos rentables primero" },
     "reports.profitability.empty": { pt:"Sem dados de rentabilidade neste período.", en:"No profitability data this period.", es:"Sin datos de rentabilidad en este período." },
+    "reports.profitability.colRanking": { pt:"Rentabilidade por Hora", en:"Profitability per Hour", es:"Rentabilidad por Hora" },
+    "reports.profitability.colIndicators": { pt:"Indicadores Gerais", en:"General Indicators", es:"Indicadores Generales" },
     "reports.indicators.title": { pt:"Eficiência", en:"Efficiency", es:"Eficiencia" },
     "reports.noData": { pt:"Sem dados", en:"No data", es:"Sin datos" },
     "reports.indicators.ticket": { pt:"Ticket médio", en:"Average ticket", es:"Ticket medio" },
@@ -6625,12 +6630,17 @@
      entre o último/primeiro segmento e a linha (justify-content:flex-end
      no lado esquerdo, flex-start no direito) — e cresce pra fora, nunca em
      direção ao centro. */
-  function distfinBarHtml(ratio, lado, corClasse){
+  /* mesmo componente de barra do card Operacional (.track/.segment,
+     dashboard.css): 20 blocos fixos, moldura vazia nos não preenchidos,
+     preenchimento progressivo da esquerda pra direita — padrão idêntico
+     pros dois lados (Recebidos/Despesas), só recolorido (.green pro
+     Recebidos, laranja nativo pro Despesas). */
+  function distfinTrackHtml(ratio, corClasse){
     const N=20;
-    const cheios=Math.max(1, Math.round((ratio||0)*N));
+    const alcancados=Math.max(0, Math.min(N, Math.round((ratio||0)*N)));
     let segs='';
-    for(let i=0;i<cheios;i++) segs+='<span class="distfin-seg2 '+corClasse+'"></span>';
-    return '<div class="distfin-bar2 distfin-bar2-'+lado+'">'+segs+'</div>';
+    for(let i=0;i<N;i++) segs+='<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
+    return '<div class="track'+(corClasse?' '+corClasse:'')+'">'+segs+'</div>';
   }
   /* Card Fluxo — gráfico espelhado, exatamente a referência visual da
      Distribuição Financeira: eixo vertical fixo no centro (grid de 3
@@ -6668,17 +6678,15 @@
     const meiaEsq=(l)=>{
       if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
       return '<div class="distfin-half l">'+
-        '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-        '<div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div>'+
-        distfinBarHtml(totalI>0?l.valor/totalI:0,'l','green')+
+        '<div class="distfin-line"><div class="distfin-name">'+escapeHtml(l.label)+'</div><div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div></div>'+
+        distfinTrackHtml(totalI>0?l.valor/totalI:0,'green')+
       '</div>';
     };
     const meiaDir=(l)=>{
       if(!l) return '<div class="distfin-half r"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
       return '<div class="distfin-half r">'+
-        '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-        '<div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div>'+
-        distfinBarHtml(totalE>0?l.valor/totalE:0,'r','orange')+
+        '<div class="distfin-line"><div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div><div class="distfin-name">'+escapeHtml(l.label)+'</div></div>'+
+        distfinTrackHtml(totalE>0?l.valor/totalE:0,'')+
       '</div>';
     };
     let html='<div class="distfin-vline"></div>';
@@ -7203,7 +7211,7 @@
       return;
     }
     wrapTable.innerHTML=linhas.map(l=>
-      '<tr><td>'+escapeHtml(l.cidade)+'</td><td>'+l.eventos+'</td><td>'+fmtMoney(l.receita)+'</td><td>'+fmtMoney(l.ticketMedio)+'</td><td>'+fmtMoney(l.porHora)+'/h</td></tr>'
+      '<tr><td>'+escapeHtml(l.cidade)+'</td><td>'+l.eventos+'</td><td>'+fmtMoney(l.receita)+'</td><td>'+fmtMoney(l.ticketMedio)+'</td></tr>'
     ).join('');
     wrapTable.querySelectorAll('tr').forEach((tr,i)=>{ tr.onclick=()=>relAbrirCidade(linhas[i].cidade); });
     const porTicket=[...linhas].sort((a,b)=>b.ticketMedio-a.ticketMedio)[0];
