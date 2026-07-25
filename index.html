@@ -650,6 +650,9 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
+            <button type="button" class="bib-square-btn bib-glass" id="bib-add-btn" onclick="abrirMenuNovoModelo()" aria-label="Novo modelo" data-t-title="library.newMenu.title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
           </div>
 
           <div class="bib-toolbar">
@@ -671,7 +674,10 @@
       <!-- ============ CONTATOS (clientes + colaboradores) ============ -->
       <section class="view" id="v-contatos">
         <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.title">Perfil</span></div>
-        <div class="page-head"><div class="page-title" data-t="profile.contacts">Contatos</div></div>
+        <div class="page-head">
+          <div class="page-title" data-t="profile.contacts">Contatos</div>
+          <div class="sheet-item row" onclick="abrirNovoContato()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg><span class="ti" data-t="wizard.fromScratch">Novo</span></div>
+        </div>
         <div class="segmented" style="margin-bottom:16px">
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
@@ -811,6 +817,15 @@
           </div>
         </div>
 
+        <!-- 4 botões de acesso às listas completas (add/editar/excluir),
+             sem gráfico nenhum nessas telas — só o essencial de navegação. -->
+        <div class="rel-fin-actions">
+          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirGerenciamentoFluxo('recebidos')"><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
+        </div>
+
         <!-- Card: Fluxo — só análise, sem gerenciamento: Top 5 subcategorias
              que mais faturaram (verde, esquerda) vs Top 5 subcategorias com
              maior gasto (laranja, direita), sempre 5 linhas fixas cada lado
@@ -826,13 +841,11 @@
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo</div>
         <div class="card rel-card rel-card-body distfin-card">
           <div class="distfin-heads">
-            <span class="distfin-head-inc distfin-head-click" onclick="abrirGerenciamentoFluxo('recebidos')">
+            <span class="distfin-head-inc">
               <span data-t="reports.distFin.income">Recebidos</span>
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
             </span>
-            <span class="distfin-head-exp distfin-head-click" onclick="abrirGerenciamentoFluxo('despesas')">
+            <span class="distfin-head-exp">
               <span data-t="reports.distFin.expenses">Despesas</span>
-              <svg class="distfin-head-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
             </span>
           </div>
           <div class="distfin-rule-soft"></div>
@@ -934,8 +947,6 @@
               <tbody id="rel-mercado-tabela-body"></tbody>
             </table>
           </div>
-          <div class="rel-geo-divider"></div>
-          <div id="rel-mercado-insights" style="padding:12px 16px 4px"></div>
         </div>
       </section>
 
@@ -1017,14 +1028,9 @@
       <div class="panel show" data-panel="home">
         <div class="sheet-grid">
           <div class="sheet-item" onclick="pushPanel('trabalho')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg><span data-t="sheet.job">Trabalho</span></div>
-          <div class="sheet-item" onclick="abrirNovoContato()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="sheet.contact">Contato</span></div>
-          <div class="sheet-item" onclick="pushPanel('contrato')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span data-t="sheet.contract">Contrato</span></div>
-          <div class="sheet-item" onclick="closeSheet();abrirRegistroManual()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span data-t="sheet.financialMovement">Movimentação Financeira</span></div>
-          <div class="sheet-item" onclick="closeSheet();abrirDefinirMetas()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg><span data-t="sheet.goalsLimits">Metas e Limites</span></div>
-          <div class="sheet-item" onclick="closeSheet();abrirNovoServico()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><span data-t="sheet.services">Serviços</span></div>
           <div class="sheet-item" onclick="pushPanel('tarefa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 11l3 3L22 4"/></svg><span data-t="sheet.task">Tarefa</span></div>
-          <div class="sheet-item" onclick="abrirNovoLembrete()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span data-t="sheet.reminder">Lembrete</span></div>
-          <div class="sheet-item" onclick="abrirNovaLista()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="7" height="7" rx="1.3"/><path d="m4.5 7.5 1.2 1.2L8.5 6"/><path d="M13 5h8M13 11h8M3 16h18M3 20h18"/></svg><span data-t="sheet.list">Lista</span></div>
+          <div class="sheet-item" onclick="pushPanel('receita')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg><span data-t="sheet.income">Receita</span></div>
+          <div class="sheet-item" onclick="pushPanel('despesa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14"/><path d="m5 12 7 7 7-7"/></svg><span data-t="sheet.expense">Despesa</span></div>
         </div>
       </div>
 
@@ -1304,15 +1310,18 @@
         <button class="btn primary" id="cl-submit-btn" style="width:100%" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
       </div>
 
-      <!-- ✅ TAREFA -->
+      <!-- ✅ TAREFA — unifica Tarefa/Lembrete/Lista de antes: Simples (título,
+           data, hora opcional, prioridade, trabalho, observações) e Checklist
+           (idem + itens) são só dois modos do mesmo formulário. -->
       <div class="panel" data-panel="tarefa">
         <div class="segmented">
           <button class="on" onclick="setTarefaTipo(this,'simples')" data-t="field.tasksSimple">Simples</button>
-          <button onclick="setTarefaTipo(this,'checklist')">Checklist</button>
+          <button onclick="setTarefaTipo(this,'checklist')" data-t="field.tasksChecklist">Checklist</button>
         </div>
         <div id="tarefa-simples">
           <div class="field"><label data-t="field.taskTitle">Título</label><input id="ta-titulo" placeholder="O que precisa de ser feito?" data-t-placeholder="task.titlePlaceholder"></div>
           <div class="field"><label data-t="field.date">Data</label><input type="date" id="ta-data"></div>
+          <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ta-hora"></div>
           <div class="field">
             <label data-t="field.priority">Prioridade</label>
             <div class="priority-picker" id="ta-prioridade-picker">
@@ -1324,51 +1333,54 @@
           <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
             <select id="ta-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
           </div>
+          <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ta-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
         </div>
         <div id="tarefa-checklist" style="display:none">
-          <div class="field"><label data-t="wizard.checklistTitle">Título da checklist</label><input id="ta-cl-titulo" placeholder="Checklist de entrega" data-t-placeholder="explore.deliveryChecklist"></div>
-          <div id="ta-cl-items"></div>
+          <div class="field"><label data-t="wizard.checklistTitle">Título da checklist</label><input id="ls-titulo" placeholder="Checklist de entrega" data-t-placeholder="explore.deliveryChecklist"></div>
+          <div id="ls-items"></div>
           <div class="addlist-input">
-            <input id="ta-cl-newitem" placeholder="Adicionar item…" data-t-placeholder="task.addItemPlaceholder" onkeydown="if(event.key==='Enter'){addChecklistItem();event.preventDefault();}">
-            <button class="btn soft" onclick="addChecklistItem()">+</button>
+            <input id="ls-newitem" placeholder="Adicionar item…" data-t-placeholder="task.addItemPlaceholder" onkeydown="if(event.key==='Enter'){addListaItem();event.preventDefault();}">
+            <button class="btn soft" onclick="addListaItem()">+</button>
           </div>
+          <div class="field" style="margin-top:14px"><label data-t="field.date">Data</label><input type="date" id="ls-data"></div>
+          <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ls-hora"></div>
+          <div class="field">
+            <label data-t="field.priority">Prioridade</label>
+            <div class="priority-picker" id="ls-prioridade-picker">
+              <div class="priority-opt on" data-val="Normal" onclick="selecionarPrioridade(this)"><span class="priority-dot normal"></span><span data-t="priority.normal">Normal</span></div>
+              <div class="priority-opt" data-val="Importante" onclick="selecionarPrioridade(this)"><span class="priority-dot media"></span><span data-t="priority.important">Importante</span></div>
+              <div class="priority-opt" data-val="Urgente" onclick="selecionarPrioridade(this)"><span class="priority-dot urgente"></span><span data-t="priority.urgent">Urgente</span></div>
+            </div>
+          </div>
+          <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
+            <select id="ls-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
+          </div>
+          <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ls-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
         </div>
-        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarTarefa()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
+        <button class="btn primary" style="width:100%;margin-top:14px" onclick="salvarTarefaPanel()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
       </div>
 
-      <!-- 🔔 LEMBRETE -->
-      <div class="panel" data-panel="lembrete">
-        <div class="field"><label data-t="field.taskTitle">Título</label><input id="lb-titulo" placeholder="Do que precisa de se lembrar?" data-t-placeholder="reminder.titlePlaceholder"></div>
-        <div class="field"><label data-t="field.date">Data</label><input type="date" id="lb-data"></div>
-        <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="lb-hora"></div>
-        <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
-          <select id="lb-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
-        </div>
-        <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="lb-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarLembrete()"><span data-t="reminder.create">Criar lembrete →</span></button>
+      <!-- 💰 RECEITA — tela exclusiva de captura rápida (a lista completa de
+           gerenciamento continua em Financeiro > Receitas, abrirGerenciamentoFluxo). -->
+      <div class="panel" data-panel="receita">
+        <div class="field"><label data-t="field.title">Título</label><input id="rc-titulo" placeholder="Freelance extra, venda…"></div>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="rc-categoria" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
+        <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="rc-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key==='Enter')criarReceitaPanel()"></div>
+        <div class="field"><label data-t="field.date">Data</label><input type="date" id="rc-data"></div>
+        <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="rc-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
+        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarReceitaPanel()"><span data-t="home.addEntryBtn">Adicionar</span></button>
       </div>
 
-      <!-- ☑️ LISTA -->
-      <div class="panel" data-panel="lista">
-        <div class="field"><label data-t="wizard.checklistTitle">Título da lista</label><input id="ls-titulo" placeholder="Título da lista" data-t-placeholder="list.titlePlaceholder"></div>
-        <div id="ls-items"></div>
-        <div class="addlist-input">
-          <input id="ls-newitem" placeholder="Adicionar item…" data-t-placeholder="task.addItemPlaceholder" onkeydown="if(event.key==='Enter'){addListaItem();event.preventDefault();}">
-          <button class="btn soft" onclick="addListaItem()">+</button>
-        </div>
-        <div class="field" style="margin-top:14px"><label data-t="field.date">Data (opcional)</label><input type="date" id="ls-data"></div>
-        <div class="field">
-          <label data-t="field.priority">Prioridade</label>
-          <div class="priority-picker" id="ls-prioridade-picker">
-            <div class="priority-opt on" data-val="Normal" onclick="selecionarPrioridade(this)"><span class="priority-dot normal"></span><span data-t="priority.normal">Normal</span></div>
-            <div class="priority-opt" data-val="Importante" onclick="selecionarPrioridade(this)"><span class="priority-dot media"></span><span data-t="priority.important">Importante</span></div>
-            <div class="priority-opt" data-val="Urgente" onclick="selecionarPrioridade(this)"><span class="priority-dot urgente"></span><span data-t="priority.urgent">Urgente</span></div>
-          </div>
-        </div>
-        <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
-          <select id="ls-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
-        </div>
-        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarLista()"><span data-t="list.create">Criar lista →</span></button>
+      <!-- 💸 DESPESA — tela exclusiva de captura rápida (a lista completa de
+           gerenciamento continua em Financeiro > Despesas, abrirDespesas). -->
+      <div class="panel" data-panel="despesa">
+        <div class="field"><label data-t="field.title">Título</label><input id="ds-titulo" placeholder="Uber, equipamento…"></div>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="ds-categoria" list="despesa-categorias-lista-sheet" placeholder="opcional" data-t-placeholder="reports.expenseCategoryPlaceholder" autocomplete="off"></div>
+        <datalist id="despesa-categorias-lista-sheet"></datalist>
+        <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="ds-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key==='Enter')criarDespesaPanel()"></div>
+        <div class="field"><label data-t="field.date">Data</label><input type="date" id="ds-data"></div>
+        <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ds-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
+        <button class="btn primary" style="width:100%;margin-top:14px" onclick="criarDespesaPanel()"><span data-t="home.addEntryBtn">Adicionar</span></button>
       </div>
 
       <!-- 📥 IMPORTAR -->
@@ -2533,6 +2545,7 @@
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
     "library.favorites": { pt:"Favoritos", en:"Favorites", es:"Favoritos" },
     "library.origin.mine": { pt:"Meus Modelos", en:"My Templates", es:"Mis Modelos" },
+    "library.newMenu.title": { pt:"Novo modelo", en:"New template", es:"Nuevo modelo" },
     "library.empty": { pt:"Nada encontrado. Tente outra busca ou filtro.", en:"Nothing found. Try another search or filter.", es:"Nada encontrado. Prueba otra búsqueda o filtro." },
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "library.facet.profession": { pt:"Segmento", en:"Segment", es:"Segmento" },
@@ -2631,6 +2644,7 @@
     "field.role": { pt:"Papel", en:"Role", es:"Rol" },
     "field.taskTitle": { pt:"Título", en:"Title", es:"Título" },
     "field.tasksSimple": { pt:"Simples", en:"Simple", es:"Simple" },
+    "field.tasksChecklist": { pt:"Checklist", en:"Checklist", es:"Checklist" },
     "field.timezone": { pt:"Fuso horário", en:"Time zone", es:"Zona horaria" },
     // --- Ajuda ---
     "help.portalDesc": { pt:"Cada trabalho gera um link próprio quando crias o contrato. O cliente abre esse link, vê o contrato, assina, e — se ativares briefing — responde às perguntas. Tudo sem precisar de criar conta.", en:"Each job generates its own link when you create the contract. The client opens that link, views the contract, signs it, and — if you enable briefing — answers the questions. All without needing to create an account.", es:"Cada trabajo genera un enlace propio cuando creas el contrato. El cliente abre ese enlace, ve el contrato, firma, y — si activas el briefing — responde a las preguntas. Todo sin necesidad de crear una cuenta." },
@@ -2678,6 +2692,10 @@
     "tasks.actionReceivePayment": { pt:"Receber pagamento", en:"Receive payment", es:"Recibir pago" },
     "tasks.actionExecute": { pt:"Realizar {tipo}", en:"Run {tipo}", es:"Realizar {tipo}" },
     "tasks.paymentDue": { pt:"Pagamento vence", en:"Payment due", es:"Pago vence" },
+    "tasks.daysLeft": { pt:" dias restantes", en:" days left", es:" días restantes" },
+    "tasks.dayLeft": { pt:"1 dia restante", en:"1 day left", es:"1 día restante" },
+    "tasks.daysLate": { pt:" dias em atraso", en:" days late", es:" días de atraso" },
+    "tasks.dayLate": { pt:"1 dia em atraso", en:"1 day late", es:"1 día de atraso" },
     "home.tryAll": { pt:"Tenta \"Todos\" para ver a carteira completa.", en:"Try \"All\" to see your full portfolio.", es:"Prueba \"Todos\" para ver toda tu cartera." },
     "home.upcoming": { pt:"Próximos vencimentos", en:"Upcoming payments", es:"Próximos vencimientos" },
     "home.vsMonth": { pt:"vs mês ant.", en:"vs last mo.", es:"vs mes ant." },
@@ -3262,6 +3280,10 @@
     "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
     "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
     "reports.distFin.others": { pt:"Outros", en:"Others", es:"Otros" },
+    "reports.finBtn.metas": { pt:"Metas", en:"Goals", es:"Metas" },
+    "reports.finBtn.limites": { pt:"Limites", en:"Limits", es:"Límites" },
+    "reports.finBtn.receitas": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "reports.finBtn.despesas": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     // --- Reorganização de Relatórios: áreas, Resumo, Fluxo, Carga, Evolução, Rentabilidade, Indicadores, Mercado Regional ---
     "reports.stats.title": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.area.financial": { pt:"Financeiro", en:"Financial", es:"Financiero" },
@@ -3387,6 +3409,8 @@
     "toast.serviceDeleted": { pt:"Serviço eliminado.", en:"Service deleted.", es:"Servicio eliminado." },
     "sheet.reminder": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
     "sheet.list": { pt:"Lista", en:"List", es:"Lista" },
+    "sheet.income": { pt:"Receita", en:"Income", es:"Ingreso" },
+    "sheet.expense": { pt:"Despesa", en:"Expense", es:"Gasto" },
     // --- Assinatura ---
     "signature.clear": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "signature.noneYet": { pt:"Ainda sem assinatura guardada", en:"No signature saved yet", es:"Aún sin firma guardada" },
@@ -3417,6 +3441,10 @@
     "reminder.historyCreated": { pt:"Lembrete criado: ", en:"Reminder created: ", es:"Recordatorio creado: " },
     "reminder.sectionTitle": { pt:"Lembretes", en:"Reminders", es:"Recordatorios" },
     "reminder.action": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
+    "task.action": { pt:"Tarefa", en:"Task", es:"Tarea" },
+    "field.title": { pt:"Título", en:"Title", es:"Título" },
+    "wizard.newIncome": { pt:"Nova receita", en:"New income", es:"Nuevo ingreso" },
+    "wizard.newExpense": { pt:"Nova despesa", en:"New expense", es:"Nuevo gasto" },
     "toast.createdMascSuffix": { pt:"\" criado.", en:"\" created.", es:"\" creado." },
     "toast.reminderPrefix": { pt:"Lembrete \"", en:"Reminder \"", es:"Recordatorio \"" },
     "toast.removed": { pt:"Removido.", en:"Removed.", es:"Eliminado." },
@@ -4276,7 +4304,15 @@
        trabalho ficam sempre na secção "Listas" da página do trabalho. */
     Object.values(listasData).forEach(ls=>{
       if(ls.feito || ls.jobId || !ls.data || !ls.prioridade) return;
-      itens.push({ dataISO:ls.data, hora:'', nome:ls.titulo, cliente:'', acao:t('list.action'), jobId:null, tipo:'lista', idx:ls.id });
+      itens.push({ dataISO:ls.data, hora:ls.hora||'', nome:ls.titulo, cliente:'', acao:t('list.action'), jobId:null, tipo:'lista', idx:ls.id });
+    });
+    /* Tarefas soltas (modo Simples do painel unificado) — mesma regra dos
+       Lembretes: só entram se tiverem data e não estiverem vinculadas a um
+       trabalho (vinculadas ficam só na secção "Tarefas" da página do
+       trabalho). */
+    Object.values(tarefasData).forEach(tk=>{
+      if(tk.tipo!=='simples' || tk.feito || tk.jobId || !tk.data) return;
+      itens.push({ dataISO:tk.data, hora:tk.hora||'', nome:tk.titulo, cliente:'', acao:t('task.action'), jobId:null, tipo:'tarefa', idx:tk.id });
     });
     const mesAtualISO=new Date().toISOString().slice(0,7);
     const itensDoMes=itens.filter(it=> diasEntre(it.dataISO)<0 || it.dataISO.slice(0,7)===mesAtualISO);
@@ -4289,6 +4325,26 @@
     if(d===0) return 'alta';
     if(d===1) return 'media';
     return 'normal';
+  }
+  /* badge de prazo do card de Tarefas: verde=dias restantes, amarelo=hoje/
+     amanhã, vermelho=dias em atraso. Reaproveita as mesmas 3 cores do
+     .sig-tag (contrato/pagamento) em vez de criar paleta nova. */
+  function prazoBadgeInfo(dataISO){
+    const d=diasEntre(dataISO);
+    if(d<0){
+      const n=Math.abs(d);
+      return { classe:'late', label:(n===1?t('tasks.dayLate'):n+t('tasks.daysLate')) };
+    }
+    if(d===0) return { classe:'amber', label:t('status.today') };
+    if(d===1) return { classe:'amber', label:t('status.tomorrow') };
+    return { classe:'green', label:(d===1?t('tasks.dayLeft'):d+t('tasks.daysLeft')) };
+  }
+  /* badge de tipo (Pendência = depende do cliente / Demanda = depende de
+     mim) — mesma classificação já usada nos filtros "cliente"/"meucargo"
+     de Trabalhos. Cor sempre neutra, nunca muda com o status. */
+  function tipoTarefaInfo(tipo){
+    if(tipo==='contrato' || tipo==='pagamento') return { label:t('home.pending'), icon:RTK_ICONS.client };
+    return { label:t('home.demands'), icon:RTK_ICONS.action };
   }
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
@@ -4325,12 +4381,21 @@
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
-    const solto = it.tipo==='lembrete' || it.tipo==='lista';
+    const solto = it.tipo==='lembrete' || it.tipo==='lista' || it.tipo==='tarefa';
+    const prazoBadge=prazoBadgeInfo(it.dataISO);
+    const tipoBadge=tipoTarefaInfo(it.tipo);
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    card+='<div class="rtk-side">'+
+      avatarHtml(it.cliente||it.nome,44)+
+      '<span class="sig-tag '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></span>'+
+      '<span class="sig-tag gray">'+tipoBadge.icon+'<span>'+escapeHtml(tipoBadge.label)+'</span></span>'+
+    '</div>';
+    card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
-    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
+    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+(it.hora?' · '+escapeHtml(it.hora):'')+'</span></div>';
+    card+='</div>';
     card+='</div>';
     const editarAction = solto
       ? '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();abrirDetalheItemSolto(\''+it.tipo+'\',\''+it.idx+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>'
@@ -4357,7 +4422,7 @@
   function onRadarCardClick(e, card){
     if(card.dataset.swiped==='1'){ e.preventDefault(); e.stopPropagation(); return; }
     const tipo=card.dataset.tipo;
-    if(tipo==='lembrete'||tipo==='lista'){ abrirDetalheItemSolto(tipo, card.dataset.idx); return; }
+    if(tipo==='lembrete'||tipo==='lista'||tipo==='tarefa'){ abrirDetalheItemSolto(tipo, card.dataset.idx); return; }
     openJob(card.dataset.jobId);
   }
   function concluirItemRadar(btn){
@@ -4367,6 +4432,8 @@
       if(lembretesData[idx]){ lembretesData[idx].feito=true; saveLembretesData(); }
     } else if(tipo==='lista'){
       if(listasData[idx]){ listasData[idx].feito=true; saveListasData(); }
+    } else if(tipo==='tarefa'){
+      if(tarefasData[idx]){ tarefasData[idx].feito=true; saveTarefasData(); }
     } else {
       const job=jobsData[jobId];
       if(!job){ showToast(t('toast.jobNotFound')); return; }
@@ -4723,7 +4790,13 @@
     panelStack.push(name);
     showPanel(name);
     if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); populateCategoriaWizardSelect(); }
-    if(name==='tarefa'||name==='lembrete'||name==='lista') populateTrabalhoSelects();
+    if(name==='tarefa'){
+      limparFormularioTarefa(); limparFormularioLista(); populateTrabalhoSelects();
+      const seg=document.querySelector('[data-panel="tarefa"] .segmented');
+      if(seg) setTarefaTipo(seg.querySelector('button'), 'simples');
+    }
+    if(name==='receita') limparFormularioReceitaPanel();
+    if(name==='despesa') limparFormularioDespesaPanel();
     if(name==='importar-referencias') renderReferenciasGuardadas();
     if(name==='comunidade-contratos') renderBibliotecaPanel('contratos');
     if(name==='comunidade-modelos') renderBibliotecaPanel('modelos');
@@ -7202,30 +7275,16 @@
   }
   function renderRelMercadoRegional(){
     const wrapTable=document.getElementById('rel-mercado-tabela-body');
-    const wrapInsights=document.getElementById('rel-mercado-insights');
-    if(!wrapTable || !wrapInsights) return;
+    if(!wrapTable) return;
     const linhas=calcularMercadoRegional();
     if(!linhas.length){
       wrapTable.innerHTML='';
-      wrapInsights.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
       return;
     }
     wrapTable.innerHTML=linhas.map(l=>
       '<tr><td>'+escapeHtml(l.cidade)+'</td><td>'+l.eventos+'</td><td>'+fmtMoney(l.receita)+'</td><td>'+fmtMoney(l.ticketMedio)+'</td></tr>'
     ).join('');
     wrapTable.querySelectorAll('tr').forEach((tr,i)=>{ tr.onclick=()=>relAbrirCidade(linhas[i].cidade); });
-    const porTicket=[...linhas].sort((a,b)=>b.ticketMedio-a.ticketMedio)[0];
-    const porHora=[...linhas].sort((a,b)=>b.porHora-a.porHora)[0];
-    const porEventos=[...linhas].sort((a,b)=>b.eventos-a.eventos)[0];
-    const top=linhas[0];
-    const insights=[
-      t('reports.regional.insight.topRevenue').replace('{cidade}', top.cidade).replace('{valor}', fmtMoney(top.receita)),
-      t('reports.regional.insight.topTicket').replace('{cidade}', porTicket.cidade).replace('{valor}', fmtMoney(porTicket.ticketMedio)),
-      t('reports.regional.insight.topHourly').replace('{cidade}', porHora.cidade).replace('{valor}', fmtMoney(porHora.porHora)),
-      t('reports.regional.insight.topCount').replace('{cidade}', porEventos.cidade).replace('{valor}', String(porEventos.eventos)),
-      t('reports.regional.insight.concentration').replace('{cidade}', top.cidade).replace('{pct}', String(top.pctReceita)),
-    ];
-    wrapInsights.innerHTML=insights.map(txt=>'<div class="rel-insight-row">'+txt+'</div>').join('');
   }
 
   /* ===== HEATMAPS =====
@@ -7489,6 +7548,49 @@
   const DESPESA_CATEGORIAS_SUGERIDAS=['Freelancers','Equipamentos','Marketing','Softwares','Viagens','Assinaturas','Deslocação','Outros'];
   function despesaCategoriaDatalistHtml(){
     return '<datalist id="despesa-categorias-lista">'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('')+'</datalist>';
+  }
+  /* Telas exclusivas de Receita/Despesa do menu Criar — captura rápida com
+     Título/Categoria/Valor/Data/Observações. Distintas das listas completas
+     de gerenciamento (Financeiro > Receitas/Despesas), que continuam a
+     reaproveitar abrirGerenciamentoFluxo/abrirDespesas sem alteração. */
+  function limparFormularioReceitaPanel(){
+    ['rc-titulo','rc-categoria','rc-valor','rc-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    const dataEl=document.getElementById('rc-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
+  }
+  function criarReceitaPanel(){
+    const titulo=(document.getElementById('rc-titulo').value||'').trim();
+    const valor=parseFloat(document.getElementById('rc-valor').value);
+    if(!titulo || !valor){ showToast(t('toast.fillDescValue')); return; }
+    const id='rec'+Date.now();
+    receitasData[id]={ id, descricao:titulo, categoria:(document.getElementById('rc-categoria').value||'').trim(),
+      valor, data:document.getElementById('rc-data').value||new Date().toISOString().slice(0,10),
+      notas:document.getElementById('rc-notas').value.trim() };
+    saveReceitasData();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    closeSheet();
+    showToast(t('toast.incomeAdded'));
+  }
+  function limparFormularioDespesaPanel(){
+    ['ds-titulo','ds-categoria','ds-valor','ds-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    const dataEl=document.getElementById('ds-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
+    const dl=document.getElementById('despesa-categorias-lista-sheet');
+    if(dl) dl.innerHTML=DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('');
+  }
+  function criarDespesaPanel(){
+    const titulo=(document.getElementById('ds-titulo').value||'').trim();
+    const valor=parseFloat(document.getElementById('ds-valor').value);
+    if(!titulo || !valor){ showToast(t('toast.fillDescValue')); return; }
+    const id='cst'+Date.now();
+    custosData[id]={ id, descricao:titulo, categoria:(document.getElementById('ds-categoria').value||'').trim(),
+      valor, data:document.getElementById('ds-data').value||new Date().toISOString().slice(0,10),
+      notas:document.getElementById('ds-notas').value.trim() };
+    saveCustosData();
+    registrarAnalyticsDespesa(custosData[id]);
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    closeSheet();
+    showToast(t('toast.costAdded'));
   }
   function abrirRegistroManual(){
     const hoje=new Date().toISOString().slice(0,10);
@@ -11970,6 +12072,21 @@
      todo o sistema, nunca um ícone diferente para o mesmo conceito. */
   const BIB_ICON_BOOKMARK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
   const BIB_ICON_LIBRARY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>';
+  /* Botão "+" da tela de Modelos: 4 caminhos pra criar/reutilizar contrato —
+     reaproveita tal e qual os fluxos que existiam no menu Criar (agora
+     removido de lá): Novo (builder em branco), Explorar (biblioteca
+     comunitária, pushPanel dentro do sheet), Favoritos (bibFavoritos) e
+     Salvos (modelosContratoData, com busca). */
+  function abrirMenuNovoModelo(){
+    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
+    const html='<div class="plist">'+
+      '<div class="prow" onclick="closeInfo();abrirBuilderParaSelecao(null);showToast(t(\'toast.blankContract\'))">'+BIB_ICON_LIBRARY+'<div class="t">'+t('wizard.fromScratch')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'comunidade-contratos\')">'+BIB_ICON_LIBRARY+'<div class="t">'+t('wizard.browseLibrary')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="closeInfo();abrirSalvosBiblioteca()">'+BIB_ICON_BOOKMARK+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'contrato-usar\')">'+BIB_ICON_BOOKMARK+'<div class="t">'+t('library.saved')+'</div>'+chevr+'</div>'+
+    '</div>';
+    openInfo(t('library.newMenu.title'), html);
+  }
   function abrirMenuMeusModelos(){
     const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
     const html='<div class="plist">'+
@@ -12438,7 +12555,7 @@
        funcionar) apareciam aqui pra associar uma tarefa nova, o que não
        faz sentido pra um trabalho já fechado. */
     const optsReal=jobsVisiveis().filter(j=>!j.arquivado).map(j=>'<option value="'+j.id+'">'+escapeHtml(j.typeLabel+' — '+j.client)+'</option>').join('');
-    ['ta-trabalho','lb-trabalho','ls-trabalho'].forEach(selId=>{
+    ['ta-trabalho','ls-trabalho'].forEach(selId=>{
       const sel=document.getElementById(selId);
       if(sel) sel.innerHTML='<option value="">'+t('field.optionalDropdown')+'</option>'+optsReal;
     });
@@ -12514,6 +12631,7 @@
      fluxos, então o reset tem de acontecer sempre que se entra por aqui. */
   function abrirNovoContato(){
     limparFormularioContato();
+    openSheet();
     pushPanel('cliente');
   }
   /* Abre o mesmo painel "cliente" (criar/editar são o mesmo formulário) já
@@ -12771,88 +12889,49 @@
     el.parentElement.querySelectorAll('.priority-opt').forEach(o=>o.classList.remove('on'));
     el.classList.add('on');
   }
-  function addChecklistItem(){
-    const inp=document.getElementById('ta-cl-newitem'); const v=inp.value.trim(); if(!v) return;
-    const row=document.createElement('div'); row.className='addlist-row';
-    row.innerHTML='<span class="dots">⠿</span><span class="tx">'+escapeHtml(v)+'</span><span class="rm" onclick="this.parentElement.remove()">✕</span>';
-    document.getElementById('ta-cl-items').appendChild(row);
-    inp.value='';
+  /* Painel unificado (Tarefa) despacha pro modo ativo: Simples grava em
+     tarefasData (criarTarefa), Checklist grava em listasData (criarLista,
+     reaproveitada tal e qual do antigo painel "Lista"). */
+  function salvarTarefaPanel(){
+    const ehChecklist=document.getElementById('tarefa-checklist').style.display!=='none';
+    if(ehChecklist) criarLista(); else criarTarefa();
   }
   function criarTarefa(){
-    const ehChecklist=document.getElementById('tarefa-checklist').style.display!=='none';
-    const id='tar'+Date.now();
-    let jobIdCriado=null;
-    if(!ehChecklist){
-      const titulo=document.getElementById('ta-titulo').value.trim();
-      if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
-      const jobId=document.getElementById('ta-trabalho').value||null;
-      jobIdCriado=jobId;
-      const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
-      tarefasData[id]={ id, tipo:'simples', titulo,
-        data:document.getElementById('ta-data').value||null,
-        prioridade: prioEl ? prioEl.dataset.val : t('task.priorityNormal'),
-        jobId, feito:false };
-      if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], 'Tarefa criada: '+titulo); saveJobsData(); }
-      showToast(t('toast.taskPrefix')+titulo+t('toast.createdFemSuffix'));
-    } else {
-      const titulo=document.getElementById('ta-cl-titulo').value.trim()||'Checklist';
-      const itens=[...document.querySelectorAll('#ta-cl-items .tx')].map(el=>({t:el.textContent, feito:false}));
-      if(!itens.length){ showToast(t('toast.addAtLeastOneItem')); return; }
-      tarefasData[id]={ id, tipo:'checklist', titulo, itens, jobId:null, feito:false };
-      showToast('"'+titulo+t('toast.createdFemSuffix'));
-    }
-    saveTarefasData();
-    renderMonthTicker();
-    if(jobIdCriado && currentJobId===jobIdCriado && document.getElementById('detalhe-dynamic').style.display!=='none'){
-      renderJobDetailDynamic(jobIdCriado);
-    }
-    closeSheet();
-    ['ta-titulo','ta-data','ta-cl-titulo'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
-    const prioPicker=document.getElementById('ta-prioridade-picker');
-    if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
-    const items=document.getElementById('ta-cl-items'); if(items) items.innerHTML='';
-  }
-
-  /* 🔔 Lembrete — igual a Tarefa/Simples na estrutura (data + trabalho
-     opcional), mas sem prioridade: um lembrete não é urgente/normal, é só
-     "não te esqueças disto nesta data". Solto (sem jobId) entra no radar de
-     Tarefas do Dashboard; vinculado a um trabalho aparece na secção
-     "Lembretes" dentro da própria página do trabalho. */
-  let lembretesData={};
-  function saveLembretesData(){ savePersisted('pivot-lembretesData', ()=>lembretesData); }
-  async function loadLembretesData(){ await loadPersisted('pivot-lembretesData', d=>{ lembretesData=d||{}; }); }
-  function criarLembrete(){
-    const tituloEl=document.getElementById('lb-titulo');
-    const titulo=tituloEl.value.trim();
+    const titulo=document.getElementById('ta-titulo').value.trim();
     if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
-    const data=document.getElementById('lb-data').value;
-    if(!data){ showToast(t('reminder.dateRequired')); return; }
-    const id='lbr'+Date.now();
-    const jobId=document.getElementById('lb-trabalho').value||null;
-    lembretesData[id]={ id, titulo, data, hora:document.getElementById('lb-hora').value||null,
-      jobId, notas:document.getElementById('lb-notas').value.trim(), feito:false, criadoEm:new Date().toISOString() };
-    saveLembretesData();
-    if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], t('reminder.historyCreated')+titulo); saveJobsData(); }
-    showToast(t('toast.reminderPrefix')+titulo+t('toast.createdMascSuffix'));
+    const id='tar'+Date.now();
+    const jobId=document.getElementById('ta-trabalho').value||null;
+    const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
+    tarefasData[id]={ id, tipo:'simples', titulo,
+      data:document.getElementById('ta-data').value||null,
+      hora:document.getElementById('ta-hora').value||null,
+      prioridade: prioEl ? prioEl.dataset.val : t('task.priorityNormal'),
+      jobId, notas:document.getElementById('ta-notas').value.trim(), feito:false };
+    if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], 'Tarefa criada: '+titulo); saveJobsData(); }
+    showToast(t('toast.taskPrefix')+titulo+t('toast.createdFemSuffix'));
+    saveTarefasData();
     renderMonthTicker();
     if(typeof renderTasksList==='function') renderTasksList();
     if(jobId && currentJobId===jobId && document.getElementById('detalhe-dynamic').style.display!=='none'){
       renderJobDetailDynamic(jobId);
     }
     closeSheet();
-    limparFormularioLembrete();
+    limparFormularioTarefa();
   }
-  function limparFormularioLembrete(){
-    ['lb-titulo','lb-data','lb-hora','lb-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
-    const sel=document.getElementById('lb-trabalho'); if(sel) sel.value='';
+  function limparFormularioTarefa(){
+    ['ta-titulo','ta-data','ta-hora','ta-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    const sel=document.getElementById('ta-trabalho'); if(sel) sel.value='';
+    const prioPicker=document.getElementById('ta-prioridade-picker');
+    if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
   }
-  /* Sempre parte de um formulário limpo — mesmo cuidado do "+ Contato"
-     (abrirNovoContato): sem isto, cancelar a meio de um lembrete e abrir
-     "+ Lembrete" de novo deixava os campos anteriores por lá. */
-  function abrirNovoLembrete(){
-    limparFormularioLembrete();
-    pushPanel('lembrete');
-  }
+
+  /* 🔔 Lembrete — a criação foi unificada em Tarefa > Simples (o antigo
+     painel "Lembrete" some, mas a store/leitura continua aqui tal e qual,
+     pra lembretes já criados antes continuarem a aparecer/editar/excluir
+     normalmente no radar de Tarefas e na página do trabalho). */
+  let lembretesData={};
+  function saveLembretesData(){ savePersisted('pivot-lembretesData', ()=>lembretesData); }
+  async function loadLembretesData(){ await loadPersisted('pivot-lembretesData', d=>{ lembretesData=d||{}; }); }
   function toggleLembreteItem(id, el){
     const l=lembretesData[id];
     if(!l) return;
@@ -12906,7 +12985,9 @@
     const prioEl=document.querySelector('#ls-prioridade-picker .priority-opt.on');
     listasData[id]={ id, titulo, itens, jobId,
       data:document.getElementById('ls-data').value||null,
+      hora:document.getElementById('ls-hora').value||null,
       prioridade: prioEl ? prioEl.dataset.val : null,
+      notas:document.getElementById('ls-notas').value.trim(),
       feito:false, criadoEm:new Date().toISOString() };
     saveListasData();
     if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], t('list.historyCreated')+titulo); saveJobsData(); }
@@ -12920,15 +13001,11 @@
     limparFormularioLista();
   }
   function limparFormularioLista(){
-    ['ls-titulo','ls-data'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['ls-titulo','ls-data','ls-hora','ls-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const items=document.getElementById('ls-items'); if(items) items.innerHTML='';
     const sel=document.getElementById('ls-trabalho'); if(sel) sel.value='';
     const prioPicker=document.getElementById('ls-prioridade-picker');
     if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
-  }
-  function abrirNovaLista(){
-    limparFormularioLista();
-    pushPanel('lista');
   }
   function toggleListaItem(id, i, el){
     const ls=listasData[id];
@@ -12963,8 +13040,36 @@
       const ls=listasData[id]; if(!ls) return;
       const itensHtml=(ls.itens||[]).map((it,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(it.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(it.t)+'</div></div><div class="toggle'+(it.feito?' on':'')+'" onclick="toggleListaItem(\''+id+'\','+i+',this)"><div class="kn"></div></div></div>').join('');
       openInfo(ls.titulo, itensHtml+
+        (ls.notas?('<p style="font-size:13.5px;color:var(--ink-soft);white-space:pre-wrap;margin-top:14px">'+escapeHtml(ls.notas)+'</p>'):'')+
         '<button class="btn ghost" style="width:100%;margin-top:14px" onclick="excluirLista(\''+id+'\')">'+t('action.remove')+'</button>');
+    } else if(tipo==='tarefa'){
+      const tk=tarefasData[id]; if(!tk) return;
+      openInfo(tk.titulo,
+        (tk.data?('<p style="font-size:13px;color:var(--ink-soft);margin-bottom:10px">'+t('field.date')+': '+tk.data.split('-').reverse().join('/')+(tk.hora?(' · '+tk.hora):'')+'</p>'):'')+
+        (tk.notas?('<p style="font-size:13.5px;color:var(--ink-soft);white-space:pre-wrap;margin-bottom:14px">'+escapeHtml(tk.notas)+'</p>'):'')+
+        (tk.feito?'':'<button class="btn primary" style="width:100%;margin-bottom:8px" onclick="marcarTarefaFeita(\''+id+'\')">'+t('action.complete')+'</button>')+
+        '<button class="btn ghost" style="width:100%" onclick="excluirTarefa(\''+id+'\')">'+t('action.remove')+'</button>');
     }
+  }
+  function marcarTarefaFeita(id){
+    const tk=tarefasData[id];
+    if(!tk) return;
+    tk.feito=true;
+    saveTarefasData();
+    closeInfo();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(tk.jobId) renderJobDetailDynamic(tk.jobId);
+    showToast(t('toast.done'));
+  }
+  function excluirTarefa(id){
+    const tk=tarefasData[id];
+    const jobId=tk&&tk.jobId;
+    delete tarefasData[id];
+    saveTarefasData();
+    closeInfo();
+    if(typeof renderTasksList==='function') renderTasksList();
+    if(jobId) renderJobDetailDynamic(jobId);
+    showToast(t('toast.removed'));
   }
 
   /* 📥 Importar — conversa / print / pdf */
