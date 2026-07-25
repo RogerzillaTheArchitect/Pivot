@@ -121,6 +121,11 @@
   .ops-card .label{font-size:12px;font-weight:400;letter-spacing:-.01em;color:var(--ink);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .ops-card .value-end{color:var(--ink-soft);font-size:12px;text-align:right;white-space:nowrap}
+  /* "concluído/total" — o número concluído usa a mesma cor do bloco
+     preenchido (laranja), o total permanece branco. */
+  .ops-card .value-end .ve-cur{color:#FF9738;font-weight:600}
+  .ops-card .value-end .ve-sep{color:var(--ink-soft);padding:0 1px}
+  .ops-card .value-end .ve-tot{color:var(--ink)}
   /* .track/.segment NÃO são escopados a .ops-card de propósito — é o mesmo
      componente reaproveitado no card Fluxo de Relatórios (ver
      relatorios.css .rel-split-cell .track), pra nunca existir um segundo

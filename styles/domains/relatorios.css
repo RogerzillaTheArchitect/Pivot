@@ -162,9 +162,9 @@
   .distfin-vline{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-1px);background:var(--line-soft);z-index:1}
   .distfin-row{
     display:grid;grid-template-columns:1fr 1fr;column-gap:0;row-gap:0;
-    align-items:stretch;min-height:56px;
+    align-items:stretch;min-height:46px;
   }
-  .distfin-half{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;padding:6px 0}
+  .distfin-half{display:flex;flex-direction:column;justify-content:center;gap:1px;min-width:0;padding:4px 0}
   .distfin-half.l{align-items:flex-start;padding-right:0}
   .distfin-half.r{align-items:flex-end;padding-left:0}
   .distfin-name{max-width:100%;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -219,10 +219,14 @@
   .rel-split-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
   .rel-mrow-side-txt{min-width:0}
   .rel-mrow-name{font-size:12px;color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rel-mrow-value{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);margin-top:3px;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rel-mrow-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap;text-align:center}
+  .rel-mrow-value{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-mrow-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap;flex:none}
   .rel-mrow-pct.pos{color:var(--done)}
   .rel-mrow-pct.neg{color:var(--late)}
+  /* nome sempre numa linha própria acima; valor+percentual alinhados
+     horizontalmente na linha de baixo — libera largura pro título completo
+     não truncar (ver Evolução Mensal). */
+  .rel-mrow-line{display:flex;align-items:baseline;gap:8px;margin-top:3px;max-width:100%}
   /* barra do card Fluxo — mesmo .track/.segment do card Operacional
      (dashboard.css), só recolorida: verde pro lado Recebidos, laranja
      nativo (sem override) pro lado Despesas. */
@@ -237,11 +241,18 @@
   .rel-table th{text-align:left;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:12px 16px;border-bottom:1px solid var(--line-soft);white-space:nowrap}
   .rel-table td{padding:12px 16px;border-bottom:1px solid var(--line-soft);color:var(--ink);white-space:nowrap}
   .rel-table th:first-child, .rel-table td:first-child{padding-left:16px}
+  /* nomes de cidade/endereço muito longos truncam em vez de alargar a
+     tabela — a rolagem horizontal do .rel-table-wrap continua existindo
+     pras outras colunas, mas a primeira nunca deve crescer sem limite. */
+  .rel-table td:first-child{max-width:120px;overflow:hidden;text-overflow:ellipsis}
   .rel-table tbody tr{cursor:pointer}
   .rel-table tbody tr:last-child td{border-bottom:0}
   .rel-table tbody tr:active{background:rgba(255,255,255,.03)}
 
-  .rel-insight-row{font-size:12.5px;color:var(--ink-soft);line-height:1.5;padding:6px 0}
+  /* divisória entre a tabela de cidades e os insights, borda a borda */
+  .rel-geo-divider{height:1px;background:var(--line-soft);width:100%;margin-top:2px}
+  .rel-insight-row{font-size:12.5px;color:var(--ink-soft);line-height:1.5;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+  .rel-insight-row:last-child{border-bottom:0}
 
   .distfin-clicavel{cursor:pointer}
 

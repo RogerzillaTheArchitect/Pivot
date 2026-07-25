@@ -902,30 +902,22 @@
           <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
 
-        <!-- Card: Rentabilidade — duas colunas no mesmo grid dividido
-             .rel-split (divisória vertical central, linhas horizontais de
-             borda a borda): mais rentáveis (esquerda) vs menos rentáveis
-             (direita), sempre ordenado automaticamente, 5 linhas fixas cada
-             lado (preenche com "Sem dados" se faltar), sem botão de
-             inverter ordenação. -->
+        <!-- Card: Rentabilidade — unifica Rentabilidade + Eficiência no mesmo
+             grid dividido .rel-split (divisória vertical central, linhas
+             horizontais de borda a borda): esquerda = ranking de
+             rentabilidade por hora (maior → menor, até 5 subcategorias),
+             direita = 5 médias gerais do período (ticket médio, receita/h,
+             receita/projeto, lucro médio/projeto, margem média). -->
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-split" id="rel-rentabilidade-grid"></div>
-        </div>
-
-        <!-- Card: Eficiência — 5 médias do período: ticket médio, receita
-             por hora, receita por projeto, lucro médio por projeto, margem
-             média. O card já identifica a seção — sem rótulo de área. -->
-        <div class="rel-card-header" data-t="reports.indicators.title">Eficiência</div>
-        <div class="card rel-card rel-card-body">
-          <div id="rel-indicadores-lista"></div>
         </div>
 
         <!-- Card: Mercado Regional — substitui o antigo Heatmap Geográfico:
              tabela real (Cidade/Eventos/Receita/Ticket Médio/€/h) ordenada
              por receita, clicável por linha (abre os trabalhos da cidade), e
              insights automáticos calculados da mesma tabela. -->
-        <div class="rel-card-header" data-t="reports.regional.title">Mercado Regional</div>
+        <div class="rel-card-header" data-t="reports.regional.title">Geográfico</div>
         <div class="card rel-card rel-card-body rel-card-body-flush">
           <div class="rel-table-wrap">
             <table class="rel-table">
@@ -939,7 +931,8 @@
               <tbody id="rel-mercado-tabela-body"></tbody>
             </table>
           </div>
-          <div id="rel-mercado-insights" style="padding:14px 16px 4px"></div>
+          <div class="rel-geo-divider"></div>
+          <div id="rel-mercado-insights" style="padding:12px 16px 4px"></div>
         </div>
       </section>
 
@@ -3265,6 +3258,7 @@
     "reports.distFin.emptyIncome": { pt:"Sem receita neste período.", en:"No income this period.", es:"Sin ingresos en este período." },
     "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
     "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
+    "reports.distFin.others": { pt:"Outros", en:"Others", es:"Otros" },
     // --- Reorganização de Relatórios: áreas, Resumo, Fluxo, Carga, Evolução, Rentabilidade, Indicadores, Mercado Regional ---
     "reports.stats.title": { pt:"Operacional", en:"Operational", es:"Operacional" },
     "reports.area.financial": { pt:"Financeiro", en:"Financial", es:"Financiero" },
@@ -3301,7 +3295,7 @@
     "reports.indicators.revenuePerProject": { pt:"Receita por projeto", en:"Revenue per project", es:"Ingresos por proyecto" },
     "reports.indicators.avgProfitPerProject": { pt:"Lucro médio por projeto", en:"Average profit per project", es:"Beneficio medio por proyecto" },
     "reports.indicators.avgMargin": { pt:"Margem média", en:"Average margin", es:"Margen medio" },
-    "reports.regional.title": { pt:"Mercado Regional", en:"Regional Market", es:"Mercado Regional" },
+    "reports.regional.title": { pt:"Geográfico", en:"Geographic", es:"Geográfico" },
     "reports.regional.city": { pt:"Cidade", en:"City", es:"Ciudad" },
     "reports.regional.events": { pt:"Eventos", en:"Events", es:"Eventos" },
     "reports.regional.revenue": { pt:"Receita", en:"Revenue", es:"Ingresos" },
@@ -4000,7 +3994,12 @@
     let html='';
     for(let i=0;i<N;i++) html += '<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
     track.innerHTML=html;
-    end.textContent=textoTotal;
+    /* formato "concluído/total": o número concluído usa a mesma cor da
+       barra preenchida, o total permanece branco — modo 'contagem' (Fechados)
+       não tem um total distinto do próprio valor, então mostra só o número. */
+    end.innerHTML = modo==='contagem'
+      ? '<span class="ve-cur">'+escapeHtml(textoTotal)+'</span>'
+      : '<span class="ve-cur">'+escapeHtml(textoAtual)+'</span><span class="ve-sep">/</span><span class="ve-tot">'+escapeHtml(textoTotal)+'</span>';
   }
   function pintarAnelComVolta(elId, r, num, den, trackElOverride){
     const el=document.getElementById(elId);
@@ -4175,10 +4174,17 @@
     const h=Math.floor(v), m=Math.round((v-h)*60);
     return m>0 ? (h+'h'+String(m).padStart(2,'0')) : (h+'h');
   }
+  /* mesmo cálculo de horasCompacto, mas sem o sufixo "h" — só o valor
+     numérico (usado no indicador "Horas" do card Operacional). */
+  function horasOpNum(v){
+    v=v||0;
+    const h=Math.floor(v), m=Math.round((v-h)*60);
+    return m>0 ? (h+':'+String(m).padStart(2,'0')) : String(h);
+  }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
     /* Horas: executadas (marco principal "feito") sobre o total previsto no mês */
-    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasCompacto(s.horasExecutadasEsteMes), horasCompacto(s.horasEsteMes));
+    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes));
     /* Pendências (lado do cliente) sobre o total de trabalhos */
     pintarMetricaOp('pendencias', s.pendClienteCount, s.totalJobs, String(s.pendClienteCount), String(s.totalJobs));
     /* Demandas (lado próprio) sobre o total de trabalhos */
@@ -6641,19 +6647,30 @@
      5 linhas fixas — preenche com "Sem dados" se faltar. Linhas NÃO
      clicáveis — só os títulos das colunas (com seta) abrem o gerenciamento
      (abrirGerenciamentoFluxo). */
+  /* Top 4 categorias + "Outros" (soma das demais) — sempre no máximo
+     REL_SPLIT_N linhas, e a soma das linhas devolvidas é sempre igual ao
+     total geral (top4 + outros = tudo), pra barra usar esse total como
+     referência (ver renderRelFluxoGrid). */
+  function relTop4MaisOutros(linhas){
+    const top4=linhas.slice(0, REL_SPLIT_N-1);
+    const resto=linhas.slice(REL_SPLIT_N-1);
+    if(!resto.length) return top4;
+    const somaResto=resto.reduce((s,l)=>s+l.valor,0);
+    return top4.concat([{ label:t('reports.distFin.others'), valor:somaResto }]);
+  }
   function renderRelFluxoGrid(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
-    const receitas=calcularReceitaPorSubcategoria().slice(0, REL_SPLIT_N);
-    const gastos=calcularGastosPorCategoria().slice(0, REL_SPLIT_N);
-    const maxI=receitas.length?receitas[0].valor:0;
-    const maxE=gastos.length?gastos[0].valor:0;
+    const receitas=relTop4MaisOutros(calcularReceitaPorSubcategoria());
+    const gastos=relTop4MaisOutros(calcularGastosPorCategoria());
+    const totalI=receitas.reduce((s,l)=>s+l.valor,0);
+    const totalE=gastos.reduce((s,l)=>s+l.valor,0);
     const meiaEsq=(l)=>{
       if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
       return '<div class="distfin-half l">'+
         '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
         '<div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div>'+
-        distfinBarHtml(maxI>0?l.valor/maxI:0,'l','green')+
+        distfinBarHtml(totalI>0?l.valor/totalI:0,'l','green')+
       '</div>';
     };
     const meiaDir=(l)=>{
@@ -6661,7 +6678,7 @@
       return '<div class="distfin-half r">'+
         '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
         '<div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div>'+
-        distfinBarHtml(maxE>0?l.valor/maxE:0,'r','orange')+
+        distfinBarHtml(totalE>0?l.valor/totalE:0,'r','orange')+
       '</div>';
     };
     let html='<div class="distfin-vline"></div>';
@@ -6726,7 +6743,7 @@
     if(!document.getElementById('ropm-horas')) return;
     const totalJobs=s.totalJobsEsteMes||0;
     const eventosTot=s.eventosPrevistosEsteMes||0;
-    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasCompacto(s.horasExecutadasEsteMes), horasCompacto(s.horasEsteMes), null, 'ropm-');
+    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes), null, 'ropm-');
     pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs), null, 'ropm-');
     pintarMetricaOp('demandas', s.pendMeuEsteMes||0, totalJobs, String(s.pendMeuEsteMes||0), String(totalJobs), null, 'ropm-');
     pintarMetricaOp('fechados', s.fechadosPorDataEsteMes||0, 0, '', String(s.fechadosPorDataEsteMes||0), 'contagem', 'ropm-');
@@ -6966,7 +6983,6 @@
     renderRelOpBars(s);
     renderRelEvolucaoMensal();
     renderRelRentabilidade();
-    renderRelIndicadores();
     renderRelMercadoRegional();
   }
 
@@ -7056,14 +7072,14 @@
     const melhorias=metrics.slice(0,REL_SPLIT_N);
     const quedas=metrics.slice(-REL_SPLIT_N).reverse();
     const seta=m=>m.pct<0?'↓':'↑';
-    const celEsq=m=>'<div class="rel-split-cell l"><div class="rel-split-inner">'+
-        '<div class="rel-mrow-side-txt"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
-        '<div class="rel-mrow-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
-      '</div></div>';
-    const celDir=m=>'<div class="rel-split-cell r"><div class="rel-split-inner">'+
-        '<div class="rel-mrow-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div>'+
-        '<div class="rel-mrow-side-txt"><div class="rel-mrow-name">'+escapeHtml(m.label)+'</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
-      '</div></div>';
+    const celEsq=m=>'<div class="rel-split-cell l">'+
+        '<div class="rel-mrow-name">'+escapeHtml(m.label)+'</div>'+
+        '<div class="rel-mrow-line"><div class="rel-mrow-value">'+m.fmt(m.a)+'</div><div class="rel-mrow-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div></div>'+
+      '</div>';
+    const celDir=m=>'<div class="rel-split-cell r">'+
+        '<div class="rel-mrow-name">'+escapeHtml(m.label)+'</div>'+
+        '<div class="rel-mrow-line"><div class="rel-mrow-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div><div class="rel-mrow-value">'+m.fmt(m.a)+'</div></div>'+
+      '</div>';
     wrap.innerHTML=relSplitBuild(REL_SPLIT_N, melhorias, quedas, celEsq, celDir);
   }
 
@@ -7091,18 +7107,29 @@
      sem barra, só nome + €/h (mesmo espírito compacto do card Indicadores). */
   /* mesmo grid dividido .rel-split das outras, 5+5 fixo — sem a zona de
      percentual, só nome em cima, €/h embaixo, mesma altura/grade. */
+  /* Card unificado Rentabilidade + Eficiência: esquerda = ranking de
+     rentabilidade por hora (maior → menor, até 5 subcategorias), direita =
+     5 médias gerais do período (ticket médio, receita/h, receita/projeto,
+     lucro médio/projeto, margem média) — mesmo grid .rel-split das demais. */
   function renderRelRentabilidade(){
     const wrap=document.getElementById('rel-rentabilidade-grid');
     if(!wrap) return;
-    const linhas=calcularRentabilidade().sort((a,b)=>b.porHora-a.porHora);
-    const top=linhas.slice(0,REL_SPLIT_N);
-    const low=linhas.slice(-REL_SPLIT_N).reverse();
+    const ranking=calcularRentabilidade().sort((a,b)=>b.porHora-a.porHora).slice(0,REL_SPLIT_N);
+    const d=calcularIndicadores();
+    const indicadores=[
+      {label:t('reports.indicators.ticket'), val:fmtMoney(d.ticketMedio)},
+      {label:t('reports.indicators.revenuePerHour'), val:fmtMoney(d.receitaPorHora)+'/h'},
+      {label:t('reports.indicators.revenuePerProject'), val:fmtMoney(d.receitaPorProjeto)},
+      {label:t('reports.indicators.avgProfitPerProject'), val:fmtMoney(d.lucroMedioProjeto)},
+      {label:t('reports.indicators.avgMargin'), val:Math.round(d.margemMedia)+'%'},
+    ];
     const celEsq=l=>'<div class="rel-split-cell l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div>';
-    const celDir=l=>'<div class="rel-split-cell r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div><div class="rel-mrow-value">'+fmtMoney(l.porHora)+'/h</div></div>';
-    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, top, low, celEsq, celDir);
+    const celDir=ind=>'<div class="rel-split-cell r"><div class="rel-mrow-name">'+escapeHtml(ind.label)+'</div><div class="rel-mrow-value">'+ind.val+'</div></div>';
+    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, ranking, indicadores, celEsq, celDir);
   }
 
-  /* ===== Indicadores — 5 médias do período selecionado. ===== */
+  /* ===== Indicadores — 5 médias do período selecionado (usado dentro do
+     card unificado Rentabilidade, ver renderRelRentabilidade). ===== */
   function calcularIndicadores(){
     const meses=relRangeMeses();
     const mesesSet=new Set(meses.map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
@@ -7126,18 +7153,6 @@
       lucroMedioProjeto: projetos>0 ? (receitaTotal-despesasTotal)/projetos : 0,
       margemMedia: receitaTotal>0 ? ((receitaTotal-despesasTotal)/receitaTotal)*100 : 0,
     };
-  }
-  function renderRelIndicadores(){
-    const wrap=document.getElementById('rel-indicadores-lista'); if(!wrap) return;
-    const d=calcularIndicadores();
-    const linhas=[
-      {label:t('reports.indicators.ticket'), val:fmtMoney(d.ticketMedio)},
-      {label:t('reports.indicators.revenuePerHour'), val:fmtMoney(d.receitaPorHora)+'/h'},
-      {label:t('reports.indicators.revenuePerProject'), val:fmtMoney(d.receitaPorProjeto)},
-      {label:t('reports.indicators.avgProfitPerProject'), val:fmtMoney(d.lucroMedioProjeto)},
-      {label:t('reports.indicators.avgMargin'), val:Math.round(d.margemMedia)+'%'},
-    ];
-    wrap.innerHTML=linhas.map(l=>'<div class="rel-indic-row"><span class="rel-indic-label">'+escapeHtml(l.label)+'</span><span class="rel-indic-val">'+l.val+'</span></div>').join('');
   }
 
   /* ===== Mercado Regional — substitui o antigo Heatmap Geográfico: tabela
