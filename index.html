@@ -819,18 +819,18 @@
              linha é clicável e abre a lista detalhada correspondente,
              reaproveitando relFluxoPeriodo() (já existia como timeline). -->
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo Financeiro</div>
-        <div class="card rel-card rel-card-body">
-          <div class="rel-subhead" data-t="reports.distFin.income">Recebidos</div>
-          <div class="rel-subhead-sub" data-t="reports.flow.byCategory">Por categoria</div>
-          <div id="rel-fluxo-receita-categoria"></div>
-          <div class="rel-subhead-sub" style="margin-top:16px" data-t="reports.flow.bySubcategory">Por subcategoria</div>
+        <div class="card rel-card rel-card-body distfin-card">
+          <div class="distfin-heads">
+            <span class="distfin-head-inc" data-t="reports.distFin.income">Recebidos</span>
+            <span class="distfin-head-exp" data-t="reports.distFin.expenses">Despesas</span>
+          </div>
+          <div class="distfin-rule-soft"></div>
+          <div class="rel-subhead-sub" style="text-align:center;margin-top:14px" data-t="reports.flow.byCategory">Por categoria</div>
+          <div class="distfin-rows" id="rel-fluxo-rows-categoria"></div>
+          <div class="rel-subhead-sub" style="margin-top:18px" data-t="reports.flow.bySubcategoryIncome">Recebidos por subcategoria</div>
           <div id="rel-fluxo-receita-subcategoria"></div>
-          <div class="rel-subhead" style="margin-top:22px" data-t="reports.distFin.expenses">Despesas</div>
-          <div class="rel-subhead-sub" data-t="reports.flow.byCategory">Por categoria</div>
-          <div id="rel-fluxo-gastos-categoria"></div>
-        </div>
-        <div class="card rel-card rel-card-body rel-card-body-flush" style="margin-top:10px">
-          <div class="segmented" id="rel-fluxo-seg" style="margin-top:12px;margin-bottom:0">
+          <div class="distfin-rule-soft" style="margin-top:18px"></div>
+          <div class="segmented" id="rel-fluxo-seg" style="margin-top:14px;margin-bottom:0">
             <button class="on" data-f="todos" onclick="relSetFiltroFluxo('todos')"><span data-t="reports.flowAll">Todos</span></button>
             <button data-f="recebidos" onclick="relSetFiltroFluxo('recebidos')"><span data-t="reports.flowIncome">Recebidos</span></button>
             <button data-f="despesas" onclick="relSetFiltroFluxo('despesas')"><span data-t="reports.flowExpense">Despesas</span></button>
@@ -3246,6 +3246,7 @@
     "reports.summary.title": { pt:"Resumo Financeiro", en:"Financial Summary", es:"Resumen Financiero" },
     "reports.flow.byCategory": { pt:"Por categoria", en:"By category", es:"Por categoría" },
     "reports.flow.bySubcategory": { pt:"Por subcategoria", en:"By subcategory", es:"Por subcategoría" },
+    "reports.flow.bySubcategoryIncome": { pt:"Recebidos por subcategoria", en:"Income by subcategory", es:"Recibidos por subcategoría" },
     "reports.emptyPeriod": { pt:"Sem dados neste período.", en:"No data this period.", es:"Sin datos en este período." },
     "reports.workload.title": { pt:"Carga de Trabalho", en:"Workload", es:"Carga de Trabajo" },
     "reports.workload.days": { pt:"Dias", en:"Days", es:"Días" },
@@ -6579,8 +6580,13 @@
     for(let i=0;i<cheios;i++) ticks+='<span class="distfin-tick '+cls+'" style="width:'+w+'"></span>';
     return '<div class="distfin-bar distfin-bar-'+lado+'">'+ticks+'</div>';
   }
-  function renderRelDistribuicaoFinanceira(){
-    const wrap=document.getElementById('rel-distfin-rows');
+  /* renderiza os pares receita-por-categoria (verde, esquerda) / gasto-por-
+     categoria (laranja, direita) do card Fluxo Financeiro, exatamente na
+     estrutura de ticks do mockup de referência — cada linha é clicável e
+     abre a lista detalhada dessa categoria específica dentro do mesmo card
+     (ver relFiltrarPorCategoria), não num card separado. */
+  function renderRelFluxoCategoriaTicks(){
+    const wrap=document.getElementById('rel-fluxo-rows-categoria');
     if(!wrap) return;
     const receitas=calcularSegmentacaoFinanceira().linhas.slice(0, DISTFIN_MAX_LINHAS);
     const gastos=calcularGastosPorCategoria().slice(0, DISTFIN_MAX_LINHAS);
@@ -6596,20 +6602,27 @@
       const inc=receitas[i], exp=gastos[i];
       const iT=distfinTone(i), eT=distfinTone(i);
       html+='<div class="distfin-row">'+
-        '<div class="distfin-lbl distfin-lbl-l">'+
+        '<div class="distfin-lbl distfin-lbl-l'+(inc?' distfin-clicavel':'')+'" data-lado="inc" data-idx="'+i+'">'+
           (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
           '<div class="distfin-val distfin-c-i-'+iT+'">'+fmtMoney(inc.receita)+'</div>'):'')+
         '</div>'+
         '<div>'+(inc?distfinBarHtml(maxI>0?inc.receita/maxI:0,'l',iT,'i'):'')+'</div>'+
         '<div aria-hidden="true"></div>'+
         '<div>'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r',eT,'e'):'')+'</div>'+
-        '<div class="distfin-lbl distfin-lbl-r">'+
+        '<div class="distfin-lbl distfin-lbl-r'+(exp?' distfin-clicavel':'')+'" data-lado="exp" data-idx="'+i+'">'+
           (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
           '<div class="distfin-val distfin-c-e-'+eT+'">'+fmtMoney(exp.valor)+'</div>'):'')+
         '</div>'+
       '</div>';
     }
     wrap.innerHTML=html;
+    wrap.querySelectorAll('.distfin-clicavel').forEach(el=>{
+      el.onclick=()=>{
+        const i=parseInt(el.dataset.idx,10);
+        if(el.dataset.lado==='inc') relFiltrarPorCategoria('receitaCategoria', receitas[i].id, receitas[i].label);
+        else relFiltrarPorCategoria('gastoCategoria', gastos[i].label, gastos[i].label);
+      };
+    });
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
@@ -6782,15 +6795,10 @@
     wrap.querySelectorAll('.seg-fin-row').forEach((row,i)=>{ row.onclick=()=>onClickFn(linhas[i]); });
   }
   function renderRelFluxoFinanceiro(){
-    const receitaCat=calcularSegmentacaoFinanceira().linhas;
+    renderRelFluxoCategoriaTicks();
     const receitaSub=calcularReceitaPorSubcategoria();
-    const gastos=calcularGastosPorCategoria();
-    relMontaListaBarras(receitaCat, 'rel-fluxo-receita-categoria', 'receita', l=>fmtMoney(l.receita),
-      l=>relFiltrarPorCategoria('receitaCategoria', l.id, l.label));
     relMontaListaBarras(receitaSub, 'rel-fluxo-receita-subcategoria', 'valor', l=>fmtMoney(l.valor),
       l=>relFiltrarPorCategoria('receitaSubcategoria', l.label, l.label));
-    relMontaListaBarras(gastos, 'rel-fluxo-gastos-categoria', 'valor', l=>fmtMoney(l.valor),
-      l=>relFiltrarPorCategoria('gastoCategoria', l.label, l.label));
     renderRelFluxoLista();
   }
   function relFluxoDoMes(ano, mes){
