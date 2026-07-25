@@ -2678,6 +2678,10 @@
     "tasks.actionReceivePayment": { pt:"Receber pagamento", en:"Receive payment", es:"Recibir pago" },
     "tasks.actionExecute": { pt:"Realizar {tipo}", en:"Run {tipo}", es:"Realizar {tipo}" },
     "tasks.paymentDue": { pt:"Pagamento vence", en:"Payment due", es:"Pago vence" },
+    "tasks.daysLeft": { pt:" dias restantes", en:" days left", es:" días restantes" },
+    "tasks.dayLeft": { pt:"1 dia restante", en:"1 day left", es:"1 día restante" },
+    "tasks.daysLate": { pt:" dias em atraso", en:" days late", es:" días de atraso" },
+    "tasks.dayLate": { pt:"1 dia em atraso", en:"1 day late", es:"1 día de atraso" },
     "home.tryAll": { pt:"Tenta \"Todos\" para ver a carteira completa.", en:"Try \"All\" to see your full portfolio.", es:"Prueba \"Todos\" para ver toda tu cartera." },
     "home.upcoming": { pt:"Próximos vencimentos", en:"Upcoming payments", es:"Próximos vencimientos" },
     "home.vsMonth": { pt:"vs mês ant.", en:"vs last mo.", es:"vs mes ant." },
@@ -4290,6 +4294,26 @@
     if(d===1) return 'media';
     return 'normal';
   }
+  /* badge de prazo do card de Tarefas: verde=dias restantes, amarelo=hoje/
+     amanhã, vermelho=dias em atraso. Reaproveita as mesmas 3 cores do
+     .sig-tag (contrato/pagamento) em vez de criar paleta nova. */
+  function prazoBadgeInfo(dataISO){
+    const d=diasEntre(dataISO);
+    if(d<0){
+      const n=Math.abs(d);
+      return { classe:'late', label:(n===1?t('tasks.dayLate'):n+t('tasks.daysLate')) };
+    }
+    if(d===0) return { classe:'amber', label:t('status.today') };
+    if(d===1) return { classe:'amber', label:t('status.tomorrow') };
+    return { classe:'green', label:(d===1?t('tasks.dayLeft'):d+t('tasks.daysLeft')) };
+  }
+  /* badge de tipo (Pendência = depende do cliente / Demanda = depende de
+     mim) — mesma classificação já usada nos filtros "cliente"/"meucargo"
+     de Trabalhos. Cor sempre neutra, nunca muda com o status. */
+  function tipoTarefaInfo(tipo){
+    if(tipo==='contrato' || tipo==='pagamento') return { label:t('home.pending'), icon:RTK_ICONS.client };
+    return { label:t('home.demands'), icon:RTK_ICONS.action };
+  }
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
     if(!wrap) return;
@@ -4326,11 +4350,20 @@
     const nivel=gerarNivelPrioridade(it.dataISO);
     const urgClasse = nivel==='critica' ? 'late' : (nivel==='alta'||nivel==='media') ? 'soon' : 'normal';
     const solto = it.tipo==='lembrete' || it.tipo==='lista';
+    const prazoBadge=prazoBadgeInfo(it.dataISO);
+    const tipoBadge=tipoTarefaInfo(it.tipo);
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    card+='<div class="rtk-side">'+
+      avatarHtml(it.cliente||it.nome,44)+
+      '<span class="sig-tag '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></span>'+
+      '<span class="sig-tag gray">'+tipoBadge.icon+'<span>'+escapeHtml(tipoBadge.label)+'</span></span>'+
+    '</div>';
+    card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
-    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
+    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+(it.hora?' · '+escapeHtml(it.hora):'')+'</span></div>';
+    card+='</div>';
     card+='</div>';
     const editarAction = solto
       ? '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();abrirDetalheItemSolto(\''+it.tipo+'\',\''+it.idx+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>Editar</button>'
