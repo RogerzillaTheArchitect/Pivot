@@ -278,15 +278,36 @@
   .rel-indic-label{font-size:13px;color:var(--ink-soft)}
   .rel-indic-val{font-family:var(--font-numeric);font-size:13px;font-weight:600;color:var(--ink)}
 
-  .rel-evo-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
+  /* Evolução Mensal — duas colunas espelhadas: melhorias (nome/valor à
+     esquerda, % perto do centro) e quedas (% perto do centro, nome/valor à
+     direita) — mesma ordem de leitura visual em ambas, só invertida. */
+  .rel-evo-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+  .rel-evo-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid var(--line-soft)}
   .rel-evo-row:last-child{border-bottom:0}
-  .rel-evo-label{font-size:12.5px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .rel-evo-val{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink)}
-  .rel-evo-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;min-width:52px;text-align:right}
+  .rel-evo-col-down .rel-evo-row{flex-direction:row-reverse}
+  .rel-evo-nv{min-width:0}
+  .rel-evo-name{font-size:12px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .rel-evo-val{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);margin-top:2px}
+  .rel-evo-col-down .rel-evo-name, .rel-evo-col-down .rel-evo-val{text-align:right}
+  .rel-evo-pct{font-family:var(--font-numeric);font-size:12px;font-weight:700;white-space:nowrap}
   .rel-evo-pct.pos{color:var(--done)}
   .rel-evo-pct.neg{color:var(--late)}
 
-  .rel-rent-toggle{display:block;margin:0 auto;font-size:11.5px;font-weight:600;color:var(--ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--r);padding:8px 14px;cursor:pointer}
+  /* Rentabilidade — duas colunas simétricas, mesmo componente do card
+     Indicadores (.rel-indic-row), sem barra/sem botão de ordenar. */
+  .rel-rent-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+  .rel-rent-col-low .rel-indic-row{flex-direction:row-reverse}
+  .rel-rent-col-low .rel-indic-label{text-align:right}
+
+  /* Carga de Trabalho — ranking horizontal compacto: nome + barra + valor
+     numa única linha (mais denso que .seg-fin-row, que empilha em 2 linhas). */
+  .rel-rank-row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:10px;padding:7px 0}
+  .rel-rank-name{font-size:12px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-rank-bar-track{height:9px;border-radius:var(--r);background:rgba(255,255,255,.05);overflow:hidden}
+  .rel-rank-bar-fill{display:block;height:100%;width:0;border-radius:var(--r);
+    background:linear-gradient(90deg,#F2F5F3,#B9BDC2);
+    transition:width .9s cubic-bezier(.2,.8,.2,1)}
+  .rel-rank-val{font-family:var(--font-numeric);font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap}
 
   .rel-table-wrap{overflow-x:auto}
   .rel-table{width:100%;border-collapse:collapse;font-size:12.5px}
