@@ -849,20 +849,16 @@
           <div id="rel-op-bars"></div>
         </div>
 
-        <!-- Card: Carga de Trabalho — só os dias do período com mais horas
-             trabalhadas, num ranking horizontal compacto (reaproveita
-             heatIndiceDiario(), mesmo índice diário já usado nos Heatmaps).
-             Sem semanas/meses — o período já É o filtro selecionado. -->
-        <div class="rel-card-header" id="rel-anchor-carga" data-t="reports.workload.title">Carga de Trabalho</div>
-        <div class="card rel-card rel-card-body">
-          <div id="rel-carga-dias"></div>
-        </div>
-
         <!-- Card: Evolução Mensal — compara automaticamente o período atual
-             contra o período anterior equivalente (mesmo nº de meses); duas
+             contra o período anterior equivalente (mesmo nº de meses),
+             classificando cada métrica como melhoria/queda pelo SIGNIFICADO
+             dela (nem todo aumento é bom — despesas/pendências/horas por
+             evento pioram ao subir), não pelo sinal bruto do %. Duas
              colunas espelhadas de sempre 5 indicadores cada (altura fixa),
-             melhorias à esquerda e quedas à direita, sem título de seção. -->
-        <div class="rel-card-header" data-t="reports.evolution.title">Evolução Mensal</div>
+             melhorias à esquerda e quedas à direita, sem título de seção.
+             O card "Carga de Trabalho" saiu daqui — a métrica "Horas
+             trabalhadas" incorpora essa mesma comparação de período. -->
+        <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Evolução Mensal</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-evo-cols">
             <div class="rel-evo-col rel-evo-col-up" id="rel-evolucao-melhorias"></div>
@@ -3246,11 +3242,6 @@
     "reports.flow.bySubcategory": { pt:"Por subcategoria", en:"By subcategory", es:"Por subcategoría" },
     "reports.flow.bySubcategoryIncome": { pt:"Recebidos por subcategoria", en:"Income by subcategory", es:"Recibidos por subcategoría" },
     "reports.emptyPeriod": { pt:"Sem dados neste período.", en:"No data this period.", es:"Sin datos en este período." },
-    "reports.workload.title": { pt:"Carga de Trabalho", en:"Workload", es:"Carga de Trabajo" },
-    "reports.workload.days": { pt:"Dias", en:"Days", es:"Días" },
-    "reports.workload.weeks": { pt:"Semanas", en:"Weeks", es:"Semanas" },
-    "reports.workload.months": { pt:"Meses", en:"Months", es:"Meses" },
-    "reports.workload.weekLabel": { pt:"Semana", en:"Week", es:"Semana" },
     "reports.evolution.title": { pt:"Evolução Mensal", en:"Monthly Evolution", es:"Evolución Mensual" },
     "reports.evolution.improvements": { pt:"Top 5 melhorias", en:"Top 5 improvements", es:"Top 5 mejoras" },
     "reports.evolution.declines": { pt:"Top 5 quedas", en:"Top 5 declines", es:"Top 5 caídas" },
@@ -3264,6 +3255,8 @@
     "reports.evolution.metric.closed": { pt:"Demandas fechadas", en:"Closed deals", es:"Demandas cerradas" },
     "reports.evolution.metric.completed": { pt:"Demandas concluídas", en:"Completed deals", es:"Demandas concluidas" },
     "reports.evolution.metric.hours": { pt:"Horas trabalhadas", en:"Hours worked", es:"Horas trabajadas" },
+    "reports.evolution.metric.margin": { pt:"Margem", en:"Margin", es:"Margen" },
+    "reports.evolution.metric.pending": { pt:"Pendências", en:"Pending", es:"Pendientes" },
     "reports.profitability.title": { pt:"Rentabilidade", en:"Profitability", es:"Rentabilidad" },
     "reports.profitability.sortDesc": { pt:"Mais rentáveis primeiro", en:"Most profitable first", es:"Más rentables primero" },
     "reports.profitability.sortAsc": { pt:"Menos rentáveis primeiro", en:"Least profitable first", es:"Menos rentables primero" },
@@ -6960,43 +6953,10 @@
     renderResumoFinanceiroRelatorios();
     renderRelFluxoFinanceiro();
     renderRelOpBars(s);
-    renderRelCargaTrabalho();
     renderRelEvolucaoMensal();
     renderRelRentabilidade();
     renderRelIndicadores();
     renderRelMercadoRegional();
-  }
-
-  /* ===== Carga de Trabalho — só os dias do período com mais horas
-     trabalhadas, ranking horizontal compacto (nome + barra + valor numa
-     única linha), reaproveitando heatIndiceDiario() (mesmo índice diário já
-     usado nos Heatmaps). Sem semanas/meses — o período selecionado já é o
-     filtro; top 8 pra manter altura fixa mesmo em meses cheios. */
-  const CARGA_TOP_N=8;
-  function calcularCargaTrabalho(){
-    const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
-    const indice=heatIndiceDiario();
-    const dias=Object.entries(indice)
-      .filter(([iso])=>mesesSet.has(iso.slice(0,7)) && indice[iso].horas>0)
-      .map(([iso,v])=>({label:fmtDataCurta(iso), horas:v.horas}))
-      .sort((a,b)=>b.horas-a.horas);
-    return dias.slice(0, CARGA_TOP_N);
-  }
-  function renderRelCargaTrabalho(){
-    const wrap=document.getElementById('rel-carga-dias');
-    if(!wrap) return;
-    const dias=calcularCargaTrabalho();
-    if(!dias.length){ wrap.innerHTML='<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>'; return; }
-    const max=dias[0].horas;
-    wrap.innerHTML=dias.map((l,i)=>{
-      const larguraPct=max>0?Math.round(l.horas/max*100):0;
-      return '<div class="rel-rank-row">'+
-        '<div class="rel-rank-name">'+escapeHtml(l.label)+'</div>'+
-        '<div class="rel-rank-bar-track"><div class="rel-rank-bar-fill" id="carga-bar-'+i+'" data-w="'+larguraPct+'"></div></div>'+
-        '<div class="rel-rank-val">'+l.horas.toFixed(1)+'h</div>'+
-      '</div>';
-    }).join('');
-    setTimeout(()=>{ dias.forEach((l,i)=>{ const el=document.getElementById('carga-bar-'+i); if(el) el.style.width=el.dataset.w+'%'; }); }, 60);
   }
 
   /* ===== Evolução Mensal — período atual vs período anterior equivalente
@@ -7029,6 +6989,10 @@
     acc.meta=METAS.receita; acc.limiteGastos=METAS.gastos;
     return acc;
   }
+  /* cada métrica carrega um "dir" (1 = subir é bom, -1 = subir é ruim) —
+     é isso que classifica melhoria vs queda, não o sinal bruto do %.
+     Ex.: Despesas subir é queda mesmo com pct positivo; Horas por evento
+     cair é melhoria mesmo com pct negativo. */
   function relMetricasEvolucao(){
     const rangeAtual=relRangeMeses();
     const rangeAnterior=relRangeAnterior(rangeAtual);
@@ -7041,40 +7005,54 @@
     const receitaHoraA = atual.horasEsteMes ? atual.recebido/atual.horasEsteMes : 0;
     const receitaHoraP = anterior.horasEsteMes ? anterior.recebido/anterior.horasEsteMes : 0;
     const lucroA=atual.recebido-atual.custos, lucroP=anterior.recebido-anterior.custos;
+    const margemA = atual.recebido>0 ? (atual.recebido-atual.custos)/atual.recebido*100 : 0;
+    const margemP = anterior.recebido>0 ? (anterior.recebido-anterior.custos)/anterior.recebido*100 : 0;
     const metrics=[
-      {label:t('reports.evolution.metric.revenue'), a:atual.recebido, p:anterior.recebido, fmt:fmtMoney},
-      {label:t('reports.evolution.metric.profit'), a:lucroA, p:lucroP, fmt:fmtMoney},
-      {label:t('reports.evolution.metric.expenses'), a:atual.custos, p:anterior.custos, fmt:fmtMoney},
-      {label:t('reports.evolution.metric.ticket'), a:ticketA, p:ticketP, fmt:fmtMoney},
-      {label:t('reports.evolution.metric.revenuePerHour'), a:receitaHoraA, p:receitaHoraP, fmt:v=>fmtMoney(v)+'/h'},
-      {label:t('reports.evolution.metric.hoursPerEvent'), a:horasEventoA, p:horasEventoP, fmt:v=>v.toFixed(1)+'h'},
-      {label:t('reports.evolution.metric.projects'), a:atual.totalJobsEsteMes, p:anterior.totalJobsEsteMes, fmt:v=>String(Math.round(v))},
-      {label:t('reports.evolution.metric.closed'), a:atual.fechadosPorDataEsteMes, p:anterior.fechadosPorDataEsteMes, fmt:v=>String(Math.round(v))},
-      {label:t('reports.evolution.metric.completed'), a:atual.entreguesPorDataEsteMes, p:anterior.entreguesPorDataEsteMes, fmt:v=>String(Math.round(v))},
-      {label:t('reports.evolution.metric.hours'), a:atual.horasEsteMes, p:anterior.horasEsteMes, fmt:v=>Math.round(v)+'h'},
+      {label:t('reports.evolution.metric.revenue'), a:atual.recebido, p:anterior.recebido, fmt:fmtMoney, dir:1},
+      {label:t('reports.evolution.metric.profit'), a:lucroA, p:lucroP, fmt:fmtMoney, dir:1},
+      {label:t('reports.evolution.metric.margin'), a:margemA, p:margemP, fmt:v=>Math.round(v)+'%', dir:1},
+      {label:t('reports.evolution.metric.expenses'), a:atual.custos, p:anterior.custos, fmt:fmtMoney, dir:-1},
+      {label:t('reports.evolution.metric.ticket'), a:ticketA, p:ticketP, fmt:fmtMoney, dir:1},
+      {label:t('reports.evolution.metric.revenuePerHour'), a:receitaHoraA, p:receitaHoraP, fmt:v=>fmtMoney(v)+'/h', dir:1},
+      {label:t('reports.evolution.metric.hoursPerEvent'), a:horasEventoA, p:horasEventoP, fmt:v=>v.toFixed(1)+'h', dir:-1},
+      {label:t('reports.evolution.metric.projects'), a:atual.totalJobsEsteMes, p:anterior.totalJobsEsteMes, fmt:v=>String(Math.round(v)), dir:1},
+      {label:t('reports.evolution.metric.closed'), a:atual.fechadosPorDataEsteMes, p:anterior.fechadosPorDataEsteMes, fmt:v=>String(Math.round(v)), dir:1},
+      {label:t('reports.evolution.metric.completed'), a:atual.entreguesPorDataEsteMes, p:anterior.entreguesPorDataEsteMes, fmt:v=>String(Math.round(v)), dir:1},
+      {label:t('reports.evolution.metric.pending'), a:atual.pendClienteEsteMes, p:anterior.pendClienteEsteMes, fmt:v=>String(Math.round(v)), dir:-1},
+      {label:t('reports.evolution.metric.hours'), a:atual.horasEsteMes, p:anterior.horasEsteMes, fmt:v=>Math.round(v)+'h', dir:1},
     ];
-    return metrics.filter(m=>!(!m.a && !m.p)).map(m=>({...m, pct:relPctVariacao(m.a, m.p||0)}));
+    return metrics.filter(m=>!(!m.a && !m.p)).map(m=>{
+      const pct=relPctVariacao(m.a, m.p||0);
+      return Object.assign({}, m, {pct, score:pct*m.dir});
+    });
   }
   /* duas colunas espelhadas, sempre 5 indicadores cada (o pool de
-     relMetricasEvolucao tem 10 métricas) — melhorias são as 5 com maior %,
-     quedas as 5 com menor %, cada uma ordenada da mais extrema pra menos
-     extrema dentro da própria coluna. Se houver menos de 10 métricas com
-     dado real no período, as colunas simplesmente mostram o que existe
+     relMetricasEvolucao tem 12 métricas) — melhorias são as 5 com maior
+     "score" (% já ajustado pelo significado da métrica), quedas as 5 com
+     menor score. A seta/percentual exibidos continuam sendo o valor bruto
+     (ex.: Horas por evento pode aparecer com ↓ mesmo estando na coluna de
+     melhorias — caiu de fato, e cair é bom nessa métrica); a cor (verde/
+     vermelho) segue a coluna, não o sinal bruto. Se houver menos de 12
+     métricas com dado real no período, as colunas mostram o que existe
      (sem inventar linha vazia). */
   function renderRelEvolucaoMensal(){
     const wrapUp=document.getElementById('rel-evolucao-melhorias'), wrapDown=document.getElementById('rel-evolucao-quedas');
     if(!wrapUp || !wrapDown) return;
-    const metrics=relMetricasEvolucao().sort((a,b)=>b.pct-a.pct);
+    const metrics=relMetricasEvolucao().sort((a,b)=>b.score-a.score);
     const melhorias=metrics.slice(0,5);
     const quedas=metrics.slice(-5).reverse();
-    const linhaUp=m=>'<div class="rel-evo-row"><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div><div class="rel-evo-pct '+(m.pct<0?'neg':'pos')+'">'+(m.pct<0?'↓':'↑')+' '+Math.abs(m.pct)+'%</div></div>';
-    const linhaDown=m=>'<div class="rel-evo-row"><div class="rel-evo-pct '+(m.pct<0?'neg':'pos')+'">'+(m.pct<0?'↓':'↑')+' '+Math.abs(m.pct)+'%</div><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div></div>';
+    const seta=m=>m.pct<0?'↓':'↑';
+    const linhaUp=m=>'<div class="rel-evo-row"><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div><div class="rel-evo-pct pos">'+seta(m)+' '+Math.abs(m.pct)+'%</div></div>';
+    const linhaDown=m=>'<div class="rel-evo-row"><div class="rel-evo-pct neg">'+seta(m)+' '+Math.abs(m.pct)+'%</div><div class="rel-evo-nv"><div class="rel-evo-name">'+escapeHtml(m.label)+'</div><div class="rel-evo-val">'+m.fmt(m.a)+'</div></div></div>';
     wrapUp.innerHTML = melhorias.length ? melhorias.map(linhaUp).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
     wrapDown.innerHTML = quedas.length ? quedas.map(linhaDown).join('') : '<p class="distfin-empty">'+t('reports.emptyPeriod')+'</p>';
   }
 
   /* ===== Rentabilidade — receita/hora por categoria de serviço no período,
      ordenação invertível (mais/menos rentáveis primeiro). ===== */
+  /* por SUBCATEGORIA (job.segmento — Casamento Religioso, Ensaio Feminino
+     etc.), não por categoria de mercado (Fotografia, Videografia) — o
+     nível granular é o que ajuda de fato na tomada de decisão. */
   function calcularRentabilidade(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
@@ -7082,12 +7060,12 @@
       const mm=(j.dateRaw||'').slice(0,7);
       if(!mesesSet.has(mm)) return;
       if(!j.value || !j.duracaoHoras) return;
-      const segId=classificarSegmentoJob(j);
-      if(!acc[segId]) acc[segId]={receita:0, horas:0};
-      acc[segId].receita+=j.value;
-      acc[segId].horas+=j.duracaoHoras;
+      const nome=(j.segmento||'').trim() || t('reports.distFin.uncategorized');
+      if(!acc[nome]) acc[nome]={receita:0, horas:0};
+      acc[nome].receita+=j.value;
+      acc[nome].horas+=j.duracaoHoras;
     });
-    return Object.keys(acc).map(id=>({ id, label:segmentoLabel(id), porHora: acc[id].horas>0 ? acc[id].receita/acc[id].horas : 0 }));
+    return Object.keys(acc).map(label=>({ label, porHora: acc[label].horas>0 ? acc[label].receita/acc[label].horas : 0 }));
   }
   /* duas colunas: mais rentáveis (esquerda, sempre nessa ordem, sem botão
      pra inverter) vs menos rentáveis (direita, pior primeiro) — até 5 cada,
