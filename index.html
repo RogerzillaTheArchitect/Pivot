@@ -766,22 +766,17 @@
         </div>
 
         <!-- Card: Distribuição Financeira — receita por segmento (verde) e
-             gastos por categoria (amarelo→laranja), cada um crescendo a
-             partir do eixo central, sem linha divisória desenhada — o centro
-             é só o eixo de alinhamento das duas colunas do grid. -->
+             gastos por categoria (amarelo→laranja), cada linha nasce no eixo
+             central do grid e cresce pra fora, em barras de "ticks" (blocos
+             fixos, não uma barra contínua). -->
         <div class="rel-card-header" data-t="reports.distFin.title">Distribuição Financeira</div>
-        <div class="card rel-card rel-card-body">
-          <div class="distfin-divider"></div>
-          <div class="distfin-cols">
-            <div class="distfin-col distfin-col-income">
-              <div class="distfin-col-title" data-t="reports.distFin.income">Receitas</div>
-              <div id="rel-distfin-receitas"></div>
-            </div>
-            <div class="distfin-col distfin-col-expenses">
-              <div class="distfin-col-title" data-t="reports.distFin.expenses">Gastos</div>
-              <div id="rel-distfin-gastos"></div>
-            </div>
+        <div class="card rel-card rel-card-body distfin-card">
+          <div class="distfin-heads">
+            <span class="distfin-head-inc" data-t="reports.distFin.income">Recebidos</span>
+            <span class="distfin-head-exp" data-t="reports.distFin.expenses">Despesas</span>
           </div>
+          <div class="distfin-rule-soft"></div>
+          <div class="distfin-rows" id="rel-distfin-rows"></div>
         </div>
 
         <!-- Card: Estatísticas Operacionais — spec exata: container técnico
@@ -3173,8 +3168,8 @@
     "reports.expenseCategoryPlaceholder": { pt:"Equipamentos, Marketing…", en:"Equipment, Marketing…", es:"Equipamiento, Marketing…" },
     // --- Distribuição Financeira ---
     "reports.distFin.title": { pt:"Distribuição Financeira", en:"Financial Distribution", es:"Distribución Financiera" },
-    "reports.distFin.income": { pt:"Receitas", en:"Income", es:"Ingresos" },
-    "reports.distFin.expenses": { pt:"Gastos", en:"Expenses", es:"Gastos" },
+    "reports.distFin.income": { pt:"Recebidos", en:"Received", es:"Recibidos" },
+    "reports.distFin.expenses": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "reports.distFin.emptyIncome": { pt:"Sem receita neste período.", en:"No income this period.", es:"Sin ingresos en este período." },
     "reports.distFin.emptyExpenses": { pt:"Sem gastos neste período.", en:"No expenses this period.", es:"Sin gastos en este período." },
     "reports.distFin.uncategorized": { pt:"Sem categoria", en:"Uncategorized", es:"Sin categoría" },
@@ -6435,54 +6430,53 @@
 
   /* ===== Distribuição Financeira — receitas por segmento (verde, mais
      escuro = maior) à esquerda e gastos por categoria (amarelo→laranja,
-     mais intenso = maior) à direita, ambos crescendo a partir do eixo
-     central, cada lado com sua própria normalização. Mesmo componente de
-     barra segmentada da Estatísticas Operacionais — segmentos retos,
-     cor sólida, sem gradiente. */
-  const DISTFIN_N_SEGMENTOS=14;
+     mais intenso = maior) à direita, ambos nascendo no eixo central de
+     cada linha e crescendo pra fora em barras de "ticks" (blocos fixos
+     com folga entre eles, não uma barra contínua). Layout/paleta exatos
+     do mockup de referência enviado pelo usuário — só os dados é que
+     vêm de calcularSegmentacaoFinanceira()/calcularGastosPorCategoria(). */
+  const DISTFIN_TICKS=16;
   const DISTFIN_MAX_LINHAS=5;
-  const DISTFIN_VERDES=['#33472E','#44603C','#5E7A52','#7FA070','#A8C39C'];
-  const DISTFIN_LARANJAS=['#C25A26','#CF7530','#DC9138','#E7AC42','#F0C650'];
+  function distfinTone(i){ return Math.min(i,4)+1; }
+  function distfinBarHtml(ratio, lado, tone, tipo){
+    const cheios=Math.max(1, Math.round(ratio*DISTFIN_TICKS));
+    const w='calc((100% - '+((DISTFIN_TICKS-1)*2)+'px) / '+DISTFIN_TICKS+')';
+    const cls='distfin-b-'+tipo+'-'+tone;
+    let ticks='';
+    for(let i=0;i<cheios;i++) ticks+='<span class="distfin-tick '+cls+'" style="width:'+w+'"></span>';
+    return '<div class="distfin-bar distfin-bar-'+lado+'">'+ticks+'</div>';
+  }
   function renderRelDistribuicaoFinanceira(){
-    const wrapReceitas=document.getElementById('rel-distfin-receitas');
-    const wrapGastos=document.getElementById('rel-distfin-gastos');
-    if(!wrapReceitas || !wrapGastos) return;
+    const wrap=document.getElementById('rel-distfin-rows');
+    if(!wrap) return;
     const receitas=calcularSegmentacaoFinanceira().linhas.slice(0, DISTFIN_MAX_LINHAS);
     const gastos=calcularGastosPorCategoria().slice(0, DISTFIN_MAX_LINHAS);
-    if(!receitas.length){
-      wrapReceitas.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyIncome')+'</p>';
-    } else {
-      const max=receitas[0].receita;
-      wrapReceitas.innerHTML=receitas.map((l,i)=>{
-        const cheios = max>0 ? Math.round(l.receita/max*DISTFIN_N_SEGMENTOS) : 0;
-        const cor=DISTFIN_VERDES[Math.min(i,DISTFIN_VERDES.length-1)];
-        const segs=Array.from({length:DISTFIN_N_SEGMENTOS},(_,s)=>
-          '<span class="distfin-seg'+(s>=DISTFIN_N_SEGMENTOS-cheios?' on':'')+'"'+(s>=DISTFIN_N_SEGMENTOS-cheios?' style="background:'+cor+'"':'')+'></span>'
-        ).join('');
-        return '<div class="distfin-row">'+
-          '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-          '<div class="distfin-value" style="color:'+cor+'">'+fmtMoney(l.receita)+'</div>'+
-          '<div class="distfin-track">'+segs+'</div>'+
-        '</div>';
-      }).join('');
+    if(!receitas.length && !gastos.length){
+      wrap.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyIncome')+'</p>';
+      return;
     }
-    if(!gastos.length){
-      wrapGastos.innerHTML='<p class="distfin-empty">'+t('reports.distFin.emptyExpenses')+'</p>';
-    } else {
-      const max=gastos[0].valor;
-      wrapGastos.innerHTML=gastos.map((l,i)=>{
-        const cheios = max>0 ? Math.round(l.valor/max*DISTFIN_N_SEGMENTOS) : 0;
-        const cor=DISTFIN_LARANJAS[Math.min(i,DISTFIN_LARANJAS.length-1)];
-        const segs=Array.from({length:DISTFIN_N_SEGMENTOS},(_,s)=>
-          '<span class="distfin-seg'+(s<cheios?' on':'')+'"'+(s<cheios?' style="background:'+cor+'"':'')+'></span>'
-        ).join('');
-        return '<div class="distfin-row">'+
-          '<div class="distfin-name">'+escapeHtml(l.label)+'</div>'+
-          '<div class="distfin-value" style="color:'+cor+'">'+fmtMoney(l.valor)+'</div>'+
-          '<div class="distfin-track">'+segs+'</div>'+
-        '</div>';
-      }).join('');
+    const maxI=receitas.length?receitas[0].receita:0;
+    const maxE=gastos.length?gastos[0].valor:0;
+    const linhas=Math.max(receitas.length, gastos.length);
+    let html='';
+    for(let i=0;i<linhas;i++){
+      const inc=receitas[i], exp=gastos[i];
+      const iT=distfinTone(i), eT=distfinTone(i);
+      html+='<div class="distfin-row">'+
+        '<div class="distfin-lbl distfin-lbl-l">'+
+          (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
+          '<div class="distfin-val distfin-c-i-'+iT+'">'+fmtMoney(inc.receita)+'</div>'):'')+
+        '</div>'+
+        '<div>'+(inc?distfinBarHtml(maxI>0?inc.receita/maxI:0,'l',iT,'i'):'')+'</div>'+
+        '<div aria-hidden="true"></div>'+
+        '<div>'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r',eT,'e'):'')+'</div>'+
+        '<div class="distfin-lbl distfin-lbl-r">'+
+          (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
+          '<div class="distfin-val distfin-c-e-'+eT+'">'+fmtMoney(exp.valor)+'</div>'):'')+
+        '</div>'+
+      '</div>';
     }
+    wrap.innerHTML=html;
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
