@@ -836,7 +836,7 @@
             </span>
           </div>
           <div class="distfin-rule-soft"></div>
-          <div class="rel-split" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
+          <div class="distfin-rows" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
         </div>
 
         <!-- Card: Operacional — reaproveita EXATAMENTE o mesmo componente
@@ -6610,24 +6610,30 @@
     }
     return html;
   }
-  /* barra no MESMO estilo do card Operacional (.track/.segment, 20 blocos,
-     reaproveitado tal e qual — só a cor muda via classe .green). */
-  function opsBarHtml(ratio, corClasse){
-    const N=20;
-    const r=Math.max(0, Math.min(1, ratio||0));
-    const cheios=Math.floor(r*N);
-    let segs='';
-    for(let i=0;i<N;i++) segs+='<span class="segment'+(i<cheios?' is-filled':'')+'"></span>';
-    return '<div class="track'+(corClasse?(' '+corClasse):'')+'" style="--fill:'+Math.round(r*100)+'">'+segs+'</div>';
-  }
   const REL_SPLIT_N=5;
-  /* Card Fluxo — só análise: Top 5 subcategorias que mais faturaram (verde,
-     esquerda, calcularReceitaPorSubcategoria/job.segmento) vs Top 5
-     subcategorias com maior gasto (laranja, direita — a única categorização
-     real que existe pra despesas hoje é custosData.categoria, não existe um
-     2º nível pra despesas, então usamos essa mesma, sem inventar dado novo).
-     Linhas NÃO clicáveis — só os títulos das colunas abrem o gerenciamento
-     (abrirGerenciamentoFluxo). */
+  /* barra do card Fluxo — mesmos blocos retangulares/espaçamento/cantos do
+     card Operacional (.segment), só que SEM segmentos vazios: a barra é
+     composta só pelos blocos preenchidos, cujo número varia com o valor
+     (proporcional ao maior item do próprio lado). Nasce no eixo central
+     (justify-content:flex-end no lado esquerdo, flex-start no direito — ver
+     .distfin-bar-l/r) e cresce pra fora, nunca em direção ao centro. */
+  function distfinBarHtml(ratio, lado, corClasse){
+    const N=20;
+    const cheios=Math.max(1, Math.round((ratio||0)*N));
+    let segs='';
+    for(let i=0;i<cheios;i++) segs+='<span class="distfin-seg2 '+corClasse+'"></span>';
+    return '<div class="distfin-bar2 distfin-bar2-'+lado+'">'+segs+'</div>';
+  }
+  /* Card Fluxo — gráfico espelhado, exatamente a referência visual da
+     Distribuição Financeira: eixo vertical fixo no centro, Recebidos
+     (verde) cresce do centro pra esquerda, Despesas (laranja) cresce do
+     centro pra direita. Top 5 subcategorias que mais faturaram
+     (calcularReceitaPorSubcategoria/job.segmento) vs Top 5 subcategorias
+     com maior gasto (calcularGastosPorCategoria — única categorização real
+     que existe pra despesas hoje é custosData.categoria, sem inventar dado
+     novo). Sempre 5 linhas fixas — preenche com "Sem dados" se faltar.
+     Linhas NÃO clicáveis — só os títulos das colunas (com seta) abrem o
+     gerenciamento (abrirGerenciamentoFluxo). */
   function renderRelFluxoGrid(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
@@ -6635,11 +6641,26 @@
     const gastos=calcularGastosPorCategoria().slice(0, REL_SPLIT_N);
     const maxI=receitas.length?receitas[0].valor:0;
     const maxE=gastos.length?gastos[0].valor:0;
-    const celEsq=l=>'<div class="rel-split-cell l"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div>'+
-      '<div class="rel-mrow-value">'+fmtMoney(l.valor)+'</div>'+opsBarHtml(maxI>0?l.valor/maxI:0,'green')+'</div>';
-    const celDir=l=>'<div class="rel-split-cell r"><div class="rel-mrow-name">'+escapeHtml(l.label)+'</div>'+
-      '<div class="rel-mrow-value">'+fmtMoney(l.valor)+'</div>'+opsBarHtml(maxE>0?l.valor/maxE:0,'')+'</div>';
-    wrap.innerHTML=relSplitBuild(REL_SPLIT_N, receitas, gastos, celEsq, celDir);
+    let html='';
+    for(let i=0;i<REL_SPLIT_N;i++){
+      const inc=receitas[i], exp=gastos[i];
+      html+='<div class="distfin-row">'+
+        '<div class="distfin-lbl distfin-lbl-l">'+
+          (inc?('<div class="distfin-name">'+escapeHtml(inc.label)+'</div>'+
+          '<div class="distfin-val distfin-c-inc">'+fmtMoney(inc.valor)+'</div>')
+          :('<div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div>'))+
+        '</div>'+
+        '<div class="distfin-bar-col">'+(inc?distfinBarHtml(maxI>0?inc.valor/maxI:0,'l','green'):'')+'</div>'+
+        '<div class="distfin-vline"></div>'+
+        '<div class="distfin-bar-col">'+(exp?distfinBarHtml(maxE>0?exp.valor/maxE:0,'r','orange'):'')+'</div>'+
+        '<div class="distfin-lbl distfin-lbl-r">'+
+          (exp?('<div class="distfin-name">'+escapeHtml(exp.label)+'</div>'+
+          '<div class="distfin-val distfin-c-exp">'+fmtMoney(exp.valor)+'</div>')
+          :('<div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div>'))+
+        '</div>'+
+      '</div>';
+    }
+    wrap.innerHTML=html;
   }
 
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
