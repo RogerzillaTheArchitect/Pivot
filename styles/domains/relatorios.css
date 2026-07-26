@@ -84,23 +84,19 @@
   #exp-lista .radar-card-wrap:first-child .card.radar-card,#rec-lista .radar-card-wrap:first-child .card.radar-card{border-top:none}
   #exp-lista .card.radar-card,#rec-lista .card.radar-card{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px}
   #exp-lista .card.radar-card::before,#rec-lista .card.radar-card::before{content:none}
-  /* Despesas: título em cima, categoria/data embaixo, valor à direita */
-  .desp-item{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .desp-item-body{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .desp-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .desp-item-cat{font-size:11.5px;color:var(--neutral)}
-  .desp-item-valor{flex:none;font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;color:var(--ink)}
-  /* Receitas: título em cima; projeto (esq) / data (centro) / valor (dir) embaixo */
-  .rec-item{display:flex;flex-direction:column;gap:5px}
-  .rec-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rec-item-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;gap:10px}
-  .rec-item-proj{font-size:11.5px;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-  .rec-item-data{font-size:11.5px;color:var(--neutral);white-space:nowrap}
-  .rec-item-valor{font-family:var(--font-numeric),inherit;font-weight:600;font-size:13.5px;color:var(--ink);white-space:nowrap}
+  /* Despesas/Receitas — mesmo grid 2x2 nos dois: título (canto sup. esq.) /
+     data (canto sup. dir.) na linha de cima; categoria — ou nome do
+     cliente, no caso de um pagamento automático de contrato — (canto inf.
+     esq.) / valor (canto inf. dir.) na linha de baixo. */
+  .fin-item{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:3px;align-items:baseline}
+  .fin-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:1}
+  .fin-item-date{font-size:11.5px;color:var(--neutral);white-space:nowrap;text-align:right;grid-column:2;grid-row:1}
+  .fin-item-sub{font-size:11.5px;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:2}
+  .fin-item-valor{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;text-align:right;grid-column:2;grid-row:2}
   /* lançamento automático (parcela de contrato) — sem swipe, levemente
      recuado visualmente pra ler como "só leitura". */
-  .rec-item-auto{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px;opacity:.72}
-  .rec-item-auto::before{content:none}
+  .fin-item-auto{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px;opacity:.72}
+  .fin-item-auto::before{content:none}
 
   /* Seletor avançado de período (modal aberto ao tocar no mês/ano) */
   .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--ink)}
@@ -154,13 +150,17 @@
      preenchimento progressivo), só recolorida (.green pro Recebidos,
      laranja nativo pro Despesas) — mesmo padrão visual pros dois lados. */
   .distfin-empty,.fluxo-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
-  /* Card Fluxo — lista simples de lançamentos (recebidos/despesas
-     misturados, mais recentes primeiro): título em cima, categoria embaixo,
-     valor à direita esticado pra ocupar a altura das duas linhas. */
+  /* Card Fluxo — lista de lançamentos, com Recebidos e Despesas em seções
+     separadas (nunca intercalados por data) — cada item: título em cima,
+     categoria embaixo, valor à direita esticado pra ocupar a altura das
+     duas linhas. */
   .fluxo-rows{display:flex;flex-direction:column}
+  .fluxo-group-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--label-out);margin:16px 0 4px}
+  .fluxo-group-label:first-child{margin-top:2px}
   .fluxo-item{display:flex;align-items:stretch;justify-content:space-between;gap:12px;
     padding:11px 0;border-top:1px solid var(--line-soft)}
-  .fluxo-item:first-child{border-top:none;padding-top:2px}
+  .fluxo-group-label + .fluxo-item{border-top:none;padding-top:2px}
   .fluxo-item-body{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0}
   .fluxo-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .fluxo-item-cat{font-size:12px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
