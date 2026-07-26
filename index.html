@@ -292,12 +292,12 @@
     <div class="login-logo"><span class="pivot-logo-full" role="img" aria-label="Pivot"></span></div>
 
     <div id="login-form-entrar">
-      <p class="login-tag" id="lbl-login-tag" data-t="login.title"><span data-t="login.title">Entra para continuar</span></p>
+      <p class="login-tag" id="lbl-login-tag" data-t="login.title">Your contacts, into contracts</p>
       <div class="field"><label data-t="login.email">Email</label><input id="login-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
       <div class="field"><label data-t="login.password">Password</label><input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
       <p class="field-err" id="login-err" style="display:none"><span>Preenche o email e a password.</span></p>
       <button class="btn primary" style="width:100%" onclick="entrarNaApp()"><span data-t="login.submit">Entrar</span></button>
-      <p class="login-alt" style="margin-top:-6px"><span class="inline-link" onclick="abrirResetPassword()" data-t="login.forgotPassword">Esqueceste a password?</span></p>
+      <p class="login-alt"><span class="inline-link" onclick="abrirResetPassword()" data-t="login.forgotPassword">Redefinir a senha</span></p>
       <div class="login-divider"><span data-t="login.or">ou</span></div>
       <button class="btn soft" style="width:100%" onclick="pivotSignInGoogle()">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.94z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
@@ -332,7 +332,7 @@
 
     <div id="login-form-reset" style="display:none">
       <div id="reset-form-fields">
-        <p class="login-tag" data-t="login.forgotPassword">Esqueceste a password?</p>
+        <p class="login-tag" data-t="login.forgotPassword">Redefinir a senha</p>
         <div class="field"><label data-t="login.email">Email</label><input id="reset-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
         <p class="field-err" id="reset-err" style="display:none"><span data-t="login.error">Preenche o email e a password.</span></p>
         <button class="btn primary" style="width:100%" id="reset-btn" onclick="enviarResetPassword()"><span data-t="login.sendResetLink">Enviar link</span></button>
@@ -346,7 +346,7 @@
     </div>
 
     <div id="login-form-newpass" style="display:none">
-      <p class="login-tag" data-t="login.forgotPassword">Esqueceste a password?</p>
+      <p class="login-tag" data-t="login.forgotPassword">Redefinir a senha</p>
       <div class="field"><label data-t="login.password">Password</label><input id="newpass-1" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
       <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="newpass-2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
       <p class="field-err" id="newpass-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
@@ -1447,7 +1447,15 @@
     return data;
   }
   async function pivotSignInGoogle(){
-    await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } });
+    /* signInWithOAuth não rejeita a promise em caso de erro — devolve
+       {data,error}. Sem checar isso, uma falha (ex.: provedor Google não
+       ativado no projeto Supabase, ou redirect URL fora da allowlist)
+       ficava completamente muda: nada acontecia e ninguém via porquê. */
+    const { error } = await sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo: window.location.origin } });
+    if (error) {
+      console.error('Erro no login com Google:', error);
+      showToast(t('login.googleError')+(error.message?(': '+error.message):''));
+    }
   }
   async function pivotSignOut(){
     await sb.auth.signOut();
@@ -2866,7 +2874,8 @@
     "login.error": { pt:"Preenche o email e a password.", en:"Please enter your email and password.", es:"Introduce tu email y contraseña." },
     "login.google": { pt:"Continuar com Google", en:"Continue with Google", es:"Continuar con Google" },
     "login.googleSignup": { pt:"Criar conta com Google", en:"Sign up with Google", es:"Crear cuenta con Google" },
-    "login.forgotPassword": { pt:"Esqueceste a password?", en:"Forgot password?", es:"¿Olvidaste tu contraseña?" },
+    "login.googleError": { pt:"Não foi possível continuar com o Google", en:"Couldn't continue with Google", es:"No se pudo continuar con Google" },
+    "login.forgotPassword": { pt:"Redefinir a senha", en:"Reset password", es:"Restablecer contraseña" },
     "login.resetSent": { pt:"Se existir uma conta com este email, enviámos um link para redefinires a password.", en:"If an account exists for this email, we've sent a link to reset your password.", es:"Si existe una cuenta con este email, enviamos un enlace para restablecer tu contraseña." },
     "login.resetEmailNeeded": { pt:"Escreve o teu email no campo acima primeiro.", en:"Enter your email in the field above first.", es:"Escribe tu email en el campo de arriba primero." },
     "login.sendResetLink": { pt:"Enviar link", en:"Send link", es:"Enviar enlace" },
@@ -6882,27 +6891,34 @@
   /* Card Fluxo — lista simples de lançamentos (não mais o gráfico de barras
      espelhado): cada item mostra título (linha de cima), categoria (linha de
      baixo) e o valor à direita ocupando visualmente a altura das duas linhas.
-     Mostra os 10 lançamentos mais recentes do período (relFluxoPeriodo() já
-     devolve ordenado por data desc, misturando recebidos e despesas). */
+     Recebidos e despesas NÃO ficam misturados/intercalados por data — cada
+     grupo tem sua própria seção (Recebidos primeiro, depois Despesas), até
+     5 lançamentos mais recentes cada. */
+  function fluxoItemHtml(it){
+    const tipoClasse = it.tipo==='recebido' ? 'in' : 'out';
+    const sinal = it.tipo==='recebido' ? '+' : '−';
+    return '<div class="fluxo-item">'+
+      '<div class="fluxo-item-body">'+
+        '<div class="fluxo-item-title">'+escapeHtml(it.desc||'')+'</div>'+
+        '<div class="fluxo-item-cat">'+escapeHtml(it.categoria||'')+'</div>'+
+      '</div>'+
+      '<div class="fluxo-item-valor '+tipoClasse+'">'+sinal+fmtMoney(it.valor)+'</div>'+
+    '</div>';
+  }
   function renderRelFluxoFinanceiro(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
-    const itens=relFluxoPeriodo().slice(0,10);
-    if(!itens.length){
+    const todos=relFluxoPeriodo();
+    const recebidos=todos.filter(i=>i.tipo==='recebido').slice(0,5);
+    const despesas=todos.filter(i=>i.tipo==='despesa').slice(0,5);
+    if(!recebidos.length && !despesas.length){
       wrap.innerHTML='<div class="fluxo-empty">'+t('reports.noData')+'</div>';
       return;
     }
-    wrap.innerHTML=itens.map(it=>{
-      const tipoClasse = it.tipo==='recebido' ? 'in' : 'out';
-      const sinal = it.tipo==='recebido' ? '+' : '−';
-      return '<div class="fluxo-item">'+
-        '<div class="fluxo-item-body">'+
-          '<div class="fluxo-item-title">'+escapeHtml(it.desc||'')+'</div>'+
-          '<div class="fluxo-item-cat">'+escapeHtml(it.categoria||'')+'</div>'+
-        '</div>'+
-        '<div class="fluxo-item-valor '+tipoClasse+'">'+sinal+fmtMoney(it.valor)+'</div>'+
-      '</div>';
-    }).join('');
+    let html='';
+    if(recebidos.length) html+='<div class="fluxo-group-label">'+t('reports.distFin.income')+'</div>'+recebidos.map(fluxoItemHtml).join('');
+    if(despesas.length) html+='<div class="fluxo-group-label">'+t('reports.distFin.expenses')+'</div>'+despesas.map(fluxoItemHtml).join('');
+    wrap.innerHTML=html;
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
@@ -7660,9 +7676,9 @@
   function editarReceitaManual(id){
     const r=receitasData[id]; if(!r) return;
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="rec-edit-nome" value="'+escapeHtml(r.descricao)+'"></div>'+
-      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-edit-valor" type="number" min="0" inputmode="decimal" value="'+r.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="rec-edit-data" type="date" value="'+(r.data||'')+'"></div>'+
       '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-edit-categoria', RECEITA_CATEGORIAS_SUGERIDAS, r.categoria||'')+'</div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-edit-valor" type="number" min="0" inputmode="decimal" value="'+r.valor+'"></div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
     openInfo(t('home.entryIncome'), html, abrirReceitas);
   }
@@ -7700,9 +7716,9 @@
   function abrirFormNovaDespesa(){
     const hoje=new Date().toISOString().slice(0,10);
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
-      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="exp-data" type="date" value="'+hoje+'"></div>'+
       '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-categoria', DESPESA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>';
     openInfo(t('reports.addExpense'), html, abrirDespesas);
   }
@@ -7728,12 +7744,11 @@
       '<div class="radar-card-wrap">'+
         '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
         '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
-        '<div class="card radar-card desp-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarDespesa(\''+c.id+'\')">'+
-          '<div class="desp-item-body">'+
-            '<div class="desp-item-title">'+escapeHtml(c.descricao)+'</div>'+
-            '<div class="desp-item-cat">'+(c.categoria?escapeHtml(c.categoria):'')+(c.data?(' · '+c.data.split('-').reverse().join('/')):'')+'</div>'+
-          '</div>'+
-          '<div class="desp-item-valor">'+fmtMoney(c.valor)+'</div>'+
+        '<div class="card radar-card fin-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarDespesa(\''+c.id+'\')">'+
+          '<div class="fin-item-title">'+escapeHtml(c.descricao)+'</div>'+
+          '<div class="fin-item-date">'+(c.data?c.data.split('-').reverse().join('/'):'')+'</div>'+
+          '<div class="fin-item-sub">'+(c.categoria?escapeHtml(c.categoria):'')+'</div>'+
+          '<div class="fin-item-valor">'+fmtMoney(c.valor)+'</div>'+
         '</div>'+
       '</div>'
     ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>';
@@ -7742,9 +7757,9 @@
   function editarDespesa(id){
     const c=custosData[id]; if(!c) return;
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-edit-nome" value="'+escapeHtml(c.descricao)+'"></div>'+
-      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-edit-valor" type="number" min="0" inputmode="decimal" value="'+c.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="exp-edit-data" type="date" value="'+(c.data||'')+'"></div>'+
       '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-edit-categoria', DESPESA_CATEGORIAS_SUGERIDAS, c.categoria||'')+'</div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-edit-valor" type="number" min="0" inputmode="decimal" value="'+c.valor+'"></div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoDespesa(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
     openInfo(t('reports.editExpense'), html, abrirDespesas);
   }
@@ -7775,9 +7790,9 @@
   function abrirFormNovaReceita(){
     const hoje=new Date().toISOString().slice(0,10);
     const html='<div class="field"><label>'+t('field.title')+'</label><input id="rec-nome" placeholder="Freelance extra, venda…"></div>'+
-      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')guardarReceitaNova()"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="rec-data" type="date" value="'+hoje+'"></div>'+
       '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-categoria', RECEITA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')guardarReceitaNova()"></div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarReceitaNova()">'+t('reports.addIncome')+'</button>';
     openInfo(t('reports.addIncome'), html, abrirReceitas);
   }
@@ -7811,20 +7826,18 @@
     if(!itens.length){ wrap.innerHTML='<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>'; return; }
     wrap.innerHTML=itens.map(it=>{
       const dataFmt=it.data?it.data.split('-').reverse().join('/'):'';
-      const corpo='<div class="rec-item-title">'+escapeHtml(it.desc)+'</div>'+
-          '<div class="rec-item-row">'+
-            '<span class="rec-item-proj">'+escapeHtml(it.projeto||'')+'</span>'+
-            '<span class="rec-item-data">'+dataFmt+'</span>'+
-            '<span class="rec-item-valor">'+fmtMoney(it.valor)+'</span>'+
-          '</div>';
+      const corpo='<div class="fin-item-title">'+escapeHtml(it.desc)+'</div>'+
+          '<div class="fin-item-date">'+dataFmt+'</div>'+
+          '<div class="fin-item-sub">'+escapeHtml(it.projeto||'')+'</div>'+
+          '<div class="fin-item-valor">'+fmtMoney(it.valor)+'</div>';
       if(!it.manual){
         /* lançamento automático (parcela de contrato) — sem swipe, sem editar/excluir */
-        return '<div class="card rec-item rec-item-auto">'+corpo+'</div>';
+        return '<div class="card fin-item fin-item-auto">'+corpo+'</div>';
       }
       return '<div class="radar-card-wrap">'+
         '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
         '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
-        '<div class="card radar-card rec-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarReceitaManual(\''+it.id+'\')">'+corpo+'</div>'+
+        '<div class="card radar-card fin-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarReceitaManual(\''+it.id+'\')">'+corpo+'</div>'+
       '</div>';
     }).join('');
     ativarSwipeRadar();
