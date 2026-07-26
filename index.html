@@ -960,7 +960,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
           <input placeholder="Cliente, email, local, data, trabalho…" id="searchin" oninput="fakeSearch()" data-t-placeholder="search.inputHint">
         </div>
-        <div class="res" id="searchres" data-t="search.placeholder2">Pesquisa por cliente, local, data ou trabalho.</div>
+        <div class="res" id="searchres" style="display:none"></div>
+        <div id="search-recentes"></div>
         <div id="searchhits"></div>
       </section>
 
@@ -3866,6 +3867,7 @@
     if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
+    if(v==='pesquisa'){ const si=document.getElementById('searchin'); if(si) si.value=''; fakeSearch(); }
   }
   /* Meta de faturamento e limite de gastos passam a ter histórico por mês
      (chave 'AAAA-MM'), não mais um único valor global — cada mês guarda o
@@ -12526,10 +12528,10 @@
   let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false} } };
   const METODOS_PAGAMENTO_META=[
-    ['revolut','payment.method.revolut','@utilizador', '<path d="M7 3h6a4.5 4.5 0 0 1 0 9h-2.5l5 9h-3.3l-5-9H9v9H7z"/>'],
-    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', '<path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"/>'],
-    ['mbway','payment.method.mbway','+351 900 000 000', '<rect x="7" y="2" width="10" height="20" rx="2.2"/><path d="M11 18h2"/>'],
-    ['paypal','payment.method.paypal','paypal.me/utilizador', '<path d="M8 4h6a4 4 0 0 1 0 8h-4l-1 8H6z"/><path d="M10 8h4"/>']
+    ['revolut','payment.method.revolut','@utilizador', 'https://api.iconify.design/simple-icons:revolut.svg'],
+    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', 'https://api.iconify.design/mdi:bank.svg'],
+    ['mbway','payment.method.mbway','+351 900 000 000', 'https://api.iconify.design/mdi:cellphone-android.svg'],
+    ['paypal','payment.method.paypal','paypal.me/utilizador', 'https://api.iconify.design/ic:baseline-paypal.svg']
   ];
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
@@ -13416,7 +13418,7 @@
     const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone])=>{
       const m=mp[key];
       return '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:14px 2px">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10)"><span style="width:16px;height:16px;display:inline-block;background-color:var(--brand);mask-image:url('+icone+');-webkit-mask-image:url('+icone+');mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span></span><div class="nm">'+t(labelKey)+'</div></div>'+
         '<div class="toggle'+(m.ativo?' on':'')+'" onclick="this.classList.toggle(\'on\')" id="mp-ativo-'+key+'"><div class="kn"></div></div></div>'+
         '<div class="field" style="margin-bottom:0"><input id="mp-valor-'+key+'" placeholder="'+placeholder+'" value="'+escapeHtml(m.valor||'')+'"></div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)"><input type="checkbox" id="mp-padrao-'+key+'" '+(m.padrao?'checked':'')+' style="accent-color:var(--brand)"> '+t('payment.method.sendByDefault')+'</label>'+
@@ -13811,11 +13813,55 @@
     openSheet(); pushPanel('trabalho'); trabalhoGoto(1);
     setTimeout(()=>{ const el=document.getElementById('tw-cliente'); if(el) el.value=nome; }, 80);
   }
+  /* Histórico de pesquisas — últimas 10, mais recente primeiro, com botão
+     de remoção individual. Persistido igual ao resto dos dados da conta. */
+  let pesquisasRecentes=[];
+  function savePesquisasRecentes(){ savePersisted('pivot-pesquisas-recentes', ()=>pesquisasRecentes); }
+  async function loadPesquisasRecentes(){ await loadPersisted('pivot-pesquisas-recentes', d=>{ pesquisasRecentes=Array.isArray(d)?d:[]; }); }
+  function registrarPesquisaRecente(q){
+    q=(q||'').trim();
+    if(!q) return;
+    pesquisasRecentes=[q].concat(pesquisasRecentes.filter(p=>p.toLowerCase()!==q.toLowerCase())).slice(0,10);
+    savePesquisasRecentes();
+  }
+  function removerPesquisaRecente(q){
+    pesquisasRecentes=pesquisasRecentes.filter(p=>p!==q);
+    savePesquisasRecentes();
+    renderPesquisasRecentes();
+  }
+  function refazerPesquisaRecente(q){
+    document.getElementById('searchin').value=q;
+    fakeSearch();
+  }
+  function renderPesquisasRecentes(){
+    const wrap=document.getElementById('search-recentes');
+    if(!wrap) return;
+    if(!pesquisasRecentes.length){ wrap.innerHTML=''; return; }
+    wrap.innerHTML=pesquisasRecentes.map(q=>{
+      const qEsc=escapeHtml(q).replace(/'/g,"\\'");
+      return '<div class="search-recent-item" onclick="refazerPesquisaRecente(\''+qEsc+'\')">'+
+        '<span class="search-recent-txt">'+escapeHtml(q)+'</span>'+
+        '<span class="search-recent-x" onclick="event.stopPropagation();removerPesquisaRecente(\''+qEsc+'\')">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
+        '</span>'+
+      '</div>';
+    }).join('');
+  }
   function fakeSearch(){
-    const q=document.getElementById('searchin').value.toLowerCase().trim();
+    const qRaw=document.getElementById('searchin').value.trim();
+    const q=qRaw.toLowerCase();
     const res=document.getElementById('searchres');
     const box=document.getElementById('searchhits');
-    if(!q){res.textContent=t('search.placeholder2');box.innerHTML='';return}
+    const recentes=document.getElementById('search-recentes');
+    if(!q){
+      res.style.display='none';
+      box.innerHTML='';
+      if(recentes) recentes.style.display='block';
+      renderPesquisasRecentes();
+      return;
+    }
+    if(recentes) recentes.style.display='none';
+    res.style.display='block';
     const jobMatches=jobsVisiveis().filter(j=>
       (j.client+' '+j.typeLabel+' '+(j.local||'')+' '+(j.date||'')).toLowerCase().includes(q)
     ).map(j=>'<div class="job" onclick="openJob(\''+j.id+'\')"><div class="job-top"><div class="job-top-l">'+avatarHtml(j.client,30)+
@@ -13825,8 +13871,13 @@
       (c.nome+' '+(c.email||'')+' '+(c.empresa||'')).toLowerCase().includes(q)
     ).map(c=>'<div class="pick-row" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div class="nm">'+escapeHtml(c.nome)+'</div><div class="sub">'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
     const total=jobMatches.length+clienteMatches.length;
-    res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+q+'"';
+    res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+qRaw+'"';
     box.innerHTML = jobMatches.join('') + clienteMatches.join('');
+    /* só entra no histórico depois de uma pausa na digitação (debounce) —
+       nunca a cada tecla, senão o histórico enchia de buscas parciais
+       ("c", "ca", "cas"...) em vez da busca que a pessoa quis fazer. */
+    clearTimeout(window.__buscaDebounce);
+    window.__buscaDebounce=setTimeout(()=>registrarPesquisaRecente(qRaw), 900);
   }
 
   document.addEventListener('keydown', e=>{
@@ -14286,7 +14337,7 @@
     await loadEquipaData();
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadLembretesData(), loadListasData(), loadCustosData(), loadReceitasData(),
-      loadPerfilData(), loadMetas(),
+      loadPerfilData(), loadMetas(), loadPesquisasRecentes(),
       loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData(), loadCatalogoPersonalizado()
     ]);
     renderMonthTicker();
