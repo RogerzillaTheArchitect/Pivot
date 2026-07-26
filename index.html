@@ -482,12 +482,12 @@
             </div>
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="mrl-extras">0 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
               </div>
             </div>
           </div>
@@ -802,12 +802,12 @@
             </div>
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
+                <div class="mrl-item" onclick="abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="rf-mrl-esperado">3.200 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="rf-mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="rf-mrl-extras">0 €</b></div>
                 <div class="mrl-item" onclick="abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="rf-mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="rf-mrl-teto">500 €</b></div>
+                <div class="mrl-item" onclick="abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="rf-mrl-teto">500 €</b></div>
               </div>
             </div>
           </div>
@@ -816,8 +816,8 @@
         <!-- 4 botões de acesso às listas completas (add/editar/excluir),
              sem gráfico nenhum nessas telas — só o essencial de navegação. -->
         <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span data-t="reports.finBtn.limites">Limites</span></button>
           <button class="btn soft" onclick="abrirReceitas()"><span data-t="reports.finBtn.receitas">Receitas</span></button>
           <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
@@ -3857,23 +3857,68 @@
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
   }
-  let METAS={receita:0, gastos:0};
-  function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
+  /* Meta de faturamento e limite de gastos passam a ter histórico por mês
+     (chave 'AAAA-MM'), não mais um único valor global — cada mês guarda o
+     valor que esteve em vigor nele. O mês corrente é sempre o único
+     editável: as duas telas de definição (abrirDefinirMetaReceita/
+     abrirDefinirLimiteGastos) só leem/gravam a chave do mês atual, nunca
+     uma chave passada — isso já é suficiente pra "travar" meses anteriores,
+     sem precisar de nenhum mecanismo extra de bloqueio: uma vez que o mês
+     vira, a chave antiga simplesmente não é mais tocada por nada. Um mês
+     sem valor definido (ex.: início de um mês novo, ainda sem edição)
+     herda o último valor definido até ali, em vez de cair pra 0. */
+  let METAS_HIST={};
+  function chaveMes(ano,mes){ return ano+'-'+String(mes).padStart(2,'0'); }
+  function chaveMesAtual(){ const h=new Date(); return chaveMes(h.getFullYear(), h.getMonth()+1); }
+  function metasDoMes(ano,mes){
+    const chave=chaveMes(ano,mes);
+    if(METAS_HIST[chave]) return METAS_HIST[chave];
+    const anteriores=Object.keys(METAS_HIST).filter(k=>k<=chave).sort();
+    if(anteriores.length) return METAS_HIST[anteriores[anteriores.length-1]];
+    return {receita:0, gastos:0};
+  }
+  function metasMesAtual(){
+    const chave=chaveMesAtual();
+    if(!METAS_HIST[chave]) METAS_HIST[chave]=Object.assign({}, metasDoMes(new Date().getFullYear(), new Date().getMonth()+1));
+    return METAS_HIST[chave];
+  }
+  function saveMetas(){ savePersisted('pivot-metas-historico', ()=>METAS_HIST); }
   async function loadMetas(){
-    await loadPersisted('pivot-metas', d=>{ METAS=Object.assign({}, METAS, d); });
+    await loadPersisted('pivot-metas-historico', d=>{ METAS_HIST=d||{}; });
+    /* migração do formato antigo (pivot-metas: um objeto único {receita,gastos},
+       sem histórico) — se ainda não existir nenhum histórico, o valor antigo
+       vira o valor do mês corrente, pra não perder o que já estava configurado. */
+    if(!Object.keys(METAS_HIST).length){
+      await loadPersisted('pivot-metas', d=>{ if(d && (d.receita||d.gastos)) METAS_HIST[chaveMesAtual()]={receita:d.receita||0, gastos:d.gastos||0}; });
+    }
     renderMonthTicker();
   }
-  function abrirDefinirMetas(){
-    openInfo(t('modal.setGoals'), `
-      <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${METAS.receita}" placeholder="4300"></div>
-      <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${METAS.gastos}" placeholder="500"></div>
+  function abrirDefinirMetaReceita(){
+    const m=metasMesAtual();
+    openInfo(t('settings.projectedLabel'), `
+      <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${m.receita}" placeholder="4300"></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
-      <button class="btn primary" style="width:100%" onclick="guardarMetas()">${t('action.saveGoals')}</button>`);
+      <button class="btn primary" style="width:100%" onclick="guardarMetaReceita()">${t('action.saveGoals')}</button>`);
   }
-  function guardarMetas(){
+  function guardarMetaReceita(){
     const r=parseFloat(document.getElementById('meta-receita-input').value)||0;
+    metasMesAtual().receita=r;
+    saveMetas();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    closeInfo();
+    showToast(t('toast.goalsUpdated'));
+  }
+  function abrirDefinirLimiteGastos(){
+    const m=metasMesAtual();
+    openInfo(t('settings.limitLabel'), `
+      <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${m.gastos}" placeholder="500"></div>
+      <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
+      <button class="btn primary" style="width:100%" onclick="guardarLimiteGastos()">${t('action.saveGoals')}</button>`);
+  }
+  function guardarLimiteGastos(){
     const g=parseFloat(document.getElementById('meta-gastos-input').value)||0;
-    METAS.receita=r; METAS.gastos=g;
+    metasMesAtual().gastos=g;
     saveMetas();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
@@ -3983,7 +4028,8 @@
   }
   function renderRingsDashboard(recebido, esperado, custos, extras){
     extras=extras||0;
-    const meta=METAS.receita||1, teto=METAS.gastos||1;
+    const mAtual=metasMesAtual();
+    const meta=mAtual.receita||1, teto=mAtual.gastos||1;
     pintarTeto('');
     FITA_STATE.esperado=pintarFita('esperado', esperado, meta);
     FITA_STATE.recebido=pintarFita('recebido', recebido, meta);
@@ -4010,15 +4056,17 @@
   /* mesmo gráfico de anéis do Dashboard, reaproveitado no card "Resumo
      Financeiro" de Relatórios (prefixo 'rf-'), mas com os valores somados
      pro período selecionado ali (relRangeMeses()) em vez de fixos no mês
-     corrente — meta/teto escalam pro nº de meses do período, pra continuar
-     comparável (ex.: um trimestre soma 3 metas mensais). */
+     corrente — meta/teto somam a meta/teto que esteve em vigor em cada mês
+     do período (ver metasDoMes), pra continuar comparável e refletir o
+     histórico real de cada mês, não o valor atual multiplicado. */
   function renderResumoFinanceiroRelatorios(){
     if(!document.getElementById('rf-mr-esperado')) return;
     const meses=relRangeMeses();
     const s=relStatsAgregadas();
     const extrasPeriodo=meses.reduce((acc,m)=>acc+receitasDoMes(m.ano,m.mes),0);
     const recebido=s.recebido-extrasPeriodo, esperado=s.porReceber, custos=s.custos, extras=extrasPeriodo;
-    const meta=(METAS.receita||0)*meses.length||1, teto=(METAS.gastos||0)*meses.length||1;
+    const somaMetas=meses.reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
+    const meta=somaMetas.receita||1, teto=somaMetas.gastos||1;
     pintarTeto('rf-');
     pintarFita('esperado', esperado, meta, 'rf-');
     pintarFita('recebido', recebido, meta, 'rf-');
@@ -4247,7 +4295,7 @@
       entreguesPorDataEsteMes, entreguesPorDataMesAnterior, fechadosPorDataEsteMes, fechadosPorDataMesAnterior,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
-      custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
+      custos:custosDoMes(anoRef,mesRef), meta:metasDoMes(anoRef,mesRef).receita, limiteGastos:metasDoMes(anoRef,mesRef).gastos};
   }
   function horasCompacto(v){
     v=v||0;
@@ -6947,7 +6995,8 @@
     const pts=relSerieGrafico();
     const N=pts.length; if(!N){ wrap.innerHTML=''; return; }
     const W=320, H=150, padL=4, padR=4, padT=10, padB=20;
-    const meta=METAS.receita||0, teto=METAS.gastos||0;
+    const somaMetasChart=relRangeMeses().reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
+    const meta=somaMetasChart.receita||0, teto=somaMetasChart.gastos||0;
     const maxV=Math.max(1, meta, teto, pts[N-1].recebido, pts[N-1].gasto);
     const x=i=>padL+(N>1?i/(N-1):0.5)*(W-padL-padR);
     const y=v=>H-padB-(v/maxV)*(H-padT-padB);
@@ -7026,7 +7075,8 @@
       const s=calcularEstatisticasMes(ano,mes);
       campos.forEach(c=>acc[c]+=s[c]||0);
     });
-    acc.meta=METAS.receita; acc.limiteGastos=METAS.gastos;
+    const somaMetasRange=meses.reduce((s,{ano,mes})=>{ const mm=metasDoMes(ano,mes); s.receita+=mm.receita||0; s.gastos+=mm.gastos||0; return s; }, {receita:0,gastos:0});
+    acc.meta=somaMetasRange.receita; acc.limiteGastos=somaMetasRange.gastos;
     return acc;
   }
   /* cada métrica carrega um "dir" (1 = subir é bom, -1 = subir é ruim) —
