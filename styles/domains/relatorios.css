@@ -84,7 +84,14 @@
      data (canto sup. dir.) na linha de cima; categoria — ou nome do
      cliente, no caso de um pagamento automático de contrato — (canto inf.
      esq.) / valor (canto inf. dir.) na linha de baixo. */
-  .fin-item{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:3px;align-items:baseline}
+  /* .card.radar-card (dashboard.css) força display:flex pros cards de
+     Tarefas/Projetos (avatar + conteúdo lado a lado) — mesma especificidade
+     de duas classes que .fin-item usa nos itens manuais (precisa de
+     .radar-card pra ativar o swipe), então sem uma seletor mais específico
+     aqui esse flex vence e quebra o grid 2x2. .card.radar-card.fin-item
+     (três classes) garante que o grid sempre vence, tanto nos itens
+     automáticos (.fin-item sozinho) quanto nos manuais (.card.radar-card.fin-item). */
+  .fin-item,.card.radar-card.fin-item{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:3px;align-items:baseline}
   .fin-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:1}
   .fin-item-date{font-size:11.5px;color:var(--neutral);white-space:nowrap;text-align:right;grid-column:2;grid-row:1}
   .fin-item-sub{font-size:11.5px;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:2}
