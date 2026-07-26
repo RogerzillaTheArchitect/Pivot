@@ -818,7 +818,7 @@
         <div class="rel-fin-actions">
           <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.metas">Metas</span></button>
           <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.limites">Limites</span></button>
-          <button class="btn soft" onclick="abrirGerenciamentoFluxo('recebidos')"><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirReceitas()"><span data-t="reports.finBtn.receitas">Receitas</span></button>
           <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
 
@@ -1341,10 +1341,10 @@
       </div>
 
       <!-- 💰 RECEITA — tela exclusiva de captura rápida (a lista completa de
-           gerenciamento continua em Financeiro > Receitas, abrirGerenciamentoFluxo). -->
+           gerenciamento continua em Financeiro > Receitas, abrirReceitas()). -->
       <div class="panel" data-panel="receita">
         <div class="field"><label data-t="field.title">Título</label><input id="rc-titulo" placeholder="Freelance extra, venda…"></div>
-        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="rc-categoria" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><select id="rc-categoria"></select></div>
         <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="rc-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key==='Enter')criarReceitaPanel()"></div>
         <div class="field"><label data-t="field.date">Data</label><input type="date" id="rc-data"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="rc-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
@@ -1355,8 +1355,7 @@
            gerenciamento continua em Financeiro > Despesas, abrirDespesas). -->
       <div class="panel" data-panel="despesa">
         <div class="field"><label data-t="field.title">Título</label><input id="ds-titulo" placeholder="Uber, equipamento…"></div>
-        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="ds-categoria" list="despesa-categorias-lista-sheet" placeholder="opcional" data-t-placeholder="reports.expenseCategoryPlaceholder" autocomplete="off"></div>
-        <datalist id="despesa-categorias-lista-sheet"></datalist>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><select id="ds-categoria"></select></div>
         <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="ds-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key==='Enter')criarDespesaPanel()"></div>
         <div class="field"><label data-t="field.date">Data</label><input type="date" id="ds-data"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ds-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
@@ -3279,14 +3278,16 @@
     "reports.op.info.target": { pt:"Meta", en:"Target", es:"Meta" },
     "reports.op.info.percent": { pt:"Percentual", en:"Percentage", es:"Porcentaje" },
     "reports.op.info.gotIt": { pt:"Entendi", en:"Got it", es:"Entendido" },
-    "reports.expensesTitle": { pt:"Despesas do mês", en:"Month expenses", es:"Gastos del mes" },
+    "reports.expensesTitle": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "reports.expenseName": { pt:"Nome", en:"Name", es:"Nombre" },
     "reports.expenseValue": { pt:"Valor", en:"Value", es:"Valor" },
     "reports.addExpense": { pt:"Adicionar despesa", en:"Add expense", es:"Añadir gasto" },
     "reports.editExpense": { pt:"Editar despesa", en:"Edit expense", es:"Editar gasto" },
     "reports.saveExpense": { pt:"Guardar", en:"Save", es:"Guardar" },
     "reports.expenseCategory": { pt:"Categoria", en:"Category", es:"Categoría" },
-    "reports.expenseCategoryPlaceholder": { pt:"Equipamentos, Marketing…", en:"Equipment, Marketing…", es:"Equipamiento, Marketing…" },
+    "reports.incomeTitle": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "reports.addIncome": { pt:"Adicionar receita", en:"Add income", es:"Añadir ingreso" },
+    "reports.expenseCategoryPlaceholder": { pt:"Selecionar categoria", en:"Select category", es:"Seleccionar categoría" },
     // --- Distribuição Financeira ---
     "reports.distFin.title": { pt:"Distribuição Financeira", en:"Financial Distribution", es:"Distribución Financiera" },
     "reports.distFin.income": { pt:"Recebidos", en:"Received", es:"Recibidos" },
@@ -6815,33 +6816,6 @@
     pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs), null, 'ropm-');
   }
 
-  /* ===== Card 4 — Fluxo Financeiro: lista unificada (recebidos + despesas) do
-     mês selecionado, filtrável. Reaproveita listaRecebidosDoMes/
-     listaDespesasDoMes tal como já eram usadas — só o consumidor mudou.
-     Não vive mais dentro do card de análise — só abre via
-     abrirGerenciamentoFluxo(), clicando em "Recebidos"/"Despesas". ===== */
-  let relFiltroFluxo='todos'; // 'todos'|'recebidos'|'despesas'
-  function relSetFiltroFluxo(f){
-    relFiltroFluxo=f;
-    renderRelFluxoLista();
-    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===f));
-  }
-  /* abre a tela de gerenciamento (editar/excluir/adicionar) já existente —
-     mesma lista/timeline de sempre, só que agora num bottom sheet em vez de
-     expandida dentro do card de análise. */
-  function abrirGerenciamentoFluxo(filtroInicial){
-    relFiltroFluxo=filtroInicial;
-    const html='<div class="segmented" id="rel-fluxo-seg" style="margin-bottom:14px">'+
-        '<button data-f="todos" onclick="relSetFiltroFluxo(\'todos\')"><span data-t="reports.flowAll">Todos</span></button>'+
-        '<button data-f="recebidos" onclick="relSetFiltroFluxo(\'recebidos\')"><span data-t="reports.flowIncome">Recebidos</span></button>'+
-        '<button data-f="despesas" onclick="relSetFiltroFluxo(\'despesas\')"><span data-t="reports.flowExpense">Despesas</span></button>'+
-      '</div>'+
-      '<button class="btn soft" style="width:100%;margin-bottom:14px" onclick="abrirRegistroManual()">+ '+t('home.addEntryBtn')+'</button>'+
-      '<div id="rel-fluxo-lista"></div>';
-    openInfo(filtroInicial==='despesas' ? t('reports.flowExpense') : t('reports.flowIncome'), html);
-    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===filtroInicial));
-    renderRelFluxoLista();
-  }
   function calcularReceitaPorSubcategoria(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
@@ -6895,55 +6869,8 @@
     if(relPeriodo.tipo==='intervalo') itens=itens.filter(i=>i.data && i.data>=relPeriodo.ini && i.data<=relPeriodo.fim);
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
-  const ICON_CONTRATO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>';
-  const ICON_MANUAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
-  const ICON_CALENDARIO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
-  const fmtDataCurta=d=>{
-    if(!d) return '';
-    const partes=d.split('-'); const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
-    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
-  };
   const ICON_LAPIS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>';
   const ICON_LIXO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-  /* Card 4 — timeline: título, metadados por ícone (contrato/utilizador + calendário)
-     e valor empilhados (valor sempre alinhado à direita), separados por espaçamento —
-     não por caixa/cartão. Interação: exatamente o mesmo swipe bidirecional já usado em
-     Trabalhos/Tarefas (ativarSwipeRadar, reaproveitada sem alterações) — deslizar para
-     a esquerda revela Eliminar, para a direita revela Editar; tocar abre os detalhes. */
-  function relFluxoOnClick(it){
-    if(it.tipo==='recebido') return it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
-    return "editarDespesa('"+it.id+"')";
-  }
-  function renderRelFluxoLista(){
-    const wrap=document.getElementById('rel-fluxo-lista'); if(!wrap) return;
-    let itens=relFluxoPeriodo();
-    if(relFiltroFluxo==='recebidos') itens=itens.filter(i=>i.tipo==='recebido');
-    else if(relFiltroFluxo==='despesas') itens=itens.filter(i=>i.tipo==='despesa');
-    wrap.innerHTML = itens.length ? itens.map(it=>{
-      const cor = it.tipo==='recebido' ? 'var(--brand)' : 'var(--late)';
-      const sinal = it.tipo==='recebido' ? '+' : '−';
-      let meta;
-      if(it.tipo==='recebido'){
-        meta = (it.manual ? '<span>'+ICON_MANUAL+t('reports.manualLabel')+'</span>' : '<span>'+ICON_CONTRATO+escapeHtml(it.cliente||'')+'</span>') +
-          (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
-      } else {
-        meta = (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
-      }
-      const onclickAcao=relFluxoOnClick(it);
-      const tapGuard="if(this.closest('.radar-card-wrap').classList.contains('active')){event.stopPropagation();return;} "+onclickAcao;
-      /* pagamentos de contrato não têm "eliminar" aqui (não é uma entrada avulsa) —
-         o painel da direita só existe para lançamentos manuais (recebido ou despesa) */
-      const podeEliminar = it.tipo==='despesa' || it.manual;
-      const removerAcao = it.tipo==='despesa' ? "event.stopPropagation();removerCusto('"+it.id+"')" : "event.stopPropagation();removerReceita('"+it.id+"')";
-      return '<div class="radar-card-wrap">'+
-        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();'+onclickAcao+'">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
-        (podeEliminar ? '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="'+removerAcao+'">'+ICON_LIXO+t('action.remove')+'</button></div>' : '')+
-        '<div class="card radar-card rel-fluxo-item" onclick="'+tapGuard+'">'+
-          '<div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div>'+
-        '</div></div>';
-    }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('reports.emptyFlow')+'</p>';
-    ativarSwipeRadar();
-  }
 
   /* ===== gráfico de linha: recebido e gasto acumulados no mês, com meta e teto ===== */
   function serieAcumuladaMes(ano, mes, dias){
@@ -7546,21 +7473,26 @@
   /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
      sem estar ligado a um trabalho. Despesa cai em custosData (já existente);
      Recebido cai em receitasData (novo, mesmo formato). ===== */
-  /* Sugestões de categoria de despesa — o campo é sempre texto livre (nunca
-     um valor forçado); isto só ajuda a digitar consistente, pra "Distribuição
-     Financeira" conseguir agrupar gastos por categoria de verdade, em vez de
-     um "categoria" que nunca foi preenchido por ninguém. */
+  /* Categorias de despesa/receita — dropdown pré-definido (não mais texto
+     livre com sugestões): garante que "Distribuição Financeira" e o Card
+     Fluxo conseguem agrupar/rotular por categoria de verdade. */
   const DESPESA_CATEGORIAS_SUGERIDAS=['Freelancers','Equipamentos','Marketing','Softwares','Viagens','Assinaturas','Deslocação','Outros'];
-  function despesaCategoriaDatalistHtml(){
-    return '<datalist id="despesa-categorias-lista">'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('')+'</datalist>';
+  const RECEITA_CATEGORIAS_SUGERIDAS=['Projeto','Consultoria','Venda de produto','Aula/Workshop','Comissão','Outros'];
+  function categoriaSelectHtml(id, opcoes, valorAtual){
+    return '<select id="'+id+'">'+
+      '<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+
+      opcoes.map(c=>'<option value="'+escapeHtml(c)+'"'+(c===valorAtual?' selected':'')+'>'+escapeHtml(c)+'</option>').join('')+
+    '</select>';
   }
   /* Telas exclusivas de Receita/Despesa do menu Criar — captura rápida com
      Título/Categoria/Valor/Data/Observações. Distintas das listas completas
-     de gerenciamento (Financeiro > Receitas/Despesas), que continuam a
-     reaproveitar abrirGerenciamentoFluxo/abrirDespesas sem alteração. */
+     de gerenciamento (Financeiro > Receitas/Despesas), que vivem em
+     abrirReceitas()/abrirDespesas(). */
   function limparFormularioReceitaPanel(){
-    ['rc-titulo','rc-categoria','rc-valor','rc-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['rc-titulo','rc-valor','rc-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const dataEl=document.getElementById('rc-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
+    const catEl=document.getElementById('rc-categoria');
+    if(catEl) catEl.innerHTML='<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+RECEITA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
   }
   function criarReceitaPanel(){
     const titulo=(document.getElementById('rc-titulo').value||'').trim();
@@ -7577,10 +7509,10 @@
     showToast(t('toast.incomeAdded'));
   }
   function limparFormularioDespesaPanel(){
-    ['ds-titulo','ds-categoria','ds-valor','ds-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['ds-titulo','ds-valor','ds-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const dataEl=document.getElementById('ds-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
-    const dl=document.getElementById('despesa-categorias-lista-sheet');
-    if(dl) dl.innerHTML=DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('');
+    const catEl=document.getElementById('ds-categoria');
+    if(catEl) catEl.innerHTML='<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
   }
   function criarDespesaPanel(){
     const titulo=(document.getElementById('ds-titulo').value||'').trim();
@@ -7604,8 +7536,7 @@
       '<div class="field" style="margin-top:14px"><label data-t="reports.expenseName">Nome</label><input id="reg-nome" placeholder="Uber, freelance extra…"></div>'+
       '<div class="field-row"><div class="field"><label data-t="reports.expenseValue">Valor</label><input id="reg-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')salvarRegistroManual()"></div>'+
       '<div class="field"><label data-t="field.date">Data</label><input id="reg-data" type="date" value="'+hoje+'"></div></div>'+
-      '<div class="field" id="reg-categoria-wrap"><label data-t="reports.expenseCategory">Categoria</label><input id="reg-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
-      despesaCategoriaDatalistHtml()+
+      '<div class="field" id="reg-categoria-wrap"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('reg-categoria', DESPESA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
       '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarRegistroManual()" data-t="home.addEntryBtn">Adicionar</button>';
     openInfo(t('home.addEntryTitle'), html);
   }
@@ -7681,9 +7612,9 @@
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="rec-edit-nome" value="'+escapeHtml(r.descricao)+'"></div>'+
       '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-edit-valor" type="number" min="0" inputmode="decimal" value="'+r.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="rec-edit-data" type="date" value="'+(r.data||'')+'"></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>'+
-      '<button class="btn soft" style="width:100%;margin-top:8px;color:var(--late)" onclick="removerReceita(\''+id+'\')">'+t('action.remove')+'</button>';
-    openInfo(t('home.entryIncome'), html);
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-edit-categoria', RECEITA_CATEGORIAS_SUGERIDAS, r.categoria||'')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
+    openInfo(t('home.entryIncome'), html, abrirReceitas);
   }
   function salvarEdicaoReceita(id){
     const r=receitasData[id]; if(!r) return;
@@ -7691,41 +7622,52 @@
     const valor=parseFloat(document.getElementById('rec-edit-valor').value);
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     r.descricao=desc; r.valor=valor; r.data=document.getElementById('rec-edit-data').value||r.data;
+    r.categoria=(document.getElementById('rec-edit-categoria').value||'').trim();
     saveReceitasData();
-    closeInfo();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirReceitas();
     showToast(t('toast.incomeAdded'));
   }
   function removerReceita(id){
     delete receitasData[id];
     saveReceitasData();
-    closeInfo();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('rec-lista')) renderReceitasLista(); else closeInfo();
   }
-  /* ===== Despesas — painel com cards e swipe para editar/apagar ===== */
+  /* ===== Despesas — tela dedicada (própria, sem nada em comum com Receitas):
+     botão Adicionar no topo abre o formulário à parte (Título/Valor/Data/
+     Categoria em dropdown); a lista é sempre a tela raiz, cards deslizáveis
+     reaproveitando o mesmo swipe do radar (.radar-card-wrap/ativarSwipeRadar)
+     — esquerda revela Excluir, direita revela Editar. ===== */
   function abrirDespesas(){
-    const html='<div class="field-row" style="margin-bottom:2px"><div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
-      '<div class="field" style="max-width:110px"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div></div>'+
-      '<div class="field" style="margin-bottom:10px"><label data-t="reports.expenseCategory">Categoria</label><input id="exp-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
-      despesaCategoriaDatalistHtml()+
-      '<button class="btn primary" style="width:100%;margin:4px 0 14px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>'+
-      '<div class="sheet-divider"></div><div id="exp-lista" style="margin-top:12px"></div>';
+    const html='<button class="btn primary" style="width:100%;margin-bottom:14px" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
+      '<div id="exp-lista"></div>';
     openInfo(t('reports.expensesTitle'), html);
     renderDespesasLista();
   }
+  function abrirFormNovaDespesa(){
+    const hoje=new Date().toISOString().slice(0,10);
+    const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div>'+
+      '<div class="field"><label>'+t('field.date')+'</label><input id="exp-data" type="date" value="'+hoje+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-categoria', DESPESA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>';
+    openInfo(t('reports.addExpense'), html, abrirDespesas);
+  }
   function guardarDespesaNova(){
-    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor'), catEl=document.getElementById('exp-categoria');
+    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor'),
+      catEl=document.getElementById('exp-categoria'), dataEl=document.getElementById('exp-data');
     const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), categoria=(catEl&&catEl.value||'').trim();
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     const id='cst'+Date.now();
-    custosData[id]={ id, descricao:desc, valor, categoria, data:new Date().toISOString().slice(0,10) };
+    custosData[id]={ id, descricao:desc, valor, categoria, data:(dataEl&&dataEl.value)||new Date().toISOString().slice(0,10) };
     saveCustosData();
     registrarAnalyticsDespesa(custosData[id]);
-    nomeEl.value=''; valEl.value=''; if(catEl) catEl.value=''; nomeEl.focus();
-    renderDespesasLista();
+    renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirDespesas();
     showToast(t('toast.costAdded'));
   }
   function renderDespesasLista(){
@@ -7733,50 +7675,28 @@
     if(!wrap) return;
     const lista=Object.values(custosData).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
     wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="exp-wrap" data-exp="'+c.id+'">'+
-        '<div class="exp-actions"><button class="ed" onclick="editarDespesa(\''+c.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'+
-          '<button class="rm" onclick="removerCusto(\''+c.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>'+
-        '<div class="exp-card"><div><div class="nm">'+escapeHtml(c.descricao)+'</div>'+(c.data?('<div class="sub">'+c.data.split('-').reverse().slice(0,2).join('/')+'</div>'):'')+'</div>'+
-          '<div class="val">'+fmtMoney(c.valor)+'<div class="fx">'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="editarDespesa(\''+c.id+'\')"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="removerCusto(\''+c.id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
-          '</div></div></div>'+
+      '<div class="radar-card-wrap">'+
+        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
+        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
+        '<div class="card radar-card desp-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarDespesa(\''+c.id+'\')">'+
+          '<div class="desp-item-body">'+
+            '<div class="desp-item-title">'+escapeHtml(c.descricao)+'</div>'+
+            '<div class="desp-item-cat">'+(c.categoria?escapeHtml(c.categoria):'')+(c.data?(' · '+c.data.split('-').reverse().join('/')):'')+'</div>'+
+          '</div>'+
+          '<div class="desp-item-valor">'+fmtMoney(c.valor)+'</div>'+
+        '</div>'+
       '</div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>';
-    ativarSwipeDespesas();
-  }
-  function ativarSwipeDespesas(){
-    document.querySelectorAll('#exp-lista .exp-wrap').forEach(wrap=>{
-      const card=wrap.querySelector('.exp-card');
-      const revelado=90; let x0=null, y0=null, aberto=false, horizontal=null;
-      card.addEventListener('pointerdown', e=>{ x0=e.clientX; y0=e.clientY; horizontal=null; card.style.transition='none'; });
-      card.addEventListener('pointermove', e=>{
-        if(x0===null) return;
-        const dx=e.clientX-x0, dy=e.clientY-y0;
-        if(horizontal===null){ if(Math.abs(dx)>6||Math.abs(dy)>6) horizontal=Math.abs(dx)>Math.abs(dy); }
-        if(!horizontal) return;
-        let tx=(aberto?-revelado:0)+dx;
-        tx=Math.max(-revelado, Math.min(0, tx));
-        card.style.transform='translateX('+tx+'px)';
-      });
-      const fim=e=>{
-        if(x0===null) return;
-        card.style.transition='';
-        const dx=(e.clientX||0)-x0;
-        if(horizontal){ aberto = aberto ? dx<40 : dx<-40; card.style.transform='translateX('+(aberto?-revelado:0)+'px)'; if(aberto&&navigator.vibrate)navigator.vibrate(6); }
-        x0=null; y0=null; horizontal=null;
-      };
-      card.addEventListener('pointerup', fim);
-      card.addEventListener('pointercancel', fim);
-    });
+    ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>';
+    ativarSwipeRadar();
   }
   function editarDespesa(id){
     const c=custosData[id]; if(!c) return;
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-edit-nome" value="'+escapeHtml(c.descricao)+'"></div>'+
       '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-edit-valor" type="number" min="0" inputmode="decimal" value="'+c.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="exp-edit-data" type="date" value="'+(c.data||'')+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-edit-categoria', DESPESA_CATEGORIAS_SUGERIDAS, c.categoria||'')+'</div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoDespesa(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
-    openInfo(t('reports.editExpense'), html);
+    openInfo(t('reports.editExpense'), html, abrirDespesas);
   }
   function salvarEdicaoDespesa(id){
     const c=custosData[id]; if(!c) return;
@@ -7784,10 +7704,80 @@
     const valor=parseFloat(document.getElementById('exp-edit-valor').value);
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     c.descricao=desc; c.valor=valor; c.data=document.getElementById('exp-edit-data').value||c.data;
+    c.categoria=(document.getElementById('exp-edit-categoria').value||'').trim();
     saveCustosData();
-    abrirDespesas();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirDespesas();
     showToast(t('toast.costAdded'));
+  }
+  /* ===== Receitas — tela dedicada (própria, sem nada em comum com Despesas):
+     mesma linguagem de tela (botão Adicionar no topo, cards deslizáveis) mas
+     card com layout próprio (título em cima; projeto/data/valor numa linha
+     embaixo). Lançamentos automáticos (parcela de contrato paga) aparecem
+     sem swipe/edição/exclusão — só os manuais (receitasData) respondem aos
+     gestos. */
+  function abrirReceitas(){
+    const html='<button class="btn primary" style="width:100%;margin-bottom:14px" onclick="abrirFormNovaReceita()">+ '+t('reports.addIncome')+'</button>'+
+      '<div id="rec-lista"></div>';
+    openInfo(t('reports.incomeTitle'), html);
+    renderReceitasLista();
+  }
+  function abrirFormNovaReceita(){
+    const hoje=new Date().toISOString().slice(0,10);
+    const html='<div class="field"><label>'+t('field.title')+'</label><input id="rec-nome" placeholder="Freelance extra, venda…"></div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')guardarReceitaNova()"></div>'+
+      '<div class="field"><label>'+t('field.date')+'</label><input id="rec-data" type="date" value="'+hoje+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-categoria', RECEITA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarReceitaNova()">'+t('reports.addIncome')+'</button>';
+    openInfo(t('reports.addIncome'), html, abrirReceitas);
+  }
+  function guardarReceitaNova(){
+    const nomeEl=document.getElementById('rec-nome'), valEl=document.getElementById('rec-valor'),
+      catEl=document.getElementById('rec-categoria'), dataEl=document.getElementById('rec-data');
+    const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), categoria=(catEl&&catEl.value||'').trim();
+    if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
+    const id='rec'+Date.now();
+    receitasData[id]={ id, descricao:desc, valor, categoria, data:(dataEl&&dataEl.value)||new Date().toISOString().slice(0,10) };
+    saveReceitasData();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirReceitas();
+    showToast(t('toast.incomeAdded'));
+  }
+  function renderReceitasLista(){
+    const wrap=document.getElementById('rec-lista');
+    if(!wrap) return;
+    const automaticos=[];
+    jobsVisiveis().forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        automaticos.push({ desc:p.label||t('field.payment'), projeto:j.client||j.typeLabel||'', valor:Number(p.amount)||0, data:p.pagoEm||p.dueDate, jobId:j.id });
+      });
+    });
+    const manuais=Object.values(receitasData);
+    const itens=automaticos.map(it=>Object.assign({},it,{manual:false}))
+      .concat(manuais.map(r=>({ id:r.id, desc:r.descricao, projeto:r.categoria||'', valor:Number(r.valor)||0, data:r.data, manual:true })))
+      .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(!itens.length){ wrap.innerHTML='<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>'; return; }
+    wrap.innerHTML=itens.map(it=>{
+      const dataFmt=it.data?it.data.split('-').reverse().join('/'):'';
+      const corpo='<div class="rec-item-title">'+escapeHtml(it.desc)+'</div>'+
+          '<div class="rec-item-row">'+
+            '<span class="rec-item-proj">'+escapeHtml(it.projeto||'')+'</span>'+
+            '<span class="rec-item-data">'+dataFmt+'</span>'+
+            '<span class="rec-item-valor">'+fmtMoney(it.valor)+'</span>'+
+          '</div>';
+      if(!it.manual){
+        /* lançamento automático (parcela de contrato) — sem swipe, sem editar/excluir */
+        return '<div class="card rec-item rec-item-auto">'+corpo+'</div>';
+      }
+      return '<div class="radar-card-wrap">'+
+        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
+        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
+        '<div class="card radar-card rec-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarReceitaManual(\''+it.id+'\')">'+corpo+'</div>'+
+      '</div>';
+    }).join('');
+    ativarSwipeRadar();
   }
   function pushHistory(job,text,tipo){
     job.history=job.history||[];
