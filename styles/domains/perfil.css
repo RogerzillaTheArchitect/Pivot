@@ -30,14 +30,14 @@
   /* Relatórios — mesmas seções da página, agora agrupadas em cards */
   .rel-card{margin-bottom:16px}
   .rel-card:last-child{margin-bottom:0}
-  .rel-period-bar{display:flex;align-items:center;justify-content:center;gap:6px}
   .rel-icon-btn{width:34px;height:34px;display:grid;place-items:center;background:none;border:none;
     color:var(--ink-soft);cursor:pointer;flex:none;transition:color .15s}
   .rel-icon-btn:hover{color:var(--ink)}
   .rel-icon-btn svg{width:17px;height:17px}
   /* navegação de mês — botões altos e discretos (opacidade baixa em repouso,
-     área de toque grande) em vez de setas minúsculas ou gesto de deslizar */
-  .rel-month-row{display:flex;align-items:stretch;justify-content:center;gap:10px;flex:1;min-width:0}
+     área de toque grande) em vez de setas minúsculas ou gesto de deslizar.
+     Cabeçalho de mês/ano de Relatórios usa exatamente este mesmo componente
+     (.tasks-header.cal-header), sem wrapper próprio — ver index.html. */
   /* min-height um pouco maior (era 52px) — é essa altura, não o texto em
      si, que define o respiro vertical do cabeçalho (a fila inteira é
      centrada por align-items:stretch); aumentá-la é o que de fato deixa o

@@ -1,10 +1,6 @@
   /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
-  /* barra de período (mês/ano + navegação) — cola quase direto no card
-     Financeiro logo abaixo, em vez do respiro padrão de 11px entre cards. */
-  .rel-period-card{margin-bottom:2px}
-
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
@@ -150,25 +146,21 @@
      preenchimento progressivo), só recolorida (.green pro Recebidos,
      laranja nativo pro Despesas) — mesmo padrão visual pros dois lados. */
   .distfin-empty,.fluxo-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
-  /* Card Fluxo — lista de lançamentos, com Recebidos e Despesas em seções
-     separadas (nunca intercalados por data) — cada item: título em cima,
-     categoria embaixo, valor à direita esticado pra ocupar a altura das
-     duas linhas. */
-  .fluxo-rows{display:flex;flex-direction:column}
-  .fluxo-group-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-    color:var(--label-out);margin:16px 0 4px}
-  .fluxo-group-label:first-child{margin-top:2px}
-  .fluxo-item{display:flex;align-items:stretch;justify-content:space-between;gap:12px;
-    padding:11px 0;border-top:1px solid var(--line-soft)}
-  .fluxo-group-label + .fluxo-item{border-top:none;padding-top:2px}
-  .fluxo-item-body{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0}
-  .fluxo-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .fluxo-item-cat{font-size:12px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .fluxo-item-valor{display:flex;align-items:center;flex:none;
-    font-family:var(--font-numeric);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
-  .fluxo-item-valor.in{color:#5E7A52}
-  .fluxo-item-valor.out{color:#FF9738}
-  .distfin-half .track.green::before{background:linear-gradient(90deg, rgba(94,122,82,.16), transparent)}
+  /* Card Fluxo — duas colunas independentes: ranking de categorias de
+     Receitas (esquerda) e de Despesas (direita), cada uma ordenada da
+     maior pra menor. Nunca compartilham espaço/linha entre si. */
+  .fluxo-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:18px}
+  .fluxo-col{min-width:0}
+  .fluxo-col-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+  .fluxo-col-label.in{color:#5E7A52}
+  .fluxo-col-label.out{color:#FF9738}
+  .fluxo-rank-row{margin-bottom:10px}
+  .fluxo-rank-row:last-child{margin-bottom:0}
+  .fluxo-rank-name{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+  .fluxo-rank-track{height:5px;background:var(--paper-2);border-radius:0}
+  .fluxo-col:first-child .fluxo-rank-fill{height:100%;background:#5E7A52;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .fluxo-col:last-child .fluxo-rank-fill{height:100%;background:#FF9738;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  .fluxo-rank-val{font-family:var(--font-numeric),inherit;font-size:11px;color:var(--ink-soft);margin-top:3px;font-variant-numeric:tabular-nums}
 
   /* ===== Reorganização de Relatórios (3 áreas / 8 cards) =====
      Anéis do Resumo Financeiro: mesmas classes mr-ring/mr-tip/mr-base e
@@ -256,4 +248,3 @@
   .rel-table tbody tr:last-child td{border-bottom:0}
   .rel-table tbody tr:active{background:rgba(255,255,255,.03)}
 
-  .distfin-clicavel{cursor:pointer}

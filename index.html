@@ -757,17 +757,18 @@
         <!-- Seletor de período — barra global partilhada por todos os cards
              da página (todo card usa relRangeMeses()/relPeriodo pra se
              filtrar), por isso fica solta no topo, fora de qualquer área. -->
-        <div class="card rel-card rel-period-card">
-          <div class="rel-period-bar">
-            <div class="rel-month-row">
-              <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
-              <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
-                <span class="rel-mes-big" id="rel-mes-label">Julho</span>
-                <span class="rel-ano-small" id="rel-ano-label">2026</span>
-              </div>
-              <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
-            </div>
+        <!-- mesmo componente exato do cabeçalho de mês/ano de Projetos
+             (.tasks-header.cal-header + .rel-nav-tall + .rel-month-center) —
+             sem card/wrapper próprio, sem alteração de fonte/tamanho/peso/
+             espaçamento/alinhamento. Só o clique no mês/ano ganha o
+             comportamento próprio de Relatórios (abrir o seletor de período). -->
+        <div class="tasks-header cal-header">
+          <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+          <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
+            <span class="rel-mes-big" id="rel-mes-label">Julho</span>
+            <span class="rel-ano-small" id="rel-ano-label">2026</span>
           </div>
+          <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
         </div>
 
         <!-- Card: Financeiro — mesmo gráfico de anéis (Meta/Esperado/
@@ -776,7 +777,7 @@
              valores recalculados pro período selecionado em Relatórios em
              vez de fixos no mês corrente. O card já identifica a seção —
              sem rótulo de área solto acima. -->
-        <div class="rel-card-header" id="rel-anchor-financeiro" data-t="reports.summary.title" style="margin-top:20px">Financeiro</div>
+        <div class="rel-card-header" id="rel-anchor-financeiro" data-t="reports.summary.title" style="margin-top:2px">Financeiro</div>
         <div class="card rel-card rel-card-body">
           <div class="ms-progress-row">
             <div class="ms-rings-wrap-outer">
@@ -6888,37 +6889,35 @@
     linhas.sort((a,b)=>b.valor-a.valor);
     return linhas;
   }
-  /* Card Fluxo — lista simples de lançamentos (não mais o gráfico de barras
-     espelhado): cada item mostra título (linha de cima), categoria (linha de
-     baixo) e o valor à direita ocupando visualmente a altura das duas linhas.
-     Recebidos e despesas NÃO ficam misturados/intercalados por data — cada
-     grupo tem sua própria seção (Recebidos primeiro, depois Despesas), até
-     5 lançamentos mais recentes cada. */
-  function fluxoItemHtml(it){
-    const tipoClasse = it.tipo==='recebido' ? 'in' : 'out';
-    const sinal = it.tipo==='recebido' ? '+' : '−';
-    return '<div class="fluxo-item">'+
-      '<div class="fluxo-item-body">'+
-        '<div class="fluxo-item-title">'+escapeHtml(it.desc||'')+'</div>'+
-        '<div class="fluxo-item-cat">'+escapeHtml(it.categoria||'')+'</div>'+
-      '</div>'+
-      '<div class="fluxo-item-valor '+tipoClasse+'">'+sinal+fmtMoney(it.valor)+'</div>'+
+  /* Card Fluxo — duas colunas independentes: ranking de categorias de
+     Receitas (esquerda, calcularReceitaPorSubcategoria — agrupa pelo
+     segmento/categoria do projeto) e ranking de categorias de Despesas
+     (direita, calcularGastosPorCategoria — agrupa por custosData.categoria),
+     cada uma ordenada da maior pra menor. Nunca misturadas — colunas
+     totalmente separadas, cada uma com seu próprio ranking. */
+  function fluxoRankRowHtml(l, max){
+    const pct = max>0 ? Math.round(l.valor/max*100) : 0;
+    return '<div class="fluxo-rank-row">'+
+      '<div class="fluxo-rank-name">'+escapeHtml(l.label)+'</div>'+
+      '<div class="fluxo-rank-track"><div class="fluxo-rank-fill" style="width:'+Math.max(pct,4)+'%"></div></div>'+
+      '<div class="fluxo-rank-val">'+fmtMoney(l.valor)+'</div>'+
     '</div>';
+  }
+  function fluxoRankColHtml(linhas){
+    if(!linhas.length) return '<div class="fluxo-empty">'+t('reports.noData')+'</div>';
+    const top=linhas.slice(0,6);
+    const max=top[0].valor;
+    return top.map(l=>fluxoRankRowHtml(l, max)).join('');
   }
   function renderRelFluxoFinanceiro(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
     if(!wrap) return;
-    const todos=relFluxoPeriodo();
-    const recebidos=todos.filter(i=>i.tipo==='recebido').slice(0,5);
-    const despesas=todos.filter(i=>i.tipo==='despesa').slice(0,5);
-    if(!recebidos.length && !despesas.length){
-      wrap.innerHTML='<div class="fluxo-empty">'+t('reports.noData')+'</div>';
-      return;
-    }
-    let html='';
-    if(recebidos.length) html+='<div class="fluxo-group-label">'+t('reports.distFin.income')+'</div>'+recebidos.map(fluxoItemHtml).join('');
-    if(despesas.length) html+='<div class="fluxo-group-label">'+t('reports.distFin.expenses')+'</div>'+despesas.map(fluxoItemHtml).join('');
-    wrap.innerHTML=html;
+    const receitas=calcularReceitaPorSubcategoria();
+    const despesas=calcularGastosPorCategoria();
+    wrap.innerHTML='<div class="fluxo-cols">'+
+      '<div class="fluxo-col"><div class="fluxo-col-label in">'+t('reports.distFin.income')+'</div>'+fluxoRankColHtml(receitas)+'</div>'+
+      '<div class="fluxo-col"><div class="fluxo-col-label out">'+t('reports.distFin.expenses')+'</div>'+fluxoRankColHtml(despesas)+'</div>'+
+    '</div>';
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
