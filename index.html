@@ -688,11 +688,11 @@
         <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.title">Perfil</span></div>
         <div class="page-head">
           <div class="page-title" data-t="profile.contacts">Contatos</div>
-          <div class="sheet-item row" onclick="abrirNovoContato()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg><span class="ti" data-t="wizard.fromScratch">Novo</span></div>
         </div>
-        <div class="segmented" style="margin-bottom:16px">
-          <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
-          <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
+        <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
+          <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
+          <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
+          <button onclick="abrirNovoContato()" style="flex:none;width:38px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -733,10 +733,12 @@
         <div class="plabel" id="lbl-conta-section" data-t="profile.account">Conta</div>
         <div class="plist">
           <div class="prow" onclick="infoMinhaConta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" id="lbl-minha-conta" data-t="profile.myAccount">Minha conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Dados de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoServicos()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" id="lbl-organizacao" data-t="profile.organization">Organização</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="t" id="lbl-equipa" data-t="profile.team">Equipe</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoServicos()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Dados de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoPlano()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3"/></svg><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" id="lbl-produto-section" data-t="profile.product">Produto</div>
@@ -746,8 +748,12 @@
 
         <div class="plabel" id="lbl-suporte" data-t="profile.support">Suporte</div>
         <div class="plist">
-          <div class="prow" onclick="infoPrivacidade()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="t" id="lbl-privacidade" data-t="profile.privacy">Privacidade</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoAjuda()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3 2.4c-.7.3-1 .9-1 1.6v.3M12 17h.01"/></svg><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoPrivacidade()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="t" id="lbl-privacidade" data-t="profile.privacy">Privacidade</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoSobre()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div class="t" id="lbl-sobre" data-t="profile.about">Sobre</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+
+        <div class="plist" style="margin-top:22px">
           <div class="prow" onclick="terminarSessao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="color:var(--late)"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><div class="t" id="lbl-terminar-sessao" data-t="profile.signOut" style="color:var(--late)">Terminar sessão</div></div>
         </div>
       </section>
@@ -937,20 +943,8 @@
         <div class="page-title" style="font-size:25px" data-t="profile.team">Equipe</div>
         <p style="font-size:13px;color:var(--ink-soft);margin:-8px 2px 18px"><span data-t="team.planLabel">Plano</span> <b id="equipa-plano-label">Pro</b> · <span id="equipa-seats-label">1 de 1 lugar usado</span></p>
 
-        <div class="plabel"><span data-t="profile.company">Empresa</span></div>
-        <div class="plist" style="margin-bottom:20px">
-          <div class="prow" onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" id="equipa-empresa-nome" data-t="profile.company">Empresa</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-        </div>
-
         <div id="equipa-lista"></div>
         <button class="btn soft" style="width:100%;margin-top:6px" onclick="abrirAdicionarMembro()"><span data-t="team.add">+ Adicionar pessoa à equipe</span></button>
-
-        <div class="plabel" style="margin-top:26px"><span data-t="team.roles">Papéis e privilégios</span></div>
-        <div class="plist">
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.admin.name">Admin</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.adminDesc">Gere a equipe, faturamento e todos os trabalhos</span></div></div></div>
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.editor.name">Editor</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.editorDesc">Cria e edita trabalhos, contratos e pagamentos</span></div></div></div>
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.viewer.name">Visualizador</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.viewerDesc">Só vê trabalhos e relatórios, sem poder editar</span></div></div></div>
-        </div>
       </section>
 
       <!-- ============ PESQUISA ============ -->
@@ -1437,6 +1431,7 @@
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  const PIVOT_VERSAO='1.0.0';
   let currentWorkspaceId = null;
   let currentUser = null;
 
@@ -3160,6 +3155,27 @@
     "profile.account.name": { pt:"Nome", en:"Name", es:"Nombre" },
     "profile.account.plan": { pt:"Plano", en:"Plan", es:"Plan" },
     "profile.account.save": { pt:"Guardar alterações", en:"Save changes", es:"Guardar cambios" },
+    "profile.account.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
+    "profile.account.docId": { pt:"Número de Documento Nacional", en:"National ID number", es:"Número de Documento Nacional" },
+    "profile.account.changePassword": { pt:"Alterar senha", en:"Change password", es:"Cambiar contraseña" },
+    "profile.company.address": { pt:"Endereço", en:"Address", es:"Dirección" },
+    "profile.organization": { pt:"Organização", en:"Organization", es:"Organización" },
+    "profile.plan": { pt:"Plano", en:"Plan", es:"Plan" },
+    "profile.plan.billingHistory": { pt:"Histórico de faturamento", en:"Billing history", es:"Historial de facturación" },
+    "profile.plan.nextRenewal": { pt:"Próxima renovação", en:"Next renewal", es:"Próxima renovación" },
+    "profile.about": { pt:"Sobre", en:"About", es:"Acerca de" },
+    "profile.notifications": { pt:"Notificações", en:"Notifications", es:"Notificaciones" },
+    "notif.email": { pt:"Notificações por email", en:"Email notifications", es:"Notificaciones por email" },
+    "notif.inApp": { pt:"Notificações no app", en:"In-app notifications", es:"Notificaciones en la app" },
+    "about.version": { pt:"Versão do aplicativo", en:"App version", es:"Versión de la app" },
+    "about.privacyPolicy": { pt:"Política de Privacidade", en:"Privacy Policy", es:"Política de Privacidad" },
+    "about.termsOfUse": { pt:"Termos de Uso", en:"Terms of Use", es:"Términos de Uso" },
+    "login.newPassword": { pt:"Nova senha", en:"New password", es:"Nueva contraseña" },
+    "login.confirmPassword": { pt:"Confirmar senha", en:"Confirm password", es:"Confirmar contraseña" },
+    "toast.passwordTooShort": { pt:"A senha deve ter pelo menos 6 caracteres", en:"Password must be at least 6 characters", es:"La contraseña debe tener al menos 6 caracteres" },
+    "toast.passwordMismatch": { pt:"As senhas não coincidem", en:"Passwords don't match", es:"Las contraseñas no coinciden" },
+    "toast.passwordUpdateError": { pt:"Erro ao alterar a senha", en:"Error changing password", es:"Error al cambiar la contraseña" },
+    "toast.passwordUpdated": { pt:"Senha alterada com sucesso", en:"Password changed successfully", es:"Contraseña cambiada con éxito" },
     "plan.name.free": { pt:"Free", en:"Free", es:"Free" },
     "plan.name.plus": { pt:"Plus", en:"Plus", es:"Plus" },
     "plan.name.pro": { pt:"Pro", en:"Pro", es:"Pro" },
@@ -3428,6 +3444,7 @@
     "services.new": { pt:"Novo serviço", en:"New service", es:"Nuevo servicio" },
     "services.edit": { pt:"Editar serviço", en:"Edit service", es:"Editar servicio" },
     "services.name": { pt:"Nome", en:"Name", es:"Nombre" },
+    "services.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "services.description": { pt:"Descrição", en:"Description", es:"Descripción" },
     "services.price": { pt:"Valor sugerido", en:"Suggested price", es:"Precio sugerido" },
     "services.delete": { pt:"Eliminar serviço", en:"Delete service", es:"Eliminar servicio" },
@@ -5352,7 +5369,7 @@
     if(membrosEquipa.length>=limite){
       openInfo(t('modal.seatsFull'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('team.seatsFullPrefix')}${limite}${t('team.seatsFullSuffix')}</p>
-        <button class="btn primary" style="width:100%" onclick="closeInfo();infoMinhaConta()">${t('profile.account.plan')}</button>`);
+        <button class="btn primary" style="width:100%" onclick="closeInfo();infoPlano()">${t('profile.account.plan')}</button>`);
       return;
     }
     openInfo(t('team.addPerson'), `
@@ -12527,7 +12544,7 @@
   function saveServicosData(){ savePersisted('pivot-servicosData', ()=>servicosData); }
   async function loadClientesData(){ await loadPersisted('pivot-clientesData', d=>{ clientesData=d; }); }
   async function loadServicosData(){ await loadPersisted('pivot-servicosData', d=>{ servicosData=d||[]; }); }
-  let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
+  let perfilData={nome:'', email:'', telefonePessoal:'', documentoNacional:'', empresa:'', categoria:'', telefone:'', endereco:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR', notifEmail:false, notifApp:true,
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false} } };
   const METODOS_PAGAMENTO_META=[
     ['revolut','payment.method.revolut','@utilizador', 'https://api.iconify.design/simple-icons:revolut.svg'],
@@ -13303,6 +13320,16 @@
     document.getElementById('infoBackBtn').style.display='none';
   }
   function infoMinhaConta(){
+    openInfo(t('profile.myAccount'), `
+      <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
+      <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
+      <div class="field"><label>${t('profile.account.phone')}</label><input value="${escapeHtml(perfilData.telefonePessoal||'')}" id="mc-telefone"></div>
+      <div class="field"><label>${t('profile.account.docId')}</label><input value="${escapeHtml(perfilData.documentoNacional||'')}" id="mc-doc"></div>
+      <div class="prow" style="margin:0 0 13px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <button class="btn primary" style="width:100%;margin-top:2px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
+      <button class="btn soft" style="width:100%;margin-top:8px" onclick="abrirAlterarSenha()">${t('profile.account.changePassword')}</button>`);
+  }
+  function infoPlano(){
     const planoAtual = perfilData.plano||'Free';
     const linhasPlano = Object.keys(PLANOS).map(nome=>{
       const p=PLANOS[nome];
@@ -13311,18 +13338,30 @@
       const onclick = atual ? '' : ` onclick="escolherPlano('${nome}')"`;
       return `<div class="pick-row"${estilo}${onclick}><div><div class="nm">${t(p.labelKey)}${atual?t('plan.current'):''}</div><div class="sub">${t(p.descKey)}</div></div></div>`;
     }).join('');
-    openInfo(t('profile.myAccount'), `
-      <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
-      <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
-      <div class="prow" style="margin:0 0 13px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-      <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
+    openInfo(t('profile.plan'), `
+      <p class="plabel" style="margin:0 2px 9px">${t('profile.account.plan')}</p>
       ${linhasPlano}
-      <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
       <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
       <div style="display:flex;gap:8px">
         <div class="field" style="flex:1;margin-bottom:0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
         <button class="btn soft" style="flex:none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
-      </div>`);
+      </div>
+      <p class="plabel" style="margin:22px 2px 9px">${t('profile.plan.billingHistory')}</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin:0 2px 6px">${t('profile.plan.nextRenewal')}: ${perfilData.plano==='Free'?'—':(perfilData.proximaRenovacao||'—')}</p>`);
+  }
+  function abrirAlterarSenha(){
+    openInfo(t('profile.account.changePassword'), `
+      <div class="field"><label>${t('login.newPassword')}</label><input type="password" id="ap-senha1"></div>
+      <div class="field"><label>${t('login.confirmPassword')}</label><input type="password" id="ap-senha2"></div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarAlterarSenha()">${t('profile.account.save')}</button>`);
+  }
+  async function confirmarAlterarSenha(){
+    const s1=document.getElementById('ap-senha1').value, s2=document.getElementById('ap-senha2').value;
+    if(!s1 || s1.length<6){ showToast(t('toast.passwordTooShort')); return; }
+    if(s1!==s2){ showToast(t('toast.passwordMismatch')); return; }
+    const { error } = await sb.auth.updateUser({ password:s1 });
+    if(error){ showToast(t('toast.passwordUpdateError')); return; }
+    closeInfo(); showToast(t('toast.passwordUpdated'));
   }
   async function resgatarCodigoPlano(){
     const input=document.getElementById('mc-codigo');
@@ -13350,6 +13389,7 @@
         <label class="inline-link" style="cursor:pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" style="display:none" onchange="onEmpresaAvatarSelected(this)"></label>
       </div>
       <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="emp-nome"></div>
+      <div class="field"><label>${t('profile.company.address')}</label><input value="${escapeHtml(perfilData.endereco||'')}" id="emp-endereco"></div>
       <div class="field"><label>${t('profile.company.category')}</label><input value="${escapeHtml(perfilData.categoria)}" id="emp-categoria" placeholder="${t('profile.company.categoryPlaceholder')}"></div>
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.empresaEmail||'')}" id="emp-email"></div>
       <div class="field"><label>${t('profile.company.phone')}</label><input value="${escapeHtml(perfilData.telefone)}" id="emp-telefone"></div>
@@ -13372,6 +13412,7 @@
   }
   function salvarEmpresa(){
     perfilData.empresa=document.getElementById('emp-nome').value.trim();
+    perfilData.endereco=document.getElementById('emp-endereco').value.trim();
     perfilData.categoria=document.getElementById('emp-categoria').value.trim();
     perfilData.empresaEmail=document.getElementById('emp-email').value.trim();
     perfilData.telefone=document.getElementById('emp-telefone').value.trim();
@@ -13411,6 +13452,8 @@
   function salvarMinhaConta(){
     perfilData.nome=document.getElementById('mc-nome').value.trim()||'Utilizador';
     perfilData.email=document.getElementById('mc-email').value.trim();
+    perfilData.telefonePessoal=document.getElementById('mc-telefone').value.trim();
+    perfilData.documentoNacional=document.getElementById('mc-doc').value.trim();
     savePerfilData();
     aplicarPerfilData();
     closeInfo(); showToast(t('toast.accountDataUpdated'));
@@ -13459,6 +13502,7 @@
     const s = id ? servicosData.find(x=>x.id===id) : null;
     openInfo(s ? t('services.edit') : t('services.new'), `
       <div class="field"><label>${t('services.name')}</label><input id="srv-nome" value="${s?escapeHtml(s.nome):''}"></div>
+      <div class="field"><label>${t('services.category')}</label><input id="srv-categoria" value="${s?escapeHtml(s.categoria||''):''}"></div>
       <div class="field"><label>${t('services.description')}</label><textarea id="srv-desc" rows="3">${s?escapeHtml(s.descricao||''):''}</textarea></div>
       <div class="field"><label>${t('services.price')}</label><input id="srv-valor" type="number" min="0" step="0.01" value="${s&&s.valor?s.valor:''}"></div>
       <input type="hidden" id="srv-id" value="${s?s.id:''}">
@@ -13468,14 +13512,15 @@
   function guardarServico(){
     const nome=document.getElementById('srv-nome').value.trim();
     if(!nome){ showToast(t('services.nameRequired')); return; }
+    const categoria=document.getElementById('srv-categoria').value.trim();
     const descricao=document.getElementById('srv-desc').value.trim();
     const valor=parseFloat(document.getElementById('srv-valor').value)||0;
     const id=document.getElementById('srv-id').value;
     if(id){
       const s=servicosData.find(x=>x.id===id);
-      if(s){ s.nome=nome; s.descricao=descricao; s.valor=valor; }
+      if(s){ s.nome=nome; s.categoria=categoria; s.descricao=descricao; s.valor=valor; }
     } else {
-      servicosData.push({ id:'srv'+Date.now()+Math.random().toString(36).slice(2,7), nome, descricao, valor });
+      servicosData.push({ id:'srv'+Date.now()+Math.random().toString(36).slice(2,7), nome, categoria, descricao, valor });
     }
     saveServicosData();
     showToast(t('toast.serviceSaved'));
@@ -13630,7 +13675,8 @@
         <option value="USD"${perfilData.moeda==='USD'?' selected':''}>${t('currency.dollar')}</option>
         <option value="BRL"${perfilData.moeda==='BRL'?' selected':''}>${t('currency.real')}</option></select></div>
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
-      <div class="prow" style="margin-top:18px" onclick="infoIdioma()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" style="margin-top:18px" onclick="infoNotificacoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="infoIdioma()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:18px 2px 8px">${t('settings.storageTitle')}</p>
       <div style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
       <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${usadoMB.toFixed(1)} MB ${t('settings.storageOf')} ${limiteTexto}</p>`);
@@ -13643,6 +13689,24 @@
     closeInfo();
     showToast(t('toast.settingsSaved'));
   }
+  function infoNotificacoes(){
+    openInfo(t('profile.notifications'), `
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.email')}</div><div class="toggle${perfilData.notifEmail?' on':''}" onclick="this.classList.toggle('on')" id="notif-email"><div class="kn"></div></div></div>
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.inApp')}</div><div class="toggle${perfilData.notifApp?' on':''}" onclick="this.classList.toggle('on')" id="notif-app"><div class="kn"></div></div></div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="guardarNotificacoes()">${t('action.save')}</button>`);
+  }
+  function guardarNotificacoes(){
+    perfilData.notifEmail=document.getElementById('notif-email').classList.contains('on');
+    perfilData.notifApp=document.getElementById('notif-app').classList.contains('on');
+    savePerfilData();
+    closeInfo(); showToast(t('toast.settingsSaved'));
+  }
+  function infoSobre(){
+    openInfo(t('profile.about'), `
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('about.version')}</div><div class="v">${PIVOT_VERSAO||'1.0.0'}</div></div>
+      <div class="prow" onclick="window.open('https://pivot.app/privacidade','_blank')"><div class="t">${t('about.privacyPolicy')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="window.open('https://pivot.app/termos','_blank')"><div class="t">${t('about.termsOfUse')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>`);
+  }
   function infoPrivacidade(){
     openInfo(t('modal.privacy'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('privacy.desc')}</p>
@@ -13650,7 +13714,7 @@
       <button class="btn soft" style="width:100%;color:var(--ink);border-color:var(--late)" onclick="confirmarApagarDados()">${t('action.deleteAccount')}</button>`);
   }
   function exportarDadosReal(){
-    const pacote={ exportadoEm:new Date().toISOString(), trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
+    const pacote={ exportadoEm:new Date().toISOString(), conta:perfilData, trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
     const blob=new Blob([JSON.stringify(pacote,null,2)], {type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
