@@ -10,7 +10,7 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&family=Six+Caps&family=JetBrains+Mono:wght@400;500;600;700&family=Zalando+Sans+Expanded:wght@400;500;600;700&family=Space+Grotesk:wght@600&family=Inter:wght@500;600&family=IBM+Plex+Sans:wght@500;600&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&family=Six+Caps&family=JetBrains+Mono:wght@400;500;600;700&family=Zalando+Sans+Expanded:wght@400;500;600;700&family=TikTok+Sans:slnt,wdth,wght@0,115,900&family=Inter:wght@500;600&family=IBM+Plex+Sans:wght@500;600&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/background.css">
 <link rel="stylesheet" href="styles/domains/landing.css">
@@ -293,14 +293,15 @@
 
     <div id="login-form-entrar">
       <p class="login-tag" id="lbl-login-tag" data-t="login.title"><span data-t="login.title">Entra para continuar</span></p>
-      <div class="field"><label data-t="login.email">Email</label><input id="login-email" type="email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
+      <div class="field"><label data-t="login.email">Email</label><input id="login-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
       <div class="field"><label data-t="login.password">Password</label><input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
       <p class="field-err" id="login-err" style="display:none"><span>Preenche o email e a password.</span></p>
       <button class="btn primary" style="width:100%" onclick="entrarNaApp()"><span data-t="login.submit">Entrar</span></button>
-      <div class="login-divider"><span>ou</span></div>
+      <p class="login-alt" style="margin-top:-6px"><span class="inline-link" onclick="abrirResetPassword()" data-t="login.forgotPassword">Esqueceste a password?</span></p>
+      <div class="login-divider"><span data-t="login.or">ou</span></div>
       <button class="btn soft" style="width:100%" onclick="pivotSignInGoogle()">
         <svg viewBox="0 0 24 24" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.94z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
-        <span>Continuar com Google</span>
+        <span data-t="login.google">Continuar com Google</span>
       </button>
       <p class="login-alt"><span data-t="login.noAccount">Ainda não tem conta?</span> <span class="inline-link" onclick="mostrarEcraCriarConta()" data-t="login.register">Criar conta</span></p>
     </div>
@@ -309,11 +310,16 @@
       <div id="signup-form-fields">
         <p class="login-tag" data-t="login.registerTitle">Cria a tua conta</p>
         <div class="field"><label data-t="field.name">Nome</label><input id="signup-nome" type="text" placeholder="O teu nome" data-t-placeholder="signup.namePlaceholder" autocomplete="name"></div>
-        <div class="field"><label data-t="login.email">Email</label><input id="signup-email" type="email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
+        <div class="field"><label data-t="login.email">Email</label><input id="signup-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
         <div class="field"><label data-t="login.password">Password</label><input id="signup-pass" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
         <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="signup-pass2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
         <p class="field-err" id="signup-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
         <button class="btn primary" style="width:100%" id="signup-btn" onclick="criarContaNaApp()"><span data-t="login.register">Criar conta</span></button>
+        <div class="login-divider"><span data-t="login.or">ou</span></div>
+        <button class="btn soft" style="width:100%" onclick="pivotSignInGoogle()">
+          <svg viewBox="0 0 24 24" style="width:16px;height:16px;vertical-align:-3px;margin-right:6px"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.49 12c0-.73.13-1.43.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.43 3.45 1.18 4.94z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1A11 11 0 0 0 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
+          <span data-t="login.googleSignup">Criar conta com Google</span>
+        </button>
         <p class="login-alt"><span data-t="login.haveAccount">Já tem conta?</span> <span class="inline-link" onclick="mostrarEcraEntrar()" data-t="login.submit">Entrar</span></p>
       </div>
       <div id="signup-aguardando" style="display:none">
@@ -322,6 +328,29 @@
         <button class="btn soft" style="width:100%;margin-bottom:9px" id="signup-reenviar-btn" onclick="reenviarEmailConfirmacao()"><span data-t="signup.resendEmail">Reenviar email</span></button>
         <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
       </div>
+    </div>
+
+    <div id="login-form-reset" style="display:none">
+      <div id="reset-form-fields">
+        <p class="login-tag" data-t="login.forgotPassword">Esqueceste a password?</p>
+        <div class="field"><label data-t="login.email">Email</label><input id="reset-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
+        <p class="field-err" id="reset-err" style="display:none"><span data-t="login.error">Preenche o email e a password.</span></p>
+        <button class="btn primary" style="width:100%" id="reset-btn" onclick="enviarResetPassword()"><span data-t="login.sendResetLink">Enviar link</span></button>
+        <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
+      </div>
+      <div id="reset-enviado" style="display:none">
+        <p class="login-tag" data-t="signup.confirmEmailTitle">Confirma o teu email</p>
+        <p style="font-size:13.5px;color:var(--ink-soft);text-align:center;margin-bottom:18px" data-t="login.resetSent">Se existir uma conta com este email, enviámos um link para redefinires a password.</p>
+        <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
+      </div>
+    </div>
+
+    <div id="login-form-newpass" style="display:none">
+      <p class="login-tag" data-t="login.forgotPassword">Esqueceste a password?</p>
+      <div class="field"><label data-t="login.password">Password</label><input id="newpass-1" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
+      <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="newpass-2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
+      <p class="field-err" id="newpass-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
+      <button class="btn primary" style="width:100%" id="newpass-btn" onclick="salvarNovaPassword()"><span data-t="login.saveNewPassword">Guardar nova password</span></button>
     </div>
 
   </div>
@@ -453,12 +482,12 @@
             </div>
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="mrl-extras">0 €</b></div>
                 <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
+                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="mrl-teto">500 €</b></div>
               </div>
             </div>
           </div>
@@ -532,7 +561,6 @@
         </div>
         <div class="card rel-card-body">
           <div class="cal-grid" id="calgrid"></div>
-          <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
         </div>
 
         <!-- 4 filtros do mesmo tamanho, com ícone antes do nome (reaproveitando
@@ -540,10 +568,9 @@
              "Todos" é o estado padrão (calFiltroAtivo já começa como 'todos',
              nenhuma lógica nova em filterJobs precisa mudar). -->
         <div class="filter-row filter-row-even" style="margin-top:22px">
-          <div class="chip chip-ic on" data-key="todos" onclick="filterJobs(this,'todos')"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg><span data-t="jobs.filter.all">Todos</span></div>
-          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="jobs.filter.mine">Demandas</span></div>
-          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg><span data-t="jobs.filter.client">Pendências</span></div>
-          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg><span data-t="jobs.filter.history">Histórico</span></div>
+          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/streamline-block:arrowheads-up-right-chevron.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:arrowheads-up-right-chevron.svg)"></span><span data-t="jobs.filter.client">Pendências</span></div>
+          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/streamline-block:arrowheads-down-left-chevron.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:arrowheads-down-left-chevron.svg)"></span><span data-t="jobs.filter.mine">Demandas</span></div>
+          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/ic:outline-history.svg);-webkit-mask-image:url(https://api.iconify.design/ic:outline-history.svg)"></span><span data-t="jobs.filter.history">Histórico</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
@@ -730,12 +757,12 @@
         <!-- Seletor de período — barra global partilhada por todos os cards
              da página (todo card usa relRangeMeses()/relPeriodo pra se
              filtrar), por isso fica solta no topo, fora de qualquer área. -->
-        <div class="card rel-card">
+        <div class="card rel-card rel-period-card">
           <div class="rel-period-bar">
             <div class="rel-month-row">
               <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
               <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
-                <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
+                <span class="rel-mes-big" id="rel-mes-label">Julho</span>
                 <span class="rel-ano-small" id="rel-ano-label">2026</span>
               </div>
               <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
@@ -775,12 +802,12 @@
             </div>
             <div class="ms-progress-left">
               <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="abrirDefinirMetas()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
+                <div class="mrl-item" onclick="abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="rf-mrl-esperado">3.200 €</b></div>
                 <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Recebido</span> <b id="rf-mrl-receb">2.450 €</b></div>
                 <div class="mrl-item" onclick="abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="rf-mrl-extras">0 €</b></div>
                 <div class="mrl-item" onclick="abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="rf-mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="abrirDefinirMetas()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="rf-mrl-teto">500 €</b></div>
+                <div class="mrl-item" onclick="abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Teto de gastos</span> <b id="rf-mrl-teto">500 €</b></div>
               </div>
             </div>
           </div>
@@ -789,36 +816,20 @@
         <!-- 4 botões de acesso às listas completas (add/editar/excluir),
              sem gráfico nenhum nessas telas — só o essencial de navegação. -->
         <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirMetas()"><span data-t="reports.finBtn.limites">Limites</span></button>
-          <button class="btn soft" onclick="abrirGerenciamentoFluxo('recebidos')"><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirReceitas()"><span data-t="reports.finBtn.receitas">Receitas</span></button>
           <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
 
-        <!-- Card: Fluxo — só análise, sem gerenciamento: Top 5 subcategorias
-             que mais faturaram (verde, esquerda) vs Top 5 subcategorias com
-             maior gasto (laranja, direita), sempre 5 linhas fixas cada lado
-             (preenche com "Sem dados" se faltar), no mesmo grid dividido
-             .rel-split usado em Rentabilidade/Evolução Mensal: divisória
-             vertical exata no centro, linhas horizontais atravessando a
-             largura toda do card. Barras no mesmo estilo do card Operacional
-             (.track/.segment, 20 blocos), só recoloridas verde/laranja.
-             Linhas NÃO são clicáveis — só os títulos "Recebidos"/"Despesas"
-             (com seta apontando pro próprio lado) abrem a tela de
-             gerenciamento (abrirGerenciamentoFluxo), que reaproveita a mesma
-             lista/timeline de sempre (editar/excluir/adicionar). -->
+        <!-- Card: Fluxo — lista simples dos lançamentos mais recentes do
+             período (recebidos e despesas misturados, ordenados por data),
+             um item por linha: título em cima, categoria embaixo, valor à
+             direita ocupando a altura das duas linhas. Ver
+             renderRelFluxoFinanceiro(). -->
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo</div>
-        <div class="card rel-card rel-card-body distfin-card">
-          <div class="distfin-heads">
-            <span class="distfin-head-inc">
-              <span data-t="reports.distFin.income">Recebidos</span>
-            </span>
-            <span class="distfin-head-exp">
-              <span data-t="reports.distFin.expenses">Despesas</span>
-            </span>
-          </div>
-          <div class="distfin-rule-soft"></div>
-          <div class="distfin-rows" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
+        <div class="card rel-card rel-card-body">
+          <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
         </div>
 
         <!-- Card: Operacional — reaproveita EXATAMENTE o mesmo componente
@@ -879,7 +890,7 @@
              trabalhadas" incorpora essa mesma comparação de período. Mesmo
              grid dividido .rel-split das demais (divisória vertical
              central, linhas horizontais de borda a borda). -->
-        <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Evolução Mensal</div>
+        <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Desempenho</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
@@ -893,8 +904,8 @@
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-split-subhead">
-            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Rentabilidade por Hora</div>
-            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Indicadores Gerais</div>
+            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
+            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
           </div>
           <div class="rel-split" id="rel-rentabilidade-grid"></div>
         </div>
@@ -1262,7 +1273,7 @@
           <label data-t="field.nameRequired">Nome *</label><input id="cl-nome" placeholder="Nome completo" data-t-placeholder="field.namePlaceholder">
           <div class="field-err" id="cl-nome-err" data-t="wizard.client.nameError">Precisa de um nome para continuar.</div>
         </div>
-        <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()" type="email" autocomplete="off" name="cl-email-cliente"></div>
+        <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()" type="email" autocomplete="off" name="cl-email-cliente"></div>
         <div class="warn-box" id="cl-dup" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>
           <div><span data-t="wizard.client.dupPrefix">Já existe </span><b id="cl-dup-nome"></b><span data-t="wizard.client.dupSuffix"> com este email.</span>
@@ -1330,10 +1341,10 @@
       </div>
 
       <!-- 💰 RECEITA — tela exclusiva de captura rápida (a lista completa de
-           gerenciamento continua em Financeiro > Receitas, abrirGerenciamentoFluxo). -->
+           gerenciamento continua em Financeiro > Receitas, abrirReceitas()). -->
       <div class="panel" data-panel="receita">
         <div class="field"><label data-t="field.title">Título</label><input id="rc-titulo" placeholder="Freelance extra, venda…"></div>
-        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="rc-categoria" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></div>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><select id="rc-categoria"></select></div>
         <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="rc-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key==='Enter')criarReceitaPanel()"></div>
         <div class="field"><label data-t="field.date">Data</label><input type="date" id="rc-data"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="rc-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
@@ -1344,8 +1355,7 @@
            gerenciamento continua em Financeiro > Despesas, abrirDespesas). -->
       <div class="panel" data-panel="despesa">
         <div class="field"><label data-t="field.title">Título</label><input id="ds-titulo" placeholder="Uber, equipamento…"></div>
-        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><input id="ds-categoria" list="despesa-categorias-lista-sheet" placeholder="opcional" data-t-placeholder="reports.expenseCategoryPlaceholder" autocomplete="off"></div>
-        <datalist id="despesa-categorias-lista-sheet"></datalist>
+        <div class="field"><label data-t="reports.expenseCategory">Categoria</label><select id="ds-categoria"></select></div>
         <div class="field"><label data-t="reports.expenseValue">Valor</label><input id="ds-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key==='Enter')criarDespesaPanel()"></div>
         <div class="field"><label data-t="field.date">Data</label><input type="date" id="ds-data"></div>
         <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ds-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
@@ -1446,7 +1456,19 @@
   }
   async function carregarWorkspace(session){
     currentUser = session.user;
-    const { data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single();
+    /* Conta nova (sobretudo via Google, onde a sessão fica pronta assim que o
+       browser volta do OAuth) pode chegar aqui antes do trigger da BD que cria
+       a linha em workspace_members terminar de correr — sem isto, a primeira
+       leitura vinha vazia (PGRST116, "no rows") e a pessoa ficava presa num
+       ecrã de erro mesmo com o login a ter funcionado. Repete algumas vezes
+       com um pequeno intervalo antes de assumir que é um erro real. */
+    let data, error;
+    for (let tentativa=0; tentativa<5; tentativa++){
+      ({ data, error } = await sb.from('workspace_members').select('workspace_id').eq('user_id', currentUser.id).limit(1).single());
+      if (!error) break;
+      if (error.code !== 'PGRST116') break; // erro real (não "sem linhas ainda") — não adianta repetir
+      await new Promise(r=>setTimeout(r, 700));
+    }
     if (error) {
       console.error('Erro a obter workspace:', error);
       const aviso=document.createElement('div');
@@ -1489,10 +1511,26 @@
        ecrãs a "misturar-se" a meio de um clique, listas a re-renderizar do
        nada. Só reagimos aos eventos que realmente significam início/fim de
        sessão. */
-    const eventosRelevantes = ['INITIAL_SESSION', 'SIGNED_IN', 'SIGNED_OUT'];
+    const eventosRelevantes = ['INITIAL_SESSION', 'SIGNED_IN', 'SIGNED_OUT', 'PASSWORD_RECOVERY'];
     if (!eventosRelevantes.includes(_event)) return;
     if (_event === 'SIGNED_OUT' || !session) {
       authPronta = true;
+      tentarEsconderSplash();
+      return;
+    }
+    /* Link de "esqueci a password": a Supabase autentica a pessoa ao seguir o
+       link (é assim que confirma que é dona do email) e dispara este evento
+       em vez de SIGNED_IN — mostramos o ecrã de escolher nova password em vez
+       de entrar direto na app com a sessão temporária de recuperação. */
+    if (_event === 'PASSWORD_RECOVERY') {
+      authPronta = true;
+      const landing=document.getElementById('landing-page');
+      if (landing) landing.style.display='none';
+      const tela=document.getElementById('login-screen');
+      if (tela) tela.classList.remove('hide');
+      ['login-form-entrar','login-form-criar','login-form-reset'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+      const np=document.getElementById('login-form-newpass');
+      if (np) np.style.display='block';
       tentarEsconderSplash();
       return;
     }
@@ -2827,12 +2865,19 @@
     "login.email": { pt:"Email", en:"Email", es:"Email" },
     "login.error": { pt:"Preenche o email e a password.", en:"Please enter your email and password.", es:"Introduce tu email y contraseña." },
     "login.google": { pt:"Continuar com Google", en:"Continue with Google", es:"Continuar con Google" },
+    "login.googleSignup": { pt:"Criar conta com Google", en:"Sign up with Google", es:"Crear cuenta con Google" },
+    "login.forgotPassword": { pt:"Esqueceste a password?", en:"Forgot password?", es:"¿Olvidaste tu contraseña?" },
+    "login.resetSent": { pt:"Se existir uma conta com este email, enviámos um link para redefinires a password.", en:"If an account exists for this email, we've sent a link to reset your password.", es:"Si existe una cuenta con este email, enviamos un enlace para restablecer tu contraseña." },
+    "login.resetEmailNeeded": { pt:"Escreve o teu email no campo acima primeiro.", en:"Enter your email in the field above first.", es:"Escribe tu email en el campo de arriba primero." },
+    "login.sendResetLink": { pt:"Enviar link", en:"Send link", es:"Enviar enlace" },
+    "login.saveNewPassword": { pt:"Guardar nova password", en:"Save new password", es:"Guardar nueva contraseña" },
+    "login.newPasswordSaved": { pt:"Password redefinida. Já podes continuar.", en:"Password reset. You're all set.", es:"Contraseña restablecida. Ya puedes continuar." },
     "login.noAccount": { pt:"Ainda não tem conta?", en:"Don't have an account?", es:"¿Aún no tienes cuenta?" },
     "login.or": { pt:"ou", en:"or", es:"o" },
     "login.password": { pt:"Password", en:"Password", es:"Contraseña" },
     "login.register": { pt:"Criar conta", en:"Create account", es:"Crear cuenta" },
     "login.submit": { pt:"Entrar", en:"Sign in", es:"Entrar" },
-    "login.title": { pt:"Entra para continuar", en:"Sign in to continue", es:"Inicia sesión para continuar" },
+    "login.title": { pt:"Your contacts, into contracts", en:"Your contacts, into contracts", es:"Your contacts, into contracts" },
     "login.registerTitle": { pt:"Cria a tua conta", en:"Create your account", es:"Crea tu cuenta" },
     "login.haveAccount": { pt:"Já tem conta?", en:"Already have an account?", es:"¿Ya tienes cuenta?" },
     "field.confirmPassword": { pt:"Confirmar password", en:"Confirm password", es:"Confirmar contraseña" },
@@ -3233,14 +3278,16 @@
     "reports.op.info.target": { pt:"Meta", en:"Target", es:"Meta" },
     "reports.op.info.percent": { pt:"Percentual", en:"Percentage", es:"Porcentaje" },
     "reports.op.info.gotIt": { pt:"Entendi", en:"Got it", es:"Entendido" },
-    "reports.expensesTitle": { pt:"Despesas do mês", en:"Month expenses", es:"Gastos del mes" },
+    "reports.expensesTitle": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     "reports.expenseName": { pt:"Nome", en:"Name", es:"Nombre" },
     "reports.expenseValue": { pt:"Valor", en:"Value", es:"Valor" },
     "reports.addExpense": { pt:"Adicionar despesa", en:"Add expense", es:"Añadir gasto" },
     "reports.editExpense": { pt:"Editar despesa", en:"Edit expense", es:"Editar gasto" },
     "reports.saveExpense": { pt:"Guardar", en:"Save", es:"Guardar" },
     "reports.expenseCategory": { pt:"Categoria", en:"Category", es:"Categoría" },
-    "reports.expenseCategoryPlaceholder": { pt:"Equipamentos, Marketing…", en:"Equipment, Marketing…", es:"Equipamiento, Marketing…" },
+    "reports.incomeTitle": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "reports.addIncome": { pt:"Adicionar receita", en:"Add income", es:"Añadir ingreso" },
+    "reports.expenseCategoryPlaceholder": { pt:"Selecionar categoria", en:"Select category", es:"Seleccionar categoría" },
     // --- Distribuição Financeira ---
     "reports.distFin.title": { pt:"Distribuição Financeira", en:"Financial Distribution", es:"Distribución Financiera" },
     "reports.distFin.income": { pt:"Recebidos", en:"Received", es:"Recibidos" },
@@ -3263,7 +3310,7 @@
     "reports.flow.bySubcategory": { pt:"Por subcategoria", en:"By subcategory", es:"Por subcategoría" },
     "reports.flow.bySubcategoryIncome": { pt:"Recebidos por subcategoria", en:"Income by subcategory", es:"Recibidos por subcategoría" },
     "reports.emptyPeriod": { pt:"Sem dados neste período.", en:"No data this period.", es:"Sin datos en este período." },
-    "reports.evolution.title": { pt:"Evolução Mensal", en:"Monthly Evolution", es:"Evolución Mensual" },
+    "reports.evolution.title": { pt:"Desempenho", en:"Performance", es:"Desempeño" },
     "reports.evolution.improvements": { pt:"Top 5 melhorias", en:"Top 5 improvements", es:"Top 5 mejoras" },
     "reports.evolution.declines": { pt:"Top 5 quedas", en:"Top 5 declines", es:"Top 5 caídas" },
     "reports.evolution.metric.revenue": { pt:"Receita", en:"Revenue", es:"Ingresos" },
@@ -3282,8 +3329,8 @@
     "reports.profitability.sortDesc": { pt:"Mais rentáveis primeiro", en:"Most profitable first", es:"Más rentables primero" },
     "reports.profitability.sortAsc": { pt:"Menos rentáveis primeiro", en:"Least profitable first", es:"Menos rentables primero" },
     "reports.profitability.empty": { pt:"Sem dados de rentabilidade neste período.", en:"No profitability data this period.", es:"Sin datos de rentabilidad en este período." },
-    "reports.profitability.colRanking": { pt:"Rentabilidade por Hora", en:"Profitability per Hour", es:"Rentabilidad por Hora" },
-    "reports.profitability.colIndicators": { pt:"Indicadores Gerais", en:"General Indicators", es:"Indicadores Generales" },
+    "reports.profitability.colRanking": { pt:"Ranking hora", en:"Hour ranking", es:"Ranking hora" },
+    "reports.profitability.colIndicators": { pt:"Geral mensal", en:"Monthly overview", es:"General mensual" },
     "reports.indicators.title": { pt:"Eficiência", en:"Efficiency", es:"Eficiencia" },
     "reports.noData": { pt:"Sem dados", en:"No data", es:"Sin datos" },
     "reports.indicators.ticket": { pt:"Ticket médio", en:"Average ticket", es:"Ticket medio" },
@@ -3687,7 +3734,7 @@
     "wizard.schedule": { pt:"Cronograma", en:"Schedule", es:"Cronograma" },
     "wizard.noAddressMatches": { pt:"Nenhum endereço encontrado. Continue digitando ou preencha manualmente.", en:"No address found. Keep typing or fill it in manually.", es:"No se encontró ninguna dirección. Siga escribiendo o complete manualmente." },
     "field.phonePlaceholder": { pt:"Número de telefone", en:"Phone number", es:"Número de teléfono" },
-    "field.emailPlaceholder": { pt:"email@email.com", en:"email@email.com", es:"email@email.com" },
+    "field.emailPlaceholder": { pt:"example@email.com", en:"example@email.com", es:"example@email.com" },
     "field.instagramPlaceholder": { pt:"@usuário", en:"@username", es:"@usuario" },
     "wizard.searchOrCreate": { pt:"Procurar ou criar…", en:"Search or create…", es:"Buscar o crear…" },
     "wizard.searchTemplates": { pt:"Procurar nos seus modelos", en:"Search your templates", es:"Buscar en tus plantillas" },
@@ -3787,12 +3834,16 @@
 
   const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe'];
   function go(v){
-    views.forEach(x=>{
-      const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
-    });
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
       contatos:'perfil','contato-detalhe':'perfil'};
+    /* sair da área de Trabalhos (menu/página diferente) limpa a seleção de dia
+       do calendário — ao voltar, mostra de novo os registos do dia atual em
+       vez de continuar filtrado por um dia que a pessoa já esqueceu. */
+    if(navMap[v]!=='trabalhos' && typeof calDiaAtivo!=='undefined' && calDiaAtivo!=null) calDiaAtivo=null;
+    views.forEach(x=>{
+      const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
+    });
     const active=navMap[v]||v;
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
@@ -3806,23 +3857,68 @@
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
   }
-  let METAS={receita:0, gastos:0};
-  function saveMetas(){ savePersisted('pivot-metas', ()=>METAS); }
+  /* Meta de faturamento e limite de gastos passam a ter histórico por mês
+     (chave 'AAAA-MM'), não mais um único valor global — cada mês guarda o
+     valor que esteve em vigor nele. O mês corrente é sempre o único
+     editável: as duas telas de definição (abrirDefinirMetaReceita/
+     abrirDefinirLimiteGastos) só leem/gravam a chave do mês atual, nunca
+     uma chave passada — isso já é suficiente pra "travar" meses anteriores,
+     sem precisar de nenhum mecanismo extra de bloqueio: uma vez que o mês
+     vira, a chave antiga simplesmente não é mais tocada por nada. Um mês
+     sem valor definido (ex.: início de um mês novo, ainda sem edição)
+     herda o último valor definido até ali, em vez de cair pra 0. */
+  let METAS_HIST={};
+  function chaveMes(ano,mes){ return ano+'-'+String(mes).padStart(2,'0'); }
+  function chaveMesAtual(){ const h=new Date(); return chaveMes(h.getFullYear(), h.getMonth()+1); }
+  function metasDoMes(ano,mes){
+    const chave=chaveMes(ano,mes);
+    if(METAS_HIST[chave]) return METAS_HIST[chave];
+    const anteriores=Object.keys(METAS_HIST).filter(k=>k<=chave).sort();
+    if(anteriores.length) return METAS_HIST[anteriores[anteriores.length-1]];
+    return {receita:0, gastos:0};
+  }
+  function metasMesAtual(){
+    const chave=chaveMesAtual();
+    if(!METAS_HIST[chave]) METAS_HIST[chave]=Object.assign({}, metasDoMes(new Date().getFullYear(), new Date().getMonth()+1));
+    return METAS_HIST[chave];
+  }
+  function saveMetas(){ savePersisted('pivot-metas-historico', ()=>METAS_HIST); }
   async function loadMetas(){
-    await loadPersisted('pivot-metas', d=>{ METAS=Object.assign({}, METAS, d); });
+    await loadPersisted('pivot-metas-historico', d=>{ METAS_HIST=d||{}; });
+    /* migração do formato antigo (pivot-metas: um objeto único {receita,gastos},
+       sem histórico) — se ainda não existir nenhum histórico, o valor antigo
+       vira o valor do mês corrente, pra não perder o que já estava configurado. */
+    if(!Object.keys(METAS_HIST).length){
+      await loadPersisted('pivot-metas', d=>{ if(d && (d.receita||d.gastos)) METAS_HIST[chaveMesAtual()]={receita:d.receita||0, gastos:d.gastos||0}; });
+    }
     renderMonthTicker();
   }
-  function abrirDefinirMetas(){
-    openInfo(t('modal.setGoals'), `
-      <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${METAS.receita}" placeholder="4300"></div>
-      <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${METAS.gastos}" placeholder="500"></div>
+  function abrirDefinirMetaReceita(){
+    const m=metasMesAtual();
+    openInfo(t('settings.projectedLabel'), `
+      <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${m.receita}" placeholder="4300"></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
-      <button class="btn primary" style="width:100%" onclick="guardarMetas()">${t('action.saveGoals')}</button>`);
+      <button class="btn primary" style="width:100%" onclick="guardarMetaReceita()">${t('action.saveGoals')}</button>`);
   }
-  function guardarMetas(){
+  function guardarMetaReceita(){
     const r=parseFloat(document.getElementById('meta-receita-input').value)||0;
+    metasMesAtual().receita=r;
+    saveMetas();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    closeInfo();
+    showToast(t('toast.goalsUpdated'));
+  }
+  function abrirDefinirLimiteGastos(){
+    const m=metasMesAtual();
+    openInfo(t('settings.limitLabel'), `
+      <div class="field"><label>${t('settings.limitLabel')}</label><input type="number" min="0" id="meta-gastos-input" value="${m.gastos}" placeholder="500"></div>
+      <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px">${t('settings.ringHint')}</p>
+      <button class="btn primary" style="width:100%" onclick="guardarLimiteGastos()">${t('action.saveGoals')}</button>`);
+  }
+  function guardarLimiteGastos(){
     const g=parseFloat(document.getElementById('meta-gastos-input').value)||0;
-    METAS.receita=r; METAS.gastos=g;
+    metasMesAtual().gastos=g;
     saveMetas();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
@@ -3932,7 +4028,8 @@
   }
   function renderRingsDashboard(recebido, esperado, custos, extras){
     extras=extras||0;
-    const meta=METAS.receita||1, teto=METAS.gastos||1;
+    const mAtual=metasMesAtual();
+    const meta=mAtual.receita||1, teto=mAtual.gastos||1;
     pintarTeto('');
     FITA_STATE.esperado=pintarFita('esperado', esperado, meta);
     FITA_STATE.recebido=pintarFita('recebido', recebido, meta);
@@ -3959,15 +4056,17 @@
   /* mesmo gráfico de anéis do Dashboard, reaproveitado no card "Resumo
      Financeiro" de Relatórios (prefixo 'rf-'), mas com os valores somados
      pro período selecionado ali (relRangeMeses()) em vez de fixos no mês
-     corrente — meta/teto escalam pro nº de meses do período, pra continuar
-     comparável (ex.: um trimestre soma 3 metas mensais). */
+     corrente — meta/teto somam a meta/teto que esteve em vigor em cada mês
+     do período (ver metasDoMes), pra continuar comparável e refletir o
+     histórico real de cada mês, não o valor atual multiplicado. */
   function renderResumoFinanceiroRelatorios(){
     if(!document.getElementById('rf-mr-esperado')) return;
     const meses=relRangeMeses();
     const s=relStatsAgregadas();
     const extrasPeriodo=meses.reduce((acc,m)=>acc+receitasDoMes(m.ano,m.mes),0);
     const recebido=s.recebido-extrasPeriodo, esperado=s.porReceber, custos=s.custos, extras=extrasPeriodo;
-    const meta=(METAS.receita||0)*meses.length||1, teto=(METAS.gastos||0)*meses.length||1;
+    const somaMetas=meses.reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
+    const meta=somaMetas.receita||1, teto=somaMetas.gastos||1;
     pintarTeto('rf-');
     pintarFita('esperado', esperado, meta, 'rf-');
     pintarFita('recebido', recebido, meta, 'rf-');
@@ -4196,7 +4295,7 @@
       entreguesPorDataEsteMes, entreguesPorDataMesAnterior, fechadosPorDataEsteMes, fechadosPorDataMesAnterior,
       pendClienteCount:pendCliente.length, pendClienteEsteMes:pendClienteBucket.esteMes, pendClienteMesAnterior:pendClienteBucket.mesAnterior,
       pendMeuCount:pendMeu.length, pendMeuEsteMes:pendMeuBucket.esteMes, pendMeuMesAnterior:pendMeuBucket.mesAnterior,
-      custos:custosDoMes(anoRef,mesRef), meta:METAS.receita, limiteGastos:METAS.gastos};
+      custos:custosDoMes(anoRef,mesRef), meta:metasDoMes(anoRef,mesRef).receita, limiteGastos:metasDoMes(anoRef,mesRef).gastos};
   }
   function horasCompacto(v){
     v=v||0;
@@ -4365,6 +4464,7 @@
     client:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.7 3.4-7.5 7.5-7.5s7.5 2.8 7.5 7.5z"/></svg>',
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
     calendar:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4 9.5h4v3H9z"/><rect x="7" y="2" width="2.4" height="4" rx="1"/><rect x="14.6" y="2" width="2.4" height="4" rx="1"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   };
   /* data literal (dd Mmm aaaa) — o prazo deixou de mostrar "Hoje"/"Amanhã"/
      "N dias" e passa a mostrar sempre a data exata em que a tarefa deve
@@ -5242,7 +5342,7 @@
       return;
     }
     openInfo(t('team.addPerson'), `
-      <div class="field"><label>${t('login.email')}</label><input id="eq-email" placeholder="email@exemplo.pt" data-t-placeholder="field.emailPlaceholder" type="email" autocomplete="off" name="eq-email-convite"></div>
+      <div class="field"><label>${t('login.email')}</label><input id="eq-email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" type="email" autocomplete="off" name="eq-email-convite"></div>
       <div class="field"><label>${t('field.role')}</label><select id="eq-papel"><option value="Editor">${papelNome('Editor')}</option><option value="Viewer">${papelNome('Viewer')}</option></select></div>
       <p style="font-size:12px;color:var(--neutral);margin:-6px 2px 14px" id="eq-papel-desc">${papelDesc('Editor')}</p>
       <button class="btn primary" style="width:100%" onclick="guardarNovoMembro()">${t('action.add')}</button>`);
@@ -6155,7 +6255,7 @@
     if(relPeriodo.tipo==='trimestre') return {big:'T'+Math.ceil(relPeriodo.mesFim/3), small:String(relPeriodo.ano), compact:false};
     if(relPeriodo.tipo==='ano') return {big:String(relPeriodo.ano), small:'', compact:false};
     if(relPeriodo.tipo==='intervalo') return {big:fmtD(relPeriodo.ini)+' – '+fmtD(relPeriodo.fim), small:'', compact:true};
-    return {big:mesCompleto(relMes-1).toUpperCase(), small:String(relAno), compact:false};
+    return {big:mesCompleto(relMes-1), small:String(relAno), compact:false};
   }
   function relMonthNav(dir){
     if(relPeriodo.tipo==='trimestre'){
@@ -6704,70 +6804,6 @@
      preenchimento progressivo da esquerda pra direita — padrão idêntico
      pros dois lados (Recebidos/Despesas), só recolorido (.green pro
      Recebidos, laranja nativo pro Despesas). */
-  function distfinTrackHtml(ratio, corClasse){
-    const N=20;
-    const alcancados=Math.max(0, Math.min(N, Math.round((ratio||0)*N)));
-    let segs='';
-    for(let i=0;i<N;i++) segs+='<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
-    return '<div class="track'+(corClasse?' '+corClasse:'')+'">'+segs+'</div>';
-  }
-  /* Card Fluxo — gráfico espelhado, exatamente a referência visual da
-     Distribuição Financeira: eixo vertical fixo no centro (grid de 3
-     colunas: metade-esq 1fr | eixo 2px | metade-dir 1fr, column-gap:0 —
-     crítico pra a barra encostar na linha sem nenhum respiro). Cada metade
-     é uma pilha de 3 linhas (nome no topo alinhado pra fora, barra no
-     meio encostada no eixo, valor embaixo perto do eixo) — nome e valor
-     NUNCA na mesma altura da barra. Recebidos (verde) cresce do centro pra
-     esquerda, Despesas (laranja) cresce do centro pra direita. Top 5
-     subcategorias que mais faturaram (calcularReceitaPorSubcategoria/
-     job.segmento) vs Top 5 subcategorias com maior gasto
-     (calcularGastosPorCategoria — única categorização real que existe pra
-     despesas hoje é custosData.categoria, sem inventar dado novo). Sempre
-     5 linhas fixas — preenche com "Sem dados" se faltar. Linhas NÃO
-     clicáveis — só os títulos das colunas (com seta) abrem o gerenciamento
-     (abrirGerenciamentoFluxo). */
-  /* Top 4 categorias + "Outros" (soma das demais) — sempre no máximo
-     REL_SPLIT_N linhas, e a soma das linhas devolvidas é sempre igual ao
-     total geral (top4 + outros = tudo), pra barra usar esse total como
-     referência (ver renderRelFluxoGrid). */
-  function relTop4MaisOutros(linhas){
-    const top4=linhas.slice(0, REL_SPLIT_N-1);
-    const resto=linhas.slice(REL_SPLIT_N-1);
-    if(!resto.length) return top4;
-    const somaResto=resto.reduce((s,l)=>s+l.valor,0);
-    return top4.concat([{ label:t('reports.distFin.others'), valor:somaResto }]);
-  }
-  function renderRelFluxoGrid(){
-    const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
-    if(!wrap) return;
-    const receitas=relTop4MaisOutros(calcularReceitaPorSubcategoria());
-    const gastos=relTop4MaisOutros(calcularGastosPorCategoria());
-    const totalI=receitas.reduce((s,l)=>s+l.valor,0);
-    const totalE=gastos.reduce((s,l)=>s+l.valor,0);
-    const meiaEsq=(l)=>{
-      if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
-      return '<div class="distfin-half l">'+
-        '<div class="distfin-line"><div class="distfin-name">'+escapeHtml(l.label)+'</div><div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div></div>'+
-        distfinTrackHtml(totalI>0?l.valor/totalI:0,'green')+
-      '</div>';
-    };
-    const meiaDir=(l)=>{
-      if(!l) return '<div class="distfin-half r"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
-      return '<div class="distfin-half r">'+
-        '<div class="distfin-line"><div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div><div class="distfin-name">'+escapeHtml(l.label)+'</div></div>'+
-        distfinTrackHtml(totalE>0?l.valor/totalE:0,'')+
-      '</div>';
-    };
-    let html='<div class="distfin-vline"></div>';
-    for(let i=0;i<REL_SPLIT_N;i++){
-      html+='<div class="distfin-row">'+
-        meiaEsq(receitas[i])+
-        meiaDir(gastos[i])+
-      '</div>';
-    }
-    wrap.innerHTML=html;
-  }
-
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
      etc) — reaproveitada aqui, não uma cor nova, só a mesma legenda aplicada
      também às barras de Faturamento */
@@ -6828,33 +6864,6 @@
     pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs), null, 'ropm-');
   }
 
-  /* ===== Card 4 — Fluxo Financeiro: lista unificada (recebidos + despesas) do
-     mês selecionado, filtrável. Reaproveita listaRecebidosDoMes/
-     listaDespesasDoMes tal como já eram usadas — só o consumidor mudou.
-     Não vive mais dentro do card de análise — só abre via
-     abrirGerenciamentoFluxo(), clicando em "Recebidos"/"Despesas". ===== */
-  let relFiltroFluxo='todos'; // 'todos'|'recebidos'|'despesas'
-  function relSetFiltroFluxo(f){
-    relFiltroFluxo=f;
-    renderRelFluxoLista();
-    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===f));
-  }
-  /* abre a tela de gerenciamento (editar/excluir/adicionar) já existente —
-     mesma lista/timeline de sempre, só que agora num bottom sheet em vez de
-     expandida dentro do card de análise. */
-  function abrirGerenciamentoFluxo(filtroInicial){
-    relFiltroFluxo=filtroInicial;
-    const html='<div class="segmented" id="rel-fluxo-seg" style="margin-bottom:14px">'+
-        '<button data-f="todos" onclick="relSetFiltroFluxo(\'todos\')"><span data-t="reports.flowAll">Todos</span></button>'+
-        '<button data-f="recebidos" onclick="relSetFiltroFluxo(\'recebidos\')"><span data-t="reports.flowIncome">Recebidos</span></button>'+
-        '<button data-f="despesas" onclick="relSetFiltroFluxo(\'despesas\')"><span data-t="reports.flowExpense">Despesas</span></button>'+
-      '</div>'+
-      '<button class="btn soft" style="width:100%;margin-bottom:14px" onclick="abrirRegistroManual()">+ '+t('home.addEntryBtn')+'</button>'+
-      '<div id="rel-fluxo-lista"></div>';
-    openInfo(filtroInicial==='despesas' ? t('reports.flowExpense') : t('reports.flowIncome'), html);
-    document.querySelectorAll('#rel-fluxo-seg button').forEach(el=>el.classList.toggle('on', el.dataset.f===filtroInicial));
-    renderRelFluxoLista();
-  }
   function calcularReceitaPorSubcategoria(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
@@ -6870,8 +6879,30 @@
     linhas.sort((a,b)=>b.valor-a.valor);
     return linhas;
   }
+  /* Card Fluxo — lista simples de lançamentos (não mais o gráfico de barras
+     espelhado): cada item mostra título (linha de cima), categoria (linha de
+     baixo) e o valor à direita ocupando visualmente a altura das duas linhas.
+     Mostra os 10 lançamentos mais recentes do período (relFluxoPeriodo() já
+     devolve ordenado por data desc, misturando recebidos e despesas). */
   function renderRelFluxoFinanceiro(){
-    renderRelFluxoGrid();
+    const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
+    if(!wrap) return;
+    const itens=relFluxoPeriodo().slice(0,10);
+    if(!itens.length){
+      wrap.innerHTML='<div class="fluxo-empty">'+t('reports.noData')+'</div>';
+      return;
+    }
+    wrap.innerHTML=itens.map(it=>{
+      const tipoClasse = it.tipo==='recebido' ? 'in' : 'out';
+      const sinal = it.tipo==='recebido' ? '+' : '−';
+      return '<div class="fluxo-item">'+
+        '<div class="fluxo-item-body">'+
+          '<div class="fluxo-item-title">'+escapeHtml(it.desc||'')+'</div>'+
+          '<div class="fluxo-item-cat">'+escapeHtml(it.categoria||'')+'</div>'+
+        '</div>'+
+        '<div class="fluxo-item-valor '+tipoClasse+'">'+sinal+fmtMoney(it.valor)+'</div>'+
+      '</div>';
+    }).join('');
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
@@ -6886,55 +6917,8 @@
     if(relPeriodo.tipo==='intervalo') itens=itens.filter(i=>i.data && i.data>=relPeriodo.ini && i.data<=relPeriodo.fim);
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
-  const ICON_CONTRATO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>';
-  const ICON_MANUAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>';
-  const ICON_CALENDARIO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>';
-  const fmtDataCurta=d=>{
-    if(!d) return '';
-    const partes=d.split('-'); const mn=mesCompleto(parseInt(partes[1],10)-1).slice(0,3);
-    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
-  };
   const ICON_LAPIS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>';
   const ICON_LIXO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-  /* Card 4 — timeline: título, metadados por ícone (contrato/utilizador + calendário)
-     e valor empilhados (valor sempre alinhado à direita), separados por espaçamento —
-     não por caixa/cartão. Interação: exatamente o mesmo swipe bidirecional já usado em
-     Trabalhos/Tarefas (ativarSwipeRadar, reaproveitada sem alterações) — deslizar para
-     a esquerda revela Eliminar, para a direita revela Editar; tocar abre os detalhes. */
-  function relFluxoOnClick(it){
-    if(it.tipo==='recebido') return it.manual ? "editarReceitaManual('"+it.id+"')" : "openJob('"+it.jobId+"')";
-    return "editarDespesa('"+it.id+"')";
-  }
-  function renderRelFluxoLista(){
-    const wrap=document.getElementById('rel-fluxo-lista'); if(!wrap) return;
-    let itens=relFluxoPeriodo();
-    if(relFiltroFluxo==='recebidos') itens=itens.filter(i=>i.tipo==='recebido');
-    else if(relFiltroFluxo==='despesas') itens=itens.filter(i=>i.tipo==='despesa');
-    wrap.innerHTML = itens.length ? itens.map(it=>{
-      const cor = it.tipo==='recebido' ? 'var(--brand)' : 'var(--late)';
-      const sinal = it.tipo==='recebido' ? '+' : '−';
-      let meta;
-      if(it.tipo==='recebido'){
-        meta = (it.manual ? '<span>'+ICON_MANUAL+t('reports.manualLabel')+'</span>' : '<span>'+ICON_CONTRATO+escapeHtml(it.cliente||'')+'</span>') +
-          (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
-      } else {
-        meta = (it.data ? '<span>'+ICON_CALENDARIO+fmtDataCurta(it.data)+'</span>' : '');
-      }
-      const onclickAcao=relFluxoOnClick(it);
-      const tapGuard="if(this.closest('.radar-card-wrap').classList.contains('active')){event.stopPropagation();return;} "+onclickAcao;
-      /* pagamentos de contrato não têm "eliminar" aqui (não é uma entrada avulsa) —
-         o painel da direita só existe para lançamentos manuais (recebido ou despesa) */
-      const podeEliminar = it.tipo==='despesa' || it.manual;
-      const removerAcao = it.tipo==='despesa' ? "event.stopPropagation();removerCusto('"+it.id+"')" : "event.stopPropagation();removerReceita('"+it.id+"')";
-      return '<div class="radar-card-wrap">'+
-        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();'+onclickAcao+'">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
-        (podeEliminar ? '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="'+removerAcao+'">'+ICON_LIXO+t('action.remove')+'</button></div>' : '')+
-        '<div class="card radar-card rel-fluxo-item" onclick="'+tapGuard+'">'+
-          '<div class="nm">'+escapeHtml(it.desc)+'</div><div class="rel-fluxo-meta">'+meta+'</div><div class="rel-fluxo-val" style="color:'+cor+'">'+sinal+fmtMoney(it.valor)+'</div>'+
-        '</div></div>';
-    }).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('reports.emptyFlow')+'</p>';
-    ativarSwipeRadar();
-  }
 
   /* ===== gráfico de linha: recebido e gasto acumulados no mês, com meta e teto ===== */
   function serieAcumuladaMes(ano, mes, dias){
@@ -7011,7 +6995,8 @@
     const pts=relSerieGrafico();
     const N=pts.length; if(!N){ wrap.innerHTML=''; return; }
     const W=320, H=150, padL=4, padR=4, padT=10, padB=20;
-    const meta=METAS.receita||0, teto=METAS.gastos||0;
+    const somaMetasChart=relRangeMeses().reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
+    const meta=somaMetasChart.receita||0, teto=somaMetasChart.gastos||0;
     const maxV=Math.max(1, meta, teto, pts[N-1].recebido, pts[N-1].gasto);
     const x=i=>padL+(N>1?i/(N-1):0.5)*(W-padL-padR);
     const y=v=>H-padB-(v/maxV)*(H-padT-padB);
@@ -7090,7 +7075,8 @@
       const s=calcularEstatisticasMes(ano,mes);
       campos.forEach(c=>acc[c]+=s[c]||0);
     });
-    acc.meta=METAS.receita; acc.limiteGastos=METAS.gastos;
+    const somaMetasRange=meses.reduce((s,{ano,mes})=>{ const mm=metasDoMes(ano,mes); s.receita+=mm.receita||0; s.gastos+=mm.gastos||0; return s; }, {receita:0,gastos:0});
+    acc.meta=somaMetasRange.receita; acc.limiteGastos=somaMetasRange.gastos;
     return acc;
   }
   /* cada métrica carrega um "dir" (1 = subir é bom, -1 = subir é ruim) —
@@ -7537,21 +7523,26 @@
   /* ===== Registo manual (botão + do card Financeiro) — despesa OU recebido avulso,
      sem estar ligado a um trabalho. Despesa cai em custosData (já existente);
      Recebido cai em receitasData (novo, mesmo formato). ===== */
-  /* Sugestões de categoria de despesa — o campo é sempre texto livre (nunca
-     um valor forçado); isto só ajuda a digitar consistente, pra "Distribuição
-     Financeira" conseguir agrupar gastos por categoria de verdade, em vez de
-     um "categoria" que nunca foi preenchido por ninguém. */
+  /* Categorias de despesa/receita — dropdown pré-definido (não mais texto
+     livre com sugestões): garante que "Distribuição Financeira" e o Card
+     Fluxo conseguem agrupar/rotular por categoria de verdade. */
   const DESPESA_CATEGORIAS_SUGERIDAS=['Freelancers','Equipamentos','Marketing','Softwares','Viagens','Assinaturas','Deslocação','Outros'];
-  function despesaCategoriaDatalistHtml(){
-    return '<datalist id="despesa-categorias-lista">'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('')+'</datalist>';
+  const RECEITA_CATEGORIAS_SUGERIDAS=['Projeto','Consultoria','Venda de produto','Aula/Workshop','Comissão','Outros'];
+  function categoriaSelectHtml(id, opcoes, valorAtual){
+    return '<select id="'+id+'">'+
+      '<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+
+      opcoes.map(c=>'<option value="'+escapeHtml(c)+'"'+(c===valorAtual?' selected':'')+'>'+escapeHtml(c)+'</option>').join('')+
+    '</select>';
   }
   /* Telas exclusivas de Receita/Despesa do menu Criar — captura rápida com
      Título/Categoria/Valor/Data/Observações. Distintas das listas completas
-     de gerenciamento (Financeiro > Receitas/Despesas), que continuam a
-     reaproveitar abrirGerenciamentoFluxo/abrirDespesas sem alteração. */
+     de gerenciamento (Financeiro > Receitas/Despesas), que vivem em
+     abrirReceitas()/abrirDespesas(). */
   function limparFormularioReceitaPanel(){
-    ['rc-titulo','rc-categoria','rc-valor','rc-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['rc-titulo','rc-valor','rc-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const dataEl=document.getElementById('rc-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
+    const catEl=document.getElementById('rc-categoria');
+    if(catEl) catEl.innerHTML='<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+RECEITA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
   }
   function criarReceitaPanel(){
     const titulo=(document.getElementById('rc-titulo').value||'').trim();
@@ -7568,10 +7559,10 @@
     showToast(t('toast.incomeAdded'));
   }
   function limparFormularioDespesaPanel(){
-    ['ds-titulo','ds-categoria','ds-valor','ds-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['ds-titulo','ds-valor','ds-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const dataEl=document.getElementById('ds-data'); if(dataEl) dataEl.value=new Date().toISOString().slice(0,10);
-    const dl=document.getElementById('despesa-categorias-lista-sheet');
-    if(dl) dl.innerHTML=DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">').join('');
+    const catEl=document.getElementById('ds-categoria');
+    if(catEl) catEl.innerHTML='<option value="">'+t('reports.expenseCategoryPlaceholder')+'</option>'+DESPESA_CATEGORIAS_SUGERIDAS.map(c=>'<option value="'+escapeHtml(c)+'">'+escapeHtml(c)+'</option>').join('');
   }
   function criarDespesaPanel(){
     const titulo=(document.getElementById('ds-titulo').value||'').trim();
@@ -7595,8 +7586,7 @@
       '<div class="field" style="margin-top:14px"><label data-t="reports.expenseName">Nome</label><input id="reg-nome" placeholder="Uber, freelance extra…"></div>'+
       '<div class="field-row"><div class="field"><label data-t="reports.expenseValue">Valor</label><input id="reg-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')salvarRegistroManual()"></div>'+
       '<div class="field"><label data-t="field.date">Data</label><input id="reg-data" type="date" value="'+hoje+'"></div></div>'+
-      '<div class="field" id="reg-categoria-wrap"><label data-t="reports.expenseCategory">Categoria</label><input id="reg-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
-      despesaCategoriaDatalistHtml()+
+      '<div class="field" id="reg-categoria-wrap"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('reg-categoria', DESPESA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
       '<button class="btn primary" style="width:100%;margin-top:10px" onclick="salvarRegistroManual()" data-t="home.addEntryBtn">Adicionar</button>';
     openInfo(t('home.addEntryTitle'), html);
   }
@@ -7650,12 +7640,12 @@
         if(p.status!=='pago') return;
         const d=p.pagoEm||p.dueDate;
         if(!d || d.slice(0,7)!==mesISO) return;
-        itens.push({ desc:p.label||t('field.payment'), cliente:j.client||j.typeLabel||'', jobId:j.id, valor:Number(p.amount)||0, data:d, manual:false });
+        itens.push({ desc:p.label||t('field.payment'), cliente:j.client||j.typeLabel||'', categoria:j.client||j.typeLabel||t('field.payment'), jobId:j.id, valor:Number(p.amount)||0, data:d, manual:false });
       });
     });
     Object.values(receitasData).forEach(r=>{
       if(!r.data || r.data.slice(0,7)!==mesISO) return;
-      itens.push({ desc:r.descricao, id:r.id, valor:Number(r.valor)||0, data:r.data, manual:true });
+      itens.push({ desc:r.descricao, id:r.id, categoria:r.categoria||'', valor:Number(r.valor)||0, data:r.data, manual:true });
     });
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
@@ -7664,7 +7654,7 @@
     const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     const mesISO=ano+'-'+String(mes).padStart(2,'0');
     return Object.values(custosData).filter(c=>c.data && c.data.slice(0,7)===mesISO)
-      .map(c=>({ desc:c.descricao, id:c.id, valor:Number(c.valor)||0, data:c.data }))
+      .map(c=>({ desc:c.descricao, id:c.id, categoria:c.categoria||'', valor:Number(c.valor)||0, data:c.data }))
       .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
   function editarReceitaManual(id){
@@ -7672,9 +7662,9 @@
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="rec-edit-nome" value="'+escapeHtml(r.descricao)+'"></div>'+
       '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-edit-valor" type="number" min="0" inputmode="decimal" value="'+r.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="rec-edit-data" type="date" value="'+(r.data||'')+'"></div>'+
-      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>'+
-      '<button class="btn soft" style="width:100%;margin-top:8px;color:var(--late)" onclick="removerReceita(\''+id+'\')">'+t('action.remove')+'</button>';
-    openInfo(t('home.entryIncome'), html);
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-edit-categoria', RECEITA_CATEGORIAS_SUGERIDAS, r.categoria||'')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoReceita(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
+    openInfo(t('home.entryIncome'), html, abrirReceitas);
   }
   function salvarEdicaoReceita(id){
     const r=receitasData[id]; if(!r) return;
@@ -7682,41 +7672,52 @@
     const valor=parseFloat(document.getElementById('rec-edit-valor').value);
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     r.descricao=desc; r.valor=valor; r.data=document.getElementById('rec-edit-data').value||r.data;
+    r.categoria=(document.getElementById('rec-edit-categoria').value||'').trim();
     saveReceitasData();
-    closeInfo();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirReceitas();
     showToast(t('toast.incomeAdded'));
   }
   function removerReceita(id){
     delete receitasData[id];
     saveReceitasData();
-    closeInfo();
     renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('rec-lista')) renderReceitasLista(); else closeInfo();
   }
-  /* ===== Despesas — painel com cards e swipe para editar/apagar ===== */
+  /* ===== Despesas — tela dedicada (própria, sem nada em comum com Receitas):
+     botão Adicionar no topo abre o formulário à parte (Título/Valor/Data/
+     Categoria em dropdown); a lista é sempre a tela raiz, cards deslizáveis
+     reaproveitando o mesmo swipe do radar (.radar-card-wrap/ativarSwipeRadar)
+     — esquerda revela Excluir, direita revela Editar. ===== */
   function abrirDespesas(){
-    const html='<div class="field-row" style="margin-bottom:2px"><div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
-      '<div class="field" style="max-width:110px"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div></div>'+
-      '<div class="field" style="margin-bottom:10px"><label data-t="reports.expenseCategory">Categoria</label><input id="exp-categoria" list="despesa-categorias-lista" placeholder="'+t('reports.expenseCategoryPlaceholder')+'" autocomplete="off"></div>'+
-      despesaCategoriaDatalistHtml()+
-      '<button class="btn primary" style="width:100%;margin:4px 0 14px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>'+
-      '<div class="sheet-divider"></div><div id="exp-lista" style="margin-top:12px"></div>';
+    const html='<button class="btn primary" style="width:100%;margin-bottom:14px" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
+      '<div id="exp-lista"></div>';
     openInfo(t('reports.expensesTitle'), html);
     renderDespesasLista();
   }
+  function abrirFormNovaDespesa(){
+    const hoje=new Date().toISOString().slice(0,10);
+    const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-nome" placeholder="Uber, equipamento…"></div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-valor" type="number" min="0" inputmode="decimal" placeholder="18" onkeydown="if(event.key===\'Enter\')guardarDespesaNova()"></div>'+
+      '<div class="field"><label>'+t('field.date')+'</label><input id="exp-data" type="date" value="'+hoje+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-categoria', DESPESA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarDespesaNova()">'+t('reports.addExpense')+'</button>';
+    openInfo(t('reports.addExpense'), html, abrirDespesas);
+  }
   function guardarDespesaNova(){
-    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor'), catEl=document.getElementById('exp-categoria');
+    const nomeEl=document.getElementById('exp-nome'), valEl=document.getElementById('exp-valor'),
+      catEl=document.getElementById('exp-categoria'), dataEl=document.getElementById('exp-data');
     const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), categoria=(catEl&&catEl.value||'').trim();
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     const id='cst'+Date.now();
-    custosData[id]={ id, descricao:desc, valor, categoria, data:new Date().toISOString().slice(0,10) };
+    custosData[id]={ id, descricao:desc, valor, categoria, data:(dataEl&&dataEl.value)||new Date().toISOString().slice(0,10) };
     saveCustosData();
     registrarAnalyticsDespesa(custosData[id]);
-    nomeEl.value=''; valEl.value=''; if(catEl) catEl.value=''; nomeEl.focus();
-    renderDespesasLista();
+    renderMonthTicker();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirDespesas();
     showToast(t('toast.costAdded'));
   }
   function renderDespesasLista(){
@@ -7724,50 +7725,28 @@
     if(!wrap) return;
     const lista=Object.values(custosData).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
     wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="exp-wrap" data-exp="'+c.id+'">'+
-        '<div class="exp-actions"><button class="ed" onclick="editarDespesa(\''+c.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg></button>'+
-          '<button class="rm" onclick="removerCusto(\''+c.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>'+
-        '<div class="exp-card"><div><div class="nm">'+escapeHtml(c.descricao)+'</div>'+(c.data?('<div class="sub">'+c.data.split('-').reverse().slice(0,2).join('/')+'</div>'):'')+'</div>'+
-          '<div class="val">'+fmtMoney(c.valor)+'<div class="fx">'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="editarDespesa(\''+c.id+'\')"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>'+
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" onclick="removerCusto(\''+c.id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
-          '</div></div></div>'+
+      '<div class="radar-card-wrap">'+
+        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
+        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
+        '<div class="card radar-card desp-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarDespesa(\''+c.id+'\')">'+
+          '<div class="desp-item-body">'+
+            '<div class="desp-item-title">'+escapeHtml(c.descricao)+'</div>'+
+            '<div class="desp-item-cat">'+(c.categoria?escapeHtml(c.categoria):'')+(c.data?(' · '+c.data.split('-').reverse().join('/')):'')+'</div>'+
+          '</div>'+
+          '<div class="desp-item-valor">'+fmtMoney(c.valor)+'</div>'+
+        '</div>'+
       '</div>'
-    ).join('') : '<p style="font-size:13px;color:var(--neutral)">'+t('cost.empty')+'</p>';
-    ativarSwipeDespesas();
-  }
-  function ativarSwipeDespesas(){
-    document.querySelectorAll('#exp-lista .exp-wrap').forEach(wrap=>{
-      const card=wrap.querySelector('.exp-card');
-      const revelado=90; let x0=null, y0=null, aberto=false, horizontal=null;
-      card.addEventListener('pointerdown', e=>{ x0=e.clientX; y0=e.clientY; horizontal=null; card.style.transition='none'; });
-      card.addEventListener('pointermove', e=>{
-        if(x0===null) return;
-        const dx=e.clientX-x0, dy=e.clientY-y0;
-        if(horizontal===null){ if(Math.abs(dx)>6||Math.abs(dy)>6) horizontal=Math.abs(dx)>Math.abs(dy); }
-        if(!horizontal) return;
-        let tx=(aberto?-revelado:0)+dx;
-        tx=Math.max(-revelado, Math.min(0, tx));
-        card.style.transform='translateX('+tx+'px)';
-      });
-      const fim=e=>{
-        if(x0===null) return;
-        card.style.transition='';
-        const dx=(e.clientX||0)-x0;
-        if(horizontal){ aberto = aberto ? dx<40 : dx<-40; card.style.transform='translateX('+(aberto?-revelado:0)+'px)'; if(aberto&&navigator.vibrate)navigator.vibrate(6); }
-        x0=null; y0=null; horizontal=null;
-      };
-      card.addEventListener('pointerup', fim);
-      card.addEventListener('pointercancel', fim);
-    });
+    ).join('') : '<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>';
+    ativarSwipeRadar();
   }
   function editarDespesa(id){
     const c=custosData[id]; if(!c) return;
     const html='<div class="field"><label>'+t('reports.expenseName')+'</label><input id="exp-edit-nome" value="'+escapeHtml(c.descricao)+'"></div>'+
       '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="exp-edit-valor" type="number" min="0" inputmode="decimal" value="'+c.valor+'"></div>'+
       '<div class="field"><label>'+t('field.date')+'</label><input id="exp-edit-data" type="date" value="'+(c.data||'')+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('exp-edit-categoria', DESPESA_CATEGORIAS_SUGERIDAS, c.categoria||'')+'</div>'+
       '<button class="btn primary" style="width:100%;margin-top:8px" onclick="salvarEdicaoDespesa(\''+id+'\')">'+t('reports.saveExpense')+'</button>';
-    openInfo(t('reports.editExpense'), html);
+    openInfo(t('reports.editExpense'), html, abrirDespesas);
   }
   function salvarEdicaoDespesa(id){
     const c=custosData[id]; if(!c) return;
@@ -7775,10 +7754,80 @@
     const valor=parseFloat(document.getElementById('exp-edit-valor').value);
     if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
     c.descricao=desc; c.valor=valor; c.data=document.getElementById('exp-edit-data').value||c.data;
+    c.categoria=(document.getElementById('exp-edit-categoria').value||'').trim();
     saveCustosData();
-    abrirDespesas();
     if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirDespesas();
     showToast(t('toast.costAdded'));
+  }
+  /* ===== Receitas — tela dedicada (própria, sem nada em comum com Despesas):
+     mesma linguagem de tela (botão Adicionar no topo, cards deslizáveis) mas
+     card com layout próprio (título em cima; projeto/data/valor numa linha
+     embaixo). Lançamentos automáticos (parcela de contrato paga) aparecem
+     sem swipe/edição/exclusão — só os manuais (receitasData) respondem aos
+     gestos. */
+  function abrirReceitas(){
+    const html='<button class="btn primary" style="width:100%;margin-bottom:14px" onclick="abrirFormNovaReceita()">+ '+t('reports.addIncome')+'</button>'+
+      '<div id="rec-lista"></div>';
+    openInfo(t('reports.incomeTitle'), html);
+    renderReceitasLista();
+  }
+  function abrirFormNovaReceita(){
+    const hoje=new Date().toISOString().slice(0,10);
+    const html='<div class="field"><label>'+t('field.title')+'</label><input id="rec-nome" placeholder="Freelance extra, venda…"></div>'+
+      '<div class="field"><label>'+t('reports.expenseValue')+'</label><input id="rec-valor" type="number" min="0" inputmode="decimal" placeholder="50" onkeydown="if(event.key===\'Enter\')guardarReceitaNova()"></div>'+
+      '<div class="field"><label>'+t('field.date')+'</label><input id="rec-data" type="date" value="'+hoje+'"></div>'+
+      '<div class="field"><label data-t="reports.expenseCategory">Categoria</label>'+categoriaSelectHtml('rec-categoria', RECEITA_CATEGORIAS_SUGERIDAS, '')+'</div>'+
+      '<button class="btn primary" style="width:100%;margin-top:8px" onclick="guardarReceitaNova()">'+t('reports.addIncome')+'</button>';
+    openInfo(t('reports.addIncome'), html, abrirReceitas);
+  }
+  function guardarReceitaNova(){
+    const nomeEl=document.getElementById('rec-nome'), valEl=document.getElementById('rec-valor'),
+      catEl=document.getElementById('rec-categoria'), dataEl=document.getElementById('rec-data');
+    const desc=(nomeEl.value||'').trim(), valor=parseFloat(valEl.value), categoria=(catEl&&catEl.value||'').trim();
+    if(!desc || !valor){ showToast(t('toast.fillDescValue')); return; }
+    const id='rec'+Date.now();
+    receitasData[id]={ id, descricao:desc, valor, categoria, data:(dataEl&&dataEl.value)||new Date().toISOString().slice(0,10) };
+    saveReceitasData();
+    renderMonthTicker();
+    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    abrirReceitas();
+    showToast(t('toast.incomeAdded'));
+  }
+  function renderReceitasLista(){
+    const wrap=document.getElementById('rec-lista');
+    if(!wrap) return;
+    const automaticos=[];
+    jobsVisiveis().forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        automaticos.push({ desc:p.label||t('field.payment'), projeto:j.client||j.typeLabel||'', valor:Number(p.amount)||0, data:p.pagoEm||p.dueDate, jobId:j.id });
+      });
+    });
+    const manuais=Object.values(receitasData);
+    const itens=automaticos.map(it=>Object.assign({},it,{manual:false}))
+      .concat(manuais.map(r=>({ id:r.id, desc:r.descricao, projeto:r.categoria||'', valor:Number(r.valor)||0, data:r.data, manual:true })))
+      .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+    if(!itens.length){ wrap.innerHTML='<p style="font-size:13px;color:var(--neutral);padding:10px 2px">'+t('cost.empty')+'</p>'; return; }
+    wrap.innerHTML=itens.map(it=>{
+      const dataFmt=it.data?it.data.split('-').reverse().join('/'):'';
+      const corpo='<div class="rec-item-title">'+escapeHtml(it.desc)+'</div>'+
+          '<div class="rec-item-row">'+
+            '<span class="rec-item-proj">'+escapeHtml(it.projeto||'')+'</span>'+
+            '<span class="rec-item-data">'+dataFmt+'</span>'+
+            '<span class="rec-item-valor">'+fmtMoney(it.valor)+'</span>'+
+          '</div>';
+      if(!it.manual){
+        /* lançamento automático (parcela de contrato) — sem swipe, sem editar/excluir */
+        return '<div class="card rec-item rec-item-auto">'+corpo+'</div>';
+      }
+      return '<div class="radar-card-wrap">'+
+        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
+        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
+        '<div class="card radar-card rec-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarReceitaManual(\''+it.id+'\')">'+corpo+'</div>'+
+      '</div>';
+    }).join('');
+    ativarSwipeRadar();
   }
   function pushHistory(job,text,tipo){
     job.history=job.history||[];
@@ -9484,7 +9533,7 @@
     if(!job) return;
     openInfo(t('job.clientEmailTitle'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('job.clientEmailHint').replace('{client}', escapeHtml(job.client))}</p>
-      <div class="field"><label>Email</label><input id="ce-email" type="email" value="${escapeHtml(job.email||'')}" placeholder="email@exemplo.pt" autocomplete="off" name="ce-email-cliente"></div>
+      <div class="field"><label>Email</label><input id="ce-email" type="email" value="${escapeHtml(job.email||'')}" placeholder="example@email.com" autocomplete="off" name="ce-email-cliente"></div>
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarEmailCliente('${id}')">${t('action.save')}</button>`);
     _aposGuardarEmail = aposGuardar || null;
     setTimeout(()=>{ const el=document.getElementById('ce-email'); if(el) el.focus(); }, 60);
@@ -10111,7 +10160,7 @@
   }
   function abrirConvidarExternoDireto(jobId){
     openInfo(t('collab.title'), `
-      <div class="field"><label>${t('collab.externalEmailPrompt')}</label><input id="colab-email-externo" placeholder="email@exemplo.pt" autocomplete="off"></div>
+      <div class="field"><label>${t('collab.externalEmailPrompt')}</label><input id="colab-email-externo" placeholder="example@email.com" autocomplete="off"></div>
       <button class="btn primary" style="width:100%" onclick="procurarColaboradorExterno('${jobId}')">${t('collab.search')}</button>`);
   }
   async function procurarColaboradorExterno(jobId){
@@ -11175,7 +11224,6 @@
     if(!wrap) return;
     document.querySelectorAll('#v-trabalhos .job-card-wrap').forEach(w=>w.style.display='none');
     document.getElementById('jobsEmpty').style.display='none';
-    const df=document.getElementById('cal-dia-filtro'); if(df) df.style.display='none';
     const itens=jobsArquivados();
     wrap.style.display='block';
     wrap.innerHTML = itens.length ? itens.map(htmlCardArquivado).join('') :
@@ -11268,6 +11316,18 @@
     if(job.horaIni) s+=' • '+job.horaIni+(job.horaFim?('–'+job.horaFim):'');
     return s;
   }
+  /* mesma data de fmtDataHoraLinhaJob, mas sem a hora — usada quando a hora
+     ganha o seu próprio ícone/linha (relógio) em vez de ficar colada à data. */
+  function fmtDataLinhaJob(job){
+    if(!job.dateRaw) return t('jobs.dateNotSet');
+    const partes=job.dateRaw.split('-');
+    const mn=mesAbrev(parseInt(partes[1],10)-1);
+    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
+  }
+  function fmtHoraLinhaJob(job){
+    if(!job.horaIni) return '';
+    return job.horaIni+(job.horaFim?('–'+job.horaFim):'');
+  }
   /* Card de Projeto — só responde 2 perguntas (que projeto é este, em que
      etapa está): título, cliente (avatar+nome), data/hora numa linha, etapa
      atual. Endereço/valor/observações/equipa só existem na página interna
@@ -11288,11 +11348,15 @@
     div.dataset.entregue= c.entregue?'1':'0';
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
     div.className='job'+(urgClasse?' '+urgClasse:'');
+    const hora=fmtHoraLinhaJob(job);
     div.innerHTML='<div class="job-head-row">'+avatarHtml(job.client,44)+
       '<div class="job-head-info"><div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
-      '<div class="job-client-name">'+escapeHtml(job.client)+'</div></div></div>'+
-      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataHoraLinhaJob(job))+'</span></div>'+
-      '<div class="job-stage-row">'+RTK_ICONS.action+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>';
+      '<div class="job-client-name">'+RTK_ICONS.client+'<span>'+escapeHtml(job.client)+'</span></div></div></div>'+
+      '<div class="job-body-rows">'+
+      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataLinhaJob(job))+'</span></div>'+
+      (hora ? '<div class="job-datetime job-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(hora)+'</span></div>' : '')+
+      '<div class="job-stage-row">'+RTK_ICONS.action+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>'+
+      '</div>';
   }
   function updateJobCard(id){
     const job=jobsData[id];
@@ -13691,11 +13755,6 @@
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
-    const df=document.getElementById('cal-dia-filtro');
-    if(df){
-      if(calDiaAtivo!=null){ df.style.display='block'; df.innerHTML=t('calendar.dayFilterPrefix')+' '+calDiaAtivo+' · <span class="inline-link" onclick="limparDiaCal()">'+t('calendar.clearDay')+'</span>'; }
-      else df.style.display='none';
-    }
   }
   /* sem chip "Todos" — estado padrão (nenhum filtro ativo) mostra os projetos
      ativos normalmente. Tocar num chip já ativo desliga-o e volta a esse
@@ -13856,7 +13915,7 @@
     const m=calMonths[calIndex];
     const hojeReal=diaHojeSeForOMes(m);
     const merged=mergedMonthData(m);
-    document.getElementById('cal-mes-label').textContent=mesCompleto(m.month-1).toUpperCase();
+    document.getElementById('cal-mes-label').textContent=mesCompleto(m.month-1);
     document.getElementById('cal-ano-label').textContent=String(m.year);
     document.getElementById('cal-prev').style.opacity = calIndex===0 ? '.15':'';
     document.getElementById('cal-prev').style.pointerEvents = calIndex===0 ? 'none':'';
@@ -13998,13 +14057,65 @@
   function lpCriarConta(){ document.getElementById('landing-page').style.display='none'; mostrarEcraCriarConta(); }
   function mostrarEcraCriarConta(){
     document.getElementById('login-form-entrar').style.display='none';
+    document.getElementById('login-form-reset').style.display='none';
     document.getElementById('login-form-criar').style.display='block';
     document.getElementById('signup-form-fields').style.display='block';
     document.getElementById('signup-aguardando').style.display='none';
   }
   function mostrarEcraEntrar(){
     document.getElementById('login-form-criar').style.display='none';
+    document.getElementById('login-form-reset').style.display='none';
     document.getElementById('login-form-entrar').style.display='block';
+  }
+  function abrirResetPassword(){
+    const emailAtual=document.getElementById('login-email').value.trim();
+    document.getElementById('login-form-entrar').style.display='none';
+    document.getElementById('login-form-criar').style.display='none';
+    document.getElementById('login-form-reset').style.display='block';
+    document.getElementById('reset-form-fields').style.display='block';
+    document.getElementById('reset-enviado').style.display='none';
+    document.getElementById('reset-err').style.display='none';
+    document.getElementById('reset-email').value=emailAtual;
+  }
+  async function enviarResetPassword(){
+    const email=document.getElementById('reset-email').value.trim();
+    const err=document.getElementById('reset-err');
+    if(!email){ err.querySelector('span').textContent=t('login.resetEmailNeeded'); err.style.display='block'; return; }
+    err.style.display='none';
+    const btn=document.getElementById('reset-btn');
+    btn.disabled=true;
+    try{
+      await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+    }catch(e){
+      // erro real de rede/serviço — a Supabase não distingue "conta não existe" por segurança,
+      // por isso qualquer outra falha (ex.: rate limit) ainda mostra a mesma mensagem genérica.
+    }finally{
+      btn.disabled=false;
+      document.getElementById('reset-form-fields').style.display='none';
+      document.getElementById('reset-enviado').style.display='block';
+    }
+  }
+  async function salvarNovaPassword(){
+    const p1=document.getElementById('newpass-1').value;
+    const p2=document.getElementById('newpass-2').value;
+    const err=document.getElementById('newpass-err');
+    if(!p1 || !p2){ err.querySelector('span').textContent=t('signup.error'); err.style.display='block'; return; }
+    if(!senhaForte(p1)){ err.querySelector('span').textContent=t('signup.weakPassword'); err.style.display='block'; return; }
+    if(p1!==p2){ err.querySelector('span').textContent=t('signup.passwordMismatch'); err.style.display='block'; return; }
+    err.style.display='none';
+    const btn=document.getElementById('newpass-btn');
+    btn.disabled=true; btn.textContent=t('signup.creating');
+    try{
+      const { error } = await sb.auth.updateUser({ password: p1 });
+      if(error) throw error;
+      showToast(t('login.newPasswordSaved'));
+      document.getElementById('login-form-newpass').style.display='none';
+    }catch(e){
+      err.querySelector('span').textContent=e.message||t('signup.genericError');
+      err.style.display='block';
+    }finally{
+      btn.disabled=false; btn.textContent=t('login.saveNewPassword');
+    }
   }
   async function entrarNaApp(){
     const email=document.getElementById('login-email').value.trim();

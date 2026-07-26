@@ -8,14 +8,22 @@
   .evento-tipo-card.on{background:var(--brand-10);border-color:var(--brand);color:var(--ink);font-weight:600}
   .filter-row{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;padding-bottom:2px}
   .filter-row::-webkit-scrollbar{display:none}
-  /* Trabalhos: 4 filtros sempre do mesmo tamanho (grid, não flex por
-     conteúdo) — texto/ícone centralizados, sem overflow horizontal. */
-  .filter-row-even{display:grid;grid-template-columns:repeat(4,1fr);overflow-x:visible}
+  /* Trabalhos: filtros sempre do mesmo tamanho (grid, não flex por
+     conteúdo) — texto/ícone centralizados, sem overflow horizontal.
+     Sem "Todos": só Pendências/Demandas/Histórico (3 colunas). */
+  .filter-row-even{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:visible}
   .filter-row-even .chip{padding:7px 6px;justify-content:center;text-align:center;min-width:0}
   .filter-row-even .chip span{overflow:hidden;text-overflow:ellipsis}
   .chip{font-size:13px;font-weight:500;padding:7px 14px;border-radius:var(--r);border:1px solid var(--line);
-    background:var(--paper);color:var(--ink-soft);white-space:nowrap;cursor:pointer;transition:all .15s}
+    background:var(--paper);color:var(--ink-soft);white-space:nowrap;cursor:pointer;transition:all .15s;
+    display:flex;align-items:center;justify-content:center;gap:6px}
   .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  /* ícones dos filtros vêm do Iconify (api.iconify.design) como máscara CSS,
+     não <img> — assim herdam currentColor e mudam de cor com o estado
+     ativo/inativo do chip, igual aos ícones inline do resto do app. */
+  .chip-ic-mask{width:15px;height:15px;flex:none;background:currentColor;
+    mask-size:contain;mask-repeat:no-repeat;mask-position:center;
+    -webkit-mask-size:contain;-webkit-mask-repeat:no-repeat;-webkit-mask-position:center}
   .chip-add{border-style:dashed;color:var(--ink);border-color:var(--brand)}
   .priority-dot{width:9px;height:9px;border-radius:50%;flex:none;display:inline-block;margin-right:7px}
   .priority-dot.urgente{background:var(--c-orange)}
@@ -120,8 +128,15 @@
   .job-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;
     font-size:17px;font-weight:400;line-height:1.25;color:var(--ink);margin:0 0 3px;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .job-client-name{font-size:13.5px;color:var(--ink-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .job-datetime{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink);margin-bottom:10px}
+  .job-client-name{display:flex;align-items:center;gap:5px;font-size:13.5px;color:var(--ink-soft);overflow:hidden;min-width:0}
+  .job-client-name svg{width:12px;height:12px;flex:none;color:var(--ink-soft)}
+  .job-client-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* linhas abaixo do cabeçalho (data/hora/etapa) alinhadas com o título e o
+     contato — não com a borda do card — por isso o mesmo recuo do avatar
+     (44px) + gap (12px) do .job-head-row, em vez de começarem por baixo da
+     própria foto. */
+  .job-body-rows{margin-left:56px;display:flex;flex-direction:column;gap:7px}
+  .job-datetime{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--ink)}
   .job-datetime svg{width:13px;height:13px;flex:none;color:var(--ink-soft)}
   /* Etapa atual — mesma linguagem visual dos cards de Tarefas do Dashboard
      (.rtk-action: ícone preenchido + texto numa linha), não mais uma pílula
