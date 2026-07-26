@@ -822,30 +822,14 @@
           <button class="btn soft" onclick="abrirDespesas()"><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
 
-        <!-- Card: Fluxo — só análise, sem gerenciamento: Top 5 subcategorias
-             que mais faturaram (verde, esquerda) vs Top 5 subcategorias com
-             maior gasto (laranja, direita), sempre 5 linhas fixas cada lado
-             (preenche com "Sem dados" se faltar), no mesmo grid dividido
-             .rel-split usado em Rentabilidade/Evolução Mensal: divisória
-             vertical exata no centro, linhas horizontais atravessando a
-             largura toda do card. Barras no mesmo estilo do card Operacional
-             (.track/.segment, 20 blocos), só recoloridas verde/laranja.
-             Linhas NÃO são clicáveis — só os títulos "Recebidos"/"Despesas"
-             (com seta apontando pro próprio lado) abrem a tela de
-             gerenciamento (abrirGerenciamentoFluxo), que reaproveita a mesma
-             lista/timeline de sempre (editar/excluir/adicionar). -->
+        <!-- Card: Fluxo — lista simples dos lançamentos mais recentes do
+             período (recebidos e despesas misturados, ordenados por data),
+             um item por linha: título em cima, categoria embaixo, valor à
+             direita ocupando a altura das duas linhas. Ver
+             renderRelFluxoFinanceiro(). -->
         <div class="rel-card-header" data-t="reports.cashFlow">Fluxo</div>
-        <div class="card rel-card rel-card-body distfin-card">
-          <div class="distfin-heads">
-            <span class="distfin-head-inc">
-              <span data-t="reports.distFin.income">Recebidos</span>
-            </span>
-            <span class="distfin-head-exp">
-              <span data-t="reports.distFin.expenses">Despesas</span>
-            </span>
-          </div>
-          <div class="distfin-rule-soft"></div>
-          <div class="distfin-rows" id="rel-fluxo-rows-subcategoria" style="margin-top:14px"></div>
+        <div class="card rel-card rel-card-body">
+          <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
         </div>
 
         <!-- Card: Operacional — reaproveita EXATAMENTE o mesmo componente
@@ -6771,70 +6755,6 @@
      preenchimento progressivo da esquerda pra direita — padrão idêntico
      pros dois lados (Recebidos/Despesas), só recolorido (.green pro
      Recebidos, laranja nativo pro Despesas). */
-  function distfinTrackHtml(ratio, corClasse){
-    const N=20;
-    const alcancados=Math.max(0, Math.min(N, Math.round((ratio||0)*N)));
-    let segs='';
-    for(let i=0;i<N;i++) segs+='<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
-    return '<div class="track'+(corClasse?' '+corClasse:'')+'">'+segs+'</div>';
-  }
-  /* Card Fluxo — gráfico espelhado, exatamente a referência visual da
-     Distribuição Financeira: eixo vertical fixo no centro (grid de 3
-     colunas: metade-esq 1fr | eixo 2px | metade-dir 1fr, column-gap:0 —
-     crítico pra a barra encostar na linha sem nenhum respiro). Cada metade
-     é uma pilha de 3 linhas (nome no topo alinhado pra fora, barra no
-     meio encostada no eixo, valor embaixo perto do eixo) — nome e valor
-     NUNCA na mesma altura da barra. Recebidos (verde) cresce do centro pra
-     esquerda, Despesas (laranja) cresce do centro pra direita. Top 5
-     subcategorias que mais faturaram (calcularReceitaPorSubcategoria/
-     job.segmento) vs Top 5 subcategorias com maior gasto
-     (calcularGastosPorCategoria — única categorização real que existe pra
-     despesas hoje é custosData.categoria, sem inventar dado novo). Sempre
-     5 linhas fixas — preenche com "Sem dados" se faltar. Linhas NÃO
-     clicáveis — só os títulos das colunas (com seta) abrem o gerenciamento
-     (abrirGerenciamentoFluxo). */
-  /* Top 4 categorias + "Outros" (soma das demais) — sempre no máximo
-     REL_SPLIT_N linhas, e a soma das linhas devolvidas é sempre igual ao
-     total geral (top4 + outros = tudo), pra barra usar esse total como
-     referência (ver renderRelFluxoGrid). */
-  function relTop4MaisOutros(linhas){
-    const top4=linhas.slice(0, REL_SPLIT_N-1);
-    const resto=linhas.slice(REL_SPLIT_N-1);
-    if(!resto.length) return top4;
-    const somaResto=resto.reduce((s,l)=>s+l.valor,0);
-    return top4.concat([{ label:t('reports.distFin.others'), valor:somaResto }]);
-  }
-  function renderRelFluxoGrid(){
-    const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
-    if(!wrap) return;
-    const receitas=relTop4MaisOutros(calcularReceitaPorSubcategoria());
-    const gastos=relTop4MaisOutros(calcularGastosPorCategoria());
-    const totalI=receitas.reduce((s,l)=>s+l.valor,0);
-    const totalE=gastos.reduce((s,l)=>s+l.valor,0);
-    const meiaEsq=(l)=>{
-      if(!l) return '<div class="distfin-half l"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
-      return '<div class="distfin-half l">'+
-        '<div class="distfin-line"><div class="distfin-name">'+escapeHtml(l.label)+'</div><div class="distfin-val distfin-c-inc">'+fmtMoney(l.valor)+'</div></div>'+
-        distfinTrackHtml(totalI>0?l.valor/totalI:0,'green')+
-      '</div>';
-    };
-    const meiaDir=(l)=>{
-      if(!l) return '<div class="distfin-half r"><div class="distfin-name distfin-name-empty">'+t('reports.noData')+'</div></div>';
-      return '<div class="distfin-half r">'+
-        '<div class="distfin-line"><div class="distfin-val distfin-c-exp">'+fmtMoney(l.valor)+'</div><div class="distfin-name">'+escapeHtml(l.label)+'</div></div>'+
-        distfinTrackHtml(totalE>0?l.valor/totalE:0,'')+
-      '</div>';
-    };
-    let html='<div class="distfin-vline"></div>';
-    for(let i=0;i<REL_SPLIT_N;i++){
-      html+='<div class="distfin-row">'+
-        meiaEsq(receitas[i])+
-        meiaDir(gastos[i])+
-      '</div>';
-    }
-    wrap.innerHTML=html;
-  }
-
   /* mesma paleta de 5 cores já usada no card Financeiro do Dashboard (.mr-meta-c
      etc) — reaproveitada aqui, não uma cor nova, só a mesma legenda aplicada
      também às barras de Faturamento */
@@ -6937,8 +6857,30 @@
     linhas.sort((a,b)=>b.valor-a.valor);
     return linhas;
   }
+  /* Card Fluxo — lista simples de lançamentos (não mais o gráfico de barras
+     espelhado): cada item mostra título (linha de cima), categoria (linha de
+     baixo) e o valor à direita ocupando visualmente a altura das duas linhas.
+     Mostra os 10 lançamentos mais recentes do período (relFluxoPeriodo() já
+     devolve ordenado por data desc, misturando recebidos e despesas). */
   function renderRelFluxoFinanceiro(){
-    renderRelFluxoGrid();
+    const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
+    if(!wrap) return;
+    const itens=relFluxoPeriodo().slice(0,10);
+    if(!itens.length){
+      wrap.innerHTML='<div class="fluxo-empty">'+t('reports.noData')+'</div>';
+      return;
+    }
+    wrap.innerHTML=itens.map(it=>{
+      const tipoClasse = it.tipo==='recebido' ? 'in' : 'out';
+      const sinal = it.tipo==='recebido' ? '+' : '−';
+      return '<div class="fluxo-item">'+
+        '<div class="fluxo-item-body">'+
+          '<div class="fluxo-item-title">'+escapeHtml(it.desc||'')+'</div>'+
+          '<div class="fluxo-item-cat">'+escapeHtml(it.categoria||'')+'</div>'+
+        '</div>'+
+        '<div class="fluxo-item-valor '+tipoClasse+'">'+sinal+fmtMoney(it.valor)+'</div>'+
+      '</div>';
+    }).join('');
   }
   function relFluxoDoMes(ano, mes){
     const rec=listaRecebidosDoMes(ano,mes).map(it=>Object.assign({}, it, {tipo:'recebido'}));
@@ -7717,12 +7659,12 @@
         if(p.status!=='pago') return;
         const d=p.pagoEm||p.dueDate;
         if(!d || d.slice(0,7)!==mesISO) return;
-        itens.push({ desc:p.label||t('field.payment'), cliente:j.client||j.typeLabel||'', jobId:j.id, valor:Number(p.amount)||0, data:d, manual:false });
+        itens.push({ desc:p.label||t('field.payment'), cliente:j.client||j.typeLabel||'', categoria:j.client||j.typeLabel||t('field.payment'), jobId:j.id, valor:Number(p.amount)||0, data:d, manual:false });
       });
     });
     Object.values(receitasData).forEach(r=>{
       if(!r.data || r.data.slice(0,7)!==mesISO) return;
-      itens.push({ desc:r.descricao, id:r.id, valor:Number(r.valor)||0, data:r.data, manual:true });
+      itens.push({ desc:r.descricao, id:r.id, categoria:r.categoria||'', valor:Number(r.valor)||0, data:r.data, manual:true });
     });
     return itens.sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
@@ -7731,7 +7673,7 @@
     const ano=anoParam!=null?anoParam:hoje.getFullYear(), mes=mesParam!=null?mesParam:hoje.getMonth()+1;
     const mesISO=ano+'-'+String(mes).padStart(2,'0');
     return Object.values(custosData).filter(c=>c.data && c.data.slice(0,7)===mesISO)
-      .map(c=>({ desc:c.descricao, id:c.id, valor:Number(c.valor)||0, data:c.data }))
+      .map(c=>({ desc:c.descricao, id:c.id, categoria:c.categoria||'', valor:Number(c.valor)||0, data:c.data }))
       .sort((a,b)=>(b.data||'').localeCompare(a.data||''));
   }
   function editarReceitaManual(id){

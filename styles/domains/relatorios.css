@@ -151,47 +151,21 @@
      dashboard.css: 20 blocos fixos, moldura vazia nos não preenchidos,
      preenchimento progressivo), só recolorida (.green pro Recebidos,
      laranja nativo pro Despesas) — mesmo padrão visual pros dois lados. */
-  .distfin-card{}
-  .distfin-heads{display:grid;grid-template-columns:1fr 1fr;column-gap:20px}
-  .distfin-head-inc,.distfin-head-exp{
-    display:flex;flex-direction:column;align-items:center;gap:4px;
-    font-family:var(--font-numeric);font-size:12px;font-weight:500;
-    text-transform:uppercase;letter-spacing:.22em;
-  }
-  .distfin-head-inc{color:#5E7A52}
-  .distfin-head-exp{color:#FF9738}
-  /* sangra pra fora do padding padrão do card (16px) — encosta na borda
-     física, sem sobra vazia nas pontas, igual às demais linhas divisórias. */
-  .distfin-rule-soft{height:1px;background:var(--line-soft);margin:10px -16px 0;width:calc(100% + 32px)}
-  .distfin-rows{margin-top:6px;position:relative}
-  .distfin-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
-  /* eixo central único, contínuo — atravessa as 5 linhas de uma vez só (não
-     é um segmento por linha), sobreposto por cima do grid via position. */
-  .distfin-vline{position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-1px);background:var(--line-soft);z-index:1}
-  .distfin-row{
-    display:grid;grid-template-columns:1fr 1fr;column-gap:20px;row-gap:0;
-    align-items:stretch;min-height:46px;
-  }
-  .distfin-half{display:flex;flex-direction:column;justify-content:center;gap:9px;min-width:0;padding:4px 0}
-  .distfin-half.l{align-items:flex-start}
-  .distfin-half.r{align-items:flex-end}
-  /* espelhado: Recebidos preenche a partir do eixo central (direita da sua
-     metade) crescendo pra fora (esquerda); Despesas já preenche naturalmente
-     a partir da esquerda da sua metade (encostada no eixo) crescendo pra
-     fora (direita) — só o lado esquerdo precisa de espelho. */
-  .distfin-half.l .track{transform:scaleX(-1)}
-  /* nome e valor na MESMA linha — space-between empurra o valor pra perto
-     do eixo central (nome fica na borda externa do card). */
-  .distfin-line{display:flex;align-items:baseline;justify-content:space-between;gap:8px;width:100%}
-  .distfin-name{max-width:100%;font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .distfin-name-empty{font-weight:400;color:var(--neutral)}
-  .distfin-val{max-width:100%;font-family:var(--font-numeric);font-size:11.5px;font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .distfin-c-inc{color:#5E7A52}
-  .distfin-c-exp{color:#FF9738}
-  /* mesmo .track do Operacional, só com largura 100% da metade e recolorido
-     em verde pro lado Recebidos (Despesas usa o laranja nativo). */
-  .distfin-half .track{width:100%;margin-top:2px}
-  .distfin-half .track.green .segment.is-filled{border-color:#5E7A52;background:#5E7A52}
+  .distfin-empty,.fluxo-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
+  /* Card Fluxo — lista simples de lançamentos (recebidos/despesas
+     misturados, mais recentes primeiro): título em cima, categoria embaixo,
+     valor à direita esticado pra ocupar a altura das duas linhas. */
+  .fluxo-rows{display:flex;flex-direction:column}
+  .fluxo-item{display:flex;align-items:stretch;justify-content:space-between;gap:12px;
+    padding:11px 0;border-top:1px solid var(--line-soft)}
+  .fluxo-item:first-child{border-top:none;padding-top:2px}
+  .fluxo-item-body{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0}
+  .fluxo-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fluxo-item-cat{font-size:12px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fluxo-item-valor{display:flex;align-items:center;flex:none;
+    font-family:var(--font-numeric);font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+  .fluxo-item-valor.in{color:#5E7A52}
+  .fluxo-item-valor.out{color:#FF9738}
   .distfin-half .track.green::before{background:linear-gradient(90deg, rgba(94,122,82,.16), transparent)}
 
   /* ===== Reorganização de Relatórios (3 áreas / 8 cards) =====
