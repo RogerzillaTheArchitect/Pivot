@@ -413,7 +413,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0"/></svg> <span data-t="profile.notifications">Notificações</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/mdi:bell.svg);-webkit-mask-image:url(https://api.iconify.design/mdi:bell.svg)"></span> <span data-t="profile.notifications">Notificações</span>
       <span class="notif-dot" style="position:absolute;left:19px;top:6px;display:none"></span>
     </div>
     <div class="sb-item" id="sb-item-colaboracoes" data-nav="colaboracoes" style="display:none" onclick="go('colaboracoes')">
@@ -437,7 +437,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações">
-          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18 8a6 6 0 1 0-12 0c0 3.6-1 5.2-2 7h16c-1-1.8-2-3.4-2-7Z"/><path d="M10 20a2 2 0 0 0 4 0h-4Z" fill-opacity=".6"/></svg>
+          <span class="nav-ico" style="width:22px;height:22px;mask-image:url(https://api.iconify.design/mdi:bell.svg);-webkit-mask-image:url(https://api.iconify.design/mdi:bell.svg)"></span>
           <span class="notif-count" id="notif-count" style="display:none"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
@@ -496,37 +496,37 @@
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.hours">Horas</div>
             <div class="track" id="opm-horas-track"></div>
             <div class="value-end" id="opm-horas-end"></div>
           </section>
           <section class="metric" id="opm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 20h17l-7-8m7 8-7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.pending">Pendências</div>
             <div class="track" id="opm-pendencias-track"></div>
             <div class="value-end" id="opm-pendencias-end"></div>
           </section>
           <section class="metric" id="opm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M31 20H14l7-8m-7 8 7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.demands">Demandas</div>
             <div class="track" id="opm-demandas-track"></div>
             <div class="value-end" id="opm-demandas-end"></div>
           </section>
           <section class="metric" id="opm-fechados" onclick="abrirRelatorios('operacional')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="3" width="36" height="34" fill="currentColor"/><path d="m10 20 7 7 14-15" fill="none" stroke="#0b1017" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.closed">Fechados</div>
             <div class="track" id="opm-fechados-track"></div>
             <div class="value-end" id="opm-fechados-end"></div>
           </section>
           <section class="metric" id="opm-executados" onclick="go('historico')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 8h26v28H7Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 8V6a6 6 0 0 1 12 0v2" fill="none" stroke="currentColor" stroke-width="3"/><path d="M13 19h14M13 26h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.executed">Executados</div>
             <div class="track" id="opm-executados-track"></div>
             <div class="value-end" id="opm-executados-end"></div>
           </section>
           <section class="metric" id="opm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M3 2h4v36H3Zm4 1h29L24 15l12 12H7Z" fill="currentColor"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/gridicons:flag.svg);-webkit-mask-image:url(https://api.iconify.design/gridicons:flag.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.completedTile">Concluídos</div>
             <div class="track" id="opm-concluidos-track"></div>
             <div class="value-end" id="opm-concluidos-end"></div>
@@ -688,11 +688,11 @@
         <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.title">Perfil</span></div>
         <div class="page-head">
           <div class="page-title" data-t="profile.contacts">Contatos</div>
-          <div class="sheet-item row" onclick="abrirNovoContato()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 5v14M5 12h14"/></svg><span class="ti" data-t="wizard.fromScratch">Novo</span></div>
         </div>
-        <div class="segmented" style="margin-bottom:16px">
-          <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
-          <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
+        <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
+          <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
+          <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
+          <button onclick="abrirNovoContato()" style="flex:none;width:38px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -733,10 +733,12 @@
         <div class="plabel" id="lbl-conta-section" data-t="profile.account">Conta</div>
         <div class="plist">
           <div class="prow" onclick="infoMinhaConta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" id="lbl-minha-conta" data-t="profile.myAccount">Minha conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Dados de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoServicos()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M20.5 7.5 12 12 3.5 7.5"/><path d="M12 12v9"/><path d="m20.5 7.5-8.5-4.5-8.5 4.5 8.5 4.5 8.5-4.5Z"/></svg><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" id="lbl-organizacao" data-t="profile.organization">Organização</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div class="t" id="lbl-equipa" data-t="profile.team">Equipe</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoServicos()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:design-services-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:design-services-outline.svg)"></span><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoMetodosPagamento()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><div class="t" data-t="profile.paymentMethods">Dados de pagamento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoPlano()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 15h3"/></svg><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
 
         <div class="plabel" id="lbl-produto-section" data-t="profile.product">Produto</div>
@@ -746,8 +748,12 @@
 
         <div class="plabel" id="lbl-suporte" data-t="profile.support">Suporte</div>
         <div class="plist">
+          <div class="prow" onclick="infoAjuda()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:help-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:help-outline.svg)"></span><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoPrivacidade()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="t" id="lbl-privacidade" data-t="profile.privacy">Privacidade</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoAjuda()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3 2.4c-.7.3-1 .9-1 1.6v.3M12 17h.01"/></svg><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoSobre()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div class="t" id="lbl-sobre" data-t="profile.about">Sobre</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        </div>
+
+        <div class="plist" style="margin-top:22px">
           <div class="prow" onclick="terminarSessao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" style="color:var(--late)"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><div class="t" id="lbl-terminar-sessao" data-t="profile.signOut" style="color:var(--late)">Terminar sessão</div></div>
         </div>
       </section>
@@ -843,37 +849,37 @@
         <div class="rel-card-header tech" id="rel-anchor-operacional" data-t="reports.stats.title">Operacional</div>
         <div class="card ops-card" style="margin-top:0;border-radius:0 0 var(--r) var(--r)">
           <section class="metric" id="ropm-horas">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="17.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M20 2.5A17.5 17.5 0 0 1 37.5 20H20Z" fill="currentColor"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.hours">Horas</div>
             <div class="track" id="ropm-horas-track"></div>
             <div class="value-end" id="ropm-horas-end"></div>
           </section>
           <section class="metric" id="ropm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M9 20h17l-7-8m7 8-7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.pending">Pendências</div>
             <div class="track" id="ropm-pendencias-track"></div>
             <div class="value-end" id="ropm-pendencias-end"></div>
           </section>
           <section class="metric" id="ropm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="3" y="3" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3"/><path d="M31 20H14l7-8m-7 8 7 8" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.demands">Demandas</div>
             <div class="track" id="ropm-demandas-track"></div>
             <div class="value-end" id="ropm-demandas-end"></div>
           </section>
           <section class="metric" id="ropm-fechados">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="3" width="36" height="34" fill="currentColor"/><path d="m10 20 7 7 14-15" fill="none" stroke="#0b1017" stroke-width="4" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.closed">Fechados</div>
             <div class="track" id="ropm-fechados-track"></div>
             <div class="value-end" id="ropm-fechados-end"></div>
           </section>
           <section class="metric" id="ropm-executados" onclick="go('historico')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M7 8h26v28H7Z" fill="none" stroke="currentColor" stroke-width="3"/><path d="M14 8V6a6 6 0 0 1 12 0v2" fill="none" stroke="currentColor" stroke-width="3"/><path d="M13 19h14M13 26h11" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.executed">Executados</div>
             <div class="track" id="ropm-executados-track"></div>
             <div class="value-end" id="ropm-executados-end"></div>
           </section>
           <section class="metric" id="ropm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <svg class="icon" viewBox="0 0 40 40" aria-hidden="true"><path d="M3 2h4v36H3Zm4 1h29L24 15l12 12H7Z" fill="currentColor"/></svg>
+            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/gridicons:flag.svg);-webkit-mask-image:url(https://api.iconify.design/gridicons:flag.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
             <div class="label" data-t="home.completedTile">Concluídos</div>
             <div class="track" id="ropm-concluidos-track"></div>
             <div class="value-end" id="ropm-concluidos-end"></div>
@@ -937,20 +943,8 @@
         <div class="page-title" style="font-size:25px" data-t="profile.team">Equipe</div>
         <p style="font-size:13px;color:var(--ink-soft);margin:-8px 2px 18px"><span data-t="team.planLabel">Plano</span> <b id="equipa-plano-label">Pro</b> · <span id="equipa-seats-label">1 de 1 lugar usado</span></p>
 
-        <div class="plabel"><span data-t="profile.company">Empresa</span></div>
-        <div class="plist" style="margin-bottom:20px">
-          <div class="prow" onclick="infoEmpresa()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" id="equipa-empresa-nome" data-t="profile.company">Empresa</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-        </div>
-
         <div id="equipa-lista"></div>
         <button class="btn soft" style="width:100%;margin-top:6px" onclick="abrirAdicionarMembro()"><span data-t="team.add">+ Adicionar pessoa à equipe</span></button>
-
-        <div class="plabel" style="margin-top:26px"><span data-t="team.roles">Papéis e privilégios</span></div>
-        <div class="plist">
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.admin.name">Admin</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.adminDesc">Gere a equipe, faturamento e todos os trabalhos</span></div></div></div>
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.editor.name">Editor</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.editorDesc">Cria e edita trabalhos, contratos e pagamentos</span></div></div></div>
-          <div class="prow" style="cursor:default"><div><div class="t" data-t="role.viewer.name">Visualizador</div><div class="v" style="font-size:11.5px;text-align:left;max-width:200px;white-space:normal"><span data-t="team.viewerDesc">Só vê trabalhos e relatórios, sem poder editar</span></div></div></div>
-        </div>
       </section>
 
       <!-- ============ PESQUISA ============ -->
@@ -960,7 +954,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
           <input placeholder="Cliente, email, local, data, trabalho…" id="searchin" oninput="fakeSearch()" data-t-placeholder="search.inputHint">
         </div>
-        <div class="res" id="searchres" data-t="search.placeholder2">Pesquisa por cliente, local, data ou trabalho.</div>
+        <div class="res" id="searchres" style="display:none"></div>
+        <div id="search-recentes"></div>
         <div id="searchhits"></div>
       </section>
 
@@ -977,7 +972,7 @@
       <span class="nav-ico nav-ico-trabalhos"></span>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 5v14M5 12h14"/></svg></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="mask-image:url(https://api.iconify.design/material-symbols:add-circle.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-circle.svg)"></span></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico nav-ico-modelos"></span>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
@@ -1436,6 +1431,7 @@
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
   const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
+  const PIVOT_VERSAO='1.0.0';
   let currentWorkspaceId = null;
   let currentUser = null;
 
@@ -3159,6 +3155,27 @@
     "profile.account.name": { pt:"Nome", en:"Name", es:"Nombre" },
     "profile.account.plan": { pt:"Plano", en:"Plan", es:"Plan" },
     "profile.account.save": { pt:"Guardar alterações", en:"Save changes", es:"Guardar cambios" },
+    "profile.account.phone": { pt:"Telefone", en:"Phone", es:"Teléfono" },
+    "profile.account.docId": { pt:"Número de Documento Nacional", en:"National ID number", es:"Número de Documento Nacional" },
+    "profile.account.changePassword": { pt:"Alterar senha", en:"Change password", es:"Cambiar contraseña" },
+    "profile.company.address": { pt:"Endereço", en:"Address", es:"Dirección" },
+    "profile.organization": { pt:"Organização", en:"Organization", es:"Organización" },
+    "profile.plan": { pt:"Plano", en:"Plan", es:"Plan" },
+    "profile.plan.billingHistory": { pt:"Histórico de faturamento", en:"Billing history", es:"Historial de facturación" },
+    "profile.plan.nextRenewal": { pt:"Próxima renovação", en:"Next renewal", es:"Próxima renovación" },
+    "profile.about": { pt:"Sobre", en:"About", es:"Acerca de" },
+    "profile.notifications": { pt:"Notificações", en:"Notifications", es:"Notificaciones" },
+    "notif.email": { pt:"Notificações por email", en:"Email notifications", es:"Notificaciones por email" },
+    "notif.inApp": { pt:"Notificações no app", en:"In-app notifications", es:"Notificaciones en la app" },
+    "about.version": { pt:"Versão do aplicativo", en:"App version", es:"Versión de la app" },
+    "about.privacyPolicy": { pt:"Política de Privacidade", en:"Privacy Policy", es:"Política de Privacidad" },
+    "about.termsOfUse": { pt:"Termos de Uso", en:"Terms of Use", es:"Términos de Uso" },
+    "login.newPassword": { pt:"Nova senha", en:"New password", es:"Nueva contraseña" },
+    "login.confirmPassword": { pt:"Confirmar senha", en:"Confirm password", es:"Confirmar contraseña" },
+    "toast.passwordTooShort": { pt:"A senha deve ter pelo menos 6 caracteres", en:"Password must be at least 6 characters", es:"La contraseña debe tener al menos 6 caracteres" },
+    "toast.passwordMismatch": { pt:"As senhas não coincidem", en:"Passwords don't match", es:"Las contraseñas no coinciden" },
+    "toast.passwordUpdateError": { pt:"Erro ao alterar a senha", en:"Error changing password", es:"Error al cambiar la contraseña" },
+    "toast.passwordUpdated": { pt:"Senha alterada com sucesso", en:"Password changed successfully", es:"Contraseña cambiada con éxito" },
     "plan.name.free": { pt:"Free", en:"Free", es:"Free" },
     "plan.name.plus": { pt:"Plus", en:"Plus", es:"Plus" },
     "plan.name.pro": { pt:"Pro", en:"Pro", es:"Pro" },
@@ -3427,6 +3444,7 @@
     "services.new": { pt:"Novo serviço", en:"New service", es:"Nuevo servicio" },
     "services.edit": { pt:"Editar serviço", en:"Edit service", es:"Editar servicio" },
     "services.name": { pt:"Nome", en:"Name", es:"Nombre" },
+    "services.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "services.description": { pt:"Descrição", en:"Description", es:"Descripción" },
     "services.price": { pt:"Valor sugerido", en:"Suggested price", es:"Precio sugerido" },
     "services.delete": { pt:"Eliminar serviço", en:"Delete service", es:"Eliminar servicio" },
@@ -3866,6 +3884,7 @@
     if(v==='historico') renderHistorico();
     if(v==='colaboracoes') renderColaboracoesView();
     if(v==='contatos') abrirContatos();
+    if(v==='pesquisa'){ const si=document.getElementById('searchin'); if(si) si.value=''; fakeSearch(); }
   }
   /* Meta de faturamento e limite de gastos passam a ter histórico por mês
      (chave 'AAAA-MM'), não mais um único valor global — cada mês guarda o
@@ -4491,15 +4510,17 @@
     const prazoBadge=prazoBadgeInfo(it.dataISO);
     const tipoBadge=tipoTarefaInfo(it.tipo);
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    const prazoClasse = prazoBadge.classe==='green' ? 'neutral' : prazoBadge.classe;
     card+='<div class="rtk-side">'+
       avatarHtml(it.cliente||it.nome,44)+
-      '<span class="sig-tag '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></span>'+
-      '<span class="sig-tag gray">'+tipoBadge.icon+'<span>'+escapeHtml(tipoBadge.label)+'</span></span>'+
+      '<div class="rtk-subcards">'+
+        '<div class="rtk-sub rtk-sub-prazo '+prazoClasse+'"><span>'+escapeHtml(prazoBadge.label)+'</span></div>'+
+        '<div class="rtk-sub rtk-sub-tipo">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>'+
+      '</div>'+
     '</div>';
     card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
-    card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
     card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+(it.hora?' · '+escapeHtml(it.hora):'')+'</span></div>';
     card+='</div>';
     card+='</div>';
@@ -5348,7 +5369,7 @@
     if(membrosEquipa.length>=limite){
       openInfo(t('modal.seatsFull'), `
         <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('team.seatsFullPrefix')}${limite}${t('team.seatsFullSuffix')}</p>
-        <button class="btn primary" style="width:100%" onclick="closeInfo();infoMinhaConta()">${t('profile.account.plan')}</button>`);
+        <button class="btn primary" style="width:100%" onclick="closeInfo();infoPlano()">${t('profile.account.plan')}</button>`);
       return;
     }
     openInfo(t('team.addPerson'), `
@@ -12523,13 +12544,13 @@
   function saveServicosData(){ savePersisted('pivot-servicosData', ()=>servicosData); }
   async function loadClientesData(){ await loadPersisted('pivot-clientesData', d=>{ clientesData=d; }); }
   async function loadServicosData(){ await loadPersisted('pivot-servicosData', d=>{ servicosData=d||[]; }); }
-  let perfilData={nome:'', email:'', empresa:'', categoria:'', telefone:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR',
+  let perfilData={nome:'', email:'', telefonePessoal:'', documentoNacional:'', empresa:'', categoria:'', telefone:'', endereco:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR', notifEmail:false, notifApp:true,
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false} } };
   const METODOS_PAGAMENTO_META=[
-    ['revolut','payment.method.revolut','@utilizador', '<path d="M7 3h6a4.5 4.5 0 0 1 0 9h-2.5l5 9h-3.3l-5-9H9v9H7z"/>'],
-    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', '<path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"/>'],
-    ['mbway','payment.method.mbway','+351 900 000 000', '<rect x="7" y="2" width="10" height="20" rx="2.2"/><path d="M11 18h2"/>'],
-    ['paypal','payment.method.paypal','paypal.me/utilizador', '<path d="M8 4h6a4 4 0 0 1 0 8h-4l-1 8H6z"/><path d="M10 8h4"/>']
+    ['revolut','payment.method.revolut','@utilizador', 'https://api.iconify.design/simple-icons:revolut.svg'],
+    ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', 'https://api.iconify.design/mdi:bank.svg'],
+    ['mbway','payment.method.mbway','+351 900 000 000', 'https://api.iconify.design/mdi:cellphone-android.svg'],
+    ['paypal','payment.method.paypal','paypal.me/utilizador', 'https://api.iconify.design/ic:baseline-paypal.svg']
   ];
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
@@ -13299,6 +13320,16 @@
     document.getElementById('infoBackBtn').style.display='none';
   }
   function infoMinhaConta(){
+    openInfo(t('profile.myAccount'), `
+      <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
+      <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
+      <div class="field"><label>${t('profile.account.phone')}</label><input value="${escapeHtml(perfilData.telefonePessoal||'')}" id="mc-telefone"></div>
+      <div class="field"><label>${t('profile.account.docId')}</label><input value="${escapeHtml(perfilData.documentoNacional||'')}" id="mc-doc"></div>
+      <div class="prow" style="margin:0 0 13px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <button class="btn primary" style="width:100%;margin-top:2px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
+      <button class="btn soft" style="width:100%;margin-top:8px" onclick="abrirAlterarSenha()">${t('profile.account.changePassword')}</button>`);
+  }
+  function infoPlano(){
     const planoAtual = perfilData.plano||'Free';
     const linhasPlano = Object.keys(PLANOS).map(nome=>{
       const p=PLANOS[nome];
@@ -13307,18 +13338,30 @@
       const onclick = atual ? '' : ` onclick="escolherPlano('${nome}')"`;
       return `<div class="pick-row"${estilo}${onclick}><div><div class="nm">${t(p.labelKey)}${atual?t('plan.current'):''}</div><div class="sub">${t(p.descKey)}</div></div></div>`;
     }).join('');
-    openInfo(t('profile.myAccount'), `
-      <div class="field"><label>${t('profile.account.name')}</label><input value="${escapeHtml(perfilData.nome)}" id="mc-nome"></div>
-      <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
-      <div class="prow" style="margin:0 0 13px" onclick="infoAssinatura()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 17v3a1 1 0 0 0 1 1h3l11-11-4-4L3 17Z"/></svg><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-      <p class="plabel" style="margin:14px 2px 9px">${t('profile.account.plan')}</p>
+    openInfo(t('profile.plan'), `
+      <p class="plabel" style="margin:0 2px 9px">${t('profile.account.plan')}</p>
       ${linhasPlano}
-      <button class="btn primary" style="width:100%;margin-top:12px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
       <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
       <div style="display:flex;gap:8px">
         <div class="field" style="flex:1;margin-bottom:0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
         <button class="btn soft" style="flex:none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
-      </div>`);
+      </div>
+      <p class="plabel" style="margin:22px 2px 9px">${t('profile.plan.billingHistory')}</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin:0 2px 6px">${t('profile.plan.nextRenewal')}: ${perfilData.plano==='Free'?'—':(perfilData.proximaRenovacao||'—')}</p>`);
+  }
+  function abrirAlterarSenha(){
+    openInfo(t('profile.account.changePassword'), `
+      <div class="field"><label>${t('login.newPassword')}</label><input type="password" id="ap-senha1"></div>
+      <div class="field"><label>${t('login.confirmPassword')}</label><input type="password" id="ap-senha2"></div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="confirmarAlterarSenha()">${t('profile.account.save')}</button>`);
+  }
+  async function confirmarAlterarSenha(){
+    const s1=document.getElementById('ap-senha1').value, s2=document.getElementById('ap-senha2').value;
+    if(!s1 || s1.length<6){ showToast(t('toast.passwordTooShort')); return; }
+    if(s1!==s2){ showToast(t('toast.passwordMismatch')); return; }
+    const { error } = await sb.auth.updateUser({ password:s1 });
+    if(error){ showToast(t('toast.passwordUpdateError')); return; }
+    closeInfo(); showToast(t('toast.passwordUpdated'));
   }
   async function resgatarCodigoPlano(){
     const input=document.getElementById('mc-codigo');
@@ -13346,6 +13389,7 @@
         <label class="inline-link" style="cursor:pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" style="display:none" onchange="onEmpresaAvatarSelected(this)"></label>
       </div>
       <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="emp-nome"></div>
+      <div class="field"><label>${t('profile.company.address')}</label><input value="${escapeHtml(perfilData.endereco||'')}" id="emp-endereco"></div>
       <div class="field"><label>${t('profile.company.category')}</label><input value="${escapeHtml(perfilData.categoria)}" id="emp-categoria" placeholder="${t('profile.company.categoryPlaceholder')}"></div>
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.empresaEmail||'')}" id="emp-email"></div>
       <div class="field"><label>${t('profile.company.phone')}</label><input value="${escapeHtml(perfilData.telefone)}" id="emp-telefone"></div>
@@ -13368,6 +13412,7 @@
   }
   function salvarEmpresa(){
     perfilData.empresa=document.getElementById('emp-nome').value.trim();
+    perfilData.endereco=document.getElementById('emp-endereco').value.trim();
     perfilData.categoria=document.getElementById('emp-categoria').value.trim();
     perfilData.empresaEmail=document.getElementById('emp-email').value.trim();
     perfilData.telefone=document.getElementById('emp-telefone').value.trim();
@@ -13407,6 +13452,8 @@
   function salvarMinhaConta(){
     perfilData.nome=document.getElementById('mc-nome').value.trim()||'Utilizador';
     perfilData.email=document.getElementById('mc-email').value.trim();
+    perfilData.telefonePessoal=document.getElementById('mc-telefone').value.trim();
+    perfilData.documentoNacional=document.getElementById('mc-doc').value.trim();
     savePerfilData();
     aplicarPerfilData();
     closeInfo(); showToast(t('toast.accountDataUpdated'));
@@ -13416,7 +13463,7 @@
     const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone])=>{
       const m=mp[key];
       return '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:14px 2px">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10);color:var(--brand)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">'+icone+'</svg></span><div class="nm">'+t(labelKey)+'</div></div>'+
+        '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10)"><span style="width:16px;height:16px;display:inline-block;background-color:var(--brand);mask-image:url('+icone+');-webkit-mask-image:url('+icone+');mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span></span><div class="nm">'+t(labelKey)+'</div></div>'+
         '<div class="toggle'+(m.ativo?' on':'')+'" onclick="this.classList.toggle(\'on\')" id="mp-ativo-'+key+'"><div class="kn"></div></div></div>'+
         '<div class="field" style="margin-bottom:0"><input id="mp-valor-'+key+'" placeholder="'+placeholder+'" value="'+escapeHtml(m.valor||'')+'"></div>'+
         '<label style="display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink-soft)"><input type="checkbox" id="mp-padrao-'+key+'" '+(m.padrao?'checked':'')+' style="accent-color:var(--brand)"> '+t('payment.method.sendByDefault')+'</label>'+
@@ -13455,6 +13502,7 @@
     const s = id ? servicosData.find(x=>x.id===id) : null;
     openInfo(s ? t('services.edit') : t('services.new'), `
       <div class="field"><label>${t('services.name')}</label><input id="srv-nome" value="${s?escapeHtml(s.nome):''}"></div>
+      <div class="field"><label>${t('services.category')}</label><input id="srv-categoria" value="${s?escapeHtml(s.categoria||''):''}"></div>
       <div class="field"><label>${t('services.description')}</label><textarea id="srv-desc" rows="3">${s?escapeHtml(s.descricao||''):''}</textarea></div>
       <div class="field"><label>${t('services.price')}</label><input id="srv-valor" type="number" min="0" step="0.01" value="${s&&s.valor?s.valor:''}"></div>
       <input type="hidden" id="srv-id" value="${s?s.id:''}">
@@ -13464,14 +13512,15 @@
   function guardarServico(){
     const nome=document.getElementById('srv-nome').value.trim();
     if(!nome){ showToast(t('services.nameRequired')); return; }
+    const categoria=document.getElementById('srv-categoria').value.trim();
     const descricao=document.getElementById('srv-desc').value.trim();
     const valor=parseFloat(document.getElementById('srv-valor').value)||0;
     const id=document.getElementById('srv-id').value;
     if(id){
       const s=servicosData.find(x=>x.id===id);
-      if(s){ s.nome=nome; s.descricao=descricao; s.valor=valor; }
+      if(s){ s.nome=nome; s.categoria=categoria; s.descricao=descricao; s.valor=valor; }
     } else {
-      servicosData.push({ id:'srv'+Date.now()+Math.random().toString(36).slice(2,7), nome, descricao, valor });
+      servicosData.push({ id:'srv'+Date.now()+Math.random().toString(36).slice(2,7), nome, categoria, descricao, valor });
     }
     saveServicosData();
     showToast(t('toast.serviceSaved'));
@@ -13626,7 +13675,8 @@
         <option value="USD"${perfilData.moeda==='USD'?' selected':''}>${t('currency.dollar')}</option>
         <option value="BRL"${perfilData.moeda==='BRL'?' selected':''}>${t('currency.real')}</option></select></div>
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
-      <div class="prow" style="margin-top:18px" onclick="infoIdioma()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" style="margin-top:18px" onclick="infoNotificacoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="infoIdioma()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/mdi:translate.svg);-webkit-mask-image:url(https://api.iconify.design/mdi:translate.svg)"></span><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:18px 2px 8px">${t('settings.storageTitle')}</p>
       <div style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
       <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${usadoMB.toFixed(1)} MB ${t('settings.storageOf')} ${limiteTexto}</p>`);
@@ -13639,6 +13689,24 @@
     closeInfo();
     showToast(t('toast.settingsSaved'));
   }
+  function infoNotificacoes(){
+    openInfo(t('profile.notifications'), `
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.email')}</div><div class="toggle${perfilData.notifEmail?' on':''}" onclick="this.classList.toggle('on')" id="notif-email"><div class="kn"></div></div></div>
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.inApp')}</div><div class="toggle${perfilData.notifApp?' on':''}" onclick="this.classList.toggle('on')" id="notif-app"><div class="kn"></div></div></div>
+      <button class="btn primary" style="width:100%;margin-top:12px" onclick="guardarNotificacoes()">${t('action.save')}</button>`);
+  }
+  function guardarNotificacoes(){
+    perfilData.notifEmail=document.getElementById('notif-email').classList.contains('on');
+    perfilData.notifApp=document.getElementById('notif-app').classList.contains('on');
+    savePerfilData();
+    closeInfo(); showToast(t('toast.settingsSaved'));
+  }
+  function infoSobre(){
+    openInfo(t('profile.about'), `
+      <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('about.version')}</div><div class="v">${PIVOT_VERSAO||'1.0.0'}</div></div>
+      <div class="prow" onclick="window.open('https://pivot.app/privacidade','_blank')"><div class="t">${t('about.privacyPolicy')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="window.open('https://pivot.app/termos','_blank')"><div class="t">${t('about.termsOfUse')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>`);
+  }
   function infoPrivacidade(){
     openInfo(t('modal.privacy'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('privacy.desc')}</p>
@@ -13646,7 +13714,7 @@
       <button class="btn soft" style="width:100%;color:var(--ink);border-color:var(--late)" onclick="confirmarApagarDados()">${t('action.deleteAccount')}</button>`);
   }
   function exportarDadosReal(){
-    const pacote={ exportadoEm:new Date().toISOString(), trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
+    const pacote={ exportadoEm:new Date().toISOString(), conta:perfilData, trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
     const blob=new Blob([JSON.stringify(pacote,null,2)], {type:'application/json'});
     const url=URL.createObjectURL(blob);
     const a=document.createElement('a');
@@ -13811,11 +13879,55 @@
     openSheet(); pushPanel('trabalho'); trabalhoGoto(1);
     setTimeout(()=>{ const el=document.getElementById('tw-cliente'); if(el) el.value=nome; }, 80);
   }
+  /* Histórico de pesquisas — últimas 10, mais recente primeiro, com botão
+     de remoção individual. Persistido igual ao resto dos dados da conta. */
+  let pesquisasRecentes=[];
+  function savePesquisasRecentes(){ savePersisted('pivot-pesquisas-recentes', ()=>pesquisasRecentes); }
+  async function loadPesquisasRecentes(){ await loadPersisted('pivot-pesquisas-recentes', d=>{ pesquisasRecentes=Array.isArray(d)?d:[]; }); }
+  function registrarPesquisaRecente(q){
+    q=(q||'').trim();
+    if(!q) return;
+    pesquisasRecentes=[q].concat(pesquisasRecentes.filter(p=>p.toLowerCase()!==q.toLowerCase())).slice(0,10);
+    savePesquisasRecentes();
+  }
+  function removerPesquisaRecente(q){
+    pesquisasRecentes=pesquisasRecentes.filter(p=>p!==q);
+    savePesquisasRecentes();
+    renderPesquisasRecentes();
+  }
+  function refazerPesquisaRecente(q){
+    document.getElementById('searchin').value=q;
+    fakeSearch();
+  }
+  function renderPesquisasRecentes(){
+    const wrap=document.getElementById('search-recentes');
+    if(!wrap) return;
+    if(!pesquisasRecentes.length){ wrap.innerHTML=''; return; }
+    wrap.innerHTML=pesquisasRecentes.map(q=>{
+      const qEsc=escapeHtml(q).replace(/'/g,"\\'");
+      return '<div class="search-recent-item" onclick="refazerPesquisaRecente(\''+qEsc+'\')">'+
+        '<span class="search-recent-txt">'+escapeHtml(q)+'</span>'+
+        '<span class="search-recent-x" onclick="event.stopPropagation();removerPesquisaRecente(\''+qEsc+'\')">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>'+
+        '</span>'+
+      '</div>';
+    }).join('');
+  }
   function fakeSearch(){
-    const q=document.getElementById('searchin').value.toLowerCase().trim();
+    const qRaw=document.getElementById('searchin').value.trim();
+    const q=qRaw.toLowerCase();
     const res=document.getElementById('searchres');
     const box=document.getElementById('searchhits');
-    if(!q){res.textContent=t('search.placeholder2');box.innerHTML='';return}
+    const recentes=document.getElementById('search-recentes');
+    if(!q){
+      res.style.display='none';
+      box.innerHTML='';
+      if(recentes) recentes.style.display='block';
+      renderPesquisasRecentes();
+      return;
+    }
+    if(recentes) recentes.style.display='none';
+    res.style.display='block';
     const jobMatches=jobsVisiveis().filter(j=>
       (j.client+' '+j.typeLabel+' '+(j.local||'')+' '+(j.date||'')).toLowerCase().includes(q)
     ).map(j=>'<div class="job" onclick="openJob(\''+j.id+'\')"><div class="job-top"><div class="job-top-l">'+avatarHtml(j.client,30)+
@@ -13825,8 +13937,13 @@
       (c.nome+' '+(c.email||'')+' '+(c.empresa||'')).toLowerCase().includes(q)
     ).map(c=>'<div class="pick-row" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div class="nm">'+escapeHtml(c.nome)+'</div><div class="sub">'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
     const total=jobMatches.length+clienteMatches.length;
-    res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+q+'"';
+    res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+qRaw+'"';
     box.innerHTML = jobMatches.join('') + clienteMatches.join('');
+    /* só entra no histórico depois de uma pausa na digitação (debounce) —
+       nunca a cada tecla, senão o histórico enchia de buscas parciais
+       ("c", "ca", "cas"...) em vez da busca que a pessoa quis fazer. */
+    clearTimeout(window.__buscaDebounce);
+    window.__buscaDebounce=setTimeout(()=>registrarPesquisaRecente(qRaw), 900);
   }
 
   document.addEventListener('keydown', e=>{
@@ -14286,7 +14403,7 @@
     await loadEquipaData();
     await Promise.all([
       loadJobsData(), loadClientesData(), loadTarefasData(), loadLembretesData(), loadListasData(), loadCustosData(), loadReceitasData(),
-      loadPerfilData(), loadMetas(),
+      loadPerfilData(), loadMetas(), loadPesquisasRecentes(),
       loadReferenciasData(), loadModelosUsoData(), loadModelosContratoData(), loadTema(), carregarMinhasColaboracoes(), loadBibFavoritos(), loadNotifDismissed(), loadServicosData(), loadCatalogoPersonalizado()
     ]);
     renderMonthTicker();

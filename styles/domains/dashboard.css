@@ -118,7 +118,7 @@
   .ops-card .value-end{color:var(--ink-soft);font-size:12px;text-align:right;white-space:nowrap}
   /* "concluído/total" — o número concluído usa a mesma cor do bloco
      preenchido (laranja), o total permanece branco. */
-  .ops-card .value-end .ve-cur{color:#FF9738;font-weight:600}
+  .ops-card .value-end .ve-cur{color:#914B27;font-weight:600}
   .ops-card .value-end .ve-sep{color:var(--ink-soft);padding:0 1px}
   .ops-card .value-end .ve-tot{color:var(--ink)}
   /* .track/.segment NÃO são escopados a .ops-card de propósito — é o mesmo
@@ -144,7 +144,7 @@
     width:calc(var(--fill, 0) * 1%);
     height:20px;
     transform:translateY(-50%);
-    background:linear-gradient(90deg, rgba(255,151,56,.16), transparent);
+    background:linear-gradient(90deg, rgba(145,75,39,.16), transparent);
   }
   /* blocos retangulares, sem cantos arredondados; vazios com borda branca,
      preenchidos em laranja sólido (sem etiqueta numérica por cima). */
@@ -156,8 +156,8 @@
     background:rgba(255,255,255,.03);
   }
   .segment.is-filled{
-    border-color:#FF9738;
-    background:#FF9738;
+    border-color:#914B27;
+    background:#914B27;
     box-shadow:inset 0 1px rgba(255,255,255,.35);
   }
   @media (max-width:360px){
@@ -235,11 +235,24 @@
      texto ao lado do avatar. */
   .card.radar-card{display:flex;align-items:flex-start;gap:12px}
   #tasks-list .rtk-side,.radar-card .rtk-side{
-    display:flex;flex-direction:column;align-items:center;gap:6px;
-    width:64px;flex:none}
-  .rtk-side .sig-tag{width:100%;box-sizing:border-box;justify-content:center;text-align:center;
-    font-size:9.5px;padding:4px 5px;white-space:normal;line-height:1.25}
-  .rtk-side .sig-tag svg{width:11px;height:11px;flex:none}
+    display:flex;flex-direction:column;align-items:stretch;gap:7px;
+    width:108px;flex:none}
+  #tasks-list .rtk-side .client-avatar,.radar-card .rtk-side .client-avatar{align-self:center}
+  /* 2 cards menores lado a lado abaixo do avatar — cantos retos (sem
+     arredondamento), mesma largura entre si, sem preenchimento de cor:
+     Prazo (contorno, texto só) e Demanda/Pendência (ícone + descrição
+     objetiva do item). Nunca pílulas cheias como o resto do app. */
+  .rtk-subcards{display:flex;gap:5px;width:100%}
+  .rtk-sub{flex:1;min-width:0;border-radius:0;border:1px solid var(--line);
+    background:transparent;box-sizing:border-box;padding:5px 4px;
+    display:flex;align-items:center;justify-content:center;gap:4px;text-align:center}
+  .rtk-sub span{font-size:9px;font-weight:600;line-height:1.2;white-space:normal;word-break:break-word}
+  .rtk-sub svg{width:11px;height:11px;flex:none}
+  .rtk-sub-prazo.neutral{border-color:var(--line);color:var(--ink-faint)}
+  .rtk-sub-prazo.amber{border-color:rgba(203,162,106,.55);color:var(--pend)}
+  .rtk-sub-prazo.late{border-color:rgba(217,127,121,.55);color:var(--c-text-red)}
+  .rtk-sub-tipo{color:var(--ink-soft)}
+  .rtk-sub-tipo svg{color:var(--ink-faint)}
   #tasks-list .rtk-body{flex:1;min-width:0}
   /* título do card: mesma tipografia exata do rótulo "TAREFAS" (.tasks-header) */
   #tasks-list .rtk-title{

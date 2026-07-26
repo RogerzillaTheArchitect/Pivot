@@ -176,6 +176,17 @@
   .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}
   .res{font-size:13px;color:var(--neutral);padding:0 2px}
 
+  .search-recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;
+    padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);
+    margin-bottom:8px;cursor:pointer;transition:background .15s}
+  .search-recent-item:active{background:var(--paper-2)}
+  .search-recent-txt{font-size:14px;color:var(--ink);flex:1;min-width:0;overflow:hidden;
+    text-overflow:ellipsis;white-space:nowrap}
+  .search-recent-x{width:26px;height:26px;flex:none;display:grid;place-items:center;color:var(--neutral);
+    border-radius:50%;transition:background .15s,color .15s}
+  .search-recent-x:hover{background:var(--paper-2);color:var(--ink)}
+  .search-recent-x svg{width:14px;height:14px}
+
   /* ===== Visualizar — tela do contrato (título à esquerda, cabeçalho em linha, blocos num card) ===== */
   .vis-screen{--ink:#F5F5F3; --ink-soft:#9B9DA3; --neutral:#6A6C72; --line-soft:rgba(255,255,255,.07)}
   .vis-title{font-family:var(--font-headline),Georgia,serif;font-weight:400;font-size:21px;line-height:1.2;color:var(--bib-ink);text-align:left;margin:2px 0 12px}
