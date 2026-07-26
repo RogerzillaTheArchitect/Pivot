@@ -561,7 +561,6 @@
         </div>
         <div class="card rel-card-body">
           <div class="cal-grid" id="calgrid"></div>
-          <div id="cal-dia-filtro" style="display:none;margin:12px 2px 0;font-size:12.5px;color:var(--ink-soft)"></div>
         </div>
 
         <!-- 4 filtros do mesmo tamanho, com ícone antes do nome (reaproveitando
@@ -569,10 +568,9 @@
              "Todos" é o estado padrão (calFiltroAtivo já começa como 'todos',
              nenhuma lógica nova em filterJobs precisa mudar). -->
         <div class="filter-row filter-row-even" style="margin-top:22px">
-          <div class="chip chip-ic on" data-key="todos" onclick="filterJobs(this,'todos')"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.4"/><circle cx="15" cy="6" r="1.4"/><circle cx="9" cy="12" r="1.4"/><circle cx="15" cy="12" r="1.4"/><circle cx="9" cy="18" r="1.4"/><circle cx="15" cy="18" r="1.4"/></svg><span data-t="jobs.filter.all">Todos</span></div>
-          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><span data-t="jobs.filter.mine">Demandas</span></div>
-          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg><span data-t="jobs.filter.client">Pendências</span></div>
-          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg><span data-t="jobs.filter.history">Histórico</span></div>
+          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/streamline-block:arrowheads-up-right-chevron.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:arrowheads-up-right-chevron.svg)"></span><span data-t="jobs.filter.client">Pendências</span></div>
+          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/streamline-block:arrowheads-down-left-chevron.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:arrowheads-down-left-chevron.svg)"></span><span data-t="jobs.filter.mine">Demandas</span></div>
+          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/ic:outline-history.svg);-webkit-mask-image:url(https://api.iconify.design/ic:outline-history.svg)"></span><span data-t="jobs.filter.history">Histórico</span></div>
         </div>
 
         <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
@@ -759,12 +757,12 @@
         <!-- Seletor de período — barra global partilhada por todos os cards
              da página (todo card usa relRangeMeses()/relPeriodo pra se
              filtrar), por isso fica solta no topo, fora de qualquer área. -->
-        <div class="card rel-card">
+        <div class="card rel-card rel-period-card">
           <div class="rel-period-bar">
             <div class="rel-month-row">
               <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
               <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
-                <span class="rel-mes-big" id="rel-mes-label">JULHO</span>
+                <span class="rel-mes-big" id="rel-mes-label">Julho</span>
                 <span class="rel-ano-small" id="rel-ano-label">2026</span>
               </div>
               <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
@@ -908,7 +906,7 @@
              trabalhadas" incorpora essa mesma comparação de período. Mesmo
              grid dividido .rel-split das demais (divisória vertical
              central, linhas horizontais de borda a borda). -->
-        <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Evolução Mensal</div>
+        <div class="rel-card-header" id="rel-anchor-evolucao" data-t="reports.evolution.title">Desempenho</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
@@ -922,8 +920,8 @@
         <div class="rel-card-header" id="rel-anchor-eficiencia" data-t="reports.profitability.title">Rentabilidade</div>
         <div class="card rel-card rel-card-body">
           <div class="rel-split-subhead">
-            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Rentabilidade por Hora</div>
-            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Indicadores Gerais</div>
+            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
+            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
           </div>
           <div class="rel-split" id="rel-rentabilidade-grid"></div>
         </div>
@@ -3327,7 +3325,7 @@
     "reports.flow.bySubcategory": { pt:"Por subcategoria", en:"By subcategory", es:"Por subcategoría" },
     "reports.flow.bySubcategoryIncome": { pt:"Recebidos por subcategoria", en:"Income by subcategory", es:"Recibidos por subcategoría" },
     "reports.emptyPeriod": { pt:"Sem dados neste período.", en:"No data this period.", es:"Sin datos en este período." },
-    "reports.evolution.title": { pt:"Evolução Mensal", en:"Monthly Evolution", es:"Evolución Mensual" },
+    "reports.evolution.title": { pt:"Desempenho", en:"Performance", es:"Desempeño" },
     "reports.evolution.improvements": { pt:"Top 5 melhorias", en:"Top 5 improvements", es:"Top 5 mejoras" },
     "reports.evolution.declines": { pt:"Top 5 quedas", en:"Top 5 declines", es:"Top 5 caídas" },
     "reports.evolution.metric.revenue": { pt:"Receita", en:"Revenue", es:"Ingresos" },
@@ -3346,8 +3344,8 @@
     "reports.profitability.sortDesc": { pt:"Mais rentáveis primeiro", en:"Most profitable first", es:"Más rentables primero" },
     "reports.profitability.sortAsc": { pt:"Menos rentáveis primeiro", en:"Least profitable first", es:"Menos rentables primero" },
     "reports.profitability.empty": { pt:"Sem dados de rentabilidade neste período.", en:"No profitability data this period.", es:"Sin datos de rentabilidad en este período." },
-    "reports.profitability.colRanking": { pt:"Rentabilidade por Hora", en:"Profitability per Hour", es:"Rentabilidad por Hora" },
-    "reports.profitability.colIndicators": { pt:"Indicadores Gerais", en:"General Indicators", es:"Indicadores Generales" },
+    "reports.profitability.colRanking": { pt:"Ranking hora", en:"Hour ranking", es:"Ranking hora" },
+    "reports.profitability.colIndicators": { pt:"Geral mensal", en:"Monthly overview", es:"General mensual" },
     "reports.indicators.title": { pt:"Eficiência", en:"Efficiency", es:"Eficiencia" },
     "reports.noData": { pt:"Sem dados", en:"No data", es:"Sin datos" },
     "reports.indicators.ticket": { pt:"Ticket médio", en:"Average ticket", es:"Ticket medio" },
@@ -3851,12 +3849,16 @@
 
   const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe'];
   function go(v){
-    views.forEach(x=>{
-      const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
-    });
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
       contatos:'perfil','contato-detalhe':'perfil'};
+    /* sair da área de Trabalhos (menu/página diferente) limpa a seleção de dia
+       do calendário — ao voltar, mostra de novo os registos do dia atual em
+       vez de continuar filtrado por um dia que a pessoa já esqueceu. */
+    if(navMap[v]!=='trabalhos' && typeof calDiaAtivo!=='undefined' && calDiaAtivo!=null) calDiaAtivo=null;
+    views.forEach(x=>{
+      const el=document.getElementById('v-'+x); if(el) el.classList.toggle('active', x===v);
+    });
     const active=navMap[v]||v;
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
@@ -4429,6 +4431,7 @@
     client:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 21c0-4.7 3.4-7.5 7.5-7.5s7.5 2.8 7.5 7.5z"/></svg>',
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
     calendar:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm4 9.5h4v3H9z"/><rect x="7" y="2" width="2.4" height="4" rx="1"/><rect x="14.6" y="2" width="2.4" height="4" rx="1"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
   };
   /* data literal (dd Mmm aaaa) — o prazo deixou de mostrar "Hoje"/"Amanhã"/
      "N dias" e passa a mostrar sempre a data exata em que a tarefa deve
@@ -6219,7 +6222,7 @@
     if(relPeriodo.tipo==='trimestre') return {big:'T'+Math.ceil(relPeriodo.mesFim/3), small:String(relPeriodo.ano), compact:false};
     if(relPeriodo.tipo==='ano') return {big:String(relPeriodo.ano), small:'', compact:false};
     if(relPeriodo.tipo==='intervalo') return {big:fmtD(relPeriodo.ini)+' – '+fmtD(relPeriodo.fim), small:'', compact:true};
-    return {big:mesCompleto(relMes-1).toUpperCase(), small:String(relAno), compact:false};
+    return {big:mesCompleto(relMes-1), small:String(relAno), compact:false};
   }
   function relMonthNav(dir){
     if(relPeriodo.tipo==='trimestre'){
@@ -11239,7 +11242,6 @@
     if(!wrap) return;
     document.querySelectorAll('#v-trabalhos .job-card-wrap').forEach(w=>w.style.display='none');
     document.getElementById('jobsEmpty').style.display='none';
-    const df=document.getElementById('cal-dia-filtro'); if(df) df.style.display='none';
     const itens=jobsArquivados();
     wrap.style.display='block';
     wrap.innerHTML = itens.length ? itens.map(htmlCardArquivado).join('') :
@@ -11332,6 +11334,18 @@
     if(job.horaIni) s+=' • '+job.horaIni+(job.horaFim?('–'+job.horaFim):'');
     return s;
   }
+  /* mesma data de fmtDataHoraLinhaJob, mas sem a hora — usada quando a hora
+     ganha o seu próprio ícone/linha (relógio) em vez de ficar colada à data. */
+  function fmtDataLinhaJob(job){
+    if(!job.dateRaw) return t('jobs.dateNotSet');
+    const partes=job.dateRaw.split('-');
+    const mn=mesAbrev(parseInt(partes[1],10)-1);
+    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
+  }
+  function fmtHoraLinhaJob(job){
+    if(!job.horaIni) return '';
+    return job.horaIni+(job.horaFim?('–'+job.horaFim):'');
+  }
   /* Card de Projeto — só responde 2 perguntas (que projeto é este, em que
      etapa está): título, cliente (avatar+nome), data/hora numa linha, etapa
      atual. Endereço/valor/observações/equipa só existem na página interna
@@ -11352,11 +11366,15 @@
     div.dataset.entregue= c.entregue?'1':'0';
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
     div.className='job'+(urgClasse?' '+urgClasse:'');
+    const hora=fmtHoraLinhaJob(job);
     div.innerHTML='<div class="job-head-row">'+avatarHtml(job.client,44)+
       '<div class="job-head-info"><div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
-      '<div class="job-client-name">'+escapeHtml(job.client)+'</div></div></div>'+
-      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataHoraLinhaJob(job))+'</span></div>'+
-      '<div class="job-stage-row">'+RTK_ICONS.action+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>';
+      '<div class="job-client-name">'+RTK_ICONS.client+'<span>'+escapeHtml(job.client)+'</span></div></div></div>'+
+      '<div class="job-body-rows">'+
+      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataLinhaJob(job))+'</span></div>'+
+      (hora ? '<div class="job-datetime job-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(hora)+'</span></div>' : '')+
+      '<div class="job-stage-row">'+RTK_ICONS.action+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>'+
+      '</div>';
   }
   function updateJobCard(id){
     const job=jobsData[id];
@@ -13755,11 +13773,6 @@
       if(show) visible++;
     });
     document.getElementById('jobsEmpty').style.display = visible===0 ? 'block':'none';
-    const df=document.getElementById('cal-dia-filtro');
-    if(df){
-      if(calDiaAtivo!=null){ df.style.display='block'; df.innerHTML=t('calendar.dayFilterPrefix')+' '+calDiaAtivo+' · <span class="inline-link" onclick="limparDiaCal()">'+t('calendar.clearDay')+'</span>'; }
-      else df.style.display='none';
-    }
   }
   /* sem chip "Todos" — estado padrão (nenhum filtro ativo) mostra os projetos
      ativos normalmente. Tocar num chip já ativo desliga-o e volta a esse
@@ -13920,7 +13933,7 @@
     const m=calMonths[calIndex];
     const hojeReal=diaHojeSeForOMes(m);
     const merged=mergedMonthData(m);
-    document.getElementById('cal-mes-label').textContent=mesCompleto(m.month-1).toUpperCase();
+    document.getElementById('cal-mes-label').textContent=mesCompleto(m.month-1);
     document.getElementById('cal-ano-label').textContent=String(m.year);
     document.getElementById('cal-prev').style.opacity = calIndex===0 ? '.15':'';
     document.getElementById('cal-prev').style.pointerEvents = calIndex===0 ? 'none':'';

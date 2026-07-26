@@ -45,12 +45,16 @@
   .rel-nav-tall svg{width:17px;height:17px}
   .rel-month-center{display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer}
   /* mesma tipografia dos títulos de card (.tasks-header) — Space Grotesk
-     bold uppercase — em vez das fontes decorativas Six Caps/Special Gothic,
-     pra unificar a linguagem tipográfica entre calendário e cabeçalhos. */
+     bold — em vez das fontes decorativas Six Caps/Special Gothic, pra
+     unificar a linguagem tipográfica entre calendário e cabeçalhos.
+     Só a primeira letra maiúscula (ex.: "Julho"), não o mês todo em caixa
+     alta — por isso sem text-transform aqui (mesCompleto() já devolve
+     "Julho" capitalizado, ver index.html). */
   .rel-mes-big{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-weight:700;font-size:19px;color:var(--ink);letter-spacing:.08em;text-transform:uppercase;line-height:1.1}
-  .rel-mes-big.compact{font-size:13px;letter-spacing:.06em}
-  .rel-ano-small{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral);margin-top:3px}
+    font-weight:700;font-size:19px;color:var(--ink);letter-spacing:.02em;line-height:1.1;
+    padding-top:2px;padding-bottom:1px}
+  .rel-mes-big.compact{font-size:13px;letter-spacing:.02em}
+  .rel-ano-small{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral);margin-top:4px;padding-bottom:2px}
 
   /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo.
      Sem cantos arredondados em pílula (isso lê como progress bar de UI) — traço
