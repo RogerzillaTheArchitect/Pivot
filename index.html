@@ -6894,20 +6894,20 @@
      segmento/categoria do projeto) e ranking de categorias de Despesas
      (direita, calcularGastosPorCategoria — agrupa por custosData.categoria),
      cada uma ordenada da maior pra menor. Nunca misturadas — colunas
-     totalmente separadas, cada uma com seu próprio ranking. */
-  function fluxoRankRowHtml(l, max){
-    const pct = max>0 ? Math.round(l.valor/max*100) : 0;
+     totalmente separadas. SEMPRE exatamente 5 linhas (nunca menos, nunca
+     "sem dados") — linhas sem categoria correspondente ficam em branco,
+     mas ocupam o espaço, pra o card nunca mudar de tamanho. Só listas,
+     sem barra/indicador gráfico nenhum. */
+  const FLUXO_RANK_N=5;
+  function fluxoRankRowHtml(l){
     return '<div class="fluxo-rank-row">'+
-      '<div class="fluxo-rank-name">'+escapeHtml(l.label)+'</div>'+
-      '<div class="fluxo-rank-track"><div class="fluxo-rank-fill" style="width:'+Math.max(pct,4)+'%"></div></div>'+
-      '<div class="fluxo-rank-val">'+fmtMoney(l.valor)+'</div>'+
+      '<div class="fluxo-rank-name">'+(l?escapeHtml(l.label):'')+'</div>'+
+      '<div class="fluxo-rank-val">'+(l?fmtMoney(l.valor):'')+'</div>'+
     '</div>';
   }
   function fluxoRankColHtml(linhas){
-    if(!linhas.length) return '<div class="fluxo-empty">'+t('reports.noData')+'</div>';
-    const top=linhas.slice(0,6);
-    const max=top[0].valor;
-    return top.map(l=>fluxoRankRowHtml(l, max)).join('');
+    const linhasFixas=Array.from({length:FLUXO_RANK_N}, (_,i)=>linhas[i]||null);
+    return linhasFixas.map(fluxoRankRowHtml).join('');
   }
   function renderRelFluxoFinanceiro(){
     const wrap=document.getElementById('rel-fluxo-rows-subcategoria');
