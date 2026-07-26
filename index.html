@@ -4493,15 +4493,17 @@
     const prazoBadge=prazoBadgeInfo(it.dataISO);
     const tipoBadge=tipoTarefaInfo(it.tipo);
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
+    const prazoClasse = prazoBadge.classe==='green' ? 'neutral' : prazoBadge.classe;
     card+='<div class="rtk-side">'+
       avatarHtml(it.cliente||it.nome,44)+
-      '<span class="sig-tag '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></span>'+
-      '<span class="sig-tag gray">'+tipoBadge.icon+'<span>'+escapeHtml(tipoBadge.label)+'</span></span>'+
+      '<div class="rtk-subcards">'+
+        '<div class="rtk-sub rtk-sub-prazo '+prazoClasse+'"><span>'+escapeHtml(prazoBadge.label)+'</span></div>'+
+        '<div class="rtk-sub rtk-sub-tipo">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>'+
+      '</div>'+
     '</div>';
     card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
-    card+='<div class="rtk-action">'+RTK_ICONS.action+'<span>'+escapeHtml(it.acao)+'</span></div>';
     card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+(it.hora?' · '+escapeHtml(it.hora):'')+'</span></div>';
     card+='</div>';
     card+='</div>';
