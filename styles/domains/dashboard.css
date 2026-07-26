@@ -20,19 +20,14 @@
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:155px;height:155px;transform:rotate(-90deg)}
-  .mr-trilho{fill:none;stroke:rgba(255,255,255,.16)}
-  .mr-ring{fill:none;stroke-linecap:butt}
-  /* camada 1 — voltas já fechadas (círculo cheio, cor "congelada" no ponto em
-     que a volta terminou); fica sempre no fundo, por isso a sombra é maior/
-     mais soft, para dar profundidade a quem está por baixo das pontas */
-  .mr-base{opacity:0;transition:opacity .3s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
-  /* camada 2 — a ponta em crescimento (arco parcial da volta atual); sombra
-     mais curta/nítida, para parecer a fita de cima da pilha */
-  .mr-tip{filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35)) drop-shadow(0 0 1px rgba(0,0,0,.2))}
-  .mr-esperado{stroke:url(#grad-esperado)}
-  .mr-recebido{stroke:url(#grad-recebido)}
-  .mr-extras{stroke:url(#grad-extras)}
-  .mr-despesas{stroke:url(#grad-despesas)}
+  /* trilho — referência de meta/teto, branco gelo bem discreto (<20% opacidade) */
+  .mr-trilho{fill:none;stroke:rgba(245,245,243,.14)}
+  /* anéis do donut agora são paths preenchidos (não stroke) — cor sólida
+     definida por elemento via JS (ver pintarFita/pintarTeto). Sem
+     gradiente, sem glow, sem sombra decorativa: só a forma e a cor. */
+  .mr-ring{stroke:none;fill-rule:nonzero}
+  .mr-base{opacity:1}
+  .mr-teto{opacity:1}
   /* apenas o número fica centrado no anel — o rótulo "Total" é ancorado
      acima dele, fora do cálculo de centralização, para não puxar o
      conjunto para baixo do centro. */
@@ -46,11 +41,11 @@
   .mrl-item{display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11.5px;font-weight:500;letter-spacing:0;color:var(--ink-soft);padding:6px 0;cursor:pointer;white-space:nowrap}
   .mrl-item b{color:var(--ink);font-weight:600;font-size:12.5px;text-align:right;font-family:var(--font-financial),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-variant-numeric:tabular-nums}
   .mr-meta-c{color:#F2F5F3}
-  .mr-esperado-c{color:#B8C7A8}
-  .mr-recebido-c{color:#5E7A52}
-  .mr-extras-c{color:#2E8577}
-  .mr-gastos-c{color:#C9A855}
-  .mr-teto-c{color:#A8453D}
+  .mr-esperado-c{color:#BED4CA}
+  .mr-recebido-c{color:#345959}
+  .mr-extras-c{color:#B5D19F}
+  .mr-gastos-c{color:#FFFACC}
+  .mr-teto-c{color:#EB6449}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}

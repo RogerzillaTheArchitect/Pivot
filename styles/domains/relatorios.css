@@ -191,14 +191,10 @@
   .distfin-half .track.green::before{background:linear-gradient(90deg, rgba(94,122,82,.16), transparent)}
 
   /* ===== Reorganização de Relatórios (3 áreas / 8 cards) =====
-     Anéis do Resumo Financeiro: mesmas classes mr-ring/mr-tip/mr-base já
-     usadas no Dashboard (dashboard.css) — só o binding de gradiente muda
-     (gradientes próprios rf-grad-*, pra não competir com os do Dashboard
-     quando os dois estão montados na mesma página). */
-  .rf-mr-esperado{stroke:url(#rf-grad-esperado)}
-  .rf-mr-recebido{stroke:url(#rf-grad-recebido)}
-  .rf-mr-extras{stroke:url(#rf-grad-extras)}
-  .rf-mr-despesas{stroke:url(#rf-grad-despesas)}
+     Anéis do Resumo Financeiro: mesmas classes mr-ring/mr-tip/mr-base e
+     mesma lógica de render (pintarFita/pintarTeto) já usadas no Dashboard
+     (dashboard.css) — cor de cada indicador é setada por elemento via JS,
+     não há mais binding de gradiente por CSS. */
 
   .rel-subhead{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
   .rel-subhead-sub{font-size:11px;font-weight:600;color:var(--neutral);margin-bottom:8px}
