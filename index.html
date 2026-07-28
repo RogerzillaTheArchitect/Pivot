@@ -996,7 +996,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </div>
     </div>
-    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="sheet-body" id="sheetBody">
 
@@ -1190,19 +1190,30 @@
           <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <!-- ETAPA 6 — Contrato -->
+        <!-- ETAPA 6 — Serviços Incluídos (tem de vir antes do Contrato: os
+             serviços escolhidos aqui viram um bloco "Serviços incluídos"
+             gerado automaticamente no contrato da Etapa 7). -->
         <div class="moment" data-moment="6" style="display:none">
+          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.includedServicesHint">Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.</p>
+          <div id="tw-servicos-incluidos-lista"></div>
+          <p id="tw-servicos-incluidos-empty" style="display:none;font-size:13px;color:var(--ink-soft)" data-t="wizard.noServicesSaved">Ainda não tem serviços guardados em Perfil &gt; Serviços.</p>
+          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+        </div>
+
+        <!-- ETAPA 7 — Contrato -->
+        <div class="moment" data-moment="7" style="display:none">
           <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.suggestedFor">Modelos sugeridos da biblioteca</p>
           <div id="modelos-sugeridos-lista"></div>
           <div id="tw-modelo-escolhido-status"></div>
           <div style="display:flex;gap:8px;margin:10px 0 4px">
             <button class="btn soft" style="flex:1" onclick="twEmWizard=true;pushPanel('comunidade-modelos')"><span data-t="wizard.browseLibrary">Explorar Modelos</span></button>
           </div>
+          <div class="struct-row" style="margin-top:16px"><div class="struct-l"><div class="nm" data-t="wizard.requireDocId">Exigir documento de identificação para assinar</div><span class="sub" data-t="wizard.requireDocIdHint">O cliente terá de indicar o tipo e o número do documento antes de assinar.</span></div><div class="toggle" id="tw-exigir-doc" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- RESUMO -->
-        <div class="moment" data-moment="7" style="display:none">
+        <div class="moment" data-moment="8" style="display:none">
           <div id="trabalho-review-summary" style="margin-bottom:14px"></div>
           <div class="struct-row" style="margin-bottom:14px"><div class="struct-l"><div class="nm" data-t="wizard.autoReminders">Lembretes automáticos</div><span class="sub" data-t="wizard.autoRemindersHint">Email ao cliente antes e no dia de cada pagamento</span></div><div class="toggle on" id="tw-lembretes-toggle" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <button class="btn primary" style="width:100%" onclick="trabalhoCreate()"><span data-t="wizard.createJob">Criar trabalho</span></button>
@@ -2258,8 +2269,13 @@
     "wizard.serviceTemplate": { pt:"Serviço", en:"Service", es:"Servicio" },
     "wizard.serviceTemplatePlaceholder": { pt:"Selecionar serviço ou preencher manualmente…", en:"Pick a service or fill in manually…", es:"Seleccionar servicio o rellenar manualmente…" },
     "wizard.step5": { pt:"Entrega e Aprovação", en:"Delivery & Approval", es:"Entrega y Aprobación" },
-    "wizard.step6": { pt:"Contrato", en:"Contract", es:"Contrato" },
-    "wizard.step7": { pt:"Resumo", en:"Summary", es:"Resumen" },
+    "wizard.step6": { pt:"Serviços Incluídos", en:"Included Services", es:"Servicios Incluidos" },
+    "wizard.step7": { pt:"Contrato", en:"Contract", es:"Contrato" },
+    "wizard.step8": { pt:"Resumo", en:"Summary", es:"Resumen" },
+    "wizard.includedServicesHint": { pt:"Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.", en:"Select the services included in this job — they're automatically added as a block in the contract.", es:"Selecciona los servicios incluidos en este trabajo — se añaden automáticamente como un bloque en el contrato." },
+    "wizard.noServicesSaved": { pt:"Ainda não tem serviços guardados em Perfil > Serviços.", en:"You don't have any services saved yet in Profile > Services.", es:"Aún no tienes servicios guardados en Perfil > Servicios." },
+    "wizard.requireDocId": { pt:"Exigir documento de identificação para assinar", en:"Require ID document to sign", es:"Exigir documento de identificación para firmar" },
+    "wizard.requireDocIdHint": { pt:"O cliente terá de indicar o tipo e o número do documento antes de assinar.", en:"The client will need to provide the document type and number before signing.", es:"El cliente deberá indicar el tipo y número del documento antes de firmar." },
     "entrega.screening": { pt:"Triagem", en:"Screening", es:"Selección previa" },
     "entrega.screeningHint": { pt:"O cliente faz uma primeira triagem dos materiais (fotos RAW, vídeos brutos, áudios, outros arquivos).", en:"The client does a first pass over the raw materials (RAW photos, raw video, audio, other files).", es:"El cliente hace una primera revisión de los materiales (fotos RAW, video en bruto, audio, otros archivos)." },
     "entrega.selection": { pt:"Seleção", en:"Selection", es:"Selección" },
@@ -3149,6 +3165,13 @@
     "portal.simulation": { pt:"Modo de simulação. O cliente real não está visualizando este conteúdo.", en:"Simulation mode. The actual client is not viewing this.", es:"Modo simulación. El cliente real no está viendo esto." },
     "portal.talkToPrefix": { pt:"Falar com ", en:"Talk to ", es:"Hablar con " },
     "portal.taxId": { pt:"NIF ou endereço (opcional)", en:"Tax ID or address (optional)", es:"NIF o dirección (opcional)" },
+    "portal.docType": { pt:"Tipo de documento", en:"Document type", es:"Tipo de documento" },
+    "portal.docTypeNational": { pt:"CC / BI", en:"National ID", es:"DNI" },
+    "portal.docTypeCpf": { pt:"CPF", en:"CPF", es:"CPF" },
+    "portal.docTypePassport": { pt:"Passaporte", en:"Passport", es:"Pasaporte" },
+    "portal.docTypeOther": { pt:"Outro", en:"Other", es:"Otro" },
+    "portal.docNumber": { pt:"Número do documento", en:"Document number", es:"Número de documento" },
+    "portal.docNumberPlaceholder": { pt:"Obrigatório para assinar este contrato", en:"Required to sign this contract", es:"Obligatorio para firmar este contrato" },
     "portal.thankYou": { pt:"obrigado pelas respostas", en:"thank you for your answers", es:"gracias por tus respuestas" },
     "portal.writeSignerName": { pt:"— escreve o nome de quem está mesmo a assinar.", en:"— write the name of whoever is actually signing.", es:"— escribe el nombre de quién realmente está firmando." },
     "portal.yourJob": { pt:"O seu trabalho", en:"Your job", es:"Tu trabajo" },
@@ -4931,7 +4954,7 @@
     document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
   }
-  const WIZARD_STEP_KEYS=['wizard.step1','wizard.step2','wizard.step3','wizard.step4','wizard.step5','wizard.step6','wizard.step7'];
+  const WIZARD_STEP_KEYS=['wizard.step1','wizard.step2','wizard.step3','wizard.step4','wizard.step5','wizard.step6','wizard.step7','wizard.step8'];
   function syncChrome(){
     const current=panelStack[panelStack.length-1];
     const back=document.getElementById('sheetBack');
@@ -4940,9 +4963,9 @@
     const prog=document.getElementById('sheetProgress');
     const header=document.getElementById('sheetHeader');
     if(current==='trabalho'){
-      // 7 pontos para as 7 etapas; o resumo (momento 7) mantém os 7 pontos
+      // 8 pontos para as 8 etapas; o resumo (momento 8) mantém os 8 pontos
       // preenchidos com o último marcado como atual.
-      const passo=Math.min(trabalhoMoment,7);
+      const passo=Math.min(trabalhoMoment,8);
       prog.style.display='flex';
       prog.querySelectorAll('span').forEach((s,i)=>{
         s.classList.toggle('on', i<passo);
@@ -5514,8 +5537,9 @@
     if(n===2) renderColaboradoresPendentesWizard();
     if(n===4){ renderServicoPickerWizard(); prepararEtapaPagamentos(); }
     if(n===5) prepararEtapaEntrega();
-    if(n===6) renderModelosSugeridos();
-    if(n===7) renderReview();
+    if(n===6) renderServicosIncluidosWizard();
+    if(n===7) renderModelosSugeridos();
+    if(n===8) renderReview();
     document.getElementById('sheetBody').scrollTop=0;
     syncChrome();
   }
@@ -5698,7 +5722,34 @@
     };
   }
   function trabalhoNext(){
-    trabalhoGoto(Math.min(7, trabalhoMoment+1));
+    trabalhoGoto(Math.min(8, trabalhoMoment+1));
+  }
+  /* ===== Etapa 6 — Serviços Incluídos =====
+     Seleção (não obrigatória) de modelos de serviço salvos em Perfil >
+     Serviços para incluir neste trabalho — a escolha vira automaticamente
+     um bloco "Serviços incluídos" no contrato da etapa seguinte, com um
+     snapshot de nome/categoria/descrição/valor no momento da criação (não
+     uma referência viva ao modelo, que pode mudar depois). */
+  let twServicosSelecionados=new Set();
+  function renderServicosIncluidosWizard(){
+    const wrap=document.getElementById('tw-servicos-incluidos-lista');
+    const empty=document.getElementById('tw-servicos-incluidos-empty');
+    if(!wrap) return;
+    if(!servicosData.length){ wrap.innerHTML=''; if(empty) empty.style.display='block'; return; }
+    if(empty) empty.style.display='none';
+    wrap.innerHTML=servicosData.map(s=>{
+      const on=twServicosSelecionados.has(s.id);
+      const meta=[s.categoria, s.valor?fmtMoney(s.valor):''].filter(Boolean).join(' · ');
+      return '<div class="pick-row'+(on?' selected':'')+'" onclick="toggleServicoIncluidoWizard(\''+s.id+'\')">'+
+        '<div><div class="nm">'+escapeHtml(s.nome)+'</div>'+(meta?'<div class="sub">'+escapeHtml(meta)+'</div>':'')+'</div>'+
+        (on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--brand);flex:none"><path d="M20 6 9 17l-5-5"/></svg>':'')+
+      '</div>';
+    }).join('');
+  }
+  function toggleServicoIncluidoWizard(id){
+    if(twServicosSelecionados.has(id)) twServicosSelecionados.delete(id);
+    else twServicosSelecionados.add(id);
+    renderServicosIncluidosWizard();
   }
   let modeloContratoSelecionado=null;
   function renderModelosSugeridos(){
@@ -6171,6 +6222,17 @@
       job.contract.templateName = twModeloEscolhido.nome;
       job.contract.status = 'rascunho';
     }
+    /* Serviços Incluídos (Etapa 6): snapshot dos modelos escolhidos vira um
+       bloco extra no contrato, além dos blocos do modelo/template. */
+    if(twServicosSelecionados.size){
+      const servicosSnapshot=servicosData.filter(s=>twServicosSelecionados.has(s.id))
+        .map(s=>({nome:s.nome, categoria:s.categoria||'', descricao:s.descricao||'', valor:s.valor||0}));
+      job.contract.blocks.push({id:genId(), key:'servicosIncluidos', on:true, params:{servicos:servicosSnapshot}});
+    }
+    // Exigir documento de identificação (Etapa 7 — Contrato): o portal do
+    // cliente passa a pedir tipo+número do documento antes de assinar, e o
+    // valor entra no hash e na folha de prova (ver assinarContratoCliente).
+    job.contract.exigirDocumento = ligado('tw-exigir-doc');
     pushHistory(job,t('toast.jobCreated')+(trabalhoModo==='rapido'?t('toast.quickMode'):''));
     jobsData[id]=job;
     renderJobCard(job);
@@ -6276,8 +6338,9 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false; twServicoEscolhido=null;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false; twServicoEscolhido=null; twServicosSelecionados=new Set();
     const servSel=document.getElementById('tw-servico'); if(servSel) servSel.value='';
+    const exigirDocEl=document.getElementById('tw-exigir-doc'); if(exigirDocEl) exigirDocEl.classList.remove('on');
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
@@ -8116,7 +8179,8 @@
     identificacao:'Identificação das partes', pagamento:'Pagamento', entrega:'Entrega',
     cancelamento:'Cancelamento', direitos:'Direitos de imagem', confidencialidade:'Confidencialidade',
     forcaMaior:'Força maior', alteracaoEscopo:'Alteração de âmbito',
-    propriedadeIntelectual:'Materiais de trabalho', garantias:'Garantias e revisões'
+    propriedadeIntelectual:'Materiais de trabalho', garantias:'Garantias e revisões',
+    servicosIncluidos:'Serviços incluídos'
   };
   /* Cada função aceita (job, params) — params vem de b.params, definido por
      Motor de cláusulas genérico (interim) — usado por todo trabalho/modelo
@@ -8174,7 +8238,17 @@
     forcaMaior: (job,p)=>'Nenhuma das partes é responsável por atrasos ou incumprimentos causados por circunstâncias fora do seu controlo razoável (condições climatéricas extremas, falhas de equipamento de terceiros, restrições de última hora), devendo a data ser remarcada de comum acordo assim que possível.',
     alteracaoEscopo: (job,p)=>'Qualquer alteração ao âmbito acordado (serviços adicionais, extensão de duração, entregas extra) só é válida mediante confirmação escrita e o correspondente ajuste de preço e prazo.',
     propriedadeIntelectual: (job,p)=>'O prestador mantém a titularidade dos ficheiros de trabalho, métodos e materiais preliminares, que não integram a entrega final.',
-    garantias: (job,p)=>'O prestador compromete-se a corrigir, sem custo adicional, quaisquer erros técnicos que lhe sejam imputáveis, identificados até 15 dias após a entrega.'
+    garantias: (job,p)=>'O prestador compromete-se a corrigir, sem custo adicional, quaisquer erros técnicos que lhe sejam imputáveis, identificados até 15 dias após a entrega.',
+    /* p.servicos é um snapshot (nome/categoria/descricao/valor) capturado na
+       Etapa 6 do wizard, não uma referência viva ao modelo em Perfil >
+       Serviços — se o modelo mudar depois, o texto já gerado não muda. */
+    servicosIncluidos: (job,p)=>{
+      const lista=(p&&p.servicos)||[];
+      if(!lista.length) return 'Nenhum serviço adicional foi especificado para este trabalho.';
+      return 'Este trabalho inclui os seguintes serviços:\n'+lista.map(s=>
+        '• '+s.nome+(s.descricao?' — '+s.descricao:'')+(s.valor?' ('+fmtMoney(s.valor)+')':'')
+      ).join('\n');
+    }
   };
   function genId(){ return 'b'+Math.random().toString(36).slice(2,9); }
   function escapeHtml(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -10891,7 +10965,19 @@
       html+='<div class="csec-label" style="margin-top:18px">'+tp('portal.signerDetails')+'</div>';
       html+='<p style="font-size:12px;color:var(--neutral);margin:-6px 2px 12px">'+tp('portal.notNecessarily')+' '+escapeHtml(job.client)+' '+tp('portal.writeSignerName')+'</p>';
       html+='<div class="field"><label>'+tp('portal.fullName')+'</label><input id="sig-nome" placeholder="'+tp('portal.namePlaceholder2')+'"></div>';
-      html+='<div class="field"><label>'+tp('portal.taxId')+'</label><input id="sig-nif" placeholder="opcional"></div>';
+      /* Documento de identificação — só aparece se o profissional ligou o
+         toggle "Exigir documento" na Etapa Contrato do wizard. O número
+         entra no hash do documento e na folha de prova (ver
+         capturarMetadadosAssinatura/assinarContratoCliente), não é
+         decorativo como o antigo campo opcional de NIF que existia aqui. */
+      if(job.contract.exigirDocumento){
+        html+='<div class="field-row"><div class="field" style="flex:0 0 118px"><label>'+tp('portal.docType')+'</label><select id="sig-doc-tipo">'+
+          '<option value="'+tp('portal.docTypeNational')+'">'+tp('portal.docTypeNational')+'</option>'+
+          '<option value="'+tp('portal.docTypeCpf')+'">'+tp('portal.docTypeCpf')+'</option>'+
+          '<option value="'+tp('portal.docTypePassport')+'">'+tp('portal.docTypePassport')+'</option>'+
+          '<option value="'+tp('portal.docTypeOther')+'">'+tp('portal.docTypeOther')+'</option>'+
+          '</select></div><div class="field" style="flex:1"><label>'+tp('portal.docNumber')+'</label><input id="sig-doc-numero" placeholder="'+tp('portal.docNumberPlaceholder')+'"></div></div>';
+      }
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-soft);margin:14px 2px"><input type="checkbox" id="sig-aceite1" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.acceptTerms')+'</label>';
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--ink-soft);margin:0 2px 16px"><input type="checkbox" id="sig-aceite2" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.confirmData')+'</label>';
       html+='<div class="field"><label>'+tp('portal.signatureLabel')+'</label>'+
@@ -11066,9 +11152,10 @@
      Antes, esta validação, a mutação de job.contract/milestones/histórico,
      a persistência e a nova renderização estavam todas misturadas numa
      única função. Passam a ser 3 responsabilidades separadas: */
-  function validarDadosAssinatura(nome, aceite1, aceite2){
+  function validarDadosAssinatura(nome, aceite1, aceite2, exigeDocumento, docNumero){
     if(!nome) return 'Falta o nome.';
     if(!sigHasDrawing) return 'Desenhe sua assinatura no quadro.';
+    if(exigeDocumento && !docNumero) return 'Indique o número do documento de identificação.';
     if(!aceite1 || !aceite2) return 'Aceita os dois termos para continuar.';
     return null;
   }
@@ -11091,12 +11178,22 @@
     const nome=document.getElementById('sig-nome').value.trim();
     const a1=document.getElementById('sig-aceite1').checked;
     const a2=document.getElementById('sig-aceite2').checked;
-    const erro=validarDadosAssinatura(nome, a1, a2);
+    const docTipoEl=document.getElementById('sig-doc-tipo');
+    const docNumeroEl=document.getElementById('sig-doc-numero');
+    const docTipo = job.contract.exigirDocumento && docTipoEl ? docTipoEl.value : null;
+    const docNumero = job.contract.exigirDocumento && docNumeroEl ? docNumeroEl.value.trim() : null;
+    const erro=validarDadosAssinatura(nome, a1, a2, job.contract.exigirDocumento, docNumero);
     if(erro){ clientToast(erro); return; }
     const comGeo=document.getElementById('sig-geo-opt').checked;
-    const textoDocumento=job.contract.blocks.filter(b=>b.on).map(b=>blockName(b)+': '+blockText(job,b)).join('\n');
+    let textoDocumento=job.contract.blocks.filter(b=>b.on).map(b=>blockName(b)+': '+blockText(job,b)).join('\n');
+    /* o documento entra no texto que é hasheado — assim a folha de prova
+       comprova não só quem disse assinar, mas com que documento afirmou
+       fazê-lo, e qualquer alteração posterior a este dado quebra o hash. */
+    if(docNumero) textoDocumento += '\nDocumento do signatário: '+docTipo+' '+docNumero;
     clientToast('A confirmar assinatura…');
     const meta=await capturarMetadadosAssinatura(textoDocumento, comGeo);
+    meta.documentoTipo=docTipo;
+    meta.documentoNumero=docNumero;
     const canvas=document.getElementById('sig-canvas-cliente');
     const assinaturaImg = canvas ? canvas.toDataURL('image/png') : null;
     aplicarAssinaturaContrato(job, {nome, meta, assinaturaImg});
@@ -11196,13 +11293,16 @@
       const linhas=[
         ['Documento', 'Contrato — '+job.typeLabel],
         ['Signatário', job.contract.signerName||'—'],
+      ];
+      if(meta.documentoNumero) linhas.push(['Documento de identificação apresentado', (meta.documentoTipo||'Documento')+' '+meta.documentoNumero]);
+      linhas.push(
         ['Versão do contrato', job.contract.versao||'—'],
         ['Data e hora (UTC)', meta.dataHoraUTC],
         ['Endereço IP', meta.ip],
         ['Dispositivo', meta.dispositivo],
         ['Navegador', meta.navegador],
         ['Hash do documento (SHA-256)', meta.hash],
-      ];
+      );
       if(meta.geo) linhas.push(['Localização (autorizada pelo signatário)', meta.geo]);
       doc.setFont('helvetica','normal'); doc.setFontSize(10);
       linhas.forEach(([label,val])=>{
