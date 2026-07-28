@@ -237,6 +237,18 @@
   #tasks-list .rtk-side,.radar-card .rtk-side{
     display:flex;flex-direction:column;align-items:center;gap:6px;
     width:44px;flex:none}
+  /* item solto (tarefa/lista/lembrete sem trabalho vinculado): quadrado com o
+     mesmo ícone de check do botão "Tarefa" do menu Criar, em vez do avatar de
+     iniciais. Vinculado a um trabalho: mantém a foto do cliente, com o mesmo
+     ícone virando um selinho no canto superior direito do quadrado. */
+  .rtk-avatar-wrap{position:relative;flex:none;width:44px;height:44px}
+  .rtk-avatar-check{border-radius:var(--r);display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.07);border:1px solid var(--line-soft)}
+  .rtk-avatar-check .rtk-check-ico{width:20px;height:20px;background-color:var(--ink-soft)}
+  .rtk-avatar-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;
+    background:var(--ink);display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--bg-ice-2)}
+  .rtk-avatar-badge .rtk-check-ico{width:9px;height:9px;background-color:var(--bg-ice-2)}
   /* Card de Prazo abaixo da foto — mesma largura horizontal do avatar,
      metade da altura, cantos retos, contorno colorido sem preenchimento,
      só texto (Hoje/Amanhã/N dias — nunca "atrasado"/"faltam"). */
