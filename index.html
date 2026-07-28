@@ -3139,6 +3139,7 @@
     "import.stepValidate": { pt:"A validar…", en:"Validating…", es:"Validando…" },
     "import.failMessage": { pt:"Não foi possível identificar uma estrutura documental válida para este arquivo. Verifique a qualidade do documento ou utilize um arquivo cuja organização estrutural possa ser interpretada corretamente.", en:"We couldn't identify a valid document structure for this file. Check the document's quality or use a file whose structural organization can be interpreted correctly.", es:"No fue posible identificar una estructura documental válida para este archivo. Verifica la calidad del documento o utiliza un archivo cuya organización estructural pueda interpretarse correctamente." },
     "import.unsupportedFormat": { pt:"Formato não suportado. Usa PDF, DOCX, DOC, JPG, JPEG, PNG ou WEBP.", en:"Unsupported format. Use PDF, DOCX, DOC, JPG, JPEG, PNG or WEBP.", es:"Formato no compatible. Usa PDF, DOCX, DOC, JPG, JPEG, PNG o WEBP." },
+    "import.docUnsupported": { pt:"Este é um arquivo .doc antigo (Word 97-2003), que não conseguimos ler diretamente. Abre-o no Word ou Google Docs e guarda-o como .docx, ou exporta como PDF — depois volta a tentar a importação.", en:"This is a legacy .doc file (Word 97-2003), which we can't read directly. Open it in Word or Google Docs and save it as .docx, or export as PDF — then try importing again.", es:"Este es un archivo .doc antiguo (Word 97-2003), que no podemos leer directamente. Ábrelo en Word o Google Docs y guárdalo como .docx, o expórtalo como PDF — luego vuelve a intentar la importación." },
     "import.reviewTitle": { pt:"Rever estrutura", en:"Review structure", es:"Revisar estructura" },
     "import.reviewHint": { pt:"Confere os blocos e cláusulas reconstruídos. Podes editar qualquer texto, mover cláusulas entre blocos, reordenar, criar ou remover — antes de guardar como Modelo.", en:"Check the rebuilt blocks and clauses. You can edit any text, move clauses between blocks, reorder, create or remove — before saving as a Template.", es:"Revisa los bloques y cláusulas reconstruidos. Puedes editar cualquier texto, mover cláusulas entre bloques, reordenar, crear o eliminar — antes de guardar como Plantilla." },
     "import.addBlock": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
@@ -8886,6 +8887,7 @@
       go('revisao-importacao');
     }catch(err){
       console.error('[import]', err);
+      if(err && err.message==='legacy-doc-unsupported'){ impFalhar(t('import.docUnsupported')); return; }
       impFalhar(t('import.failMessage'));
     }
   }
