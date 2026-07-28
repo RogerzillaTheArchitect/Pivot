@@ -683,6 +683,41 @@
         </div>
       </section>
 
+      <!-- ============ IMPORTAR ARQUIVO ============ -->
+      <section class="view" id="v-importar-arquivo">
+        <div class="back" onclick="go('bibliotecas')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="nav.libraries">Modelos</span></div>
+        <div class="page-title" data-t="import.title">Importar arquivo</div>
+        <p class="imp-hint" data-t="import.desc">Envia um contrato que já usas e o Pivots reconstrói automaticamente a sua estrutura como um Modelo editável — blocos e cláusulas, tal como se tivesse sido criado aqui.</p>
+
+        <div class="imp-dropzone" id="imp-dropzone" onclick="document.getElementById('imp-file-input').click()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+          <div class="ti" data-t="import.dropTitle">Arrasta o arquivo aqui</div>
+          <div class="si" data-t="import.dropSub">ou toca para selecionar do dispositivo</div>
+        </div>
+        <input type="file" id="imp-file-input" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png,.webp" style="display:none" onchange="handleImportFiles(this.files)">
+
+        <div class="imp-formats" id="imp-formats"></div>
+
+        <div class="imp-progress" id="imp-progress" style="display:none"></div>
+        <div class="imp-fail" id="imp-fail" style="display:none"></div>
+      </section>
+
+      <!-- ============ REVISÃO DE IMPORTAÇÃO ============ -->
+      <section class="view wide" id="v-revisao-importacao">
+        <div class="back" onclick="cancelarRevisaoImportacao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="import.title">Importar arquivo</span></div>
+        <div class="builder-top">
+          <div><div class="detail-h" style="font-size:24px" data-t="import.reviewTitle">Rever estrutura</div><div class="detail-sub" id="rev-sub"></div></div>
+          <div class="save-tpl" data-t="action.save" onclick="abrirGuardarModeloImportado()">Guardar</div>
+        </div>
+        <p class="imp-hint" data-t="import.reviewHint" style="margin-bottom:16px">Confere os blocos e cláusulas reconstruídos. Podes editar qualquer texto, mover cláusulas entre blocos, reordenar, criar ou remover — antes de guardar como Modelo.</p>
+
+        <div id="rev-blocos"></div>
+
+        <button class="addblock" onclick="revAdicionarBloco()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> <span data-t="import.addBlock">Adicionar Bloco</span>
+        </button>
+      </section>
+
       <!-- ============ CONTATOS (clientes + colaboradores) ============ -->
       <section class="view" id="v-contatos">
         <div class="back" onclick="go('perfil')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="profile.title">Perfil</span></div>
@@ -1226,6 +1261,7 @@
           <div class="sheet-item" onclick="abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg><span><span data-t="wizard.fromScratch">Novo</span></span></div>
           <div class="sheet-item" onclick="pushPanel('comunidade-contratos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18Z"/></svg><span data-t="wizard.browseLibrary">Explorar</span></div>
           <div class="sheet-item" onclick="pushPanel('contrato-usar')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1Z"/></svg><span data-t="library.saved">Salvos</span></div>
+          <div class="sheet-item" onclick="closeSheet();abrirImportarArquivo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg><span data-t="import.menuLabel">Arquivo</span></div>
         </div>
       </div>
 
@@ -3092,6 +3128,23 @@
     "model.scheduleMilestone": { pt:"Adicionar marco (ex: +7 dias — Sinal)…", en:"Add milestone (e.g. +7 days — Deposit)…", es:"Añadir hito (ej: +7 días — Señal)…" },
     "model.scheduleName": { pt:"Nome do cronograma", en:"Schedule name", es:"Nombre del cronograma" },
     "model.schedulePlaceholder": { pt:"ex: Padrão de casamento", en:"e.g. Standard wedding", es:"ej: Boda estándar" },
+    // --- Importar Arquivo ---
+    "import.menuLabel": { pt:"Arquivo", en:"File", es:"Archivo" },
+    "import.title": { pt:"Importar arquivo", en:"Import file", es:"Importar archivo" },
+    "import.desc": { pt:"Envia um contrato que já usas e o Pivots reconstrói automaticamente a sua estrutura como um Modelo editável — blocos e cláusulas, tal como se tivesse sido criado aqui.", en:"Upload a contract you already use and Pivots automatically rebuilds its structure as an editable Template — blocks and clauses, just like one created here.", es:"Sube un contrato que ya usas y Pivots reconstruye automáticamente su estructura como una Plantilla editable — bloques y cláusulas, igual que si se hubiera creado aquí." },
+    "import.dropTitle": { pt:"Arrasta o arquivo aqui", en:"Drop the file here", es:"Arrastra el archivo aquí" },
+    "import.dropSub": { pt:"ou toca para selecionar do dispositivo", en:"or tap to choose from your device", es:"o toca para elegir desde tu dispositivo" },
+    "import.stepExtract": { pt:"A extrair conteúdo…", en:"Extracting content…", es:"Extrayendo contenido…" },
+    "import.stepRebuild": { pt:"A reconstruir estrutura…", en:"Rebuilding structure…", es:"Reconstruyendo estructura…" },
+    "import.stepValidate": { pt:"A validar…", en:"Validating…", es:"Validando…" },
+    "import.failMessage": { pt:"Não foi possível identificar uma estrutura documental válida para este arquivo. Verifique a qualidade do documento ou utilize um arquivo cuja organização estrutural possa ser interpretada corretamente.", en:"We couldn't identify a valid document structure for this file. Check the document's quality or use a file whose structural organization can be interpreted correctly.", es:"No fue posible identificar una estructura documental válida para este archivo. Verifica la calidad del documento o utiliza un archivo cuya organización estructural pueda interpretarse correctamente." },
+    "import.unsupportedFormat": { pt:"Formato não suportado. Usa PDF, DOCX, DOC, JPG, JPEG, PNG ou WEBP.", en:"Unsupported format. Use PDF, DOCX, DOC, JPG, JPEG, PNG or WEBP.", es:"Formato no compatible. Usa PDF, DOCX, DOC, JPG, JPEG, PNG o WEBP." },
+    "import.reviewTitle": { pt:"Rever estrutura", en:"Review structure", es:"Revisar estructura" },
+    "import.reviewHint": { pt:"Confere os blocos e cláusulas reconstruídos. Podes editar qualquer texto, mover cláusulas entre blocos, reordenar, criar ou remover — antes de guardar como Modelo.", en:"Check the rebuilt blocks and clauses. You can edit any text, move clauses between blocks, reorder, create or remove — before saving as a Template.", es:"Revisa los bloques y cláusulas reconstruidos. Puedes editar cualquier texto, mover cláusulas entre bloques, reordenar, crear o eliminar — antes de guardar como Plantilla." },
+    "import.addBlock": { pt:"Adicionar Bloco", en:"Add Block", es:"Añadir Bloque" },
+    "import.addClause": { pt:"Adicionar cláusula", en:"Add clause", es:"Añadir cláusula" },
+    "import.needOneBlock": { pt:"O modelo precisa de pelo menos um bloco.", en:"The template needs at least one block.", es:"La plantilla necesita al menos un bloque." },
+    "import.newBlockName": { pt:"Novo bloco", en:"New block", es:"Nuevo bloque" },
     // --- Navegação ---
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
@@ -3937,7 +3990,7 @@
     }
   }
 
-  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
   function go(v){
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
@@ -8728,6 +8781,397 @@
     }
     abrirBuilderParaSelecao({ client:'', nome:m.nome, blocks });
   }
+
+  /* ============================================================
+     IMPORTAÇÃO DE ARQUIVO — Modelos → + Criar → Arquivo
+     Extração + reconstrução estrutural 100% no browser (sem backend, sem
+     IA, sem serviços externos): PDF.js / Mammoth.js / Tesseract.js carregados
+     via CDN sob demanda, o mesmo padrão já usado por carregarLeaflet().
+     A heurística de segmentação em Blocos/Cláusulas é determinística —
+     nunca depende de vocabulário específico, só de sinais estruturais
+     (hierarquia, isolamento visual, tipografia, enumeração, continuidade).
+     Cada Bloco/Cláusula reconstruído é guardado no MESMO formato de bloco
+     já usado pelo builder ({id,key:null,name,customText,on}) — as cláusulas
+     ficam preservadas como parágrafos separados por linha em branco dentro
+     de customText, o que mantém 100% de compatibilidade com o editor de
+     blocos existente depois de guardado. A edição verdadeiramente por
+     cláusula (mover entre blocos, reordenar, criar, remover) acontece aqui,
+     na Tela de Revisão, antes de o Modelo ser criado. ============ */
+
+  const IMP_FORMATOS = ['PDF','DOCX','DOC','JPG','JPEG','PNG','WEBP'];
+  let _pdfjsLoading=null, _mammothLoading=null, _tesseractLoading=null;
+  function carregarScript(src){
+    return new Promise((resolve,reject)=>{
+      const s=document.createElement('script');
+      s.src=src; s.onload=resolve; s.onerror=()=>reject(new Error('falha ao carregar '+src));
+      document.head.appendChild(s);
+    });
+  }
+  function carregarPdfJs(){
+    if(typeof pdfjsLib!=='undefined') return Promise.resolve();
+    if(_pdfjsLoading) return _pdfjsLoading;
+    _pdfjsLoading=carregarScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js').then(()=>{
+      pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    }).catch(e=>{ _pdfjsLoading=null; throw e; });
+    return _pdfjsLoading;
+  }
+  function carregarMammoth(){
+    if(typeof mammoth!=='undefined') return Promise.resolve();
+    if(_mammothLoading) return _mammothLoading;
+    _mammothLoading=carregarScript('https://cdn.jsdelivr.net/npm/mammoth@1.7.2/mammoth.browser.min.js').catch(e=>{ _mammothLoading=null; throw e; });
+    return _mammothLoading;
+  }
+  function carregarTesseract(){
+    if(typeof Tesseract!=='undefined') return Promise.resolve();
+    if(_tesseractLoading) return _tesseractLoading;
+    _tesseractLoading=carregarScript('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js').catch(e=>{ _tesseractLoading=null; throw e; });
+    return _tesseractLoading;
+  }
+
+  let impState=null; // {fileName, blocos:[{id,titulo,clausulas:[{id,texto}]}]}
+  let impDragBound=false;
+
+  function abrirImportarArquivo(){
+    document.getElementById('imp-formats').innerHTML = IMP_FORMATOS.map(f=>'<span>'+f+'</span>').join('');
+    document.getElementById('imp-progress').style.display='none';
+    document.getElementById('imp-progress').innerHTML='';
+    document.getElementById('imp-fail').style.display='none';
+    document.getElementById('imp-file-input').value='';
+    bindImportDropzone();
+    go('importar-arquivo');
+  }
+  function bindImportDropzone(){
+    if(impDragBound) return;
+    impDragBound=true;
+    const zona=document.getElementById('imp-dropzone');
+    ['dragenter','dragover'].forEach(ev=>zona.addEventListener(ev, e=>{ e.preventDefault(); zona.classList.add('drag-over'); }));
+    ['dragleave','drop'].forEach(ev=>zona.addEventListener(ev, e=>{ e.preventDefault(); zona.classList.remove('drag-over'); }));
+    zona.addEventListener('drop', e=>{ if(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) handleImportFiles(e.dataTransfer.files); });
+  }
+  const IMP_STEPS=['import.stepExtract','import.stepRebuild','import.stepValidate'];
+  function impSetStep(idx){
+    const wrap=document.getElementById('imp-progress');
+    wrap.style.display='block';
+    wrap.innerHTML=IMP_STEPS.map((k,i)=>
+      '<div class="imp-progress-step '+(i<idx?'done':i===idx?'on':'')+'"><div class="imp-progress-dot"></div>'+t(k)+'</div>'
+    ).join('');
+  }
+  function impFalhar(msg){
+    document.getElementById('imp-progress').style.display='none';
+    const fail=document.getElementById('imp-fail');
+    fail.style.display='block';
+    fail.textContent = msg || t('import.failMessage');
+  }
+  async function handleImportFiles(fileList){
+    const file=fileList && fileList[0];
+    if(!file) return;
+    document.getElementById('imp-fail').style.display='none';
+    const ext=(file.name.split('.').pop()||'').toLowerCase();
+    if(!IMP_FORMATOS.map(f=>f.toLowerCase()).includes(ext)){
+      impFalhar(t('import.unsupportedFormat'));
+      return;
+    }
+    try{
+      impSetStep(0);
+      const extraido = await impExtrairConteudo(file, ext);
+      impSetStep(1);
+      const blocos = impSegmentarEstrutura(extraido);
+      impSetStep(2);
+      if(!impEstruturaValida(blocos)){
+        impFalhar(t('import.failMessage'));
+        return;
+      }
+      impState={ fileName:file.name, blocos };
+      revRender();
+      go('revisao-importacao');
+    }catch(err){
+      console.error('[import]', err);
+      impFalhar(t('import.failMessage'));
+    }
+  }
+
+  /* ----- Extração ----- */
+  async function impExtrairConteudo(file, ext){
+    if(ext==='docx') return impExtrairDocx(file);
+    if(ext==='doc') throw new Error('legacy-doc-unsupported');
+    if(ext==='pdf') return impExtrairPdf(file);
+    return impExtrairImagem(file); // jpg/jpeg/png/webp
+  }
+  // DOCX: mammoth preserva estilos de título (Heading 1/2/...) como <h1>/<h2>,
+  // o sinal estrutural mais confiável que temos para separar Blocos de
+  // Cláusulas sem depender de nenhuma palavra específica.
+  async function impExtrairDocx(file){
+    await carregarMammoth();
+    const buf=await file.arrayBuffer();
+    const {value: html} = await mammoth.convertToHtml({arrayBuffer: buf});
+    const doc=new DOMParser().parseFromString('<div>'+html+'</div>', 'text/html');
+    const nodes=[...doc.body.firstChild.children];
+    const temTitulos = nodes.some(n=>/^H[1-6]$/.test(n.tagName));
+    if(!temTitulos) return {tipo:'plano', texto: nodes.map(n=>n.textContent).join('\n\n')};
+    return {tipo:'estruturado', nodes: nodes.map(n=>({
+      tag:n.tagName, texto:(n.textContent||'').replace(/\s+/g,' ').trim()
+    })).filter(n=>n.texto)};
+  }
+  async function impExtrairPdf(file){
+    await carregarPdfJs();
+    const buf=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:buf}).promise;
+    let textoTotal='';
+    const paginasTexto=[];
+    for(let i=1;i<=pdf.numPages;i++){
+      const page=await pdf.getPage(i);
+      const content=await page.getTextContent();
+      const pageText=content.items.map(it=>it.str).join(' ').trim();
+      paginasTexto.push({page, pageText});
+      textoTotal+=pageText+'\n';
+    }
+    // Páginas praticamente sem texto extraído = provavelmente digitalizadas
+    // (imagem). Fazemos OCR só dessas páginas, mantendo o restante direto.
+    const precisaOcr = textoTotal.trim().length < pdf.numPages*20;
+    if(!precisaOcr) return {tipo:'plano', texto: paginasTexto.map(p=>p.pageText).join('\n\n')};
+    await carregarTesseract();
+    let textoOcr='';
+    for(const {page, pageText} of paginasTexto){
+      if(pageText.length>30){ textoOcr+=pageText+'\n\n'; continue; }
+      const viewport=page.getViewport({scale:2});
+      const canvas=document.createElement('canvas');
+      canvas.width=viewport.width; canvas.height=viewport.height;
+      await page.render({canvasContext:canvas.getContext('2d'), viewport}).promise;
+      const {data:{text}} = await Tesseract.recognize(canvas, 'por');
+      textoOcr+=text+'\n\n';
+    }
+    return {tipo:'plano', texto:textoOcr};
+  }
+  async function impExtrairImagem(file){
+    await carregarTesseract();
+    const {data:{text}} = await Tesseract.recognize(file, 'por');
+    return {tipo:'plano', texto:text};
+  }
+
+  /* ----- Normalização ----- */
+  function impNormalizarTexto(texto){
+    return texto
+      .replace(/\r\n?/g,'\n')
+      .replace(/[ \t]+/g,' ')
+      .replace(/\n{3,}/g,'\n\n')
+      .split('\n').map(l=>l.trim()).join('\n')
+      .trim();
+  }
+
+  /* ----- Segmentação estrutural (determinística, sem IA) ----- */
+  const IMP_RE_BLOCO_MARCADOR = /^(CL[ÁA]USULA|SE[ÇC][ÃA]O|CAP[ÍI]TULO|ANEXO|T[ÍI]TULO|PAR[ÁA]GRAFO)\b/i;
+  const IMP_RE_CLAUSULA_MARCADOR = /^(\d{1,2}(\.\d{1,2})*[.)]|\(?[a-z]\)|[IVXLC]{1,5}[.)]|§\s*\d+)\s*/;
+  function impPontuacaoRatioCaps(linha){
+    const letras=linha.replace(/[^A-Za-zÀ-ÿ]/g,'');
+    if(!letras.length) return 0;
+    const maiusc=letras.replace(/[^A-ZÀ-Ý]/g,'');
+    return maiusc.length/letras.length;
+  }
+  function impPareceCabecalhoBloco(linha, anterior, seguinte){
+    if(!linha || linha.length>90) return false;
+    let sinais=0;
+    if(IMP_RE_BLOCO_MARCADOR.test(linha)) sinais+=2;
+    if(!/[,.;:]$/.test(linha)) sinais++;
+    if(impPontuacaoRatioCaps(linha)>0.7) sinais++;
+    if(linha.length<60) sinais++;
+    if(!anterior || anterior==='') sinais++;
+    if(seguinte && seguinte.length>linha.length) sinais++;
+    return sinais>=3;
+  }
+  function impSegmentarEstrutura(extraido){
+    const blocos = extraido.tipo==='estruturado' ? impSegmentarDeHtml(extraido.nodes) : impSegmentarDeTexto(impNormalizarTexto(extraido.texto||''));
+    // Um cabeçalho isolado sem nenhuma cláusula por baixo (ex: o título do
+    // documento, classificado como possível bloco pela heurística) não é um
+    // Bloco válido — só ruído. Mantemos pelo menos 1, mesmo vazio, para o
+    // caso extremo de tudo ter sido descartado.
+    const comConteudo = blocos.filter(b=>b.clausulas.length>0);
+    return comConteudo.length ? comConteudo : blocos;
+  }
+  function impSegmentarDeHtml(nodes){
+    const blocos=[];
+    let atual=null;
+    nodes.forEach(n=>{
+      if(/^H[1-6]$/.test(n.tag)){
+        atual={id:genId(), titulo:n.texto, clausulas:[]};
+        blocos.push(atual);
+        return;
+      }
+      if(!atual){ atual={id:genId(), titulo:'Bloco 1', clausulas:[]}; blocos.push(atual); }
+      impAdicionarClausulasDeParagrafo(atual, n.texto);
+    });
+    return blocos;
+  }
+  function impSegmentarDeTexto(texto){
+    const paragrafos=texto.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+    const blocos=[];
+    let atual=null;
+    paragrafos.forEach((p,i)=>{
+      const linhaUnica = !p.includes('\n');
+      const anterior = i>0 ? paragrafos[i-1] : '';
+      const seguinte = i<paragrafos.length-1 ? paragrafos[i+1] : '';
+      if(linhaUnica && impPareceCabecalhoBloco(p, anterior, seguinte)){
+        atual={id:genId(), titulo:p, clausulas:[]};
+        blocos.push(atual);
+        return;
+      }
+      if(!atual){ atual={id:genId(), titulo:'Bloco 1', clausulas:[]}; blocos.push(atual); }
+      impAdicionarClausulasDeParagrafo(atual, p);
+    });
+    return blocos;
+  }
+  // Dentro de um parágrafo já isolado, itens de enumeração formal (1., a),
+  // I., §) viram cláusulas próprias; sem enumeração, o parágrafo inteiro
+  // é uma cláusula — nunca fragmentamos no meio de uma frase.
+  function impAdicionarClausulasDeParagrafo(bloco, texto){
+    const linhas=texto.split('\n').map(l=>l.trim()).filter(Boolean);
+    let atualTexto=[];
+    function fechar(){
+      const tx=atualTexto.join(' ').trim();
+      if(tx) bloco.clausulas.push({id:genId(), texto:tx});
+      atualTexto=[];
+    }
+    linhas.forEach(l=>{
+      if(IMP_RE_CLAUSULA_MARCADOR.test(l) && atualTexto.length){
+        fechar();
+      }
+      atualTexto.push(l);
+    });
+    fechar();
+  }
+  function impEstruturaValida(blocos){
+    if(!blocos || !blocos.length) return false;
+    const totalClausulas=blocos.reduce((s,b)=>s+b.clausulas.length,0);
+    if(!totalClausulas) return false;
+    if(blocos.length===1 && totalClausulas<=1) return false;
+    return true;
+  }
+
+  /* ----- Tela de Revisão ----- */
+  function revRender(){
+    document.getElementById('rev-sub').textContent = impState.fileName;
+    const wrap=document.getElementById('rev-blocos');
+    wrap.innerHTML = impState.blocos.map(revBlocoHtml).join('');
+    revBindDragBlocos();
+  }
+  function revBlocoHtml(b){
+    const opcoesBloco = impState.blocos.map(o=>'<option value="'+o.id+'"'+(o.id===b.id?' selected':'')+'>'+escapeHtml(o.titulo||'')+'</option>').join('');
+    return '<div class="revb" data-bid="'+b.id+'">'+
+      '<div class="revb-head"><span class="handle" data-handle>'+ICON_GRIP+'</span>'+
+      '<input class="revb-title" value="'+escapeHtml(b.titulo||'')+'" oninput="revRenomearBloco(\''+b.id+'\',this.value)">'+
+      '<span class="revb-del" onclick="revRemoverBloco(\''+b.id+'\')" title="'+t('action.remove')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></span>'+
+      '</div>'+
+      b.clausulas.map(c=>revClausulaHtml(b,c,opcoesBloco)).join('')+
+      '<div class="revb-addclause" onclick="revAdicionarClausula(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('import.addClause')+'</div>'+
+      '</div>';
+  }
+  function revClausulaHtml(b,c,opcoesBloco){
+    return '<div class="revc" data-cid="'+c.id+'">'+
+      '<span class="dots">⠿</span>'+
+      '<textarea class="revc-tx" rows="1" oninput="revAutoAltura(this);revEditarClausula(\''+b.id+'\',\''+c.id+'\',this.value)">'+escapeHtml(c.texto)+'</textarea>'+
+      '<div class="revc-actions">'+
+      '<select class="revc-move" onchange="revMoverClausula(\''+b.id+'\',\''+c.id+'\',this.value)">'+opcoesBloco+'</select>'+
+      '<span class="revc-rm" onclick="revRemoverClausula(\''+b.id+'\',\''+c.id+'\')">✕</span>'+
+      '</div></div>';
+  }
+  function revAutoAltura(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+  function revAcharBloco(bid){ return impState.blocos.find(b=>b.id===bid); }
+  function revRenomearBloco(bid, valor){ const b=revAcharBloco(bid); if(b){ b.titulo=valor; } }
+  function revEditarClausula(bid, cid, valor){
+    const b=revAcharBloco(bid); if(!b) return;
+    const c=b.clausulas.find(x=>x.id===cid); if(c) c.texto=valor;
+  }
+  function revRemoverClausula(bid, cid){
+    const b=revAcharBloco(bid); if(!b) return;
+    b.clausulas=b.clausulas.filter(c=>c.id!==cid);
+    revRender();
+  }
+  function revAdicionarClausula(bid){
+    const b=revAcharBloco(bid); if(!b) return;
+    b.clausulas.push({id:genId(), texto:''});
+    revRender();
+    const novo=document.querySelector('.revb[data-bid="'+bid+'"] .revc:last-child .revc-tx');
+    if(novo) novo.focus();
+  }
+  function revMoverClausula(bidOrigem, cid, bidDestino){
+    if(bidOrigem===bidDestino) return;
+    const origem=revAcharBloco(bidOrigem), destino=revAcharBloco(bidDestino);
+    if(!origem||!destino) return;
+    const idx=origem.clausulas.findIndex(c=>c.id===cid);
+    if(idx<0) return;
+    const [c]=origem.clausulas.splice(idx,1);
+    destino.clausulas.push(c);
+    revRender();
+  }
+  function revRemoverBloco(bid){
+    if(impState.blocos.length<=1){ showToast(t('import.needOneBlock')); return; }
+    impState.blocos=impState.blocos.filter(b=>b.id!==bid);
+    revRender();
+  }
+  function revAdicionarBloco(){
+    impState.blocos.push({id:genId(), titulo:t('import.newBlockName'), clausulas:[]});
+    revRender();
+  }
+  function revBindDragBlocos(){
+    const list=document.getElementById('rev-blocos');
+    if(list.dataset.dragBound) return;
+    list.dataset.dragBound='1';
+    let dragEl=null;
+    list.addEventListener('pointerdown', e=>{
+      const handle=e.target.closest('[data-handle]');
+      if(!handle) return;
+      dragEl=handle.closest('.revb');
+      dragEl.classList.add('dragging');
+      try{ handle.setPointerCapture(e.pointerId); }catch(err){}
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+    function onMove(e){
+      if(!dragEl) return;
+      const siblings=[...list.querySelectorAll('.revb')].filter(b=>b!==dragEl);
+      for(const sib of siblings){
+        const r=sib.getBoundingClientRect();
+        if(e.clientY>r.top && e.clientY<r.bottom){
+          if(e.clientY < r.top + r.height/2){ list.insertBefore(dragEl, sib); }
+          else { list.insertBefore(dragEl, sib.nextSibling); }
+        }
+      }
+    }
+    function onUp(){
+      if(dragEl) dragEl.classList.remove('dragging');
+      dragEl=null;
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+      const ids=[...list.querySelectorAll('.revb')].map(el=>el.dataset.bid);
+      impState.blocos.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
+    }
+  }
+  function cancelarRevisaoImportacao(){
+    impState=null;
+    go('importar-arquivo');
+  }
+  function abrirGuardarModeloImportado(){
+    openInfo(t('builder.saveTemplateTitle'), `
+      <div class="field"><label data-t="field.name">Nome</label><input id="modelo-importado-nome" placeholder="${t('builder.templateNamePlaceholder')}"></div>
+      <button class="btn primary" style="width:100%" onclick="confirmarGuardarModeloImportado()">${t('action.save')}</button>`);
+  }
+  function confirmarGuardarModeloImportado(){
+    const nomeEl=document.getElementById('modelo-importado-nome');
+    const nome=nomeEl.value.trim();
+    if(!nome){ nomeEl.focus(); return; }
+    const blocks = impState.blocos.map(b=>({
+      id: genId(), key:null, name: b.titulo || t('import.newBlockName'),
+      customText: b.clausulas.map(c=>c.texto).filter(Boolean).join('\n\n'),
+      on:true
+    })).filter(b=>b.customText);
+    const id='mc'+Date.now();
+    modelosContratoData[id]={ id, nome, blocks, criadoEm:new Date().toISOString(), usos:0, origemImportacao:impState.fileName };
+    saveModelosContratoData();
+    closeInfo();
+    impState=null;
+    showToast(t('toast.savedAsTemplate'));
+    go('bibliotecas');
+  }
+
   function gerarLinkDoBuilder(){
     if(!builderContext) return;
     openJob(builderContext);
