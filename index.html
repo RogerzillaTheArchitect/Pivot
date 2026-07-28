@@ -710,6 +710,7 @@
           <div class="save-tpl" data-t="action.save" onclick="abrirGuardarModeloImportado()">Guardar</div>
         </div>
         <p class="imp-hint" data-t="import.reviewHint" style="margin-bottom:16px">Confere os blocos e cláusulas reconstruídos. Podes editar qualquer texto, mover cláusulas entre blocos, reordenar, criar ou remover — antes de guardar como Modelo.</p>
+        <p class="imp-hint" id="rev-variaveis" style="display:none;margin-bottom:16px"></p>
 
         <div id="rev-blocos"></div>
 
@@ -3146,6 +3147,7 @@
     "import.addClause": { pt:"Adicionar cláusula", en:"Add clause", es:"Añadir cláusula" },
     "import.needOneBlock": { pt:"O modelo precisa de pelo menos um bloco.", en:"The template needs at least one block.", es:"La plantilla necesita al menos un bloque." },
     "import.newBlockName": { pt:"Novo bloco", en:"New block", es:"Nuevo bloque" },
+    "import.variablesDetected": { pt:"{{n}} elementos específicos deste contrato (nomes, datas, valores, contactos) foram convertidos em variáveis reutilizáveis — vais poder preenchê-las cada vez que usares este Modelo, no painel de Campos Dinâmicos do editor.", en:"{{n}} elements specific to this contract (names, dates, values, contacts) were converted into reusable variables — you'll be able to fill them in each time you use this Template, from the Dynamic Fields panel in the editor.", es:"{{n}} elementos específicos de este contrato (nombres, fechas, valores, contactos) se convirtieron en variables reutilizables — podrás rellenarlas cada vez que uses esta Plantilla, en el panel de Campos Dinámicos del editor." },
     // --- Navegação ---
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
@@ -8876,13 +8878,13 @@
       impSetStep(0);
       const extraido = await impExtrairConteudo(file, ext);
       impSetStep(1);
-      const blocos = impSegmentarEstrutura(extraido);
+      const resultado = impSegmentarEstrutura(extraido);
       impSetStep(2);
-      if(!impEstruturaValida(blocos)){
+      if(!impEstruturaValida(resultado.blocos)){
         impFalhar(t('import.failMessage'));
         return;
       }
-      impState={ fileName:file.name, blocos };
+      impState={ fileName:file.name, blocos:resultado.blocos, variaveisDetectadas:resultado.contagemVariaveis };
       revRender();
       go('revisao-importacao');
     }catch(err){
@@ -8907,34 +8909,71 @@
     const buf=await file.arrayBuffer();
     const {value: html} = await mammoth.convertToHtml({arrayBuffer: buf});
     const doc=new DOMParser().parseFromString('<div>'+html+'</div>', 'text/html');
-    const nodes=[...doc.body.firstChild.children];
-    const temTitulos = nodes.some(n=>/^H[1-6]$/.test(n.tagName));
-    if(!temTitulos) return {tipo:'plano', texto: nodes.map(n=>n.textContent).join('\n\n')};
-    return {tipo:'estruturado', nodes: nodes.map(n=>({
+    // Tabelas (financeiras, dados bancários, formulários) não são texto
+    // jurídico corrido — nunca viram bloco/cláusula.
+    const nodes=[...doc.body.firstChild.children].filter(n=>n.tagName!=='TABLE');
+    const niveisTitulo=[...new Set(nodes.filter(n=>/^H[1-6]$/.test(n.tagName)).map(n=>+n.tagName[1]))];
+    if(!niveisTitulo.length) return {tipo:'plano', texto: nodes.map(n=>n.textContent).join('\n\n')};
+    // Muitos contratos do Word estilizam TODA cláusula numerada como título
+    // (só para gerar sumário automático) — tratar qualquer nível de H1-H6
+    // como fronteira de Bloco fragmenta em dezenas de blocos de 1 frase, sem
+    // contexto. Só o nível de título mais RASO do documento vira Bloco;
+    // níveis mais fundos (se existirem) ficam como texto normal dentro do
+    // bloco corrente, preservando o contexto ao redor.
+    const nivelBloco=Math.min(...niveisTitulo);
+    return {tipo:'estruturado', nivelBloco, nodes: nodes.map(n=>({
       tag:n.tagName, texto:(n.textContent||'').replace(/\s+/g,' ').trim()
     })).filter(n=>n.texto)};
+  }
+  // pdf.js entrega os itens de texto soltos (posição x/y, sem noção de linha).
+  // Juntar tudo com espaço (como era antes) perdia toda quebra de linha dentro
+  // de uma página — a segmentação em blocos/cláusulas só via parágrafos nas
+  // bordas entre páginas. Reconstrução real: nova linha quando o Y muda mais
+  // que ~1.5pt em relação ao item anterior; um salto de Y bem maior que a
+  // altura do texto é tratado como parágrafo novo (linha em branco).
+  function impReconstruirLinhasPdf(content){
+    const linhas=[]; let linhaAtual=''; let ultimoY=null;
+    content.items.forEach(it=>{
+      if(!it.str) return;
+      const y=it.transform[5];
+      if(ultimoY===null){ linhaAtual=it.str; }
+      else if(Math.abs(y-ultimoY)>1.5){
+        linhas.push(linhaAtual);
+        if(ultimoY-y > (it.height||10)*1.8) linhas.push('');
+        linhaAtual=it.str;
+      } else {
+        linhaAtual += (linhaAtual && !/\s$/.test(linhaAtual) && !/^\s/.test(it.str) ? ' ' : '') + it.str;
+      }
+      ultimoY=y;
+    });
+    if(linhaAtual) linhas.push(linhaAtual);
+    return linhas.join('\n');
   }
   async function impExtrairPdf(file){
     await carregarPdfJs();
     const buf=await file.arrayBuffer();
     const pdf=await pdfjsLib.getDocument({data:buf}).promise;
-    let textoTotal='';
-    const paginasTexto=[];
+    const paginas=[];
+    let totalChars=0;
     for(let i=1;i<=pdf.numPages;i++){
       const page=await pdf.getPage(i);
       const content=await page.getTextContent();
-      const pageText=content.items.map(it=>it.str).join(' ').trim();
-      paginasTexto.push({page, pageText});
-      textoTotal+=pageText+'\n';
+      const texto=impReconstruirLinhasPdf(content);
+      const linhas=texto.split('\n').map(l=>l.trim()).filter(Boolean);
+      paginas.push({page, linhas, texto});
+      totalChars+=texto.trim().length;
     }
     // Páginas praticamente sem texto extraído = provavelmente digitalizadas
     // (imagem). Fazemos OCR só dessas páginas, mantendo o restante direto.
-    const precisaOcr = textoTotal.trim().length < pdf.numPages*20;
-    if(!precisaOcr) return {tipo:'plano', texto: paginasTexto.map(p=>p.pageText).join('\n\n')};
+    const precisaOcr = totalChars < pdf.numPages*20;
+    if(!precisaOcr){
+      const linhasLimpas = impRemoverCabecalhosRodapes(paginas.map(p=>p.linhas));
+      return {tipo:'plano', texto: linhasLimpas.map(ls=>ls.join('\n')).join('\n\n')};
+    }
     await carregarTesseract();
     let textoOcr='';
-    for(const {page, pageText} of paginasTexto){
-      if(pageText.length>30){ textoOcr+=pageText+'\n\n'; continue; }
+    for(const {page, texto} of paginas){
+      if(texto.length>30){ textoOcr+=texto+'\n\n'; continue; }
       const viewport=page.getViewport({scale:2});
       const canvas=document.createElement('canvas');
       canvas.width=viewport.width; canvas.height=viewport.height;
@@ -8943,6 +8982,28 @@
       textoOcr+=text+'\n\n';
     }
     return {tipo:'plano', texto:textoOcr};
+  }
+  // Linhas que se repetem (quase) exatamente no topo/rodapé de várias páginas
+  // — logo do escritório, "Contrato XYZ — Página N", nome do cliente no
+  // cabeçalho — são ruído de formatação, não estrutura jurídica. Compara só
+  // as 2 primeiras/últimas linhas de cada página, normalizando dígitos (pra
+  // pegar "Página 1"/"Página 2" como a mesma linha), e remove o que se repete
+  // em pelo menos 60% das páginas.
+  function impChaveLinha(l){ return l.replace(/\d+/g,'#'); }
+  function impRemoverCabecalhosRodapes(linhasPorPagina){
+    if(linhasPorPagina.length<3) return linhasPorPagina;
+    const contagem={};
+    linhasPorPagina.forEach(linhas=>{
+      const bordas=new Set([...linhas.slice(0,2), ...linhas.slice(-2)].filter(Boolean));
+      bordas.forEach(l=>{ const k=impChaveLinha(l); contagem[k]=(contagem[k]||0)+1; });
+    });
+    const limiar=Math.max(2, Math.ceil(linhasPorPagina.length*0.6));
+    const repetidos=new Set(Object.entries(contagem).filter(([,c])=>c>=limiar).map(([k])=>k));
+    if(!repetidos.size) return linhasPorPagina;
+    return linhasPorPagina.map(linhas=>linhas.filter((l,idx)=>{
+      const naBorda = idx<2 || idx>=linhas.length-2;
+      return !(naBorda && l && repetidos.has(impChaveLinha(l)));
+    }));
   }
   async function impExtrairImagem(file){
     await carregarTesseract();
@@ -8958,6 +9019,63 @@
       .replace(/\n{3,}/g,'\n\n')
       .split('\n').map(l=>l.trim()).join('\n')
       .trim();
+  }
+
+  /* ----- Limpeza de conteúdo não reutilizável -----
+     O objetivo não é recriar o PDF, é aproveitar só a estrutura jurídica
+     reutilizável. Cabeçalhos/rodapés/assinaturas/tabelas/dados bancários não
+     viram bloco nem cláusula — são descartados linha a linha, por formato
+     (nunca por o conteúdo "parecer" ou não relevante). */
+  const IMP_RE_ASSINATURA = /^(assinatura|rubrica|testemunha(s)?|local\s+e\s+data|nome\s+leg[íi]vel|carimbo|ci[êe]nte(\s+e\s+de\s+acordo)?)\b/i;
+  const IMP_RE_LINHA_BRANCO_ASSINATURA = /^[_\-.\s]{6,}$/;
+  const IMP_RE_PAGINACAO = /^p[áa]gina\s*\d+(\s*(de|\/)\s*\d+)?$/i;
+  const IMP_RE_DADOS_BANCARIOS = /\b(IBAN|SWIFT|BIC|N[úu]mero de conta|Ag[êe]ncia|NIB)\b/i;
+  // Densidade bruta de dígitos falha para frases normais que citam um valor
+  // E uma data ("O valor é de R$3.000, pago em 01/02/2026" já tem 14
+  // dígitos) — apagava cláusulas reais. Conta por TOKEN: uma linha de
+  // tabela de verdade tem a maioria das palavras sendo só números/moeda
+  // ("Sessão 1  2  500,00  1000,00"); uma frase tem poucos tokens
+  // numéricos no meio de palavras normais.
+  function impLinhaTabular(linha){
+    const tokens=linha.trim().split(/\s+/).filter(Boolean);
+    if(tokens.length<3) return false;
+    const numericos=tokens.filter(tk=>/^[\d.,%$€R\-\/]+$/.test(tk)).length;
+    return numericos>=3 && (numericos/tokens.length)>=0.55;
+  }
+  function impLinhaEhRuido(linha){
+    if(!linha) return false;
+    const curta=linha.length<70;
+    if(curta && IMP_RE_ASSINATURA.test(linha)) return true;
+    if(IMP_RE_LINHA_BRANCO_ASSINATURA.test(linha)) return true;
+    if(curta && IMP_RE_PAGINACAO.test(linha)) return true;
+    if(curta && IMP_RE_DADOS_BANCARIOS.test(linha)) return true;
+    if(impLinhaTabular(linha)) return true;
+    return false;
+  }
+  function impLimparLinhasRuido(texto){
+    return texto.split('\n').filter(l=>!impLinhaEhRuido(l.trim())).join('\n');
+  }
+
+  /* ----- Variáveis -----
+     Dados específicos DESTE contrato (nome do cliente, datas, valores,
+     documentos, contacto) não pertencem a um Template reutilizável — viram
+     placeholders, mantendo a frase à volta intacta. Nunca usado para
+     classificar Bloco/Cláusula, só para substituir tokens dentro do texto
+     já segmentado. */
+  function impSubstituirVariaveis(texto){
+    let contagem=0;
+    const marcar=(regex, token)=>{ texto=texto.replace(regex, ()=>{ contagem++; return token; }); };
+    marcar(/\b[\w.+-]+@[\w-]+\.[a-z]{2,}\b/gi, '[CLIENT_EMAIL]');
+    marcar(/\b\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}\b/g, '[CLIENT_DOCUMENT]');
+    marcar(/\b\d{3}\.\d{3}\.\d{3}-\d{2}\b/g, '[CLIENT_DOCUMENT]');
+    marcar(/\(\d{2}\)\s?\d{4,5}-?\d{4}\b/g, '[CLIENT_PHONE]');
+    marcar(/\b\d{2}\s\d{4,5}-\d{4}\b/g, '[CLIENT_PHONE]');
+    marcar(/\b\d{1,2}\s+de\s+[a-zà-ú]+\s+de\s+\d{4}\b/gi, '[DATE]');
+    marcar(/\b\d{1,2}[\/\-.]\d{1,2}[\/\-.]\d{2,4}\b/g, '[DATE]');
+    marcar(/\b(R\$|US\$|€)\s?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?\b/gi, '[TOTAL_VALUE]');
+    texto=texto.replace(/\b(CONTRATANTE|CONTRATADO|CLIENTE|LOCAT[ÁA]RIO|LOCADOR|OUTORGANTE|OUTORGADO)(\s*:?\s*)([A-ZÀ-Ý][A-Za-zà-ÿ'’-]+(?:\s+[A-ZÀ-Ý][A-Za-zà-ÿ'’-]+){1,4})/g,
+      (m,label,sep)=>{ contagem++; return label+sep+'[CLIENT_NAME]'; });
+    return {texto, contagem};
   }
 
   /* ----- Segmentação estrutural (determinística, sem IA) ----- */
@@ -8981,27 +9099,69 @@
     return sinais>=3;
   }
   function impSegmentarEstrutura(extraido){
-    const blocos = extraido.tipo==='estruturado' ? impSegmentarDeHtml(extraido.nodes) : impSegmentarDeTexto(impNormalizarTexto(extraido.texto||''));
+    let blocos, contagemVariaveis=0;
+    if(extraido.tipo==='estruturado'){
+      const r=impSegmentarDeHtml(extraido.nodes, extraido.nivelBloco);
+      blocos=r.blocos; contagemVariaveis=r.contagemVariaveis;
+    } else {
+      let texto=impNormalizarTexto(extraido.texto||'');
+      texto=impLimparLinhasRuido(texto);
+      const sub=impSubstituirVariaveis(texto);
+      texto=impNormalizarTexto(sub.texto);
+      contagemVariaveis=sub.contagem;
+      blocos=impSegmentarDeTexto(texto);
+    }
     // Um cabeçalho isolado sem nenhuma cláusula por baixo (ex: o título do
     // documento, classificado como possível bloco pela heurística) não é um
     // Bloco válido — só ruído. Mantemos pelo menos 1, mesmo vazio, para o
     // caso extremo de tudo ter sido descartado.
     const comConteudo = blocos.filter(b=>b.clausulas.length>0);
-    return comConteudo.length ? comConteudo : blocos;
+    blocos = comConteudo.length ? comConteudo : blocos;
+    blocos = impFundirBlocosFragmentados(blocos);
+    return {blocos, contagemVariaveis};
   }
-  function impSegmentarDeHtml(nodes){
+  // Um bloco com 0-1 cláusula curta e sem marcador jurídico forte no título
+  // (CLÁUSULA/SEÇÃO/CAPÍTULO/...) é fragmento, não estrutura de verdade —
+  // acontece sobretudo com DOCX que estiliza toda cláusula numerada como
+  // título só para gerar sumário. Funde no bloco anterior, preservando o
+  // título curto como início de uma cláusula (não perde texto nenhum).
+  function impFundirBlocosFragmentados(blocos){
+    if(blocos.length<=1) return blocos;
+    const fundidos=[];
+    blocos.forEach(b=>{
+      const fragil = b.clausulas.length<=1 && !IMP_RE_BLOCO_MARCADOR.test(b.titulo||'') &&
+        (b.clausulas.length===0 || (b.clausulas[0].texto||'').length<40);
+      if(fragil && fundidos.length){
+        const anterior=fundidos[fundidos.length-1];
+        const textoTitulo=(b.titulo||'').trim();
+        if(textoTitulo) anterior.clausulas.push({id:genId(), texto:textoTitulo});
+        b.clausulas.forEach(c=>anterior.clausulas.push(c));
+      } else {
+        fundidos.push(b);
+      }
+    });
+    return fundidos;
+  }
+  function impSegmentarDeHtml(nodes, nivelBloco){
     const blocos=[];
     let atual=null;
+    let contagemVariaveis=0;
     nodes.forEach(n=>{
-      if(/^H[1-6]$/.test(n.tag)){
+      if(/^H[1-6]$/.test(n.tag) && +n.tag[1]===nivelBloco){
         atual={id:genId(), titulo:n.texto, clausulas:[]};
         blocos.push(atual);
         return;
       }
+      if(impLinhaEhRuido(n.texto)) return;
+      const sub=impSubstituirVariaveis(n.texto);
+      contagemVariaveis+=sub.contagem;
       if(!atual){ atual={id:genId(), titulo:'Bloco 1', clausulas:[]}; blocos.push(atual); }
-      impAdicionarClausulasDeParagrafo(atual, n.texto);
+      // Títulos de nível mais fundo (ex: H3 dentro de um documento cujo
+      // nível de Bloco é H1) preservam-se como o início de uma cláusula —
+      // dão contexto, mas não fragmentam em blocos novos.
+      impAdicionarClausulasDeParagrafo(atual, sub.texto);
     });
-    return blocos;
+    return {blocos, contagemVariaveis};
   }
   function impSegmentarDeTexto(texto){
     const paragrafos=texto.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
@@ -9048,39 +9208,80 @@
     return true;
   }
 
-  /* ----- Tela de Revisão ----- */
+  /* ----- Tela de Revisão -----
+     Reaproveita tal e qual a linguagem visual do editor de blocos real
+     (.block/.block-header/.block-name/.block-chev/.block-preview.collapsed/
+     .clause-list/.clause/.clause-n/.clause-txt) em vez de inventar um
+     componente novo — cabeçalho recolhido por padrão, clica no nome do
+     bloco para abrir, clica na cláusula para editar inline. As variáveis
+     [CLIENT_NAME]/[TOTAL_VALUE]/etc. aparecem aqui como texto simples; ao
+     guardar como Modelo, vão para b.tpl e passam a ser os mesmos "Campos
+     Dinâmicos" clicáveis/preenchíveis que já existem no builder — nenhuma
+     UI nova precisa ser inventada para isso, só alimentar a que já existe. */
   function revRender(){
     document.getElementById('rev-sub').textContent = impState.fileName;
+    const hint=document.getElementById('rev-variaveis');
+    if(hint){
+      if(impState.variaveisDetectadas>0){
+        hint.style.display='block';
+        hint.textContent=t('import.variablesDetected').replace('{{n}}', impState.variaveisDetectadas);
+      } else hint.style.display='none';
+    }
     const wrap=document.getElementById('rev-blocos');
     wrap.innerHTML = impState.blocos.map(revBlocoHtml).join('');
     revBindDragBlocos();
   }
   function revBlocoHtml(b){
     const opcoesBloco = impState.blocos.map(o=>'<option value="'+o.id+'"'+(o.id===b.id?' selected':'')+'>'+escapeHtml(o.titulo||'')+'</option>').join('');
-    return '<div class="revb" data-bid="'+b.id+'">'+
-      '<div class="revb-head"><span class="handle" data-handle>'+ICON_GRIP+'</span>'+
-      '<input class="revb-title" value="'+escapeHtml(b.titulo||'')+'" oninput="revRenomearBloco(\''+b.id+'\',this.value)">'+
-      '<span class="revb-del" onclick="revRemoverBloco(\''+b.id+'\')" title="'+t('action.remove')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></span>'+
+    return '<div class="block" data-bid="'+b.id+'">'+
+      '<div class="block-header">'+
+        '<span class="handle" data-handle>'+ICON_GRIP+'</span>'+
+        '<div class="block-name" onclick="revToggleBlocoPreview(\''+b.id+'\')">'+
+        '<input class="revb-title" value="'+escapeHtml(b.titulo||'')+'" onclick="event.stopPropagation()" oninput="revRenomearBloco(\''+b.id+'\',this.value)">'+
+        '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
+        '<span class="icon-sm" title="'+t('action.remove')+'" onclick="revRemoverBloco(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg></span>'+
       '</div>'+
-      b.clausulas.map(c=>revClausulaHtml(b,c,opcoesBloco)).join('')+
-      '<div class="revb-addclause" onclick="revAdicionarClausula(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('import.addClause')+'</div>'+
-      '</div>';
-  }
-  function revClausulaHtml(b,c,opcoesBloco){
-    return '<div class="revc" data-cid="'+c.id+'">'+
-      '<span class="dots">⠿</span>'+
-      '<textarea class="revc-tx" rows="1" oninput="revAutoAltura(this);revEditarClausula(\''+b.id+'\',\''+c.id+'\',this.value)">'+escapeHtml(c.texto)+'</textarea>'+
-      '<div class="revc-actions">'+
-      '<select class="revc-move" onchange="revMoverClausula(\''+b.id+'\',\''+c.id+'\',this.value)">'+opcoesBloco+'</select>'+
-      '<span class="revc-rm" onclick="revRemoverClausula(\''+b.id+'\',\''+c.id+'\')">✕</span>'+
+      '<div class="block-preview collapsed" id="revbprev-'+b.id+'">'+
+        '<div class="clause-list" id="revclist-'+b.id+'">'+b.clausulas.map((c,idx)=>revClausulaHtml(b,c,idx,opcoesBloco)).join('')+'</div>'+
+        '<button class="addclause" onclick="revAdicionarClausula(\''+b.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>'+t('import.addClause')+'</button>'+
       '</div></div>';
   }
-  function revAutoAltura(el){ el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
+  function revClausulaHtml(b,c,idx,opcoesBloco){
+    return '<div class="clause" id="revcl-'+b.id+'-'+c.id+'" onclick="revEditarClausula(\''+b.id+'\',\''+c.id+'\')">'+
+      '<span class="clause-n">'+(idx+1)+'</span>'+
+      '<div class="clause-txt">'+escapeHtml(c.texto)+'</div>'+
+      '<div class="revc-actions" onclick="event.stopPropagation()">'+
+      '<select class="revc-move" onchange="revMoverClausula(\''+b.id+'\',\''+c.id+'\',this.value)">'+opcoesBloco+'</select>'+
+      '<span class="revc-rm" title="'+t('action.remove')+'" onclick="revRemoverClausula(\''+b.id+'\',\''+c.id+'\')">✕</span>'+
+      '</div></div>';
+  }
   function revAcharBloco(bid){ return impState.blocos.find(b=>b.id===bid); }
+  function revToggleBlocoPreview(bid){
+    const prev=document.getElementById('revbprev-'+bid);
+    if(prev) prev.classList.toggle('collapsed');
+  }
   function revRenomearBloco(bid, valor){ const b=revAcharBloco(bid); if(b){ b.titulo=valor; } }
-  function revEditarClausula(bid, cid, valor){
+  // Edição inline por cláusula — clicar na cláusula entra em edição (mesmo
+  // padrão de editarClausula/guardarClausula do builder real).
+  function revEditarClausula(bid, cid){
     const b=revAcharBloco(bid); if(!b) return;
-    const c=b.clausulas.find(x=>x.id===cid); if(c) c.texto=valor;
+    const c=b.clausulas.find(x=>x.id===cid); if(!c) return;
+    const el=document.getElementById('revcl-'+bid+'-'+cid);
+    if(!el || el.querySelector('textarea')) return;
+    const idx=b.clausulas.indexOf(c);
+    el.classList.add('editing');
+    el.removeAttribute('onclick');
+    el.innerHTML='<span class="clause-n">'+(idx+1)+'</span>'+
+      '<div class="clause-edit"><textarea class="block-textarea" id="revcedit-'+bid+'-'+cid+'">'+escapeHtml(c.texto)+'</textarea>'+
+      '<div class="block-edit-actions"><button class="btn soft" onclick="event.stopPropagation();revRender()">'+t('action.cancel')+'</button>'+
+      '<button class="btn primary" onclick="event.stopPropagation();revGuardarClausula(\''+bid+'\',\''+cid+'\')">'+t('action.save')+'</button></div></div>';
+    const ta=document.getElementById('revcedit-'+bid+'-'+cid); ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  }
+  function revGuardarClausula(bid, cid){
+    const b=revAcharBloco(bid); if(!b) return;
+    const c=b.clausulas.find(x=>x.id===cid); if(!c) return;
+    c.texto=document.getElementById('revcedit-'+bid+'-'+cid).value;
+    revRender();
   }
   function revRemoverClausula(bid, cid){
     const b=revAcharBloco(bid); if(!b) return;
@@ -9091,8 +9292,8 @@
     const b=revAcharBloco(bid); if(!b) return;
     b.clausulas.push({id:genId(), texto:''});
     revRender();
-    const novo=document.querySelector('.revb[data-bid="'+bid+'"] .revc:last-child .revc-tx');
-    if(novo) novo.focus();
+    const prev=document.getElementById('revbprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    revEditarClausula(bid, b.clausulas[b.clausulas.length-1].id);
   }
   function revMoverClausula(bidOrigem, cid, bidDestino){
     if(bidOrigem===bidDestino) return;
@@ -9121,7 +9322,7 @@
     list.addEventListener('pointerdown', e=>{
       const handle=e.target.closest('[data-handle]');
       if(!handle) return;
-      dragEl=handle.closest('.revb');
+      dragEl=handle.closest('.block');
       dragEl.classList.add('dragging');
       try{ handle.setPointerCapture(e.pointerId); }catch(err){}
       document.addEventListener('pointermove', onMove);
@@ -9129,7 +9330,7 @@
     });
     function onMove(e){
       if(!dragEl) return;
-      const siblings=[...list.querySelectorAll('.revb')].filter(b=>b!==dragEl);
+      const siblings=[...list.querySelectorAll('.block')].filter(b=>b!==dragEl);
       for(const sib of siblings){
         const r=sib.getBoundingClientRect();
         if(e.clientY>r.top && e.clientY<r.bottom){
@@ -9143,7 +9344,7 @@
       dragEl=null;
       document.removeEventListener('pointermove', onMove);
       document.removeEventListener('pointerup', onUp);
-      const ids=[...list.querySelectorAll('.revb')].map(el=>el.dataset.bid);
+      const ids=[...list.querySelectorAll('.block')].map(el=>el.dataset.bid);
       impState.blocos.sort((a,b)=>ids.indexOf(a.id)-ids.indexOf(b.id));
     }
   }
@@ -9156,15 +9357,20 @@
       <div class="field"><label data-t="field.name">Nome</label><input id="modelo-importado-nome" placeholder="${t('builder.templateNamePlaceholder')}"></div>
       <button class="btn primary" style="width:100%" onclick="confirmarGuardarModeloImportado()">${t('action.save')}</button>`);
   }
+  // b.tpl guarda o texto com [PLACEHOLDERS]; b.customText é a versão
+  // resolvida (aqui, sem valores ainda, então igual ao tpl) — mesmo par
+  // usado em todo o resto do builder para que os Campos Dinâmicos (painel
+  // no topo do editor) reconheçam as variáveis detectadas na importação
+  // automaticamente, sem precisar de nenhuma UI nova.
   function confirmarGuardarModeloImportado(){
     const nomeEl=document.getElementById('modelo-importado-nome');
     const nome=nomeEl.value.trim();
     if(!nome){ nomeEl.focus(); return; }
-    const blocks = impState.blocos.map(b=>({
-      id: genId(), key:null, name: b.titulo || t('import.newBlockName'),
-      customText: b.clausulas.map(c=>c.texto).filter(Boolean).join('\n\n'),
-      on:true
-    })).filter(b=>b.customText);
+    const blocks = impState.blocos.map(b=>{
+      const tpl = b.clausulas.map(c=>c.texto).filter(Boolean).join('\n\n');
+      return { id: genId(), key:null, name: b.titulo || t('import.newBlockName'),
+        tpl, customText: LegalLibrary.resolveClauseText(tpl, {}), on:true };
+    }).filter(b=>b.customText);
     const id='mc'+Date.now();
     modelosContratoData[id]={ id, nome, blocks, criadoEm:new Date().toISOString(), usos:0, origemImportacao:impState.fileName };
     saveModelosContratoData();
@@ -9366,7 +9572,11 @@
     TOTAL_VALUE:{pt:'Valor total',en:'Total value',es:'Valor total'},
     START_DATE:{pt:'Data de início',en:'Start date',es:'Fecha de inicio'},
     DELIVERY_DATE:{pt:'Data de entrega',en:'Delivery date',es:'Fecha de entrega'},
-    LOCATION:{pt:'Local',en:'Location',es:'Lugar'}
+    LOCATION:{pt:'Local',en:'Location',es:'Lugar'},
+    DATE:{pt:'Data',en:'Date',es:'Fecha'},
+    CLIENT_EMAIL:{pt:'Email do contratante',en:'Client email',es:'Email del contratante'},
+    CLIENT_DOCUMENT:{pt:'Documento do contratante',en:'Client document',es:'Documento del contratante'},
+    CLIENT_PHONE:{pt:'Telefone do contratante',en:'Client phone',es:'Teléfono del contratante'}
   };
   function dynFieldLabel(campo){
     const m=DYN_FIELD_LABELS[campo];

@@ -144,29 +144,20 @@
   .imp-fail{background:var(--paper-2);border-radius:13px;padding:16px;font-size:13.5px;color:var(--ink-soft);
     line-height:1.55;margin-top:8px}
 
-  /* ===== REVISÃO DE IMPORTAÇÃO ===== */
-  .revb{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:13px 12px;margin-bottom:12px}
-  .revb-head{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-  .revb-title{flex:1;border:none;background:none;font-size:15px;font-weight:700;color:var(--ink);
-    font-family:inherit;padding:2px 0;min-width:0}
+  /* ===== REVISÃO DE IMPORTAÇÃO =====
+     O bloco/cláusula em si reaproveita .block/.clause do editor real (ver
+     contratos.css acima) — aqui só o que é específico da revisão: o título
+     do bloco vira um input editável, e cada cláusula ganha um select de
+     "mover para outro bloco" + remover, ao lado do texto. */
+  .revb-title{flex:1;min-width:0;border:none;background:none;font-size:14px;font-weight:600;color:var(--ink);
+    font-family:inherit;padding:2px 0;cursor:text}
   .revb-title:focus{outline:none;border-bottom:1.5px solid var(--brand)}
-  .revb-del{color:var(--neutral);cursor:pointer;flex:none;padding:4px}
-  .revb-del svg{width:15px;height:15px}
-  .revc{display:flex;align-items:flex-start;gap:9px;background:var(--paper-2);border-radius:10px;
-    padding:9px 10px;margin-bottom:7px}
-  .revc .dots{color:var(--neutral);flex:none;font-size:13px;padding-top:2px}
-  .revc-tx{flex:1;border:none;background:none;font-family:inherit;font-size:13px;color:var(--ink);
-    line-height:1.5;resize:vertical;min-height:20px;padding:1px 0}
-  .revc-tx:focus{outline:none}
-  .revc-actions{display:flex;flex-direction:column;gap:6px;flex:none}
-  .revc-move{border:1px solid var(--line);background:var(--paper);border-radius:8px;font-size:11px;
-    color:var(--ink-soft);font-family:inherit;padding:3px 4px;max-width:88px}
-  .revc-rm{color:var(--neutral);cursor:pointer;text-align:center;font-size:13px}
-  .revb-addclause{display:flex;align-items:center;gap:6px;color:var(--ink-soft);font-size:12.5px;
-    cursor:pointer;padding:6px 2px 2px}
-  .revb-addclause svg{width:13px;height:13px}
-  .revb.dragging{opacity:.5}
-  .revb.drop-target{box-shadow:0 0 0 2px var(--brand)}
+  .clause{cursor:pointer}
+  .revc-actions{display:flex;flex-direction:column;gap:5px;flex:none;align-items:center}
+  .revc-move{border:1px solid var(--line-soft);background:var(--paper);border-radius:7px;font-size:10.5px;
+    color:var(--ink-soft);font-family:inherit;padding:2px 3px;max-width:84px}
+  .revc-rm{color:var(--neutral);cursor:pointer;font-size:13px;padding:2px 4px}
+  .revc-rm:hover{color:var(--ink)}
 
   /* ===== CALENDÁRIO ===== */
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
