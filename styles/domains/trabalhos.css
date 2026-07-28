@@ -251,4 +251,8 @@
   .sec.open .chev{transform:rotate(180deg)}
   .sec-body{display:none;padding:14px 16px 16px;border-top:1px solid var(--line-soft)}
   .sec.open .sec-body{display:block}
+  /* blocos de contrato com múltiplas linhas (ex.: lista de Serviços
+     Incluídos) precisam de preservar as quebras — a maioria dos blocos é
+     um parágrafo só, então isto não muda nada para eles. */
+  .sec-body p{white-space:pre-wrap}
 
