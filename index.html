@@ -702,20 +702,6 @@
         <div class="imp-fail" id="imp-fail" style="display:none"></div>
       </section>
 
-      <!-- ============ SELEÇÃO ANTES DA IMPORTAÇÃO (opcional) ============ -->
-      <section class="view wide" id="v-importar-selecao">
-        <div class="back" onclick="selVoltar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="import.title">Importar arquivo</span></div>
-        <div class="page-title" data-t="import.selectionTitle">Selecionar conteúdo</div>
-        <div class="detail-sub" id="sel-sub" style="margin-bottom:8px"></div>
-        <p class="imp-hint" data-t="import.selectionHint" style="margin-bottom:14px">Desliga o que não faz parte do contrato reutilizável — formulários, assinaturas, anexos, tabelas, dados pessoais. Já vem pré-marcado com base na limpeza automática; ajusta como quiseres antes de continuar.</p>
-        <div class="imp-sel-actions">
-          <span onclick="selMarcarTudo(true)" data-t="import.selectAll">Marcar tudo</span>
-          <span onclick="selMarcarTudo(false)" data-t="import.deselectAll">Desmarcar tudo</span>
-        </div>
-        <div id="imp-sel-lista"></div>
-        <button class="btn primary" style="width:100%;margin-top:16px" onclick="selContinuar()"><span data-t="wizard.continue">Continuar</span></button>
-      </section>
-
       <!-- ============ REVISÃO DE IMPORTAÇÃO ============ -->
       <section class="view wide" id="v-revisao-importacao">
         <div class="back" onclick="cancelarRevisaoImportacao()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="import.title">Importar arquivo</span></div>
@@ -3162,10 +3148,6 @@
     "import.needOneBlock": { pt:"O modelo precisa de pelo menos um bloco.", en:"The template needs at least one block.", es:"La plantilla necesita al menos un bloque." },
     "import.newBlockName": { pt:"Novo bloco", en:"New block", es:"Nuevo bloque" },
     "import.variablesDetected": { pt:"{{n}} elementos específicos deste contrato (nomes, datas, valores, contactos) foram convertidos em variáveis reutilizáveis — vais poder preenchê-las cada vez que usares este Modelo, no painel de Campos Dinâmicos do editor.", en:"{{n}} elements specific to this contract (names, dates, values, contacts) were converted into reusable variables — you'll be able to fill them in each time you use this Template, from the Dynamic Fields panel in the editor.", es:"{{n}} elementos específicos de este contrato (nombres, fechas, valores, contactos) se convirtieron en variables reutilizables — podrás rellenarlas cada vez que uses esta Plantilla, en el panel de Campos Dinámicos del editor." },
-    "import.selectionTitle": { pt:"Selecionar conteúdo", en:"Select content", es:"Seleccionar contenido" },
-    "import.selectionHint": { pt:"Desliga o que não faz parte do contrato reutilizável — formulários, assinaturas, anexos, tabelas, dados pessoais. Já vem pré-marcado com base na limpeza automática; ajusta como quiseres antes de continuar.", en:"Turn off anything that isn't part of the reusable contract — forms, signatures, annexes, tables, personal data. It comes pre-selected based on the automatic cleanup; adjust it however you like before continuing.", es:"Desactiva lo que no forma parte del contrato reutilizable — formularios, firmas, anexos, tablas, datos personales. Ya viene preseleccionado según la limpieza automática; ajústalo como quieras antes de continuar." },
-    "import.selectAll": { pt:"Marcar tudo", en:"Select all", es:"Marcar todo" },
-    "import.deselectAll": { pt:"Desmarcar tudo", en:"Deselect all", es:"Desmarcar todo" },
     // --- Navegação ---
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
@@ -4011,7 +3993,7 @@
     }
   }
 
-  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','importar-selecao','revisao-importacao'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
   function go(v){
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
@@ -8896,52 +8878,20 @@
       impSetStep(0);
       const extraido = await impExtrairConteudo(file, ext);
       impSetStep(1);
-      const preparado = impPrepararSelecao(extraido);
-      if(!preparado.itens.length){
+      const resultado = impSegmentarEstrutura(extraido);
+      impSetStep(2);
+      if(!impEstruturaValida(resultado.blocos)){
         impFalhar(t('import.failMessage'));
         return;
       }
-      impSelState={ fileName:file.name, preparado };
-      selRender();
-      go('importar-selecao');
+      impState={ fileName:file.name, blocos:resultado.blocos, variaveisDetectadas:resultado.contagemVariaveis };
+      revRender();
+      go('revisao-importacao');
     }catch(err){
       console.error('[import]', err);
       if(err && err.message==='legacy-doc-unsupported'){ impFalhar(t('import.docUnsupported')); return; }
       impFalhar(t('import.failMessage'));
     }
-  }
-  /* ----- Tela de Seleção (etapa opcional antes de gerar Blocos/Cláusulas) ----- */
-  let impSelState=null;
-  function selRender(){
-    document.getElementById('sel-sub').textContent = impSelState.fileName;
-    document.getElementById('imp-sel-lista').innerHTML = impSelState.preparado.itens.map(it=>
-      '<div class="imp-sel-row"><div class="imp-sel-txt">'+escapeHtml(it.texto.length>160?it.texto.slice(0,160)+'…':it.texto)+'</div>'+
-      '<div class="toggle'+(it.manter?' on':'')+'" onclick="selToggle(\''+it.id+'\')"><div class="kn"></div></div></div>'
-    ).join('');
-  }
-  function selToggle(id){
-    const it=impSelState.preparado.itens.find(x=>x.id===id);
-    if(it){ it.manter=!it.manter; selRender(); }
-  }
-  function selMarcarTudo(valor){
-    impSelState.preparado.itens.forEach(it=>it.manter=valor);
-    selRender();
-  }
-  function selVoltar(){
-    impSelState=null;
-    go('importar-arquivo');
-  }
-  function selContinuar(){
-    const resultado=impFinalizarSegmentacao(impSelState.preparado);
-    if(!impEstruturaValida(resultado.blocos)){
-      go('importar-arquivo');
-      impFalhar(t('import.failMessage'));
-      return;
-    }
-    impState={ fileName:impSelState.fileName, blocos:resultado.blocos, variaveisDetectadas:resultado.contagemVariaveis };
-    impSelState=null;
-    revRender();
-    go('revisao-importacao');
   }
 
   /* ----- Extração ----- */
@@ -9183,13 +9133,18 @@
      ambiguidade com item de letra única), "•/-/▪" é lista. Nunca depende de
      uma palavra específica para reconhecer o NÍVEL, só CLÁUSULA/SEÇÃO/etc.
      como sinal extra de que é capítulo mesmo sem numeração. */
+  // Espaço depois do marcador é OPCIONAL em todos os padrões (\s* não \s+):
+  // texto extraído de PDF real frequentemente vem sem espaço por kerning
+  // apertado ("1.DEFINIÇÕES." em vez de "1. DEFINIÇÕES."). O "(?!\d)" no
+  // capítulo garante que "1.1" (cláusula) nunca é confundido com "1."
+  // (capítulo), independente de ter espaço ou não.
   const IMP_RE_BLOCO_MARCADOR = /^(CL[ÁA]USULA|SE[ÇC][ÃA]O|CAP[ÍI]TULO|ANEXO|T[ÍI]TULO|PAR[ÁA]GRAFO)\b/i;
-  const IMP_RE_CAPITULO_NUM = /^\d{1,3}[.)]\s+\S/;
+  const IMP_RE_CAPITULO_NUM = /^\d{1,3}[.)](?!\d)\s*\S/;
   const IMP_MARCADORES_NIVEL = [
-    {nivel:'clausula', re:/^\d{1,3}\.\d{1,3}(\.\d{1,3})*[.)]?\s+\S/},
-    {nivel:'item', re:/^\(?[a-zA-Z]\)\.?\s+\S/},
-    {nivel:'subitem', re:/^\(?[ivxlcIVXLC]{2,6}\)\.?\s+\S/},
-    {nivel:'lista', re:/^[•▪◦‣]\s+\S/},
+    {nivel:'clausula', re:/^\d{1,3}\.\d{1,3}(\.\d{1,3})*[.)]?\s*\S/},
+    {nivel:'item', re:/^\(?[a-zA-Z]\)\.?\s*\S/},
+    {nivel:'subitem', re:/^\(?[ivxlcIVXLC]{2,6}\)\.?\s*\S/},
+    {nivel:'lista', re:/^[•▪◦‣]\s*\S/},
     {nivel:'lista', re:/^-\s+\S/}
   ];
   function impClassificarMarcador(linha){
@@ -9203,23 +9158,25 @@
     const maiusc=letras.replace(/[^A-ZÀ-Ý]/g,'');
     return maiusc.length/letras.length;
   }
-  // Um parágrafo "candidato a cabeçalho" é isolado (sozinho, sem quebra de
-  // linha interna) e curto — a mesma checagem de forma usada tanto no
-  // pré-scan quanto na decisão linha a linha.
-  function impCandidatoACabecalho(p){ return !p.includes('\n') && p.length<=90; }
+  // Um "candidato a cabeçalho" é uma LINHA curta — nunca exigimos que esteja
+  // isolada por linha em branco. PDFs reais de espaçamento simples raramente
+  // têm folga entre um título e o corpo do texto seguinte; exigir isso
+  // fazia o parser não reconhecer nenhum título e tudo virar 1 bloco só
+  // (bug relatado com contrato real). Cada linha física já reconstruída
+  // (impReconstruirLinhasPdf) é a unidade certa de análise.
+  function impCandidatoACabecalho(linha){ return linha.length<=90; }
   // Decide, para o DOCUMENTO INTEIRO, qual é o nível que representa Capítulo/
   // Bloco — uma vez só, antes de montar qualquer registro (por isso recebe
-  // TODOS os parágrafos, não um de cada vez). Sem essa decisão prévia, uma
+  // TODAS as linhas, não uma de cada vez). Sem essa decisão prévia, uma
   // cláusula numerada solta ("1. Prazo de pagamento") no meio de um Bloco
   // que já usa CLÁUSULA/CAPÍTULO como cabeçalho real virava Bloco novo por
-  // engano — o próprio bug relatado. Prioridade: palavra-chave jurídica
-  // explícita > numeração crua isolada > (sem nenhum marcador formal em
-  // lugar nenhum) heurística genérica de isolamento/caixa-alta, como último
-  // recurso.
-  function impDeterminarNivelCapitulo(paragrafos){
-    const candidatos=paragrafos.filter(impCandidatoACabecalho);
-    if(candidatos.some(p=>IMP_RE_BLOCO_MARCADOR.test(p))) return 'keyword';
-    if(candidatos.some(p=>IMP_RE_CAPITULO_NUM.test(p))) return 'numero';
+  // engano. Prioridade: palavra-chave jurídica explícita > numeração crua >
+  // (sem nenhum marcador formal em lugar nenhum) heurística genérica de
+  // isolamento/caixa-alta, como último recurso.
+  function impDeterminarNivelCapitulo(linhas){
+    const candidatos=linhas.filter(impCandidatoACabecalho);
+    if(candidatos.some(l=>IMP_RE_BLOCO_MARCADOR.test(l))) return 'keyword';
+    if(candidatos.some(l=>IMP_RE_CAPITULO_NUM.test(l))) return 'numero';
     return null;
   }
   // titulosConhecidos: linhas confirmadas como capítulo por uma fonte externa
@@ -9239,33 +9196,9 @@
     if(!/[,.;:]$/.test(linha)) sinais++;
     if(impPontuacaoRatioCaps(linha)>0.7) sinais++;
     if(linha.length<60) sinais++;
-    if(!anterior || anterior==='') sinais++;
+    if(!anterior) sinais++;
     if(seguinte && seguinte.length>linha.length) sinais++;
     return sinais>=3;
-  }
-  // ----- Seleção manual (etapa opcional) -----
-  // Antes de gerar qualquer Bloco/Cláusula, o utilizador pode desligar
-  // trechos inteiros que não fazem parte do contrato reutilizável
-  // (formulários, anexos, tabelas que a limpeza automática não pegou, dados
-  // pessoais em formato não previsto, etc.) — reduz ruído por cima da
-  // limpeza automática, não a substitui. Cada "item" é um parágrafo isolado
-  // (texto corrido) ou um nó (DOCX), já com um valor padrão de manter/
-  // descartar herdado de impLinhaEhRuido, ajustável livremente.
-  function impPrepararSelecao(extraido){
-    if(extraido.tipo==='estruturado'){
-      const itens=extraido.nodes.map((n,i)=>({
-        id:'n'+i, texto:n.texto, node:n,
-        manter: /^H[1-6]$/.test(n.tag) || !impLinhaEhRuido(n.texto)
-      }));
-      return {tipo:'estruturado', itens, nivelBloco:extraido.nivelBloco};
-    }
-    const texto=impNormalizarTexto(extraido.texto||'');
-    const paragrafos=texto.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
-    const itens=paragrafos.map((p,i)=>({
-      id:'p'+i, texto:p,
-      manter: !p.split('\n').map(l=>l.trim()).filter(Boolean).every(l=>impLinhaEhRuido(l))
-    }));
-    return {tipo:'plano', itens, titulosConhecidos:extraido.titulosConhecidos};
   }
   // Um cabeçalho isolado sem nenhuma cláusula por baixo (ex: o título do
   // documento, classificado como possível bloco pela heurística) não é um
@@ -9276,28 +9209,21 @@
     blocos = comConteudo.length ? comConteudo : blocos;
     return impFundirBlocosFragmentados(blocos);
   }
-  function impFinalizarSegmentacao(preparado){
+  function impSegmentarEstrutura(extraido){
     let blocos, contagemVariaveis=0;
-    if(preparado.tipo==='estruturado'){
-      const nodesFiltrados=preparado.itens.filter(it=>it.manter).map(it=>it.node);
-      const r=impSegmentarDeHtml(nodesFiltrados, preparado.nivelBloco);
+    if(extraido.tipo==='estruturado'){
+      const r=impSegmentarDeHtml(extraido.nodes, extraido.nivelBloco);
       blocos=r.blocos; contagemVariaveis=r.contagemVariaveis;
     } else {
-      let texto=preparado.itens.filter(it=>it.manter).map(it=>it.texto).join('\n\n');
+      let texto=impNormalizarTexto(extraido.texto||'');
       texto=impLimparLinhasRuido(texto);
       const sub=impSubstituirVariaveis(texto);
       texto=impNormalizarTexto(sub.texto);
       contagemVariaveis=sub.contagem;
-      blocos=impSegmentarDeTexto(texto, preparado.titulosConhecidos);
+      blocos=impSegmentarDeTexto(texto, extraido.titulosConhecidos);
     }
     blocos=impPosProcessarBlocos(blocos);
     return {blocos, contagemVariaveis};
-  }
-  // Atalho pra quem quer o resultado direto, sem passar pela tela de
-  // seleção (ex.: chamado assim internamente antes desta etapa existir) —
-  // equivale a "manter tudo" já pré-selecionado.
-  function impSegmentarEstrutura(extraido){
-    return impFinalizarSegmentacao(impPrepararSelecao(extraido));
   }
   // Um bloco com 0-1 cláusula curta e sem marcador jurídico forte no título
   // (CLÁUSULA/SEÇÃO/CAPÍTULO/...) é fragmento, não estrutura de verdade —
@@ -9307,9 +9233,15 @@
   function impFundirBlocosFragmentados(blocos){
     if(blocos.length<=1) return blocos;
     const fundidos=[];
-    blocos.forEach(b=>{
+    blocos.forEach((b,i)=>{
       const fragil = b.clausulas.length<=1 && !IMP_RE_BLOCO_MARCADOR.test(b.titulo||'') &&
         (b.clausulas.length===0 || (b.clausulas[0].texto||'').length<40);
+      // Conteúdo antes de qualquer cabeçalho reconhecido (título/preâmbulo
+      // do documento, ex: "Holmes Place Contrato de Adesão" antes da
+      // primeira cláusula real) cai no bloco de fallback "Bloco 1" — não é
+      // estrutura jurídica reutilizável, é metadado do documento. Descartado
+      // por completo, não fundido em lugar nenhum.
+      if(i===0 && fragil && b.titulo==='Bloco 1' && blocos.length>1) return;
       if(fragil && fundidos.length){
         const anterior=fundidos[fundidos.length-1];
         const textoTitulo=(b.titulo||'').trim();
@@ -9348,24 +9280,43 @@
     });
     return {blocos, contagemVariaveis};
   }
+  // Linha a linha, não por parágrafo separado por linha em branco — ver o
+  // comentário de impCandidatoACabecalho. Cabeçalho de Bloco fecha a
+  // cláusula em andamento e abre um Bloco novo; marcador de cláusula/item/
+  // subitem/lista fecha a cláusula em andamento e começa outra dentro do
+  // MESMO Bloco; qualquer outra linha continua a cláusula corrente.
   function impSegmentarDeTexto(texto, titulosConhecidos){
-    const paragrafos=texto.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean);
+    const linhas=texto.split('\n').map(l=>l.trim()).filter(Boolean);
     // Decidido UMA VEZ pra todo o documento, antes de criar qualquer Bloco —
     // ver impDeterminarNivelCapitulo.
-    const nivelCapitulo=impDeterminarNivelCapitulo(paragrafos);
+    const nivelCapitulo=impDeterminarNivelCapitulo(linhas);
     const blocos=[];
-    let atual=null;
-    paragrafos.forEach((p,i)=>{
-      const anterior = i>0 ? paragrafos[i-1] : '';
-      const seguinte = i<paragrafos.length-1 ? paragrafos[i+1] : '';
-      if(impPareceCabecalhoBloco(p, anterior, seguinte, nivelCapitulo, titulosConhecidos)){
-        atual={id:genId(), titulo:p, clausulas:[]};
-        blocos.push(atual);
+    let atualBloco=null;
+    let atualTexto=[];
+    function fecharClausula(){
+      const tx=atualTexto.join(' ').trim();
+      if(tx){
+        if(!atualBloco){ atualBloco={id:genId(), titulo:'Bloco 1', clausulas:[]}; blocos.push(atualBloco); }
+        atualBloco.clausulas.push({id:genId(), texto:tx});
+      }
+      atualTexto=[];
+    }
+    linhas.forEach((linha,i)=>{
+      const anterior = i>0 ? linhas[i-1] : '';
+      const seguinte = i<linhas.length-1 ? linhas[i+1] : '';
+      if(impPareceCabecalhoBloco(linha, anterior, seguinte, nivelCapitulo, titulosConhecidos)){
+        fecharClausula();
+        atualBloco={id:genId(), titulo:linha, clausulas:[]};
+        blocos.push(atualBloco);
         return;
       }
-      if(!atual){ atual={id:genId(), titulo:'Bloco 1', clausulas:[]}; blocos.push(atual); }
-      impAdicionarClausulasDeParagrafo(atual, p);
+      const nivel=impClassificarMarcador(linha);
+      if(nivel && atualTexto.length){
+        fecharClausula();
+      }
+      atualTexto.push(linha);
     });
+    fecharClausula();
     return blocos;
   }
   // Dentro de um parágrafo já isolado, qualquer marcador de nível
@@ -9382,7 +9333,7 @@
     }
     linhas.forEach(l=>{
       const nivel=impClassificarMarcador(l);
-      if(nivel && nivel!=='capitulo' && atualTexto.length){
+      if(nivel && atualTexto.length){
         fechar();
       }
       atualTexto.push(l);
