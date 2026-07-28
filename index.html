@@ -12847,6 +12847,7 @@
   /* "Meus modelos" — mesmo ícone de Modelos do menu inferior, já que é
      exatamente a mesma coisa vista de dentro. */
   const BIB_ICON_MEUS='<span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg);-webkit-mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg)"></span>';
+  const BIB_ICON_ARQUIVO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>';
   /* Botão "+" da tela de Modelos: 4 caminhos pra criar/reutilizar contrato —
      reaproveita tal e qual os fluxos que existiam no menu Criar (agora
      removido de lá): Novo (builder em branco), Explorar (biblioteca
@@ -12859,6 +12860,7 @@
       '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'comunidade-contratos\')">'+BIB_ICON_EXPLORAR+'<div class="t">'+t('wizard.browseLibrary')+'</div>'+chevr+'</div>'+
       '<div class="prow" onclick="closeInfo();abrirSalvosBiblioteca()">'+BIB_ICON_FAVORITOS+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
       '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'contrato-usar\')">'+BIB_ICON_BOOKMARK+'<div class="t">'+t('library.saved')+'</div>'+chevr+'</div>'+
+      '<div class="prow" onclick="closeInfo();abrirImportarArquivo()">'+BIB_ICON_ARQUIVO+'<div class="t">'+t('import.menuLabel')+'</div>'+chevr+'</div>'+
     '</div>';
     openInfo(t('library.newMenu.title'), html);
   }
