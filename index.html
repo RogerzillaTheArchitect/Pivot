@@ -12804,7 +12804,15 @@
   ];
   function savePerfilData(){ savePersisted('pivot-perfilData', ()=>perfilData); }
   async function loadPerfilData(){
+    const metodosPagamentoPadrao=perfilData.metodosPagamento;
     await loadPersisted('pivot-perfilData', d=>{ perfilData=Object.assign({}, perfilData, d); });
+    /* Object.assign acima é raso: se a conta foi guardada antes de um método
+       de pagamento novo existir (ex.: Apple Pay/Google Pay), perfilData.metodosPagamento
+       vem do banco sem essa chave — e por ser um objeto, ele substitui o
+       default inteiro em vez de só preencher o que falta. Sem isto, o ecrã
+       "Dados de pagamento" quebra ao tentar ler mp[key].ativo de uma chave
+       que não existe. */
+    perfilData.metodosPagamento=Object.assign({}, metodosPagamentoPadrao, perfilData.metodosPagamento);
     /* Migração única: limpa o antigo perfil de exemplo hardcoded ('Brener') guardado antes desta correção */
     if(perfilData.nome==='Brener' && perfilData.email==='brener@exemplo.pt'){
       perfilData.nome=''; perfilData.email=''; perfilData.empresa='';
@@ -13711,7 +13719,7 @@
   function infoMetodosPagamento(){
     const mp=perfilData.metodosPagamento;
     const linhas=METODOS_PAGAMENTO_META.map(([key,labelKey,placeholder,icone])=>{
-      const m=mp[key];
+      const m=mp[key]||(mp[key]={ativo:false,valor:'',padrao:false});
       return '<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:8px;padding:14px 2px">'+
         '<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;align-items:center;gap:9px"><span style="width:28px;height:28px;border-radius:var(--r);flex:none;display:grid;place-items:center;background:var(--brand-10)"><span style="width:16px;height:16px;display:inline-block;background-color:var(--brand);mask-image:url('+icone+');-webkit-mask-image:url('+icone+');mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span></span><div class="nm">'+t(labelKey)+'</div></div>'+
         '<div class="toggle'+(m.ativo?' on':'')+'" onclick="this.classList.toggle(\'on\')" id="mp-ativo-'+key+'"><div class="kn"></div></div></div>'+
