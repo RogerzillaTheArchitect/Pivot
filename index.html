@@ -1077,8 +1077,6 @@
             <div class="addr-dropdown" id="tw-addr-dropdown" style="display:none"></div>
           </div>
 
-          <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €"></div>
-
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="recur.toggle">Contrato recorrente</div><span class="sub" data-t="recur.toggleHint">Para mensalidades, avenças e retainers.</span></div><div class="toggle" id="envio-recorrencia" onclick="toggleRecorrenciaWizard(this)"><div class="kn"></div></div></div>
           <div id="tw-recorrencia-config" style="display:none;margin:4px 0 6px">
             <div class="field"><label data-t="recur.frequency">Frequência</label>
@@ -1124,14 +1122,24 @@
           <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <!-- ETAPA 4 — Pagamentos -->
+        <!-- ETAPA 4 — Serviço (valor + pagamentos combinados numa única etapa;
+             o serviço pode vir de um modelo salvo em Perfil > Serviços,
+             que pré-preenche o valor, ou ser preenchido manualmente) -->
         <div class="moment" data-moment="4" style="display:none">
+          <div class="field" id="tw-servico-picker-wrap" style="display:none">
+            <label data-t="wizard.serviceTemplate">Serviço</label>
+            <select id="tw-servico" onchange="onServicoWizardChange()">
+              <option value="" data-t="wizard.serviceTemplatePlaceholder">Selecionar serviço ou preencher manualmente…</option>
+            </select>
+          </div>
+          <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €" oninput="onValorWizardManual()"></div>
+
           <div id="tw-pag-recorrente-nota" class="warn-box" style="display:none;background:var(--btn-06);border-color:var(--btn-14);color:var(--ink-soft)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg>
             <div data-t="wizard.paymentsRecurringNote">Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.</div>
           </div>
           <div id="tw-parcelas-wrap">
-            <p class="plabel" style="margin:0 2px 10px" data-t="wizard.installments">Parcelas</p>
+            <p class="plabel" style="margin:16px 2px 10px" data-t="wizard.installments">Parcelas</p>
             <div id="tw-parcelas-lista"></div>
             <span class="inline-link" onclick="addParcelaWizard()"><span data-t="wizard.addInstallment">+ Adicionar parcela</span></span>
           </div>
@@ -2246,7 +2254,9 @@
     "wizard.step1": { pt:"Informações do trabalho", en:"Job details", es:"Datos del trabajo" },
     "wizard.step2": { pt:"Recursos e equipe", en:"Resources & team", es:"Recursos y equipo" },
     "wizard.step3": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
-    "wizard.step4": { pt:"Pagamentos", en:"Payments", es:"Pagos" },
+    "wizard.step4": { pt:"Serviço", en:"Service", es:"Servicio" },
+    "wizard.serviceTemplate": { pt:"Serviço", en:"Service", es:"Servicio" },
+    "wizard.serviceTemplatePlaceholder": { pt:"Selecionar serviço ou preencher manualmente…", en:"Pick a service or fill in manually…", es:"Seleccionar servicio o rellenar manualmente…" },
     "wizard.step5": { pt:"Entrega e Aprovação", en:"Delivery & Approval", es:"Entrega y Aprobación" },
     "wizard.step6": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "wizard.step7": { pt:"Resumo", en:"Summary", es:"Resumen" },
@@ -4875,6 +4885,9 @@
   let panelStack=['home'];
   let trabalhoMoment=1;
   let trabalhoModo='completo';
+  /* id do modelo de serviço (Perfil > Serviços) que preencheu o valor deste
+     trabalho, ou null quando o valor foi digitado à mão. */
+  let twServicoEscolhido=null;
   function showPanel(name){
     document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show', p.dataset.panel===name));
     const panelTitleKeys={
@@ -5477,7 +5490,7 @@
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
     if(n===2) renderColaboradoresPendentesWizard();
-    if(n===4) prepararEtapaPagamentos();
+    if(n===4){ renderServicoPickerWizard(); prepararEtapaPagamentos(); }
     if(n===5) prepararEtapaEntrega();
     if(n===6) renderModelosSugeridos();
     if(n===7) renderReview();
@@ -5492,6 +5505,47 @@
     document.getElementById('tw-pag-recorrente-nota').style.display = recorrente?'flex':'none';
     document.getElementById('tw-parcelas-wrap').style.display = recorrente?'none':'block';
     if(!recorrente) seedParcelasWizardSeVazio();
+  }
+  /* ===== Etapa 4 — Serviço =====
+     O valor deixou de viver na Etapa 1 e passou a ficar aqui, junto das
+     parcelas: as duas coisas respondem à mesma pergunta ("quanto e quando
+     recebo"), e separá-las obrigava a voltar atrás no wizard para acertar
+     o valor depois de montar as parcelas. Opcionalmente o valor vem de um
+     modelo de serviço guardado em Perfil > Serviços — escolher um só
+     pré-preenche o campo, que continua totalmente editável. */
+  function renderServicoPickerWizard(){
+    const wrap=document.getElementById('tw-servico-picker-wrap');
+    const sel=document.getElementById('tw-servico');
+    if(!wrap || !sel) return;
+    /* sem modelos guardados não faz sentido mostrar um seletor vazio —
+       nesse caso a etapa fica só com Valor + Parcelas. */
+    if(!servicosData.length){ wrap.style.display='none'; return; }
+    wrap.style.display='block';
+    const atual=sel.value;
+    sel.innerHTML='<option value="">'+t('wizard.serviceTemplatePlaceholder')+'</option>'+
+      servicosData.map(s=>'<option value="'+escapeHtml(s.id)+'">'+escapeHtml(s.nome)+(s.valor?(' — '+fmtMoney(s.valor)):'')+'</option>').join('');
+    if(atual) sel.value=atual;
+  }
+  function onServicoWizardChange(){
+    const sel=document.getElementById('tw-servico');
+    const s=servicosData.find(x=>x.id===sel.value);
+    if(!s){ twServicoEscolhido=null; return; }
+    twServicoEscolhido=s.id;
+    if(s.valor){
+      document.getElementById('tw-valor').value=s.valor;
+      sincronizarParcelaAutoComValor();
+    }
+  }
+  /* editar o valor à mão desfaz o vínculo com o modelo de serviço: o que
+     for criado passa a ser um valor próprio deste trabalho, não mais "o
+     preço do serviço X". */
+  function onValorWizardManual(){
+    sincronizarParcelaAutoComValor();
+    const sel=document.getElementById('tw-servico');
+    if(!sel || !sel.value) return;
+    const s=servicosData.find(x=>x.id===sel.value);
+    const valorAtual=(document.getElementById('tw-valor').value||'').trim();
+    if(s && String(s.valor)!==valorAtual){ sel.value=''; twServicoEscolhido=null; }
   }
   /* ===== Parcelas de pagamento — configuração manual no wizard =====
      Antes disto, o valor era sempre dividido automaticamente 50/50 (sinal +
@@ -5520,13 +5574,33 @@
       '<div style="padding-bottom:12px;cursor:pointer;color:var(--neutral)" onclick="removerParcelaWizard(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
     '</div>';
   }
+  function valorWizardNumerico(){
+    const valorTxt=(document.getElementById('tw-valor').value||'').trim();
+    return parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
+  }
   function seedParcelasWizardSeVazio(){
     const lista=document.getElementById('tw-parcelas-lista');
     if(!lista || lista.children.length) return;
-    const valorTxt=(document.getElementById('tw-valor').value||'').trim();
-    const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
     const dataEvento=document.getElementById('tw-data').value||null;
-    lista.innerHTML=parcelaWizardRowHtml(0, {label:t('payment.installmentDefault'), amount:valorNum, dueDate:dataEvento});
+    /* a parcela semeada fica marcada como "espelho do valor" (data-parc-auto):
+       enquanto o utilizador não lhe mexer, ela acompanha o campo Valor — o
+       valor agora é escrito nesta mesma etapa, depois desta linha existir. */
+    lista.innerHTML=parcelaWizardRowHtml(0, {label:t('payment.installmentDefault'), amount:valorWizardNumerico(), dueDate:dataEvento});
+    const row=lista.querySelector('[data-parc-row]');
+    if(row){
+      row.dataset.parcAuto='1';
+      row.querySelector('.tw-parc-valor').addEventListener('input', ()=>{ delete row.dataset.parcAuto; });
+    }
+  }
+  /* mantém a única parcela automática em sincronia com o campo Valor. Só age
+     enquanto existir exatamente uma parcela e ela ainda não tiver sido
+     editada à mão — a partir daí o utilizador manda. */
+  function sincronizarParcelaAutoComValor(){
+    const lista=document.getElementById('tw-parcelas-lista');
+    if(!lista || lista.children.length!==1) return;
+    const row=lista.querySelector('[data-parc-row]');
+    if(!row || row.dataset.parcAuto!=='1') return;
+    row.querySelector('.tw-parc-valor').value=valorWizardNumerico();
   }
   function addParcelaWizard(){
     const lista=document.getElementById('tw-parcelas-lista');
@@ -6037,7 +6111,7 @@
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
       categoria:categoriaInfo.label, segmento:segmentoVal,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
-      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, cidadeGeo, estadoGeo, paisGeo, value:valorNum, structure,
+      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, cidadeGeo, estadoGeo, paisGeo, value:valorNum, servicoId:twServicoEscolhido, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
@@ -6180,7 +6254,8 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false;
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false; twServicoEscolhido=null;
+    const servSel=document.getElementById('tw-servico'); if(servSel) servSel.value='';
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
     });
