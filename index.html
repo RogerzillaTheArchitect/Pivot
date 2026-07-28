@@ -14000,7 +14000,7 @@
       ${semLink ? `
         <button class="btn soft" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
       ` : `
-        <a href="${urlWebcal}" class="btn soft" style="width:100%;display:block;text-align:center;box-sizing:border-box;margin-bottom:8px">${t('sync.addAppleButton')}</a>
+        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="window.location.href='${urlWebcal}'">${t('sync.addAppleButton')}</button>
         <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
         <button class="btn soft" style="width:100%;margin-top:4px" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
         <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
