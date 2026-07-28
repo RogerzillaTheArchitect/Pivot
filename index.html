@@ -3181,6 +3181,9 @@
     "priority.urgent": { pt:"Urgente", en:"Urgent", es:"Urgente" },
     // --- Privacidade ---
     "privacy.deleteConfirm": { pt:"Isto apaga permanentemente a sua conta e todos os dados. Confirmas?", en:"This permanently deletes your account and all data. Confirm?", es:"Esto elimina permanentemente tu cuenta y todos los datos. ¿Confirmas?" },
+    "privacy.deleteConfirmAdmin": { pt:"É administrador deste workspace. Isto apaga permanentemente TODOS os dados do workspace (projetos, contratos, contactos, tudo) e remove o acesso de todos os membros da equipa — não só o seu. Confirmas?", en:"You're an admin of this workspace. This permanently deletes ALL of the workspace's data (projects, contracts, contacts, everything) and removes access for every team member, not just you. Confirm?", es:"Eres administrador de este workspace. Esto elimina permanentemente TODOS los datos del workspace (proyectos, contratos, contactos, todo) y quita el acceso a todos los miembros del equipo, no solo a ti. ¿Confirmas?" },
+    "privacy.deleteConfirmFinal": { pt:"Última confirmação: esta ação não pode ser desfeita. Eliminar agora?", en:"Final confirmation: this action cannot be undone. Delete now?", es:"Última confirmación: esta acción no se puede deshacer. ¿Eliminar ahora?" },
+    "toast.deletingAccount": { pt:"A eliminar a conta…", en:"Deleting account…", es:"Eliminando la cuenta…" },
     "privacy.desc": { pt:"Os dados dos seus clientes são seus. Exporta ou apaga quando quiseres.", en:"Your clients' data is yours. Export or delete it whenever you want.", es:"Los datos de tus clientes son tuyos. Expórtalos o elimínalos cuando quieras." },
     // --- Perfil ---
     "profile.account": { pt:"Conta", en:"Account", es:"Cuenta" },
@@ -3479,6 +3482,20 @@
     "settings.ringHint": { pt:"Usado para calcular as percentagens e os anéis no resumo financeiro.", en:"Used to calculate the percentages and rings in the financial summary.", es:"Usado para calcular los porcentajes y los anillos del resumen financiero." },
     "settings.title": { pt:"Configurações", en:"Settings", es:"Ajustes" },
     "settings.storageTitle": { pt:"Armazenamento", en:"Storage", es:"Almacenamiento" },
+    "settings.calendarSync": { pt:"Sincronização de Calendário", en:"Calendar Sync", es:"Sincronización de Calendario" },
+    "sync.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
+    "sync.explain": { pt:"Gere um link privado que mantém os seus projetos sincronizados automaticamente com o Google Calendar, Apple Calendar, Outlook ou qualquer outra app de calendário — sem precisar de ligar a sua conta. O Pivots nunca acede aos seus calendários, só publica este link.", en:"Generate a private link that keeps your projects automatically synced with Google Calendar, Apple Calendar, Outlook or any other calendar app — no account connection needed. Pivots never accesses your calendars, it just publishes this link.", es:"Genera un enlace privado que mantiene tus proyectos sincronizados automáticamente con Google Calendar, Apple Calendar, Outlook o cualquier otra app de calendario — sin necesidad de conectar tu cuenta. Pivots nunca accede a tus calendarios, solo publica este enlace." },
+    "sync.generateLink": { pt:"Gerar link de sincronização", en:"Generate sync link", es:"Generar enlace de sincronización" },
+    "sync.linkLabel": { pt:"O seu link de sincronização", en:"Your sync link", es:"Tu enlace de sincronización" },
+    "sync.howToTitle": { pt:"Como adicionar", en:"How to add it", es:"Cómo añadirlo" },
+    "sync.howToGoogle": { pt:"Definições → Adicionar calendário → A partir do URL, e cole o link.", en:"Settings → Add calendar → From URL, and paste the link.", es:"Configuración → Añadir calendario → Desde URL, y pega el enlace." },
+    "sync.howToApple": { pt:"Ficheiro → Nova assinatura de calendário, e cole o link.", en:"File → New Calendar Subscription, and paste the link.", es:"Archivo → Nueva suscripción de calendario, y pega el enlace." },
+    "sync.howToOther": { pt:"procure a opção \"Subscrever calendário\" ou \"Adicionar por URL\" e cole o link.", en:"look for \"Subscribe to calendar\" or \"Add by URL\" and paste the link.", es:"busca la opción \"Suscribirse a calendario\" o \"Añadir por URL\" y pega el enlace." },
+    "sync.other": { pt:"outros", en:"others", es:"otros" },
+    "sync.regenerateLink": { pt:"Gerar novo link", en:"Generate new link", es:"Generar nuevo enlace" },
+    "sync.regenerateHint": { pt:"O link atual deixa de funcionar assim que gerar um novo — terá de o substituir em cada app de calendário onde o usa.", en:"The current link stops working as soon as you generate a new one — you'll need to replace it in every calendar app where you use it.", es:"El enlace actual deja de funcionar en cuanto generes uno nuevo — tendrás que reemplazarlo en cada app de calendario donde lo uses." },
+    "sync.regenerateConfirm": { pt:"Isto invalida o link atual. Tem de o substituir em todas as apps de calendário onde o usa. Continuar?", en:"This invalidates the current link. You'll need to replace it in every calendar app where you use it. Continue?", es:"Esto invalida el enlace actual. Tendrás que reemplazarlo en cada app de calendario donde lo uses. ¿Continuar?" },
+    "toast.genericError": { pt:"Ocorreu um erro. Tente novamente.", en:"Something went wrong. Please try again.", es:"Ocurrió un error. Inténtalo de nuevo." },
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
     "sheet.import": { pt:"Importar", en:"Import", es:"Importar" },
@@ -13896,6 +13913,7 @@
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
       <div class="prow" style="margin-top:18px" onclick="infoNotificacoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <div class="prow" onclick="infoIdioma()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/cil:language.svg);-webkit-mask-image:url(https://api.iconify.design/cil:language.svg)"></span><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="infoSincronizacaoCalendario()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span><div class="t" data-t="settings.calendarSync">Sincronização de Calendário</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:18px 2px 8px;display:flex;align-items:center;gap:6px"><span class="nav-ico" style="width:14px;height:14px;display:inline-block;background-color:var(--neutral);mask-image:url(https://api.iconify.design/tdesign:hard-disk-storage-filled.svg);-webkit-mask-image:url(https://api.iconify.design/tdesign:hard-disk-storage-filled.svg)"></span>${t('settings.storageTitle')}</p>
       <div style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
       <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${pctUso}%</p>`);
@@ -13907,6 +13925,54 @@
     savePerfilData();
     closeInfo();
     showToast(t('toast.settingsSaved'));
+  }
+  /* ===== Sincronização de Calendário =====
+     Em vez de pedir acesso OAuth ao Google Calendar (scope sensível, sujeito
+     a revisão de segurança da Google e que não resolveria Apple/Outlook de
+     qualquer forma), o Pivots publica um feed .ics privado por link — o
+     mesmo link funciona em Google Calendar, Apple Calendar, Outlook e
+     qualquer app que suporte "assinar calendário por URL". Cada app
+     verifica o link periodicamente sozinho; o Pivots nunca escreve nem lê
+     nada nos calendários de terceiros, só serve este feed (ver
+     api/calendar/feed.js). O token pode ser substituído a qualquer altura,
+     invalidando o link antigo imediatamente. */
+  function urlFeedCalendario(token){
+    return window.location.origin+'/api/calendar/feed?token='+token;
+  }
+  async function infoSincronizacaoCalendario(){
+    openInfo(t('settings.calendarSync'), '<p style="font-size:13px;color:var(--ink-soft);padding:20px 2px;text-align:center">'+t('sync.loading')+'</p>');
+    const { data, error } = await sb.from('calendar_feed_tokens').select('token').eq('workspace_id', currentWorkspaceId).eq('revoked', false).order('created_at', {ascending:false}).limit(1);
+    const tokenAtual = (!error && data && data[0]) ? data[0].token : null;
+    renderInfoSincronizacaoCalendario(tokenAtual);
+  }
+  function renderInfoSincronizacaoCalendario(token){
+    const semLink = !token;
+    const url = token ? urlFeedCalendario(token) : '';
+    openInfo(t('settings.calendarSync'), `
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;line-height:1.5">${t('sync.explain')}</p>
+      ${semLink ? `
+        <button class="btn primary" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
+      ` : `
+        <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
+        <button class="btn primary" style="width:100%;margin-top:4px" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
+        <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
+        <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px">
+          <b>Google Calendar:</b> ${t('sync.howToGoogle')}<br><br>
+          <b>Apple Calendar:</b> ${t('sync.howToApple')}<br><br>
+          <b>Outlook / ${t('sync.other')}:</b> ${t('sync.howToOther')}
+        </p>
+        <button class="btn soft" style="width:100%;margin-top:18px;color:var(--late)" onclick="gerarTokenSincronizacaoCalendario(true)">${t('sync.regenerateLink')}</button>
+        <p style="font-size:11.5px;color:var(--ink-faint);margin:8px 2px 0">${t('sync.regenerateHint')}</p>
+      `}
+    `);
+  }
+  async function gerarTokenSincronizacaoCalendario(reconfirmar){
+    if(reconfirmar && !confirm(t('sync.regenerateConfirm'))) return;
+    await sb.from('calendar_feed_tokens').update({revoked:true}).eq('workspace_id', currentWorkspaceId).eq('revoked', false);
+    const token=(crypto.randomUUID?crypto.randomUUID():'tok'+Date.now()+Math.random().toString(36).slice(2)).replace(/-/g,'');
+    const { error } = await sb.from('calendar_feed_tokens').insert({token, workspace_id:currentWorkspaceId});
+    if(error){ showToast(t('toast.genericError')); return; }
+    renderInfoSincronizacaoCalendario(token);
   }
   function infoNotificacoes(){
     openInfo(t('profile.notifications'), `
@@ -13943,10 +14009,26 @@
     closeInfo();
     showToast(t('toast.fileDownloaded'));
   }
-  function confirmarApagarDados(){
-    if(confirm(t('privacy.deleteConfirm'))){
-      closeInfo(); showToast(t('toast.deletionRequested'));
-    }
+  /* Eliminação de conta — antes disto, esta função só mostrava um toast e
+     não apagava nada de facto (a promessa da Política de Privacidade não
+     era cumprida pelo código). Agora chama /api/account/delete, que apaga
+     mesmo os dados: se o utilizador for Admin, apaga o workspace inteiro
+     e todos perdem acesso — por isso o aviso é diferente consoante o
+     papel, para ninguém confirmar sem perceber o alcance real. */
+  async function confirmarApagarDados(){
+    const aviso = souAdmin() ? t('privacy.deleteConfirmAdmin') : t('privacy.deleteConfirm');
+    if(!confirm(aviso)) return;
+    if(!confirm(t('privacy.deleteConfirmFinal'))) return;
+    showToast(t('toast.deletingAccount'));
+    try{
+      const { data:sessionData } = await sb.auth.getSession();
+      const access_token = sessionData && sessionData.session && sessionData.session.access_token;
+      const res = await fetch('/api/account/delete', { method:'POST', headers:{'Authorization':'Bearer '+access_token} });
+      const body = await res.json().catch(()=>({}));
+      if(!res.ok){ showToast(body.error||t('toast.genericError')); return; }
+      await sb.auth.signOut();
+      window.location.reload();
+    }catch(e){ showToast(t('toast.genericError')); }
   }
   /* Ajuda — 5 destinos fixos (Primeiros passos, Central de ajuda, Tutoriais,
      FAQ, Falar com o suporte) em vez dos 3 acordeões soltos de antes. Cada
