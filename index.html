@@ -1576,7 +1576,6 @@
           if (precisaCompletarConvite) {
             abrirCompletarConvite(session);
           }
-          await finalizarLigacaoGoogleCalendarSeNecessario(session);
         }
       } finally {
         aProcessarAuth = false;
@@ -3496,15 +3495,7 @@
     "sync.regenerateLink": { pt:"Gerar novo link", en:"Generate new link", es:"Generar nuevo enlace" },
     "sync.regenerateHint": { pt:"O link atual deixa de funcionar assim que gerar um novo — terá de o substituir em cada app de calendário onde o usa.", en:"The current link stops working as soon as you generate a new one — you'll need to replace it in every calendar app where you use it.", es:"El enlace actual deja de funcionar en cuanto generes uno nuevo — tendrás que reemplazarlo en cada app de calendario donde lo uses." },
     "sync.regenerateConfirm": { pt:"Isto invalida o link atual. Tem de o substituir em todas as apps de calendário onde o usa. Continuar?", en:"This invalidates the current link. You'll need to replace it in every calendar app where you use it. Continue?", es:"Esto invalida el enlace actual. Tendrás que reemplazarlo en cada app de calendario donde lo uses. ¿Continuar?" },
-    "sync.googleExplain": { pt:"Ligue a sua conta Google e os seus trabalhos são adicionados, atualizados e removidos automaticamente no seu Google Calendar — sem precisar de fazer nada manualmente.", en:"Connect your Google account and your jobs are automatically added, updated and removed in your Google Calendar — no manual steps needed.", es:"Conecta tu cuenta de Google y tus trabajos se añaden, actualizan y eliminan automáticamente en tu Google Calendar — sin pasos manuales." },
-    "sync.googleConnect": { pt:"Ligar ao Google Calendar", en:"Connect Google Calendar", es:"Conectar Google Calendar" },
-    "sync.googleConnected": { pt:"✓ Ligado ao Google Calendar", en:"✓ Connected to Google Calendar", es:"✓ Conectado a Google Calendar" },
-    "sync.googleDisconnect": { pt:"Desligar", en:"Disconnect", es:"Desconectar" },
-    "sync.googleDisconnectConfirm": { pt:"Os trabalhos deixam de ser sincronizados automaticamente. Os eventos já criados no Google Calendar não são apagados. Continuar?", en:"Jobs will stop being automatically synced. Events already created in Google Calendar won't be deleted. Continue?", es:"Los trabajos dejarán de sincronizarse automáticamente. Los eventos ya creados en Google Calendar no se eliminarán. ¿Continuar?" },
-    "sync.googleConnectSuccess": { pt:"Google Calendar ligado com sucesso.", en:"Google Calendar connected successfully.", es:"Google Calendar conectado con éxito." },
-    "sync.googleConnectError": { pt:"Não foi possível ligar ao Google Calendar. Tente novamente.", en:"Couldn't connect to Google Calendar. Please try again.", es:"No se pudo conectar a Google Calendar. Inténtalo de nuevo." },
-    "sync.otherAppsTitle": { pt:"Apple Calendar, Outlook e outras agendas", en:"Apple Calendar, Outlook and other calendars", es:"Apple Calendar, Outlook y otras agendas" },
-    "sync.addAppleButton": { pt:"Adicionar ao Apple Calendar", en:"Add to Apple Calendar", es:"Añadir a Apple Calendar" },
+    "sync.addCalendarButton": { pt:"Adicionar ao Calendário", en:"Add to Calendar", es:"Añadir al Calendario" },
     "toast.genericError": { pt:"Ocorreu um erro. Tente novamente.", en:"Something went wrong. Please try again.", es:"Ocurrió un error. Inténtalo de nuevo." },
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
@@ -4919,7 +4910,6 @@
     if(!client || !typeLabel){ showToast(t('toast.fillDescValue')); return; }
     job.client=client; job.typeLabel=typeLabel; job.local=local;
     saveJobsData();
-    pushEventoGoogleCalendar(job, 'upsert');
     closeInfo();
     renderJobDetailDynamic(currentJobId);
     const cardEl=document.querySelector('.job[data-job-id="'+currentJobId+'"]');
@@ -6277,7 +6267,6 @@
     // depois. "Reenviar Email" no Portal Operacional continua disponível
     // para reenviar o mesmo acesso caso o cliente não tenha recebido.
     await gerarPortalClienteAutomatico(job);
-    pushEventoGoogleCalendar(job, 'upsert');
     closeSheet();
     showToast(t('toast.jobCreated')+' '+nomeTrabalho+'.');
     openJob(id);
@@ -11435,7 +11424,6 @@
     job.arquivado={ motivo, em:new Date().toISOString() };
     pushHistory(job, motivo==='concluido' ? t('history.jobArchivedDone') : t('history.jobArchivedDeleted'));
     saveJobsData();
-    pushEventoGoogleCalendar(job, 'delete');
     expirarPortalCliente(job);
     const existente=document.querySelector('.job[data-job-id="'+id+'"]');
     if(existente){ const w=existente.closest('.job-card-wrap'); (w||existente).remove(); }
@@ -13948,64 +13936,41 @@
     showToast(t('toast.settingsSaved'));
   }
   /* ===== Sincronização de Calendário =====
-     Dois caminhos, porque nenhum sozinho cobre todo o mundo:
-     - Google Calendar: ligação real por OAuth (scope de calendário pedido
-       à parte do login, com prompt=consent para garantir um refresh_token
-       novo) — o Pivots cria/atualiza/remove os eventos automaticamente via
-       Calendar API (ver api/calendar/google-*.js e pushEventoGoogleCalendar
-       abaixo). É a opção "de facto ligada", como foi pedido.
-     - Apple Calendar, Outlook e outros: não têm um equivalente de OAuth
-       público para apps de terceiros, por isso continuam a usar um feed
-       .ics privado por link (api/calendar/feed.js) — mas agora com um
-       botão "Adicionar ao Apple Calendar" que usa o esquema webcal:// para
-       abrir diretamente o diálogo de assinatura no dispositivo, em vez de
-       depender de o utilizador encontrar a opção escondida no menu. */
+     Um único link .ics privado por workspace (api/calendar/feed.js) — o
+     mesmo link funciona em Google Calendar, Apple Calendar, Outlook e
+     qualquer app que suporte "assinar calendário por URL". Cada app
+     verifica o link periodicamente sozinho; o Pivots nunca escreve nem lê
+     nada nos calendários de terceiros, só serve este feed.
+     Deliberadamente SEM OAuth: uma ligação direta por API exigiria um app
+     verificado pela Google (ou testadores cadastrados manualmente e ainda
+     assim sujeito a bloqueios de "app não verificado"), o que é mais
+     fricção do que vale a pena para o que é, no fundo, "colocar meus
+     compromissos num calendário". Um link resolve todos os apps de uma
+     vez, sem depender de aprovação de terceiros. */
   function urlFeedCalendario(token){
     return window.location.origin+'/api/calendar/feed?token='+token;
   }
   async function infoSincronizacaoCalendario(){
     openInfo(t('settings.calendarSync'), '<p style="font-size:13px;color:var(--ink-soft);padding:20px 2px;text-align:center">'+t('sync.loading')+'</p>');
-    const [{ data, error }, statusGoogle] = await Promise.all([
-      sb.from('calendar_feed_tokens').select('token').eq('workspace_id', currentWorkspaceId).eq('revoked', false).order('created_at', {ascending:false}).limit(1),
-      consultarStatusGoogleCalendar()
-    ]);
+    const { data, error } = await sb.from('calendar_feed_tokens').select('token').eq('workspace_id', currentWorkspaceId).eq('revoked', false).order('created_at', {ascending:false}).limit(1);
     const tokenAtual = (!error && data && data[0]) ? data[0].token : null;
-    renderInfoSincronizacaoCalendario(tokenAtual, statusGoogle);
+    renderInfoSincronizacaoCalendario(tokenAtual);
   }
-  async function consultarStatusGoogleCalendar(){
-    try{
-      const { data:sessionData } = await sb.auth.getSession();
-      const access_token = sessionData && sessionData.session && sessionData.session.access_token;
-      const res = await fetch('/api/calendar/google?action=status', { headers:{'Authorization':'Bearer '+access_token} });
-      const body = await res.json().catch(()=>({}));
-      return !!body.connected;
-    }catch(e){ return false; }
-  }
-  function renderInfoSincronizacaoCalendario(token, googleConectado){
+  function renderInfoSincronizacaoCalendario(token){
     const semLink = !token;
     const url = token ? urlFeedCalendario(token) : '';
-    const urlWebcal = url ? url.replace(/^https?:\/\//,'webcal://') : '';
     openInfo(t('settings.calendarSync'), `
-      <p class="plabel" style="margin:0 2px 8px">Google Calendar</p>
-      <p style="font-size:12.5px;color:var(--ink-soft);margin:0 2px 12px;line-height:1.5">${t('sync.googleExplain')}</p>
-      ${googleConectado ? `
-        <div class="struct-row" style="padding:12px 2px"><div class="nm" style="color:var(--brand)">${t('sync.googleConnected')}</div></div>
-        <button class="btn soft" style="width:100%;margin-top:4px;color:var(--late)" onclick="desconectarGoogleCalendar()">${t('sync.googleDisconnect')}</button>
-      ` : `
-        <button class="btn primary" style="width:100%" onclick="conectarGoogleCalendar()">${t('sync.googleConnect')}</button>
-      `}
-
-      <p class="plabel" style="margin:22px 2px 8px">${t('sync.otherAppsTitle')}</p>
-      <p style="font-size:12.5px;color:var(--ink-soft);margin:0 2px 12px;line-height:1.5">${t('sync.explain')}</p>
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;line-height:1.5">${t('sync.explain')}</p>
       ${semLink ? `
-        <button class="btn soft" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
+        <button class="btn primary" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
       ` : `
-        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="window.location.href='${urlWebcal}'">${t('sync.addAppleButton')}</button>
+        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="window.location.href='${url}'">${t('sync.addCalendarButton')}</button>
         <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
         <button class="btn soft" style="width:100%;margin-top:4px" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
         <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px">
-          <b>Google Calendar (desktop, alternativa):</b> ${t('sync.howToGoogle')}<br><br>
+          <b>Google Calendar:</b> ${t('sync.howToGoogle')}<br><br>
+          <b>Apple Calendar:</b> ${t('sync.howToApple')}<br><br>
           <b>Outlook / ${t('sync.other')}:</b> ${t('sync.howToOther')}
         </p>
         <button class="btn soft" style="width:100%;margin-top:18px;color:var(--late)" onclick="gerarTokenSincronizacaoCalendario(true)">${t('sync.regenerateLink')}</button>
@@ -14019,75 +13984,7 @@
     const token=(crypto.randomUUID?crypto.randomUUID():'tok'+Date.now()+Math.random().toString(36).slice(2)).replace(/-/g,'');
     const { error } = await sb.from('calendar_feed_tokens').insert({token, workspace_id:currentWorkspaceId});
     if(error){ showToast(t('toast.genericError')); return; }
-    renderInfoSincronizacaoCalendario(token, await consultarStatusGoogleCalendar());
-  }
-  /* Ligar ao Google Calendar é um segundo pedido de autorização, separado
-     do login — pede o scope de calendário só quando o utilizador
-     explicitamente quer sincronizar, e não a todos os que entram com
-     Google. prompt=consent+access_type=offline garante que a Google
-     devolve sempre um refresh_token novo (sem isto, um utilizador que já
-     tivesse autorizado antes não receberia um refresh_token de novo). */
-  async function conectarGoogleCalendar(){
-    sessionStorage.setItem('pivotsGCalConnect','1');
-    const { error } = await sb.auth.signInWithOAuth({
-      provider:'google',
-      options:{
-        redirectTo: window.location.origin,
-        scopes:'https://www.googleapis.com/auth/calendar.events',
-        queryParams:{ access_type:'offline', prompt:'consent' }
-      }
-    });
-    if(error){ sessionStorage.removeItem('pivotsGCalConnect'); showToast(t('toast.genericError')); }
-  }
-  async function finalizarLigacaoGoogleCalendarSeNecessario(session){
-    if(sessionStorage.getItem('pivotsGCalConnect')!=='1') return;
-    sessionStorage.removeItem('pivotsGCalConnect');
-    const refreshToken = session && session.provider_refresh_token;
-    if(!refreshToken){ showToast(t('sync.googleConnectError')); return; }
-    try{
-      const res = await fetch('/api/calendar/google?action=connect', {
-        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
-        body: JSON.stringify({ refresh_token: refreshToken })
-      });
-      if(!res.ok){ showToast(t('sync.googleConnectError')); return; }
-      showToast(t('sync.googleConnectSuccess'));
-      infoSincronizacaoCalendario();
-    }catch(e){ showToast(t('sync.googleConnectError')); }
-  }
-  async function desconectarGoogleCalendar(){
-    if(!confirm(t('sync.googleDisconnectConfirm'))) return;
-    const { data:sessionData } = await sb.auth.getSession();
-    const access_token = sessionData && sessionData.session && sessionData.session.access_token;
-    await fetch('/api/calendar/google?action=disconnect', { method:'POST', headers:{'Authorization':'Bearer '+access_token} });
-    infoSincronizacaoCalendario();
-  }
-  /* Empurra a criação/atualização/remoção de um evento para o Google
-     Calendar do utilizador, se ele tiver ligado a conta. Falha em
-     silêncio (só um aviso na consola) quando não há ligação ativa ou a
-     rede falha — nunca deve travar o fluxo de criar/editar um trabalho,
-     que é a ação principal do utilizador. Guarda o id do evento devolvido
-     em job.googleCalendarEventId para saber o que atualizar da próxima vez. */
-  async function pushEventoGoogleCalendar(job, action){
-    if(!job || !job.dateRaw) return;
-    try{
-      const { data:sessionData } = await sb.auth.getSession();
-      const access_token = sessionData && sessionData.session && sessionData.session.access_token;
-      if(!access_token) return;
-      const res = await fetch('/api/calendar/google?action=push', {
-        method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+access_token},
-        body: JSON.stringify({
-          action, googleEventId: job.googleCalendarEventId||null,
-          title: job.nome||job.typeLabel, location: job.localCompleto||job.local,
-          description: job.client?('Cliente: '+job.client):'',
-          dateRaw: job.dateRaw, horaIni: job.horaIni, dateFimRaw: job.dateFimRaw, horaFim: job.horaFim
-        })
-      });
-      const body = await res.json().catch(()=>({}));
-      if(body.disconnected) return; // avisado na próxima abertura do ecrã de sincronização
-      if(action==='delete'){ delete job.googleCalendarEventId; }
-      else if(body.googleEventId){ job.googleCalendarEventId=body.googleEventId; }
-      if(action!=='delete' || body.googleEventId!==undefined) saveJobsData();
-    }catch(e){ console.error('Falha ao sincronizar com o Google Calendar:', e); }
+    renderInfoSincronizacaoCalendario(token);
   }
   function infoNotificacoes(){
     openInfo(t('profile.notifications'), `
