@@ -18,6 +18,30 @@
     --r:4px; --sb-w:236px; --nav-h:74px;
     --glass-rgb:26,27,29; --glass-rgb-2:32,34,37; --btn-rgb:79,161,137;
     --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(14,13,12,.90); --glass-55:rgba(14,13,12,.92); --glass-6:rgba(14,13,12,.93); --glass-62:rgba(14,13,12,.94); --glass-65:rgba(14,13,12,.95); --glass-7:rgba(14,13,12,.96); --glass-85:rgba(14,13,12,.98); --glass2-75:rgba(14,13,12,.7);
+    /* ===== Superfícies de vidro — 4 níveis, e só 4 =====
+       Cada superfície da app cai num destes níveis; antes cada ficheiro
+       inventava o seu próprio par (brilho, base) e existiam ~20 combinações
+       ligeiramente diferentes para 5 papéis reais, o que fazia cards irmãos
+       lerem como materiais diferentes. A regra é a profundidade: quanto mais
+       "por cima" o elemento está, mais opaco fica.
+         surface-card   — card de conteúdo (o material padrão da app)
+         surface-row    — linha/card aninhado dentro de outra superfície
+         surface-header — faixa de título, sempre mais escura que o corpo
+         surface-chrome — chrome flutuante (nav, topbar) sobre o conteúdo
+         surface-panel  — painel elevado/modal, praticamente opaco */
+    --surface-card:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
+    --surface-row:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    --surface-row-hover:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,0) 45%),rgba(14,13,12,.16);
+    --surface-header:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0) 45%),rgba(8,8,9,.46);
+    --surface-chrome:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(26,27,29,.62);
+    --surface-panel:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,0) 45%),rgba(18,19,21,.94);
+    /* botões de vidro — dois níveis (destaque e discreto), cada um com o seu
+       estado hover. Base branca em vez de escura: os botões sobem sobre o
+       material, não se afundam nele. */
+    --surface-btn:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(255,255,255,.07);
+    --surface-btn-hover:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%),rgba(255,255,255,.10);
+    --surface-btn-soft:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(255,255,255,.05);
+    --surface-btn-soft-hover:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,0) 45%),rgba(255,255,255,.08);
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
     --c-orange:#CBA26A; --c-yellow-soft:#C9BB86; --c-green-soft:#4FA189;
     --c-date-bg-ok:rgba(79,161,137,.22); --c-date-bg-late:rgba(217,127,121,.22); --c-text-green:#8FD4BC; --c-text-red:#F0A8A2;
