@@ -13976,7 +13976,7 @@
     try{
       const { data:sessionData } = await sb.auth.getSession();
       const access_token = sessionData && sessionData.session && sessionData.session.access_token;
-      const res = await fetch('/api/calendar/google-status', { headers:{'Authorization':'Bearer '+access_token} });
+      const res = await fetch('/api/calendar/google?action=status', { headers:{'Authorization':'Bearer '+access_token} });
       const body = await res.json().catch(()=>({}));
       return !!body.connected;
     }catch(e){ return false; }
@@ -14045,7 +14045,7 @@
     const refreshToken = session && session.provider_refresh_token;
     if(!refreshToken){ showToast(t('sync.googleConnectError')); return; }
     try{
-      const res = await fetch('/api/calendar/google-connect', {
+      const res = await fetch('/api/calendar/google?action=connect', {
         method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+session.access_token},
         body: JSON.stringify({ refresh_token: refreshToken })
       });
@@ -14058,7 +14058,7 @@
     if(!confirm(t('sync.googleDisconnectConfirm'))) return;
     const { data:sessionData } = await sb.auth.getSession();
     const access_token = sessionData && sessionData.session && sessionData.session.access_token;
-    await fetch('/api/calendar/google-disconnect', { method:'POST', headers:{'Authorization':'Bearer '+access_token} });
+    await fetch('/api/calendar/google?action=disconnect', { method:'POST', headers:{'Authorization':'Bearer '+access_token} });
     infoSincronizacaoCalendario();
   }
   /* Empurra a criação/atualização/remoção de um evento para o Google
@@ -14073,7 +14073,7 @@
       const { data:sessionData } = await sb.auth.getSession();
       const access_token = sessionData && sessionData.session && sessionData.session.access_token;
       if(!access_token) return;
-      const res = await fetch('/api/calendar/google-push', {
+      const res = await fetch('/api/calendar/google?action=push', {
         method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+access_token},
         body: JSON.stringify({
           action, googleEventId: job.googleCalendarEventId||null,
