@@ -7,7 +7,7 @@
   /* Financeiro + Estatísticas Operacionais vivem no mesmo card, cada um
      com seu título centrado dentro; o menu (⋮) do Financeiro fica
      ancorado à direita do próprio título, não da largura do card. */
-  .finance-ops-card{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);border:1px solid rgba(255,255,255,.10);
+  .finance-ops-card{position:relative;background:var(--surface-card);border:1px solid rgba(255,255,255,.10);
     border-radius:var(--r);margin:12px 0 22px;padding:12px 0;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
     color:#F5F5F3;
@@ -53,7 +53,7 @@
   .ms-badge-gastos svg{color:#C98A2E}
   .ms-section-label{font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--label-out);margin:18px 2px 8px;text-transform:uppercase}
   .ms-cards-row{display:flex;gap:9px;margin:0 0 22px}
-  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);border:1px solid rgba(255,255,255,.10);border-radius:var(--r);
+  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--surface-card);border:1px solid rgba(255,255,255,.10);border-radius:var(--r);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     padding:12px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;cursor:pointer;
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
@@ -83,7 +83,7 @@
      com borda branca; preenchidos em laranja. Sem etiqueta numérica sobre a
      barra — só o valor no texto à direita. */
   .card.ops-card{
-    background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
+    background:var(--surface-card);
     border:1px solid rgba(255,255,255,.10);
     border-radius:var(--r);
     padding:16px 16px 8px;
@@ -217,7 +217,7 @@
      o estado (bordô=atrasado, amarelo escuro=hoje/amanhã, verde escuro=2+
      dias); o texto do prazo (.rtk-prazo) comunica o tempo em si. */
   .card.radar-card{
-    background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
+    background:var(--surface-row);
     border-color:rgba(255,255,255,.09);
     box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05)}
   .card.radar-card.late{
@@ -277,7 +277,7 @@
      superfície. Mesmo padrão em .rel-card-header e .sec-head. */
   .tasks-header{
     display:block;cursor:pointer;
-    background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0) 45%),rgba(8,8,9,.46);
+    background:var(--surface-header);
     border:1px solid rgba(255,255,255,.10);border-bottom:none;
     border-radius:var(--r) var(--r) 0 0;
     padding:11px 16px;margin:0;
@@ -297,7 +297,7 @@
      layout interno muda pra caber as setas nas extremidades. */
   .tasks-header.cal-header{display:flex;align-items:stretch;justify-content:space-between;
     gap:10px;cursor:default;padding:0 6px}
-  .card{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
+  .card{background:var(--surface-card);
     border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:16px;
     margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
@@ -333,21 +333,21 @@
      resto do app (era var(--btn-72), o verde de marca antigo, que já não
      existe em mais nenhum botão fora daqui). Levemente mais opaco que
      .dark abaixo pra continuar a ler como a ação principal do ecrã. */
-  .btn.primary{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(255,255,255,.07);
+  .btn.primary{background:var(--surface-btn);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     border-color:rgba(255,255,255,.18);color:var(--ink);font-weight:600}
-  .btn.primary:hover{background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%),rgba(255,255,255,.10)}
+  .btn.primary:hover{background:var(--surface-btn-hover)}
   .btn.soft{background:var(--paper-2)}
   .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-soft);padding-left:6px}
   /* variante neutra premium — glassmorphism escuro, sem cor de marca. */
-  .btn.dark{background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(255,255,255,.05);
+  .btn.dark{background:var(--surface-btn-soft);
     border-color:rgba(255,255,255,.14);color:var(--ink);font-weight:600;
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06)}
-  .btn.dark:hover{background:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,0) 45%),rgba(255,255,255,.08)}
-  .actions .btn{background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(255,255,255,.07)!important;
+  .btn.dark:hover{background:var(--surface-btn-soft-hover)}
+  .actions .btn{background:var(--surface-btn)!important;
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
     border:1px solid rgba(255,255,255,.18)!important;color:var(--ink)!important;font-weight:600;box-shadow:0 3px 10px rgba(0,0,0,.2)}
-  .actions .btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%),rgba(255,255,255,.10)!important}
+  .actions .btn:hover{background:var(--surface-btn-hover)!important}
   .btn svg{width:14px;height:14px;vertical-align:-2px;margin-right:2px;flex:none}
 
