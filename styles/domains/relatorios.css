@@ -36,6 +36,7 @@
      .card padrão (Segmentação Financeira). */
   .rel-card-header{
     display:block;
+    position:relative;
     background:var(--surface-header);
     border:1px solid rgba(255,255,255,.10);border-bottom:none;
     border-radius:var(--r) var(--r) 0 0;
@@ -45,6 +46,17 @@
     font-size:12px;font-weight:900;font-stretch:115%;letter-spacing:.1em;text-transform:uppercase;
     color:var(--label-out);text-align:center;
   }
+  /* Toggle "mostrar na Dashboard" — bem discreto de propósito (não é um
+     controle de destaque, é uma preferência que a maioria nunca vai tocar):
+     desligado quase se funde com o próprio cabeçalho do card, ligado vira um
+     cinza claro bem leve, nunca a cor de marca. */
+  .dash-card-toggle{width:30px;height:17px;border-radius:99px;position:absolute;right:12px;top:50%;
+    transform:translateY(-50%);cursor:pointer;background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.08);transition:background .2s}
+  .dash-card-toggle.on{background:rgba(255,255,255,.22)}
+  .dash-card-toggle .kn{width:13px;height:13px;border-radius:50%;background:rgba(255,255,255,.35);
+    position:absolute;top:1px;left:1px;transition:left .2s,background .2s}
+  .dash-card-toggle.on .kn{left:14px;background:rgba(255,255,255,.85)}
   /* .tech acompanha o card técnico/opaco (sem glass/blur) — mais escura que
      o próprio corpo (#0E0E0E), nunca mais clara. */
   .rel-card-header.tech{
