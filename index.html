@@ -655,13 +655,13 @@
             <span class="inline-link" onclick="cancelarSelecaoBiblioteca()" data-t="action.back">Voltar</span>
           </div>
           <div class="bib-headrow">
-            <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
-            </button>
             <div class="bib-search bib-glass">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
               <input id="bib-busca" placeholder="Explorar modelos…" data-t-placeholder="library.searchPlaceholder" oninput="renderBiblioteca()" autocomplete="off">
             </div>
+            <button type="button" class="bib-square-btn bib-glass" id="bib-meus-btn" onclick="abrirMenuMeusModelos()" aria-label="Modelos salvos" data-t-title="library.origin.mine">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+            </button>
             <button type="button" class="bib-square-btn bib-glass" id="bib-add-btn" onclick="abrirMenuNovoModelo()" aria-label="Novo modelo" data-t-title="library.newMenu.title">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             </button>
@@ -669,13 +669,11 @@
 
           <div class="bib-toolbar">
             <div class="bib-filters">
-              <button type="button" class="bib-filter bib-glass" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
-              <button type="button" class="bib-filter bib-glass" id="bib-seg-btn" onclick="abrirSegmentoBiblioteca()"></button>
-              <button type="button" class="bib-filter bib-glass" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
               <button type="button" class="bib-filter bib-glass" id="bib-sort-btn" onclick="abrirOrdenarBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-idioma-btn" onclick="abrirIdiomaBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-cat-btn" onclick="abrirCategoriaBiblioteca()"></button>
+              <button type="button" class="bib-filter bib-glass" id="bib-origem-btn" onclick="abrirOrigemBiblioteca()"></button>
             </div>
-
-            <div class="bib-seals" id="bib-origem-row"></div>
           </div>
 
           <div class="bib-grid" id="bib-lista"></div>
@@ -1158,45 +1156,22 @@
           <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <!-- ETAPA 4 — Serviço (valor + pagamentos combinados numa única etapa;
-             o serviço pode vir de um modelo salvo em Perfil > Serviços,
-             que pré-preenche o valor, ou ser preenchido manualmente) -->
+        <!-- ETAPA 4 — Serviços (substitui as antigas "Serviço" + "Serviços
+             Incluídos" duplicadas: um único lugar pra escolher múltiplos
+             serviços salvos em Perfil > Serviços, com o valor de cada um
+             editável aqui, e o total alimentando o valor da Etapa de
+             Pagamento — que continua separada, só pra total final + parcelas). -->
         <div class="moment" data-moment="4" style="display:none">
-          <div class="field" id="tw-servico-picker-wrap" style="display:none">
-            <label data-t="wizard.serviceTemplate">Serviço</label>
-            <select id="tw-servico" onchange="onServicoWizardChange()">
-              <option value="" data-t="wizard.serviceTemplatePlaceholder">Selecionar serviço ou preencher manualmente…</option>
-            </select>
-          </div>
-          <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €" oninput="onValorWizardManual()"></div>
-
-          <div id="tw-pag-recorrente-nota" class="warn-box" style="display:none;background:var(--btn-06);border-color:var(--btn-14);color:var(--ink-soft)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg>
-            <div data-t="wizard.paymentsRecurringNote">Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.</div>
-          </div>
-          <div id="tw-parcelas-wrap">
-            <p class="plabel" style="margin:16px 2px 10px" data-t="wizard.installments">Parcelas</p>
-            <div id="tw-parcelas-lista"></div>
-            <span class="inline-link" onclick="addParcelaWizard()"><span data-t="wizard.addInstallment">+ Adicionar parcela</span></span>
-          </div>
-          <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.includedServicesHint">Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.</p>
+          <div id="tw-servicos-incluidos-lista"></div>
+          <p id="tw-servicos-incluidos-empty" style="display:none;font-size:13px;color:var(--ink-soft)" data-t="wizard.noServicesSaved">Ainda não tem serviços guardados em Perfil &gt; Serviços.</p>
+          <div class="struct-row" style="margin-top:10px;padding:12px 2px;border-top:1px solid var(--line-soft)"><div class="nm" data-t="wizard.servicesTotal">Total dos serviços</div><b id="tw-servicos-total">0 €</b></div>
+          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- ETAPA 5 — Entrega e Aprovação -->
         <div class="moment" data-moment="5" style="display:none">
-          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="entrega.screening">Triagem</div><span class="sub" data-t="entrega.screeningHint">O cliente faz uma primeira triagem dos materiais (fotos RAW, vídeos brutos, áudios, outros arquivos).</span></div><div class="toggle" id="entrega-triagem" onclick="toggleEntregaFase(this,'triagem')"><div class="kn"></div></div></div>
-          <div class="field" id="entrega-triagem-link-wrap" style="display:none;margin-top:8px">
-            <label data-t="entrega.materialLink">Link do Material</label>
-            <input id="entrega-triagem-link" placeholder="Pixieset, Frame.io, Drive, Dropbox…" data-t-placeholder="entrega.materialLinkPlaceholder">
-          </div>
-
-          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.selection">Seleção</div><span class="sub" data-t="entrega.selectionHint">O cliente seleciona os materiais que seguem para edição ou entrega.</span></div><div class="toggle" id="entrega-selecao" onclick="toggleEntregaFase(this,'selecao')"><div class="kn"></div></div></div>
-          <div class="field" id="entrega-selecao-link-wrap" style="display:none;margin-top:8px">
-            <label data-t="entrega.materialLink">Link do Material</label>
-            <input id="entrega-selecao-link" placeholder="Pixieset, Frame.io, Drive, Dropbox…" data-t-placeholder="entrega.materialLinkPlaceholder">
-          </div>
-
-          <div class="struct-row" style="margin-top:14px"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Revisões</div><span class="sub" data-t="entrega.allowAdjustmentsHint">O cliente pode solicitar revisões do material entregue.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
+          <div class="struct-row"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Revisões</div><span class="sub" data-t="entrega.allowAdjustmentsHint">Adicione quando houver necessidade de decupagem, pré-seleção, revisão do material entregue etc. — o cliente participa dessa etapa antes da entrega final.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
           <div id="entrega-ajustes-wrap" style="display:none;margin-top:8px">
             <p class="plabel" style="margin:0 0 9px" data-t="entrega.revisionsQty">Quantidade de Revisões</p>
             <div style="display:flex;align-items:center;gap:16px">
@@ -1226,14 +1201,22 @@
           <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
-        <!-- ETAPA 6 — Serviços Incluídos (tem de vir antes do Contrato: os
-             serviços escolhidos aqui viram um bloco "Serviços incluídos"
-             gerado automaticamente no contrato da Etapa 7). -->
+        <!-- ETAPA 6 — Pagamento (valor total do trabalho, pré-preenchido pela
+             soma dos serviços escolhidos na Etapa de Serviços — sempre
+             editável — + parcelas). -->
         <div class="moment" data-moment="6" style="display:none">
-          <p style="font-size:13px;color:var(--neutral);margin-bottom:14px" data-t="wizard.includedServicesHint">Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.</p>
-          <div id="tw-servicos-incluidos-lista"></div>
-          <p id="tw-servicos-incluidos-empty" style="display:none;font-size:13px;color:var(--ink-soft)" data-t="wizard.noServicesSaved">Ainda não tem serviços guardados em Perfil &gt; Serviços.</p>
-          <button class="btn primary" style="width:100%;margin-top:14px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+          <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €" oninput="onValorWizardManual()"></div>
+
+          <div id="tw-pag-recorrente-nota" class="warn-box" style="display:none;background:var(--btn-06);border-color:var(--btn-14);color:var(--ink-soft)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg>
+            <div data-t="wizard.paymentsRecurringNote">Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.</div>
+          </div>
+          <div id="tw-parcelas-wrap">
+            <p class="plabel" style="margin:16px 2px 10px" data-t="wizard.installments">Parcelas</p>
+            <div id="tw-parcelas-lista"></div>
+            <span class="inline-link" onclick="addParcelaWizard()"><span data-t="wizard.addInstallment">+ Adicionar parcela</span></span>
+          </div>
+          <button class="btn primary" style="width:100%;margin-top:16px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- ETAPA 7 — Contrato -->
@@ -2302,11 +2285,10 @@
     "wizard.step1": { pt:"Informações do trabalho", en:"Job details", es:"Datos del trabajo" },
     "wizard.step2": { pt:"Recursos e equipe", en:"Resources & team", es:"Recursos y equipo" },
     "wizard.step3": { pt:"Portal do cliente", en:"Client portal", es:"Portal del cliente" },
-    "wizard.step4": { pt:"Serviço", en:"Service", es:"Servicio" },
-    "wizard.serviceTemplate": { pt:"Serviço", en:"Service", es:"Servicio" },
-    "wizard.serviceTemplatePlaceholder": { pt:"Selecionar serviço ou preencher manualmente…", en:"Pick a service or fill in manually…", es:"Seleccionar servicio o rellenar manualmente…" },
+    "wizard.step4": { pt:"Serviços", en:"Services", es:"Servicios" },
+    "wizard.servicesTotal": { pt:"Total dos serviços", en:"Services total", es:"Total de servicios" },
     "wizard.step5": { pt:"Entrega e Aprovação", en:"Delivery & Approval", es:"Entrega y Aprobación" },
-    "wizard.step6": { pt:"Serviços Incluídos", en:"Included Services", es:"Servicios Incluidos" },
+    "wizard.step6": { pt:"Pagamento", en:"Payment", es:"Pago" },
     "wizard.step7": { pt:"Contrato", en:"Contract", es:"Contrato" },
     "wizard.step8": { pt:"Resumo", en:"Summary", es:"Resumen" },
     "wizard.includedServicesHint": { pt:"Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.", en:"Select the services included in this job — they're automatically added as a block in the contract.", es:"Selecciona los servicios incluidos en este trabajo — se añaden automáticamente como un bloque en el contrato." },
@@ -2320,7 +2302,7 @@
     "entrega.materialLink": { pt:"Link do Material", en:"Material Link", es:"Enlace del Material" },
     "entrega.materialLinkPlaceholder": { pt:"Pixieset, Frame.io, Drive, Dropbox…", en:"Pixieset, Frame.io, Drive, Dropbox…", es:"Pixieset, Frame.io, Drive, Dropbox…" },
     "entrega.allowAdjustments": { pt:"Revisões", en:"Revisions", es:"Revisiones" },
-    "entrega.allowAdjustmentsHint": { pt:"O cliente pode solicitar revisões do material entregue.", en:"The client can request revisions of the delivered material.", es:"El cliente puede solicitar revisiones del material entregado." },
+    "entrega.allowAdjustmentsHint": { pt:"Adicione quando houver necessidade de decupagem, pré-seleção, revisão do material entregue etc. — o cliente participa dessa etapa antes da entrega final.", en:"Add this when there's a need for logging, pre-selection, review of the delivered material, etc. — the client takes part in this step before final delivery.", es:"Añade esto cuando haya necesidad de registro, preselección, revisión del material entregado, etc. — el cliente participa de esta etapa antes de la entrega final." },
     "entrega.adjustmentDefault": { pt:"Revisão", en:"Revision", es:"Revisión" },
     "entrega.revisionsQty": { pt:"Quantidade de Revisões", en:"Number of Revisions", es:"Cantidad de Revisiones" },
     "entrega.deliveryFormat": { pt:"Formato de Entrega", en:"Delivery Format", es:"Formato de Entrega" },
@@ -2613,8 +2595,8 @@
     "explore.contractLibrary": { pt:"Biblioteca de Contratos", en:"Contract Library", es:"Biblioteca de Contratos" },
     "library.searchPlaceholder": { pt:"Explorar modelos…", en:"Explore templates…", es:"Explorar modelos…" },
     "library.origin.all": { pt:"Todos", en:"All", es:"Todos" },
-    "library.origin.official": { pt:"Pivots", en:"Pivots", es:"Pivots" },
-    "library.origin.officialShort": { pt:"Pivots", en:"Pivots", es:"Pivots" },
+    "library.origin.official": { pt:"Oficiais", en:"Official", es:"Oficiales" },
+    "library.origin.officialShort": { pt:"Oficiais", en:"Official", es:"Oficiales" },
     "library.origin.community": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.communityShort": { pt:"Comunidade", en:"Community", es:"Comunidad" },
     "library.origin.saved": { pt:"Favoritos", en:"Saved", es:"Favoritos" },
@@ -2625,6 +2607,7 @@
     "library.facet.category": { pt:"Categoria", en:"Category", es:"Categoría" },
     "library.facet.profession": { pt:"Segmento", en:"Segment", es:"Segmento" },
     "library.facet.language": { pt:"Idioma", en:"Language", es:"Idioma" },
+    "library.facet.origin": { pt:"Origem", en:"Origin", es:"Origen" },
     "library.facet.context": { pt:"Contexto", en:"Context", es:"Contexto" },
     "library.facet.section": { pt:"Coberturas", en:"Coverage", es:"Coberturas" },
     "library.origin.legal": { pt:"Jurídico", en:"Legal", es:"Jurídico" },
@@ -3285,6 +3268,15 @@
     "profile.notifications": { pt:"Notificações", en:"Notifications", es:"Notificaciones" },
     "notif.email": { pt:"Notificações por email", en:"Email notifications", es:"Notificaciones por email" },
     "notif.inApp": { pt:"Notificações no app", en:"In-app notifications", es:"Notificaciones en la app" },
+    "notif.remindersTitle": { pt:"Lembretes automáticos", en:"Automatic reminders", es:"Recordatorios automáticos" },
+    "notif.remindersHint": { pt:"Sempre por email, para pendências do cliente (pagamento, revisão, assinatura de contrato etc.).", en:"Always by email, for client pendencies (payment, revision, contract signature, etc.).", es:"Siempre por email, para pendientes del cliente (pago, revisión, firma de contrato, etc.)." },
+    "notif.reminderWarning": { pt:"Email de aviso", en:"Warning email", es:"Email de aviso" },
+    "notif.reminderWarningSameDay": { pt:"No mesmo dia da deadline", en:"On the deadline day", es:"El mismo día de la fecha límite" },
+    "notif.reminderWarningDaysBefore": { pt:"{n} dias antes da deadline", en:"{n} days before the deadline", es:"{n} días antes de la fecha límite" },
+    "notif.reminderWarningDayBefore": { pt:"1 dia antes da deadline", en:"1 day before the deadline", es:"1 día antes de la fecha límite" },
+    "notif.reminderLate": { pt:"Email de atraso", en:"Late email", es:"Email de atraso" },
+    "notif.reminderLateDaysAfter": { pt:"{n} dias depois da deadline", en:"{n} days after the deadline", es:"{n} días después de la fecha límite" },
+    "notif.reminderLateDayAfter": { pt:"1 dia depois da deadline", en:"1 day after the deadline", es:"1 día después de la fecha límite" },
     "about.version": { pt:"Versão do aplicativo", en:"App version", es:"Versión de la app" },
     "about.privacyPolicy": { pt:"Política de Privacidade", en:"Privacy Policy", es:"Política de Privacidad" },
     "about.termsOfUse": { pt:"Termos de Uso", en:"Terms of Use", es:"Términos de Uso" },
@@ -3867,6 +3859,11 @@
     "wizard.addExternalCollaborator": { pt:"+ Colaborador externo", en:"+ External collaborator", es:"+ Colaborador externo" },
     "wizard.continue": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "wizard.continue.btn": { pt:"Continuar", en:"Continue", es:"Continuar" },
+    "wizard.errRequireTitle": { pt:"Dê um título ao trabalho antes de continuar.", en:"Give the job a title before continuing.", es:"Ponle un título al trabajo antes de continuar." },
+    "wizard.errRequireClient": { pt:"Escolha ou crie um cliente antes de continuar.", en:"Pick or create a client before continuing.", es:"Elige o crea un cliente antes de continuar." },
+    "wizard.errRequireDate": { pt:"Escolha a data de início antes de continuar.", en:"Pick a start date before continuing.", es:"Elige la fecha de inicio antes de continuar." },
+    "wizard.errRequireTime": { pt:"Escolha o horário de início antes de continuar.", en:"Pick a start time before continuing.", es:"Elige la hora de inicio antes de continuar." },
+    "wizard.errRequireValue": { pt:"Informe o valor do trabalho antes de continuar.", en:"Enter the job's fee before continuing.", es:"Indica el valor del trabajo antes de continuar." },
     "wizard.createAnyway": { pt:"Criar mesmo assim", en:"Create anyway", es:"Crear igualmente" },
     "wizard.createAsNewPrefix": { pt:"+ Criar “", en:"+ Create “", es:"+ Crear “" },
     "wizard.createAsNewSuffix": { pt:"” como novo cliente", en:"” as a new client", es:"” como nuevo cliente" },
@@ -5020,9 +5017,6 @@
   let panelStack=['home'];
   let trabalhoMoment=1;
   let trabalhoModo='completo';
-  /* id do modelo de serviço (Perfil > Serviços) que preencheu o valor deste
-     trabalho, ou null quando o valor foi digitado à mão. */
-  let twServicoEscolhido=null;
   function showPanel(name){
     document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('show', p.dataset.panel===name));
     const panelTitleKeys={
@@ -5389,7 +5383,8 @@
       html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     }
     html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>'+t('library.legalWarning')+'</div></div>';
-    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft" onclick="guardarModeloBiblioteca(\''+id+'\')">'+t('action.save')+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
+    const favAtivo=bibFavoritos.has('of:'+id);
+    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft'+(favAtivo?' on':'')+'" id="bib-detalhe-guardar-btn" onclick="guardarModeloBiblioteca(\''+id+'\')">'+(favAtivo?t('library.saved'):t('action.save'))+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
     html+='<div class="plabel" style="margin-top:18px">'+t('library.rating')+'</div>';
     html+='<div id="avaliacao-stars-'+id+'"></div>';
     document.getElementById('bib-detalhe-conteudo').innerHTML=html;
@@ -5445,10 +5440,22 @@
     abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
+  /* Botão "Guardar" do detalhe (painel Explorar Modelos, dentro do wizard) —
+     antes só mostrava um toast de sucesso sem persistir nada (o contrato
+     "desaparecia": não ficava em Favoritos nem em nenhuma outra língua da
+     mesma ficha). Agora usa o mesmo Set bibFavoritos (chave 'of:'+id, igual
+     ao baseId da Biblioteca principal) que todo o resto do app já usa —
+     favoritar aqui ou lá é a mesma marca, válida pra todas as variações de
+     idioma daquele contrato, não uma cópia presa a uma língua só. */
   function guardarModeloBiblioteca(id){
+    const key='of:'+id;
+    if(bibFavoritos.has(key)){ bibFavoritos.delete(key); showToast(t('library.unfavorited')); }
+    else { bibFavoritos.add(key); showToast(t('library.favorited')); if(navigator.vibrate)navigator.vibrate(6); }
+    saveBibFavoritos();
     marcarModeloComoUsado(id);
     renderEstrelasAvaliacao(id);
-    showToast(t('toast.savedToTemplates'));
+    const btn=document.getElementById('bib-detalhe-guardar-btn');
+    if(btn){ const on=bibFavoritos.has(key); btn.classList.toggle('on', on); btn.textContent = on ? t('library.saved') : t('action.save'); }
   }
   async function importarModeloBiblioteca(id, lang){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
@@ -5625,9 +5632,9 @@
       m.style.display = (+m.dataset.moment===n)?'block':'none';
     });
     if(n===2) renderColaboradoresPendentesWizard();
-    if(n===4){ renderServicoPickerWizard(); prepararEtapaPagamentos(); }
+    if(n===4) renderServicosIncluidosWizard();
     if(n===5) prepararEtapaEntrega();
-    if(n===6) renderServicosIncluidosWizard();
+    if(n===6){ sincronizarValorComServicosSelecionados(); prepararEtapaPagamentos(); }
     if(n===7) renderModelosSugeridos();
     if(n===8) renderReview();
     document.getElementById('sheetBody').scrollTop=0;
@@ -5642,46 +5649,19 @@
     document.getElementById('tw-parcelas-wrap').style.display = recorrente?'none':'block';
     if(!recorrente) seedParcelasWizardSeVazio();
   }
-  /* ===== Etapa 4 — Serviço =====
-     O valor deixou de viver na Etapa 1 e passou a ficar aqui, junto das
-     parcelas: as duas coisas respondem à mesma pergunta ("quanto e quando
-     recebo"), e separá-las obrigava a voltar atrás no wizard para acertar
-     o valor depois de montar as parcelas. Opcionalmente o valor vem de um
-     modelo de serviço guardado em Perfil > Serviços — escolher um só
-     pré-preenche o campo, que continua totalmente editável. */
-  function renderServicoPickerWizard(){
-    const wrap=document.getElementById('tw-servico-picker-wrap');
-    const sel=document.getElementById('tw-servico');
-    if(!wrap || !sel) return;
-    /* sem modelos guardados não faz sentido mostrar um seletor vazio —
-       nesse caso a etapa fica só com Valor + Parcelas. */
-    if(!servicosData.length){ wrap.style.display='none'; return; }
-    wrap.style.display='block';
-    const atual=sel.value;
-    sel.innerHTML='<option value="">'+t('wizard.serviceTemplatePlaceholder')+'</option>'+
-      servicosData.map(s=>'<option value="'+escapeHtml(s.id)+'">'+escapeHtml(s.nome)+(s.valor?(' — '+fmtMoney(s.valor)):'')+'</option>').join('');
-    if(atual) sel.value=atual;
-  }
-  function onServicoWizardChange(){
-    const sel=document.getElementById('tw-servico');
-    const s=servicosData.find(x=>x.id===sel.value);
-    if(!s){ twServicoEscolhido=null; return; }
-    twServicoEscolhido=s.id;
-    if(s.valor){
-      document.getElementById('tw-valor').value=s.valor;
-      sincronizarParcelaAutoComValor();
-    }
-  }
-  /* editar o valor à mão desfaz o vínculo com o modelo de serviço: o que
-     for criado passa a ser um valor próprio deste trabalho, não mais "o
-     preço do serviço X". */
+  /* editar o valor à mão só precisa re-sincronizar as parcelas — o valor
+     deixou de estar amarrado a um único serviço (ver Etapa 4, Serviços). */
   function onValorWizardManual(){
     sincronizarParcelaAutoComValor();
-    const sel=document.getElementById('tw-servico');
-    if(!sel || !sel.value) return;
-    const s=servicosData.find(x=>x.id===sel.value);
-    const valorAtual=(document.getElementById('tw-valor').value||'').trim();
-    if(s && String(s.valor)!==valorAtual){ sel.value=''; twServicoEscolhido=null; }
+  }
+  /* Ao entrar na Etapa de Pagamento, pré-preenche o Valor com o total dos
+     serviços escolhidos na Etapa de Serviços — só se o campo ainda estiver
+     vazio, pra nunca sobrescrever um valor que a pessoa já editou à mão. */
+  function sincronizarValorComServicosSelecionados(){
+    const el=document.getElementById('tw-valor');
+    if(!el || el.value.trim()) return;
+    const total=totalServicosSelecionadosWizard();
+    if(total>0) el.value=total;
   }
   /* ===== Parcelas de pagamento — configuração manual no wizard =====
      Antes disto, o valor era sempre dividido automaticamente 50/50 (sinal +
@@ -5766,10 +5746,6 @@
   function prepararEtapaEntrega(){
     atualizarDisplayRevisoes();
   }
-  function toggleEntregaFase(el, fase){
-    el.classList.toggle('on');
-    document.getElementById('entrega-'+fase+'-link-wrap').style.display = el.classList.contains('on') ? 'block':'none';
-  }
   function toggleEntregaAjustes(el){
     el.classList.toggle('on');
     document.getElementById('entrega-ajustes-wrap').style.display = el.classList.contains('on') ? 'block':'none';
@@ -5792,16 +5768,14 @@
     }));
   }
   function lerEntregaWizard(){
-    const triagemOn=document.getElementById('entrega-triagem').classList.contains('on');
-    const selecaoOn=document.getElementById('entrega-selecao').classList.contains('on');
     const ajustesOn=document.getElementById('entrega-ajustes-toggle').classList.contains('on');
     const ajustes = ajustesOn ? lerAjustesWizard() : [];
     return {
-      triagem: triagemOn,
-      triagemLink: triagemOn ? (document.getElementById('entrega-triagem-link').value.trim()||null) : null,
+      triagem: false,
+      triagemLink: null,
       triagemConcluida:false,
-      selecao: selecaoOn,
-      selecaoLink: selecaoOn ? (document.getElementById('entrega-selecao-link').value.trim()||null) : null,
+      selecao: false,
+      selecaoLink: null,
       selecaoConcluida:false,
       permiteAjustes: ajustesOn,
       ajustes,
@@ -5811,35 +5785,79 @@
       entregaFinalConcluida:false
     };
   }
+  /* Impede avançar sem os dados mínimos pra o resto do app não quebrar depois
+     (sem cliente/data o trabalho não aparece direito em nenhuma lista/anel
+     de prazo, e os lembretes automáticos/emails da Etapa 8 disparam pra
+     ninguém ou com "undefined" no texto). Só bloqueia o essencial — recursos,
+     equipa, portal do cliente, entrega e modelo de contrato continuam
+     opcionais, com valores por omissão sãos. */
+  function trabalhoValidarEtapa(n){
+    if(n===1){
+      if(!document.getElementById('tw-nome').value.trim()) return t('wizard.errRequireTitle');
+      if(!document.getElementById('tw-cliente').value.trim()) return t('wizard.errRequireClient');
+      if(!document.getElementById('tw-data').value) return t('wizard.errRequireDate');
+      if(!document.getElementById('tw-hora').value) return t('wizard.errRequireTime');
+      return null;
+    }
+    if(n===6){
+      const recorrente=document.getElementById('envio-recorrencia').classList.contains('on');
+      if(recorrente) return null;
+      const valorTxt=(document.getElementById('tw-valor').value||'').trim();
+      const valorNum=parseFloat((valorTxt.match(/[\d.,]+/)||['0'])[0].replace(/\./g,'').replace(',','.'))||0;
+      if(valorNum<=0) return t('wizard.errRequireValue');
+      return null;
+    }
+    return null;
+  }
   function trabalhoNext(){
+    const erro=trabalhoValidarEtapa(trabalhoMoment);
+    if(erro){ showToast(erro); return; }
     trabalhoGoto(Math.min(8, trabalhoMoment+1));
   }
-  /* ===== Etapa 6 — Serviços Incluídos =====
-     Seleção (não obrigatória) de modelos de serviço salvos em Perfil >
-     Serviços para incluir neste trabalho — a escolha vira automaticamente
-     um bloco "Serviços incluídos" no contrato da etapa seguinte, com um
-     snapshot de nome/categoria/descrição/valor no momento da criação (não
-     uma referência viva ao modelo, que pode mudar depois). */
+  /* ===== Etapa 4 — Serviços =====
+     Seleção (não obrigatória) de múltiplos modelos de serviço salvos em
+     Perfil > Serviços — cada um pode ter o valor editado manualmente aqui
+     (sem afetar o modelo salvo), o total soma automaticamente e alimenta o
+     valor da Etapa de Pagamento. A escolha também vira um bloco "Serviços
+     incluídos" no contrato, com snapshot de nome/categoria/descrição/valor
+     no momento da criação (não uma referência viva ao modelo). */
   let twServicosSelecionados=new Set();
+  let twServicosValores={};
+  function valorServicoWizard(s){ return twServicosValores[s.id]!=null ? twServicosValores[s.id] : (s.valor||0); }
+  function totalServicosSelecionadosWizard(){
+    return servicosData.filter(s=>twServicosSelecionados.has(s.id)).reduce((acc,s)=>acc+valorServicoWizard(s),0);
+  }
   function renderServicosIncluidosWizard(){
     const wrap=document.getElementById('tw-servicos-incluidos-lista');
     const empty=document.getElementById('tw-servicos-incluidos-empty');
     if(!wrap) return;
-    if(!servicosData.length){ wrap.innerHTML=''; if(empty) empty.style.display='block'; return; }
-    if(empty) empty.style.display='none';
-    wrap.innerHTML=servicosData.map(s=>{
-      const on=twServicosSelecionados.has(s.id);
-      const meta=[s.categoria, s.valor?fmtMoney(s.valor):''].filter(Boolean).join(' · ');
-      return '<div class="pick-row'+(on?' selected':'')+'" onclick="toggleServicoIncluidoWizard(\''+s.id+'\')">'+
-        '<div><div class="nm">'+escapeHtml(s.nome)+'</div>'+(meta?'<div class="sub">'+escapeHtml(meta)+'</div>':'')+'</div>'+
-        (on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--brand);flex:none"><path d="M20 6 9 17l-5-5"/></svg>':'')+
-      '</div>';
-    }).join('');
+    if(!servicosData.length){ wrap.innerHTML=''; if(empty) empty.style.display='block'; }
+    else{
+      if(empty) empty.style.display='none';
+      wrap.innerHTML=servicosData.map(s=>{
+        const on=twServicosSelecionados.has(s.id);
+        return '<div class="pick-row'+(on?' selected':'')+'">'+
+          '<div onclick="toggleServicoIncluidoWizard(\''+s.id+'\')" style="flex:1;min-width:0;cursor:pointer;display:flex;align-items:center;gap:10px">'+
+            (on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px;height:18px;color:var(--brand);flex:none"><path d="M20 6 9 17l-5-5"/></svg>'
+               :'<span style="width:18px;height:18px;flex:none"></span>')+
+            '<div><div class="nm">'+escapeHtml(s.nome)+'</div>'+(s.categoria?'<div class="sub">'+escapeHtml(s.categoria)+'</div>':'')+'</div>'+
+          '</div>'+
+          (on?'<input class="tw-servico-valor" value="'+valorServicoWizard(s)+'" oninput="onServicoValorWizardChange(\''+s.id+'\',this.value)" onclick="event.stopPropagation()" style="width:88px;text-align:right;flex:none">':'')+
+        '</div>';
+      }).join('');
+    }
+    const totalEl=document.getElementById('tw-servicos-total');
+    if(totalEl) totalEl.textContent=fmtMoney(totalServicosSelecionadosWizard());
   }
   function toggleServicoIncluidoWizard(id){
     if(twServicosSelecionados.has(id)) twServicosSelecionados.delete(id);
     else twServicosSelecionados.add(id);
     renderServicosIncluidosWizard();
+  }
+  function onServicoValorWizardChange(id, val){
+    twServicosValores[id]=parseFloat((val||'').match(/[\d.,]+/) ? (val.match(/[\d.,]+/)[0].replace(/\./g,'').replace(',','.')) : '0')||0;
+    const totalEl=document.getElementById('tw-servicos-total');
+    if(totalEl) totalEl.textContent=fmtMoney(totalServicosSelecionadosWizard());
   }
   let modeloContratoSelecionado=null;
   function renderModelosSugeridos(){
@@ -6115,8 +6133,6 @@
     html+=card(t('job.payments'), pagTxt);
     if(conteudo.length) html+=card(t('resumo.clientReceives'), conteudo.join(', '));
     const entregaFases=[];
-    if(document.getElementById('entrega-triagem').classList.contains('on')) entregaFases.push(t('entrega.screening'));
-    if(document.getElementById('entrega-selecao').classList.contains('on')) entregaFases.push(t('entrega.selection'));
     if(document.getElementById('entrega-ajustes-toggle').classList.contains('on')) entregaFases.push(t('entrega.allowAdjustments')+' ('+entregaRevisoesQtd+')');
     if(entregaFases.length) html+=card(t('wizard.step5'), entregaFases.join(', '));
     const entregaFormatoVal=document.getElementById('entrega-formato');
@@ -6274,7 +6290,7 @@
     const job={ id, typeLabel, nome:nomeTrabalho, client:cliente, modo:trabalhoModo,
       categoria:categoriaInfo.label, segmento:segmentoVal,
       email:emailInline||(clienteExistente&&clienteExistente.email)||'',
-      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, cidadeGeo, estadoGeo, paisGeo, value:valorNum, servicoId:twServicoEscolhido, structure,
+      date:data, dateRaw, dateFimRaw, horaIni, horaFim, duracaoHoras, local, localCompleto, geo, cidadeGeo, estadoGeo, paisGeo, value:valorNum, structure,
       contract:{status:'vazio', blocks:[], templateName:null, link:null, signerName:null, signedAt:null},
       briefing:null, checklist:null, recursos:[...recursosAdicionaisAtuais], calendarioSync:null,
       recorrencia:null,
@@ -6312,11 +6328,12 @@
       job.contract.templateName = twModeloEscolhido.nome;
       job.contract.status = 'rascunho';
     }
-    /* Serviços Incluídos (Etapa 6): snapshot dos modelos escolhidos vira um
-       bloco extra no contrato, além dos blocos do modelo/template. */
+    /* Serviços (Etapa 4): snapshot dos modelos escolhidos — com o valor
+       eventualmente editado ali — vira um bloco extra no contrato, além dos
+       blocos do modelo/template. */
     if(twServicosSelecionados.size){
       const servicosSnapshot=servicosData.filter(s=>twServicosSelecionados.has(s.id))
-        .map(s=>({nome:s.nome, categoria:s.categoria||'', descricao:s.descricao||'', valor:s.valor||0}));
+        .map(s=>({nome:s.nome, categoria:s.categoria||'', descricao:s.descricao||'', valor:valorServicoWizard(s)}));
       job.contract.blocks.push({id:genId(), key:'servicosIncluidos', on:true, params:{servicos:servicosSnapshot}});
     }
     // Exigir documento de identificação (Etapa 7 — Contrato): o portal do
@@ -6428,8 +6445,7 @@
     showToast(t('toast.appleSynced'));
   }
   function resetTrabalho(){
-    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false; twServicoEscolhido=null; twServicosSelecionados=new Set();
-    const servSel=document.getElementById('tw-servico'); if(servSel) servSel.value='';
+    trabalhoMoment=1; trabalhoModo='completo'; twSelectedGeo=null; twSelectedGeoAddr=null; twSelectedAddrBase=null; twColaboradoresExternosPendentes=[]; twModeloEscolhido=null; twEmWizard=false; twServicosSelecionados=new Set(); twServicosValores={};
     const exigirDocEl=document.getElementById('tw-exigir-doc'); if(exigirDocEl) exigirDocEl.classList.remove('on');
     document.querySelectorAll('.panel[data-panel="trabalho"] .moment').forEach(m=>{
       m.style.display = m.dataset.moment==='1'?'block':'none';
@@ -6459,9 +6475,9 @@
     const recFimEl=document.getElementById('tw-recur-fim'); if(recFimEl) recFimEl.value='';
     const recFreq=document.getElementById('tw-recur-freq'); if(recFreq) recFreq.value='mensal';
     // Etapa 5 — Entrega e Aprovação: toggles desligados por padrão, campos limpos.
-    ['entrega-triagem','entrega-selecao','entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
-    ['entrega-triagem-link-wrap','entrega-selecao-link-wrap','entrega-ajustes-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
-    ['entrega-triagem-link','entrega-selecao-link','entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    ['entrega-ajustes-toggle'].forEach(id=>{ const el=document.getElementById(id); if(el) el.classList.remove('on'); });
+    ['entrega-ajustes-wrap'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+    ['entrega-data'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
     entregaRevisoesQtd=1; atualizarDisplayRevisoes();
     const entregaFormato=document.getElementById('entrega-formato'); if(entregaFormato) entregaFormato.value='digital';
     const lembretesToggle=document.getElementById('tw-lembretes-toggle'); if(lembretesToggle) lembretesToggle.classList.add('on');
@@ -13094,6 +13110,10 @@
     return out;
   }
   const BIB_LANG_TAG={ en:'EN', pt:'PT', es:'ES' };
+  /* miniatura na legenda de contagem de blocos ("N blocos") — mesmo ícone em
+     toda a Biblioteca (card, detalhe, Meus Modelos), nunca outro glifo pro
+     mesmo conceito. */
+  const BIB_ICON_BLOCKS='<span class="nav-ico bc-lang-blocks-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/hugeicons:rubiks-cube.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:rubiks-cube.svg)"></span>';
   /* Ícones "sharp mid-century": traço reto (miter/square), sem curvas
      desnecessárias — usados nos botões Visualizar (olho) e Importar (seta)
      e nas etiquetas obrigatório/opcional/condicional da estrutura, no lugar
@@ -13172,16 +13192,6 @@
     if(bibOrigemSel.size===0) return todos;
     return todos.filter(i=>[...bibOrigemSel].some(org=>bibItemBateOrigem(i,org)));
   }
-  function renderBibOrigemRow(){
-    const row=document.getElementById('bib-origem-row');
-    if(!row) return;
-    row.innerHTML=BIB_ORIGENS.map(o=>{
-      const on=bibOrigemSel.has(o.key);
-      return '<button type="button" class="bib-seal s-'+o.key+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\')">'+
-        '<span class="sl-ic">'+OTAG_ICON[o.key]+'</span>'+
-        '<span class="sl-lbl">'+t(o.labelKeyShort||o.labelKey)+'</span></button>';
-    }).join('');
-  }
   /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
   function bibSheetOpcaoUnica(titulo, opcoes, atual, onPick){
     const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
@@ -13200,15 +13210,48 @@
     const opcoes=BIB_ORDENACOES.map(([key,labelKey])=>({value:key,label:t(labelKey)}));
     bibSheetOpcaoUnica(t('library.sortLabel'), opcoes, bibOrdenacao, function setBibOrdenarPick(v){ bibOrdenacao=v; renderBiblioteca(); closeInfo(); });
   }
+  /* Categoria e Segmento viraram um único botão em cascata: Categoria é a
+     rede ampla (Design, Audiovisual, Geral…); ao escolher uma categoria que
+     tenha segmentos (profissões) associados, o mesmo sheet avança pra um
+     segundo passo já filtrado só com esses segmentos (botão Voltar nativo
+     do openInfo) — nunca dois botões separados. Categorias sem nenhum
+     segmento próprio (ex.: "Geral" — contratos universais, não amarrados a
+     uma profissão) aplicam o filtro direto e fecham, sem passo extra vazio. */
+  function bibSegmentosDaCategoria(catAmigavel){
+    const itens = catAmigavel ? catalogoBiblioteca().filter(i=>i.categoriaAmigavel===catAmigavel) : catalogoBiblioteca();
+    return [...new Set(itens.map(i=>i.profissao).filter(Boolean))].sort();
+  }
   function abrirCategoriaBiblioteca(){
     const valores=[...new Set(catalogoBiblioteca().map(i=>i.categoriaAmigavel).filter(Boolean))].sort();
     const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
-    bibSheetOpcaoUnica(t('library.facet.category'), opcoes, bibCategoriaSel, function setBibCategoriaPick(v){ bibCategoriaSel=v; renderBiblioteca(); closeInfo(); });
+    bibSheetOpcaoUnica(t('library.facet.category'), opcoes, bibCategoriaSel, function setBibCategoriaPick(v){
+      bibCategoriaSel=v;
+      const segmentos=bibSegmentosDaCategoria(v);
+      if(!v || !segmentos.length){ bibSegmentoSel=null; renderBiblioteca(); closeInfo(); return; }
+      bibSegmentoSel=null;
+      abrirSegmentoBiblioteca(v);
+    });
   }
-  function abrirSegmentoBiblioteca(){
-    const valores=[...new Set(catalogoBiblioteca().map(i=>i.profissao).filter(Boolean))].sort();
+  function abrirSegmentoBiblioteca(cat){
+    const valores=bibSegmentosDaCategoria(cat);
     const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
-    bibSheetOpcaoUnica(t('library.facet.profession'), opcoes, bibSegmentoSel, function setBibSegmentoPick(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); });
+    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+    const rows=opcoes.map(o=>
+      '<div class="bib-sort-opt'+(o.value===bibSegmentoSel?' on':'')+'" onclick="bibPickSegmento('+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+')"><span>'+escapeHtml(o.label)+'</span>'+check+'</div>'
+    ).join('');
+    openInfo(cat, '<div class="bib-sort-row">'+rows+'</div>', abrirCategoriaBiblioteca);
+  }
+  function bibPickSegmento(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); }
+  /* Origem: as 4 insígnias (Recomendados/Oficiais/Comunidade/Jurídico) viram
+     um único botão multi-seleção — o sheet fica aberto entre toques (não
+     fecha ao escolher), pra permitir marcar mais de uma origem de uma vez. */
+  function abrirOrigemBiblioteca(){
+    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+    const rows=BIB_ORIGENS.map(o=>{
+      const on=bibOrigemSel.has(o.key);
+      return '<div class="bib-sort-opt'+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\');abrirOrigemBiblioteca()"><span>'+escapeHtml(t(o.labelKey))+'</span>'+check+'</div>';
+    }).join('');
+    openInfo(t('library.facet.origin'), '<div class="bib-sort-row">'+rows+'</div>');
   }
   /* Menu do botão "Meus Modelos": dá acesso a Favoritos e aos modelos
      próprios do utilizador (substitui os dois botões separados). */
@@ -13307,10 +13350,11 @@
     btn.innerHTML='<span>'+escapeHtml(label)+'</span>'+check;
   }
   function bibAtualizarBotoesFiltro(){
-    bibSetDropdownBtn('bib-cat-btn', bibCategoriaSel||t('library.facet.category'), !!bibCategoriaSel);
-    bibSetDropdownBtn('bib-seg-btn', bibSegmentoSel||t('library.facet.profession'), !!bibSegmentoSel);
+    const catLabel = bibCategoriaSel ? (bibSegmentoSel ? bibCategoriaSel+' · '+bibSegmentoSel : bibCategoriaSel) : t('library.facet.category');
+    bibSetDropdownBtn('bib-cat-btn', catLabel, !!bibCategoriaSel);
     bibSetDropdownBtn('bib-sort-btn', bibOrdenacao!=='usos'?t(BIB_ORDENACOES.find(([k])=>k===bibOrdenacao)[1]):t('library.sortLabelShort'), bibOrdenacao!=='usos');
     bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel);
+    bibSetDropdownBtn('bib-origem-btn', bibOrigemSel.size ? [...bibOrigemSel].map(k=>t(BIB_ORIGENS.find(o=>o.key===k).labelKeyShort||BIB_ORIGENS.find(o=>o.key===k).labelKey)).join(', ') : t('library.facet.origin'), bibOrigemSel.size>0);
   }
   function renderBiblioteca(){
     const banner=document.getElementById('bib-pick-banner');
@@ -13323,7 +13367,6 @@
           : 'library.pickForCollab');
     }
     bibAtualizarBotoesFiltro();
-    renderBibOrigemRow();
     const wrap=document.getElementById('bib-lista');
     if(!wrap) return;
     const q=(document.getElementById('bib-busca').value||'').trim().toLowerCase();
@@ -13339,7 +13382,7 @@
       const rodape=bibBadgesItem(i);
       if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
       const langTag='<div class="bc-lang-row"><span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>'+
-        (i.numBlocos?('<span class="bc-lang-sep"></span><span class="bc-lang-blocks">'+i.numBlocos+' '+t('builder.blocksCount')+'</span>'):'')+'</div>';
+        (i.numBlocos?('<span class="bc-lang-sep"></span><span class="bc-lang-blocks">'+BIB_ICON_BLOCKS+i.numBlocos+' '+t('builder.blocksCount')+'</span>'):'')+'</div>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
@@ -13394,7 +13437,7 @@
     const head=[];
     head.push(bibOtag('oficial', t('library.origin.official')));
     head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
-    head.push('<span class="vis-meta">'+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
+    head.push('<span class="vis-meta">'+BIB_ICON_BLOCKS+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
     const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
@@ -14810,15 +14853,64 @@
     if(error){ showToast(t('toast.genericError')); return; }
     renderInfoSincronizacaoCalendario(token);
   }
+  /* Lembretes automáticos de pendência do cliente (pagamento, revisão,
+     assinatura de contrato etc.) — sempre por email. Dois momentos
+     configuráveis, valores temporários enquanto o sheet está aberto:
+     Aviso = dias de antecedência até a deadline (0 = no mesmo dia);
+     Atraso = dias depois da deadline pra reenviar, caso ainda pendente.
+     Padrão: aviso no dia (0), atraso 3 dias depois. */
+  let notifLembreteAvisoTemp=0, notifLembreteAtrasoTemp=3;
+  function alterarLembreteAviso(delta){
+    notifLembreteAvisoTemp=Math.max(0, Math.min(30, notifLembreteAvisoTemp+delta));
+    atualizarLembretesNotifUI();
+  }
+  function alterarLembreteAtraso(delta){
+    notifLembreteAtrasoTemp=Math.max(1, Math.min(30, notifLembreteAtrasoTemp+delta));
+    atualizarLembretesNotifUI();
+  }
+  function atualizarLembretesNotifUI(){
+    const avisoEl=document.getElementById('notif-aviso-dias'); if(avisoEl) avisoEl.textContent=notifLembreteAvisoTemp;
+    const atrasoEl=document.getElementById('notif-atraso-dias'); if(atrasoEl) atrasoEl.textContent=notifLembreteAtrasoTemp;
+    const avisoSub=document.getElementById('notif-aviso-sub');
+    if(avisoSub) avisoSub.textContent = notifLembreteAvisoTemp===0 ? t('notif.reminderWarningSameDay')
+      : notifLembreteAvisoTemp===1 ? t('notif.reminderWarningDayBefore')
+      : t('notif.reminderWarningDaysBefore').replace('{n}', notifLembreteAvisoTemp);
+    const atrasoSub=document.getElementById('notif-atraso-sub');
+    if(atrasoSub) atrasoSub.textContent = notifLembreteAtrasoTemp===1 ? t('notif.reminderLateDayAfter')
+      : t('notif.reminderLateDaysAfter').replace('{n}', notifLembreteAtrasoTemp);
+  }
   function infoNotificacoes(){
+    notifLembreteAvisoTemp = perfilData.lembreteAvisoDias!=null ? perfilData.lembreteAvisoDias : 0;
+    notifLembreteAtrasoTemp = perfilData.lembreteAtrasoDias!=null ? perfilData.lembreteAtrasoDias : 3;
     openInfo(t('profile.notifications'), `
       <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.email')}</div><div class="toggle${perfilData.notifEmail?' on':''}" onclick="this.classList.toggle('on')" id="notif-email"><div class="kn"></div></div></div>
       <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('notif.inApp')}</div><div class="toggle${perfilData.notifApp?' on':''}" onclick="this.classList.toggle('on')" id="notif-app"><div class="kn"></div></div></div>
+      <p class="plabel" style="margin:20px 2px 4px">${t('notif.remindersTitle')}</p>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0 2px 10px">${t('notif.remindersHint')}</p>
+      <div class="struct-row" style="padding:12px 2px">
+        <div class="struct-l"><div class="nm">${t('notif.reminderWarning')}</div><span class="sub" id="notif-aviso-sub"></span></div>
+        <div style="display:flex;align-items:center;gap:8px;flex:none">
+          <button type="button" class="btn soft" style="width:28px;height:28px;padding:0;font-weight:700" onclick="alterarLembreteAviso(-1)">−</button>
+          <span id="notif-aviso-dias" style="min-width:14px;text-align:center;font-weight:600"></span>
+          <button type="button" class="btn soft" style="width:28px;height:28px;padding:0;font-weight:700" onclick="alterarLembreteAviso(1)">+</button>
+        </div>
+      </div>
+      <div class="struct-row" style="padding:12px 2px">
+        <div class="struct-l"><div class="nm">${t('notif.reminderLate')}</div><span class="sub" id="notif-atraso-sub"></span></div>
+        <div style="display:flex;align-items:center;gap:8px;flex:none">
+          <button type="button" class="btn soft" style="width:28px;height:28px;padding:0;font-weight:700" onclick="alterarLembreteAtraso(-1)">−</button>
+          <span id="notif-atraso-dias" style="min-width:14px;text-align:center;font-weight:600"></span>
+          <button type="button" class="btn soft" style="width:28px;height:28px;padding:0;font-weight:700" onclick="alterarLembreteAtraso(1)">+</button>
+        </div>
+      </div>
       <button class="btn primary" style="width:100%;margin-top:12px" onclick="guardarNotificacoes()">${t('action.save')}</button>`);
+    atualizarLembretesNotifUI();
   }
   function guardarNotificacoes(){
     perfilData.notifEmail=document.getElementById('notif-email').classList.contains('on');
     perfilData.notifApp=document.getElementById('notif-app').classList.contains('on');
+    perfilData.lembreteAvisoDias=notifLembreteAvisoTemp;
+    perfilData.lembreteAtrasoDias=notifLembreteAtrasoTemp;
     savePerfilData();
     closeInfo(); showToast(t('toast.settingsSaved'));
   }
