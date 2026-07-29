@@ -237,10 +237,12 @@
   #tasks-list .rtk-side,.radar-card .rtk-side{
     display:flex;flex-direction:column;align-items:center;gap:6px;
     width:44px;flex:none}
-  /* item solto (tarefa/lista/lembrete sem trabalho vinculado): quadrado com o
-     mesmo ícone de check do botão "Tarefa" do menu Criar, em vez do avatar de
-     iniciais. Vinculado a um trabalho: mantém a foto do cliente, com o mesmo
-     ícone virando um selinho no canto superior direito do quadrado. */
+  /* item criado manualmente (tarefa/lista/lembrete), sem trabalho vinculado:
+     quadrado com o ícone do tipo (Simples/Checklist) em vez do avatar de
+     iniciais. Vinculado a um trabalho: mostra a foto do cliente, com o mesmo
+     ícone virando um selinho no canto superior direito do quadrado. Cards
+     gerados pelo sistema a partir de um trabalho (contrato/pagamento/evento/
+     entrega) mostram só a foto, sem selinho nenhum. */
   .rtk-avatar-wrap{position:relative;flex:none;width:44px;height:44px}
   .rtk-avatar-check{border-radius:var(--r);display:flex;align-items:center;justify-content:center;
     background:rgba(255,255,255,.07);border:1px solid var(--line-soft)}
@@ -274,6 +276,7 @@
      (não mais "Hoje"/"Amanhã"/"N dias"). Só cor + texto, nada de moldura/
      pílula. Tons escuros/dessaturados (mesmos da variável do glow). */
   #tasks-list .rtk-prazo{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;letter-spacing:.01em;color:var(--ink-faint)}
+  #tasks-list .rtk-prazo.rtk-hora{margin-top:4px}
   #tasks-list .rtk-prazo svg{width:13px;height:13px;flex:none}
   #tasks-list .rtk-prazo .nav-ico{width:13px;height:13px;flex:none;background-color:currentColor}
   .card.radar-card.late .rtk-prazo{color:#C98088}

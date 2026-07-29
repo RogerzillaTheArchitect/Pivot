@@ -35,18 +35,11 @@
   .priority-opt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
   .priority-opt.on .priority-dot{box-shadow:0 0 0 1.5px var(--paper)}
 
+  /* Swipe (.radar-card-wrap/.radar-swipe-actions/.radar-swipe-btn) é o mesmo
+     componente reaproveitado dos cards de Tarefas — ver dashboard.css, nunca
+     um segundo componente de swipe pra cards de lista. */
   .job-card-wrap{position:relative;overflow:hidden;border-radius:var(--r);margin-bottom:10px}
   .job-card-wrap .job{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
-  .job-swipe-actions{position:absolute;top:0;right:0;height:100%;width:204px;display:flex;z-index:2;
-    opacity:0;pointer-events:none;transition:opacity .15s ease}
-  .job-card-wrap.active .job-swipe-actions{opacity:1;pointer-events:auto}
-  .job-swipe-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    font-size:10.5px;font-weight:600;color:#fff;cursor:pointer;border:none;font-family:inherit;
-    backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
-  .job-swipe-btn svg{width:16px;height:16px}
-  .job-swipe-btn.editar{background:rgba(200,200,196,.42)}
-  .job-swipe-btn.concluir{background:rgba(79,161,137,.42)}
-  .job-swipe-btn.deletar{background:rgba(217,127,121,.42)}
   /* 3 botões finais — mesmo componente, mesmo fundo translúcido escuro pros
      3 (glass, nunca vermelho/verde preenchido) — a diferenciação é só na
      borda/ícone/texto (que herdam de "color" via currentColor). */
