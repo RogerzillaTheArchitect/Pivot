@@ -12281,70 +12281,37 @@
     showToast(t('toast.pdfDownloaded'));
   }
 
+  /* Swipe do card de Projeto reaproveita EXATAMENTE o mesmo mecanismo dos
+     cards de Tarefas (ativarSwipeRadar / .radar-card-wrap / .radar-swipe-
+     actions.left/.right) — mesma animação, mesmos gestos de 3 posições
+     (fechado/esquerda/direita), em vez da implementação própria que só
+     revelava tudo (editar+concluir+deletar) de um lado só. Arrasta pra
+     direita revela Editar; pra esquerda revela Concluir e Arquivar. */
   function renderJobCard(job){
     const existente=document.querySelector('.job[data-job-id="'+job.id+'"]');
     if(existente){ const w=existente.closest('.job-card-wrap'); (w||existente).remove(); }
     if(job.arquivado) return;
     const wrap=document.createElement('div');
-    wrap.className='job-card-wrap';
-    wrap.innerHTML='<div class="job-swipe-actions">'+
-      '<button class="job-swipe-btn editar" onclick="event.stopPropagation();openJob(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>'+t('action.edit')+'</button>'+
-      '<button class="job-swipe-btn concluir" onclick="event.stopPropagation();arquivarTrabalho(\''+job.id+'\',\'concluido\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>'+t('action.complete')+'</button>'+
-      '<button class="job-swipe-btn deletar" onclick="event.stopPropagation();confirmarDeletarTrabalho(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>'+t('action.delete')+'</button>'+
-    '</div>';
+    wrap.className='job-card-wrap radar-card-wrap';
+    wrap.innerHTML='<div class="radar-swipe-actions left">'+
+        '<button class="radar-swipe-btn editar" onclick="event.stopPropagation();openJob(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>'+t('action.edit')+'</button>'+
+      '</div>'+
+      '<div class="radar-swipe-actions right">'+
+        '<button class="radar-swipe-btn concluir" onclick="event.stopPropagation();arquivarTrabalho(\''+job.id+'\',\'concluido\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>'+t('action.complete')+'</button>'+
+        '<button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();confirmarDeletarTrabalho(\''+job.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>Arquivar</button>'+
+      '</div>';
     const div=document.createElement('div');
-    div.className='job';
+    div.className='job radar-card';
     div.dataset.jobId=job.id;
     div.setAttribute('onclick',"onJobCardClick(event,this)");
     updateJobCardInner(div, job);
     wrap.appendChild(div);
     inserirJobCardOrdenado(wrap, job);
-    ativarSwipeJobs();
+    ativarSwipeRadar();
   }
   function onJobCardClick(e, card){
     if(card.dataset.swiped==='1'){ e.preventDefault(); e.stopPropagation(); return; }
     openJob(card.dataset.jobId);
-  }
-  function ativarSwipeJobs(){
-    document.querySelectorAll('.job-card-wrap .job').forEach(card=>{
-      if(card.dataset.swipeBound) return;
-      card.dataset.swipeBound='1';
-      const wrap=card.closest('.job-card-wrap');
-      let startX=0, dx=0, dragging=false, pointerId=null;
-      card.addEventListener('pointerdown', e=>{
-        startX=e.clientX; dx=0; dragging=true; pointerId=e.pointerId;
-        card.style.transition='none'; card.dataset.swiped='0';
-        /* prende o ponteiro ao card: sem isto, como o card se desloca por
-           baixo do dedo durante o arrasto, o ponteiro "sai" do elemento a
-           meio do gesto (dispara pointerleave) e o swipe cancela sozinho */
-        try{ card.setPointerCapture(pointerId); }catch(err){}
-      });
-      card.addEventListener('pointermove', e=>{
-        if(!dragging || e.pointerId!==pointerId) return;
-        dx=e.clientX-startX;
-        if(dx>0) dx=0;
-        if(dx<-204) dx=-204;
-        if(Math.abs(dx)>12){
-          if(card.dataset.swiped!=='1') haptic('tick');
-          card.dataset.swiped='1';
-          if(wrap) wrap.classList.add('active');
-          card.style.transform='translateX('+dx+'px)';
-        }
-      });
-      const fim=e=>{
-        if(!dragging || (e && e.pointerId!==pointerId)) return;
-        dragging=false;
-        if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
-        card.style.transition='transform .2s ease';
-        card.style.transform = dx<-100 ? 'translateX(-204px)' : 'translateX(0)';
-        if(dx<-100) haptic('snap');
-        if(dx>=-100){
-          setTimeout(()=>{ card.dataset.swiped='0'; if(wrap) wrap.classList.remove('active'); }, 200);
-        }
-      };
-      card.addEventListener('pointerup', fim);
-      card.addEventListener('pointercancel', fim);
-    });
   }
   /* arquivo de trabalhos: Concluir e Deletar são ações distintas, ambas reversíveis —
      o trabalho sai da lista ativa (e do calendário) e passa a viver no Histórico,
@@ -12553,7 +12520,7 @@
     div.dataset.executado= c.executado?'1':'0';
     div.dataset.entregue= c.entregue?'1':'0';
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
-    div.className='job'+(urgClasse?' '+urgClasse:'');
+    div.className='job radar-card'+(urgClasse?' '+urgClasse:'');
     const hora=fmtHoraLinhaJob(job);
     div.innerHTML='<div class="job-head-row">'+avatarHtml(job.client,44,clienteFotoPorNome(job.client))+
       '<div class="job-head-info"><div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
@@ -15024,14 +14991,63 @@
   function infoSobre(){
     openInfo(t('profile.about'), `
       <div class="struct-row" style="padding:12px 2px"><div class="nm">${t('about.version')}</div><div class="v">${PIVOT_VERSAO||'1.0.0'}</div></div>
-      <div class="prow" onclick="window.open(window.location.origin+'/privacidade.html','_blank')"><div class="t">${t('about.privacyPolicy')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-      <div class="prow" onclick="window.open(window.location.origin+'/termos.html','_blank')"><div class="t">${t('about.termsOfUse')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>`);
+      <div class="prow" onclick="abrirPoliticaPrivacidade()"><div class="t">${t('about.privacyPolicy')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      <div class="prow" onclick="abrirTermosDeUso()"><div class="t">${t('about.termsOfUse')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>`);
   }
   function infoPrivacidade(){
     openInfo(t('modal.privacy'), `
       <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t('privacy.desc')}</p>
+      <div class="prow" style="margin-bottom:9px" onclick="abrirPoliticaPrivacidade()"><div class="t">${t('about.privacyPolicy')}</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <button class="btn soft" style="width:100%;margin-bottom:9px" onclick="exportarDadosReal()">${t('action.exportData')}</button>
       <button class="btn soft" style="width:100%;color:var(--ink);border-color:var(--late)" onclick="confirmarApagarDados()">${t('action.deleteAccount')}</button>`);
+  }
+  /* ===== Termos de Uso / Política de Privacidade — texto completo dentro da
+     app (nada de abrir ficheiro externo numa nova aba). Mesmo conteúdo de
+     termos.html/privacidade.html (mantidos na raiz por compatibilidade com
+     quem já tinha o link direto), só reformatado com a tipografia padrão
+     dos modais (openInfo). Sem tradução própria (PT) — mesma decisão que já
+     valia pros ficheiros estáticos que substituem. */
+  function legalSecaoHtml(titulo, paragrafos){
+    return '<p class="plabel" style="margin:18px 2px 8px">'+titulo+'</p>'+
+      paragrafos.map(p=>'<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 10px">'+p+'</p>').join('');
+  }
+  function abrirPoliticaPrivacidade(){
+    const html='<p style="font-size:11.5px;color:var(--ink-faint);margin:0 0 14px">Última atualização: 29 de julho de 2026</p>'+
+      '<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 10px">Esta política explica que dados o Pivots recolhe, para que servem, com quem podem ser partilhados, por quanto tempo são guardados e quais são os seus direitos sobre eles. Ao usar o Pivots, você concorda com o que está descrito aqui.</p>'+
+      legalSecaoHtml('1. Quem somos e a que se aplica esta política', ['O Pivots é uma aplicação de gestão de trabalhos, clientes, contratos e finanças para profissionais independentes e pequenas equipas. Esta política aplica-se a si (o profissional que usa o Pivots) e, na parte relevante, aos seus clientes que acedem ao Portal do Cliente ou assinam um contrato através da aplicação.'])+
+      legalSecaoHtml('2. Dados que recolhemos', [
+        '<b>Fornecidos diretamente:</b> dados de conta (nome, email, palavra-passe encriptada, telefone, dados da empresa); dados que insere sobre a sua atividade (trabalhos, clientes, contratos, cláusulas, pagamentos, despesas, orçamentos, modelos, serviços); a sua assinatura e a dos seus clientes ao assinarem um contrato; comunicações com o suporte.',
+        '<b>Recolhidos automaticamente:</b> dados técnicos de sessão e preferências, e registos de utilização necessários ao funcionamento e diagnóstico do serviço.',
+        '<b>De terceiros que você liga:</b> ao ativar uma integração (ex.: sincronização de calendário), só os dados estritamente necessários a essa integração são partilhados, e só enquanto a ligação estiver ativa.'
+      ])+
+      legalSecaoHtml('3. Como usamos os dados', ['Para disponibilizar as funcionalidades da aplicação, enviar notificações e lembretes por email relacionados com os seus trabalhos, processar a sua subscrição, manter a segurança do serviço e cumprir obrigações legais. Não usamos os seus dados para treinar modelos de terceiros nem para publicidade direcionada.'])+
+      legalSecaoHtml('4. Base legal do tratamento', ['Tratamos os seus dados com base na execução do contrato de subscrição consigo, no seu consentimento explícito quando aplicável, no cumprimento de obrigações legais e no nosso interesse legítimo em manter o serviço seguro e funcional.'])+
+      legalSecaoHtml('5. Partilha com terceiros', ['Não vendemos nem alugamos os seus dados. Partilhamos apenas com serviços que você autoriza explicitamente, com fornecedores de infraestrutura necessários ao funcionamento do serviço (hospedagem, base de dados, pagamentos, envio de email — só com o acesso estritamente necessário), por obrigação legal, ou numa eventual venda/fusão do negócio, sempre sujeitos aos mesmos compromissos de proteção descritos aqui.'])+
+      legalSecaoHtml('6. Retenção de dados', ['Guardamos os seus dados enquanto a conta estiver ativa. Ao eliminar a conta, os dados são apagados permanentemente, exceto quando a lei exigir retenção mais longa (ex.: registos fiscais).'])+
+      legalSecaoHtml('7. Os seus direitos', ['Sujeito à legislação aplicável (incluindo RGPD, se residir na UE), tem direito a aceder, corrigir, exportar e eliminar os seus dados, e a retirar consentimentos dados anteriormente. Pode exercer estes direitos em Perfil → Conta / Privacidade, ou contactando-nos.'])+
+      legalSecaoHtml('8. Segurança', ['Palavras-passe encriptadas, ligações cifradas (HTTPS/TLS) e controlo de acesso por conta/equipa. Tokens de acesso a serviços de terceiros só são acedidos pelo backend, nunca ficam expostos no dispositivo. Nenhum sistema é totalmente imune a falhas — em caso de incidente que afete os seus dados, será notificado nos termos exigidos por lei.'])+
+      legalSecaoHtml('9. Menores de idade', ['O Pivots não se destina a menores de 18 anos. Não recolhemos intencionalmente dados de menores.'])+
+      legalSecaoHtml('10. Transferências internacionais', ['Os seus dados podem ser processados em servidores fora do seu país de residência, sempre com fornecedores que aplicam salvaguardas adequadas de proteção de dados.'])+
+      legalSecaoHtml('11. Alterações a esta política', ['Podemos atualizar esta política ocasionalmente. Alterações relevantes serão comunicadas dentro da aplicação antes de entrarem em vigor.'])+
+      legalSecaoHtml('12. Contacto', ['Dúvidas sobre esta política ou sobre os seus dados: <a href="mailto:support@pivots.app">support@pivots.app</a>']);
+    openInfo(t('about.privacyPolicy'), html, infoSobre);
+  }
+  function abrirTermosDeUso(){
+    const html='<p style="font-size:11.5px;color:var(--ink-faint);margin:0 0 14px">Última atualização: 29 de julho de 2026</p>'+
+      '<p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 10px">Estes Termos de Uso ("Termos") regem o acesso e uso do Pivots, uma aplicação de gestão de trabalhos, clientes, contratos e finanças para profissionais independentes ("o Serviço"). Ao criar uma conta ou usar o Pivots, você concorda com estes Termos.</p>'+
+      legalSecaoHtml('1. Elegibilidade e conta', ['Para usar o Pivots você deve ter pelo menos 18 anos e capacidade legal para celebrar contratos. É responsável por manter a confidencialidade das suas credenciais, por toda a atividade na sua conta e pela exatidão dos dados que insere. Notifique-nos imediatamente se suspeitar de acesso não autorizado.'])+
+      legalSecaoHtml('2. Uso do serviço', ['O Pivots destina-se à gestão da sua atividade profissional. Você concorda em não usar o Serviço para fins ilegais ou fraudulentos, para prejudicar ou assediar terceiros, para tentar aceder sem autorização a sistemas de outros utilizadores, ou para revender o Serviço sem autorização prévia por escrito.'])+
+      legalSecaoHtml('3. Subscrição, cobrança e cancelamento', ['O Pivots oferece um plano gratuito e planos pagos. Ao subscrever um plano pago, autoriza a cobrança periódica através do método indicado. Pode cancelar a qualquer momento em Perfil → Plano; o cancelamento produz efeito no fim do período já pago, sem reembolso proporcional salvo quando exigido por lei. Alterações de preço são avisadas com antecedência razoável.'])+
+      legalSecaoHtml('4. Contratos gerados através do Pivots', ['Os modelos e o construtor de cláusulas são ferramentas de apoio — você é o único responsável pelo conteúdo e adequação legal dos contratos que cria e envia. O Pivots não presta aconselhamento jurídico. A validade legal da assinatura eletrónica recolhida pode variar consoante a jurisdição aplicável ao contrato.'])+
+      legalSecaoHtml('5. Integrações de terceiros', ['Integrações como o Google Calendar exigem a sua autorização explícita e estão sujeitas também aos termos do respetivo serviço. Pode desligar qualquer integração a qualquer momento.'])+
+      legalSecaoHtml('6. Propriedade dos dados e conteúdo', ['Os dados que insere pertencem a você — concede-nos apenas a licença necessária para os armazenar, processar e exibir de volta a si (e aos seus clientes, via Portal do Cliente) como parte do Serviço. Pode exportar os seus dados ou eliminar a conta a qualquer momento. O software, marca e design do Pivots são propriedade nossa ou dos nossos licenciadores.'])+
+      legalSecaoHtml('7. Disponibilidade do serviço', ['Não garantimos disponibilidade ininterrupta. Podem ocorrer manutenções, indisponibilidade técnica ou alterações a funcionalidades — recomendamos manter cópias de segurança via exportação.'])+
+      legalSecaoHtml('8. Limitação de responsabilidade', ['Na máxima medida permitida por lei, o Serviço é fornecido "tal como está". Não somos responsáveis por danos indiretos, incidentais ou consequenciais, incluindo perda de dados, perda de receita ou disputas entre você e os seus clientes decorrentes de contratos geridos na plataforma.'])+
+      legalSecaoHtml('9. Suspensão e encerramento', ['Podemos suspender ou encerrar o acesso em caso de violação destes Termos, uso fraudulento ou não pagamento em atraso, com aviso quando razoavelmente possível. Pode encerrar a sua conta a qualquer momento.'])+
+      legalSecaoHtml('10. Alterações a estes Termos', ['Alterações relevantes serão comunicadas dentro da aplicação antes de entrarem em vigor; o uso continuado após essa comunicação constitui aceitação dos novos Termos.'])+
+      legalSecaoHtml('11. Lei aplicável', ['Estes Termos são regidos pela lei portuguesa, sem prejuízo de direitos imperativos que lhe assistam ao abrigo da lei do seu país de residência, caso aplicável.'])+
+      legalSecaoHtml('12. Contacto', ['Dúvidas sobre estes termos: <a href="mailto:support@pivots.app">support@pivots.app</a>']);
+    openInfo(t('about.termsOfUse'), html, infoSobre);
   }
   function exportarDadosReal(){
     const pacote={ exportadoEm:new Date().toISOString(), conta:perfilData, trabalhos:jobsData, clientes:clientesData, tarefas:tarefasData, lembretes:lembretesData, listas:listasData, custos:custosData, referencias:referenciasData };
@@ -15122,7 +15138,7 @@
   }
   function abrirSuporteEmail(){
     const a=document.createElement('a');
-    a.href='mailto:suporte@pivots.app?subject='+encodeURIComponent('Preciso de ajuda com o Pivots');
+    a.href='mailto:support@pivots.app?subject='+encodeURIComponent('Preciso de ajuda com o Pivots');
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     closeInfo();
     showToast(t('toast.openingEmail'));
