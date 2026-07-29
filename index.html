@@ -5383,7 +5383,8 @@
       html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     }
     html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>'+t('library.legalWarning')+'</div></div>';
-    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft" onclick="guardarModeloBiblioteca(\''+id+'\')">'+t('action.save')+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
+    const favAtivo=bibFavoritos.has('of:'+id);
+    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft'+(favAtivo?' on':'')+'" id="bib-detalhe-guardar-btn" onclick="guardarModeloBiblioteca(\''+id+'\')">'+(favAtivo?t('library.saved'):t('action.save'))+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
     html+='<div class="plabel" style="margin-top:18px">'+t('library.rating')+'</div>';
     html+='<div id="avaliacao-stars-'+id+'"></div>';
     document.getElementById('bib-detalhe-conteudo').innerHTML=html;
@@ -5439,10 +5440,22 @@
     abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
     showToast(t('toast.duplicatedForEdit'));
   }
+  /* Botão "Guardar" do detalhe (painel Explorar Modelos, dentro do wizard) —
+     antes só mostrava um toast de sucesso sem persistir nada (o contrato
+     "desaparecia": não ficava em Favoritos nem em nenhuma outra língua da
+     mesma ficha). Agora usa o mesmo Set bibFavoritos (chave 'of:'+id, igual
+     ao baseId da Biblioteca principal) que todo o resto do app já usa —
+     favoritar aqui ou lá é a mesma marca, válida pra todas as variações de
+     idioma daquele contrato, não uma cópia presa a uma língua só. */
   function guardarModeloBiblioteca(id){
+    const key='of:'+id;
+    if(bibFavoritos.has(key)){ bibFavoritos.delete(key); showToast(t('library.unfavorited')); }
+    else { bibFavoritos.add(key); showToast(t('library.favorited')); if(navigator.vibrate)navigator.vibrate(6); }
+    saveBibFavoritos();
     marcarModeloComoUsado(id);
     renderEstrelasAvaliacao(id);
-    showToast(t('toast.savedToTemplates'));
+    const btn=document.getElementById('bib-detalhe-guardar-btn');
+    if(btn){ const on=bibFavoritos.has(key); btn.classList.toggle('on', on); btn.textContent = on ? t('library.saved') : t('action.save'); }
   }
   async function importarModeloBiblioteca(id, lang){
     if(twEmWizard){ selecionarModeloBibliotecaNoWizard(id); return; }
