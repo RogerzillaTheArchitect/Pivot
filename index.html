@@ -1335,8 +1335,8 @@
            (idem + itens) são só dois modos do mesmo formulário. -->
       <div class="panel" data-panel="tarefa">
         <div class="segmented">
-          <button class="on" onclick="setTarefaTipo(this,'simples')" data-t="field.tasksSimple">Simples</button>
-          <button onclick="setTarefaTipo(this,'checklist')" data-t="field.tasksChecklist">Checklist</button>
+          <button class="on" onclick="setTarefaTipo(this,'simples')"><span class="nav-ico" style="width:15px;height:15px;display:inline-block;vertical-align:-3px;margin-right:5px;mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg)"></span><span data-t="field.tasksSimple">Simples</span></button>
+          <button onclick="setTarefaTipo(this,'checklist')"><span class="nav-ico" style="width:15px;height:15px;display:inline-block;vertical-align:-3px;margin-right:5px;mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg)"></span><span data-t="field.tasksChecklist">Checklist</span></button>
         </div>
         <div id="tarefa-simples">
           <div class="field"><label data-t="field.taskTitle">Título</label><input id="ta-titulo" placeholder="O que precisa de ser feito?" data-t-placeholder="task.titlePlaceholder"></div>
@@ -4540,8 +4540,7 @@
       }
       (j.payments||[]).forEach((p,i)=>{
         if(p.status==='pago' || !p.dueDate) return;
-        const acao=p.label ? (t('tasks.actionReceivePayment')+' — '+p.label) : t('tasks.actionReceivePayment');
-        itens.push({ dataISO:p.dueDate, nome:j.nome||j.client, cliente, acao, jobId:j.id, tipo:'pagamento', idx:i });
+        itens.push({ dataISO:p.dueDate, nome:j.nome||j.client, cliente, acao:t('tasks.actionReceivePayment'), jobId:j.id, tipo:'pagamento', idx:i });
       });
       if(j.dateRaw){
         const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
@@ -4566,20 +4565,23 @@
       if(l.feito || l.jobId || !l.data) return;
       itens.push({ dataISO:l.data, hora:l.hora||'', nome:l.titulo, cliente:'', acao:t('reminder.action'), jobId:null, tipo:'lembrete', idx:l.id });
     });
-    /* Listas soltas só entram se tiverem data E prioridade — sem isso não há
-       como ordená-las entre os outros itens do radar. Vinculadas a um
-       trabalho ficam sempre na secção "Listas" da página do trabalho. */
+    /* Listas só entram se tiverem data E prioridade — sem isso não há como
+       ordená-las entre os outros itens do radar. Vinculadas a um trabalho
+       também aparecem aqui (com a foto do cliente do trabalho), além de
+       continuarem na secção "Listas" da página do trabalho. */
     Object.values(listasData).forEach(ls=>{
-      if(ls.feito || ls.jobId || !ls.data || !ls.prioridade) return;
-      itens.push({ dataISO:ls.data, hora:ls.hora||'', nome:ls.titulo, cliente:'', acao:t('list.action'), jobId:null, tipo:'lista', idx:ls.id });
+      if(ls.feito || !ls.data || !ls.prioridade) return;
+      const jobLs=ls.jobId?jobsData[ls.jobId]:null;
+      itens.push({ dataISO:ls.data, hora:ls.hora||'', nome:ls.titulo, cliente:jobLs?jobLs.client:'', acao:t('list.action'), jobId:ls.jobId||null, tipo:'lista', idx:ls.id });
     });
-    /* Tarefas soltas (modo Simples do painel unificado) — mesma regra dos
-       Lembretes: só entram se tiverem data e não estiverem vinculadas a um
-       trabalho (vinculadas ficam só na secção "Tarefas" da página do
-       trabalho). */
+    /* Tarefas (modo Simples do painel unificado) — só entram se tiverem
+       data. Vinculadas a um trabalho também aparecem aqui (com a foto do
+       cliente do trabalho), além de continuarem na secção "Tarefas" da
+       página do trabalho. */
     Object.values(tarefasData).forEach(tk=>{
-      if(tk.tipo!=='simples' || tk.feito || tk.jobId || !tk.data) return;
-      itens.push({ dataISO:tk.data, hora:tk.hora||'', nome:tk.titulo, cliente:'', acao:t('task.action'), jobId:null, tipo:'tarefa', idx:tk.id });
+      if(tk.tipo!=='simples' || tk.feito || !tk.data) return;
+      const jobTk=tk.jobId?jobsData[tk.jobId]:null;
+      itens.push({ dataISO:tk.data, hora:tk.hora||'', nome:tk.titulo, cliente:jobTk?jobTk.client:'', acao:t('task.action'), jobId:tk.jobId||null, tipo:'tarefa', idx:tk.id });
     });
     const mesAtualISO=new Date().toISOString().slice(0,7);
     const itensDoMes=itens.filter(it=> diasEntre(it.dataISO)<0 || it.dataISO.slice(0,7)===mesAtualISO);
@@ -4644,11 +4646,16 @@
     calendar:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>',
     clock:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>',
     check:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
+    checkSimples:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg)"></span>',
+    checkLista:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg)"></span>',
   };
-  /* mesmo ícone de check do botão "Tarefa" do menu Criar — usado no card de
-     Tarefas (Dashboard) pra marcar itens soltos (sem trabalho vinculado); nos
-     vinculados, vira um selinho no canto da foto do cliente em vez do
-     quadrado sozinho. */
+  /* mesmos ícones dos botões Simples/Checklist do menu Criar > Tarefa —
+     usados no card de Tarefas (Dashboard) pra marcar itens soltos (sem
+     trabalho vinculado); nos vinculados, viram um selinho no canto da foto
+     do cliente em vez do quadrado sozinho. */
+  function rtkIconeSolto(tipo){
+    return tipo==='tarefa' ? RTK_ICONS.checkSimples : tipo==='lista' ? RTK_ICONS.checkLista : RTK_ICONS.check;
+  }
   function clienteFotoPorNome(nome){
     if(!nome) return null;
     const cli=Object.values(clientesData).find(c=>c.nome===nome);
@@ -4659,7 +4666,7 @@
      acontecer, com um ícone de calendário à esquerda. */
   function rtkDataCompleta(dataISO){
     const partes=dataISO.split('-');
-    return partes[2]+'/'+partes[1]+'/'+partes[0];
+    return partes[2]+' · '+partes[1];
   }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
@@ -4668,9 +4675,17 @@
     const prazoBadge=prazoBadgeInfo(it.dataISO);
     const tipoBadge=tipoTarefaInfo(it.tipo);
     let card='<div class="card radar-card '+urgClasse+'" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" onclick="onRadarCardClick(event,this)">';
-    const avatarBlock = it.jobId
-      ? '<div class="rtk-avatar-wrap">'+avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))+'<span class="rtk-avatar-badge">'+RTK_ICONS.check+'</span></div>'
-      : '<div class="rtk-avatar-wrap rtk-avatar-check">'+RTK_ICONS.check+'</div>';
+    /* Ícone (checkbox/checklist) só nos itens criados manualmente como
+       tarefa/lista/lembrete: sem trabalho vinculado, o quadrado inteiro vira
+       o ícone; vinculados a um trabalho, a foto do cliente aparece com o
+       mesmo ícone como selinho no canto. Cards gerados pelo sistema a partir
+       de um trabalho (contrato/pagamento/evento/entrega) mostram só a foto,
+       sem selinho nenhum. */
+    const avatarBlock = !solto
+      ? avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))
+      : it.jobId
+        ? '<div class="rtk-avatar-wrap">'+avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))+'<span class="rtk-avatar-badge">'+rtkIconeSolto(it.tipo)+'</span></div>'
+        : '<div class="rtk-avatar-wrap rtk-avatar-check">'+rtkIconeSolto(it.tipo)+'</div>';
     card+='<div class="rtk-side">'+
       avatarBlock+
       '<div class="rtk-sub rtk-sub-prazo '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></div>'+
@@ -4679,7 +4694,8 @@
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-action">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>';
-    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+(it.hora?' · '+escapeHtml(it.hora):'')+'</span></div>';
+    card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
+    if(it.hora) card+='<div class="rtk-prazo rtk-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(it.hora)+'</span></div>';
     card+='</div>';
     card+='</div>';
     const editarAction = solto
@@ -10789,7 +10805,7 @@
     const linha1='<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
     const itens2=[];
     if(job.dateRaw) itens2.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
-    if(job.horaIni) itens2.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' | '+job.horaFim):''))+'</span></span>');
+    if(job.horaIni) itens2.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' - '+job.horaFim):''))+'</span></span>');
     let html='<div class="dm-row">'+linha1+'</div>';
     if(itens2.length) html+='<div class="dm-row">'+itens2.join('<span class="dm-sep"></span>')+'</div>';
     return html;
@@ -12324,7 +12340,7 @@
     const done=job.arquivado.motivo==='concluido';
     const dataFmt=new Date(job.arquivado.em).toLocaleDateString(jsLocale(),{day:'2-digit',month:'short',year:'numeric'});
     return '<div class="job" style="cursor:default">'+
-      '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30)+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
+      '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30,clienteFotoPorNome(job.client))+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
       '<div class="state '+(done?'s-active':'s-wait')+'">'+(done?t('jobs.history.done'):t('jobs.history.deleted'))+'</div></div>'+
       '<div class="job-next"><div class="nd" style="background:'+(done?'var(--brand)':'var(--late)')+'"></div><span>'+dataFmt+'</span></div>'+
       '<button class="btn soft" style="width:100%;margin-top:10px" onclick="restaurarTrabalho(\''+job.id+'\')">'+t('action.restore')+'</button>'+
@@ -12442,18 +12458,8 @@
     if(job.structure && job.structure.briefing && job.briefing && !job.briefing.respondido) return ICON_PENDENCIA_DEMANDA.pendencia;
     return ICON_PENDENCIA_DEMANDA.demanda;
   }
-  /* Linha 3 — data + horário do evento principal numa única linha
-     ("12 Ago • 14:00–22:00"), pra reduzir a altura do card. */
-  function fmtDataHoraLinhaJob(job){
-    if(!job.dateRaw) return t('jobs.dateNotSet');
-    const partes=job.dateRaw.split('-');
-    const mn=mesAbrev(parseInt(partes[1],10)-1);
-    let s=parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
-    if(job.horaIni) s+=' • '+job.horaIni+(job.horaFim?(' | '+job.horaFim):'');
-    return s;
-  }
-  /* mesma data de fmtDataHoraLinhaJob, mas sem a hora — usada quando a hora
-     ganha o seu próprio ícone/linha (relógio) em vez de ficar colada à data. */
+  /* mesma data de fmtHoraLinhaJob, mas sem a hora — a hora ganha o seu
+     próprio ícone/linha (relógio) em vez de ficar colada à data. */
   function fmtDataLinhaJob(job){
     if(!job.dateRaw) return t('jobs.dateNotSet');
     const partes=job.dateRaw.split('-');
@@ -12462,7 +12468,7 @@
   }
   function fmtHoraLinhaJob(job){
     if(!job.horaIni) return '';
-    return job.horaIni+(job.horaFim?(' | '+job.horaFim):'');
+    return job.horaIni+(job.horaFim?(' - '+job.horaFim):'');
   }
   /* Card de Projeto — só responde 2 perguntas (que projeto é este, em que
      etapa está): título, cliente (avatar+nome), data/hora numa linha, etapa
@@ -12485,7 +12491,7 @@
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
     div.className='job'+(urgClasse?' '+urgClasse:'');
     const hora=fmtHoraLinhaJob(job);
-    div.innerHTML='<div class="job-head-row">'+avatarHtml(job.client,44)+
+    div.innerHTML='<div class="job-head-row">'+avatarHtml(job.client,44,clienteFotoPorNome(job.client))+
       '<div class="job-head-info"><div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
       '<div class="job-client-name">'+RTK_ICONS.client+'<span>'+escapeHtml(job.client)+'</span></div></div></div>'+
       '<div class="job-body-rows">'+
@@ -15249,7 +15255,7 @@
     res.style.display='block';
     const jobMatches=jobsVisiveis().filter(j=>
       (j.client+' '+j.typeLabel+' '+(j.local||'')+' '+(j.date||'')).toLowerCase().includes(q)
-    ).map(j=>'<div class="job" onclick="openJob(\''+j.id+'\')"><div class="job-top"><div class="job-top-l">'+avatarHtml(j.client,30)+
+    ).map(j=>'<div class="job" onclick="openJob(\''+j.id+'\')"><div class="job-top"><div class="job-top-l">'+avatarHtml(j.client,30,clienteFotoPorNome(j.client))+
       '<div><div class="job-client">'+escapeHtml(j.client)+'</div><div class="job-type">'+escapeHtml(j.typeLabel)+' · '+escapeHtml(j.date||'data a definir')+'</div></div></div>'+
       '<div class="state '+(j.contract.status==='assinado'?'s-active':'s-wait')+'">'+t(j.contract.status==='assinado'?'jobs.status.active':'jobs.status.waiting')+'</div></div></div>');
     const clienteMatches=Object.values(clientesData).filter(c=>
