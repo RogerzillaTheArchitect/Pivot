@@ -1841,6 +1841,11 @@
   function renderPortalPublicoPrincipal(){
     const job=ppJob;
     const jaAssinado = job.contract && job.contract.status==='assinado';
+    /* Assinatura Inteligente: enquanto houver uma variável [CLIENT_*] por
+       preencher, o contrato final (com o texto já substituído) e o botão de
+       assinar nem aparecem — só o formulário pedindo essas variáveis ao
+       cliente (ver camposClientePendentes/confirmarFormularioCliente). */
+    const pendentesCliente = jaAssinado ? [] : camposClientePendentes(job);
     const precisaBriefing = job.structure && job.structure.briefing && job.briefing && !job.briefing.respondido;
     let html = '<div class="pp-badge">'+(jaAssinado?'Contrato assinado':'Portal do Cliente')+'</div>';
     html += '<h2 style="font-family:\'Jost\',sans-serif;font-weight:600;margin:0 0 4px">'+escapeHtml(job.client||'')+'</h2>';
@@ -1870,7 +1875,7 @@
         '</div>';
     }
 
-    if (job.contract && job.contract.blocks && job.contract.blocks.length){
+    if (job.contract && job.contract.blocks && job.contract.blocks.length && !pendentesCliente.length){
       html += '<div style="margin-bottom:18px">'+job.contract.blocks.filter(b=>b.on).map(b=>
         '<div class="pp-block"><h4>'+escapeHtml(blockName(b))+'</h4><p>'+escapeHtml(blockText(job,b))+'</p></div>'
       ).join('')+'</div>';
@@ -1893,6 +1898,9 @@
 
     if (jaAssinado){
       html += '<p style="font-size:13px;color:var(--ink)">Assinado por '+escapeHtml(job.contract.signerName||'')+' · '+escapeHtml(job.contract.signedAt||'')+'</p>';
+    } else if (pendentesCliente.length){
+      html += renderFormularioClienteHtml(job,'ppcf-');
+      html += '<button class="btn primary" style="width:100%;margin-top:6px" onclick="confirmarFormularioClientePublico()">'+t('action.confirmAndContinue')+'</button>';
     } else {
       html += '<div class="field"><label>O seu nome completo</label><input id="pp-sig-nome" placeholder="Nome e apelido"></div>';
       html += '<div class="field"><label>Assinatura — desenhe com o dedo ou o rato</label>'+
@@ -1934,8 +1942,20 @@
 
     renderPortalPublicoEstado(html);
     if (precisaBriefing) renderPessoasImportantesPublico();
-    if (!jaAssinado) setTimeout(inicializarCanvasAssinatura, 30);
+    if (!jaAssinado && !pendentesCliente.length) setTimeout(inicializarCanvasAssinatura, 30);
     setTimeout(inicializarMapasCard, 30);
+  }
+  /* Confirma o formulário de variáveis do cliente no Portal público. Escreve
+     em ppJob (em memória, o mesmo objeto já usado por todo o resto desta
+     tela) e re-resolve as cláusulas para exibição — a substituição fica
+     imediatamente correta para o cliente ver e assinar. A persistência
+     definitiva destes valores no lado do servidor (Supabase) depende de uma
+     RPC própria ainda por criar (ex.: portal_submit_field_values); até lá,
+     os valores entram no contrato assinado (blockText/customText já
+     resolvido) mas não sobrevivem a um reload do link antes da assinatura. */
+  function confirmarFormularioClientePublico(){
+    if(!confirmarFormularioCliente(ppJob,'ppcf-')){ alert(t('toast.clientFormIncomplete')); return; }
+    renderPortalPublicoPrincipal();
   }
   /* ===== Pagamentos no Portal do Cliente =====
      O cliente vê cada parcela (paga/pendente/aguardando confirmação) e pode
@@ -2257,6 +2277,10 @@
     "action.saveGoals": { pt:"Guardar metas", en:"Save goals", es:"Guardar metas" },
     "action.saveSignature": { pt:"Guardar assinatura", en:"Save signature", es:"Guardar firma" },
     "action.test": { pt:"Testar", en:"Test", es:"Probar" },
+    "action.confirmAndContinue": { pt:"Confirmar e continuar", en:"Confirm and continue", es:"Confirmar y continuar" },
+    "portal.clientFormTitle": { pt:"Confirme os seus dados", en:"Confirm your details", es:"Confirme sus datos" },
+    "portal.clientFormHint": { pt:"Estas informações são suas e entram automaticamente no contrato antes da assinatura.", en:"This information is yours and is filled into the contract automatically before signing.", es:"Esta información es suya y se completa automáticamente en el contrato antes de la firma." },
+    "toast.clientFormIncomplete": { pt:"Preencha todos os campos antes de continuar.", en:"Fill in all fields before continuing.", es:"Complete todos los campos antes de continuar." },
     // --- App ---
     "app.subtitle": { pt:"Pivot · gere trabalhos do início ao fim", en:"Pivot · manage work from start to finish", es:"Pivot · gestiona trabajos de principio a fin" },
     // --- Blocos de contrato ---
@@ -3686,6 +3710,14 @@
     "team.seatsFullPrefix": { pt:"Usaste todos os ", en:"You've used all ", es:"Has usado las " },
     "team.seatsFullSuffix": { pt:" lugares do seu plano. Mude para um plano superior para adicionar mais pessoas.", en:" seats on your plan. Upgrade your plan to add more people.", es:" plazas de tu plan. Cambia a un plan superior para añadir más personas." },
     "team.onlyAdminInvites": { pt:"Só administradores podem convidar membros.", en:"Only admins can invite members.", es:"Solo los administradores pueden invitar miembros." },
+    "plan.limit.jobsTitle": { pt:"Limite de trabalhos atingido", en:"Job limit reached", es:"Límite de trabajos alcanzado" },
+    "plan.limit.jobsBody": { pt:"Já atingiste o limite de {n} trabalhos do teu plano. Mude para um plano superior para criar mais.", en:"You've reached your plan's limit of {n} jobs. Upgrade your plan to create more.", es:"Ya alcanzaste el límite de {n} trabajos de tu plan. Cambia a un plan superior para crear más." },
+    "plan.limit.listsTitle": { pt:"Limite de listas atingido", en:"List limit reached", es:"Límite de listas alcanzado" },
+    "plan.limit.listsBody": { pt:"Já atingiste o limite de {n} listas do teu plano. Mude para um plano superior para criar mais.", en:"You've reached your plan's limit of {n} lists. Upgrade your plan to create more.", es:"Ya alcanzaste el límite de {n} listas de tu plan. Cambia a un plan superior para crear más." },
+    "plan.limit.templatesTitle": { pt:"Limite de modelos atingido", en:"Template limit reached", es:"Límite de modelos alcanzado" },
+    "plan.limit.templatesBody": { pt:"Já atingiste o limite de {n} modelos de contrato do teu plano. Mude para um plano superior para criar mais.", en:"You've reached your plan's limit of {n} contract templates. Upgrade your plan to create more.", es:"Ya alcanzaste el límite de {n} modelos de contrato de tu plan. Cambia a un plan superior para crear más." },
+    "plan.limit.clientsTitle": { pt:"Limite de clientes atingido", en:"Client limit reached", es:"Límite de clientes alcanzado" },
+    "plan.limit.clientsBody": { pt:"Já atingiste o limite de {n} clientes do teu plano. Mude para um plano superior para adicionar mais.", en:"You've reached your plan's limit of {n} clients. Upgrade your plan to add more.", es:"Ya alcanzaste el límite de {n} clientes de tu plan. Cambia a un plan superior para añadir más." },
     "nav.collaborations": { pt:"Colaborações", en:"Collaborations", es:"Colaboraciones" },
     "collab.sectionTitle": { pt:"Colaboradores", en:"Collaborators", es:"Colaboradores" },
     "collab.contractsSection": { pt:"Contratos de Colaboradores", en:"Collaborator Contracts", es:"Contratos de Colaboradores" },
@@ -4410,8 +4442,11 @@
     let eventosExecutadosEsteMes=0, eventosExecutadosMesAnterior=0;
     let entreguesPorDataEsteMes=0, entreguesPorDataMesAnterior=0;
     let fechadosPorDataEsteMes=0, fechadosPorDataMesAnterior=0;
-    /* trabalhos deletados (descartados) não entram em nenhuma estatística;
-       trabalhos concluídos e arquivados continuam a contar — aconteceram de facto */
+    /* trabalhos deletados (descartados) não entram em nenhuma estatística
+       operacional (contagens, horas, prazos); trabalhos concluídos e
+       arquivados continuam a contar — aconteceram de facto. Pagamentos já
+       recebidos são a única exceção: entram sempre, mesmo de um trabalho
+       apagado depois (ver loop separado logo abaixo e jobTemPagamentoRecebido). */
     const todos=jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado');
     todos.forEach(j=>{
       (j.payments||[]).forEach(p=>{
@@ -4472,6 +4507,17 @@
           if(mm===mesAtualISO) entreguesEsteMes++; else if(mm===mesAnteriorISO) entreguesMesAnterior++;
         }
       }
+    });
+    /* Trabalhos apagados ficam de fora do loop acima (não contam pra
+       contagens/horas/prazos), mas um pagamento já marcado como Pago neles
+       continua a ser receita real — soma à parte, sem afetar nenhuma outra
+       estatística. */
+    jobsVisiveis().filter(j=>j.arquivado && j.arquivado.motivo==='deletado').forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        const d=p.pagoEm||p.dueDate;
+        if(d && d.slice(0,7)===mesAtualISO){ recebido+=Number(p.amount)||0; pagamentosTotalCount++; }
+      });
     });
     /* "Aguardando" (pendências do lado do cliente) e "Demandas" (pendências do
        meu lado) — contagem viva (não é um evento datado), por isso a
@@ -6279,6 +6325,16 @@
       if(extra.email) cli.email=extra.email;
       if(extra.telefone) cli.telefone=extra.telefone;
     } else {
+      /* mesmo limite de LIMITE_CLIENTES_PLANO aplicado nas telas de criação
+         explícita (criarCliente/guardarNovoClienteInline) — aqui, dentro da
+         criação de um trabalho, um limite atingido nunca deve interromper o
+         fluxo com um modal inesperado: o trabalho continua a ser criado
+         normalmente com o nome do cliente digitado, só não sobra um novo
+         registo em clientesData além do limite do plano. */
+      const limite=LIMITE_CLIENTES_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(clientesData).length>=limite){
+        return { id:null, nome, tipo:'Cliente', email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'' };
+      }
       const id='cli'+Date.now();
       cli={ id, nome, tipo:'Cliente', email:extra.email||'', telefone:extra.telefone||'', empresa:'', instagram:'', notas:'', criadoEm:new Date().toISOString() };
       clientesData[id]=cli;
@@ -6289,6 +6345,11 @@
   function guardarNovoClienteInline(){
     const nome=document.getElementById('tw-cliente').value.trim();
     if(!nome){ showToast(t('toast.writeClientName')); return; }
+    const jaExiste=Object.values(clientesData).some(c=>c.nome===nome);
+    if(!jaExiste){
+      const limite=LIMITE_CLIENTES_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(clientesData).length>=limite){ abrirLimitePlanoModal('plan.limit.clientsTitle','plan.limit.clientsBody',limite); return; }
+    }
     const email=(document.getElementById('tw-novo-email').value||'').trim();
     const telefone=(document.getElementById('tw-novo-tel').value||'').trim();
     upsertClientePorNome(nome, {email, telefone});
@@ -6307,6 +6368,8 @@
        ponteiro/toque simultâneo), o atributo disabled já impede o segundo clique
        de sequer chegar ao handler. */
     if(criandoTrabalho) return;
+    { const limite=LIMITE_TRABALHOS_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(jobsData).length>=limite){ abrirLimitePlanoModal('plan.limit.jobsTitle','plan.limit.jobsBody',limite); return; } }
     /* Título, Data e Hora são obrigatórios — sem isto o sistema deixava criar
        trabalhos "fantasma" (título a cair para o nome do cliente, data/hora a
        ficar null), difíceis de encontrar depois e sem entrar corretamente no
@@ -7110,7 +7173,7 @@
   function calcularSegmentacaoFinanceira(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
-    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado').forEach(j=>{
+    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado' || jobTemPagamentoRecebido(j)).forEach(j=>{
       const mm=(j.dateRaw||'').slice(0,7);
       if(!mesesSet.has(mm)) return;
       if(!j.value) return;
@@ -7275,7 +7338,7 @@
   function calcularReceitaPorSubcategoria(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
-    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado').forEach(j=>{
+    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado' || jobTemPagamentoRecebido(j)).forEach(j=>{
       const mm=(j.dateRaw||'').slice(0,7);
       if(!mesesSet.has(mm)) return;
       if(!j.value) return;
@@ -7623,7 +7686,7 @@
   function calcularRentabilidade(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
-    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado').forEach(j=>{
+    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado' || jobTemPagamentoRecebido(j)).forEach(j=>{
       const mm=(j.dateRaw||'').slice(0,7);
       if(!mesesSet.has(mm)) return;
       if(!j.value || !j.duracaoHoras) return;
@@ -7677,6 +7740,17 @@
         if(d && mesesSet.has(d.slice(0,7))){ pagamentosSum+=Number(p.amount)||0; pagamentosCount+=1; }
       });
     });
+    /* trabalhos apagados ficam fora do loop acima (não entram em receitaTotal/
+       projetos/horas), mas um pagamento já marcado Pago neles é receita real —
+       soma só ao ticket médio, sem alterar os outros indicadores (mesmo
+       critério de calcularEstatisticasMes/jobTemPagamentoRecebido). */
+    jobsVisiveis().filter(j=>j.arquivado && j.arquivado.motivo==='deletado').forEach(j=>{
+      (j.payments||[]).forEach(p=>{
+        if(p.status!=='pago') return;
+        const d=p.pagoEm||p.dueDate;
+        if(d && mesesSet.has(d.slice(0,7))){ pagamentosSum+=Number(p.amount)||0; pagamentosCount+=1; }
+      });
+    });
     meses.forEach(m=>{ despesasTotal+=custosDoMes(m.ano,m.mes); });
     return {
       ticketMedio: pagamentosCount ? pagamentosSum/pagamentosCount : 0,
@@ -7693,7 +7767,7 @@
   function calcularMercadoRegional(){
     const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
     const acc={};
-    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado').forEach(j=>{
+    jobsVisiveis().filter(j=>!j.arquivado || j.arquivado.motivo!=='deletado' || jobTemPagamentoRecebido(j)).forEach(j=>{
       const mm=(j.dateRaw||'').slice(0,7);
       if(!mesesSet.has(mm)) return;
       const cidade=heatCidadeDoJob(j) || t('reports.heatmap.geoNoLocation');
@@ -9070,6 +9144,8 @@
   function saveModelosContratoData(){ savePersisted('pivot-modelosContrato', ()=>modelosContratoData); }
   async function loadModelosContratoData(){ await loadPersisted('pivot-modelosContrato', d=>{ modelosContratoData=d||{}; }); }
   function confirmarGuardarModeloContrato(){
+    { const limite=LIMITE_MODELOS_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(modelosContratoData).length>=limite){ abrirLimitePlanoModal('plan.limit.templatesTitle','plan.limit.templatesBody',limite); return; } }
     const nomeEl=document.getElementById('modelo-contrato-nome');
     const nome=nomeEl.value.trim();
     if(!nome){ nomeEl.focus(); return; }
@@ -9825,6 +9901,8 @@
   // no topo do editor) reconheçam as variáveis detectadas na importação
   // automaticamente, sem precisar de nenhuma UI nova.
   function confirmarGuardarModeloImportado(){
+    { const limite=LIMITE_MODELOS_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(modelosContratoData).length>=limite){ abrirLimitePlanoModal('plan.limit.templatesTitle','plan.limit.templatesBody',limite); return; } }
     const nomeEl=document.getElementById('modelo-importado-nome');
     const nome=nomeEl.value.trim();
     if(!nome){ nomeEl.focus(); return; }
@@ -10174,7 +10252,19 @@
     STORAGE_FEE:{pt:'Taxa de armazenamento',en:'Storage fee',es:'Tarifa de almacenamiento'},
     CLAIM_NOTICE_PERIOD:{pt:'Prazo p/ reclamações',en:'Claim notice period',es:'Plazo de reclamación'},
     REPAIR_TASKS_DESCRIPTION:{pt:'Tarefas',en:'Tasks',es:'Tareas'},
-    ESTIMATED_COST:{pt:'Orçamento estimado',en:'Estimated cost',es:'Costo estimado'}
+    ESTIMATED_COST:{pt:'Orçamento estimado',en:'Estimated cost',es:'Costo estimado'},
+    /* Campos do cliente para a Assinatura Inteligente — nunca pedidos ao
+       criador do contrato, só ao cliente no formulário antes de assinar
+       (ver camposClienteContrato/renderFormularioClienteHtml). */
+    CLIENT_TAX_ID:{pt:'CPF/NIF do contratante',en:'Client tax ID',es:'CPF/NIF del contratante'},
+    CLIENT_RG:{pt:'RG do contratante',en:'Client ID number',es:'DNI del contratante'},
+    CLIENT_CITY:{pt:'Cidade do contratante',en:'Client city',es:'Ciudad del contratante'},
+    CLIENT_STATE:{pt:'Estado do contratante',en:'Client state',es:'Estado del contratante'},
+    CLIENT_ZIP:{pt:'CEP do contratante',en:'Client zip code',es:'Código postal del contratante'},
+    CLIENT_NATIONALITY:{pt:'Nacionalidade do contratante',en:'Client nationality',es:'Nacionalidad del contratante'},
+    CLIENT_BIRTH_DATE:{pt:'Data de nascimento do contratante',en:'Client date of birth',es:'Fecha de nacimiento del contratante'},
+    CLIENT_COMPANY:{pt:'Empresa do contratante',en:'Client company',es:'Empresa del contratante'},
+    CLIENT_JOB_TITLE:{pt:'Cargo do contratante',en:'Client job title',es:'Cargo del contratante'}
   };
   function dynFieldLabel(campo){
     const m=DYN_FIELD_LABELS[campo];
@@ -10191,6 +10281,86 @@
       let m; while((m=re.exec(b.tpl))){ if(!DYN_FIELD_EXCLUIR.has(m[1]) && !vistos.has(m[1])){ vistos.add(m[1]); ordem.push(m[1]); } }
     });
     return ordem;
+  }
+  /* ===== Assinatura Inteligente de Contratos =====
+     Variáveis [CLIENT_*] pertencem ao cliente, nunca ao criador do contrato —
+     este bloco intercepta o fluxo ANTES da assinatura (Portal do Cliente
+     público e a simulação "ver como cliente" dentro da app) e pede só essas
+     variáveis diretamente a quem vai assinar, pré-preenchidas a partir do
+     registo do cliente (clientesData) sempre que já existirem. Só depois de
+     todas preenchidas é que o contrato final (com as variáveis já
+     substituídas) é mostrado e o botão de assinar aparece. */
+  const CLIENT_FIELD_CLIENTE_PROP={
+    CLIENT_NAME:'nome', CLIENT_EMAIL:'email', CLIENT_PHONE:'telefone', CLIENT_DOCUMENT:'documento',
+    CLIENT_TAX_ID:'documento', CLIENT_RG:'rg', CLIENT_ADDRESS:'endereco', CLIENT_CITY:'cidade',
+    CLIENT_STATE:'estado', CLIENT_ZIP:'cep', CLIENT_NATIONALITY:'nacionalidade',
+    CLIENT_BIRTH_DATE:'dataNascimento', CLIENT_COMPANY:'empresa', CLIENT_JOB_TITLE:'cargo'
+  };
+  function camposClienteContrato(job){
+    return builderCamposDinamicos(job).filter(f=>f.startsWith('CLIENT_'));
+  }
+  function clienteRegistroDoJob(job){
+    return Object.values(clientesData).find(c=>c.nome===job.client) || null;
+  }
+  /* Devolve o valor já disponível pra um campo CLIENT_* — na ordem: o que já
+     foi confirmado neste contrato, depois o registo do cliente, depois os
+     dados soltos do próprio job (nome/email) — nunca pede de novo algo que
+     já se sabe. */
+  function valorPreenchidoCampoCliente(job, campo){
+    const fv=(job.contract&&job.contract.fieldValues)||{};
+    if(fv[campo]) return fv[campo];
+    const prop=CLIENT_FIELD_CLIENTE_PROP[campo];
+    const cli=clienteRegistroDoJob(job);
+    if(cli && prop && cli[prop]) return cli[prop];
+    if(campo==='CLIENT_NAME' && job.client) return job.client;
+    if(campo==='CLIENT_EMAIL' && job.email) return job.email;
+    return '';
+  }
+  function camposClientePendentes(job){
+    return camposClienteContrato(job).filter(c=>!valorPreenchidoCampoCliente(job,c));
+  }
+  /* HTML do formulário — um input por campo em falta, já com o valor
+     conhecido preenchido (só falta confirmar ou editar); usado tanto pelo
+     Portal do Cliente público (ppcf-) como pela simulação "ver como
+     cliente" dentro da app (cwcf-). */
+  function renderFormularioClienteHtml(job, idPrefix){
+    const pendentes=camposClientePendentes(job);
+    let html='<div class="csec-label">'+t('portal.clientFormTitle')+'</div>'+
+      '<p style="font-size:12.5px;color:var(--neutral);margin:-6px 2px 14px">'+t('portal.clientFormHint')+'</p>';
+    pendentes.forEach(campo=>{
+      const valor=valorPreenchidoCampoCliente(job,campo);
+      html+='<div class="field"><label>'+escapeHtml(dynFieldLabel(campo))+'</label>'+
+        '<input id="'+idPrefix+campo+'" value="'+escapeHtml(valor)+'"></div>';
+    });
+    return html;
+  }
+  /* Lê o formulário, valida que nada ficou em falta, escreve cada valor no
+     fieldValues do contrato (mesmo mecanismo de setBuilderCampo, sem
+     depender do contexto do Builder) e RE-RESOLVE todas as cláusulas — só
+     depois disso o contrato final (sem nenhum [CLIENT_*] sobrando) fica
+     pronto para ser mostrado e assinado. Também grava os valores no
+     registo do cliente (clientesData), para que da próxima vez o
+     formulário já venha pré-preenchido. Devolve false se algo ficou vazio. */
+  function confirmarFormularioCliente(job, idPrefix){
+    const pendentes=camposClientePendentes(job);
+    const valores={};
+    for(const campo of pendentes){
+      const el=document.getElementById(idPrefix+campo);
+      const valor=(el?el.value:'').trim();
+      if(!valor) return false;
+      valores[campo]=valor;
+    }
+    if(!job.contract.fieldValues) job.contract.fieldValues={};
+    const fv=job.contract.fieldValues;
+    const cli=clienteRegistroDoJob(job);
+    Object.keys(valores).forEach(campo=>{
+      fv[campo]=valores[campo];
+      const prop=CLIENT_FIELD_CLIENTE_PROP[campo];
+      if(prop && cli) cli[prop]=valores[campo];
+    });
+    if(cli) saveClientesData();
+    (job.contract.blocks||[]).forEach(b=>{ if(b.tpl) b.customText=LegalLibrary.resolveClauseText(b.tpl, fv); });
+    return true;
   }
   /* Agrupamento das Variáveis por categoria (Pessoas/Projeto/Serviços/
      Financeiro/Datas/Jurídico) — mapa explícito para os campos mais comuns
@@ -10209,6 +10379,8 @@
   };
   const DYN_FIELD_GROUP_MAP={
     CLIENT_NAME:'pessoas', CLIENT_ADDRESS:'pessoas', CLIENT_EMAIL:'pessoas', CLIENT_DOCUMENT:'pessoas', CLIENT_PHONE:'pessoas',
+    CLIENT_TAX_ID:'pessoas', CLIENT_RG:'pessoas', CLIENT_CITY:'pessoas', CLIENT_STATE:'pessoas', CLIENT_ZIP:'pessoas',
+    CLIENT_NATIONALITY:'pessoas', CLIENT_BIRTH_DATE:'pessoas', CLIENT_COMPANY:'pessoas', CLIENT_JOB_TITLE:'pessoas',
     PROVIDER_NAME:'pessoas', PROVIDER_ADDRESS:'pessoas',
     PROJECT_NAME:'projeto', PROPERTY_ADDRESS:'projeto', PROJECT_SITE_ADDRESS:'projeto', PREMISES_ADDRESS:'projeto',
     ORIGIN_ADDRESS:'projeto', DESTINATION_ADDRESS:'projeto', PROJECT_PLANS_REFERENCE:'projeto', LOCATION:'projeto',
@@ -12138,9 +12310,17 @@
   let notifSeenIds=new Set();
   function saveNotifDismissed(){ savePersisted('pivot-notifDismissed', ()=>[...notifDismissed]); }
   async function loadNotifDismissed(){ await loadPersisted('pivot-notifDismissed', d=>{ notifDismissed=new Set(d||[]); }); }
+  /* O botão de excluir fica ANTES do card no DOM, posicionado atrás dele
+     (z-index abaixo, opacity:0 + pointer-events:none por padrão) — só
+     ativarSwipeNotificacoes() o revela, arrastando o card por cima. Mesma
+     estrutura/técnica já usada e comprovada em .radar-card-wrap (ver
+     construirCardRadar/ativarSwipeRadar), adaptada pra um único botão à
+     direita em vez de dois lados. */
   function notifCardHtml(id, texto, sub, onclick){
     return '<div class="notif-wrap" data-notif="'+id+'">'+
-        '<div class="notif-dismiss-action" onclick="event.stopPropagation();descartarNotificacao(\''+id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'+
+        '<div class="notif-swipe-actions">'+
+          '<button type="button" class="notif-swipe-btn" onclick="event.stopPropagation();descartarNotificacao(\''+id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>'+
+        '</div>'+
         '<div class="notif-card" onclick="'+onclick+'">'+
           '<div><div class="nm">'+escapeHtml(texto)+'</div><div class="sub">'+escapeHtml(sub)+'</div></div>'+
         '</div>'+
@@ -12187,29 +12367,66 @@
     saveNotifDismissed();
     abrirNotificacoes();
   }
+  /* Swipe-to-reveal estilo iOS — mesmo motor de estados de ativarSwipeRadar
+     (closed/aberto, nunca um meio-termo permanente), só que com um único
+     lado (direita) e largura própria (LARG=72, a largura real do botão).
+     O botão só ganha opacity/pointer-events ao ser revelado pelo arrasto —
+     antes disso fica genuinamente invisível e não clicável, nunca "atrás"
+     nem "abaixo" do card visível. */
   function ativarSwipeNotificacoes(){
+    const LARG=72;
     document.querySelectorAll('#infoBody .notif-wrap').forEach(wrap=>{
       const card=wrap.querySelector('.notif-card');
-      const revelado=64; let x0=null, y0=null, aberto=false, horizontal=null;
-      card.addEventListener('pointerdown', e=>{ x0=e.clientX; y0=e.clientY; horizontal=null; card.style.transition='none'; });
+      const acoes=wrap.querySelector('.notif-swipe-actions');
+      if(!card || !acoes) return;
+      let aberto=false, moved=false;
+      let startX=0, startY=0, baseX=0, curX=0, dragging=false, pointerId=null, horizontal=null;
+      const setActions=x=>{
+        const p=Math.min(1, -x/LARG);
+        acoes.style.opacity=p; acoes.style.pointerEvents=p>0?'auto':'none';
+      };
+      card.addEventListener('pointerdown', e=>{
+        startX=e.clientX; startY=e.clientY; dragging=true; pointerId=e.pointerId; horizontal=null; moved=false;
+        baseX = aberto ? -LARG : 0;
+        curX=baseX;
+        card.style.transition='none';
+        try{ card.setPointerCapture(pointerId); }catch(err){}
+      });
       card.addEventListener('pointermove', e=>{
-        if(x0===null) return;
-        const dx=e.clientX-x0, dy=e.clientY-y0;
+        if(!dragging || e.pointerId!==pointerId) return;
+        const dx=e.clientX-startX, dy=e.clientY-startY;
         if(horizontal===null){ if(Math.abs(dx)>6||Math.abs(dy)>6) horizontal=Math.abs(dx)>Math.abs(dy); }
         if(!horizontal) return;
-        let tx=(aberto?-revelado:0)+dx;
-        tx=Math.max(-revelado, Math.min(0, tx));
-        card.style.transform='translateX('+tx+'px)';
+        moved=true;
+        let x=baseX+dx;
+        x=Math.max(-LARG, Math.min(0, x));
+        curX=x;
+        if(Math.abs(x-baseX)>4) wrap.classList.add('active');
+        card.style.transform='translateX('+x+'px)';
+        setActions(x);
       });
       const fim=e=>{
-        if(x0===null) return;
-        card.style.transition='';
-        const dx=(e.clientX||0)-x0;
-        if(horizontal){ aberto = aberto ? dx<40 : dx<-40; card.style.transform='translateX('+(aberto?-revelado:0)+'px)'; if(aberto&&navigator.vibrate)navigator.vibrate(6); }
-        x0=null; y0=null; horizontal=null;
+        if(!dragging || (e && e.pointerId!==pointerId)) return;
+        dragging=false;
+        if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
+        card.style.transition='transform .2s ease';
+        if(horizontal){
+          aberto = curX<=-LARG*.4;
+          if(aberto && navigator.vibrate) navigator.vibrate(6);
+        }
+        const finalX = aberto ? -LARG : 0;
+        card.style.transform='translateX('+finalX+'px)';
+        acoes.style.transition='opacity .2s ease';
+        setActions(finalX);
+        if(!aberto) setTimeout(()=>{ wrap.classList.remove('active'); }, 200);
+        horizontal=null;
       };
       card.addEventListener('pointerup', fim);
       card.addEventListener('pointercancel', fim);
+      /* Suprime o clique (abrir o trabalho) quando o gesto que acabou de
+         terminar foi um arrasto, não um toque — sem isto, soltar o dedo
+         depois de revelar o botão também disparava o onclick do card. */
+      card.addEventListener('click', e=>{ if(moved){ e.stopPropagation(); e.preventDefault(); moved=false; } }, true);
     });
   }
   function atualizarNotifDot(){
@@ -12329,6 +12546,15 @@
       }
     } else {
       html+='<div class="brandhead"><div class="blogo">B</div><div class="who">'+escapeHtml(perfilData.empresa)+'</div><h2>'+escapeHtml(job.typeLabel)+'</h2></div>';
+      const pendentesCliente=camposClientePendentes(job);
+      if(pendentesCliente.length){
+        /* Assinatura Inteligente: as variáveis do CLIENTE nunca são pedidas ao
+           criador do contrato — só aqui, ao cliente, antes de ele ver o
+           contrato final e assinar (ver camposClientePendentes/
+           confirmarFormularioCliente). */
+        html+=renderFormularioClienteHtml(job,'cwcf-');
+        html+='<button class="btn primary" style="width:100%;margin-top:6px" onclick="confirmarFormularioClienteESeguir(\''+id+'\')">'+t('action.confirmAndContinue')+'</button>';
+      } else {
       html+='<div class="csec-label">'+tp('portal.contract')+'</div>';
       job.contract.blocks.filter(b=>b.on).forEach((b)=>{
         html+='<div class="sec" data-bi="'+b.id+'"><div class="sec-head" onclick="toggleSec(this)"><div class="sec-l"><div class="sec-title">'+escapeHtml(blockName(b))+'</div></div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div><div class="sec-body"><p style="font-size:13.5px;color:var(--ink-soft);line-height:1.55">'+escapeHtml(blockText(job,b))+'</p></div></div>';
@@ -12356,10 +12582,17 @@
       html+='<label style="display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--ink-soft);margin:0 2px 16px">'+
         '<input type="checkbox" id="sig-geo-opt" style="margin-top:2px;width:17px;height:17px;accent-color:var(--brand);flex:none"> '+tp('portal.allowLocation')+'</label>';
       html+='<button class="btn primary" style="width:100%" onclick="assinarContratoCliente(\''+id+'\')">'+tp('portal.sign')+'</button>';
+      }
     }
     document.getElementById('client-dynamic').innerHTML=html;
     if(job.briefing && job.briefing.pessoasImportantes!=null && !job.briefing.respondido) renderPessoasImportantesLista(id);
-    if(job.contract.status!=='assinado') setTimeout(inicializarCanvasAssinaturaCliente, 30);
+    if(job.contract.status!=='assinado' && !camposClientePendentes(job).length) setTimeout(inicializarCanvasAssinaturaCliente, 30);
+  }
+  function confirmarFormularioClienteESeguir(id){
+    const job=jobsData[id];
+    if(!confirmarFormularioCliente(job,'cwcf-')){ clientToast(t('toast.clientFormIncomplete')); return; }
+    saveJobsData();
+    renderClientDynamic(id);
   }
   function renderPessoasImportantesLista(id){
     const job=jobsData[id];
@@ -12555,6 +12788,14 @@
     const docNumero = job.contract.exigirDocumento && docNumeroEl ? docNumeroEl.value.trim() : null;
     const erro=validarDadosAssinatura(nome, a1, a2, job.contract.exigirDocumento, docNumero);
     if(erro){ clientToast(erro); return; }
+    /* Documento capturado no passo de assinatura também é uma variável do
+       cliente — sem isto, [CLIENT_DOCUMENT] podia ficar por preencher no
+       contrato mesmo depois de o número já ter sido informado aqui. */
+    if(docNumero){
+      if(!job.contract.fieldValues) job.contract.fieldValues={};
+      job.contract.fieldValues.CLIENT_DOCUMENT=docTipo+' '+docNumero;
+      job.contract.blocks.forEach(b=>{ if(b.tpl) b.customText=LegalLibrary.resolveClauseText(b.tpl, job.contract.fieldValues); });
+    }
     const comGeo=document.getElementById('sig-geo-opt').checked;
     let textoDocumento=job.contract.blocks.filter(b=>b.on).map(b=>blockName(b)+': '+blockText(job,b)).join('\n');
     /* o documento entra no texto que é hasheado — assim a folha de prova
@@ -12819,6 +13060,17 @@
     return souAdmin() || !job.assignedTo || !job.assignedTo.length || job.assignedTo.includes(currentUser.id);
   }
   function jobsVisiveis(){ return Object.values(jobsData).filter(jobVisivelParaMim); }
+  /* Um trabalho "apagado" (arquivado com motivo:'deletado' — é o mesmo botão
+     "Arquivar" do rodapé do trabalho, ver arquivarTrabalho/confirmarDeletarTrabalho)
+     some das métricas operacionais (contagens, horas, prazos) normalmente.
+     Mas se algum pagamento dele já foi marcado como Pago, esse valor já
+     entrou de fato na receita — arquivar/apagar só muda a visualização do
+     trabalho, nunca pode apagar dinheiro já recebido do histórico
+     financeiro. Usado pelos agregadores de Relatórios para nunca excluir um
+     valor pago só por causa do estado de arquivamento. */
+  function jobTemPagamentoRecebido(job){
+    return (job.payments||[]).some(p=>p.status==='pago');
+  }
   function classificarTrabalho(job){
     const hojeISO=new Date().toISOString().slice(0,10);
     const fechado = job.contract.status==='assinado';
@@ -12899,13 +13151,13 @@
     if(job.structure && job.structure.briefing && job.briefing && !job.briefing.respondido) return ICON_PENDENCIA_DEMANDA.pendencia;
     return ICON_PENDENCIA_DEMANDA.demanda;
   }
-  /* mesma data de fmtHoraLinhaJob, mas sem a hora — a hora ganha o seu
-     próprio ícone/linha (relógio) em vez de ficar colada à data. */
+  /* Mesmo formato de data usado nos cards de tarefas da Dashboard
+     (rtkDataCompleta) — dd · mm — para o sistema todo usar um único padrão
+     visual de data, em vez de "12 Jul" aqui e "12 · 07" lá. */
   function fmtDataLinhaJob(job){
     if(!job.dateRaw) return t('jobs.dateNotSet');
     const partes=job.dateRaw.split('-');
-    const mn=mesAbrev(parseInt(partes[1],10)-1);
-    return parseInt(partes[2],10)+' '+mn.charAt(0).toUpperCase()+mn.slice(1);
+    return partes[2]+' · '+partes[1];
   }
   function fmtHoraLinhaJob(job){
     if(!job.horaIni) return '';
@@ -14321,6 +14573,21 @@
     Enterprise: { labelKey:'plan.name.enterprise', descKey:'plan.desc.enterprise' }
   };
   function nomePlanoAtual(){ return t(PLANOS[perfilData.plano||'Free'].labelKey); }
+  /* ===== Limites reais por plano — nunca cosméticos: o recurso continua
+     visível e utilizável normalmente até ao limite; só a CRIAÇÃO de um novo
+     item além do limite é bloqueada, com um modal a explicar o limite e um
+     atalho direto para o upgrade (mesmo padrão já usado em
+     LIMITE_UTILIZADORES_PLANO/abrirAdicionarMembro, só generalizado). */
+  const LIMITE_TRABALHOS_PLANO={Free:3, Plus:15, Pro:50, Business:200, Enterprise:Infinity};
+  const LIMITE_LISTAS_PLANO={Free:5, Plus:20, Pro:100, Business:500, Enterprise:Infinity};
+  const LIMITE_MODELOS_PLANO={Free:2, Plus:8, Pro:30, Business:100, Enterprise:Infinity};
+  const LIMITE_CLIENTES_PLANO={Free:5, Plus:30, Pro:150, Business:1000, Enterprise:Infinity};
+  function abrirLimitePlanoModal(tituloKey, corpoKey, limite){
+    const limiteTexto = limite===Infinity ? '∞' : limite;
+    openInfo(t(tituloKey), `
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px">${t(corpoKey).replace('{n}', limiteTexto)}</p>
+      <button class="btn primary" style="width:100%" onclick="closeInfo();infoPlano()">${t('profile.account.plan')}</button>`);
+  }
   function aplicarPerfilData(){
     const nomeExibido = perfilData.nome || t('defaults.userName');
     document.querySelectorAll('.p-name').forEach(el=>el.textContent=nomeExibido);
@@ -14464,6 +14731,10 @@
     if(!nome){ err.style.display='block'; nomeEl.focus(); return; }
     err.style.display='none';
     const editando=!!contatoEditandoId;
+    if(!editando){
+      const limite=LIMITE_CLIENTES_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(clientesData).length>=limite){ abrirLimitePlanoModal('plan.limit.clientsTitle','plan.limit.clientsBody',limite); return; }
+    }
     const id=contatoEditandoId||('cli'+Date.now());
     clientesData[id]={ id, nome, tipo:contatoTipoAtual||'Cliente',
       email:document.getElementById('cl-email').value.trim(),
@@ -14774,6 +15045,8 @@
     inp.value='';
   }
   function criarLista(){
+    { const limite=LIMITE_LISTAS_PLANO[perfilData.plano||'Free'];
+      if(Object.keys(listasData).length>=limite){ abrirLimitePlanoModal('plan.limit.listsTitle','plan.limit.listsBody',limite); return; } }
     const titulo=document.getElementById('ls-titulo').value.trim()||t('list.untitled');
     const itens=[...document.querySelectorAll('#ls-items .tx')].map(el=>({t:el.textContent, feito:false}));
     if(!itens.length){ showToast(t('toast.addAtLeastOneItem')); return; }
