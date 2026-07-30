@@ -620,27 +620,46 @@
         <div class="back" onclick="voltarDoBuilder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span id="builder-back-label" data-t="nav.jobs">Trabalhos</span></div>
         <div class="builder-top">
           <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
-          <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
+          <button class="btn soft builder-tutorial-btn" id="builder-tutorial-btn" onclick="abrirTutorialBuilder()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+            <span data-t="builder.tutorialBtn">Tutorial</span>
+          </button>
         </div>
-        <div class="builder-legend" id="builder-hint">
-          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg><span data-t="builder.legendReorder">Arraste para reordenar</span></span>
-          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span data-t="builder.legendEdit">Toque no texto para editar</span></span>
-          <span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg><span data-t="builder.legendToggle">Inclua ou remova</span></span>
+
+        <div class="builder-tabs segmented" id="builder-tabs">
+          <button class="on" id="builder-tab-btn-estrutura" onclick="mudarBuilderTab('estrutura')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            <span data-t="builder.tabStructure">Estrutura</span>
+          </button>
+          <button id="builder-tab-btn-variaveis" onclick="mudarBuilderTab('variaveis')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg>
+            <span data-t="builder.tabVariables">Variáveis</span>
+            <span class="tab-badge" id="builder-tab-varcount">0</span>
+          </button>
         </div>
+
         <div class="builder-locked-notice" id="builder-locked-notice" style="display:none">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11V7a7 7 0 0 1 14 0v4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
           <span id="builder-locked-text" data-t="job.contract.sent">Contrato já enviado ao cliente — já não pode ser editado.</span>
         </div>
 
-        <div id="builder-dynfields" class="dynf-panel" style="display:none"></div>
+        <div id="builder-tab-content-estrutura">
+          <div id="blocklist" class="dyn-blocklist"></div>
 
-        <div id="blocklist" class="dyn-blocklist"></div>
+          <div class="builder-bottom-actions" id="builder-bottom-actions">
+            <button class="addblock" id="addblock-btn" onclick="abrirBibliotecaBlocos()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> <span data-t="library.addBlockBtn">Adicionar Bloco</span>
+            </button>
+            <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
+          </div>
 
-        <button class="addblock" id="addblock-btn" onclick="abrirBibliotecaBlocos()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> <span data-t="library.addBlockBtn">Adicionar Bloco</span>
-        </button>
-        <div id="builder-progress" style="display:none;margin-top:18px">
-          <button class="btn primary" style="width:100%" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
+          <div id="builder-progress" style="display:none;margin-top:18px">
+            <button class="btn primary" style="width:100%" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
+          </div>
+        </div>
+
+        <div id="builder-tab-content-variaveis" style="display:none">
+          <div id="builder-dynfields" class="dynf-panel"></div>
         </div>
       </section>
 
@@ -2252,9 +2271,28 @@
     "builder.legendReorder": { pt:"Arraste para reordenar", en:"Drag to reorder", es:"Arrastra para reordenar" },
     "builder.legendEdit": { pt:"Toque no texto para editar", en:"Tap the text to edit", es:"Toca el texto para editar" },
     "builder.legendToggle": { pt:"Inclua ou remova", en:"Include or remove", es:"Incluye o elimina" },
+    "builder.legendMenu": { pt:"Toque nos três pontos para editar, duplicar, mover ou excluir uma cláusula", en:"Tap the three dots to edit, duplicate, move or delete a clause", es:"Toca los tres puntos para editar, duplicar, mover o eliminar una cláusula" },
+    "builder.legendVariables": { pt:"Na aba Variáveis, preencha os campos do contrato numa lista organizada", en:"In the Variables tab, fill in the contract's fields from an organized list", es:"En la pestaña Variables, completa los campos del contrato en una lista organizada" },
     "builder.service": { pt:"Serviço", en:"Service", es:"Servicio" },
+    "builder.tutorialBtn": { pt:"Tutorial", en:"Tutorial", es:"Tutorial" },
+    "builder.tutorialTitle": { pt:"Como usar o editor", en:"How to use the editor", es:"Cómo usar el editor" },
+    "builder.tabStructure": { pt:"Estrutura", en:"Structure", es:"Estructura" },
+    "builder.tabVariables": { pt:"Variáveis", en:"Variables", es:"Variables" },
+    "builder.varsTotal": { pt:"{n} variáveis", en:"{n} variables", es:"{n} variables" },
+    "builder.varsFilled": { pt:"{n} preenchidas", en:"{n} filled", es:"{n} completadas" },
+    "builder.varsPending": { pt:"{n} pendentes", en:"{n} pending", es:"{n} pendientes" },
+    "builder.showWhereUsed": { pt:"Ver onde aparece no contrato", en:"Show where it appears in the contract", es:"Ver dónde aparece en el contrato" },
+    "builder.clauseEdit": { pt:"Editar", en:"Edit", es:"Editar" },
+    "builder.clauseDuplicate": { pt:"Duplicar", en:"Duplicate", es:"Duplicar" },
+    "builder.clauseMoveUp": { pt:"Mover para cima", en:"Move up", es:"Mover hacia arriba" },
+    "builder.clauseMoveDown": { pt:"Mover para baixo", en:"Move down", es:"Mover hacia abajo" },
+    "builder.clauseDelete": { pt:"Excluir", en:"Delete", es:"Eliminar" },
+    "builder.clauseMenuTitle": { pt:"Cláusula", en:"Clause", es:"Cláusula" },
+    "builder.clauseDeleteConfirm": { pt:"Excluir esta cláusula? Esta ação não pode ser desfeita.", en:"Delete this clause? This action cannot be undone.", es:"¿Eliminar esta cláusula? Esta acción no se puede deshacer." },
+    "builder.blockSubtitleGeneric": { pt:"Cláusulas deste bloco", en:"Clauses in this block", es:"Cláusulas de este bloque" },
+    "builder.varsEmpty": { pt:"Este contrato não tem variáveis por preencher.", en:"This contract has no variables to fill in.", es:"Este contrato no tiene variables por completar." },
     "builder.dynFields": { pt:"Campos dinâmicos", en:"Dynamic fields", es:"Campos dinámicos" },
-    "builder.dynFieldsHint": { pt:"Substitua um valor e ele é aplicado em todo o contrato. Toque no nome do campo para ver onde ele aparece.", en:"Replace a value and it applies across the whole contract. Tap the field name to see where it appears.", es:"Sustituye un valor y se aplica en todo el contrato. Toca el nombre del campo para ver dónde aparece." },
+    "builder.dynFieldsHint": { pt:"Substitua um valor e ele será atualizado automaticamente em todo o contrato. Toque numa variável para editar o valor ou visualizar onde ela é utilizada.", en:"Replace a value and it will be updated automatically across the whole contract. Tap a variable to edit its value or see where it's used.", es:"Sustituye un valor y se actualizará automáticamente en todo el contrato. Toca una variable para editar su valor o ver dónde se utiliza." },
     "builder.dynFieldPlaceholder": { pt:"Substituir…", en:"Replace…", es:"Sustituir…" },
     "builder.dynFieldApply": { pt:"Aplicar", en:"Apply", es:"Aplicar" },
     "builder.dynFieldApplyAll": { pt:"Aplicar a todos", en:"Apply to all", es:"Aplicar a todos" },
@@ -5298,10 +5336,10 @@
   function modelCardHtml(m, selected){
     return '<div class="model-card'+(selected?' selected':'')+'" data-modelo-id="'+m.id+'" onclick="selecionarModeloContrato(\''+m.id+'\')">'+
       '<div class="model-card-head">'+
-        '<div class="model-card-name">'+escapeHtml(m.titulo)+'</div>'+
+        '<div class="model-card-name">'+escapeHtml(LegalLibrary.tituloEm(m, LANG))+'</div>'+
         '<svg class="model-card-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M20 6 9 17l-5-5"/></svg>'+
       '</div>'+
-      '<div class="model-card-desc">'+escapeHtml(m.desc||'')+'</div>'+
+      '<div class="model-card-desc">'+escapeHtml(LegalLibrary.descEm(m, LANG)||'')+'</div>'+
     '</div>';
   }
   /* Biblioteca Pivot — navegação real por categoria e detalhe dinâmico.
@@ -5374,8 +5412,8 @@
   function bibCardHtml(m, escopo){
     const fav=bibFavoritos.has('of:'+m.id);
     return '<div class="model-card">'+
-      '<div class="model-card-head" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer"><div class="model-card-name">'+escapeHtml(m.titulo)+'</div></div>'+
-      '<div class="model-card-desc" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer">'+escapeHtml(m.desc||'')+'</div>'+
+      '<div class="model-card-head" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer"><div class="model-card-name">'+escapeHtml(LegalLibrary.tituloEm(m, LANG))+'</div></div>'+
+      '<div class="model-card-desc" onclick="abrirDetalheBiblioteca(\''+m.id+'\')" style="cursor:pointer">'+escapeHtml(LegalLibrary.descEm(m, LANG)||'')+'</div>'+
       '<div class="model-card-foot">'+
         '<span class="bib-fav'+(fav?' on':'')+'" style="margin-left:auto;cursor:pointer" onclick="event.stopPropagation();toggleFavBibliotecaWizard(\''+m.id+'\',\''+escopo+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.7" style="width:16px;height:16px"><path d="M12 17.3 6.2 21l1.6-6.6L2.5 9.8l6.7-.6L12 3l2.8 6.2 6.7.6-5.3 4.6L17.8 21z"/></svg></span>'+
       '</div>'+
@@ -5396,30 +5434,31 @@
   function abrirDetalheBiblioteca(id){
     const m=LegalLibrary.get(id);
     if(!m) return;
+    const titulo=LegalLibrary.tituloEm(m, LANG);
     let html='<div class="model-detail-head">';
-    html+='<div class="model-detail-name">'+escapeHtml(m.titulo)+'</div>';
+    html+='<div class="model-detail-name">'+escapeHtml(titulo)+'</div>';
     html+='<div class="model-detail-meta">'+bibAutorLinha(m)+'</div>';
     html+='</div>';
-    html+='<p class="model-detail-desc">'+escapeHtml(m.desc||'')+'</p>';
+    html+='<p class="model-detail-desc">'+escapeHtml(LegalLibrary.descEm(m, LANG)||'')+'</p>';
     if((m.tags||[]).length){
       html+='<div class="plabel">'+t('library.tags')+'</div>';
-      html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
+      html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(bibTraduzirTag(tg, LANG))+'</span>').join('')+'</div>';
     }
     html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>'+t('library.legalWarning')+'</div></div>';
     const favAtivo=bibFavoritos.has('of:'+id);
-    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft'+(favAtivo?' on':'')+'" id="bib-detalhe-guardar-btn" onclick="guardarModeloBiblioteca(\''+id+'\')">'+(favAtivo?t('library.saved'):t('action.save'))+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\')">'+t('sheet.import')+'</button></div>';
+    html+='<div class="detail-actions"><button class="btn soft" onclick="duplicarModeloBiblioteca(\''+id+'\')">'+t('action.duplicate')+'</button><button class="btn soft'+(favAtivo?' on':'')+'" id="bib-detalhe-guardar-btn" onclick="guardarModeloBiblioteca(\''+id+'\')">'+(favAtivo?t('library.saved'):t('action.save'))+'</button><button class="btn primary" onclick="importarModeloBiblioteca(\''+id+'\',\''+LANG+'\')">'+t('sheet.import')+'</button></div>';
     html+='<div class="plabel" style="margin-top:18px">'+t('library.rating')+'</div>';
     html+='<div id="avaliacao-stars-'+id+'"></div>';
     document.getElementById('bib-detalhe-conteudo').innerHTML=html;
     pushPanel('comunidade-contrato-detalhe');
-    document.getElementById('sheetTitle').textContent=m.titulo;
+    document.getElementById('sheetTitle').textContent=titulo;
     renderEstrelasAvaliacao(id);
   }
   async function selecionarModeloBibliotecaNoWizard(id){
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    twModeloEscolhido={ nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) };
+    twModeloEscolhido={ nome:LegalLibrary.tituloEm(m, LANG), blocks: await blocosParaModeloBiblioteca(m, LANG) };
     twEmWizard=false;
     while(panelStack.length>1 && panelStack[panelStack.length-1]!=='trabalho'){ panelStack.pop(); }
     showPanel('trabalho');
@@ -5460,7 +5499,7 @@
     const m=LegalLibrary.get(id);
     if(!m) return;
     marcarModeloComoUsado(id);
-    abrirBuilderParaSelecao({ client:'', nome:m.titulo, blocks: await blocosParaModeloBiblioteca(m) });
+    abrirBuilderParaSelecao({ client:'', nome:LegalLibrary.tituloEm(m, LANG), blocks: await blocosParaModeloBiblioteca(m, LANG) });
     showToast(t('toast.duplicatedForEdit'));
   }
   /* Botão "Guardar" do detalhe (painel Explorar Modelos, dentro do wizard) —
@@ -8473,6 +8512,58 @@
     es:'Las plantillas facilitadas son contenido informativo y un punto de partida editable. No constituyen asesoramiento jurídico ni sustituyen la consulta de un abogado habilitado en la jurisdicción aplicable. Pivot y los autores de las plantillas no se responsabilizan del uso dado a estos documentos. Se recomienda revisión profesional antes de la firma.'
   };
   const BIB_BLOCK_LABELS={
+    /* Bloco abaixo agrupado fora da ordem alfabética de propósito — nomes de
+       bloco introduzidos pelos 8 novos contratos de Home & Trade Services. */
+    "Scope of Work":{pt:"Âmbito do Trabalho",es:"Alcance del Trabajo"},
+    "Materials and Paint Specifications":{pt:"Materiais e Especificações de Tinta",es:"Materiales y Especificaciones de Pintura"},
+    "Site Preparation and Access":{pt:"Preparação e Acesso ao Local",es:"Preparación y Acceso al Lugar"},
+    "Surface Preparation":{pt:"Preparação de Superfícies",es:"Preparación de Superficies"},
+    "Color Changes and Additional Work":{pt:"Mudanças de Cor e Trabalho Adicional",es:"Cambios de Color y Trabajo Adicional"},
+    "Cleanup and Waste Disposal":{pt:"Limpeza e Descarte de Resíduos",es:"Limpieza y Eliminación de Residuos"},
+    "Weather Delays":{pt:"Atrasos Climáticos",es:"Retrasos por Clima"},
+    "Payment and Draw Schedule":{pt:"Pagamento e Cronograma de Desembolsos",es:"Pago y Calendario de Desembolsos"},
+    "Permits and Approvals":{pt:"Licenças e Aprovações",es:"Permisos y Aprobaciones"},
+    "Change Orders":{pt:"Ordens de Alteração",es:"Órdenes de Cambio"},
+    "Materials and Fixtures":{pt:"Materiais e Acabamentos",es:"Materiales y Accesorios"},
+    "Subcontractors":{pt:"Subempreiteiros",es:"Subcontratistas"},
+    "Site Conditions and Hidden Damage":{pt:"Condições do Local e Danos Ocultos",es:"Condiciones del Sitio y Daños Ocultos"},
+    "Warranty of Workmanship":{pt:"Garantia de Execução",es:"Garantía de Mano de Obra"},
+    "Insurance and Licensing":{pt:"Seguro e Licenciamento",es:"Seguro y Licencias"},
+    "Permits and Regulatory Compliance":{pt:"Licenças e Conformidade Regulatória",es:"Permisos y Cumplimiento Normativo"},
+    "Materials and Equipment":{pt:"Materiais e Equipamentos",es:"Materiales y Equipos"},
+    "Site Safety":{pt:"Segurança do Canteiro",es:"Seguridad en el Sitio"},
+    "Inspections and Quality Control":{pt:"Vistorias e Controlo de Qualidade",es:"Inspecciones y Control de Calidad"},
+    "Delay Penalties":{pt:"Penalizações por Atraso",es:"Penalizaciones por Retraso"},
+    "Insurance and Bonding":{pt:"Seguro e Caução",es:"Seguro y Fianza"},
+    "Service Schedule":{pt:"Cronograma de Serviço",es:"Calendario de Servicio"},
+    "Access to Premises":{pt:"Acesso ao Imóvel",es:"Acceso al Inmueble"},
+    "Cleaning Supplies and Equipment":{pt:"Produtos e Equipamentos de Limpeza",es:"Productos y Equipos de Limpieza"},
+    "Pets and Household Members":{pt:"Animais e Moradores",es:"Mascotas y Convivientes"},
+    "Cancellation and Rescheduling Policy":{pt:"Política de Cancelamento e Reagendamento",es:"Política de Cancelación y Reprogramación"},
+    "Damage Policy":{pt:"Política de Danos",es:"Política de Daños"},
+    "Additional Services":{pt:"Serviços Adicionais",es:"Servicios Adicionales"},
+    "Access and Security":{pt:"Acesso e Segurança",es:"Acceso y Seguridad"},
+    "Supplies and Equipment":{pt:"Suprimentos e Equipamentos",es:"Suministros y Equipos"},
+    "Staffing and Personnel":{pt:"Pessoal Envolvido",es:"Personal Involucrado"},
+    "Quality Control and Inspections":{pt:"Controlo de Qualidade e Vistorias",es:"Control de Calidad e Inspecciones"},
+    "Cancellation and Termination":{pt:"Cancelamento e Rescisão",es:"Cancelación y Rescisión"},
+    "Materials and Plants":{pt:"Materiais e Plantas",es:"Materiales y Plantas"},
+    "Irrigation and Equipment":{pt:"Irrigação e Equipamento",es:"Riego y Equipo"},
+    "Access to Property":{pt:"Acesso ao Imóvel",es:"Acceso al Inmueble"},
+    "Waste and Debris Removal":{pt:"Remoção de Resíduos e Detritos",es:"Retiro de Residuos y Escombros"},
+    "Seasonal and Additional Services":{pt:"Serviços Sazonais e Adicionais",es:"Servicios Estacionales y Adicionales"},
+    "Inventory of Goods":{pt:"Inventário dos Bens",es:"Inventario de Bienes"},
+    "Packing Services":{pt:"Serviço de Embalagem",es:"Servicio de Embalaje"},
+    "Valuation and Insurance Coverage":{pt:"Avaliação e Cobertura de Seguro",es:"Valoración y Cobertura de Seguro"},
+    "Storage Services":{pt:"Serviços de Armazenamento",es:"Servicios de Almacenamiento"},
+    "Delivery Window and Delays":{pt:"Janela de Entrega e Atrasos",es:"Ventana de Entrega y Retrasos"},
+    "Damage Claims Procedure":{pt:"Procedimento de Reclamação de Danos",es:"Procedimiento de Reclamación de Daños"},
+    "Access and Parking":{pt:"Acesso e Estacionamento",es:"Acceso y Estacionamiento"},
+    "Cancellation Policy":{pt:"Política de Cancelamento",es:"Política de Cancelación"},
+    "Estimate and Payment":{pt:"Orçamento e Pagamento",es:"Presupuesto y Pago"},
+    "Materials":{pt:"Materiais",es:"Materiales"},
+    "Additional Work Discovered":{pt:"Trabalho Adicional Identificado",es:"Trabajo Adicional Detectado"},
+    "Cleanup":{pt:"Limpeza",es:"Limpieza"},
     "24/7 Support":{pt:"Suporte 24/7",es:"Soporte 24/7"},
     "3D Rendering":{pt:"Renderização 3D",es:"Renderizado 3D"},
     "API Versioning":{pt:"Versionamento de API",es:"Versionado de API"},
@@ -8786,6 +8877,83 @@
     "Writing Scope":{pt:"Âmbito de Redação",es:"Alcance de Redacción"}
   };
   function blockName(b){ if(b.key) return blocoNomes[b.key]; const m=BIB_BLOCK_LABELS[b.name]; if(m){ if(LANG==='pt') return m.pt; if(LANG==='es') return m.es; return b.name; } return b.name||'Bloco'; }
+  /* Subtítulo descritivo sob o nome do bloco (ver referência visual do
+     editor) — cobre os nomes de bloco mais comuns da Biblioteca (inclui os
+     8 novos contratos de Home & Trade Services); qualquer nome fora do mapa
+     cai num subtítulo genérico em vez de ficar sem nada. */
+  const BIB_BLOCK_SUBTITLES={
+    "Identification":{pt:"Definição das partes",en:"Defines the parties",es:"Definición de las partes"},
+    "Contract Object":{pt:"Descrição do objeto do contrato",en:"Describes the contract's subject",es:"Descripción del objeto del contrato"},
+    "Scope of Work":{pt:"O que será executado",en:"What will be performed",es:"Qué se realizará"},
+    "Scope of Services":{pt:"O que será executado",en:"What will be performed",es:"Qué se realizará"},
+    "Management Scope":{pt:"O que será executado",en:"What will be performed",es:"Qué se realizará"},
+    "Services":{pt:"Escopo dos serviços",en:"Services scope",es:"Alcance de los servicios"},
+    "Payment":{pt:"Valores e condições",en:"Amounts and terms",es:"Valores y condiciones"},
+    "Payment and Draw Schedule":{pt:"Valores e condições",en:"Amounts and terms",es:"Valores y condiciones"},
+    "Estimate and Payment":{pt:"Orçamento e condições de pagamento",en:"Estimate and payment terms",es:"Presupuesto y condiciones de pago"},
+    "Timeline":{pt:"Prazos de execução",en:"Execution timeline",es:"Plazos de ejecución"},
+    "Service Schedule":{pt:"Frequência e horários",en:"Frequency and hours",es:"Frecuencia y horarios"},
+    "Materials and Paint Specifications":{pt:"Fornecimento de materiais",en:"Materials supply",es:"Suministro de materiales"},
+    "Materials and Fixtures":{pt:"Fornecimento de materiais",en:"Materials supply",es:"Suministro de materiales"},
+    "Materials and Equipment":{pt:"Fornecimento de materiais",en:"Materials supply",es:"Suministro de materiales"},
+    "Materials and Plants":{pt:"Fornecimento de plantas",en:"Plant supply",es:"Suministro de plantas"},
+    "Materials":{pt:"Fornecimento de materiais",en:"Materials supply",es:"Suministro de materiales"},
+    "Permits and Approvals":{pt:"Licenças e aprovações",en:"Permits and approvals",es:"Permisos y aprobaciones"},
+    "Permits and Regulatory Compliance":{pt:"Licenças e aprovações",en:"Permits and approvals",es:"Permisos y aprobaciones"},
+    "Change Orders":{pt:"Alterações ao escopo",en:"Scope changes",es:"Cambios de alcance"},
+    "Site Preparation and Access":{pt:"Acesso ao local",en:"Site access",es:"Acceso al lugar"},
+    "Access to Property":{pt:"Acesso ao local",en:"Site access",es:"Acceso al lugar"},
+    "Access to Premises":{pt:"Acesso ao imóvel",en:"Premises access",es:"Acceso al inmueble"},
+    "Access and Security":{pt:"Acesso e segurança",en:"Access and security",es:"Acceso y seguridad"},
+    "Access and Parking":{pt:"Acesso e estacionamento",en:"Access and parking",es:"Acceso y estacionamiento"},
+    "Surface Preparation":{pt:"Preparação das superfícies",en:"Surface preparation",es:"Preparación de superficies"},
+    "Color Changes and Additional Work":{pt:"Mudanças de cor e trabalho extra",en:"Color changes and extra work",es:"Cambios de color y trabajo extra"},
+    "Cleanup and Waste Disposal":{pt:"Limpeza e remoção de resíduos",en:"Cleanup and waste removal",es:"Limpieza y retiro de residuos"},
+    "Waste and Debris Removal":{pt:"Limpeza e remoção de resíduos",en:"Cleanup and waste removal",es:"Limpieza y retiro de residuos"},
+    "Cleanup":{pt:"Limpeza do local",en:"Site cleanup",es:"Limpieza del lugar"},
+    "Weather Delays":{pt:"Atrasos por condições climáticas",en:"Weather-related delays",es:"Retrasos por clima"},
+    "Warranty":{pt:"Garantias e responsabilidades",en:"Warranties and liability",es:"Garantías y responsabilidad"},
+    "Warranty of Workmanship":{pt:"Garantias e responsabilidades",en:"Warranties and liability",es:"Garantías y responsabilidad"},
+    "Client Responsibilities":{pt:"Obrigações do contratante",en:"Client obligations",es:"Obligaciones del cliente"},
+    "Responsibilities":{pt:"Obrigações das partes",en:"Parties' obligations",es:"Obligaciones de las partes"},
+    "Insurance":{pt:"Cobertura de seguro",en:"Insurance coverage",es:"Cobertura de seguro"},
+    "Insurance and Bonding":{pt:"Cobertura de seguro",en:"Insurance coverage",es:"Cobertura de seguro"},
+    "Insurance and Licensing":{pt:"Cobertura de seguro",en:"Insurance coverage",es:"Cobertura de seguro"},
+    "Liability":{pt:"Garantias e responsabilidades",en:"Warranties and liability",es:"Garantías y responsabilidad"},
+    "General Provisions":{pt:"Disposições gerais",en:"General provisions",es:"Disposiciones generales"},
+    "Signatures":{pt:"Assinaturas das partes",en:"Parties' signatures",es:"Firmas de las partes"},
+    "Subcontractors":{pt:"Contratação de subempreiteiros",en:"Subcontractor engagement",es:"Contratación de subcontratistas"},
+    "Site Safety":{pt:"Normas de segurança",en:"Safety standards",es:"Normas de seguridad"},
+    "Safety Requirements":{pt:"Normas de segurança",en:"Safety standards",es:"Normas de seguridad"},
+    "Inspections and Quality Control":{pt:"Vistorias e controlo de qualidade",en:"Inspections and quality control",es:"Inspecciones y control de calidad"},
+    "Quality Control and Inspections":{pt:"Vistorias e controlo de qualidade",en:"Inspections and quality control",es:"Inspecciones y control de calidad"},
+    "Delay Penalties":{pt:"Penalizações por atraso",en:"Delay penalties",es:"Penalizaciones por retraso"},
+    "Additional Services":{pt:"Serviços adicionais",en:"Additional services",es:"Servicios adicionales"},
+    "Seasonal and Additional Services":{pt:"Serviços sazonais",en:"Seasonal services",es:"Servicios estacionales"},
+    "Supplies and Equipment":{pt:"Fornecimento de equipamentos",en:"Supplies and equipment",es:"Suministros y equipos"},
+    "Cleaning Supplies and Equipment":{pt:"Fornecimento de equipamentos",en:"Supplies and equipment",es:"Suministros y equipos"},
+    "Staffing and Personnel":{pt:"Pessoal envolvido",en:"Staffing",es:"Personal involucrado"},
+    "Damage Policy":{pt:"Política de danos",en:"Damage policy",es:"Política de daños"},
+    "Damage Claims Procedure":{pt:"Política de danos",en:"Damage claims",es:"Reclamos por daños"},
+    "Cancellation and Rescheduling Policy":{pt:"Política de cancelamento",en:"Cancellation policy",es:"Política de cancelación"},
+    "Cancellation and Termination":{pt:"Política de cancelamento",en:"Cancellation policy",es:"Política de cancelación"},
+    "Cancellation Policy":{pt:"Política de cancelamento",en:"Cancellation policy",es:"Política de cancelación"},
+    "Confidentiality":{pt:"Confidencialidade",en:"Confidentiality",es:"Confidencialidad"},
+    "Pets and Household Members":{pt:"Animais e moradores",en:"Pets and household members",es:"Mascotas y convivientes"},
+    "Irrigation and Equipment":{pt:"Equipamento de rega",en:"Irrigation equipment",es:"Equipo de riego"},
+    "Storage Services":{pt:"Armazenamento",en:"Storage",es:"Almacenamiento"},
+    "Valuation and Insurance Coverage":{pt:"Cobertura e avaliação dos bens",en:"Valuation and coverage",es:"Valoración y cobertura"},
+    "Delivery Window and Delays":{pt:"Janela de entrega",en:"Delivery window",es:"Ventana de entrega"},
+    "Inventory of Goods":{pt:"Inventário dos bens",en:"Goods inventory",es:"Inventario de bienes"},
+    "Packing Services":{pt:"Serviço de embalagem",en:"Packing service",es:"Servicio de embalaje"},
+    "Additional Work Discovered":{pt:"Trabalho adicional identificado",en:"Additional work found",es:"Trabajo adicional detectado"},
+    "Deliverables":{pt:"Entregáveis do projeto",en:"Project deliverables",es:"Entregables del proyecto"}
+  };
+  function blockSubtitle(b){
+    const m=BIB_BLOCK_SUBTITLES[b.name];
+    if(m) return m[LANG]||m.en;
+    return t('builder.blockSubtitleGeneric');
+  }
   function blockText(job,b){ return (b.customText!=null) ? b.customText : (b.key ? blocoTextos[b.key](job,b.params) : ''); }
   function contractSummaryHtml(job){
     let html='<div style="font-size:13.5px;line-height:1.85;margin-bottom:4px">';
@@ -8859,6 +9027,7 @@
         saveJobsData();
       }
     }
+    mudarBuilderTab('estrutura');
     renderBuilder();
     go('builder');
   }
@@ -9679,14 +9848,40 @@
     document.getElementById('builder-sub').textContent= isJob? (job.typeLabel+' · '+(job.date||t('wizard.date'))) : (builderColabCtx ? (builderModeloOrigem&&builderModeloOrigem.nome||'') : (builderModeloOrigem ? (builderModeloOrigem.client ? t('builder.basedOnPrefix')+builderModeloOrigem.client : builderModeloOrigem.nome||t('builder.newTemplateSub')) : t('builder.newTemplateSub')));
     document.getElementById('builder-back-label').textContent= isJob? job.client : (builderColabCtx ? t('collab.contractsSection') : t('nav.jobs'));
     renderBuilderCampos(job, locked);
+    document.getElementById('builder-tab-varcount').textContent= builderCamposDinamicos(job).length;
     document.getElementById('blocklist').innerHTML= job.contract.blocks.map(b=>blockCardHtml(job,b,locked)).join('');
     document.getElementById('addblock-btn').style.display= locked ? 'none' : 'flex';
     const saveTplBtn=document.getElementById('save-tpl-btn');
     saveTplBtn.style.display= locked ? 'none' : 'block';
     saveTplBtn.textContent= builderColabCtx ? t('wizard.continue') : t('action.save');
     document.getElementById('builder-locked-notice').style.display= locked ? 'flex' : 'none';
-    document.getElementById('builder-hint').style.display= locked ? 'none' : 'block';
     document.getElementById('builder-progress').style.display= (isJob && job.contract.status==='rascunho') ? 'block':'none';
+  }
+  /* Estrutura (blocos/cláusulas) x Variáveis (campos dinâmicos) — duas abas
+     em vez de tudo empilhado na mesma tela. Reabre sempre em "Estrutura"
+     (abrirBuilder chama isto), nunca preserva a aba anterior entre
+     contratos diferentes. */
+  let builderTabAtual='estrutura';
+  function mudarBuilderTab(tab){
+    builderTabAtual=tab;
+    document.getElementById('builder-tab-btn-estrutura').classList.toggle('on', tab==='estrutura');
+    document.getElementById('builder-tab-btn-variaveis').classList.toggle('on', tab==='variaveis');
+    document.getElementById('builder-tab-content-estrutura').style.display = tab==='estrutura' ? '' : 'none';
+    document.getElementById('builder-tab-content-variaveis').style.display = tab==='variaveis' ? '' : 'none';
+  }
+  /* Tutorial deixou de ficar sempre visível no topo do editor — agora é um
+     modal (openInfo) sob demanda, reaproveitando as 3 dicas que antes
+     ficavam fixas na tela principal. */
+  function abrirTutorialBuilder(){
+    const html=
+      '<div class="builder-legend" style="margin:0">'+
+        '<span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M8 6h.01M8 12h.01M8 18h.01M16 6h.01M16 12h.01M16 18h.01"/></svg><span>'+t('builder.legendReorder')+'</span></span>'+
+        '<span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg><span>'+t('builder.legendEdit')+'</span></span>'+
+        '<span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="8" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg><span>'+t('builder.legendToggle')+'</span></span>'+
+        '<span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9"/><path d="M12 4v16m-8-8h16"/></svg><span>'+t('builder.legendMenu')+'</span></span>'+
+        '<span class="bl-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg><span>'+t('builder.legendVariables')+'</span></span>'+
+      '</div>';
+    openInfo(t('builder.tutorialTitle'), html);
   }
   /* Divide o texto de um bloco em cláusulas individuais (separadas por linha
      em branco) — usado para exibir cada cláusula numerada e editável. */
@@ -9719,6 +9914,7 @@
     out += escapeHtml(tplTexto.slice(lastIndex));
     return out;
   }
+  const ICON_KEBAB='<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>';
   function clauseListInnerHtml(job,b,editavel){
     const clausesTxt=blocoClausulas(job,b);
     const clausesTpl = b.tpl!=null ? b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean) : null;
@@ -9727,8 +9923,69 @@
       '<div class="clause" id="cl-'+b.id+'-'+idx+'"'+(editavel?' onclick="editarClausula(\''+b.id+'\','+idx+')"':'')+'>'+
         '<span class="clause-n">'+(idx+1)+'</span>'+
         '<div class="clause-txt">'+(usarTags ? clauseTextComTagsHtml(b.id, idx, clausesTpl[idx]) : escapeHtml(txt))+'</div>'+
+        (editavel?'<button type="button" class="clause-kebab" onclick="event.stopPropagation();abrirMenuClausula(\''+b.id+'\','+idx+')">'+ICON_KEBAB+'</button>':'')+
       '</div>'
     ).join('');
+  }
+  /* Menu de ações por cláusula (editar/duplicar/mover/excluir) — reaproveita
+     o mesmo openInfo usado no resto do app em vez de um dropdown próprio. */
+  function abrirMenuClausula(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    if(!b) return;
+    const total=blocoClausulas(job,b).length;
+    const item=(label,onclick,disabled)=>'<div class="pick-row'+(disabled?' disabled':'')+'" '+(disabled?'':'onclick="'+onclick+'"')+'><div><div class="nm">'+label+'</div></div></div>';
+    const html=
+      item(t('builder.clauseEdit'), "closeInfo();editarClausula('"+bid+"',"+idx+")")+
+      item(t('builder.clauseDuplicate'), "duplicarClausulaBuilder('"+bid+"',"+idx+")")+
+      item(t('builder.clauseMoveUp'), "moverClausulaBuilder('"+bid+"',"+idx+",-1)", idx===0)+
+      item(t('builder.clauseMoveDown'), "moverClausulaBuilder('"+bid+"',"+idx+",1)", idx===total-1)+
+      item(t('builder.clauseDelete'), "excluirClausulaBuilder('"+bid+"',"+idx+")");
+    openInfo(t('builder.clauseMenuTitle')+' '+(idx+1), html);
+  }
+  /* As 3 ações abaixo mantêm customText e tpl sempre com o MESMO número de
+     itens e no mesmo índice — o mesmo cuidado já usado em guardarClausula —
+     senão o rastreamento de tags de campo dinâmico por cláusula (usarTags em
+     clauseListInnerHtml) desalinha. */
+  function duplicarClausulaBuilder(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    closeInfo();
+    if(!b) return;
+    const txtArr=blocoClausulas(job,b); txtArr.splice(idx+1,0,txtArr[idx]); b.customText=txtArr.join('\n\n');
+    if(b.tpl){ const tp=b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean); if(tp.length===txtArr.length-1){ tp.splice(idx+1,0,tp[idx]); b.tpl=tp.join('\n\n'); } else { b.tpl=null; } }
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    showToast(t('toast.blockTextUpdated'));
+  }
+  function moverClausulaBuilder(bid, idx, direcao){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    closeInfo();
+    if(!b) return;
+    const novoIdx=idx+direcao;
+    const txtArr=blocoClausulas(job,b);
+    if(novoIdx<0 || novoIdx>=txtArr.length) return;
+    [txtArr[idx],txtArr[novoIdx]]=[txtArr[novoIdx],txtArr[idx]]; b.customText=txtArr.join('\n\n');
+    if(b.tpl){ const tp=b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean); if(tp.length===txtArr.length){ [tp[idx],tp[novoIdx]]=[tp[novoIdx],tp[idx]]; b.tpl=tp.join('\n\n'); } else { b.tpl=null; } }
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+  }
+  function excluirClausulaBuilder(bid, idx){
+    closeInfo();
+    openInfo(t('builder.clauseDelete'), '<p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">'+t('builder.clauseDeleteConfirm')+'</p><button class="btn primary" style="width:100%;background:var(--late);border-color:var(--late)" onclick="confirmarExcluirClausulaBuilder(\''+bid+'\','+idx+')">'+t('builder.clauseDelete')+'</button>');
+  }
+  function confirmarExcluirClausulaBuilder(bid, idx){
+    const job=getBuilderJob(); const b=job.contract.blocks.find(x=>x.id===bid);
+    closeInfo();
+    if(!b) return;
+    const txtArr=blocoClausulas(job,b);
+    if(txtArr.length<=1) return;
+    txtArr.splice(idx,1); b.customText=txtArr.join('\n\n');
+    if(b.tpl){ const tp=b.tpl.split(/\n{2,}/).map(s=>s.trim()).filter(Boolean); if(tp.length===txtArr.length+1){ tp.splice(idx,1); b.tpl=tp.join('\n\n'); } else { b.tpl=null; } }
+    if(builderContext){ marcarContratoAlterado(job); saveJobsData(); }
+    renderBuilder();
+    const prev=document.getElementById('bprev-'+bid); if(prev) prev.classList.remove('collapsed');
+    showToast(t('toast.blockTextUpdated'));
   }
   /* Popup de edição de UMA ocorrência de campo dinâmico dentro do texto —
      "Aplicar" muda só esta ocorrência (congela o valor nesse ponto exato do
@@ -9798,7 +10055,7 @@
       '<div class="block-header">'+
         (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
         '<div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')">'+
-        '<span>'+escapeHtml(blockName(b))+'</span>'+
+        '<div class="block-name-main"><span class="bn-title">'+escapeHtml(blockName(b))+'</span><span class="block-subtitle">'+escapeHtml(blockSubtitle(b))+'</span></div>'+
         '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
         '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
       '</div>'+
@@ -9855,7 +10112,55 @@
     DATE:{pt:'Data',en:'Date',es:'Fecha'},
     CLIENT_EMAIL:{pt:'Email do contratante',en:'Client email',es:'Email del contratante'},
     CLIENT_DOCUMENT:{pt:'Documento do contratante',en:'Client document',es:'Documento del contratante'},
-    CLIENT_PHONE:{pt:'Telefone do contratante',en:'Client phone',es:'Teléfono del contratante'}
+    CLIENT_PHONE:{pt:'Telefone do contratante',en:'Client phone',es:'Teléfono del contratante'},
+    COMPLETION_DATE:{pt:'Data de conclusão',en:'Completion date',es:'Fecha de finalización'},
+    PAYMENT_METHOD:{pt:'Forma de pagamento',en:'Payment method',es:'Forma de pago'},
+    LATE_PAYMENT_RATE:{pt:'Multa por atraso',en:'Late payment penalty',es:'Multa por atraso'},
+    DEPOSIT_AMOUNT:{pt:'Primeiro pagamento',en:'Deposit',es:'Depósito'},
+    APPLICABLE_LAW:{pt:'Legislação aplicável',en:'Applicable law',es:'Legislación aplicable'},
+    DISPUTE_RESOLUTION_MECHANISM:{pt:'Resolução de litígios',en:'Dispute resolution',es:'Resolución de litigios'},
+    SIGNATURE_DATE:{pt:'Data de assinatura',en:'Signature date',es:'Fecha de firma'},
+    PROPERTY_ADDRESS:{pt:'Local do projeto',en:'Property address',es:'Dirección del inmueble'},
+    PROJECT_SITE_ADDRESS:{pt:'Local da obra',en:'Site address',es:'Dirección de la obra'},
+    PREMISES_ADDRESS:{pt:'Local do imóvel',en:'Premises address',es:'Dirección del local'},
+    ORIGIN_ADDRESS:{pt:'Endereço de origem',en:'Origin address',es:'Dirección de origen'},
+    DESTINATION_ADDRESS:{pt:'Endereço de destino',en:'Destination address',es:'Dirección de destino'},
+    PROJECT_PLANS_REFERENCE:{pt:'Projeto/plantas',en:'Plans reference',es:'Referencia de planos'},
+    WARRANTY_PERIOD:{pt:'Garantia',en:'Warranty period',es:'Garantía'},
+    PLANT_WARRANTY_PERIOD:{pt:'Garantia das plantas',en:'Plant warranty',es:'Garantía de las plantas'},
+    PAYMENT_MILESTONES:{pt:'Cronograma de pagamento',en:'Payment schedule',es:'Cronograma de pago'},
+    MATERIALS_ALLOWANCE:{pt:'Verba de materiais',en:'Materials allowance',es:'Presupuesto de materiales'},
+    MATERIALS_MARKUP_RATE:{pt:'Margem sobre materiais',en:'Materials markup',es:'Margen de materiales'},
+    PERMIT_RESPONSIBILITY:{pt:'Responsável pelas licenças',en:'Permit responsibility',es:'Responsable de permisos'},
+    DELAY_PENALTY_RATE:{pt:'Multa por atraso (obra)',en:'Delay penalty rate',es:'Multa por retraso'},
+    DELAY_PENALTY_CAP:{pt:'Limite da multa',en:'Delay penalty cap',es:'Límite de la multa'},
+    PERFORMANCE_BOND_AMOUNT:{pt:'Caução de performance',en:'Performance bond',es:'Fianza de cumplimiento'},
+    CANCELLATION_NOTICE_PERIOD:{pt:'Aviso de cancelamento',en:'Cancellation notice',es:'Aviso de cancelación'},
+    CANCELLATION_FEE:{pt:'Taxa de cancelamento',en:'Cancellation fee',es:'Tarifa de cancelación'},
+    TERMINATION_NOTICE_PERIOD:{pt:'Aviso de rescisão',en:'Termination notice',es:'Aviso de rescisión'},
+    DAMAGE_REPORTING_PERIOD:{pt:'Prazo p/ reportar danos',en:'Damage reporting period',es:'Plazo para reportar daños'},
+    ACCESS_METHOD:{pt:'Forma de acesso',en:'Access method',es:'Forma de acceso'},
+    SERVICE_FREQUENCY:{pt:'Frequência',en:'Frequency',es:'Frecuencia'},
+    SERVICE_DAY_AND_TIME:{pt:'Dia e horário',en:'Day & time',es:'Día y horario'},
+    SERVICE_HOURS:{pt:'Horário do serviço',en:'Service hours',es:'Horario del servicio'},
+    SEASONAL_SCHEDULE:{pt:'Calendário sazonal',en:'Seasonal schedule',es:'Calendario estacional'},
+    CLEANING_TASKS_INCLUDED:{pt:'Tarefas incluídas',en:'Tasks included',es:'Tareas incluidas'},
+    LANDSCAPING_SERVICES_INCLUDED:{pt:'Serviços',en:'Services',es:'Servicios'},
+    SURFACES_TO_BE_PAINTED:{pt:'Superfícies',en:'Surfaces',es:'Superficies'},
+    PAINT_BRAND_AND_TYPE:{pt:'Marca e tipo de tinta',en:'Paint brand & type',es:'Marca y tipo de pintura'},
+    COLOR_SPECIFICATIONS:{pt:'Cores',en:'Colors',es:'Colores'},
+    RENOVATION_SCOPE:{pt:'Escopo da obra',en:'Renovation scope',es:'Alcance de la renovación'},
+    CONSTRUCTION_SCOPE:{pt:'Escopo da obra',en:'Construction scope',es:'Alcance de la obra'},
+    MOVING_DATE:{pt:'Data da mudança',en:'Moving date',es:'Fecha de la mudanza'},
+    INVENTORY_LIST_REFERENCE:{pt:'Inventário',en:'Inventory list',es:'Inventario'},
+    PACKING_SERVICES_INCLUDED:{pt:'Serviço de embalagem',en:'Packing services',es:'Servicio de embalaje'},
+    INSURANCE_COVERAGE_LEVEL:{pt:'Nível de cobertura',en:'Coverage level',es:'Nivel de cobertura'},
+    DECLARED_VALUE:{pt:'Valor declarado',en:'Declared value',es:'Valor declarado'},
+    STORAGE_DURATION:{pt:'Duração do armazenamento',en:'Storage duration',es:'Duración del almacenamiento'},
+    STORAGE_FEE:{pt:'Taxa de armazenamento',en:'Storage fee',es:'Tarifa de almacenamiento'},
+    CLAIM_NOTICE_PERIOD:{pt:'Prazo p/ reclamações',en:'Claim notice period',es:'Plazo de reclamación'},
+    REPAIR_TASKS_DESCRIPTION:{pt:'Tarefas',en:'Tasks',es:'Tareas'},
+    ESTIMATED_COST:{pt:'Orçamento estimado',en:'Estimated cost',es:'Costo estimado'}
   };
   function dynFieldLabel(campo){
     const m=DYN_FIELD_LABELS[campo];
@@ -9873,24 +10178,110 @@
     });
     return ordem;
   }
+  /* Agrupamento das Variáveis por categoria (Pessoas/Projeto/Serviços/
+     Financeiro/Datas/Jurídico) — mapa explícito para os campos mais comuns
+     da Biblioteca (cobre os 8 novos contratos de Home & Trade Services e os
+     campos universais repetidos em dezenas de outros); para qualquer campo
+     fora do mapa, cai numa heurística por palavras-chave no próprio nome,
+     nunca deixa um campo "sem grupo". */
+  const DYN_GROUP_ORDER=['pessoas','projeto','servicos','financeiro','datas','juridico'];
+  const DYN_GROUP_META={
+    pessoas:{label:{pt:'Pessoas',en:'People',es:'Personas'},icon:'<path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/>'},
+    projeto:{label:{pt:'Projeto',en:'Project',es:'Proyecto'},icon:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>'},
+    servicos:{label:{pt:'Serviços',en:'Services',es:'Servicios'},icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>'},
+    financeiro:{label:{pt:'Financeiro',en:'Financial',es:'Financiero'},icon:'<circle cx="12" cy="12" r="9"/><path d="M12 6v12M15 9.5c0-1.4-1.3-2.5-3-2.5s-3 1.1-3 2.5 1.3 2 3 2.5 3 1.1 3 2.5-1.3 2.5-3 2.5-3-1.1-3-2.5"/>'},
+    datas:{label:{pt:'Datas',en:'Dates',es:'Fechas'},icon:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>'},
+    juridico:{label:{pt:'Jurídico',en:'Legal',es:'Jurídico'},icon:'<path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z"/><path d="M7 21h10"/><path d="M12 3v18"/><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"/>'}
+  };
+  const DYN_FIELD_GROUP_MAP={
+    CLIENT_NAME:'pessoas', CLIENT_ADDRESS:'pessoas', CLIENT_EMAIL:'pessoas', CLIENT_DOCUMENT:'pessoas', CLIENT_PHONE:'pessoas',
+    PROVIDER_NAME:'pessoas', PROVIDER_ADDRESS:'pessoas',
+    PROJECT_NAME:'projeto', PROPERTY_ADDRESS:'projeto', PROJECT_SITE_ADDRESS:'projeto', PREMISES_ADDRESS:'projeto',
+    ORIGIN_ADDRESS:'projeto', DESTINATION_ADDRESS:'projeto', PROJECT_PLANS_REFERENCE:'projeto', LOCATION:'projeto',
+    RENOVATION_SCOPE:'projeto', CONSTRUCTION_SCOPE:'projeto', SURFACES_TO_BE_PAINTED:'projeto', INVENTORY_LIST_REFERENCE:'projeto',
+    CLEANING_TASKS_INCLUDED:'servicos', LANDSCAPING_SERVICES_INCLUDED:'servicos', PAINT_BRAND_AND_TYPE:'servicos',
+    COLOR_SPECIFICATIONS:'servicos', SERVICE_FREQUENCY:'servicos', SERVICE_DAY_AND_TIME:'servicos', SERVICE_HOURS:'servicos',
+    SEASONAL_SCHEDULE:'servicos', PACKING_SERVICES_INCLUDED:'servicos', REPAIR_TASKS_DESCRIPTION:'servicos', ACCESS_METHOD:'servicos',
+    TOTAL_VALUE:'financeiro', PAYMENT_METHOD:'financeiro', LATE_PAYMENT_RATE:'financeiro', DEPOSIT_AMOUNT:'financeiro',
+    PAYMENT_MILESTONES:'financeiro', MATERIALS_ALLOWANCE:'financeiro', MATERIALS_MARKUP_RATE:'financeiro',
+    DELAY_PENALTY_RATE:'financeiro', DELAY_PENALTY_CAP:'financeiro', PERFORMANCE_BOND_AMOUNT:'financeiro',
+    CANCELLATION_FEE:'financeiro', STORAGE_FEE:'financeiro', DECLARED_VALUE:'financeiro', INSURANCE_COVERAGE_LEVEL:'financeiro',
+    ESTIMATED_COST:'financeiro',
+    START_DATE:'datas', DELIVERY_DATE:'datas', COMPLETION_DATE:'datas', MOVING_DATE:'datas', SIGNATURE_DATE:'datas', DATE:'datas',
+    CANCELLATION_NOTICE_PERIOD:'datas', TERMINATION_NOTICE_PERIOD:'datas', DAMAGE_REPORTING_PERIOD:'datas',
+    CLAIM_NOTICE_PERIOD:'datas', WARRANTY_PERIOD:'datas', PLANT_WARRANTY_PERIOD:'datas', STORAGE_DURATION:'datas',
+    APPLICABLE_LAW:'juridico', DISPUTE_RESOLUTION_MECHANISM:'juridico', PERMIT_RESPONSIBILITY:'juridico'
+  };
+  function inferirGrupoCampo(campo){
+    const explicito=DYN_FIELD_GROUP_MAP[campo];
+    if(explicito) return explicito;
+    if(/^(CLIENT|PROVIDER|CONTRACTOR|ASSIGNEE|ASSIGNOR|AGENT|CANDIDATE)/.test(campo)) return 'pessoas';
+    if(/_DATE$|_PERIOD$|_DURATION$|_NOTICE|_DEADLINE/.test(campo)) return 'datas';
+    if(/LAW|DISPUTE|LIABILITY|JURISDICTION|GOVERNING|COMPLIANCE|PERMIT|LICENSE|REGULAT/.test(campo)) return 'juridico';
+    if(/VALUE|PRICE|AMOUNT|RATE|FEE|COST|BUDGET|PAYMENT|DEPOSIT|BOND|MARKUP|ALLOWANCE/.test(campo)) return 'financeiro';
+    if(/ADDRESS|SITE|PROPERTY|PREMISES|LOCATION|PLANS/.test(campo)) return 'projeto';
+    return 'servicos';
+  }
   function renderBuilderCampos(job, locked){
     const wrap=document.getElementById('builder-dynfields');
     if(!wrap) return;
     const campos=builderCamposDinamicos(job);
-    if(!campos.length || locked){ wrap.style.display='none'; wrap.innerHTML=''; return; }
+    if(!campos.length){
+      wrap.innerHTML='<div class="dynf-head-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg><span>'+t('builder.tabVariables')+'</span></div>'+
+        '<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('builder.varsEmpty')+'</p>';
+      return;
+    }
     const fv=getBuilderFieldValues();
+    const preenchidos=campos.filter(c=>fv[c]!=null && fv[c]!=='').length;
+    const grupos={};
+    campos.forEach(c=>{ const g=inferirGrupoCampo(c); (grupos[g]=grupos[g]||[]).push(c); });
     const seta='<svg class="dynf-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
-    wrap.style.display='block';
-    wrap.innerHTML=
-      '<div class="dynf-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"/></svg>'+
-        '<span>'+t('builder.dynFields')+'</span><span class="dynf-count">'+campos.length+'</span></div>'+
+    let html='<div class="dynf-head-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 4c-2 0-3 1-3 3v3c0 1-1 2-2 2 1 0 2 1 2 2v3c0 2 1 3 3 3M15 4c2 0 3 1 3 3v3c0 1 1 2 2 2-1 0-2 1-2 2v3c0 2-1 3-3 3"/></svg><span>'+t('builder.tabVariables')+'</span></div>'+
       '<div class="dynf-hint">'+t('builder.dynFieldsHint')+'</div>'+
-      campos.map(c=>{
-        const val=fv[c]!=null?fv[c]:'';
-        return '<div class="dynf-row"><span class="dynf-key" onclick="localizarCampoNoBuilder(\''+c+'\')">'+escapeHtml(dynFieldLabel(c))+'</span>'+seta+
-          '<input class="dynf-input" value="'+escapeHtml(val)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" '+
-          'oninput="setBuilderCampo(\''+c+'\', this.value)"></div>';
-      }).join('');
+      '<div class="dynf-summary">'+t('builder.varsTotal').replace('{n}', campos.length)+' • '+t('builder.varsFilled').replace('{n}', preenchidos)+' • '+t('builder.varsPending').replace('{n}', campos.length-preenchidos)+'</div>';
+    DYN_GROUP_ORDER.filter(g=>grupos[g] && grupos[g].length).forEach(g=>{
+      const meta=DYN_GROUP_META[g];
+      const itens=grupos[g];
+      html+='<div class="dynf-group">'+
+        '<div class="dynf-group-head" onclick="toggleDynfGroup(this)">'+
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">'+meta.icon+'</svg>'+
+          '<span>'+(meta.label[LANG]||meta.label.en)+'</span><span class="dynf-count">'+itens.length+'</span>'+
+          '<svg class="dynf-group-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>'+
+        '</div>'+
+        '<div class="dynf-group-body">'+
+          itens.map(c=>{
+            const val=fv[c]!=null?fv[c]:'';
+            const display = val!=='' ? escapeHtml(val) : '<span class="dynf-empty">'+t('builder.dynFieldPlaceholder')+'</span>';
+            return locked
+              ? '<div class="dynf-row-ro"><span class="dynf-key">'+escapeHtml(dynFieldLabel(c))+'</span><span class="dynf-val">'+display+'</span></div>'
+              : '<div class="dynf-row" onclick="abrirEditarVariavelBuilder(\''+c+'\')"><span class="dynf-key">'+escapeHtml(dynFieldLabel(c))+'</span><span class="dynf-val">'+display+'</span>'+seta+'</div>';
+          }).join('')+
+        '</div>'+
+      '</div>';
+    });
+    wrap.innerHTML=html;
+  }
+  function toggleDynfGroup(el){
+    el.parentElement.classList.toggle('collapsed');
+  }
+  /* Editar UMA variável (aplica a todas as ocorrências no contrato — igual ao
+     comportamento anterior do input inline) + atalho para ver onde ela
+     aparece, sem sair do modal primeiro. */
+  function abrirEditarVariavelBuilder(campo){
+    const fv=getBuilderFieldValues();
+    const valorAtual=fv[campo]||'';
+    const html='<div class="field"><input id="dynf-var-input" value="'+escapeHtml(valorAtual)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" autocomplete="off"></div>'+
+      '<button class="btn primary" style="width:100%;margin-top:6px" onclick="salvarEditarVariavelBuilder(\''+campo+'\')">'+t('action.save')+'</button>'+
+      '<button class="btn soft" style="width:100%;margin-top:8px" onclick="localizarCampoNoBuilder(\''+campo+'\');closeInfo();mudarBuilderTab(\'estrutura\')">'+t('builder.showWhereUsed')+'</button>';
+    openInfo(dynFieldLabel(campo), html);
+    setTimeout(()=>{ const el=document.getElementById('dynf-var-input'); if(el){ el.focus(); el.select(); } },0);
+  }
+  function salvarEditarVariavelBuilder(campo){
+    const el=document.getElementById('dynf-var-input');
+    setBuilderCampo(campo, el?el.value:'');
+    closeInfo();
+    renderBuilderCampos(getBuilderJob(), builderContext && contratoBloqueadoParaEdicao(getBuilderJob()));
+    const badge=document.getElementById('builder-tab-varcount'); if(badge) badge.textContent=builderCamposDinamicos(getBuilderJob()).length;
   }
   /* Toca no nome do campo (lado esquerdo) → leva até a cláusula onde ele
      aparece no contrato (expande o bloco, rola e dá um flash), pra mostrar o
@@ -12686,6 +13077,60 @@
     return [];
   }
   const BIB_FIELD_WORD_MAP={
+    /* Bloco abaixo agrupado fora da ordem alfabética de propósito — vocabulário
+       novo introduzido pelos contratos de Home & Trade Services (pintura,
+       reforma, obras, limpeza, jardinagem, mudanças, faz-tudo). A ordem não
+       importa para a busca (chave direta no objeto), só para leitura humana. */
+    "ADDITIONS":{pt:"Ampliações",es:"Ampliaciones"},
+    "BASEMENT":{pt:"Cave",es:"Sótano"},
+    "BATHROOM":{pt:"Casa de Banho",es:"Baño"},
+    "CARE":{pt:"Cuidado",es:"Cuidado"},
+    "CLEANING":{pt:"Limpeza",es:"Limpieza"},
+    "CONSTRUCTION":{pt:"Construção",es:"Construcción"},
+    "DEEP":{pt:"Profunda",es:"Profunda"},
+    "DISTANCE":{pt:"Distância",es:"Distancia"},
+    "EXTERIOR":{pt:"Exterior",es:"Exterior"},
+    "FACILITY":{pt:"Instalação",es:"Instalación"},
+    "FINISHING":{pt:"Acabamento",es:"Acabado"},
+    "FIXTURE":{pt:"Acessório",es:"Accesorio"},
+    "GARDEN":{pt:"Jardim",es:"Jardín"},
+    "HANDYMAN":{pt:"Faz-Tudo",es:"Manitas"},
+    "HOME":{pt:"Casa",es:"Casa"},
+    "HOUSE":{pt:"Casa",es:"Casa"},
+    "IN":{pt:"Entrada",es:"Entrada"},
+    "INTERIOR":{pt:"Interior",es:"Interior"},
+    "JANITORIAL":{pt:"Conservação",es:"Conserjería"},
+    "JOBS":{pt:"Trabalhos",es:"Trabajos"},
+    "KITCHEN":{pt:"Cozinha",es:"Cocina"},
+    "LANDSCAPE":{pt:"Paisagismo",es:"Paisajismo"},
+    "LANDSCAPING":{pt:"Paisagismo",es:"Paisajismo"},
+    "LAWN":{pt:"Relvado",es:"Césped"},
+    "LOCAL":{pt:"Local",es:"Local"},
+    "LONG":{pt:"Longa",es:"Larga"},
+    "MINOR":{pt:"Menor",es:"Menor"},
+    "MOVE":{pt:"Mudança",es:"Mudanza"},
+    "MOVING":{pt:"Mudança",es:"Mudanza"},
+    "NEW":{pt:"Nova",es:"Nueva"},
+    "OFFICE":{pt:"Escritório",es:"Oficina"},
+    "OUT":{pt:"Saída",es:"Salida"},
+    "PACKING":{pt:"Embalagem",es:"Embalaje"},
+    "PAINT":{pt:"Pintura",es:"Pintura"},
+    "PAINTING":{pt:"Pintura",es:"Pintura"},
+    "PROPERTIES":{pt:"Propriedades",es:"Propiedades"},
+    "RECURRING":{pt:"Recorrente",es:"Recurrente"},
+    "RELOCATION":{pt:"Mudança",es:"Mudanza"},
+    "RENOVATION":{pt:"Renovação",es:"Renovación"},
+    "REPAINTING":{pt:"Repintura",es:"Repintado"},
+    "REPAIR":{pt:"Reparo",es:"Reparación"},
+    "REPAIRS":{pt:"Reparos",es:"Reparaciones"},
+    "RESIDENTIAL":{pt:"Residencial",es:"Residencial"},
+    "RETAIL":{pt:"Retalho",es:"Minorista"},
+    "ROOM":{pt:"Cómodo",es:"Habitación"},
+    "SEASONAL":{pt:"Sazonal",es:"Estacional"},
+    "SMALL":{pt:"Pequenos",es:"Pequeños"},
+    "STORAGE":{pt:"Armazenamento",es:"Almacenamiento"},
+    "STRUCTURAL":{pt:"Estrutural",es:"Estructural"},
+    "WHOLE":{pt:"Inteira",es:"Entera"},
     "A":{pt:"Um",es:"Un"},
     "ACCEPTANCE":{pt:"Aceitação",es:"Aceptación"},
     "ACCESS":{pt:"Acesso",es:"Acceso"},
@@ -13084,6 +13529,24 @@
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
   }
+  /* Tags do catálogo (index.json) só existem em inglês — sem isto, uma
+     Biblioteca em PT/ES mostrava título traduzido mas tags cruas em inglês
+     ("Contrato de Pintura" com a tag "Interior Painting" por baixo), lendo
+     como duas línguas misturadas na mesma ficha. Traduz palavra a palavra
+     reaproveitando o MESMO dicionário de bibTraduzirCampo (preserva espaços e
+     "/", já que tags são frases como "Move-in/Move-out Cleaning", não
+     SCREAMING_SNAKE_CASE) — qualquer palavra fora do dicionário mantém-se em
+     inglês em vez de inventar tradução, mesma regra de fallback do resto da
+     Biblioteca. */
+  function bibTraduzirTag(tag, lang){
+    lang = lang || LANG;
+    if(lang==='en' || !tag) return tag;
+    return tag.split(/(\s+|\/|-)/).map(parte=>{
+      if(/^(\s+|\/|-)$/.test(parte)) return parte;
+      const m=BIB_FIELD_WORD_MAP[parte.toUpperCase()];
+      return m ? (m[lang]||m.pt) : parte;
+    }).join('');
+  }
   function bibTraduzirCampo(campo){
     if(LANG==='en') return bibCapitalizar(campo);
     const palavras=(campo||'').split(/[_-]+/).filter(Boolean);
@@ -13167,7 +13630,8 @@
           id:'of:'+b.id+'@'+lang,
           lang,
           titulo: LegalLibrary.tituloEm(b, lang),
-          desc: LegalLibrary.descEm(b, lang)
+          desc: LegalLibrary.descEm(b, lang),
+          tags: (base.tags||[]).map(tg=>bibTraduzirTag(tg, lang))
         }));
       });
     });

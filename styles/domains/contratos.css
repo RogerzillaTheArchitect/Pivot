@@ -1,14 +1,27 @@
   /* ===== BUILDER DE CONTRATO ===== */
-  .builder-top{display:flex;justify-content:space-between;align-items:flex-start;margin:14px 0 4px;gap:10px}
+  .builder-top{display:flex;justify-content:space-between;align-items:flex-start;margin:14px 0 16px;gap:10px}
+  .builder-tutorial-btn{display:flex;align-items:center;gap:7px;flex:none;white-space:nowrap}
+  .builder-tutorial-btn svg{width:15px;height:15px;flex:none}
+  /* Abas Estrutura/Variáveis — reaproveita o componente .segmented já usado
+     no resto do app (fundo --ink no estado ativo = mesma linguagem
+     monocromática, sem verde). */
+  .builder-tabs{margin-bottom:18px}
+  .builder-tabs button{display:flex;align-items:center;justify-content:center;gap:7px}
+  .builder-tabs button svg{width:15px;height:15px;flex:none}
+  .tab-badge{font-size:10.5px;font-weight:700;border-radius:var(--r);padding:1px 6px;background:rgba(255,255,255,.14);color:var(--ink)}
+  .builder-tabs button.on .tab-badge{background:rgba(0,0,0,.14);color:#15170F}
   .builder-hint{font-size:13px;color:var(--neutral);margin-bottom:18px}
   /* Cada dica numa linha própria — em vez de deixar quebrar livremente lado
      a lado (o que lia como um texto corrido/confuso ao envolver), fica
      sempre claro qual ícone pertence a qual frase. */
-  .builder-legend{display:flex;flex-direction:column;gap:7px;margin:2px 0 16px}
+  .builder-legend{display:flex;flex-direction:column;gap:10px;margin:2px 0 16px}
   .builder-legend .bl-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--neutral)}
   .builder-legend .bl-item svg{width:15px;height:15px;opacity:.8;flex:none}
+  .builder-bottom-actions{display:flex;gap:10px;margin-top:18px}
+  .builder-bottom-actions .addblock{width:auto;flex:1;min-width:0;margin-top:0}
+  .builder-bottom-actions .save-tpl{flex:1;min-width:0;margin-top:0}
   .block{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r);padding:12px 8px;margin-bottom:8px;box-shadow:var(--shadow);
+    border-radius:var(--r);padding:14px 10px;margin-bottom:12px;box-shadow:var(--shadow);
     transition:transform .18s,box-shadow .18s,opacity .18s}
   /* Handle e toggle ficam só nesta linha — a lista de cláusulas abaixo é
      filha direta do .block, sem ficar espremida entre essas duas colunas
@@ -33,21 +46,30 @@
   .builder-locked-notice{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);
     background:var(--paper-2);border-radius:var(--r);padding:11px 14px;margin-bottom:14px}
   .builder-locked-notice svg{width:16px;height:16px;flex:none;color:var(--neutral)}
-  .block-name{flex:1;min-width:0;font-size:14px;font-weight:600;cursor:pointer;
+  .block-name{flex:1;min-width:0;cursor:pointer;
     display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .block-name-main{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .block-name-main .bn-title{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .block-subtitle{font-size:11.5px;font-weight:400;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .block-chev{width:14px;height:14px;flex:none;color:var(--neutral);transition:transform .2s}
-  .block-preview{margin-top:9px}
+  .block-preview{margin-top:12px}
   .block-preview.collapsed{display:none}
   .block.off .block-preview,.block.off .block-name{opacity:.45}
   /* cláusulas numeradas, separadas e com hierarquia clara */
-  .clause-list{display:flex;flex-direction:column;gap:7px;width:100%}
-  .clause{display:flex;gap:8px;align-items:flex-start;padding:9px 8px;border:1px solid var(--line-soft);
+  .clause-list{display:flex;flex-direction:column;gap:9px;width:100%}
+  .clause{display:flex;gap:8px;align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
     border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
   .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
     font-size:10px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+  /* Menu de três pontos por cláusula (editar/duplicar/mover/excluir) */
+  .clause-kebab{flex:none;border:none;background:none;color:var(--neutral);cursor:pointer;
+    padding:3px;margin:-2px -4px -2px 2px;display:flex;align-items:center;border-radius:var(--r);transition:color .15s,background .15s}
+  .clause-kebab:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+  .clause-kebab svg{width:16px;height:16px}
+  .pick-row.disabled{opacity:.4;cursor:default}
   /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
      só esta ocorrência ou todas as ocorrências da mesma tag no contrato. */
   .dynf-tag{display:inline;padding:1px 5px;border-radius:3px;background:rgba(232,118,58,.18);
@@ -71,6 +93,10 @@
      "concluído" do app (ex.: .job-footer-btn.concluir). */
   .toggle.on{background:rgba(70,130,108,.65)}
   .toggle.on .kn{left:18px}
+  /* Editor de contrato: sem verde nenhum, nem o dessaturado acima — os
+     blocos usam só a escala preto/cinza/branco do resto deste ecrã. */
+  .dyn-blocklist .toggle.on{background:rgba(255,255,255,.32)}
+  .dyn-blocklist .toggle.on .kn{background:var(--ink)}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
     border:1.5px dashed var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
@@ -78,27 +104,34 @@
   .addblock svg{width:16px;height:16px}
   .save-tpl{flex:none;white-space:nowrap;margin-top:2px}
 
-  /* ===== PAINEL DE CAMPOS DINÂMICOS (substituição em massa) =====
+  /* ===== ABA VARIÁVEIS (antigo painel de Campos Dinâmicos) =====
      Acento monocromático (grafite/ink) — nada de verde da marca aqui, para
-     não destoar da identidade escura da biblioteca. */
-  .dynf-panel{border:1px solid var(--line);border-radius:var(--r);background:var(--paper-2);padding:14px 14px 6px;margin-bottom:14px}
-  .dynf-head{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
-  .dynf-head svg{width:17px;height:17px;color:var(--ink-soft);flex:none}
-  .dynf-count{margin-left:auto;font-size:11px;font-weight:600;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
-  .dynf-hint{font-size:12px;color:var(--neutral);margin:4px 0 12px}
-  .dynf-row{display:grid;grid-template-columns:minmax(0,1fr) 14px minmax(0,1fr);align-items:center;gap:8px;margin-bottom:8px}
-  /* Nome do campo (lado esquerdo) é clicável — leva até a cláusula onde ele
-     aparece no contrato (localizarCampoNoBuilder), pra ver o contexto antes
-     de editar o valor no input ao lado. */
-  .dynf-key{min-height:38px;display:flex;align-items:center;font-size:12.5px;font-weight:600;color:var(--ink-soft);
-    background:rgba(255,255,255,.05);border:1px solid var(--line-soft);border-radius:var(--r);padding:8px 10px;
-    white-space:normal;overflow-wrap:break-word;line-height:1.25;cursor:pointer}
-  .dynf-key:hover{border-color:var(--ink-soft);color:var(--ink)}
-  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none;justify-self:center}
-  .dynf-input{width:100%;min-height:38px;font-family:inherit;font-size:13px;color:var(--ink);
-    background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:0 11px;outline:none;box-sizing:border-box}
-  .dynf-input:focus{border-color:var(--ink-soft)}
-  .dynf-input::placeholder{color:var(--ink-faint)}
+     não destoar da identidade escura da biblioteca. Agrupado por categoria
+     (Pessoas/Projeto/Serviços/Financeiro/Datas/Jurídico), cada linha ocupa
+     uma única linha (nome — valor — seta) e abre um modal ao tocar, em vez
+     de inputs sempre expostos. */
+  .dynf-panel{padding:2px 0 0}
+  .dynf-head-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .dynf-head-title svg{width:19px;height:19px;color:var(--ink-soft);flex:none}
+  .dynf-hint{font-size:12.5px;color:var(--neutral);line-height:1.5;margin:0 0 12px}
+  .dynf-summary{font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:20px}
+  .dynf-group{border:1px solid var(--line);border-radius:var(--r);background:var(--paper);margin-bottom:14px;overflow:hidden}
+  .dynf-group-head{display:flex;align-items:center;gap:9px;padding:14px 14px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
+  .dynf-group-head svg:first-child{width:16px;height:16px;color:var(--ink-soft);flex:none}
+  .dynf-count{font-size:11px;font-weight:700;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
+  .dynf-group-chev{width:14px;height:14px;flex:none;color:var(--neutral);margin-left:auto;transition:transform .2s}
+  .dynf-group.collapsed .dynf-group-chev{transform:rotate(-90deg)}
+  .dynf-group-body{border-top:1px solid var(--line)}
+  .dynf-group.collapsed .dynf-group-body{display:none}
+  .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:12px;padding:13px 14px;border-top:1px solid var(--line-soft)}
+  .dynf-row:first-child,.dynf-row-ro:first-child{border-top:none}
+  .dynf-row{cursor:pointer;transition:background .15s}
+  .dynf-row:hover{background:rgba(255,255,255,.03)}
+  .dynf-row .dynf-key,.dynf-row-ro .dynf-key{flex:1;min-width:0;font-size:13.5px;font-weight:500;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;border:none;padding:0;height:auto;min-height:0;cursor:inherit}
+  .dynf-val{flex:1;min-width:0;font-size:13.5px;color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dynf-empty{color:var(--ink-faint);font-style:italic}
+  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
