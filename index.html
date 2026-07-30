@@ -2281,7 +2281,7 @@
     "builder.varsTotal": { pt:"{n} variáveis", en:"{n} variables", es:"{n} variables" },
     "builder.varsFilled": { pt:"{n} preenchidas", en:"{n} filled", es:"{n} completadas" },
     "builder.varsPending": { pt:"{n} pendentes", en:"{n} pending", es:"{n} pendientes" },
-    "builder.showWhereUsed": { pt:"Ver onde aparece no contrato", en:"Show where it appears in the contract", es:"Ver dónde aparece en el contrato" },
+    "builder.showWhereUsed": { pt:"Ver no contrato", en:"View in contract", es:"Ver en el contrato" },
     "builder.clauseEdit": { pt:"Editar", en:"Edit", es:"Editar" },
     "builder.clauseDuplicate": { pt:"Duplicar", en:"Duplicate", es:"Duplicar" },
     "builder.clauseMoveUp": { pt:"Mover para cima", en:"Move up", es:"Mover hacia arriba" },
@@ -10272,7 +10272,7 @@
     const valorAtual=fv[campo]||'';
     const html='<div class="field"><input id="dynf-var-input" value="'+escapeHtml(valorAtual)+'" placeholder="'+t('builder.dynFieldPlaceholder')+'" autocomplete="off"></div>'+
       '<button class="btn primary" style="width:100%;margin-top:6px" onclick="salvarEditarVariavelBuilder(\''+campo+'\')">'+t('action.save')+'</button>'+
-      '<button class="btn soft" style="width:100%;margin-top:8px" onclick="localizarCampoNoBuilder(\''+campo+'\');closeInfo();mudarBuilderTab(\'estrutura\')">'+t('builder.showWhereUsed')+'</button>';
+      '<button class="btn soft" style="width:100%;margin-top:8px" onclick="verNoContrato(\''+campo+'\')">'+t('builder.showWhereUsed')+'</button>';
     openInfo(dynFieldLabel(campo), html);
     setTimeout(()=>{ const el=document.getElementById('dynf-var-input'); if(el){ el.focus(); el.select(); } },0);
   }
@@ -10282,6 +10282,19 @@
     closeInfo();
     renderBuilderCampos(getBuilderJob(), builderContext && contratoBloqueadoParaEdicao(getBuilderJob()));
     const badge=document.getElementById('builder-tab-varcount'); if(badge) badge.textContent=builderCamposDinamicos(getBuilderJob()).length;
+  }
+  /* Botão "Ver no contrato" do modal de edição de variável — fecha o modal e
+     troca para a aba Estrutura ANTES de tentar rolar até a cláusula. Antes
+     disto, localizarCampoNoBuilder rodava primeiro, com #builder-tab-content-
+     estrutura ainda display:none (a aba Variáveis estava ativa): scrollIntoView
+     num elemento dentro de um ancestral escondido não tem efeito nenhum, então
+     ao trocar de aba em seguida a tela ficava no topo, no bloco errado. Um
+     pequeno atraso depois de tornar a aba visível garante que o layout já foi
+     recalculado antes de medir/rolar. */
+  function verNoContrato(campo){
+    closeInfo();
+    mudarBuilderTab('estrutura');
+    setTimeout(()=>localizarCampoNoBuilder(campo), 60);
   }
   /* Toca no nome do campo (lado esquerdo) → leva até a cláusula onde ele
      aparece no contrato (expande o bloco, rola e dá um flash), pra mostrar o
@@ -11711,7 +11724,7 @@
     /* email completo digitado que não corresponde a ninguém → oferecer adicionar novo */
     const exato=todos.some(c=>(c.email||'').toLowerCase()===q);
     if(ehEmail && !exato){
-      html+='<div class="pick-row" style="border:1px dashed var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
+      html+='<div class="pick-row" style="border:1px solid var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
         '<div><div class="nm">'+t('collab.addNew')+'</div><span class="sub">'+escapeHtml(q)+'</span></div></div>';
     }
     if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('wizard.noMatchesFor')+escapeHtml(q)+'"</p>';
@@ -13529,10 +13542,55 @@
   function bibCapitalizar(s){
     return (s||'').replace(/[_-]/g,' ').split(' ').filter(Boolean).map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
   }
+  /* Tradução palavra-a-palavra (fallback abaixo) não reordena adjetivo/
+     substantivo — "Interior Painting" virava "Interior Pintura" em vez de
+     "Pintura Interior". Continua em uma única língua (o objetivo principal),
+     mas para as tags dos 8 contratos de Home & Trade Services — que
+     conhecemos exatamente, por serem obra desta mesma sessão — vale a pena
+     uma tradução completa e natural da frase, não só palavra por palavra. */
+  const BIB_TAG_PHRASE_OVERRIDES={
+    "Interior Painting":{pt:"Pintura Interior",es:"Pintura Interior"},
+    "Exterior Painting":{pt:"Pintura Exterior",es:"Pintura Exterior"},
+    "Residential Properties":{pt:"Imóveis Residenciais",es:"Inmuebles Residenciales"},
+    "Commercial Properties":{pt:"Imóveis Comerciais",es:"Inmuebles Comerciales"},
+    "Repainting":{pt:"Repintura",es:"Repintado"},
+    "Kitchen Remodeling":{pt:"Remodelação de Cozinha",es:"Remodelación de Cocina"},
+    "Bathroom Remodeling":{pt:"Remodelação de Casa de Banho",es:"Remodelación de Baño"},
+    "Whole-Home Renovation":{pt:"Renovação Completa da Casa",es:"Renovación Completa de la Casa"},
+    "Room Additions":{pt:"Ampliação de Cómodos",es:"Ampliación de Habitaciones"},
+    "Basement Finishing":{pt:"Acabamento de Cave",es:"Acabado de Sótano"},
+    "New Construction":{pt:"Construção Nova",es:"Construcción Nueva"},
+    "Residential Construction":{pt:"Construção Residencial",es:"Construcción Residencial"},
+    "Commercial Construction":{pt:"Construção Comercial",es:"Construcción Comercial"},
+    "Building Additions":{pt:"Ampliações de Edifícios",es:"Ampliaciones de Edificios"},
+    "Structural Work":{pt:"Obras Estruturais",es:"Trabajos Estructurales"},
+    "House Cleaning":{pt:"Limpeza Doméstica",es:"Limpieza del Hogar"},
+    "Recurring Cleaning":{pt:"Limpeza Recorrente",es:"Limpieza Recurrente"},
+    "Deep Cleaning":{pt:"Limpeza Profunda",es:"Limpieza Profunda"},
+    "Move-in/Move-out Cleaning":{pt:"Limpeza de Entrada/Saída",es:"Limpieza de Entrada/Salida"},
+    "Office Cleaning":{pt:"Limpeza de Escritório",es:"Limpieza de Oficinas"},
+    "Janitorial Services":{pt:"Serviços de Conservação",es:"Servicios de Conserjería"},
+    "Retail Cleaning":{pt:"Limpeza de Retalho",es:"Limpieza de Comercios"},
+    "Facility Maintenance":{pt:"Manutenção de Instalações",es:"Mantenimiento de Instalaciones"},
+    "Lawn Care":{pt:"Cuidado do Relvado",es:"Cuidado del Césped"},
+    "Garden Maintenance":{pt:"Manutenção de Jardim",es:"Mantenimiento de Jardín"},
+    "Landscape Design":{pt:"Design de Paisagismo",es:"Diseño de Paisajismo"},
+    "Seasonal Services":{pt:"Serviços Sazonais",es:"Servicios Estacionales"},
+    "Residential Moving":{pt:"Mudança Residencial",es:"Mudanza Residencial"},
+    "Local Moving":{pt:"Mudança Local",es:"Mudanza Local"},
+    "Long-Distance Moving":{pt:"Mudança de Longa Distância",es:"Mudanza de Larga Distancia"},
+    "Packing Services":{pt:"Serviço de Embalagem",es:"Servicio de Embalaje"},
+    "Storage":{pt:"Armazenamento",es:"Almacenamiento"},
+    "Home Repairs":{pt:"Reparos Domésticos",es:"Reparaciones del Hogar"},
+    "Minor Maintenance":{pt:"Manutenção Simples",es:"Mantenimiento Menor"},
+    "Fixture Installation":{pt:"Instalação de Acessórios",es:"Instalación de Accesorios"},
+    "Small Jobs":{pt:"Pequenos Trabalhos",es:"Trabajos Pequeños"}
+  };
   /* Tags do catálogo (index.json) só existem em inglês — sem isto, uma
      Biblioteca em PT/ES mostrava título traduzido mas tags cruas em inglês
      ("Contrato de Pintura" com a tag "Interior Painting" por baixo), lendo
-     como duas línguas misturadas na mesma ficha. Traduz palavra a palavra
+     como duas línguas misturadas na mesma ficha. Confere primeiro a tradução
+     completa acima; sem correspondência, traduz palavra a palavra
      reaproveitando o MESMO dicionário de bibTraduzirCampo (preserva espaços e
      "/", já que tags são frases como "Move-in/Move-out Cleaning", não
      SCREAMING_SNAKE_CASE) — qualquer palavra fora do dicionário mantém-se em
@@ -13541,6 +13599,8 @@
   function bibTraduzirTag(tag, lang){
     lang = lang || LANG;
     if(lang==='en' || !tag) return tag;
+    const overr=BIB_TAG_PHRASE_OVERRIDES[tag];
+    if(overr) return overr[lang]||overr.pt;
     return tag.split(/(\s+|\/|-)/).map(parte=>{
       if(/^(\s+|\/|-)$/.test(parte)) return parte;
       const m=BIB_FIELD_WORD_MAP[parte.toUpperCase()];
@@ -13720,22 +13780,54 @@
     if(bibOrigemSel.size===0) return todos;
     return todos.filter(i=>[...bibOrigemSel].some(org=>bibItemBateOrigem(i,org)));
   }
+  /* Ícones dos filtros da Biblioteca — um glifo por conceito, nunca texto
+     sozinho. iconHtml já vem embrulhado (svg completo ou o box de 2 letras
+     do idioma via bibIdiomaIconHtml), pra esta função não ter que adivinhar
+     o tipo de ícone de cada filtro. */
+  function bibOptRowHtml(onclickAttr, label, on, iconHtml){
+    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
+    return '<div class="bib-sort-opt'+(on?' on':'')+'" onclick="'+onclickAttr+'">'+
+      '<span class="opt-left">'+(iconHtml?'<span class="opt-icon">'+iconHtml+'</span>':'')+'<span>'+escapeHtml(label)+'</span></span>'+
+      '<span class="opt-check">'+check+'</span></div>';
+  }
+  const BIB_ICON_GLOBE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.4 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.4-4-9s1.5-6.3 4-9Z"/></svg>';
+  function bibIdiomaIconHtml(code){
+    if(!code) return BIB_ICON_GLOBE;
+    return '<span class="opt-lang-box">'+(BIB_LANG_TAG[code]||String(code).toUpperCase())+'</span>';
+  }
+  const BIB_ICON_SORT_USOS='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="m3 17 6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg>';
+  const BIB_ICON_SORT_REC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M12 2.5l2.7 5.8 6.3.6-4.8 4.3 1.4 6.2L12 16.2 6.4 19.4l1.4-6.2-4.8-4.3 6.3-.6Z"/></svg>';
+  const BIB_ICON_SORT_AZ='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path d="M4 6h16M4 12h10M4 18h6"/></svg>';
+  const BIB_ICON_ALL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg>';
+  const BIB_ICON_SEGMENTO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>';
+  /* Ícone de categoria: reaproveita BIB_CATEGORIA_ICONS (o mesmo usado nas
+     abas de categoria da Biblioteca antiga) por Market cru — como a
+     categoria amigável agrupa vários Markets (ex.: Photography+Videography
+     → "Audiovisual"), acha o primeiro item do catálogo com essa categoria
+     amigável e usa o ícone do Market real dele, em vez de manter um segundo
+     mapa duplicado que poderia desalinhar do original. */
+  function bibIconeCategoriaAmigavel(catAmigavel){
+    if(!catAmigavel) return BIB_ICON_ALL;
+    const item=catalogoBiblioteca().find(i=>i.categoriaAmigavel===catAmigavel);
+    const path=(item && BIB_CATEGORIA_ICONS[item.categoria]) || BIB_CATEGORIA_ICONS['Outros'];
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">'+path+'</svg>';
+  }
   /* Sheet genérico de opção única (idioma, ordenar, categoria, segmento). */
   function bibSheetOpcaoUnica(titulo, opcoes, atual, onPick){
-    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
     window[onPick.name]=onPick;
     const rows=opcoes.map(o=>
-      '<div class="bib-sort-opt'+(o.value===atual?' on':'')+'" onclick="'+onPick.name+'('+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+')"><span>'+escapeHtml(o.label)+'</span>'+check+'</div>'
+      bibOptRowHtml(onPick.name+'('+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+')', o.label, o.value===atual, o.icon)
     ).join('');
     openInfo(titulo, '<div class="bib-sort-row">'+rows+'</div>');
   }
   function abrirIdiomaBiblioteca(){
     const valores=bibValoresIdioma(catalogoBiblioteca());
-    const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:bibNomeIdioma(v)})));
+    const opcoes=[{value:null,label:t('library.origin.all'),icon:BIB_ICON_GLOBE}].concat(valores.map(v=>({value:v,label:bibNomeIdioma(v),icon:bibIdiomaIconHtml(v)})));
     bibSheetOpcaoUnica(t('library.facet.language'), opcoes, bibIdiomaSel, function setBibIdiomaPick(v){ bibIdiomaSel=v; renderBiblioteca(); closeInfo(); });
   }
+  const BIB_ORDENACAO_ICONS={usos:BIB_ICON_SORT_USOS, recomendados:BIB_ICON_SORT_REC, az:BIB_ICON_SORT_AZ};
   function abrirOrdenarBiblioteca(){
-    const opcoes=BIB_ORDENACOES.map(([key,labelKey])=>({value:key,label:t(labelKey)}));
+    const opcoes=BIB_ORDENACOES.map(([key,labelKey])=>({value:key,label:t(labelKey),icon:BIB_ORDENACAO_ICONS[key]}));
     bibSheetOpcaoUnica(t('library.sortLabel'), opcoes, bibOrdenacao, function setBibOrdenarPick(v){ bibOrdenacao=v; renderBiblioteca(); closeInfo(); });
   }
   /* Categoria e Segmento viraram um único botão em cascata: Categoria é a
@@ -13751,7 +13843,7 @@
   }
   function abrirCategoriaBiblioteca(){
     const valores=[...new Set(catalogoBiblioteca().map(i=>i.categoriaAmigavel).filter(Boolean))].sort();
-    const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
+    const opcoes=[{value:null,label:t('library.origin.all'),icon:BIB_ICON_ALL}].concat(valores.map(v=>({value:v,label:v,icon:bibIconeCategoriaAmigavel(v)})));
     bibSheetOpcaoUnica(t('library.facet.category'), opcoes, bibCategoriaSel, function setBibCategoriaPick(v){
       bibCategoriaSel=v;
       const segmentos=bibSegmentosDaCategoria(v);
@@ -13763,21 +13855,21 @@
   function abrirSegmentoBiblioteca(cat){
     const valores=bibSegmentosDaCategoria(cat);
     const opcoes=[{value:null,label:t('library.origin.all')}].concat(valores.map(v=>({value:v,label:v})));
-    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
     const rows=opcoes.map(o=>
-      '<div class="bib-sort-opt'+(o.value===bibSegmentoSel?' on':'')+'" onclick="bibPickSegmento('+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+')"><span>'+escapeHtml(o.label)+'</span>'+check+'</div>'
+      bibOptRowHtml("bibPickSegmento("+(o.value===null?'null':'\''+String(o.value).replace(/'/g,"\\'")+'\'')+")", o.label, o.value===bibSegmentoSel, BIB_ICON_SEGMENTO)
     ).join('');
     openInfo(cat, '<div class="bib-sort-row">'+rows+'</div>', abrirCategoriaBiblioteca);
   }
   function bibPickSegmento(v){ bibSegmentoSel=v; renderBiblioteca(); closeInfo(); }
   /* Origem: as 4 insígnias (Recomendados/Oficiais/Comunidade/Jurídico) viram
      um único botão multi-seleção — o sheet fica aberto entre toques (não
-     fecha ao escolher), pra permitir marcar mais de uma origem de uma vez. */
+     fecha ao escolher), pra permitir marcar mais de uma origem de uma vez.
+     Ícones reaproveitam OTAG_ICON — o MESMO selo usado no card/detalhe/
+     Visualizar pra cada origem, nunca um glifo diferente pro mesmo conceito. */
   function abrirOrigemBiblioteca(){
-    const check='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>';
     const rows=BIB_ORIGENS.map(o=>{
       const on=bibOrigemSel.has(o.key);
-      return '<div class="bib-sort-opt'+(on?' on':'')+'" onclick="toggleBibOrigem(\''+o.key+'\');abrirOrigemBiblioteca()"><span>'+escapeHtml(t(o.labelKey))+'</span>'+check+'</div>';
+      return bibOptRowHtml("toggleBibOrigem('"+o.key+"');abrirOrigemBiblioteca()", t(o.labelKey), on, OTAG_ICON[o.key]);
     }).join('');
     openInfo(t('library.facet.origin'), '<div class="bib-sort-row">'+rows+'</div>');
   }
@@ -13907,14 +13999,18 @@
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.baseId);
+      /* Idioma e nº de blocos vieram da antiga bc-lang-row (entre título e
+         descrição) pra dentro deste MESMO rodapé onde já ficam os selos
+         Oficial/Jurídico/Recomendados — cria uma hierarquia visual clara:
+         título → descrição → uma única linha de tags informacionais, em vez
+         de duas linhas de metadados espalhadas em pontos diferentes do card. */
       const rodape=bibBadgesItem(i);
+      rodape.push('<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>');
+      if(i.numBlocos) rodape.push('<span class="bc-lang-blocks">'+BIB_ICON_BLOCKS+i.numBlocos+' '+t('builder.blocksCount')+'</span>');
       if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
-      const langTag='<div class="bc-lang-row"><span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>'+
-        (i.numBlocos?('<span class="bc-lang-sep"></span><span class="bc-lang-blocks">'+BIB_ICON_BLOCKS+i.numBlocos+' '+t('builder.blocksCount')+'</span>'):'')+'</div>';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
-        langTag+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
         '<div class="bc-meta"><div class="bc-meta-l">'+rodape.join('')+'</div>'+favBtn+'</div>'+
       '</div>';
@@ -14008,8 +14104,15 @@
     html+='<div class="vis-head" style="margin-bottom:14px">'+metricas.join('')+'</div>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
-    const tagsExibidas=it.tagsBusca||it.tags||[];
-    if(tagsExibidas.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(bibCapitalizar(tg))+'</span>').join('')+'</div>';
+    /* tagsBusca mistura as tags reais com facetas internas de busca
+       (categoria amigável, subcategoria crua do catálogo, profissão e
+       contexto — estes dois últimos strings fixas em português) — exibir
+       isso mostrava tags em inglês misturadas com palavras em português
+       independente do idioma da app. it.tags já vem traduzido para o idioma
+       de "it.lang" por catalogoBiblioteca (bibTraduzirTag), então é a única
+       fonte usada aqui; tagsBusca continua reservada para o filtro de busca. */
+    const tagsExibidas=it.tags||[];
+    if(tagsExibidas.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft" style="width:100%;margin-bottom:8px" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';

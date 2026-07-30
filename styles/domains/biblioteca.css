@@ -127,27 +127,27 @@
     --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.07)}
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
   .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:17px;font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
-  /* badge de idioma — quadrado pequeno e vazio (sem preenchimento), só
-     moldura fina + as duas letras dentro (referência: icon-park-outline
-     "english"), seguido de um separador e da contagem de blocos na mesma
-     linha. */
-  .bib-card .bc-lang-row{align-self:flex-start;display:flex;align-items:center;gap:7px;margin:8px 0}
-  .bib-card .bc-lang{flex:none;width:16px;height:16px;
-    display:inline-flex;align-items:center;justify-content:center;font-size:7.5px;font-weight:700;letter-spacing:.01em;
-    border-radius:2px;border:1px solid var(--bib-ink-soft);color:var(--bib-ink-soft);background:transparent}
-  .bib-card .bc-lang-sep{width:3px;height:3px;border-radius:50%;background:var(--bib-ink-faint);flex:none}
-  .bib-card .bc-lang-blocks{font-size:11px;color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:4px}
-  .bc-lang-blocks-ico{width:14px;height:14px;background-color:var(--bib-ink-faint)}
-  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;
+  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;margin-top:6px;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+  /* Rodapé do card: MESMA linha para os selos de origem (Oficial/Jurídico/
+     Recomendados), o badge de idioma, a contagem de blocos e os usos —
+     título → descrição → uma única linha de metadados, em vez de duas
+     linhas espalhadas (idioma/blocos ficava solto entre título e descrição
+     antes). Todos os itens desta linha compartilham a mesma altura (22px,
+     igual ao selo span.bib-seal) para leitura consistente. */
   .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;font-size:11px;color:var(--bib-ink-faint);font-weight:400}
   .bib-card .bc-meta-l{display:flex;align-items:center;gap:6px;flex-wrap:wrap;min-width:0}
+  .bib-card .bc-lang{flex:none;height:22px;padding:0 6px;box-sizing:border-box;
+    display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;letter-spacing:.01em;
+    border-radius:var(--r);border:1px solid var(--bib-ink-soft);color:var(--bib-ink-soft);background:transparent}
+  .bib-card .bc-lang-blocks{height:22px;box-sizing:border-box;font-size:11px;color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:5px}
+  .bc-lang-blocks-ico{width:16px;height:16px;background-color:var(--bib-ink-faint)}
   .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
   .bib-fav svg{width:16px;height:16px}
   .bib-fav.on{color:var(--bib-brass-ink);opacity:1}
   .bib-minitag{font-size:10.5px;font-weight:500;padding:3px 9px;border-radius:var(--r);background:rgba(255,255,255,.05);color:var(--bib-ink-soft);border:1px solid var(--bib-mat-line)}
-  .bib-uses{font-size:11px;color:var(--bib-ink-faint);white-space:nowrap}
+  .bib-uses{height:22px;display:inline-flex;align-items:center;font-size:11px;color:var(--bib-ink-faint);white-space:nowrap}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 
   .bib-struct-list{margin-bottom:14px}
@@ -166,10 +166,18 @@
   .bib-struct-seg{z-index:1;height:10px;border:1px solid rgba(255,255,255,.35);border-radius:0;background:rgba(255,255,255,.03)}
   .bib-struct-seg.is-filled{border-color:#BED4CA;background:#BED4CA;box-shadow:inset 0 1px rgba(255,255,255,.35)}
   .bib-sort-row{display:flex;flex-direction:column;gap:6px}
-  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r);cursor:pointer;font-size:13.5px;color:var(--ink)}
+  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r);cursor:pointer;font-size:13.5px;color:var(--ink)}
   .bib-sort-opt.on{border-color:var(--ink);font-weight:600}
-  .bib-sort-opt svg{width:16px;height:16px;opacity:0;flex:none}
-  .bib-sort-opt.on svg{opacity:1}
+  .opt-left{display:flex;align-items:center;gap:10px;min-width:0}
+  .opt-icon{flex:none;width:17px;height:17px;color:var(--bib-ink-faint);display:inline-flex}
+  .opt-icon svg{width:100%;height:100%}
+  .bib-sort-opt.on .opt-icon{color:var(--ink)}
+  .opt-lang-box{flex:none;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;
+    font-size:7.5px;font-weight:700;letter-spacing:.01em;border-radius:var(--r);border:1px solid currentColor;color:var(--bib-ink-faint)}
+  .bib-sort-opt.on .opt-lang-box{color:var(--ink)}
+  .opt-check{flex:none;width:16px;height:16px;opacity:0;display:inline-flex}
+  .opt-check svg{width:100%;height:100%}
+  .bib-sort-opt.on .opt-check{opacity:1}
 
   /* ===== PESQUISA (genérica, usada fora da biblioteca também) ===== */
   .searchbox{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);
