@@ -72,7 +72,7 @@
   .pick-row.disabled{opacity:.4;cursor:default}
   /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
      só esta ocorrência ou todas as ocorrências da mesma tag no contrato. */
-  .dynf-tag{display:inline;padding:1px 5px;border-radius:3px;background:rgba(232,118,58,.18);
+  .dynf-tag{display:inline;padding:1px 5px;border-radius:var(--r);background:rgba(232,118,58,.18);
     border:1px solid rgba(232,118,58,.4);color:var(--ink);font-weight:600;cursor:pointer;white-space:normal}
   .dynf-tag:hover{background:rgba(232,118,58,.28)}
   .clause-edit{flex:1;min-width:0}
@@ -99,7 +99,7 @@
   .dyn-blocklist .toggle.on .kn{background:var(--ink)}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
-    border:1.5px dashed var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
+    border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
     font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
   .addblock svg{width:16px;height:16px}
   .save-tpl{flex:none;white-space:nowrap;margin-top:2px}
@@ -135,7 +135,7 @@
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
-    border:1px dashed var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
     transition:border-color .15s,color .15s,background .15s}
   .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
   .addclause svg{width:15px;height:15px;flex:none}
@@ -156,7 +156,7 @@
   .btn[disabled]{opacity:.45;pointer-events:none}
 
   /* ===== IMPORTAR ARQUIVO (Modelos → + Criar → Arquivo) ===== */
-  .imp-dropzone{border:1.5px dashed var(--line);border-radius:16px;padding:38px 20px;text-align:center;
+  .imp-dropzone{border:1.5px dashed var(--line);border-radius:var(--r);padding:38px 20px;text-align:center;
     cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:16px}
   .imp-dropzone.drag-over{border-color:var(--brand);background:var(--brand-10)}
   .imp-dropzone svg{width:30px;height:30px;color:var(--neutral);margin-bottom:10px}
@@ -164,7 +164,7 @@
   .imp-dropzone .si{font-size:12.5px;color:var(--neutral)}
   .imp-formats{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
   .imp-formats span{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);
-    background:var(--paper-2);border-radius:7px;padding:4px 8px}
+    background:var(--paper-2);border-radius:var(--r);padding:4px 8px}
   .imp-hint{font-size:12.5px;color:var(--neutral);line-height:1.55;margin-bottom:4px}
   .imp-progress{padding:6px 2px}
   .imp-progress-step{display:flex;align-items:center;gap:10px;padding:10px 2px;font-size:14px;color:var(--neutral)}
@@ -174,7 +174,7 @@
   .imp-progress-step.on .imp-progress-dot{background:var(--ink);animation:imp-pulse 1s ease-in-out infinite}
   .imp-progress-step.done .imp-progress-dot{background:var(--brand)}
   @keyframes imp-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  .imp-fail{background:var(--paper-2);border-radius:13px;padding:16px;font-size:13.5px;color:var(--ink-soft);
+  .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:16px;font-size:13.5px;color:var(--ink-soft);
     line-height:1.55;margin-top:8px}
 
   /* ===== REVISÃO DE IMPORTAÇÃO =====
@@ -187,7 +187,7 @@
   .revb-title:focus{outline:none;border-bottom:1.5px solid var(--brand)}
   .clause{cursor:pointer}
   .revc-actions{display:flex;flex-direction:column;gap:5px;flex:none;align-items:center}
-  .revc-move{border:1px solid var(--line-soft);background:var(--paper);border-radius:7px;font-size:10.5px;
+  .revc-move{border:1px solid var(--line-soft);background:var(--paper);border-radius:var(--r);font-size:10.5px;
     color:var(--ink-soft);font-family:inherit;padding:2px 3px;max-width:84px}
   .revc-rm{color:var(--neutral);cursor:pointer;font-size:13px;padding:2px 4px}
   .revc-rm:hover{color:var(--ink)}
