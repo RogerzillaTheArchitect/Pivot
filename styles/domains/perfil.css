@@ -5,6 +5,7 @@
      neutro do avatar-padrão sem foto usado no resto do app (avatarColor()). */
   .p-avatar{width:54px;height:54px;border-radius:var(--r);background:#26272A;color:#F5F5F3;
     font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:23px;display:grid;place-items:center}
+  .p-avatar[style*="background-image"],#org-avatar-preview[style*="background-image"]{filter:grayscale(1) brightness(0.78)}
   .p-avatar-wrap{position:relative;flex:none}
   /* Selo de editar escuro/glass (era var(--brand), verde de marca sólido). */
   .p-avatar-edit{position:absolute;bottom:-4px;right:-4px;width:22px;height:22px;border-radius:var(--r);
@@ -69,10 +70,10 @@
      "Julho" capitalizado, ver index.html). Tamanho um pouco menor que o
      antigo (era 19px) pra não ficar pesado demais no peso 900/115 da
      TikTok Sans. */
-  .rel-mes-big{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-weight:900;font-stretch:115%;font-size:17px;color:var(--ink);letter-spacing:.01em;line-height:1.15}
+  .rel-mes-big{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-weight:600;font-stretch:100%;font-size:17px;color:var(--ink);letter-spacing:.01em;line-height:1.15}
   .rel-mes-big.compact{font-size:13px;letter-spacing:.01em}
-  .rel-ano-small{font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10.5px;font-weight:900;font-stretch:115%;letter-spacing:.08em;text-transform:uppercase;color:var(--neutral);margin-top:3px}
+  .rel-ano-small{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:10.5px;font-weight:600;font-stretch:100%;letter-spacing:.05em;text-transform:uppercase;color:var(--neutral);margin-top:3px}
 
   /* Card 1 (Faturamento) — sem caixa: a barra é o próprio elemento sobre o fundo.
      Sem cantos arredondados em pílula (isso lê como progress bar de UI) — traço
