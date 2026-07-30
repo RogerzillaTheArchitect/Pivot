@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "market": "Equipment & Rentals",
+    "category": "Rental",
+    "subcategory": "Equipment",
+    "contractType": "Equipment Rental Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["equipment", "rental", "temporary", "lease"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_LOCADOR] (\"Locador\"), e [NOME_LOCATARIO] (\"Locatário\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_LOCADOR", "NOME_LOCATARIO"]
+    },
+    {
+      "name": "Identificação do Equipamento",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "equipment.description",
+          "version": null,
+          "text": "O Locador cede ao Locatário, em regime de locação temporária, o(s) seguinte(s) equipamento(s): [DESCRICAO_EQUIPAMENTO], com número(s) de série [NUMEROS_SERIE], avaliado(s) em [VALOR_EQUIPAMENTO]. O estado do equipamento no momento da entrega está descrito no relatório de estado em anexo, que faz parte integrante deste contrato."
+        }
+      ],
+      "dynamicFields": ["DESCRICAO_EQUIPAMENTO", "NUMEROS_SERIE", "VALOR_EQUIPAMENTO"]
+    },
+    {
+      "name": "Período de Locação",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "rental.period",
+          "version": null,
+          "text": "O período de locação inicia-se em [DATA_INICIO] e termina em [DATA_FIM], perfazendo um total de [DURACAO_LOCACAO]. A entrega do equipamento ocorrerá em [LOCAL_ENTREGA] e a devolução em [LOCAL_DEVOLUCAO]. O Locatário poderá solicitar a prorrogação do prazo com [PRAZO_SOLICITACAO_PRORROGACAO] dias de antecedência, sujeita a disponibilidade e acordo das Partes."
+        }
+      ],
+      "dynamicFields": ["DATA_INICIO", "DATA_FIM", "DURACAO_LOCACAO", "LOCAL_ENTREGA", "LOCAL_DEVOLUCAO", "PRAZO_SOLICITACAO_PRORROGACAO"]
+    },
+    {
+      "name": "Valor da Locação e Pagamento",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.rental_fee",
+          "version": null,
+          "text": "O valor da locação é de [VALOR_LOCACAO], correspondendo a [PRECO_PERIODO] por [PERIODO_FATURACAO]. O pagamento será efetuado [CONDICOES_PAGAMENTO]. Em caso de atraso no pagamento, serão aplicados juros de mora à taxa legal em vigor."
+        },
+        {
+          "id": "payment.deposit",
+          "version": null,
+          "text": "O Locatário entregará ao Locador uma caução no valor de [VALOR_CAUCAO], a ser devolvida no prazo de [PRAZO_DEVOLUCAO_CAUCAO] dias após a devolução do equipamento em boas condições, deduzida de eventuais custos de reparação ou substituição."
+        }
+      ],
+      "dynamicFields": ["VALOR_LOCACAO", "PRECO_PERIODO", "PERIODO_FATURACAO", "CONDICOES_PAGAMENTO", "VALOR_CAUCAO", "PRAZO_DEVOLUCAO_CAUCAO"]
+    },
+    {
+      "name": "Responsabilidades do Locatário",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "lessee.responsibilities",
+          "version": null,
+          "text": "O Locatário compromete-se a: utilizar o equipamento exclusivamente para os fins previstos e de acordo com as instruções do fabricante; manter o equipamento em boas condições de conservação; não ceder, sublocar ou emprestar o equipamento a terceiros sem autorização prévia e por escrito do Locador; e devolver o equipamento nas condições em que o recebeu, salvo desgaste normal."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Danos, Perda e Seguro",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "damage.loss.insurance",
+          "version": null,
+          "text": "O Locatário é integralmente responsável por quaisquer danos, avarias ou perda do equipamento durante o período de locação, independentemente da causa. Em caso de dano ou perda, o Locatário suportará os custos de reparação ou substituição até ao valor de [VALOR_EQUIPAMENTO]. O Locatário deverá contratar um seguro que cubra os riscos referidos durante o período de locação, apresentando a apólice ao Locador antes do início da locação."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Utilização Proibida",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "prohibited.use",
+          "version": null,
+          "text": "É expressamente proibida a utilização do equipamento para: [USOS_PROIBIDOS]. A violação desta cláusula confere ao Locador o direito de resolução imediata do contrato e de reclamação de todos os danos causados."
+        }
+      ],
+      "dynamicFields": ["USOS_PROIBIDOS"]
+    },
+    {
+      "name": "Devolução e Inspeção",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "return.inspection",
+          "version": null,
+          "text": "Aquando da devolução, o Locador procederá à inspeção do equipamento na presença do Locatário sempre que possível. O Locador comunicará por escrito qualquer dano detetado no prazo de [PRAZO_COMUNICACAO_DANOS] dias úteis após a devolução. A não devolução do equipamento na data acordada implica a cobrança de [PENALIZACAO_ATRASO] por cada dia de atraso."
+        }
+      ],
+      "dynamicFields": ["PRAZO_COMUNICACAO_DANOS", "PENALIZACAO_ATRASO"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa. Para resolução de conflitos, as Partes elegem o foro da comarca de [COMARCA]."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_LOCADOR", "label": "Nome do Locador", "type": "text"},
+    {"key": "NOME_LOCATARIO", "label": "Nome do Locatário", "type": "text"},
+    {"key": "DESCRICAO_EQUIPAMENTO", "label": "Descrição do Equipamento", "type": "textarea"},
+    {"key": "NUMEROS_SERIE", "label": "Números de Série", "type": "text"},
+    {"key": "VALOR_EQUIPAMENTO", "label": "Valor do Equipamento", "type": "currency"},
+    {"key": "DATA_INICIO", "label": "Data de Início da Locação", "type": "date"},
+    {"key": "DATA_FIM", "label": "Data de Fim da Locação", "type": "date"},
+    {"key": "DURACAO_LOCACAO", "label": "Duração Total da Locação", "type": "text"},
+    {"key": "LOCAL_ENTREGA", "label": "Local de Entrega", "type": "text"},
+    {"key": "LOCAL_DEVOLUCAO", "label": "Local de Devolução", "type": "text"},
+    {"key": "PRAZO_SOLICITACAO_PRORROGACAO", "label": "Prazo para Solicitar Prorrogação (dias)", "type": "number"},
+    {"key": "VALOR_LOCACAO", "label": "Valor Total da Locação", "type": "currency"},
+    {"key": "PRECO_PERIODO", "label": "Preço por Período", "type": "currency"},
+    {"key": "PERIODO_FATURACAO", "label": "Período de Faturação (ex: dia, semana)", "type": "text"},
+    {"key": "CONDICOES_PAGAMENTO", "label": "Condições de Pagamento", "type": "text"},
+    {"key": "VALOR_CAUCAO", "label": "Valor da Caução", "type": "currency"},
+    {"key": "PRAZO_DEVOLUCAO_CAUCAO", "label": "Prazo de Devolução da Caução (dias)", "type": "number"},
+    {"key": "USOS_PROIBIDOS", "label": "Usos Proibidos do Equipamento", "type": "textarea"},
+    {"key": "PRAZO_COMUNICACAO_DANOS", "label": "Prazo para Comunicar Danos (dias úteis)", "type": "number"},
+    {"key": "PENALIZACAO_ATRASO", "label": "Penalização por Dia de Atraso na Devolução", "type": "currency"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "equipment_rental_agreement"
+}

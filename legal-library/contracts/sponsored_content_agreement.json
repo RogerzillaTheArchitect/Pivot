@@ -1,0 +1,136 @@
+{
+  "meta": {
+    "market": "Digital & Social Media",
+    "category": "Content",
+    "subcategory": "Sponsored",
+    "contractType": "Sponsored Content Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["influencer", "sponsored-content", "social-media", "brand-ambassador"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_MARCA] (\"Marca\"), e [NOME_CRIADOR] (\"Criador de Conteúdo\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_MARCA", "NOME_CRIADOR"]
+    },
+    {
+      "name": "Âmbito da Parceria",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope.campaign",
+          "version": null,
+          "text": "O Criador de Conteúdo compromete-se a produzir e publicar [NUMERO_PUBLICACOES] publicações patrocinadas nas seguintes plataformas: [PLATAFORMAS]. As publicações deverão ser realizadas no período compreendido entre [DATA_INICIO] e [DATA_FIM]."
+        },
+        {
+          "id": "scope.content",
+          "version": null,
+          "text": "O conteúdo a produzir deverá incluir: [DESCRICAO_CONTEUDO]. O Criador manterá o seu estilo editorial autêntico, respeitando as diretrizes da Marca conforme o briefing em anexo."
+        }
+      ],
+      "dynamicFields": ["NUMERO_PUBLICACOES", "PLATAFORMAS", "DATA_INICIO", "DATA_FIM", "DESCRICAO_CONTEUDO"]
+    },
+    {
+      "name": "Aprovação de Conteúdo",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "approval.process",
+          "version": null,
+          "text": "O Criador submeterá rascunhos de cada publicação à Marca com [PRAZO_SUBMISSAO] dias de antecedência. A Marca terá [PRAZO_APROVACAO] dias úteis para aprovar, solicitar alterações ou rejeitar. Na ausência de resposta no prazo indicado, o conteúdo é considerado aprovado. São permitidas até [NUMERO_REVISOES] rondas de revisão por publicação."
+        }
+      ],
+      "dynamicFields": ["PRAZO_SUBMISSAO", "PRAZO_APROVACAO", "NUMERO_REVISOES"]
+    },
+    {
+      "name": "Remuneração",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee",
+          "version": null,
+          "text": "A Marca pagará ao Criador o valor de [VALOR_TOTAL] pela totalidade das publicações acordadas, nos seguintes termos: [CONDICOES_PAGAMENTO]. Eventuais produtos ou serviços cedidos gratuitamente à Marca avaliados em [VALOR_PRODUTOS] serão descontados ao valor total, caso acordado entre as Partes."
+        }
+      ],
+      "dynamicFields": ["VALOR_TOTAL", "CONDICOES_PAGAMENTO", "VALOR_PRODUTOS"]
+    },
+    {
+      "name": "Transparência e Publicidade",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "disclosure.sponsored",
+          "version": null,
+          "text": "O Criador de Conteúdo compromete-se a identificar todas as publicações patrocinadas de forma clara e transparente, em conformidade com as diretrizes do ICAP (Instituto Civil da Autodisciplina da Comunicação Comercial) e demais regulamentação aplicável, utilizando marcações como #publicidade, #patrocinado ou equivalentes exigidos pelas plataformas."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Exclusividade",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "exclusivity.clause",
+          "version": null,
+          "text": "Durante o período de vigência deste contrato e por [PERIODO_EXCLUSIVIDADE] dias após o término, o Criador compromete-se a não promover produtos ou serviços de marcas concorrentes da [NOME_MARCA] nas seguintes categorias: [CATEGORIAS_EXCLUSIVIDADE]."
+        }
+      ],
+      "dynamicFields": ["PERIODO_EXCLUSIVIDADE", "CATEGORIAS_EXCLUSIVIDADE"]
+    },
+    {
+      "name": "Direitos de Utilização",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "rights.usage",
+          "version": null,
+          "text": "O Criador concede à Marca uma licença [TIPO_LICENCA] para reutilizar o conteúdo produzido nos seus canais próprios (website, redes sociais, materiais de marketing) pelo período de [DURACAO_LICENCA], sem necessidade de pagamento adicional. Qualquer utilização em publicidade paga requer acordo prévio por escrito e poderá implicar remuneração adicional."
+        }
+      ],
+      "dynamicFields": ["TIPO_LICENCA", "DURACAO_LICENCA"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa. Para resolução de conflitos, as Partes elegem o foro da comarca de [COMARCA]."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_MARCA", "label": "Nome da Marca / Empresa", "type": "text"},
+    {"key": "NOME_CRIADOR", "label": "Nome do Criador de Conteúdo", "type": "text"},
+    {"key": "NUMERO_PUBLICACOES", "label": "Número de Publicações", "type": "number"},
+    {"key": "PLATAFORMAS", "label": "Plataformas (ex: Instagram, TikTok)", "type": "text"},
+    {"key": "DATA_INICIO", "label": "Data de Início da Campanha", "type": "date"},
+    {"key": "DATA_FIM", "label": "Data de Fim da Campanha", "type": "date"},
+    {"key": "DESCRICAO_CONTEUDO", "label": "Descrição do Conteúdo a Produzir", "type": "textarea"},
+    {"key": "PRAZO_SUBMISSAO", "label": "Prazo de Submissão para Aprovação (dias)", "type": "number"},
+    {"key": "PRAZO_APROVACAO", "label": "Prazo de Aprovação pela Marca (dias úteis)", "type": "number"},
+    {"key": "NUMERO_REVISOES", "label": "Número de Rondas de Revisão", "type": "number"},
+    {"key": "VALOR_TOTAL", "label": "Valor Total da Parceria", "type": "currency"},
+    {"key": "CONDICOES_PAGAMENTO", "label": "Condições de Pagamento", "type": "text"},
+    {"key": "VALOR_PRODUTOS", "label": "Valor de Produtos/Serviços Cedidos", "type": "currency"},
+    {"key": "PERIODO_EXCLUSIVIDADE", "label": "Período de Exclusividade Pós-Contrato (dias)", "type": "number"},
+    {"key": "CATEGORIAS_EXCLUSIVIDADE", "label": "Categorias de Exclusividade", "type": "text"},
+    {"key": "TIPO_LICENCA", "label": "Tipo de Licença (ex: não exclusiva)", "type": "text"},
+    {"key": "DURACAO_LICENCA", "label": "Duração da Licença", "type": "text"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "sponsored_content_agreement"
+}

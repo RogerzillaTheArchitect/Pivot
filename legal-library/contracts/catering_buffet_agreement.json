@@ -1,0 +1,134 @@
+{
+  "meta": {
+    "market": "Food & Beverage",
+    "category": "Events",
+    "subcategory": "Catering",
+    "contractType": "Catering & Buffet Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["catering", "buffet", "events", "food-service"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_CLIENTE] (\"Cliente\"), e [NOME_EMPRESA_CATERING] (\"Prestador\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_CLIENTE", "NOME_EMPRESA_CATERING"]
+    },
+    {
+      "name": "Descrição do Serviço",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope.service",
+          "version": null,
+          "text": "O Prestador compromete-se a fornecer serviços de catering e buffet para o evento [NOME_EVENTO], realizado no dia [DATA_EVENTO], no local [LOCAL_EVENTO], para um número estimado de [NUMERO_CONVIDADOS] pessoas."
+        },
+        {
+          "id": "scope.menu",
+          "version": null,
+          "text": "O cardápio acordado inclui: [DESCRICAO_MENU]. Qualquer alteração ao cardápio deverá ser comunicada com pelo menos [PRAZO_ALTERACAO_MENU] dias de antecedência e poderá implicar ajuste de preço."
+        }
+      ],
+      "dynamicFields": ["NOME_EVENTO", "DATA_EVENTO", "LOCAL_EVENTO", "NUMERO_CONVIDADOS", "DESCRICAO_MENU", "PRAZO_ALTERACAO_MENU"]
+    },
+    {
+      "name": "Preço e Pagamento",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.total",
+          "version": null,
+          "text": "O valor total dos serviços é de [VALOR_TOTAL], com base no preço por pessoa de [PRECO_POR_PESSOA]. Este valor inclui [ITENS_INCLUIDOS] e exclui [ITENS_EXCLUIDOS]."
+        },
+        {
+          "id": "payment.schedule",
+          "version": null,
+          "text": "O pagamento será efetuado da seguinte forma: [PERCENTAGEM_SINAL]% de sinal no ato da assinatura ([VALOR_SINAL]) e o remanescente ([VALOR_REMANESCENTE]) até [DATA_PAGAMENTO_FINAL]."
+        }
+      ],
+      "dynamicFields": ["VALOR_TOTAL", "PRECO_POR_PESSOA", "ITENS_INCLUIDOS", "ITENS_EXCLUIDOS", "PERCENTAGEM_SINAL", "VALOR_SINAL", "VALOR_REMANESCENTE", "DATA_PAGAMENTO_FINAL"]
+    },
+    {
+      "name": "Alteração de Número de Convidados",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "guests.changes",
+          "version": null,
+          "text": "O Cliente deverá confirmar o número final de convidados até [PRAZO_CONFIRMACAO_CONVIDADOS] dias antes do evento. Aumentos superiores a [MARGEM_AUMENTO]% poderão não ser garantidos. Reduções não implicam desconto no valor total se comunicadas após o prazo referido."
+        }
+      ],
+      "dynamicFields": ["PRAZO_CONFIRMACAO_CONVIDADOS", "MARGEM_AUMENTO"]
+    },
+    {
+      "name": "Alergias e Restrições Alimentares",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "dietary.restrictions",
+          "version": null,
+          "text": "O Cliente é responsável por comunicar ao Prestador, com antecedência mínima de [PRAZO_RESTRICOES] dias, todas as restrições alimentares e alergias conhecidas dos convidados. O Prestador tomará as medidas razoáveis para acomodar estas necessidades, mas não assume responsabilidade por reações não comunicadas atempadamente."
+        }
+      ],
+      "dynamicFields": ["PRAZO_RESTRICOES"]
+    },
+    {
+      "name": "Cancelamento",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "cancellation.policy",
+          "version": null,
+          "text": "Em caso de cancelamento pelo Cliente com mais de [PRAZO_CANCELAMENTO_TOTAL] dias de antecedência, o sinal será devolvido integralmente. Com menos de [PRAZO_CANCELAMENTO_PARCIAL] dias, será retido [PERCENTAGEM_RETENCAO]% do valor total. Em caso de cancelamento por força maior devidamente documentada, as Partes acordarão uma solução equitativa."
+        }
+      ],
+      "dynamicFields": ["PRAZO_CANCELAMENTO_TOTAL", "PRAZO_CANCELAMENTO_PARCIAL", "PERCENTAGEM_RETENCAO"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa. Para resolução de conflitos, as Partes elegem o tribunal da comarca de [COMARCA]."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_CLIENTE", "label": "Nome do Cliente", "type": "text"},
+    {"key": "NOME_EMPRESA_CATERING", "label": "Nome da Empresa de Catering", "type": "text"},
+    {"key": "NOME_EVENTO", "label": "Nome do Evento", "type": "text"},
+    {"key": "DATA_EVENTO", "label": "Data do Evento", "type": "date"},
+    {"key": "LOCAL_EVENTO", "label": "Local do Evento", "type": "text"},
+    {"key": "NUMERO_CONVIDADOS", "label": "Número Estimado de Convidados", "type": "number"},
+    {"key": "DESCRICAO_MENU", "label": "Descrição do Cardápio", "type": "textarea"},
+    {"key": "PRAZO_ALTERACAO_MENU", "label": "Prazo para Alteração do Menu (dias)", "type": "number"},
+    {"key": "VALOR_TOTAL", "label": "Valor Total", "type": "currency"},
+    {"key": "PRECO_POR_PESSOA", "label": "Preço por Pessoa", "type": "currency"},
+    {"key": "ITENS_INCLUIDOS", "label": "Itens Incluídos", "type": "text"},
+    {"key": "ITENS_EXCLUIDOS", "label": "Itens Excluídos", "type": "text"},
+    {"key": "PERCENTAGEM_SINAL", "label": "Percentagem do Sinal (%)", "type": "number"},
+    {"key": "VALOR_SINAL", "label": "Valor do Sinal", "type": "currency"},
+    {"key": "VALOR_REMANESCENTE", "label": "Valor Remanescente", "type": "currency"},
+    {"key": "DATA_PAGAMENTO_FINAL", "label": "Data de Pagamento Final", "type": "date"},
+    {"key": "PRAZO_CONFIRMACAO_CONVIDADOS", "label": "Prazo de Confirmação de Convidados (dias)", "type": "number"},
+    {"key": "MARGEM_AUMENTO", "label": "Margem de Aumento Tolerada (%)", "type": "number"},
+    {"key": "PRAZO_RESTRICOES", "label": "Prazo para Comunicar Restrições (dias)", "type": "number"},
+    {"key": "PRAZO_CANCELAMENTO_TOTAL", "label": "Prazo de Cancelamento com Reembolso Total (dias)", "type": "number"},
+    {"key": "PRAZO_CANCELAMENTO_PARCIAL", "label": "Prazo de Cancelamento Parcial (dias)", "type": "number"},
+    {"key": "PERCENTAGEM_RETENCAO", "label": "Percentagem de Retenção em Cancelamento (%)", "type": "number"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "catering_buffet_agreement"
+}
