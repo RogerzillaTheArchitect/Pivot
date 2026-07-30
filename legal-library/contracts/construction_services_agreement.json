@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "market": "Architecture & Engineering",
+    "category": "Construction",
+    "subcategory": "General Contracting",
+    "contractType": "Construction Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "construction",
+      "general-contracting",
+      "building-works",
+      "permits"
+    ],
+    "language": "en"
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Contractor\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the construction work to be performed by the Contractor for the Client at [PROJECT_SITE_ADDRESS] (the \"Project\")."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS"
+      ]
+    },
+    {
+      "name": "Scope of Work",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope_of_work.definition",
+          "version": null,
+          "text": "The Contractor shall perform the construction work described in [CONSTRUCTION_SCOPE], in accordance with the plans and specifications referenced in [PROJECT_PLANS_REFERENCE]."
+        }
+      ],
+      "dynamicFields": [
+        "CONSTRUCTION_SCOPE",
+        "PROJECT_PLANS_REFERENCE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Project shall begin on [START_DATE] and is expected to reach substantial completion by [COMPLETION_DATE], subject to permitting timelines, change orders, and conditions beyond the Contractor's reasonable control."
+        }
+      ],
+      "dynamicFields": [
+        "START_DATE",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Payment and Draw Schedule",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Contractor [TOTAL_VALUE] for the Project, payable via [PAYMENT_METHOD] according to the draw schedule described in [PAYMENT_MILESTONES]."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Contractor may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month, and may suspend work until payment is received."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "PAYMENT_MILESTONES",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Permits and Regulatory Compliance",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "permits.responsibility",
+          "version": null,
+          "text": "[PERMIT_RESPONSIBILITY] shall be responsible for obtaining and paying for the building permits and regulatory approvals required for the Project, and the Contractor shall perform the work in accordance with applicable building codes."
+        }
+      ],
+      "dynamicFields": [
+        "PERMIT_RESPONSIBILITY"
+      ]
+    },
+    {
+      "name": "Change Orders",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "change_orders.process",
+          "version": null,
+          "text": "Any change to the scope described in [CONSTRUCTION_SCOPE] shall be documented in a written change order signed by both Parties, specifying the additional cost and any adjustment to [COMPLETION_DATE] before the additional work is performed."
+        }
+      ],
+      "dynamicFields": [
+        "CONSTRUCTION_SCOPE",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Materials and Equipment",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "materials.supply",
+          "version": null,
+          "text": "Unless otherwise agreed in writing, the Contractor shall supply the materials and equipment necessary for the Project, up to the allowance specified in [MATERIALS_ALLOWANCE]."
+        }
+      ],
+      "dynamicFields": [
+        "MATERIALS_ALLOWANCE"
+      ]
+    },
+    {
+      "name": "Subcontractors",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "subcontractors.engagement",
+          "version": null,
+          "text": "The Contractor may engage licensed subcontractors to perform specialized trades and remains responsible for the coordination and quality of their work under this Agreement."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Site Safety",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "site_safety.requirements",
+          "version": null,
+          "text": "Where the Project involves on-site personnel, the Contractor shall implement site-safety procedures consistent with applicable occupational safety regulations, restrict site access to authorized personnel, and promptly notify the Client of any safety incident."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Inspections and Quality Control",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "inspections.provision",
+          "version": null,
+          "text": "The Client, or its representative, may inspect the work at [PROJECT_SITE_ADDRESS] at reasonable times with prior notice to the Contractor. The Contractor shall correct any work that does not conform to the plans and specifications."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS"
+      ]
+    },
+    {
+      "name": "Delay Penalties",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "delay_penalties.liquidated_damages",
+          "version": null,
+          "text": "If the Contractor fails to reach substantial completion by [COMPLETION_DATE] for reasons within its control, the Contractor shall pay the Client liquidated damages of [DELAY_PENALTY_RATE] per day of delay, up to a maximum of [DELAY_PENALTY_CAP]."
+        }
+      ],
+      "dynamicFields": [
+        "COMPLETION_DATE",
+        "DELAY_PENALTY_RATE",
+        "DELAY_PENALTY_CAP"
+      ]
+    },
+    {
+      "name": "Warranty of Workmanship",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "warranty.workmanship",
+          "version": null,
+          "text": "The Contractor warrants that the Project shall be free from defects in workmanship for [WARRANTY_PERIOD] from [COMPLETION_DATE]. This warranty excludes normal wear, damage from misuse, and manufacturer defects in materials, which remain subject to the applicable manufacturer's warranty."
+        }
+      ],
+      "dynamicFields": [
+        "WARRANTY_PERIOD",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Insurance and Bonding",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "insurance.coverage",
+          "version": null,
+          "text": "The Contractor shall maintain applicable trade licenses, general liability insurance, and workers' compensation coverage for its personnel, and shall provide a performance bond of [PERFORMANCE_BOND_AMOUNT] where required by the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PERFORMANCE_BOND_AMOUNT"
+      ]
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "responsibilities.client_cooperation",
+          "version": null,
+          "text": "The Client shall provide timely decisions on selections and change orders, and reasonable access to [PROJECT_SITE_ADDRESS], including utilities, necessary for the Contractor to perform the Project."
+        }
+      ],
+      "dynamicFields": [
+        "PROJECT_SITE_ADDRESS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROJECT_SITE_ADDRESS",
+    "CONSTRUCTION_SCOPE",
+    "PROJECT_PLANS_REFERENCE",
+    "START_DATE",
+    "COMPLETION_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "PAYMENT_MILESTONES",
+    "LATE_PAYMENT_RATE",
+    "PERMIT_RESPONSIBILITY",
+    "MATERIALS_ALLOWANCE",
+    "DELAY_PENALTY_RATE",
+    "DELAY_PENALTY_CAP",
+    "WARRANTY_PERIOD",
+    "PERFORMANCE_BOND_AMOUNT",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "construction_services_agreement"
+}

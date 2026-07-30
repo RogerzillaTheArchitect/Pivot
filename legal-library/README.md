@@ -3,7 +3,7 @@
 Este diretório é o que o app (`index.html` → `LegalLibrary`) busca em runtime via `fetch()`.
 Hoje está publicado **vazio** de propósito (fase de fundação — ver PROJECT_STATE.md).
 
-## Como publicar o conteúdo oficial (os 61 contratos)
+## Como publicar o conteúdo oficial (os 69 contratos)
 
 ```
 node tools/build-legal-library.js "<caminho-para-'Legal Library'>" --publish

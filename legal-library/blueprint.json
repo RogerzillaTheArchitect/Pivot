@@ -11340,6 +11340,270 @@
                   ]
                 }
               ]
+            },
+            {
+              "name": "General Contracting",
+              "contractTypes": [
+                {
+                  "name": "Construction Services Agreement",
+                  "slug": "construction_services_agreement",
+                  "purpose": "Regulates general contracting and construction work performed directly by the Contractor for the Client.",
+                  "useCases": [
+                    "New Construction",
+                    "Residential Construction",
+                    "Commercial Construction",
+                    "Building Additions",
+                    "Structural Work"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Work",
+                    "Timeline",
+                    "Payment and Draw Schedule",
+                    "Permits and Regulatory Compliance",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Change Orders",
+                    "Materials and Equipment",
+                    "Subcontractors",
+                    "Inspections and Quality Control",
+                    "Delay Penalties",
+                    "Warranty of Workmanship",
+                    "Insurance and Bonding",
+                    "Client Responsibilities",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Site Safety"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROJECT_SITE_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Work",
+                      "purpose": "Defines the terms of the \"Scope of Work\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CONSTRUCTION_SCOPE",
+                        "PROJECT_PLANS_REFERENCE"
+                      ]
+                    },
+                    {
+                      "name": "Timeline",
+                      "purpose": "Establishes the schedule for execution of services and delivery.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Work"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "START_DATE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment and Draw Schedule",
+                      "purpose": "Defines pricing, payment milestones and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "PAYMENT_MILESTONES",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Permits and Regulatory Compliance",
+                      "purpose": "Defines the terms of the \"Permits and Regulatory Compliance\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PERMIT_RESPONSIBILITY"
+                      ]
+                    },
+                    {
+                      "name": "Change Orders",
+                      "purpose": "Defines the terms of the \"Change Orders\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CONSTRUCTION_SCOPE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Materials and Equipment",
+                      "purpose": "Defines the terms of the \"Materials and Equipment\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "MATERIALS_ALLOWANCE"
+                      ]
+                    },
+                    {
+                      "name": "Subcontractors",
+                      "purpose": "Defines the terms of the \"Subcontractors\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Site Safety",
+                      "purpose": "Defines the terms of the \"Site Safety\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Inspections and Quality Control",
+                      "purpose": "Defines the terms of the \"Inspections and Quality Control\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROJECT_SITE_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Delay Penalties",
+                      "purpose": "Defines the terms of the \"Delay Penalties\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "COMPLETION_DATE",
+                        "DELAY_PENALTY_RATE",
+                        "DELAY_PENALTY_CAP"
+                      ]
+                    },
+                    {
+                      "name": "Warranty of Workmanship",
+                      "purpose": "Defines the terms of the \"Warranty of Workmanship\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "WARRANTY_PERIOD",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Insurance and Bonding",
+                      "purpose": "Defines insurance and bonding requirements for the Contractor.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PERFORMANCE_BOND_AMOUNT"
+                      ]
+                    },
+                    {
+                      "name": "Client Responsibilities",
+                      "purpose": "Lists obligations of the Client during the engagement.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROJECT_SITE_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Permits and Regulatory Compliance"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -15247,6 +15511,1674 @@
                       ],
                       "incompatibleBlocks": [],
                       "dynamicFields": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Home & Trade Services",
+      "categories": [
+        {
+          "name": "Painting",
+          "subcategories": [
+            {
+              "name": "Residential & Commercial Painting",
+              "contractTypes": [
+                {
+                  "name": "Painting Services Agreement",
+                  "slug": "painting_services_agreement",
+                  "purpose": "Regulates the provision of interior and exterior painting services for residential and commercial properties.",
+                  "useCases": [
+                    "Interior Painting",
+                    "Exterior Painting",
+                    "Residential Properties",
+                    "Commercial Properties",
+                    "Repainting"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Work",
+                    "Materials and Paint Specifications",
+                    "Timeline",
+                    "Payment",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Site Preparation and Access",
+                    "Surface Preparation",
+                    "Cleanup and Waste Disposal",
+                    "Weather Delays",
+                    "Warranty",
+                    "Client Responsibilities",
+                    "Insurance",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Color Changes and Additional Work"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Work",
+                      "purpose": "Defines the terms of the \"Scope of Work\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SURFACES_TO_BE_PAINTED"
+                      ]
+                    },
+                    {
+                      "name": "Materials and Paint Specifications",
+                      "purpose": "Defines the terms of the \"Materials and Paint Specifications\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Work"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PAINT_BRAND_AND_TYPE",
+                        "COLOR_SPECIFICATIONS",
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "Timeline",
+                      "purpose": "Establishes the schedule for execution of services and delivery.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Materials and Paint Specifications"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "START_DATE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment",
+                      "purpose": "Defines pricing, payment schedule and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "DEPOSIT_AMOUNT",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Site Preparation and Access",
+                      "purpose": "Defines the terms of the \"Site Preparation and Access\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Surface Preparation",
+                      "purpose": "Defines the terms of the \"Surface Preparation\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Color Changes and Additional Work",
+                      "purpose": "Defines the terms of the \"Color Changes and Additional Work\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SURFACES_TO_BE_PAINTED"
+                      ]
+                    },
+                    {
+                      "name": "Cleanup and Waste Disposal",
+                      "purpose": "Defines the terms of the \"Cleanup and Waste Disposal\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Weather Delays",
+                      "purpose": "Defines the terms of the \"Weather Delays\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Warranty",
+                      "purpose": "Defines the terms of the \"Warranty\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "WARRANTY_PERIOD",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Client Responsibilities",
+                      "purpose": "Lists obligations of the Client during the engagement.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Insurance",
+                      "purpose": "Defines insurance coverage requirements for the Service Provider.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Renovation & Remodeling",
+          "subcategories": [
+            {
+              "name": "Home Renovation",
+              "contractTypes": [
+                {
+                  "name": "Renovation and Remodeling Agreement",
+                  "slug": "renovation_and_remodeling_agreement",
+                  "purpose": "Regulates renovation and remodeling work performed on a residential property, including scope, permits, and change orders.",
+                  "useCases": [
+                    "Kitchen Remodeling",
+                    "Bathroom Remodeling",
+                    "Whole-Home Renovation",
+                    "Room Additions",
+                    "Basement Finishing"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Work",
+                    "Timeline",
+                    "Payment and Draw Schedule",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Change Orders",
+                    "Materials and Fixtures",
+                    "Subcontractors",
+                    "Cleanup and Waste Disposal",
+                    "Warranty of Workmanship",
+                    "Insurance and Licensing",
+                    "Client Responsibilities",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Permits and Approvals",
+                    "Site Conditions and Hidden Damage"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Work",
+                      "purpose": "Defines the terms of the \"Scope of Work\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "RENOVATION_SCOPE",
+                        "PROJECT_PLANS_REFERENCE"
+                      ]
+                    },
+                    {
+                      "name": "Timeline",
+                      "purpose": "Establishes the schedule for execution of services and delivery.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Work"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "START_DATE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment and Draw Schedule",
+                      "purpose": "Defines pricing, payment milestones and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "PAYMENT_MILESTONES",
+                        "DEPOSIT_AMOUNT",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Permits and Approvals",
+                      "purpose": "Defines the terms of the \"Permits and Approvals\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PERMIT_RESPONSIBILITY"
+                      ]
+                    },
+                    {
+                      "name": "Change Orders",
+                      "purpose": "Defines the terms of the \"Change Orders\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "RENOVATION_SCOPE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Materials and Fixtures",
+                      "purpose": "Defines the terms of the \"Materials and Fixtures\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "MATERIALS_ALLOWANCE",
+                        "MATERIALS_MARKUP_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Subcontractors",
+                      "purpose": "Defines the terms of the \"Subcontractors\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Site Conditions and Hidden Damage",
+                      "purpose": "Defines the terms of the \"Site Conditions and Hidden Damage\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Cleanup and Waste Disposal",
+                      "purpose": "Defines the terms of the \"Cleanup and Waste Disposal\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Warranty of Workmanship",
+                      "purpose": "Defines the terms of the \"Warranty of Workmanship\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "WARRANTY_PERIOD",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Insurance and Licensing",
+                      "purpose": "Defines insurance and licensing requirements for the Service Provider.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Client Responsibilities",
+                      "purpose": "Lists obligations of the Client during the engagement.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment and Draw Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Cleaning Services",
+          "subcategories": [
+            {
+              "name": "Residential",
+              "contractTypes": [
+                {
+                  "name": "Residential Cleaning Services Agreement",
+                  "slug": "residential_cleaning_services_agreement",
+                  "purpose": "Regulates recurring or one-off residential cleaning services provided at a Client's home.",
+                  "useCases": [
+                    "House Cleaning",
+                    "Recurring Cleaning",
+                    "Deep Cleaning",
+                    "Move-in/Move-out Cleaning"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Services",
+                    "Service Schedule",
+                    "Payment",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Cleaning Supplies and Equipment",
+                    "Pets and Household Members",
+                    "Cancellation and Rescheduling Policy",
+                    "Damage Policy",
+                    "Additional Services",
+                    "Insurance and Bonding",
+                    "Confidentiality",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Access to Premises"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Services",
+                      "purpose": "Defines the terms of the \"Scope of Services\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLEANING_TASKS_INCLUDED",
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Service Schedule",
+                      "purpose": "Defines the terms of the \"Service Schedule\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Services"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SERVICE_FREQUENCY",
+                        "SERVICE_DAY_AND_TIME",
+                        "START_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment",
+                      "purpose": "Defines pricing, payment schedule and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Service Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Access to Premises",
+                      "purpose": "Defines the terms of the \"Access to Premises\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ACCESS_METHOD"
+                      ]
+                    },
+                    {
+                      "name": "Cleaning Supplies and Equipment",
+                      "purpose": "Defines the terms of the \"Cleaning Supplies and Equipment\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Pets and Household Members",
+                      "purpose": "Defines the terms of the \"Pets and Household Members\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Cancellation and Rescheduling Policy",
+                      "purpose": "Defines the terms of the \"Cancellation and Rescheduling Policy\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CANCELLATION_NOTICE_PERIOD",
+                        "CANCELLATION_FEE"
+                      ]
+                    },
+                    {
+                      "name": "Damage Policy",
+                      "purpose": "Defines the terms of the \"Damage Policy\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "DAMAGE_REPORTING_PERIOD"
+                      ]
+                    },
+                    {
+                      "name": "Additional Services",
+                      "purpose": "Defines the terms of the \"Additional Services\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Insurance and Bonding",
+                      "purpose": "Defines insurance and bonding requirements for the Contractor.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Confidentiality",
+                      "purpose": "Defines the terms of the \"Confidentiality\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Commercial",
+              "contractTypes": [
+                {
+                  "name": "Commercial Cleaning Services Agreement",
+                  "slug": "commercial_cleaning_services_agreement",
+                  "purpose": "Regulates recurring janitorial and cleaning services provided at a Client's commercial premises.",
+                  "useCases": [
+                    "Office Cleaning",
+                    "Janitorial Services",
+                    "Retail Cleaning",
+                    "Facility Maintenance"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Services",
+                    "Service Schedule",
+                    "Payment",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Supplies and Equipment",
+                    "Staffing and Personnel",
+                    "Quality Control and Inspections",
+                    "Additional Services",
+                    "Cancellation and Termination",
+                    "Damage Policy",
+                    "Insurance and Bonding",
+                    "Confidentiality",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Access and Security"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PREMISES_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Services",
+                      "purpose": "Defines the terms of the \"Scope of Services\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLEANING_TASKS_INCLUDED",
+                        "PREMISES_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Service Schedule",
+                      "purpose": "Defines the terms of the \"Service Schedule\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Services"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SERVICE_FREQUENCY",
+                        "SERVICE_HOURS",
+                        "START_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment",
+                      "purpose": "Defines pricing, payment schedule and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Service Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Access and Security",
+                      "purpose": "Defines the terms of the \"Access and Security\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ACCESS_METHOD"
+                      ]
+                    },
+                    {
+                      "name": "Supplies and Equipment",
+                      "purpose": "Defines the terms of the \"Supplies and Equipment\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Staffing and Personnel",
+                      "purpose": "Defines the terms of the \"Staffing and Personnel\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PREMISES_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Quality Control and Inspections",
+                      "purpose": "Defines the terms of the \"Quality Control and Inspections\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Additional Services",
+                      "purpose": "Defines the terms of the \"Additional Services\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Cancellation and Termination",
+                      "purpose": "Defines the terms of the \"Cancellation and Termination\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TERMINATION_NOTICE_PERIOD"
+                      ]
+                    },
+                    {
+                      "name": "Damage Policy",
+                      "purpose": "Defines the terms of the \"Damage Policy\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "DAMAGE_REPORTING_PERIOD"
+                      ]
+                    },
+                    {
+                      "name": "Insurance and Bonding",
+                      "purpose": "Defines insurance and bonding requirements for the Contractor.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Confidentiality",
+                      "purpose": "Defines the terms of the \"Confidentiality\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PREMISES_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Outdoor Services",
+          "subcategories": [
+            {
+              "name": "Landscaping & Gardening",
+              "contractTypes": [
+                {
+                  "name": "Landscaping and Gardening Services Agreement",
+                  "slug": "landscaping_and_gardening_services_agreement",
+                  "purpose": "Regulates recurring landscaping, gardening, and lawn care services provided at a Client's property.",
+                  "useCases": [
+                    "Lawn Care",
+                    "Garden Maintenance",
+                    "Landscape Design",
+                    "Seasonal Services"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Services",
+                    "Service Schedule",
+                    "Payment",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Materials and Plants",
+                    "Irrigation and Equipment",
+                    "Weather Delays",
+                    "Waste and Debris Removal",
+                    "Seasonal and Additional Services",
+                    "Insurance",
+                    "Client Responsibilities",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Access to Property"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Services",
+                      "purpose": "Defines the terms of the \"Scope of Services\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "LANDSCAPING_SERVICES_INCLUDED",
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Service Schedule",
+                      "purpose": "Defines the terms of the \"Service Schedule\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Services"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SERVICE_FREQUENCY",
+                        "SEASONAL_SCHEDULE",
+                        "START_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Payment",
+                      "purpose": "Defines pricing, payment schedule and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Service Schedule"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Materials and Plants",
+                      "purpose": "Defines the terms of the \"Materials and Plants\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PLANT_WARRANTY_PERIOD"
+                      ]
+                    },
+                    {
+                      "name": "Irrigation and Equipment",
+                      "purpose": "Defines the terms of the \"Irrigation and Equipment\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Access to Property",
+                      "purpose": "Defines the terms of the \"Access to Property\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ACCESS_METHOD"
+                      ]
+                    },
+                    {
+                      "name": "Weather Delays",
+                      "purpose": "Defines the terms of the \"Weather Delays\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Waste and Debris Removal",
+                      "purpose": "Defines the terms of the \"Waste and Debris Removal\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Seasonal and Additional Services",
+                      "purpose": "Defines the terms of the \"Seasonal and Additional Services\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Insurance",
+                      "purpose": "Defines insurance coverage requirements for the Service Provider.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Client Responsibilities",
+                      "purpose": "Lists obligations of the Client during the engagement.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Relocation Services",
+          "subcategories": [
+            {
+              "name": "Moving & Storage",
+              "contractTypes": [
+                {
+                  "name": "Moving and Relocation Services Agreement",
+                  "slug": "moving_and_relocation_services_agreement",
+                  "purpose": "Regulates household moving, packing, and storage services between an origin and destination address.",
+                  "useCases": [
+                    "Residential Moving",
+                    "Local Moving",
+                    "Long-Distance Moving",
+                    "Packing Services",
+                    "Storage"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Services",
+                    "Inventory of Goods",
+                    "Payment",
+                    "Valuation and Insurance Coverage",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Delivery Window and Delays",
+                    "Damage Claims Procedure",
+                    "Access and Parking",
+                    "Cancellation Policy",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Packing Services",
+                    "Storage Services"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ORIGIN_ADDRESS",
+                        "DESTINATION_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Services",
+                      "purpose": "Defines the terms of the \"Scope of Services\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ORIGIN_ADDRESS",
+                        "DESTINATION_ADDRESS",
+                        "MOVING_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Inventory of Goods",
+                      "purpose": "Defines the terms of the \"Inventory of Goods\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Services"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "INVENTORY_LIST_REFERENCE"
+                      ]
+                    },
+                    {
+                      "name": "Payment",
+                      "purpose": "Defines pricing, payment schedule and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Inventory of Goods"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "DEPOSIT_AMOUNT",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Packing Services",
+                      "purpose": "Defines the terms of the \"Packing Services\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PACKING_SERVICES_INCLUDED"
+                      ]
+                    },
+                    {
+                      "name": "Valuation and Insurance Coverage",
+                      "purpose": "Defines the terms of the \"Valuation and Insurance Coverage\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "INSURANCE_COVERAGE_LEVEL",
+                        "DECLARED_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "Storage Services",
+                      "purpose": "Defines the terms of the \"Storage Services\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "STORAGE_DURATION",
+                        "STORAGE_FEE"
+                      ]
+                    },
+                    {
+                      "name": "Delivery Window and Delays",
+                      "purpose": "Defines the terms of the \"Delivery Window and Delays\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Damage Claims Procedure",
+                      "purpose": "Defines the terms of the \"Damage Claims Procedure\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLAIM_NOTICE_PERIOD"
+                      ]
+                    },
+                    {
+                      "name": "Access and Parking",
+                      "purpose": "Defines the terms of the \"Access and Parking\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ORIGIN_ADDRESS",
+                        "DESTINATION_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Cancellation Policy",
+                      "purpose": "Defines the terms of the \"Cancellation Policy\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CANCELLATION_NOTICE_PERIOD",
+                        "CANCELLATION_FEE"
+                      ]
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "INSURANCE_COVERAGE_LEVEL"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Valuation and Insurance Coverage"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "General Repairs",
+          "subcategories": [
+            {
+              "name": "Handyman Services",
+              "contractTypes": [
+                {
+                  "name": "Handyman Services Agreement",
+                  "slug": "handyman_services_agreement",
+                  "purpose": "Regulates general handyman repair and maintenance work performed at a Client's property.",
+                  "useCases": [
+                    "Home Repairs",
+                    "Minor Maintenance",
+                    "Fixture Installation",
+                    "Small Jobs"
+                  ],
+                  "requiredBlocks": [
+                    "Identification",
+                    "Contract Object",
+                    "Scope of Work",
+                    "Estimate and Payment",
+                    "Timeline",
+                    "General Provisions",
+                    "Signatures"
+                  ],
+                  "optionalBlocks": [
+                    "Materials",
+                    "Cleanup",
+                    "Warranty of Workmanship",
+                    "Access to Property",
+                    "Insurance",
+                    "Client Responsibilities",
+                    "Liability"
+                  ],
+                  "conditionalBlocks": [
+                    "Additional Work Discovered"
+                  ],
+                  "blocks": [
+                    {
+                      "name": "Identification",
+                      "purpose": "Establishes the legal identity of the Client and Service Provider (name, address, tax ID, contact details).",
+                      "status": "Required",
+                      "dependencies": [],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "CLIENT_NAME",
+                        "PROVIDER_NAME"
+                      ]
+                    },
+                    {
+                      "name": "Contract Object",
+                      "purpose": "Defines the overall subject matter and legal purpose of the agreement.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Identification"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Scope of Work",
+                      "purpose": "Defines the terms of the \"Scope of Work\" block for this contract type.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Contract Object"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "REPAIR_TASKS_DESCRIPTION",
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Estimate and Payment",
+                      "purpose": "Defines the cost estimate, pricing and accepted payment methods.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Scope of Work"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "ESTIMATED_COST",
+                        "TOTAL_VALUE",
+                        "PAYMENT_METHOD",
+                        "LATE_PAYMENT_RATE"
+                      ]
+                    },
+                    {
+                      "name": "Timeline",
+                      "purpose": "Establishes the schedule for execution of services and delivery.",
+                      "status": "Required",
+                      "dependencies": [
+                        "Estimate and Payment"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "START_DATE",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Materials",
+                      "purpose": "Defines the terms of the \"Materials\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "Additional Work Discovered",
+                      "purpose": "Defines the terms of the \"Additional Work Discovered\" block for this contract type.",
+                      "status": "Conditional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "REPAIR_TASKS_DESCRIPTION"
+                      ]
+                    },
+                    {
+                      "name": "Cleanup",
+                      "purpose": "Defines the terms of the \"Cleanup\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Warranty of Workmanship",
+                      "purpose": "Defines the terms of the \"Warranty of Workmanship\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "WARRANTY_PERIOD",
+                        "COMPLETION_DATE"
+                      ]
+                    },
+                    {
+                      "name": "Access to Property",
+                      "purpose": "Defines the terms of the \"Access to Property\" block for this contract type.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "PROPERTY_ADDRESS"
+                      ]
+                    },
+                    {
+                      "name": "Insurance",
+                      "purpose": "Defines insurance coverage requirements for the Service Provider.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Client Responsibilities",
+                      "purpose": "Lists obligations of the Client during the engagement.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": []
+                    },
+                    {
+                      "name": "Liability",
+                      "purpose": "Limits or defines each party's responsibility for damages or losses.",
+                      "status": "Optional",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "TOTAL_VALUE"
+                      ]
+                    },
+                    {
+                      "name": "General Provisions",
+                      "purpose": "Contains miscellaneous legal boilerplate (notices, severability, governing law).",
+                      "status": "Required",
+                      "dependencies": [
+                        "Timeline"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "APPLICABLE_LAW",
+                        "DISPUTE_RESOLUTION_MECHANISM"
+                      ]
+                    },
+                    {
+                      "name": "Signatures",
+                      "purpose": "Captures the formal execution of the agreement by both parties.",
+                      "status": "Required",
+                      "dependencies": [
+                        "General Provisions"
+                      ],
+                      "incompatibleBlocks": [],
+                      "dynamicFields": [
+                        "SIGNATURE_DATE"
+                      ]
                     }
                   ]
                 }

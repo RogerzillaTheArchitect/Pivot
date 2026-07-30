@@ -1,0 +1,278 @@
+{
+  "meta": {
+    "market": "Home & Trade Services",
+    "category": "Relocation Services",
+    "subcategory": "Moving & Storage",
+    "contractType": "Moving and Relocation Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "moving",
+      "relocation",
+      "storage",
+      "household-goods"
+    ],
+    "language": "en"
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of moving and relocation services by the Service Provider to the Client from [ORIGIN_ADDRESS] to [DESTINATION_ADDRESS]."
+        }
+      ],
+      "dynamicFields": [
+        "ORIGIN_ADDRESS",
+        "DESTINATION_ADDRESS"
+      ]
+    },
+    {
+      "name": "Scope of Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope_of_services.definition",
+          "version": null,
+          "text": "The Service Provider shall load, transport, and unload the Client's belongings from [ORIGIN_ADDRESS] to [DESTINATION_ADDRESS] on [MOVING_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "ORIGIN_ADDRESS",
+        "DESTINATION_ADDRESS",
+        "MOVING_DATE"
+      ]
+    },
+    {
+      "name": "Inventory of Goods",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "inventory.reference",
+          "version": null,
+          "text": "The items to be moved are listed in the inventory referenced in [INVENTORY_LIST_REFERENCE], which the Parties shall review and sign before loading begins."
+        }
+      ],
+      "dynamicFields": [
+        "INVENTORY_LIST_REFERENCE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Services, payable via [PAYMENT_METHOD]. A deposit of [DEPOSIT_AMOUNT] is due upon booking, with the balance due upon delivery."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "DEPOSIT_AMOUNT",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Packing Services",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "packing.scope",
+          "version": null,
+          "text": "Where packing services are included, as described in [PACKING_SERVICES_INCLUDED], the Service Provider shall use reasonable care in packing the Client's belongings. Items packed by the Client remain the Client's responsibility unless visibly damaged in a manner attributable to the Service Provider's handling."
+        }
+      ],
+      "dynamicFields": [
+        "PACKING_SERVICES_INCLUDED"
+      ]
+    },
+    {
+      "name": "Valuation and Insurance Coverage",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "valuation.coverage_level",
+          "version": null,
+          "text": "The Client's belongings are covered at the valuation level of [INSURANCE_COVERAGE_LEVEL], based on the declared value of [DECLARED_VALUE]. The Client may purchase additional valuation coverage before the moving date."
+        }
+      ],
+      "dynamicFields": [
+        "INSURANCE_COVERAGE_LEVEL",
+        "DECLARED_VALUE"
+      ]
+    },
+    {
+      "name": "Storage Services",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "storage.terms",
+          "version": null,
+          "text": "Where the Client requires storage of belongings pending delivery, the Service Provider shall store the items for [STORAGE_DURATION] at a fee of [STORAGE_FEE], in a facility with reasonable security and environmental controls."
+        }
+      ],
+      "dynamicFields": [
+        "STORAGE_DURATION",
+        "STORAGE_FEE"
+      ]
+    },
+    {
+      "name": "Delivery Window and Delays",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "delivery.window",
+          "version": null,
+          "text": "The Service Provider shall use reasonable efforts to deliver the Client's belongings within the delivery window agreed by the Parties and shall notify the Client promptly of any anticipated delay."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Damage Claims Procedure",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "damage_claims.notice",
+          "version": null,
+          "text": "The Client shall note any visible damage or loss on the delivery documentation at the time of delivery and shall submit any claim in writing within [CLAIM_NOTICE_PERIOD] of delivery. The Service Provider shall investigate and resolve claims in accordance with the applicable valuation coverage."
+        }
+      ],
+      "dynamicFields": [
+        "CLAIM_NOTICE_PERIOD"
+      ]
+    },
+    {
+      "name": "Access and Parking",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "access.provision",
+          "version": null,
+          "text": "The Client shall ensure reasonable vehicle access and parking near [ORIGIN_ADDRESS] and [DESTINATION_ADDRESS] on the moving date, and shall obtain any building permits required for the move, such as elevator reservations or parking permits."
+        }
+      ],
+      "dynamicFields": [
+        "ORIGIN_ADDRESS",
+        "DESTINATION_ADDRESS"
+      ]
+    },
+    {
+      "name": "Cancellation Policy",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "cancellation.notice_period",
+          "version": null,
+          "text": "Either Party may cancel this Agreement by providing at least [CANCELLATION_NOTICE_PERIOD] prior written notice. Cancellations made with less notice may be subject to a cancellation fee of [CANCELLATION_FEE]."
+        }
+      ],
+      "dynamicFields": [
+        "CANCELLATION_NOTICE_PERIOD",
+        "CANCELLATION_FEE"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "The Service Provider's liability for loss or damage to the Client's belongings shall be limited to the valuation coverage selected under [INSURANCE_COVERAGE_LEVEL], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "INSURANCE_COVERAGE_LEVEL"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "ORIGIN_ADDRESS",
+    "DESTINATION_ADDRESS",
+    "MOVING_DATE",
+    "INVENTORY_LIST_REFERENCE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "DEPOSIT_AMOUNT",
+    "LATE_PAYMENT_RATE",
+    "PACKING_SERVICES_INCLUDED",
+    "INSURANCE_COVERAGE_LEVEL",
+    "DECLARED_VALUE",
+    "STORAGE_DURATION",
+    "STORAGE_FEE",
+    "CLAIM_NOTICE_PERIOD",
+    "CANCELLATION_NOTICE_PERIOD",
+    "CANCELLATION_FEE",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "moving_and_relocation_services_agreement"
+}
