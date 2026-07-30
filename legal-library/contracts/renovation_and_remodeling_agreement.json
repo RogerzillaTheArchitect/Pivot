@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "market": "Home & Trade Services",
+    "category": "Renovation & Remodeling",
+    "subcategory": "Home Renovation",
+    "contractType": "Renovation and Remodeling Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "renovation",
+      "remodeling",
+      "home-improvement",
+      "change-orders"
+    ],
+    "language": "en"
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the renovation and remodeling work to be performed by the Service Provider for the Client at [PROPERTY_ADDRESS] (the \"Project\")."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Scope of Work",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope_of_work.definition",
+          "version": null,
+          "text": "The Service Provider shall perform the renovation work described in [RENOVATION_SCOPE], in accordance with the plans and specifications referenced in [PROJECT_PLANS_REFERENCE]."
+        }
+      ],
+      "dynamicFields": [
+        "RENOVATION_SCOPE",
+        "PROJECT_PLANS_REFERENCE"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "timeline.schedule",
+          "version": null,
+          "text": "The Project shall begin on [START_DATE] and is expected to reach substantial completion by [COMPLETION_DATE], subject to permitting timelines, change orders, and conditions beyond the Service Provider's reasonable control."
+        }
+      ],
+      "dynamicFields": [
+        "START_DATE",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Payment and Draw Schedule",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE] for the Project, payable via [PAYMENT_METHOD] according to the draw schedule described in [PAYMENT_MILESTONES]. A deposit of [DEPOSIT_AMOUNT] is due before work begins."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month, and may suspend work until payment is received."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "PAYMENT_MILESTONES",
+        "DEPOSIT_AMOUNT",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Permits and Approvals",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "permits.responsibility",
+          "version": null,
+          "text": "Where the Project requires building permits or regulatory approvals, [PERMIT_RESPONSIBILITY] shall be responsible for obtaining and paying for them, and the Project schedule shall be adjusted to account for any resulting delay in permit issuance."
+        }
+      ],
+      "dynamicFields": [
+        "PERMIT_RESPONSIBILITY"
+      ]
+    },
+    {
+      "name": "Change Orders",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "change_orders.process",
+          "version": null,
+          "text": "Any change to the scope described in [RENOVATION_SCOPE] shall be documented in a written change order signed by both Parties, specifying the additional cost and any adjustment to [COMPLETION_DATE] before the additional work is performed."
+        }
+      ],
+      "dynamicFields": [
+        "RENOVATION_SCOPE",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Materials and Fixtures",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "materials.allowance",
+          "version": null,
+          "text": "Materials and fixtures are included up to the allowance specified in [MATERIALS_ALLOWANCE]. Selections exceeding this allowance shall be charged to the Client at cost plus the markup described in [MATERIALS_MARKUP_RATE]."
+        }
+      ],
+      "dynamicFields": [
+        "MATERIALS_ALLOWANCE",
+        "MATERIALS_MARKUP_RATE"
+      ]
+    },
+    {
+      "name": "Subcontractors",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "subcontractors.engagement",
+          "version": null,
+          "text": "The Service Provider may engage licensed subcontractors to perform specialized trades and remains responsible for the coordination and quality of their work under this Agreement."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Site Conditions and Hidden Damage",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "site_conditions.unforeseen_conditions",
+          "version": null,
+          "text": "Where the Service Provider discovers concealed conditions not reasonably discoverable before work began, such as structural, electrical, plumbing, water, mold, or pest damage, the Service Provider shall promptly notify the Client, and the Parties shall agree the additional cost and schedule impact through a change order before remediation proceeds."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Cleanup and Waste Disposal",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "cleanup.provision",
+          "version": null,
+          "text": "The Service Provider shall remove construction debris and dispose of it in accordance with applicable regulations, and shall leave the work areas broom-clean upon completion."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Warranty of Workmanship",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "warranty.workmanship",
+          "version": null,
+          "text": "The Service Provider warrants that the Project shall be free from defects in workmanship for [WARRANTY_PERIOD] from [COMPLETION_DATE]. This warranty excludes normal wear, damage from misuse, and manufacturer defects in materials, which remain subject to the applicable manufacturer's warranty."
+        }
+      ],
+      "dynamicFields": [
+        "WARRANTY_PERIOD",
+        "COMPLETION_DATE"
+      ]
+    },
+    {
+      "name": "Insurance and Licensing",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "insurance.coverage",
+          "version": null,
+          "text": "The Service Provider shall maintain applicable trade licenses and general liability insurance covering the Project, and shall provide proof of coverage upon the Client's reasonable request."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Client Responsibilities",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "responsibilities.client_cooperation",
+          "version": null,
+          "text": "The Client shall provide timely decisions on selections and change orders, and reasonable access to [PROPERTY_ADDRESS], including utilities, necessary for the Service Provider to perform the Project."
+        }
+      ],
+      "dynamicFields": [
+        "PROPERTY_ADDRESS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PROPERTY_ADDRESS",
+    "RENOVATION_SCOPE",
+    "PROJECT_PLANS_REFERENCE",
+    "START_DATE",
+    "COMPLETION_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "PAYMENT_MILESTONES",
+    "DEPOSIT_AMOUNT",
+    "LATE_PAYMENT_RATE",
+    "PERMIT_RESPONSIBILITY",
+    "MATERIALS_ALLOWANCE",
+    "MATERIALS_MARKUP_RATE",
+    "WARRANTY_PERIOD",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "renovation_and_remodeling_agreement"
+}

@@ -5131,7 +5131,7 @@
      nenhum dos pontos do app que consultam a biblioteca.
      Hoje o catálogo publicado (legal-library/index.json) está vazio de
      propósito — ver legal-library/README.md para publicar o conteúdo
-     real dos 61 contratos.
+     real dos 69 contratos.
      Cada entrada do catálogo tem o formato:
        { id, titulo, categoria, mercado, subcategoria, desc, tags, origem,
          verificado, requiredBlockCount, optionalBlockCount, clauseCount }
@@ -5307,7 +5307,7 @@
   /* Biblioteca Pivot — navegação real por categoria e detalhe dinâmico.
      A categoria de cada item é o Market da Biblioteca Jurídica oficial
      (Photography, Videography, Design, ...) — os ícones abaixo cobrem os
-     9 mercados do Blueprint; qualquer nome fora dessa lista cai no ícone
+     10 mercados do Blueprint; qualquer nome fora dessa lista cai no ícone
      genérico ("Outros"). */
   const BIB_CATEGORIA_ICONS={
     'Photography':'<path d="M4 8h2.5l1.3-2h8.4l1.3 2H20a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.4"/>',
@@ -5319,6 +5319,7 @@
     'Architecture & Engineering':'<path d="M3 11l9-8 9 8M5 10v10h5v-6h4v6h5V10"/>',
     'Education & Content':'<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/>',
     'Universal Contracts':'<circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>',
+    'Home & Trade Services':'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z"/>',
     'Outros':'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>'
   };
   let bibFiltroAtual={contratos:'populares', modelos:'populares'};
@@ -6827,8 +6828,8 @@
      senão um "Vídeo Institucional Empresa XPTO" seria lido como Videografia
      em vez de Corporativo (que é o nicho real do cliente).
      Os segmentos e palavras-chave vieram de uma análise da biblioteca
-     oficial de contratos do Pivot (legal-library/index.json, 61 modelos,
-     9 mercados) — cada segmento aqui corresponde a um ou mais desses
+     oficial de contratos do Pivot (legal-library/index.json, 69 modelos,
+     10 mercados) — cada segmento aqui corresponde a um ou mais desses
      modelos/subcategorias reais, não a uma lista inventada. Estrutura
      modular: para adicionar um segmento novo (ex. quando a biblioteca
      ganhar modelos de um mercado ainda não coberto) basta acrescentar um
@@ -6839,6 +6840,7 @@
     { id:'eventos', label:'Eventos', keywords:['evento','eventos','festa','aniversário','aniversario','festival','seminário','seminario','celebração','celebracao','formatura'] },
     { id:'imobiliario', label:'Imobiliário', keywords:['imóvel','imovel','imobiliário','imobiliario','propriedade','apartamento','condomínio','condominio','aluguel','residência','residencia','hotel','pousada','resort','hospedagem'] },
     { id:'construcao', label:'Construção Civil', keywords:['construção','construcao','obra','reforma','edificação','edificacao','canteiro','inspeção predial','inspecao predial'] },
+    { id:'servicos_domesticos', label:'Serviços Domésticos', keywords:['pintura','pintor','pintores','faxina','limpeza','faz-tudo','faz tudo','handyman','jardinagem','paisagismo','jardineiro','mudança','mudanca','mudanças','mudancas'] },
     { id:'arquitetura', label:'Arquitetura', keywords:['arquitetura','arquitetônico','arquitetonico','arquiteto','interiores','decoração','decoracao'] },
     { id:'engenharia', label:'Engenharia', keywords:['engenharia','engenheiro','estrutural','elétrica','eletrica','mecânica','mecanica','hidráulica','hidraulica'] },
     { id:'moda', label:'Moda', keywords:['moda','fashion','editorial','lookbook','desfile','coleção','colecao'] },
@@ -6938,7 +6940,7 @@
     registrarAnalyticsEvento('expense_added', { event_date: despesa.data, value: despesa.valor, segment: despesa.categoria||null });
   }
   /* ===== Categoria / Segmento (etapa de criação do trabalho) =====
-     Categoria reaproveita os mesmos 16 ids/labels de SEGMENTOS_FINANCEIROS —
+     Categoria reaproveita os mesmos 17 ids/labels de SEGMENTOS_FINANCEIROS —
      uma única fonte da verdade entre o que a pessoa escolhe ao criar o
      trabalho e o que a Segmentação Financeira usa pra classificar. Segmento
      é uma escolha mais granular dentro da categoria, também baseada nas
@@ -6952,6 +6954,7 @@
     eventos: ['Aniversário','Formatura','Festival','Conferência','Confraternização','Evento Social'],
     imobiliario: ['Residencial','Comercial','Hotelaria','Lançamento Imobiliário'],
     construcao: ['Residencial','Comercial','Industrial','Reforma','Inspeção Predial'],
+    servicos_domesticos: ['Pintura','Limpeza Residencial','Limpeza Comercial','Jardinagem','Mudança','Reparos (Faz-Tudo)'],
     arquitetura: ['Projeto Residencial','Projeto Comercial','Design de Interiores'],
     engenharia: ['Civil','Elétrica','Mecânica','Hidráulica'],
     moda: ['Editorial','Campanha Publicitária','Lookbook','Desfile'],

@@ -1,0 +1,290 @@
+{
+  "meta": {
+    "market": "Home & Trade Services",
+    "category": "Cleaning Services",
+    "subcategory": "Commercial",
+    "contractType": "Commercial Cleaning Services Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": [
+      "commercial-cleaning",
+      "janitorial-services",
+      "recurring-services",
+      "facility-management"
+    ],
+    "language": "en"
+  },
+  "blocks": [
+    {
+      "name": "Identification",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.party_identification",
+          "version": null,
+          "text": "This Agreement is entered into between [CLIENT_NAME] (\"Client\") and [PROVIDER_NAME] (\"Service Provider\")."
+        }
+      ],
+      "dynamicFields": [
+        "CLIENT_NAME",
+        "PROVIDER_NAME"
+      ]
+    },
+    {
+      "name": "Contract Object",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "contract_object.subject_matter",
+          "version": null,
+          "text": "This Agreement governs the provision of commercial cleaning and janitorial services by the Service Provider to the Client at [PREMISES_ADDRESS]."
+        }
+      ],
+      "dynamicFields": [
+        "PREMISES_ADDRESS"
+      ]
+    },
+    {
+      "name": "Scope of Services",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope_of_services.definition",
+          "version": null,
+          "text": "The Service Provider shall perform the cleaning tasks described in [CLEANING_TASKS_INCLUDED] at [PREMISES_ADDRESS]."
+        }
+      ],
+      "dynamicFields": [
+        "CLEANING_TASKS_INCLUDED",
+        "PREMISES_ADDRESS"
+      ]
+    },
+    {
+      "name": "Service Schedule",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "service_schedule.frequency",
+          "version": null,
+          "text": "The Services shall be provided with a frequency of [SERVICE_FREQUENCY], during [SERVICE_HOURS], starting on [START_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SERVICE_FREQUENCY",
+        "SERVICE_HOURS",
+        "START_DATE"
+      ]
+    },
+    {
+      "name": "Payment",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee_and_schedule",
+          "version": null,
+          "text": "The Client shall pay the Service Provider [TOTAL_VALUE], payable via [PAYMENT_METHOD] according to the schedule agreed between the Parties."
+        },
+        {
+          "id": "payment.late_payment_penalty",
+          "version": null,
+          "text": "If the Client fails to pay any amount due by its due date, the Service Provider may charge interest on the overdue amount at [LATE_PAYMENT_RATE] per month."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE",
+        "PAYMENT_METHOD",
+        "LATE_PAYMENT_RATE"
+      ]
+    },
+    {
+      "name": "Access and Security",
+      "status": "CONDITIONAL",
+      "clauses": [
+        {
+          "id": "access.method",
+          "version": null,
+          "text": "Where the Services are performed outside the Client's regular business hours, the Client shall provide the Service Provider with access via [ACCESS_METHOD] and shall communicate any applicable security protocols, which the Service Provider's personnel shall follow."
+        }
+      ],
+      "dynamicFields": [
+        "ACCESS_METHOD"
+      ]
+    },
+    {
+      "name": "Supplies and Equipment",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "supplies.provision",
+          "version": null,
+          "text": "Unless otherwise agreed in writing, the Service Provider shall supply the cleaning products, tools, and equipment necessary to perform the Services."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Staffing and Personnel",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "staffing.standards",
+          "version": null,
+          "text": "The Service Provider shall assign trained personnel to perform the Services, and shall conduct reasonable background screening of personnel granted unsupervised access to [PREMISES_ADDRESS], where required by the Client."
+        }
+      ],
+      "dynamicFields": [
+        "PREMISES_ADDRESS"
+      ]
+    },
+    {
+      "name": "Quality Control and Inspections",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "quality_control.inspections",
+          "version": null,
+          "text": "The Client may conduct periodic inspections of the Services and shall notify the Service Provider of any deficiency, which the Service Provider shall remedy within a reasonable time."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Additional Services",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "additional_services.scope",
+          "version": null,
+          "text": "Additional or one-off services, such as carpet cleaning, floor stripping and waxing, or post-event cleaning, may be requested by the Client and shall be charged separately as agreed in writing before performance."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Cancellation and Termination",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "termination.notice_period",
+          "version": null,
+          "text": "Either Party may terminate this Agreement for convenience by providing at least [TERMINATION_NOTICE_PERIOD] prior written notice to the other Party."
+        }
+      ],
+      "dynamicFields": [
+        "TERMINATION_NOTICE_PERIOD"
+      ]
+    },
+    {
+      "name": "Damage Policy",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "damage_policy.reporting",
+          "version": null,
+          "text": "The Client shall report any damage reasonably believed to result from the Services within [DAMAGE_REPORTING_PERIOD] of the relevant visit. The Service Provider shall investigate and, where responsibility is established, repair or reimburse the reported damage."
+        }
+      ],
+      "dynamicFields": [
+        "DAMAGE_REPORTING_PERIOD"
+      ]
+    },
+    {
+      "name": "Insurance and Bonding",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "insurance.coverage",
+          "version": null,
+          "text": "The Service Provider shall maintain general liability insurance and, where applicable, fidelity bonding covering its personnel, and shall provide proof of coverage upon the Client's reasonable request."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Confidentiality",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "confidentiality.business_information",
+          "version": null,
+          "text": "The Service Provider shall keep confidential any business information observed at [PREMISES_ADDRESS] while performing the Services and shall not disclose it to third parties, except as required by law."
+        }
+      ],
+      "dynamicFields": [
+        "PREMISES_ADDRESS"
+      ]
+    },
+    {
+      "name": "Liability",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "liability.limitation",
+          "version": null,
+          "text": "Neither Party shall be liable to the other for any indirect, incidental, or consequential loss arising from this Agreement."
+        },
+        {
+          "id": "liability.cap",
+          "version": null,
+          "text": "Each Party's total liability arising from this Agreement shall not exceed [TOTAL_VALUE], except for loss arising from gross negligence, willful misconduct, or fraud."
+        }
+      ],
+      "dynamicFields": [
+        "TOTAL_VALUE"
+      ]
+    },
+    {
+      "name": "General Provisions",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general_provisions.force_majeure",
+          "version": null,
+          "text": "Neither Party shall be liable for a failure to perform its obligations to the extent that failure results from an event beyond that Party's reasonable control that could not have been avoided through reasonable diligence. The affected Party shall notify the other Party without undue delay."
+        },
+        {
+          "id": "general_provisions.governing_law_and_disputes",
+          "version": null,
+          "text": "This Agreement shall be governed by [APPLICABLE_LAW]. Any dispute shall be submitted to [DISPUTE_RESOLUTION_MECHANISM] before litigation, except where interim injunctive relief is required."
+        }
+      ],
+      "dynamicFields": [
+        "APPLICABLE_LAW",
+        "DISPUTE_RESOLUTION_MECHANISM"
+      ]
+    },
+    {
+      "name": "Signatures",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "signatures.execution",
+          "version": null,
+          "text": "The Parties have executed this Agreement as of [SIGNATURE_DATE]."
+        }
+      ],
+      "dynamicFields": [
+        "SIGNATURE_DATE"
+      ]
+    }
+  ],
+  "dynamicFields": [
+    "CLIENT_NAME",
+    "PROVIDER_NAME",
+    "PREMISES_ADDRESS",
+    "CLEANING_TASKS_INCLUDED",
+    "SERVICE_FREQUENCY",
+    "SERVICE_HOURS",
+    "START_DATE",
+    "TOTAL_VALUE",
+    "PAYMENT_METHOD",
+    "LATE_PAYMENT_RATE",
+    "ACCESS_METHOD",
+    "TERMINATION_NOTICE_PERIOD",
+    "DAMAGE_REPORTING_PERIOD",
+    "APPLICABLE_LAW",
+    "DISPUTE_RESOLUTION_MECHANISM",
+    "SIGNATURE_DATE"
+  ],
+  "slug": "commercial_cleaning_services_agreement"
+}
