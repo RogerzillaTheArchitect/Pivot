@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "market": "Entertainment & Arts",
+    "category": "Performance",
+    "subcategory": "Artistic",
+    "contractType": "Artistic Performance Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["performance", "entertainment", "artist", "live-event"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_CONTRATANTE] (\"Contratante\"), e [NOME_ARTISTA] (\"Artista\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_CONTRATANTE", "NOME_ARTISTA"]
+    },
+    {
+      "name": "Objeto do Contrato",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope.description",
+          "version": null,
+          "text": "O Artista compromete-se a realizar a apresentação artística descrita como [DESCRICAO_APRESENTACAO] no dia [DATA_APRESENTACAO], no local [LOCAL_APRESENTACAO], com duração aproximada de [DURACAO_APRESENTACAO]."
+        }
+      ],
+      "dynamicFields": ["DESCRICAO_APRESENTACAO", "DATA_APRESENTACAO", "LOCAL_APRESENTACAO", "DURACAO_APRESENTACAO"]
+    },
+    {
+      "name": "Cachê e Condições de Pagamento",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.fee",
+          "version": null,
+          "text": "O Contratante pagará ao Artista o cachê total de [VALOR_CACHE], sendo [PERCENTAGEM_SINAL]% pago no ato da assinatura deste contrato ([VALOR_SINAL]) e o saldo restante ([VALOR_SALDO]) pago até [DATA_PAGAMENTO_SALDO]."
+        }
+      ],
+      "dynamicFields": ["VALOR_CACHE", "PERCENTAGEM_SINAL", "VALOR_SINAL", "VALOR_SALDO", "DATA_PAGAMENTO_SALDO"]
+    },
+    {
+      "name": "Rider Técnico e Logístico",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "rider.technical",
+          "version": null,
+          "text": "O Contratante compromete-se a providenciar os seguintes recursos técnicos e logísticos: [RIDER_TECNICO]. A não disponibilização de qualquer um destes elementos poderá, a critério do Artista, implicar o cancelamento da apresentação sem devolução do sinal pago."
+        }
+      ],
+      "dynamicFields": ["RIDER_TECNICO"]
+    },
+    {
+      "name": "Direitos de Imagem e Gravação",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "rights.image",
+          "version": null,
+          "text": "A gravação audiovisual, fotográfica ou sonora da apresentação fica sujeita a autorização prévia e por escrito do Artista. A utilização de qualquer registo para fins comerciais ou de divulgação requer acordo específico e poderá implicar remuneração adicional."
+        }
+      ],
+      "dynamicFields": []
+    },
+    {
+      "name": "Cancelamento e Força Maior",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "cancellation.policy",
+          "version": null,
+          "text": "Em caso de cancelamento pelo Contratante com menos de [PRAZO_CANCELAMENTO] dias de antecedência, o sinal pago não será reembolsado. Em caso de cancelamento pelo Artista por motivo de força maior devidamente comprovado, o sinal será devolvido na totalidade. Entende-se por força maior qualquer circunstância imprevisível e irresistível, nomeadamente doença grave, acidente ou catástrofe natural."
+        }
+      ],
+      "dynamicFields": ["PRAZO_CANCELAMENTO"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa. Para a resolução de qualquer litígio emergente do presente contrato, as Partes elegem o foro da comarca de [COMARCA], com expressa renúncia a qualquer outro."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_CONTRATANTE", "label": "Nome do Contratante", "type": "text"},
+    {"key": "NOME_ARTISTA", "label": "Nome do Artista / Banda", "type": "text"},
+    {"key": "DESCRICAO_APRESENTACAO", "label": "Descrição da Apresentação", "type": "text"},
+    {"key": "DATA_APRESENTACAO", "label": "Data da Apresentação", "type": "date"},
+    {"key": "LOCAL_APRESENTACAO", "label": "Local da Apresentação", "type": "text"},
+    {"key": "DURACAO_APRESENTACAO", "label": "Duração Aproximada", "type": "text"},
+    {"key": "VALOR_CACHE", "label": "Cachê Total", "type": "currency"},
+    {"key": "PERCENTAGEM_SINAL", "label": "Percentagem do Sinal (%)", "type": "number"},
+    {"key": "VALOR_SINAL", "label": "Valor do Sinal", "type": "currency"},
+    {"key": "VALOR_SALDO", "label": "Valor do Saldo Restante", "type": "currency"},
+    {"key": "DATA_PAGAMENTO_SALDO", "label": "Data de Pagamento do Saldo", "type": "date"},
+    {"key": "RIDER_TECNICO", "label": "Rider Técnico e Logístico", "type": "textarea"},
+    {"key": "PRAZO_CANCELAMENTO", "label": "Prazo de Cancelamento (dias)", "type": "number"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "artistic_performance_agreement"
+}

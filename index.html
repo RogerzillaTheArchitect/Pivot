@@ -386,7 +386,7 @@
       <span id="sb-label-pesquisar" data-t="nav.search">Pesquisar</span>
     </div>
     <div class="sb-create" onclick="openSheet()">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12h14"/></svg> <span id="sb-label-criar" data-t="nav.create">Criar</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);background-color:currentColor"></span> <span id="sb-label-criar" data-t="nav.create">Criar</span>
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
@@ -402,7 +402,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/ri:notification-2-line.svg);-webkit-mask-image:url(https://api.iconify.design/ri:notification-2-line.svg)"></span> <span data-t="profile.notifications">Notificações</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span> <span data-t="profile.notifications">Notificações</span>
       <span class="notif-dot" style="position:absolute;left:19px;top:6px;display:none"></span>
     </div>
     <div class="sb-item" id="sb-item-colaboracoes" data-nav="colaboracoes" style="display:none" onclick="go('colaboracoes')">
@@ -426,7 +426,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações">
-          <span class="nav-ico" style="width:22px;height:22px;mask-image:url(https://api.iconify.design/ri:notification-2-line.svg);-webkit-mask-image:url(https://api.iconify.design/ri:notification-2-line.svg)"></span>
+          <span class="nav-ico" style="width:22px;height:22px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span>
           <span class="notif-count" id="notif-count" style="display:none"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
@@ -621,7 +621,7 @@
         <div class="builder-top">
           <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
           <button class="btn soft builder-tutorial-btn" id="builder-tutorial-btn" onclick="abrirTutorialBuilder()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
             <span data-t="builder.tutorialBtn">Tutorial</span>
           </button>
         </div>
@@ -743,7 +743,7 @@
         <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
-          <button onclick="abrirNovoContato()" style="flex:none;width:38px;display:flex;align-items:center;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button onclick="abrirNovoContato()" style="flex:none;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:inherit">Novo +</button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -1028,7 +1028,7 @@
       <span class="nav-ico nav-ico-trabalhos"></span>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="mask-image:url(https://api.iconify.design/material-symbols:add-circle.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-circle.svg)"></span></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg)"></span></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico nav-ico-modelos"></span>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
@@ -12396,7 +12396,7 @@
         if(!dragging || e.pointerId!==pointerId) return;
         const dx=e.clientX-startX, dy=e.clientY-startY;
         if(horizontal===null){ if(Math.abs(dx)>6||Math.abs(dy)>6) horizontal=Math.abs(dx)>Math.abs(dy); }
-        if(!horizontal) return;
+        if(!horizontal && !(aberto && dx > 0)) return;
         moved=true;
         let x=baseX+dx;
         x=Math.max(-LARG, Math.min(0, x));
@@ -12410,7 +12410,7 @@
         dragging=false;
         if(pointerId!=null){ try{ card.releasePointerCapture(pointerId); }catch(err){} }
         card.style.transition='transform .2s ease';
-        if(horizontal){
+        if(horizontal || (aberto && moved)){
           aberto = curX<=-LARG*.4;
           if(aberto && navigator.vibrate) navigator.vibrate(6);
         }

@@ -1,0 +1,147 @@
+{
+  "meta": {
+    "market": "Technology & Digital",
+    "category": "Digital Services",
+    "subcategory": "Website Management",
+    "contractType": "Website Administration Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["website", "hosting", "maintenance", "backups", "digital"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_CLIENTE] (\"Cliente\"), e [NOME_PRESTADOR] (\"Prestador\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_CLIENTE", "NOME_PRESTADOR"]
+    },
+    {
+      "name": "Âmbito dos Serviços",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope.services",
+          "version": null,
+          "text": "O Prestador compromete-se a prestar os seguintes serviços de administração do website [URL_WEBSITE]: [LISTA_SERVICOS]. Os serviços incluem, mas não se limitam a, gestão de hospedagem, atualizações de software e plugins, backups regulares e monitorização de disponibilidade."
+        }
+      ],
+      "dynamicFields": ["URL_WEBSITE", "LISTA_SERVICOS"]
+    },
+    {
+      "name": "Hospedagem e Infraestrutura",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "hosting.infrastructure",
+          "version": null,
+          "text": "A hospedagem do website será assegurada em [SERVIDOR_HOSPEDAGEM], com garantia de disponibilidade (uptime) de [PERCENTAGEM_UPTIME]%. O Prestador notificará o Cliente com [PRAZO_NOTIFICACAO_MANUTENCAO] horas de antecedência em caso de manutenção programada que implique indisponibilidade do serviço."
+        }
+      ],
+      "dynamicFields": ["SERVIDOR_HOSPEDAGEM", "PERCENTAGEM_UPTIME", "PRAZO_NOTIFICACAO_MANUTENCAO"]
+    },
+    {
+      "name": "Atualizações e Manutenção",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "maintenance.updates",
+          "version": null,
+          "text": "O Prestador realizará atualizações de segurança e de software com periodicidade [PERIODICIDADE_ATUALIZACOES]. As atualizações de conteúdo solicitadas pelo Cliente serão realizadas no prazo de [PRAZO_ATUALIZACOES_CONTEUDO] dias úteis após receção do pedido. Estão incluídas até [HORAS_MENSAIS_INCLUIDAS] horas mensais de trabalho; horas adicionais serão faturadas a [VALOR_HORA_ADICIONAL] por hora."
+        }
+      ],
+      "dynamicFields": ["PERIODICIDADE_ATUALIZACOES", "PRAZO_ATUALIZACOES_CONTEUDO", "HORAS_MENSAIS_INCLUIDAS", "VALOR_HORA_ADICIONAL"]
+    },
+    {
+      "name": "Backups e Recuperação de Dados",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "backups.policy",
+          "version": null,
+          "text": "O Prestador realizará backups completos do website com frequência [FREQUENCIA_BACKUP], mantendo os últimos [NUMERO_BACKUPS_RETIDOS] backups armazenados. Em caso de perda de dados, o Prestador procederá à recuperação a partir do backup mais recente no prazo de [PRAZO_RECUPERACAO] horas. O Prestador não será responsável por dados não cobertos pelo plano de backup acordado."
+        }
+      ],
+      "dynamicFields": ["FREQUENCIA_BACKUP", "NUMERO_BACKUPS_RETIDOS", "PRAZO_RECUPERACAO"]
+    },
+    {
+      "name": "Segurança",
+      "status": "OPTIONAL",
+      "clauses": [
+        {
+          "id": "security.measures",
+          "version": null,
+          "text": "O Prestador implementará e manterá as seguintes medidas de segurança: certificado SSL/TLS, firewall de aplicação web (WAF), monitorização de malware e proteção contra ataques de força bruta. Em caso de violação de segurança, o Prestador notificará o Cliente no prazo de [PRAZO_NOTIFICACAO_BREACH] horas após deteção."
+        }
+      ],
+      "dynamicFields": ["PRAZO_NOTIFICACAO_BREACH"]
+    },
+    {
+      "name": "Remuneração",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.recurring",
+          "version": null,
+          "text": "Os serviços serão faturados mensalmente no valor de [VALOR_MENSAL], pagável até ao dia [DIA_PAGAMENTO] de cada mês. O valor poderá ser atualizado anualmente de acordo com o índice de preços ao consumidor publicado pelo INE, com notificação prévia de [PRAZO_NOTIFICACAO_ATUALIZACAO_PRECO] dias."
+        }
+      ],
+      "dynamicFields": ["VALOR_MENSAL", "DIA_PAGAMENTO", "PRAZO_NOTIFICACAO_ATUALIZACAO_PRECO"]
+    },
+    {
+      "name": "Duração e Rescisão",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "duration.termination",
+          "version": null,
+          "text": "Este contrato tem a duração de [DURACAO_CONTRATO], renovando-se automaticamente por períodos iguais salvo comunicação em contrário com [PRAZO_RESCISAO] dias de antecedência. Em caso de rescisão, o Prestador entregará ao Cliente todos os ficheiros e credenciais de acesso no prazo de [PRAZO_ENTREGA_DADOS] dias."
+        }
+      ],
+      "dynamicFields": ["DURACAO_CONTRATO", "PRAZO_RESCISAO", "PRAZO_ENTREGA_DADOS"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa. Para resolução de conflitos, as Partes elegem o foro da comarca de [COMARCA]."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_CLIENTE", "label": "Nome do Cliente", "type": "text"},
+    {"key": "NOME_PRESTADOR", "label": "Nome do Prestador", "type": "text"},
+    {"key": "URL_WEBSITE", "label": "URL do Website", "type": "text"},
+    {"key": "LISTA_SERVICOS", "label": "Lista de Serviços Incluídos", "type": "textarea"},
+    {"key": "SERVIDOR_HOSPEDAGEM", "label": "Servidor / Provedor de Hospedagem", "type": "text"},
+    {"key": "PERCENTAGEM_UPTIME", "label": "Garantia de Uptime (%)", "type": "number"},
+    {"key": "PRAZO_NOTIFICACAO_MANUTENCAO", "label": "Prazo de Notificação de Manutenção (horas)", "type": "number"},
+    {"key": "PERIODICIDADE_ATUALIZACOES", "label": "Periodicidade das Atualizações", "type": "text"},
+    {"key": "PRAZO_ATUALIZACOES_CONTEUDO", "label": "Prazo para Atualizações de Conteúdo (dias úteis)", "type": "number"},
+    {"key": "HORAS_MENSAIS_INCLUIDAS", "label": "Horas Mensais Incluídas", "type": "number"},
+    {"key": "VALOR_HORA_ADICIONAL", "label": "Valor por Hora Adicional", "type": "currency"},
+    {"key": "FREQUENCIA_BACKUP", "label": "Frequência dos Backups", "type": "text"},
+    {"key": "NUMERO_BACKUPS_RETIDOS", "label": "Número de Backups Retidos", "type": "number"},
+    {"key": "PRAZO_RECUPERACAO", "label": "Prazo de Recuperação de Dados (horas)", "type": "number"},
+    {"key": "PRAZO_NOTIFICACAO_BREACH", "label": "Prazo de Notificação de Violação (horas)", "type": "number"},
+    {"key": "VALOR_MENSAL", "label": "Valor Mensal", "type": "currency"},
+    {"key": "DIA_PAGAMENTO", "label": "Dia de Pagamento Mensal", "type": "number"},
+    {"key": "PRAZO_NOTIFICACAO_ATUALIZACAO_PRECO", "label": "Prazo de Notificação de Atualização de Preço (dias)", "type": "number"},
+    {"key": "DURACAO_CONTRATO", "label": "Duração do Contrato", "type": "text"},
+    {"key": "PRAZO_RESCISAO", "label": "Prazo de Rescisão (dias)", "type": "number"},
+    {"key": "PRAZO_ENTREGA_DADOS", "label": "Prazo de Entrega de Dados após Rescisão (dias)", "type": "number"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "website_administration_agreement"
+}

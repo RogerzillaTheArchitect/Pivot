@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "market": "Real Estate",
+    "category": "Property",
+    "subcategory": "Management",
+    "contractType": "Property Management Agreement",
+    "status": "Pending Human Legal Review",
+    "version": "1.0.0",
+    "tags": ["property", "real-estate", "management", "rental", "administration"],
+    "language": "pt"
+  },
+  "blocks": [
+    {
+      "name": "Identificação das Partes",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "identification.parties",
+          "version": null,
+          "text": "Este Contrato é celebrado entre [NOME_PROPRIETARIO] (\"Proprietário\"), e [NOME_GESTOR] (\"Gestor\"), doravante denominadas conjuntamente \"Partes\"."
+        }
+      ],
+      "dynamicFields": ["NOME_PROPRIETARIO", "NOME_GESTOR"]
+    },
+    {
+      "name": "Identificação do Imóvel",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "property.identification",
+          "version": null,
+          "text": "O imóvel objeto deste contrato situa-se em [MORADA_IMOVEL], descrito na Conservatória do Registo Predial sob a [DESCRICAO_PREDIAL], com a área de [AREA_IMOVEL] m². O Proprietário declara ser o legítimo titular dos direitos sobre o referido imóvel."
+        }
+      ],
+      "dynamicFields": ["MORADA_IMOVEL", "DESCRICAO_PREDIAL", "AREA_IMOVEL"]
+    },
+    {
+      "name": "Âmbito da Gestão",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "scope.management",
+          "version": null,
+          "text": "O Gestor compromete-se a prestar os seguintes serviços de gestão operacional do imóvel: [SERVICOS_GESTAO]. Os serviços incluem, designadamente, a angariação e seleção de inquilinos, cobrança de rendas, gestão de manutenção e reparações, e representação do Proprietário perante entidades públicas e privadas relacionadas com o imóvel."
+        }
+      ],
+      "dynamicFields": ["SERVICOS_GESTAO"]
+    },
+    {
+      "name": "Poderes do Gestor",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "powers.manager",
+          "version": null,
+          "text": "O Proprietário confere ao Gestor poderes para: celebrar e renovar contratos de arrendamento até ao valor máximo de renda mensal de [RENDA_MAXIMA]; autorizar reparações e manutenção até ao limite de [LIMITE_REPARACOES_SEM_AUTORIZACAO] por intervenção; e agir em nome do Proprietário em assuntos correntes de gestão do imóvel. Para valores superiores, é necessária autorização prévia e por escrito do Proprietário."
+        }
+      ],
+      "dynamicFields": ["RENDA_MAXIMA", "LIMITE_REPARACOES_SEM_AUTORIZACAO"]
+    },
+    {
+      "name": "Remuneração do Gestor",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "payment.management_fee",
+          "version": null,
+          "text": "O Gestor receberá uma comissão de gestão de [PERCENTAGEM_COMISSAO]% sobre as rendas efetivamente cobradas, paga mensalmente. Em caso de angariação de novo inquilino, será devida uma comissão de angariação equivalente a [COMISSAO_ANGARIACAO]. As despesas extraordinárias devidamente documentadas serão reembolsadas pelo Proprietário."
+        }
+      ],
+      "dynamicFields": ["PERCENTAGEM_COMISSAO", "COMISSAO_ANGARIACAO"]
+    },
+    {
+      "name": "Relatórios e Prestação de Contas",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "reporting.accounts",
+          "version": null,
+          "text": "O Gestor enviará ao Proprietário um relatório mensal detalhado até ao dia [DIA_RELATORIO] de cada mês, contendo: rendas cobradas, despesas realizadas, estado do imóvel e situação dos inquilinos. As transferências ao Proprietário serão realizadas até ao dia [DIA_TRANSFERENCIA] de cada mês."
+        }
+      ],
+      "dynamicFields": ["DIA_RELATORIO", "DIA_TRANSFERENCIA"]
+    },
+    {
+      "name": "Manutenção e Reparações",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "maintenance.repairs",
+          "version": null,
+          "text": "O Gestor é responsável por coordenar toda a manutenção preventiva e corretiva do imóvel, recorrendo a prestadores de serviços devidamente habilitados. Reparações urgentes necessárias para preservar a habitabilidade do imóvel poderão ser autorizadas pelo Gestor até [LIMITE_URGENCIA], com notificação imediata ao Proprietário."
+        }
+      ],
+      "dynamicFields": ["LIMITE_URGENCIA"]
+    },
+    {
+      "name": "Duração e Rescisão",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "duration.termination",
+          "version": null,
+          "text": "Este contrato tem a duração de [DURACAO_CONTRATO], renovando-se automaticamente por períodos iguais salvo comunicação em contrário com [PRAZO_RESCISAO] dias de antecedência. Em caso de rescisão, o Gestor prestará contas de todas as operações pendentes e entregará todos os documentos e chaves relacionados com o imóvel no prazo de [PRAZO_ENTREGA] dias."
+        }
+      ],
+      "dynamicFields": ["DURACAO_CONTRATO", "PRAZO_RESCISAO", "PRAZO_ENTREGA"]
+    },
+    {
+      "name": "Disposições Gerais",
+      "status": "REQUIRED",
+      "clauses": [
+        {
+          "id": "general.jurisdiction",
+          "version": null,
+          "text": "Este contrato é regido pela legislação portuguesa, designadamente pelo Código Civil e pelo Regime Jurídico do Arrendamento Urbano (NRAU). Para resolução de conflitos, as Partes elegem o foro da comarca de [COMARCA]."
+        }
+      ],
+      "dynamicFields": ["COMARCA"]
+    }
+  ],
+  "dynamicFields": [
+    {"key": "NOME_PROPRIETARIO", "label": "Nome do Proprietário", "type": "text"},
+    {"key": "NOME_GESTOR", "label": "Nome do Gestor / Empresa de Gestão", "type": "text"},
+    {"key": "MORADA_IMOVEL", "label": "Morada do Imóvel", "type": "text"},
+    {"key": "DESCRICAO_PREDIAL", "label": "Descrição Predial", "type": "text"},
+    {"key": "AREA_IMOVEL", "label": "Área do Imóvel (m²)", "type": "number"},
+    {"key": "SERVICOS_GESTAO", "label": "Serviços de Gestão Incluídos", "type": "textarea"},
+    {"key": "RENDA_MAXIMA", "label": "Renda Máxima sem Autorização Prévia", "type": "currency"},
+    {"key": "LIMITE_REPARACOES_SEM_AUTORIZACAO", "label": "Limite de Reparações sem Autorização", "type": "currency"},
+    {"key": "PERCENTAGEM_COMISSAO", "label": "Comissão de Gestão (%)", "type": "number"},
+    {"key": "COMISSAO_ANGARIACAO", "label": "Comissão de Angariação", "type": "text"},
+    {"key": "DIA_RELATORIO", "label": "Dia de Envio do Relatório Mensal", "type": "number"},
+    {"key": "DIA_TRANSFERENCIA", "label": "Dia de Transferência Mensal", "type": "number"},
+    {"key": "LIMITE_URGENCIA", "label": "Limite para Reparações de Urgência", "type": "currency"},
+    {"key": "DURACAO_CONTRATO", "label": "Duração do Contrato", "type": "text"},
+    {"key": "PRAZO_RESCISAO", "label": "Prazo de Rescisão (dias)", "type": "number"},
+    {"key": "PRAZO_ENTREGA", "label": "Prazo de Entrega de Documentos (dias)", "type": "number"},
+    {"key": "COMARCA", "label": "Comarca do Foro", "type": "text"}
+  ],
+  "slug": "property_management_agreement"
+}
