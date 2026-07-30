@@ -5276,6 +5276,19 @@
       if(lang==='en') return item.descEN!=null?item.descEN:item.desc;
       const m=this._i18nMeta[item.id]; const tr=m&&m[lang];
       return (tr&&tr.desc) || (item.descEN!=null?item.descEN:item.desc);
+    },
+    /* Tags traduzidas por idioma, mesma fonte (i18n/meta.json) e mesma regra
+       de fallback de tituloEm/descEm — nunca traduz palavra a palavra (isso
+       é o que misturava inglês com português dentro da MESMA tag, ex.:
+       "Interior Pintura"). Ou a lista inteira já vem pronta no idioma pedido,
+       ou cai inteira para o Master English — nunca uma mistura das duas. Um
+       contrato novo sem tradução de tags ainda aparece 100% em inglês (não
+       "quebrado"), até alguém preencher pt/es.tags em i18n/meta.json. */
+    tagsEm(item, lang){
+      const raw=item.tags||[];
+      if(lang==='en') return raw;
+      const m=this._i18nMeta[item.id]; const tr=m&&m[lang];
+      return (tr&&tr.tags&&tr.tags.length===raw.length) ? tr.tags : raw;
     }
   };
   LegalLibrary.init();
@@ -5440,9 +5453,10 @@
     html+='<div class="model-detail-meta">'+bibAutorLinha(m)+'</div>';
     html+='</div>';
     html+='<p class="model-detail-desc">'+escapeHtml(LegalLibrary.descEm(m, LANG)||'')+'</p>';
-    if((m.tags||[]).length){
+    const tagsTraduzidas=LegalLibrary.tagsEm(m, LANG);
+    if(tagsTraduzidas.length){
       html+='<div class="plabel">'+t('library.tags')+'</div>';
-      html+='<div class="detail-structure">'+m.tags.map(tg=>'<span class="struct-pill">'+escapeHtml(bibTraduzirTag(tg, LANG))+'</span>').join('')+'</div>';
+      html+='<div class="detail-structure">'+tagsTraduzidas.map(tg=>'<span class="struct-pill">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     }
     html+='<div class="warn-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg><div>'+t('library.legalWarning')+'</div></div>';
     const favAtivo=bibFavoritos.has('of:'+id);
@@ -13548,65 +13562,6 @@
      mas para as tags dos 8 contratos de Home & Trade Services — que
      conhecemos exatamente, por serem obra desta mesma sessão — vale a pena
      uma tradução completa e natural da frase, não só palavra por palavra. */
-  const BIB_TAG_PHRASE_OVERRIDES={
-    "Interior Painting":{pt:"Pintura Interior",es:"Pintura Interior"},
-    "Exterior Painting":{pt:"Pintura Exterior",es:"Pintura Exterior"},
-    "Residential Properties":{pt:"Imóveis Residenciais",es:"Inmuebles Residenciales"},
-    "Commercial Properties":{pt:"Imóveis Comerciais",es:"Inmuebles Comerciales"},
-    "Repainting":{pt:"Repintura",es:"Repintado"},
-    "Kitchen Remodeling":{pt:"Remodelação de Cozinha",es:"Remodelación de Cocina"},
-    "Bathroom Remodeling":{pt:"Remodelação de Casa de Banho",es:"Remodelación de Baño"},
-    "Whole-Home Renovation":{pt:"Renovação Completa da Casa",es:"Renovación Completa de la Casa"},
-    "Room Additions":{pt:"Ampliação de Cómodos",es:"Ampliación de Habitaciones"},
-    "Basement Finishing":{pt:"Acabamento de Cave",es:"Acabado de Sótano"},
-    "New Construction":{pt:"Construção Nova",es:"Construcción Nueva"},
-    "Residential Construction":{pt:"Construção Residencial",es:"Construcción Residencial"},
-    "Commercial Construction":{pt:"Construção Comercial",es:"Construcción Comercial"},
-    "Building Additions":{pt:"Ampliações de Edifícios",es:"Ampliaciones de Edificios"},
-    "Structural Work":{pt:"Obras Estruturais",es:"Trabajos Estructurales"},
-    "House Cleaning":{pt:"Limpeza Doméstica",es:"Limpieza del Hogar"},
-    "Recurring Cleaning":{pt:"Limpeza Recorrente",es:"Limpieza Recurrente"},
-    "Deep Cleaning":{pt:"Limpeza Profunda",es:"Limpieza Profunda"},
-    "Move-in/Move-out Cleaning":{pt:"Limpeza de Entrada/Saída",es:"Limpieza de Entrada/Salida"},
-    "Office Cleaning":{pt:"Limpeza de Escritório",es:"Limpieza de Oficinas"},
-    "Janitorial Services":{pt:"Serviços de Conservação",es:"Servicios de Conserjería"},
-    "Retail Cleaning":{pt:"Limpeza de Retalho",es:"Limpieza de Comercios"},
-    "Facility Maintenance":{pt:"Manutenção de Instalações",es:"Mantenimiento de Instalaciones"},
-    "Lawn Care":{pt:"Cuidado do Relvado",es:"Cuidado del Césped"},
-    "Garden Maintenance":{pt:"Manutenção de Jardim",es:"Mantenimiento de Jardín"},
-    "Landscape Design":{pt:"Design de Paisagismo",es:"Diseño de Paisajismo"},
-    "Seasonal Services":{pt:"Serviços Sazonais",es:"Servicios Estacionales"},
-    "Residential Moving":{pt:"Mudança Residencial",es:"Mudanza Residencial"},
-    "Local Moving":{pt:"Mudança Local",es:"Mudanza Local"},
-    "Long-Distance Moving":{pt:"Mudança de Longa Distância",es:"Mudanza de Larga Distancia"},
-    "Packing Services":{pt:"Serviço de Embalagem",es:"Servicio de Embalaje"},
-    "Storage":{pt:"Armazenamento",es:"Almacenamiento"},
-    "Home Repairs":{pt:"Reparos Domésticos",es:"Reparaciones del Hogar"},
-    "Minor Maintenance":{pt:"Manutenção Simples",es:"Mantenimiento Menor"},
-    "Fixture Installation":{pt:"Instalação de Acessórios",es:"Instalación de Accesorios"},
-    "Small Jobs":{pt:"Pequenos Trabalhos",es:"Trabajos Pequeños"}
-  };
-  /* Tags do catálogo (index.json) só existem em inglês — sem isto, uma
-     Biblioteca em PT/ES mostrava título traduzido mas tags cruas em inglês
-     ("Contrato de Pintura" com a tag "Interior Painting" por baixo), lendo
-     como duas línguas misturadas na mesma ficha. Confere primeiro a tradução
-     completa acima; sem correspondência, traduz palavra a palavra
-     reaproveitando o MESMO dicionário de bibTraduzirCampo (preserva espaços e
-     "/", já que tags são frases como "Move-in/Move-out Cleaning", não
-     SCREAMING_SNAKE_CASE) — qualquer palavra fora do dicionário mantém-se em
-     inglês em vez de inventar tradução, mesma regra de fallback do resto da
-     Biblioteca. */
-  function bibTraduzirTag(tag, lang){
-    lang = lang || LANG;
-    if(lang==='en' || !tag) return tag;
-    const overr=BIB_TAG_PHRASE_OVERRIDES[tag];
-    if(overr) return overr[lang]||overr.pt;
-    return tag.split(/(\s+|\/|-)/).map(parte=>{
-      if(/^(\s+|\/|-)$/.test(parte)) return parte;
-      const m=BIB_FIELD_WORD_MAP[parte.toUpperCase()];
-      return m ? (m[lang]||m.pt) : parte;
-    }).join('');
-  }
   function bibTraduzirCampo(campo){
     if(LANG==='en') return bibCapitalizar(campo);
     const palavras=(campo||'').split(/[_-]+/).filter(Boolean);
@@ -13691,7 +13646,7 @@
           lang,
           titulo: LegalLibrary.tituloEm(b, lang),
           desc: LegalLibrary.descEm(b, lang),
-          tags: (base.tags||[]).map(tg=>bibTraduzirTag(tg, lang))
+          tags: LegalLibrary.tagsEm(b, lang)
         }));
       });
     });
@@ -14108,9 +14063,11 @@
        (categoria amigável, subcategoria crua do catálogo, profissão e
        contexto — estes dois últimos strings fixas em português) — exibir
        isso mostrava tags em inglês misturadas com palavras em português
-       independente do idioma da app. it.tags já vem traduzido para o idioma
-       de "it.lang" por catalogoBiblioteca (bibTraduzirTag), então é a única
-       fonte usada aqui; tagsBusca continua reservada para o filtro de busca. */
+       independente do idioma da app. it.tags já vem traduzido como um bloco
+       único para o idioma de "it.lang" por catalogoBiblioteca
+       (LegalLibrary.tagsEm, lida de legal-library/i18n/meta.json — nunca
+       palavra a palavra), então é a única fonte usada aqui; tagsBusca
+       continua reservada para o filtro de busca. */
     const tagsExibidas=it.tags||[];
     if(tagsExibidas.length) html+='<div class="bc-tags" style="margin-bottom:14px">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
