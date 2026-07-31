@@ -126,8 +126,19 @@
     --ink:#F5F5F3; --ink-soft:#9B9DA3; --ink-faint:#6A6C72; --neutral:#6A6C72;
     --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.07)}
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
-  .bib-card .bc-title{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:17px;font-weight:600;line-height:1.2;color:#FBFBFA;letter-spacing:0}
-  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;margin-top:6px;
+  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:15px;font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
+  /* badge de idioma — quadrado pequeno e vazio (sem preenchimento), só
+     moldura fina + as duas letras dentro (referência: icon-park-outline
+     "english"), seguido de um separador e da contagem de blocos na mesma
+     linha. */
+  .bib-card .bc-lang-row{align-self:flex-start;display:flex;align-items:center;gap:6px;margin:8px 0}
+  .bib-card .bc-lang{flex:none;width:20px;height:20px;
+    display:inline-flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;letter-spacing:.01em;
+    border-radius:3px;border:1px solid var(--bib-ink-soft);color:var(--bib-ink-soft);background:transparent}
+  .bib-card .bc-lang-sep{width:3px;height:3px;border-radius:50%;background:var(--bib-ink-faint);flex:none}
+  .bib-card .bc-lang-blocks{font-size:11px;color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:4px;height:20px}
+  .bc-lang-blocks-ico{width:13px;height:13px;background-color:var(--bib-ink-faint)}
+  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
   /* Rodapé do card: MESMA linha para os selos de origem (Oficial/Jurídico/
      Recomendados), o badge de idioma, a contagem de blocos e os usos —

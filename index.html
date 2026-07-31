@@ -621,11 +621,8 @@
       <section class="view wide" id="v-builder">
         <div class="back" onclick="voltarDoBuilder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span id="builder-back-label" data-t="nav.jobs">Trabalhos</span></div>
         <div class="builder-top">
-          <div><div class="detail-h" style="font-size:24px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
-          <button class="btn soft builder-tutorial-btn" id="builder-tutorial-btn" onclick="abrirTutorialBuilder()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-            <span data-t="builder.tutorialBtn">Tutorial</span>
-          </button>
+          <div><div class="page-title" style="margin:0 0 4px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
+          <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
         </div>
 
         <div class="builder-tabs segmented" id="builder-tabs">
@@ -745,7 +742,7 @@
         <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
-          <button onclick="abrirNovoContato()" style="flex:none;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:inherit;align-self:stretch">Novo +</button>
+          <button onclick="abrirNovoContato()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -2826,7 +2823,7 @@
     "home.ofTarget": { pt:"do previsto", en:"of target", es:"del objetivo" },
     "home.pendingPayments": { pt:"Pagamentos pendentes", en:"Pending payments", es:"Pagos pendientes" },
     "home.projected": { pt:"Previsto", en:"Projected", es:"Previsto" },
-    "home.received": { pt:"Receita", en:"Received", es:"Recibido" },
+    "home.received": { pt:"Receitas", en:"Received", es:"Recibido" },
     "home.revenue": { pt:"Faturamento", en:"Revenue", es:"Facturación" },
     "home.spent": { pt:"Gasto", en:"Spent", es:"Gasto" },
     "home.financeTitle": { pt:"Financeiro", en:"Finance", es:"Financiero" },
@@ -3621,18 +3618,21 @@
     "settings.storageTitle": { pt:"Armazenamento", en:"Storage", es:"Almacenamiento" },
     "settings.calendarSync": { pt:"Sincronização de Calendário", en:"Calendar Sync", es:"Sincronización de Calendario" },
     "sync.loading": { pt:"A carregar…", en:"Loading…", es:"Cargando…" },
-    "sync.explain": { pt:"Gere um link privado que mantém os seus projetos sincronizados automaticamente com o Google Calendar, Apple Calendar, Outlook ou qualquer outra app de calendário — sem precisar de ligar a sua conta. O Pivots nunca acede aos seus calendários, só publica este link.", en:"Generate a private link that keeps your projects automatically synced with Google Calendar, Apple Calendar, Outlook or any other calendar app — no account connection needed. Pivots never accesses your calendars, it just publishes this link.", es:"Genera un enlace privado que mantiene tus proyectos sincronizados automáticamente con Google Calendar, Apple Calendar, Outlook o cualquier otra app de calendario — sin necesidad de conectar tu cuenta. Pivots nunca accede a tus calendarios, solo publica este enlace." },
+    "sync.explain": { pt:"Gere um link privado para sincronizar os seus projetos com qualquer app de calendário. O Pivot publica os seus eventos sem aceder à sua conta.", en:"Generate a private link to sync your projects with any calendar app. Pivot publishes your events without accessing your account.", es:"Genera un enlace privado para sincronizar tus proyectos con cualquier app de calendario. Pivot publica tus eventos sin acceder a tu cuenta." },
     "sync.generateLink": { pt:"Gerar link de sincronização", en:"Generate sync link", es:"Generar enlace de sincronización" },
     "sync.linkLabel": { pt:"O seu link de sincronização", en:"Your sync link", es:"Tu enlace de sincronización" },
-    "sync.howToTitle": { pt:"Como adicionar", en:"How to add it", es:"Cómo añadirlo" },
-    "sync.howToGoogle": { pt:"Abra o Google Calendar, clique no símbolo + ao lado de \"Outros calendários\" e escolha \"A partir do URL\". Cole o link e clique em Adicionar.", en:"Open Google Calendar, click the + next to \"Other calendars\" and choose \"From URL\". Paste the link and click Add.", es:"Abre Google Calendar, haz clic en el + junto a \"Otros calendarios\" y elige \"Desde una URL\". Pega el enlace y haz clic en Añadir." },
-    "sync.howToApple": { pt:"No macOS, abra o Calendário e clique em \"Calendário\" no menu superior. Escolha \"Nova assinatura de calendário\", cole o link e siga os passos.", en:"On macOS, open Calendar and click \"File\" in the top menu. Choose \"New Calendar Subscription\", paste the link and follow the steps.", es:"En macOS, abre Calendario y haz clic en \"Archivo\" en el menú superior. Elige \"Nueva suscripción de calendario\", pega el enlace y sigue los pasos." },
-    "sync.howToOther": { pt:"Procure a opção \"Subscrever calendário\" ou \"Adicionar por URL\". Cole o link e confirme.", en:"Look for \"Subscribe to calendar\" or \"Add by URL\". Paste the link and confirm.", es:"Busca la opción \"Suscribirse a calendario\" o \"Añadir por URL\". Pega el enlace y confirma." },
+    "sync.howToTitle": { pt:"Como adicionar por URL", en:"How to add by URL", es:"Cómo añadir por URL" },
+    "sync.howToGoogle": { pt:"Definições, Adicionar calendário, A partir do URL, e cole o link.", en:"Settings, Add calendar, From URL, and paste the link.", es:"Configuración, Añadir calendario, Desde URL, y pega el enlace." },
+    "sync.howToApple": { pt:"Ficheiro, Nova assinatura de calendário, e cole o link.", en:"File, New Calendar Subscription, and paste the link.", es:"Archivo, Nueva suscripción de calendario, y pega el enlace." },
+    "sync.howToOther": { pt:"Procure a opção Subscrever calendário ou Adicionar por URL e cole o link.", en:"Look for Subscribe to calendar or Add by URL and paste the link.", es:"Busca la opción Suscribirse a calendario o Añadir por URL y pega el enlace." },
     "sync.other": { pt:"outros", en:"others", es:"otros" },
     "sync.regenerateLink": { pt:"Gerar novo link", en:"Generate new link", es:"Generar nuevo enlace" },
-    "sync.regenerateHint": { pt:"O link atual deixa de funcionar assim que gerar um novo — terá de o substituir em cada app de calendário onde o usa.", en:"The current link stops working as soon as you generate a new one — you'll need to replace it in every calendar app where you use it.", es:"El enlace actual deja de funcionar en cuanto generes uno nuevo — tendrás que reemplazarlo en cada app de calendario donde lo uses." },
-    "sync.regenerateConfirm": { pt:"Isto invalida o link atual. Tem de o substituir em todas as apps de calendário onde o usa. Continuar?", en:"This invalidates the current link. You'll need to replace it in every calendar app where you use it. Continue?", es:"Esto invalida el enlace actual. Tendrás que reemplazarlo en cada app de calendario donde lo uses. ¿Continuar?" },
-    "sync.addCalendarButton": { pt:"Copiar link de sincronização", en:"Copy sync link", es:"Copiar enlace de sincronización" },
+    "sync.regenerateHint": { pt:"O link atual deixa de funcionar assim que gerar um novo. Tem de o substituir em cada app de calendário onde o usa.", en:"The current link stops working as soon as you generate a new one. You will need to replace it in every calendar app where you use it.", es:"El enlace actual deja de funcionar en cuanto generes uno nuevo. Tendrás que reemplazarlo en cada app de calendario donde lo uses." },
+    "sync.regenerateConfirm": { pt:"Isto invalida o link atual. Tem de o substituir em todas as apps de calendário onde o usa. Continuar?", en:"This invalidates the current link. You will need to replace it in every calendar app where you use it. Continue?", es:"Esto invalida el enlace actual. Tendrás que reemplazarlo en cada app de calendario donde lo uses. ¿Continuar?" },
+    "sync.addCalendarButton": { pt:"Adicionar ao Calendário", en:"Add to Calendar", es:"Añadir al Calendario" },
+    "sync.icsTitle": { pt:"Ficheiro .ics", en:".ics file", es:"Archivo .ics" },
+    "sync.icsExplain": { pt:"Importação pontual. Os eventos não atualizam automaticamente.", en:"One-time import. Events do not update automatically.", es:"Importación puntual. Los eventos no se actualizan automáticamente." },
+    "sync.downloadIcs": { pt:"Descarregar ficheiro .ics", en:"Download .ics file", es:"Descargar archivo .ics" },
     "toast.genericError": { pt:"Ocorreu um erro. Tente novamente.", en:"Something went wrong. Please try again.", es:"Ocurrió un error. Inténtalo de nuevo." },
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
@@ -13973,7 +13973,7 @@
   /* miniatura na legenda de contagem de blocos ("N blocos") — mesmo ícone em
      toda a Biblioteca (card, detalhe, Meus Modelos), nunca outro glifo pro
      mesmo conceito. */
-  const BIB_ICON_BLOCKS='<span class="nav-ico bc-lang-blocks-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/boxicons:blocks.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:blocks.svg)"></span>';
+  const BIB_ICON_BLOCKS='<span class="nav-ico bc-lang-blocks-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/hugeicons:blockchain-01.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:blockchain-01.svg)"></span>';
   /* Ícones "sharp mid-century": traço reto (miter/square), sem curvas
      desnecessárias — usados nos botões Visualizar (olho) e Importar (seta)
      e nas etiquetas obrigatório/opcional/condicional da estrutura, no lugar
@@ -13981,8 +13981,8 @@
   const BIB_ICON_EYE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><rect x="9.5" y="9.5" width="5" height="5"/></svg>';
   const BIB_ICON_ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="square" stroke-linejoin="miter"><path d="M4 12h16M13 5l7 7-7 7"/></svg>';
   const BIB_ICON_REQUIRED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="4.5" y="11" width="15" height="9"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
-  const BIB_ICON_OPTIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="4.5" y="4.5" width="15" height="15"/></svg>';
-  const BIB_ICON_CONDITIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M12 3 21 12 12 21 3 12Z"/></svg>';
+  const BIB_ICON_OPTIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><rect x="2" y="7" width="20" height="10" rx="5"/><circle cx="7" cy="12" r="2.5" fill="currentColor" stroke="none"/></svg>';
+  const BIB_ICON_CONDITIONAL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M8 3v7l4 3 4-3V3"/><path d="M12 13v8"/></svg>';
   /* Ícones da biblioteca — Lucide, stroke 1.75, nunca preenchidos.
      Um único desenho por conceito, reaproveitado em toda a biblioteca
      (filtro, rodapé do card, sheet de detalhe, Visualizar). */
@@ -15759,19 +15759,26 @@
   function renderInfoSincronizacaoCalendario(token){
     const semLink = !token;
     const url = token ? urlFeedCalendario(token) : '';
+    const icsUrl = token ? urlFeedCalendario(token)+'&format=ics' : '';
     openInfo(t('settings.calendarSync'), `
       <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;line-height:1.5">${t('sync.explain')}</p>
       ${semLink ? `
         <button class="btn primary" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
       ` : `
         <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
-        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="navigator.clipboard.writeText('${url}').then(()=>showToast(t('toast.linkCopied')))">${t('sync.addCalendarButton')}</button>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <button class="btn soft" style="flex:1" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
+          <button class="btn primary" style="flex:1" onclick="window.location.href='${url}'">${t('sync.addCalendarButton')}</button>
+        </div>
         <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px">
           <b>Google Calendar:</b> ${t('sync.howToGoogle')}<br><br>
           <b>Apple Calendar:</b> ${t('sync.howToApple')}<br><br>
           <b>Outlook / ${t('sync.other')}:</b> ${t('sync.howToOther')}
         </p>
+        <p class="plabel" style="margin:20px 2px 8px">${t('sync.icsTitle')}</p>
+        <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px 10px">${t('sync.icsExplain')}</p>
+        <a href="${escapeHtml(icsUrl)}" download="pivot-calendar.ics" class="btn soft" style="width:100%;display:flex;align-items:center;justify-content:center;text-decoration:none">${t('sync.downloadIcs')}</a>
         <button class="btn soft" style="width:100%;margin-top:18px;color:var(--late)" onclick="gerarTokenSincronizacaoCalendario(true)">${t('sync.regenerateLink')}</button>
         <p style="font-size:11.5px;color:var(--ink-faint);margin:8px 2px 0">${t('sync.regenerateHint')}</p>
       `}
