@@ -302,6 +302,8 @@
         <div class="field"><label data-t="login.email">Email</label><input id="signup-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
         <div class="field"><label data-t="login.password">Password</label><input id="signup-pass" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
         <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="signup-pass2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
+        <label class="cc-check" style="margin-bottom:4px"><input type="checkbox" id="signup-termos"><span><span data-t="invite.acceptTermsPrefix">Li e aceito os </span><b data-t="invite.termsLink">Termos de Uso</b>.</span></label>
+        <label class="cc-check" style="margin-bottom:10px"><input type="checkbox" id="signup-privacidade"><span><span data-t="invite.acceptCookiesPrefix">Li e aceito a </span><b data-t="invite.cookiesLink">Política de Privacidade e Cookies</b>.</span></label>
         <p class="field-err" id="signup-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
         <button class="btn primary" style="width:100%" id="signup-btn" onclick="criarContaNaApp()"><span data-t="login.register">Criar conta</span></button>
         <div class="login-divider"><span data-t="login.or">ou</span></div>
@@ -390,16 +392,16 @@
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/></svg> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:widgets.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:widgets.svg)"></span> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
     </div>
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v16"/></svg> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg)"></span> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </div>
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg);-webkit-mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg)"></span> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </div>
     <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
+      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/ion:stats-chart-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/ion:stats-chart-sharp.svg)"></span> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item" style="position:relative" onclick="abrirNotificacoes()">
       <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span> <span data-t="profile.notifications">Notificações</span>
@@ -743,7 +745,7 @@
         <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
-          <button onclick="abrirNovoContato()" style="flex:none;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:inherit">Novo +</button>
+          <button onclick="abrirNovoContato()" style="flex:none;padding:0 12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;font-family:inherit;align-self:stretch">Novo +</button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -789,7 +791,7 @@
           <div class="prow" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoPlano()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg)"></span><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoAssinatura()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols-light:signature.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:signature.svg)"></span><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoNotificacoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoNotificacoes()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoSincronizacaoCalendario()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span><div class="t" data-t="settings.calendarSync">Sincronização de Calendário</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoConfiguracoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><div class="t" id="lbl-configuracoes" data-t="profile.settings">Configurações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoAjuda()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/mdi:help-circle.svg);-webkit-mask-image:url(https://api.iconify.design/mdi:help-circle.svg)"></span><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
@@ -867,8 +869,8 @@
         <!-- 4 botões de acesso às listas completas (add/editar/excluir),
              sem gráfico nenhum nessas telas — só o essencial de navegação. -->
         <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/streamline-plump:piggy-bank.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-plump:piggy-bank.svg)"></span><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/ic:outline-money-off-csred.svg);-webkit-mask-image:url(https://api.iconify.design/ic:outline-money-off-csred.svg)"></span><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/fluent:target-arrow-16-regular.svg);-webkit-mask-image:url(https://api.iconify.design/fluent:target-arrow-16-regular.svg)"></span><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/game-icons:piggy-bank.svg);-webkit-mask-image:url(https://api.iconify.design/game-icons:piggy-bank.svg)"></span><span data-t="reports.finBtn.limites">Limites</span></button>
           <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg)"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
           <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg)"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
@@ -1028,7 +1030,7 @@
       <span class="nav-ico nav-ico-trabalhos"></span>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg)"></span></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="width:20px;height:20px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg)"></span></div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico nav-ico-modelos"></span>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
@@ -1778,6 +1780,7 @@
     if (data.needsCode){ renderPortalCodigoAcessoForm(); return; }
     if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
     ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
+    if(!localStorage.getItem('portal-termos-'+ppToken)) { renderPortalTermosAcesso(); return; }
     renderPortalPublicoPrincipal();
   }
   /* O link sozinho não basta — o portal também exige um código de acesso de
@@ -1802,6 +1805,20 @@
     ppCodigo=codigo;
     if (data.expired){ renderPortalPublicoEstado('<h3>Link expirado</h3><p style="color:var(--ink-soft);font-size:13.5px">Este link já passou do prazo. Pede ao profissional para gerar um novo.</p>'); return; }
     ppJob = data.job; ppJobId = data.jobId; ppExpiresAt = data.expiresAt||null;
+    if(!localStorage.getItem('portal-termos-'+ppToken)) { renderPortalTermosAcesso(); return; }
+    renderPortalPublicoPrincipal();
+  }
+  function renderPortalTermosAcesso(){
+    renderPortalPublicoEstado(`
+      <h3 style="margin:0 0 10px;font-size:18px">${t('portal.termsTitle')||'Termos de Utilização'}</h3>
+      <p style="font-size:13px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px">${t('portal.termsBody')||'Ao aceder a este portal, confirmas que irás utilizar as informações aqui partilhadas apenas para os fins acordados com o profissional. Os dados são confidenciais e não devem ser partilhados com terceiros.'}</p>
+      <label class="cc-check" style="margin-bottom:16px"><input type="checkbox" id="pp-termos-check"><span>${t('portal.termsAccept')||'Li e aceito os termos de utilização deste portal.'}</span></label>
+      <button class="btn primary" style="width:100%" onclick="aceitarTermosPortal()">${t('portal.termsConfirm')||'Continuar'}</button>`);
+  }
+  function aceitarTermosPortal(){
+    const check=document.getElementById('pp-termos-check');
+    if(!check||!check.checked){ return; }
+    localStorage.setItem('portal-termos-'+ppToken,'1');
     renderPortalPublicoPrincipal();
   }
   function renderPortalPublicoEstado(html){
@@ -3224,6 +3241,10 @@
     "payment.thanks": { pt:"Obrigado!", en:"Thank you!", es:"¡Gracias!" },
     // --- Portal do Cliente ---
     "portal.acceptTerms": { pt:"Li e aceito os termos de pagamento e cancelamento descritos acima.", en:"I have read and accept the payment and cancellation terms above.", es:"He leído y acepto los términos de pago y cancelación descritos arriba." },
+    "portal.termsTitle": { pt:"Termos de Utilização", en:"Terms of Use", es:"Términos de Uso" },
+    "portal.termsBody": { pt:"Ao aceder a este portal, confirmas que irás utilizar as informações aqui partilhadas apenas para os fins acordados com o profissional. Os dados são confidenciais e não devem ser partilhados com terceiros sem autorização.", en:"By accessing this portal, you confirm that you will use the information shared here only for the purposes agreed with the professional. The data is confidential and must not be shared with third parties without authorization.", es:"Al acceder a este portal, confirmas que utilizarás la información compartida aquí únicamente para los fines acordados con el profesional. Los datos son confidenciales y no deben compartirse con terceros sin autorización." },
+    "portal.termsAccept": { pt:"Li e aceito os termos de utilização deste portal.", en:"I have read and accept the terms of use for this portal.", es:"He leído y acepto los términos de uso de este portal." },
+    "portal.termsConfirm": { pt:"Continuar", en:"Continue", es:"Continuar" },
     "portal.addMoment": { pt:"+ Adicionar momento", en:"+ Add moment", es:"+ Añadir momento" },
     "portal.addPerson": { pt:"+ Adicionar pessoa", en:"+ Add person", es:"+ Añadir persona" },
     "portal.allowLocation": { pt:"Permitir partilhar a minha localização (opcional)", en:"Allow sharing my location (optional)", es:"Permitir compartir mi ubicación (opcional)" },
@@ -3604,14 +3625,14 @@
     "sync.generateLink": { pt:"Gerar link de sincronização", en:"Generate sync link", es:"Generar enlace de sincronización" },
     "sync.linkLabel": { pt:"O seu link de sincronização", en:"Your sync link", es:"Tu enlace de sincronización" },
     "sync.howToTitle": { pt:"Como adicionar", en:"How to add it", es:"Cómo añadirlo" },
-    "sync.howToGoogle": { pt:"Definições → Adicionar calendário → A partir do URL, e cole o link.", en:"Settings → Add calendar → From URL, and paste the link.", es:"Configuración → Añadir calendario → Desde URL, y pega el enlace." },
-    "sync.howToApple": { pt:"Ficheiro → Nova assinatura de calendário, e cole o link.", en:"File → New Calendar Subscription, and paste the link.", es:"Archivo → Nueva suscripción de calendario, y pega el enlace." },
-    "sync.howToOther": { pt:"procure a opção \"Subscrever calendário\" ou \"Adicionar por URL\" e cole o link.", en:"look for \"Subscribe to calendar\" or \"Add by URL\" and paste the link.", es:"busca la opción \"Suscribirse a calendario\" o \"Añadir por URL\" y pega el enlace." },
+    "sync.howToGoogle": { pt:"Abra o Google Calendar, clique no símbolo + ao lado de \"Outros calendários\" e escolha \"A partir do URL\". Cole o link e clique em Adicionar.", en:"Open Google Calendar, click the + next to \"Other calendars\" and choose \"From URL\". Paste the link and click Add.", es:"Abre Google Calendar, haz clic en el + junto a \"Otros calendarios\" y elige \"Desde una URL\". Pega el enlace y haz clic en Añadir." },
+    "sync.howToApple": { pt:"No macOS, abra o Calendário e clique em \"Calendário\" no menu superior. Escolha \"Nova assinatura de calendário\", cole o link e siga os passos.", en:"On macOS, open Calendar and click \"File\" in the top menu. Choose \"New Calendar Subscription\", paste the link and follow the steps.", es:"En macOS, abre Calendario y haz clic en \"Archivo\" en el menú superior. Elige \"Nueva suscripción de calendario\", pega el enlace y sigue los pasos." },
+    "sync.howToOther": { pt:"Procure a opção \"Subscrever calendário\" ou \"Adicionar por URL\". Cole o link e confirme.", en:"Look for \"Subscribe to calendar\" or \"Add by URL\". Paste the link and confirm.", es:"Busca la opción \"Suscribirse a calendario\" o \"Añadir por URL\". Pega el enlace y confirma." },
     "sync.other": { pt:"outros", en:"others", es:"otros" },
     "sync.regenerateLink": { pt:"Gerar novo link", en:"Generate new link", es:"Generar nuevo enlace" },
     "sync.regenerateHint": { pt:"O link atual deixa de funcionar assim que gerar um novo — terá de o substituir em cada app de calendário onde o usa.", en:"The current link stops working as soon as you generate a new one — you'll need to replace it in every calendar app where you use it.", es:"El enlace actual deja de funcionar en cuanto generes uno nuevo — tendrás que reemplazarlo en cada app de calendario donde lo uses." },
     "sync.regenerateConfirm": { pt:"Isto invalida o link atual. Tem de o substituir em todas as apps de calendário onde o usa. Continuar?", en:"This invalidates the current link. You'll need to replace it in every calendar app where you use it. Continue?", es:"Esto invalida el enlace actual. Tendrás que reemplazarlo en cada app de calendario donde lo uses. ¿Continuar?" },
-    "sync.addCalendarButton": { pt:"Adicionar ao Calendário", en:"Add to Calendar", es:"Añadir al Calendario" },
+    "sync.addCalendarButton": { pt:"Copiar link de sincronização", en:"Copy sync link", es:"Copiar enlace de sincronización" },
     "toast.genericError": { pt:"Ocorreu um erro. Tente novamente.", en:"Something went wrong. Please try again.", es:"Ocurrió un error. Inténtalo de nuevo." },
     "settings.storageOf": { pt:"de", en:"of", es:"de" },
     // --- Folhas (sheets) ---
@@ -3646,8 +3667,8 @@
     "toast.serviceDeleted": { pt:"Serviço eliminado.", en:"Service deleted.", es:"Servicio eliminado." },
     "sheet.reminder": { pt:"Lembrete", en:"Reminder", es:"Recordatorio" },
     "sheet.list": { pt:"Lista", en:"List", es:"Lista" },
-    "sheet.income": { pt:"Receita", en:"Income", es:"Ingreso" },
-    "sheet.expense": { pt:"Despesa", en:"Expense", es:"Gasto" },
+    "sheet.income": { pt:"Receitas", en:"Income", es:"Ingresos" },
+    "sheet.expense": { pt:"Despesas", en:"Expenses", es:"Gastos" },
     // --- Assinatura ---
     "signature.clear": { pt:"Limpar", en:"Clear", es:"Limpiar" },
     "signature.noneYet": { pt:"Ainda sem assinatura guardada", en:"No signature saved yet", es:"Aún sin firma guardada" },
@@ -4727,8 +4748,8 @@
     calendar:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>',
     clock:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>',
     check:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
-    checkSimples:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg)"></span>',
-    checkLista:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg)"></span>',
+    checkSimples:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
+    checkLista:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
   };
   /* mesmos ícones dos botões Simples/Checklist do menu Criar > Tarefa —
      usados no card de Tarefas (Dashboard) pra marcar itens soltos (sem
@@ -4774,9 +4795,9 @@
     card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
     if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
-    card+='<div class="rtk-action">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>';
     card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
     if(it.hora) card+='<div class="rtk-prazo rtk-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(it.hora)+'</span></div>';
+    card+='<div class="rtk-action">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>';
     card+='</div>';
     card+='</div>';
     const editarAction = solto
@@ -5657,14 +5678,18 @@
     document.getElementById('equipa-seats-label').textContent=membrosEquipa.length+' '+t('team.seats').replace('{n}',limiteTexto);
     const wrap=document.getElementById('equipa-lista');
     wrap.innerHTML=membrosEquipa.map(m=>{
-      const nomeExibido=m.email||t('team.noEmail');
-      const corAv=avatarColor(nomeExibido);
       const souEu = m.user_id===currentUser.id;
+      const nomeExibido= souEu ? (perfilData.nome||m.email||t('team.noEmail')) : (m.email||t('team.noEmail'));
+      const corAv=avatarColor(nomeExibido);
+      const fotoUrl= souEu ? perfilData.fotoUrl : null;
       const podeGerir = souAdmin() && !souEu;
+      const avatarHtml= fotoUrl
+        ? '<div style="width:36px;height:36px;border-radius:var(--r);flex:none;overflow:hidden"><img src="'+fotoUrl+'" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML=\'<div style=\\\'width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:Plus Jakarta Sans,sans-serif;font-weight:700;font-size:13px\\\'>'+avatarInitials(nomeExibido)+'</div>\'"></div>'
+        : '<div style="width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>';
       return '<div class="struct-row" style="align-items:center">'+
         '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+
-          '<div style="width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>'+
-          '<div style="min-width:0"><div class="nm">'+escapeHtml(nomeExibido)+(souEu?' <span style="font-size:10.5px;color:var(--brand);font-weight:700">'+t('team.youTag')+'</span>':'')+'</div></div>'+
+          avatarHtml+
+          '<div style="min-width:0"><div class="nm">'+escapeHtml(nomeExibido)+(souEu?' <span style="font-size:10.5px;color:var(--brand);font-weight:700">'+t('team.youTag')+'</span>':'')+'</div>'+(souEu&&currentUser.email?'<div style="font-size:11.5px;color:var(--ink-soft);margin-top:1px">'+escapeHtml(currentUser.email)+'</div>':'')+'</div>'+
         '</div>'+
         (podeGerir
           ? '<div style="display:flex;align-items:center;gap:8px;flex:none"><span class="sig-tag yellow" style="cursor:pointer" onclick="abrirAlterarPapel(\''+m.user_id+'\')">'+papelNome(m.papel).toUpperCase()+'</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:15px;height:15px;color:var(--neutral);cursor:pointer" onclick="removerMembroEquipa(\''+m.user_id+'\')"><path d="M18 6 6 18M6 6l12 12"/></svg></div>'
@@ -8599,6 +8624,45 @@
     en:'The templates provided are informational content and an editable starting point. They do not constitute legal advice and do not replace consulting a lawyer qualified in the applicable jurisdiction. Pivot and the template authors accept no liability for the use made of these documents. Professional review before signature is recommended.',
     es:'Las plantillas facilitadas son contenido informativo y un punto de partida editable. No constituyen asesoramiento jurídico ni sustituyen la consulta de un abogado habilitado en la jurisdicción aplicable. Pivot y los autores de las plantillas no se responsabilizan del uso dado a estos documentos. Se recomienda revisión profesional antes de la firma.'
   };
+  function blockIcon(name){
+    const n=(name||'').toLowerCase();
+    const m=[
+      [/identif|partes|parties|contratante|arrendador|locador|prestador/,'fluent:people-16-regular'],
+      [/assinatura|signature|execut|signing/,'fluent:signature-16-regular'],
+      [/pagamento|payment|fee|price|valor|invoice|billing|compensation|deposit|fiança|honorár|remunera/,'fluent:money-16-regular'],
+      [/cancelamento|cancellation|termination|rescisão|resolu/,'fluent:dismiss-circle-16-regular'],
+      [/prazo|period|duration|term|vigência|rental period|period of/,'fluent:calendar-16-regular'],
+      [/confidential|sigilo|nda/,'fluent:lock-closed-16-regular'],
+      [/propriedade intelectual|intellectual property|direitos autorais|copyright|licen/,'fluent:branch-16-regular'],
+      [/responsabilidade|liability|insurance|seguro|dano|damage/,'fluent:shield-16-regular'],
+      [/entregável|deliverable|scope|âmbito|object|objeto|serviç/,'fluent:clipboard-task-16-regular'],
+      [/jurisd|foro|lei aplicável|governing|general provision|disposiç/,'fluent:scales-16-regular'],
+      [/confidential|non-disclosure/,'fluent:lock-closed-16-regular'],
+      [/revision|revision|feedback|review|aprova/,'fluent:checkmark-circle-16-regular'],
+      [/imagem|image|record|gravação|fotograf|mídia|media|direito de imagem/,'fluent:camera-16-regular'],
+      [/content|conteúdo/,'fluent:document-text-16-regular'],
+      [/exclu|non-compete|concorrência/,'fluent:prohibited-16-regular'],
+      [/technical|rider|técnico|logística|logistic/,'fluent:wrench-16-regular'],
+      [/equip|maquinário|machinery|asset/,'fluent:box-16-regular'],
+      [/use|utili|prohibited|proibido/,'fluent:info-16-regular'],
+      [/return|inspect|devolução|inspeção/,'fluent:arrow-undo-16-regular'],
+      [/hosting|infraestruct|server|servidor/,'fluent:server-16-regular'],
+      [/backup|recovery|recuperação/,'fluent:arrow-clockwise-16-regular'],
+      [/security|segurança/,'fluent:shield-lock-16-regular'],
+      [/maintenance|manutenção|update/,'fluent:settings-16-regular'],
+      [/property|imóvel|gestão.*imóvel|manager|gerent/,'fluent:home-16-regular'],
+      [/report|relatório|accounting|contabilidade/,'fluent:chart-multiple-16-regular'],
+      [/repair|conserto/,'fluent:wrench-screwdriver-16-regular'],
+      [/catering|buffet|aliment|food|comida/,'fluent:food-16-regular'],
+      [/guest|convidado|número.*pessoa/,'fluent:people-team-16-regular'],
+      [/allerg|dietar|restrição alimentar/,'fluent:heart-pulse-16-regular'],
+      [/sponsor|patrocínio/,'fluent:megaphone-16-regular'],
+      [/transparency|disclosure|divulgação/,'fluent:eye-16-regular'],
+      [/perform|atuação|espetáculo|show/,'fluent:star-16-regular'],
+    ];
+    for(const [re,icon] of m){ if(re.test(n)) return '<span class="nav-ico block-type-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/'+icon+'.svg);-webkit-mask-image:url(https://api.iconify.design/'+icon+'.svg)"></span>'; }
+    return '<span class="nav-ico block-type-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/fluent:document-16-regular.svg);-webkit-mask-image:url(https://api.iconify.design/fluent:document-16-regular.svg)"></span>';
+  }
   const BIB_BLOCK_LABELS={
     /* Bloco abaixo agrupado fora da ordem alfabética de propósito — nomes de
        bloco introduzidos pelos 8 novos contratos de Home & Trade Services. */
@@ -10147,7 +10211,7 @@
       '<div class="block-header">'+
         (locked? '<div class="handle-spacer"></div>' : '<div class="handle" data-handle>'+ICON_GRIP+'</div>')+
         '<div class="block-name" onclick="toggleBlocoPreview(\''+b.id+'\')">'+
-        '<div class="block-name-main"><span class="bn-title">'+escapeHtml(blockName(b))+'</span><span class="block-subtitle">'+escapeHtml(blockSubtitle(b))+'</span></div>'+
+        '<div class="block-name-main"><div class="bn-row">'+blockIcon(b.name||b.key||'')+'<span class="bn-title">'+escapeHtml(blockName(b))+'</span></div><span class="block-subtitle">'+escapeHtml(blockSubtitle(b))+'</span></div>'+
         '<svg class="block-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div>'+
         '<div class="toggle'+(b.on?' on':'')+(locked?' disabled':'')+'"'+(locked?'':' onclick="toggleBloco(\''+b.id+'\',this)"')+'><div class="kn"></div></div>'+
       '</div>'+
@@ -12418,6 +12482,7 @@
         card.style.transform='translateX('+finalX+'px)';
         acoes.style.transition='opacity .2s ease';
         setActions(finalX);
+        card.style.touchAction = aberto ? 'none' : 'pan-y';
         if(!aberto) setTimeout(()=>{ wrap.classList.remove('active'); }, 200);
         horizontal=null;
       };
@@ -13908,7 +13973,7 @@
   /* miniatura na legenda de contagem de blocos ("N blocos") — mesmo ícone em
      toda a Biblioteca (card, detalhe, Meus Modelos), nunca outro glifo pro
      mesmo conceito. */
-  const BIB_ICON_BLOCKS='<span class="nav-ico bc-lang-blocks-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/hugeicons:cube.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:cube.svg)"></span>';
+  const BIB_ICON_BLOCKS='<span class="nav-ico bc-lang-blocks-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/boxicons:blocks.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:blocks.svg)"></span>';
   /* Ícones "sharp mid-century": traço reto (miter/square), sem curvas
      desnecessárias — usados nos botões Visualizar (olho) e Importar (seta)
      e nas etiquetas obrigatório/opcional/condicional da estrutura, no lugar
@@ -15637,10 +15702,7 @@
     }
     return bytes/(1024*1024);
   }
-  async function infoConfiguracoes(){
-    const usadoMB = await calcularArmazenamentoUsadoMB();
-    const limiteMB = LIMITE_ARMAZENAMENTO_MB[perfilData.plano||'Free'];
-    const pctUso = limiteMB===Infinity ? 0 : Math.min(100, Math.round(usadoMB/limiteMB*100));
+  function infoConfiguracoes(){
     openInfo(t('settings.title'), `
       <div class="field"><label>${t('field.timezone')}</label><select id="cfg-timezone">${['UTC','America/New_York','America/Los_Angeles','Europe/London','Europe/Lisbon','Europe/Madrid','Asia/Tokyo','Australia/Sydney'].map(tz=>'<option'+(perfilData.timezone===tz?' selected':'')+'>'+tz+'</option>').join('')}</select></div>
       <div class="field"><label>${t('field.dateFormat')}</label><select id="cfg-dateformat">
@@ -15654,8 +15716,16 @@
       <button class="btn primary" style="width:100%;margin-top:6px" onclick="guardarConfiguracoes()">${t('action.save')}</button>
       <div class="prow" style="margin-top:18px" onclick="infoIdioma()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/cil:language.svg);-webkit-mask-image:url(https://api.iconify.design/cil:language.svg)"></span><div class="t" data-t="profile.language">Idioma</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
       <p class="plabel" style="margin:18px 2px 8px;display:flex;align-items:center;gap:6px"><span class="nav-ico" style="width:14px;height:14px;display:inline-block;background-color:var(--neutral);mask-image:url(https://api.iconify.design/tdesign:hard-disk-storage-filled.svg);-webkit-mask-image:url(https://api.iconify.design/tdesign:hard-disk-storage-filled.svg)"></span>${t('settings.storageTitle')}</p>
-      <div style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:${pctUso}%;background:${pctUso>90?'var(--late)':'var(--brand)'}"></div></div>
-      <p style="font-size:12.5px;color:var(--ink-soft);margin:0">${pctUso}%</p>`);
+      <div id="cfg-storage-bar" style="background:var(--paper-2);border-radius:var(--r);height:8px;overflow:hidden;margin-bottom:6px"><div style="height:100%;width:0%;background:var(--brand)"></div></div>
+      <p id="cfg-storage-pct" style="font-size:12.5px;color:var(--ink-soft);margin:0">…</p>`);
+    calcularArmazenamentoUsadoMB().then(usadoMB=>{
+      const limiteMB=LIMITE_ARMAZENAMENTO_MB[perfilData.plano||'Free'];
+      const pctUso=limiteMB===Infinity?0:Math.min(100,Math.round(usadoMB/limiteMB*100));
+      const bar=document.getElementById('cfg-storage-bar');
+      const pct=document.getElementById('cfg-storage-pct');
+      if(bar) bar.innerHTML='<div style="height:100%;width:'+pctUso+'%;background:'+(pctUso>90?'var(--late)':'var(--brand)')+'"></div>';
+      if(pct) pct.textContent=pctUso+'%';
+    });
   }
   function guardarConfiguracoes(){
     perfilData.timezone=document.getElementById('cfg-timezone').value;
@@ -15694,9 +15764,8 @@
       ${semLink ? `
         <button class="btn primary" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
       ` : `
-        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="window.location.href='${url}'">${t('sync.addCalendarButton')}</button>
         <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
-        <button class="btn soft" style="width:100%;margin-top:4px" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
+        <button class="btn primary" style="width:100%;margin-bottom:8px" onclick="navigator.clipboard.writeText('${url}').then(()=>showToast(t('toast.linkCopied')))">${t('sync.addCalendarButton')}</button>
         <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
         <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px">
           <b>Google Calendar:</b> ${t('sync.howToGoogle')}<br><br>
@@ -16462,6 +16531,11 @@
     }
     if(pass!==pass2){
       err.querySelector('span').textContent=t('signup.passwordMismatch'); err.style.display='block'; return;
+    }
+    const termosOk=document.getElementById('signup-termos')?.checked;
+    const privOk=document.getElementById('signup-privacidade')?.checked;
+    if(!termosOk||!privOk){
+      err.querySelector('span').textContent=t('invite.fillError'); err.style.display='block'; return;
     }
     err.style.display='none';
     btn.disabled=true; btn.textContent=t('signup.creating');
