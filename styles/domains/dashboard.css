@@ -34,12 +34,12 @@
   .ms-rings-center{position:absolute;inset:0;pointer-events:none;
     width:78px;height:78px;margin:auto;padding:0 3px;box-sizing:border-box}
   .ms-rings-center-val{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
-    font-family:var(--font-financial),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1;white-space:nowrap;text-align:center}
+    font-family:var(--font-numeric),'JetBrains Mono',monospace;font-weight:600;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink);line-height:1;white-space:nowrap;text-align:center}
   .ms-rings-center-lbl{position:absolute;left:50%;bottom:50%;transform:translateX(-50%);margin-bottom:7px;
     display:block;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:8.5px;font-weight:600;letter-spacing:.1em;color:var(--neutral);opacity:.7;text-transform:uppercase;text-align:center;white-space:nowrap}
   .ms-rings-legend{display:flex;flex-direction:column;gap:0}
   .mrl-item{display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11.5px;font-weight:500;letter-spacing:0;color:var(--ink-soft);padding:6px 0;cursor:pointer;white-space:nowrap}
-  .mrl-item b{color:var(--ink);font-weight:600;font-size:12.5px;text-align:right;font-family:var(--font-financial),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-variant-numeric:tabular-nums}
+  .mrl-item b{color:var(--ink);font-weight:600;font-size:12.5px;text-align:right;font-family:var(--font-numeric),'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
   .mr-meta-c{color:#F2F5F3}
   .mr-esperado-c{color:#BED4CA}
   .mr-recebido-c{color:#345959}
@@ -183,7 +183,7 @@
   /* qualquer anel que já completou pelo menos uma volta: arco com brilho, pista mais clara */
   .ring-lapped-progress{filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
   .ring-lapped-track{opacity:.6}
-  .mini-ring-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-financial),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13.5px;font-weight:500;font-variant-numeric:tabular-nums;color:#fff}
+  .mini-ring-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--font-numeric),'JetBrains Mono',monospace;font-size:13.5px;font-weight:500;font-variant-numeric:tabular-nums;color:#fff}
   .mini-ring-slash{color:rgba(255,255,255,.5);margin:0 1px;font-weight:400;font-size:.8em}
   .greeting{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:22px;line-height:1.25;margin:6px 0 2px;letter-spacing:.04em;text-transform:uppercase}
   .headline{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:20px;line-height:1.3;margin:16px 0 22px;letter-spacing:.02em}
@@ -262,11 +262,11 @@
   .rtk-sub-prazo.amber{border-color:rgba(185,155,45,.45);color:#C9B55A}
   .rtk-sub-prazo.late{border-color:rgba(217,152,104,.5);color:#D98068}
   #tasks-list .rtk-body{flex:1;min-width:0}
-  /* título do card: mesma tipografia exata do rótulo "TAREFAS" (.tasks-header) */
+  /* título do card de tarefa: leitura normal, sem caixa-alta forçada */
   #tasks-list .rtk-title{
     font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:12px;font-weight:600;font-stretch:100%;letter-spacing:.05em;
-    line-height:1.3;color:var(--label-out);margin:0 0 8px}
+    font-size:14px;font-weight:600;letter-spacing:-.01em;
+    line-height:1.3;color:var(--ink);margin:0 0 8px}
   #tasks-list .rtk-client{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);margin-bottom:9px}
   #tasks-list .rtk-client svg{width:13px;height:13px;flex:none;color:var(--ink-faint)}
   #tasks-list .rtk-action{display:flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;color:var(--ink);margin-bottom:10px}
