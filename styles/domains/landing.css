@@ -53,14 +53,19 @@
 #landing-page .product-showcase{
   position:relative; z-index:2; min-height:790px; overflow:hidden;
   padding:90px clamp(24px, 4vw, 68px) 55px;
-  background:radial-gradient(ellipse 70% 55% at 57% 3%, rgba(62,66,70,.25), transparent 72%), linear-gradient(180deg, #0e1012, #101214 35%, #0e1011);
-  /* Quando a imagem de fundo for fornecida, descomentar abaixo: */
-  /* background-image: url('../../assets/showcase-phones-bg.jpg'); background-size:cover; background-position:center; */
+  background:
+    url('../../assets/showcase-phone-3.png.jpg'),
+    url('../../assets/showcase-phone-2.png.jpg'),
+    url('../../assets/showcase-phone-1.png.jpg'),
+    linear-gradient(180deg, #0e1012, #101214 35%, #0e1011);
+  background-size: auto 82%, auto 82%, auto 82%, cover;
+  background-position: 84% center, 62% center, 40% center, center;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat;
 }
 #landing-page .product-showcase::before{
   content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
-  /* Ativar junto com a imagem de fundo: */
-  /* background:rgba(10,11,13,.87); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); */
+  background:rgba(10,11,13,.86);
+  backdrop-filter:blur(2px); -webkit-backdrop-filter:blur(2px);
 }
 #landing-page .showcase-shell{ position:relative; z-index:1; display:grid; grid-template-columns:28% 1fr; gap:60px; max-width:1510px; min-height:610px; margin:auto; }
 #landing-page .slide-copy{ position:relative; height:440px; padding-top:0; }
