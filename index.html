@@ -654,7 +654,13 @@
         <div class="back" onclick="voltarDoBuilder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span id="builder-back-label" data-t="nav.jobs">Trabalhos</span></div>
         <div class="builder-top">
           <div><div style="font-family:var(--font-subtext),-apple-system,sans-serif;font-size:15px;font-weight:500;letter-spacing:.01em;color:var(--ink);margin:0 0 3px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
-          <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn soft builder-tutorial-btn" id="builder-tutorial-btn" onclick="abrirTutorialBuilder()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              <span data-t="builder.tutorialBtn">Tutorial</span>
+            </button>
+            <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
+          </div>
         </div>
 
         <div class="builder-tabs segmented" id="builder-tabs">
@@ -1059,7 +1065,7 @@
       <span class="nav-ico nav-ico-trabalhos"></span>
       <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </button>
-    <div class="fab-wrap"><div class="fab" onclick="openSheet()"><span class="nav-ico" style="width:20px;height:20px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg)"></span></div></div>
+    <div class="fab-wrap"><div class="fab" onclick="openSheet()">+</div></div>
     <button id="n-bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico nav-ico-modelos"></span>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
@@ -4617,20 +4623,22 @@
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
+    /* mesmos data sources que renderRelOpBars() — Dashboard e Relatórios
+       devem mostrar os mesmos números para o mesmo mês */
+    const totalJobs=s.totalJobsEsteMes||0;
+    const eventosTot=s.eventosPrevistosEsteMes||0;
     /* Horas: executadas (marco principal "feito") sobre o total previsto no mês */
     pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes));
-    /* Pendências (lado do cliente) sobre o total de trabalhos */
-    pintarMetricaOp('pendencias', s.pendClienteCount, s.totalJobs, String(s.pendClienteCount), String(s.totalJobs));
-    /* Demandas (lado próprio) sobre o total de trabalhos */
-    pintarMetricaOp('demandas', s.pendMeuCount, s.totalJobs, String(s.pendMeuCount), String(s.totalJobs));
-    /* Fechados: sem percentual de um total — é a contagem bruta de projetos
-       fechados no período. Começa em 0 e vai enchendo 1 bloco por vez a
-       cada novo projeto fechado (cada bloco = 1 projeto, não 5%). */
-    pintarMetricaOp('fechados', s.fechadosEsteMes, 0, '', String(s.fechadosEsteMes), 'contagem');
-    /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
-    pintarMetricaOp('executados', s.executadosCount, s.totalJobs, String(s.executadosCount), String(s.totalJobs));
-    /* Concluídos: entregues sobre entregues+a entregar */
-    pintarMetricaOp('concluidos', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar, String(s.trabalhosEntregues), String(s.trabalhosEntregues+s.trabalhosEntregar));
+    /* Pendências (cliente) sobre trabalhos do mês — não global */
+    pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs));
+    /* Demandas (meu lado) sobre trabalhos do mês — não global */
+    pintarMetricaOp('demandas', s.pendMeuEsteMes||0, totalJobs, String(s.pendMeuEsteMes||0), String(totalJobs));
+    /* Fechados: trabalhos do mês com contrato assinado (consistente com Relatórios) */
+    pintarMetricaOp('fechados', s.fechadosPorDataEsteMes||0, 0, '', String(s.fechadosPorDataEsteMes||0), 'contagem');
+    /* Executados: eventos realizados sobre eventos previstos no mês */
+    pintarMetricaOp('executados', s.eventosExecutadosEsteMes||0, eventosTot, String(s.eventosExecutadosEsteMes||0), String(eventosTot));
+    /* Concluídos: entregas do mês sobre total de trabalhos do mês */
+    pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs));
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
        categoria própria, sem mexer no que Relatórios entende por "Recebido". */
