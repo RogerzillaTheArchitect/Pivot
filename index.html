@@ -481,11 +481,22 @@
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" viewBox="0 0 150 150">
-                  <!-- dois anéis concêntricos sólidos (sem gradiente): externo = receitas
-                       (Esperado/Recebido/Extras), interno = despesas (Teto de gastos como
-                       anel-base fixo, Despesas por cima). Geometria e cores calculadas em
-                       JS (ver pintarFita/pintarTeto/anelArcoPath) — os <path> abaixo são
-                       preenchidos dinamicamente a cada render. -->
+                  <defs>
+                    <!-- canal escavado: sombra interna nas bordas do trilho (erode+borda+blur) -->
+                    <filter id="mr-carved" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
+                      <feMorphology in="SourceAlpha" operator="erode" radius="2" result="inner"/>
+                      <feComposite in="SourceAlpha" in2="inner" operator="out" result="edge"/>
+                      <feGaussianBlur in="edge" stdDeviation="0.9" result="soft-edge"/>
+                      <feFlood flood-color="#000" flood-opacity="0.48" result="dark"/>
+                      <feComposite in="dark" in2="soft-edge" operator="in" result="shadow"/>
+                      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shadow"/></feMerge>
+                    </filter>
+                    <!-- gradiente no ponto de cruzamento do limite de despesas -->
+                    <linearGradient id="mr-desp-cap-g" gradientUnits="userSpaceOnUse" x1="126" y1="67" x2="127" y2="75">
+                      <stop offset="0%" stop-color="#FCF9CF"/>
+                      <stop offset="100%" stop-color="#D9654E"/>
+                    </linearGradient>
+                  </defs>
                   <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
                   <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
                   <path class="mr-ring mr-base" id="mr-esperado-base"/>
@@ -497,6 +508,11 @@
                   <path class="mr-ring mr-teto" id="mr-teto"/>
                   <path class="mr-ring mr-base" id="mr-despesas-base"/>
                   <path class="mr-ring mr-tip" id="mr-despesas"/>
+                  <!-- cap com gradiente no ponto de cruzamento do limite -->
+                  <path class="mr-ring" id="mr-despesas-cap" d=""/>
+                  <!-- máscaras de separação no ângulo 0° de cada anel -->
+                  <path class="mr-gap-mask" id="mr-gap-outer" d=""/>
+                  <path class="mr-gap-mask" id="mr-gap-inner" d=""/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Total</span>
@@ -870,6 +886,13 @@
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
                 <svg class="ms-rings-svg" id="rf-rings-svg" viewBox="0 0 150 150">
+                  <defs>
+                    <!-- mesma direção de gradiente do anel do dashboard -->
+                    <linearGradient id="rf-mr-desp-cap-g" gradientUnits="userSpaceOnUse" x1="126" y1="67" x2="127" y2="75">
+                      <stop offset="0%" stop-color="#FCF9CF"/>
+                      <stop offset="100%" stop-color="#D9654E"/>
+                    </linearGradient>
+                  </defs>
                   <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
                   <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
                   <path class="mr-ring mr-base" id="rf-mr-esperado-base"/>
@@ -881,6 +904,9 @@
                   <path class="mr-ring mr-teto" id="rf-mr-teto"/>
                   <path class="mr-ring mr-base" id="rf-mr-despesas-base"/>
                   <path class="mr-ring mr-tip" id="rf-mr-despesas"/>
+                  <path class="mr-ring" id="rf-mr-despesas-cap" d=""/>
+                  <path class="mr-gap-mask" id="rf-mr-gap-outer" d=""/>
+                  <path class="mr-gap-mask" id="rf-mr-gap-inner" d=""/>
                 </svg>
                 <div class="ms-rings-center">
                   <span class="ms-rings-center-lbl" data-t="home.totalProfit">Total</span>
@@ -4230,11 +4256,11 @@
      tip = arco parcial da volta atual). As pontas ganham micro-gap na
      extremidade (separação sutil de leitura) e cantos levemente chanfrados
      (nem pill, nem corte duro). Ver anelArcoPath/anelCheioPath. */
-  const MR_COLORS={ esperado:'#BED4CA', recebido:'#345959', extras:'#B5D19F', despesas:'#FFFACC', teto:'#EB6449' };
+  const MR_COLORS={ esperado:'#7A9898', recebido:'#586E6E', extras:'#223030', despesas:'#FCF9CF', teto:'rgba(217,101,78,0.12)' };
   const MR_GEOM={ outer:{r:62, sw:14}, inner:{r:45, sw:14} };
   const MR_CHAMFER=2.2; // svg units — chanfro mínimo nas pontas do arco
   const FITA_STATE={};
-  function anelMicroGap(r){ return 1.4/r; }
+  function anelMicroGap(r){ return 2.8/r; }
   function anelPonto(cx,cy,r,a){ return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }
   /* arco parcial em forma de "fatia de anel" (path preenchido, não stroke),
      com os 4 cantos levemente chanfrados por MR_CHAMFER — evita tanto a
@@ -4288,8 +4314,39 @@
     if(!tipEl) return null;
     const ratio=den>0 ? num/den : (num>0?1:0);
     const laps=Math.floor(ratio), frac=ratio-laps;
-    animarAnel(tipEl, baseEl, cx, cy, rOut, rIn, laps, frac, MR_COLORS[key]);
+    if(key==='despesas'){
+      /* abaixo do limite → cream; acima → tip em vermelho, base em cream */
+      const tipColor = laps>0 ? '#D9654E' : '#FCF9CF';
+      animarAnel(tipEl, baseEl, cx, cy, rOut, rIn, laps, frac, tipColor);
+      if(baseEl && laps>0) baseEl.setAttribute('fill','#FCF9CF');
+      pintarDespesasCap(prefixo, ratio, rOut, rIn, cx, cy);
+    } else {
+      animarAnel(tipEl, baseEl, cx, cy, rOut, rIn, laps, frac, MR_COLORS[key]);
+    }
     return {ratio, laps, frac};
+  }
+  /* cap com gradiente FCF9CF→D9654E no ponto de cruzamento do limite de gastos */
+  function pintarDespesasCap(prefixo, ratio, rOut, rIn, cx, cy){
+    prefixo=prefixo||'';
+    const capEl=document.getElementById(prefixo+'mr-despesas-cap');
+    if(!capEl) return;
+    if(ratio>=0.96){
+      const CAP=0.13; // ~6px no raio médio do anel interno
+      capEl.setAttribute('d', anelArcoPath(cx,cy,rOut,rIn, Math.PI*2-CAP, Math.PI*2, 0));
+      capEl.setAttribute('fill','url(#'+prefixo+'mr-desp-cap-g)');
+    } else {
+      capEl.setAttribute('d','');
+    }
+  }
+  /* máscaras de fundo no ângulo 0° de cada anel — criam o vazio no canal
+     escavado quando um segmento completa 360° e encontra o próprio início */
+  function pintarGapMasks(prefixo){
+    prefixo=prefixo||'';
+    const cx=75, cy=75, MASK=0.028; // ~1.7px no anel externo, ~1.3px no interno
+    const outEl=document.getElementById(prefixo+'mr-gap-outer');
+    if(outEl){ const g=MR_GEOM.outer; outEl.setAttribute('d', anelArcoPath(cx,cy,g.r+g.sw/2+0.5,g.r-g.sw/2-0.5,0,MASK,0)); }
+    const inEl=document.getElementById(prefixo+'mr-gap-inner');
+    if(inEl){ const g=MR_GEOM.inner; inEl.setAttribute('d', anelArcoPath(cx,cy,g.r+g.sw/2+0.5,g.r-g.sw/2-0.5,0,MASK,0)); }
   }
   /* Teto de gastos: indicador fixo do anel interno, sempre desenhado cheio
      (é a referência do limite) — Despesas cresce por cima dele. */
@@ -4319,6 +4376,13 @@
     const despB=document.getElementById(prefixo+'mr-despesas-base'), despT=document.getElementById(prefixo+'mr-despesas');
     if(despB) svg.appendChild(despB);
     if(despT) svg.appendChild(despT);
+    /* cap e máscaras de gap sempre no topo da pilha Z */
+    const cap=document.getElementById(prefixo+'mr-despesas-cap');
+    const gO=document.getElementById(prefixo+'mr-gap-outer');
+    const gI=document.getElementById(prefixo+'mr-gap-inner');
+    if(cap) svg.appendChild(cap);
+    if(gO) svg.appendChild(gO);
+    if(gI) svg.appendChild(gI);
   }
   function renderRingsDashboard(recebido, esperado, custos, extras){
     extras=extras||0;
@@ -4330,6 +4394,7 @@
     FITA_STATE.extras=pintarFita('extras', extras, meta);
     FITA_STATE.despesas=pintarFita('despesas', custos, teto);
     reordenarCamadasFitas();
+    pintarGapMasks('');
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('mrl-meta', fmtMoney(meta));
     set('mrl-esperado', fmtMoney(esperado));
@@ -4367,6 +4432,7 @@
     pintarFita('extras', extras, meta, 'rf-');
     pintarFita('despesas', custos, teto, 'rf-');
     reordenarCamadasFitas('#rf-rings-svg', 'rf-');
+    pintarGapMasks('rf-');
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('rf-mrl-meta', fmtMoney(meta));
     set('rf-mrl-esperado', fmtMoney(esperado));
