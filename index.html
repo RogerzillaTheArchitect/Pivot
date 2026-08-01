@@ -653,7 +653,7 @@
       <section class="view wide" id="v-builder">
         <div class="back" onclick="voltarDoBuilder()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span id="builder-back-label" data-t="nav.jobs">Trabalhos</span></div>
         <div class="builder-top">
-          <div><div class="page-title" style="margin:0 0 4px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
+          <div><div style="font-family:var(--font-subtext),-apple-system,sans-serif;font-size:15px;font-weight:500;letter-spacing:.01em;color:var(--ink);margin:0 0 3px" id="builder-title">Builder de contrato</div><div class="detail-sub" id="builder-sub">Casamento Sofia &amp; João</div></div>
           <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
         </div>
 
@@ -774,7 +774,7 @@
         <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
           <button class="on" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')" style="flex:1"><span data-t="contacts.clients">Clientes</span></button>
           <button id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')" style="flex:1"><span data-t="contacts.collaborators">Colaboradores</span></button>
-          <button onclick="abrirNovoContato()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:5px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
+          <button onclick="abrirNovoContato()" style="flex:none;width:38px;height:100%;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
         </div>
         <div class="searchbox" style="margin:0 0 14px">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
@@ -5716,7 +5716,7 @@
       const fotoUrl= souEu ? perfilData.fotoUrl : null;
       const podeGerir = souAdmin() && !souEu;
       const avatarHtml= fotoUrl
-        ? '<div style="width:36px;height:36px;border-radius:var(--r);flex:none;overflow:hidden"><img src="'+fotoUrl+'" style="width:100%;height:100%;object-fit:cover" onerror="this.parentElement.innerHTML=\'<div style=\\\'width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:Plus Jakarta Sans,sans-serif;font-weight:700;font-size:13px\\\'>'+avatarInitials(nomeExibido)+'</div>\'"></div>'
+        ? '<div style="width:36px;height:36px;border-radius:var(--r);flex:none;overflow:hidden"><img src="'+fotoUrl+'" style="width:100%;height:100%;object-fit:cover;filter:grayscale(1) brightness(0.78)" onerror="this.parentElement.innerHTML=\'<div style=\\\'width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:Plus Jakarta Sans,sans-serif;font-weight:700;font-size:13px\\\'>'+avatarInitials(nomeExibido)+'</div>\'"></div>'
         : '<div style="width:36px;height:36px;border-radius:var(--r);background:'+corAv+';color:#fff;display:grid;place-items:center;font-family:\'Plus Jakarta Sans\',sans-serif;font-weight:700;font-size:13px;flex:none">'+avatarInitials(nomeExibido)+'</div>';
       return '<div class="struct-row" style="align-items:center">'+
         '<div style="display:flex;align-items:center;gap:11px;flex:1;min-width:0">'+
@@ -8659,38 +8659,46 @@
   function blockIcon(name){
     const n=(name||'').toLowerCase();
     const m=[
-      [/identif|partes|parties|contratante|arrendador|locador|prestador/,'fluent:people-16-regular'],
+      [/identif|partes|parties|contratante|arrendador|locador|prestador|vendedor|seller|buyer|comprador|staffing|pessoal envolvido/,'fluent:people-16-regular'],
+      [/subcontrat|subempreit/,'fluent:people-team-16-regular'],
       [/assinatura|signature|execut|signing/,'fluent:signature-16-regular'],
-      [/pagamento|payment|fee|price|valor|invoice|billing|compensation|deposit|fiança|honorár|remunera/,'fluent:money-16-regular'],
+      [/pagamento|payment|fee|price|valor|invoice|billing|compensation|deposit|fiança|honorár|remunera|draw.*schedule|schedule.*payment/,'fluent:money-16-regular'],
       [/cancelamento|cancellation|termination|rescisão|resolu/,'fluent:dismiss-circle-16-regular'],
-      [/prazo|period|duration|term|vigência|rental period|period of/,'fluent:calendar-16-regular'],
-      [/confidential|sigilo|nda/,'fluent:lock-closed-16-regular'],
-      [/propriedade intelectual|intellectual property|direitos autorais|copyright|licen/,'fluent:branch-16-regular'],
-      [/responsabilidade|liability|insurance|seguro|dano|damage/,'fluent:shield-16-regular'],
-      [/entregável|deliverable|scope|âmbito|object|objeto|serviç/,'fluent:clipboard-task-16-regular'],
-      [/jurisd|foro|lei aplicável|governing|general provision|disposiç/,'fluent:scales-16-regular'],
-      [/confidential|non-disclosure/,'fluent:lock-closed-16-regular'],
-      [/revision|revision|feedback|review|aprova/,'fluent:checkmark-circle-16-regular'],
-      [/imagem|image|record|gravação|fotograf|mídia|media|direito de imagem/,'fluent:camera-16-regular'],
-      [/content|conteúdo/,'fluent:document-text-16-regular'],
-      [/exclu|non-compete|concorrência/,'fluent:prohibited-16-regular'],
-      [/technical|rider|técnico|logística|logistic/,'fluent:wrench-16-regular'],
-      [/equip|maquinário|machinery|asset/,'fluent:box-16-regular'],
-      [/use|utili|prohibited|proibido/,'fluent:info-16-regular'],
-      [/return|inspect|devolução|inspeção/,'fluent:arrow-undo-16-regular'],
+      [/penalidade|penalty|penali|multa|delay.*penalt|penalt.*delay/,'fluent:error-circle-16-regular'],
+      [/prazo|period|duration|term|vigência|service.*schedule|schedule.*service|cronograma/,'fluent:calendar-16-regular'],
+      [/weather|clima|atraso.*clima|clima.*atraso/,'fluent:arrow-clockwise-16-regular'],
+      [/confidential|sigilo|nda|non.disclosure/,'fluent:lock-closed-16-regular'],
+      [/propriedade intelectual|intellectual property|direitos autorais|copyright/,'fluent:ribbon-16-regular'],
+      [/licen[çc]/,'fluent:document-checkmark-16-regular'],
+      [/responsabilidade|liability|insurance|seguro|dano.*oculto/,'fluent:shield-16-regular'],
+      [/scope|âmbito|entregável|deliverable|objeto|object/,'fluent:clipboard-task-16-regular'],
+      [/serviços adicionais|additional services|serviços sazon|seasonal/,'fluent:star-16-regular'],
+      [/jurisd|foro|lei aplicável|governing|general provision|disposição geral/,'fluent:scales-16-regular'],
+      [/revis|feedback|review|aprova|quality.*control|quality.*inspections|inspeç|vistoria/,'fluent:checkmark-circle-16-regular'],
+      [/devolução|return/,'fluent:arrow-undo-16-regular'],
+      [/imagem|record|gravação|fotograf|mídia|media|direito de imagem/,'fluent:camera-16-regular'],
+      [/exclu|non.compete|concorrência|prohibit|proibido/,'fluent:prohibited-16-regular'],
+      [/repair|conserto|workmanship|garantia.*execução/,'fluent:wrench-screwdriver-16-regular'],
+      [/technical|rider|técnico|logística|logistic|maintenance|manutenção/,'fluent:wrench-16-regular'],
+      [/change.*order|ordem.*alteração|mudanças.*cor/,'fluent:edit-settings-16-regular'],
+      [/material|paint|tinta|surface.*prep|preparação.*superfície|limpeza|cleanup|waste|resídu|debris|descarte/,'fluent:box-16-regular'],
+      [/equip|maquinário|machinery|asset|fixture|acabamento|supply|supplies|suprimento|plantas|plant/,'fluent:box-16-regular'],
       [/hosting|infraestruct|server|servidor/,'fluent:server-16-regular'],
       [/backup|recovery|recuperação/,'fluent:arrow-clockwise-16-regular'],
-      [/security|segurança/,'fluent:shield-lock-16-regular'],
-      [/maintenance|manutenção|update/,'fluent:settings-16-regular'],
+      [/safety|segurança do canteiro|site.*safe/,'fluent:shield-lock-16-regular'],
+      [/segurança|security/,'fluent:shield-lock-16-regular'],
       [/property|imóvel|gestão.*imóvel|manager|gerent/,'fluent:home-16-regular'],
+      [/access|acesso/,'fluent:key-16-regular'],
       [/report|relatório|accounting|contabilidade/,'fluent:chart-multiple-16-regular'],
-      [/repair|conserto/,'fluent:wrench-screwdriver-16-regular'],
       [/catering|buffet|aliment|food|comida/,'fluent:food-16-regular'],
-      [/guest|convidado|número.*pessoa/,'fluent:people-team-16-regular'],
+      [/guest|convidado|número.*pessoa|animais.*moradores|pets/,'fluent:people-team-16-regular'],
       [/allerg|dietar|restrição alimentar/,'fluent:heart-pulse-16-regular'],
       [/sponsor|patrocínio/,'fluent:megaphone-16-regular'],
       [/transparency|disclosure|divulgação/,'fluent:eye-16-regular'],
       [/perform|atuação|espetáculo|show/,'fluent:star-16-regular'],
+      [/content|conteúdo/,'fluent:document-text-16-regular'],
+      [/warranty|garantia/,'fluent:ribbon-16-regular'],
+      [/irrigation|irrigação/,'fluent:drop-16-regular'],
     ];
     for(const [re,icon] of m){ if(re.test(n)) return '<span class="nav-ico block-type-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/'+icon+'.svg);-webkit-mask-image:url(https://api.iconify.design/'+icon+'.svg)"></span>'; }
     return '<span class="nav-ico block-type-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/fluent:document-16-regular.svg);-webkit-mask-image:url(https://api.iconify.design/fluent:document-16-regular.svg)"></span>';
@@ -15785,39 +15793,46 @@
   async function infoSincronizacaoCalendario(){
     openInfo(t('settings.calendarSync'), '<p style="font-size:13px;color:var(--ink-soft);padding:20px 2px;text-align:center">'+t('sync.loading')+'</p>');
     const { data, error } = await sb.from('calendar_feed_tokens').select('token').eq('workspace_id', currentWorkspaceId).eq('revoked', false).order('created_at', {ascending:false}).limit(1);
-    const tokenAtual = (!error && data && data[0]) ? data[0].token : null;
-    renderInfoSincronizacaoCalendario(tokenAtual);
+    let token = (!error && data && data[0]) ? data[0].token : null;
+    if(!token){
+      const novoToken=(crypto.randomUUID?crypto.randomUUID():'tok'+Date.now()+Math.random().toString(36).slice(2)).replace(/-/g,'');
+      const { error:insErr } = await sb.from('calendar_feed_tokens').insert({token:novoToken, workspace_id:currentWorkspaceId});
+      if(!insErr) token=novoToken;
+    }
+    renderInfoSincronizacaoCalendario(token);
   }
   function renderInfoSincronizacaoCalendario(token){
-    const semLink = !token;
-    const url = token ? urlFeedCalendario(token) : '';
-    const icsUrl = token ? urlFeedCalendario(token)+'&format=ics' : '';
+    if(!token){ openInfo(t('settings.calendarSync'), '<p style="font-size:13px;color:var(--late);padding:20px 2px;text-align:center">'+t('toast.genericError')+'</p>'); return; }
+    const url = urlFeedCalendario(token);
+    const icsUrl = urlFeedCalendario(token)+'&format=ics';
+    const webcalUrl = url.replace(/^https?:\/\//,'webcal://');
+    const googleUrl = 'https://calendar.google.com/calendar/r?cid='+encodeURIComponent(url);
     openInfo(t('settings.calendarSync'), `
-      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:16px;line-height:1.5">${t('sync.explain')}</p>
-      ${semLink ? `
-        <button class="btn primary" style="width:100%" onclick="gerarTokenSincronizacaoCalendario()">${t('sync.generateLink')}</button>
-      ` : `
-        <div class="field"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
-        <div style="display:flex;gap:8px;margin-top:6px">
-          <button class="btn soft" style="flex:1" onclick="navigator.clipboard.writeText('${url}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
-          <button class="btn primary" style="flex:1" onclick="window.location.href='${url}'">${t('sync.addCalendarButton')}</button>
-        </div>
-        <p class="plabel" style="margin:20px 2px 8px">${t('sync.howToTitle')}</p>
-        <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px">
-          <b>Google Calendar:</b> ${t('sync.howToGoogle')}<br><br>
-          <b>Apple Calendar:</b> ${t('sync.howToApple')}<br><br>
-          <b>Outlook / ${t('sync.other')}:</b> ${t('sync.howToOther')}
-        </p>
-        <p class="plabel" style="margin:20px 2px 8px">${t('sync.icsTitle')}</p>
-        <p style="font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0 2px 10px">${t('sync.icsExplain')}</p>
-        <a href="${escapeHtml(icsUrl)}" download="pivot-calendar.ics" class="btn soft" style="width:100%;display:flex;align-items:center;justify-content:center;text-decoration:none">${t('sync.downloadIcs')}</a>
-        <button class="btn soft" style="width:100%;margin-top:18px;color:var(--late)" onclick="gerarTokenSincronizacaoCalendario(true)">${t('sync.regenerateLink')}</button>
-        <p style="font-size:11.5px;color:var(--ink-faint);margin:8px 2px 0">${t('sync.regenerateHint')}</p>
-      `}
+      <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px;line-height:1.5">${t('sync.explain')}</p>
+      <div class="field" style="margin-bottom:10px"><label>${t('sync.linkLabel')}</label><input readonly value="${escapeHtml(url)}" onclick="this.select()"></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn soft" style="flex:1" onclick="navigator.clipboard.writeText('${escapeHtml(url)}');showToast(t('toast.linkCopied'))">${t('action.copyLink')}</button>
+        <a href="${escapeHtml(icsUrl)}" download="pivot-calendar.ics" class="btn soft" style="flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;gap:6px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>${t('sync.downloadIcs')}</a>
+      </div>
+      <p class="plabel" style="margin:18px 2px 8px">${t('sync.howToTitle')}</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">
+        <a href="${escapeHtml(googleUrl)}" target="_blank" rel="noopener" class="btn soft" style="display:flex;align-items:center;justify-content:center;text-decoration:none;gap:6px;font-size:12.5px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Google Calendar
+        </a>
+        <a href="${escapeHtml(webcalUrl)}" class="btn soft" style="display:flex;align-items:center;justify-content:center;text-decoration:none;gap:6px;font-size:12.5px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          Apple Calendar
+        </a>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-faint);line-height:1.55;margin:0 2px">
+        <b>Google:</b> ${t('sync.howToGoogle')}<br>
+        <b>Apple:</b> ${t('sync.howToApple')}<br>
+        <b>${t('sync.other')}:</b> ${t('sync.howToOther')}
+      </p>
     `);
   }
-  async function gerarTokenSincronizacaoCalendario(reconfirmar){
-    if(reconfirmar && !confirm(t('sync.regenerateConfirm'))) return;
+  async function gerarTokenSincronizacaoCalendario(){
     await sb.from('calendar_feed_tokens').update({revoked:true}).eq('workspace_id', currentWorkspaceId).eq('revoked', false);
     const token=(crypto.randomUUID?crypto.randomUUID():'tok'+Date.now()+Math.random().toString(36).slice(2)).replace(/-/g,'');
     const { error } = await sb.from('calendar_feed_tokens').insert({token, workspace_id:currentWorkspaceId});
