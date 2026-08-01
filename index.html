@@ -4623,20 +4623,22 @@
   }
   function renderMonthTicker(){
     const s=calcularEstatisticasMes();
+    /* mesmos data sources que renderRelOpBars() — Dashboard e Relatórios
+       devem mostrar os mesmos números para o mesmo mês */
+    const totalJobs=s.totalJobsEsteMes||0;
+    const eventosTot=s.eventosPrevistosEsteMes||0;
     /* Horas: executadas (marco principal "feito") sobre o total previsto no mês */
     pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes));
-    /* Pendências (lado do cliente) sobre o total de trabalhos */
-    pintarMetricaOp('pendencias', s.pendClienteCount, s.totalJobs, String(s.pendClienteCount), String(s.totalJobs));
-    /* Demandas (lado próprio) sobre o total de trabalhos */
-    pintarMetricaOp('demandas', s.pendMeuCount, s.totalJobs, String(s.pendMeuCount), String(s.totalJobs));
-    /* Fechados: sem percentual de um total — é a contagem bruta de projetos
-       fechados no período. Começa em 0 e vai enchendo 1 bloco por vez a
-       cada novo projeto fechado (cada bloco = 1 projeto, não 5%). */
-    pintarMetricaOp('fechados', s.fechadosEsteMes, 0, '', String(s.fechadosEsteMes), 'contagem');
-    /* Executados: trabalhos marcados como concluídos sobre o total de trabalhos */
-    pintarMetricaOp('executados', s.executadosCount, s.totalJobs, String(s.executadosCount), String(s.totalJobs));
-    /* Concluídos: entregues sobre entregues+a entregar */
-    pintarMetricaOp('concluidos', s.trabalhosEntregues, s.trabalhosEntregues+s.trabalhosEntregar, String(s.trabalhosEntregues), String(s.trabalhosEntregues+s.trabalhosEntregar));
+    /* Pendências (cliente) sobre trabalhos do mês — não global */
+    pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs));
+    /* Demandas (meu lado) sobre trabalhos do mês — não global */
+    pintarMetricaOp('demandas', s.pendMeuEsteMes||0, totalJobs, String(s.pendMeuEsteMes||0), String(totalJobs));
+    /* Fechados: trabalhos do mês com contrato assinado (consistente com Relatórios) */
+    pintarMetricaOp('fechados', s.fechadosPorDataEsteMes||0, 0, '', String(s.fechadosPorDataEsteMes||0), 'contagem');
+    /* Executados: eventos realizados sobre eventos previstos no mês */
+    pintarMetricaOp('executados', s.eventosExecutadosEsteMes||0, eventosTot, String(s.eventosExecutadosEsteMes||0), String(eventosTot));
+    /* Concluídos: entregas do mês sobre total de trabalhos do mês */
+    pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs));
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
        categoria própria, sem mexer no que Relatórios entende por "Recebido". */
