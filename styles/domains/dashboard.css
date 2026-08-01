@@ -7,7 +7,7 @@
   /* Financeiro + Estatísticas Operacionais vivem no mesmo card, cada um
      com seu título centrado dentro; o menu (⋮) do Financeiro fica
      ancorado à direita do próprio título, não da largura do card. */
-  .finance-ops-card{position:relative;background:var(--surface-row);border:1px solid rgba(255,255,255,.10);
+  .finance-ops-card{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.035) 0%,rgba(6,5,4,.16) 100%);border:1px solid rgba(255,255,255,.10);
     border-radius:var(--r);margin:12px 0 22px;padding:12px 0;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
     backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
     color:#F5F5F3;
@@ -20,19 +20,14 @@
   .ms-progress-left{flex:1;min-width:0;display:flex;flex-direction:column}
   .ms-rings-wrap{flex:none;display:flex;justify-content:center;align-items:center;position:relative}
   .ms-rings-svg{width:155px;height:155px;transform:rotate(-90deg)}
-  /* trilho — canal escavado no card: cor #BABABA a 25% + sombra interna discreta
-     (filter:url(#mr-carved) definido nos <defs> do SVG do dashboard). Sem stroke cinza,
-     sem aparência de círculo desenhado — apenas profundidade. */
-  .mr-trilho{fill:none;stroke:rgba(186,186,186,.25);filter:url(#mr-carved)}
-  /* anéis do donut agora são paths preenchidos (não stroke) — cor sólida
-     definida por elemento via JS (ver pintarFita/pintarTeto). Sem
-     gradiente, sem glow, sem sombra decorativa: só a forma e a cor. */
+  /* trilho — canal escavado: white 3% (quase invisível) + sombra interna carved */
+  .mr-trilho{fill:none;stroke:rgba(255,255,255,.03);filter:url(#mr-carved)}
+  /* bordas finas nas arestas internas e externas de cada trilho (white 8%) */
+  .mr-trilho-edge{fill:none;stroke:rgba(255,255,255,.08);stroke-width:.7}
+  /* anéis do donut — paths preenchidos, cor definida via JS */
   .mr-ring{stroke:none;fill-rule:nonzero}
   .mr-base{opacity:1}
   .mr-teto{opacity:1}
-  /* máscara de separação no início (ângulo 0°) de cada anel — esconde a
-     ponta inicial do arco com a cor do fundo para criar o vazio no canal. */
-  .mr-gap-mask{fill:rgba(5,4,4,.97);stroke:none}
   /* apenas o número fica centrado no anel — o rótulo "Total" é ancorado
      acima dele, fora do cálculo de centralização, para não puxar o
      conjunto para baixo do centro. */
@@ -46,11 +41,11 @@
   .mrl-item{display:grid;grid-template-columns:14px minmax(0,1fr) auto;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11.5px;font-weight:500;letter-spacing:0;color:var(--ink-soft);padding:6px 0;cursor:pointer;white-space:nowrap}
   .mrl-item b{color:var(--ink);font-weight:500;font-size:12.5px;text-align:right;font-family:var(--font-numeric),'JetBrains Mono',monospace;font-variant-numeric:tabular-nums}
   .mr-meta-c{color:#BABABA}
-  .mr-esperado-c{color:#7A9898}
-  .mr-recebido-c{color:#586E6E}
-  .mr-extras-c{color:#223030}
-  .mr-gastos-c{color:#FCF9CF}
-  .mr-teto-c{color:#D9654E}
+  .mr-esperado-c{color:rgba(255,255,255,.45)}
+  .mr-recebido-c{color:#425E37}
+  .mr-extras-c{color:#88A37E}
+  .mr-gastos-c{color:#FFDB52}
+  .mr-teto-c{color:rgba(255,255,255,.30)}
   .ms-badges{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;margin:16px 0 4px;text-align:center}
   .ms-meta-badge{display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:500;padding:4px 0}
   .ms-meta-badge svg{width:14px;height:14px;color:var(--brand);flex:none}
