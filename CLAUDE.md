@@ -30,6 +30,8 @@ Regra geral: leia **só** o CSS do domínio + grep pelo `id` ou função listada
 - `styles/tokens.css` — fonte única de verdade para cores, tipografia, espaçamento
 - Escala tipográfica: `--text-2xs` (10px) → `--text-display` (46px), 19 valores
 - Dark-surface: seletor combinado no final de `tokens.css` (`.card, .finance-ops-card, .ms-card-sq, .job, .sec, .pp-card, .map-card, .collapse, .plist`)
+- `styles/utilities.css` — ~85 classes utilitárias `u-*` (layout, espaçamento, tipografia, ícones)
+  - Não duplicar: se algo parece u-*, verificar se já existe antes de criar inline
 
 ### Shell / Navegação
 - `styles/domains/sidebar.css`, `styles/domains/shell.css`
@@ -129,3 +131,5 @@ Regra geral: leia **só** o CSS do domínio + grep pelo `id` ou função listada
 - Não copiar dark-surface tokens em ficheiros individuais — estão centralizados em `tokens.css`.
 - Não hardcode font-sizes — usar `var(--text-*)`.
 - Não hardcode cores inline — usar tokens de `tokens.css`.
+- Não usar `style=` inline para padrões que já têm classe `u-*` em `utilities.css`.
+- Não converter `style="display:none"` para classe — esses 74 elementos são controlados por JS via `element.style.display` e devem permanecer como inline style.
