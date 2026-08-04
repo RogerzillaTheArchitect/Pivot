@@ -67,7 +67,7 @@
   .bib-square-btn:hover{color:var(--bib-ink)}
   .bib-square-btn svg{width:17px;height:17px}
   .bib-search{flex:1;min-width:0;display:flex;align-items:center;gap:9px;height:40px;padding:0 12px;border-radius:var(--r)}
-  .bib-search svg{width:16px;height:16px;color:var(--bib-ink-faint);flex:none}
+  .bib-search svg{width:var(--ico-md);height:var(--ico-md);color:var(--bib-ink-faint);flex:none}
   .bib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-13h);color:var(--bib-ink)}
   .bib-search input::placeholder{color:var(--bib-ink-faint)}
 
@@ -99,7 +99,7 @@
     transition:border-color .15s,filter .15s}
   .bib-seal:hover{filter:brightness(1.08)}
   .bib-seal.on{border-color:rgba(255,255,255,.20)}
-  .bib-seal .sl-ic{flex:none;display:inline-flex;width:16px;height:16px}
+  .bib-seal .sl-ic{flex:none;display:inline-flex;width:var(--ico-md);height:var(--ico-md)}
   .bib-seal .sl-ic svg{width:100%;height:100%}
   .bib-seal .sl-ic .nav-ico{width:100%;height:100%;background-color:currentColor}
   .bib-seal .sl-lbl{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -137,7 +137,7 @@
   .bc-lang-blocks-ico{width:12px;height:12px;background-color:var(--bib-ink-faint)}
   .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
-  .bib-fav svg{width:16px;height:16px}
+  .bib-fav svg{width:var(--ico-md);height:var(--ico-md)}
   .bib-fav.on{color:var(--bib-brass-ink);opacity:1}
   .bib-minitag{font-size:9.5px;font-weight:500;padding:2px 6px;border-radius:var(--r);background:rgba(255,255,255,.05);color:var(--bib-ink-soft);border:1px solid var(--bib-mat-line)}
   .bib-uses{height:18px;display:inline-flex;align-items:center;font-size:var(--text-2xs);color:var(--bib-ink-faint);white-space:nowrap}
@@ -147,7 +147,7 @@
   .bib-struct-row{margin-bottom:10px}
   .bib-struct-row .lbl{font-size:var(--text-12);color:var(--ink-soft);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2)}
   .bib-struct-tag{display:inline-flex;align-items:center;gap:var(--sp-1);flex:none;white-space:nowrap;opacity:.75}
-  .bib-struct-tag svg{width:11px;height:11px;flex:none}
+  .bib-struct-tag svg{width:var(--ico-xs);height:var(--ico-xs);flex:none}
   /* Mesmo padrão visual do .ops-card .track/.segment da Dashboard (grid de
      20 segmentos preenchendo a linha toda + gradiente --fill), em versão
      pequena — dá mais exatidão ao "score" do bloco do que uma barra única. */
@@ -168,14 +168,14 @@
   .opt-lang-box{flex:none;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;
     font-size:7.5px;font-weight:700;letter-spacing:.01em;border-radius:var(--r);border:1px solid currentColor;color:var(--bib-ink-faint)}
   .bib-sort-opt.on .opt-lang-box{color:var(--ink)}
-  .opt-check{flex:none;width:16px;height:16px;opacity:0;display:inline-flex}
+  .opt-check{flex:none;width:var(--ico-md);height:var(--ico-md);opacity:0;display:inline-flex}
   .opt-check svg{width:100%;height:100%}
   .bib-sort-opt.on .opt-check{opacity:1}
 
   /* ===== PESQUISA (genérica, usada fora da biblioteca também) ===== */
   .searchbox{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);
     border-radius:var(--r);padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
-  .searchbox svg{width:18px;height:18px;color:var(--neutral)}
+  .searchbox svg{width:var(--ico-lg);height:var(--ico-lg);color:var(--neutral)}
   .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-md);flex:1;color:var(--ink)}
   .res{font-size:var(--text-sm);color:var(--neutral);padding:0 2px}
 
@@ -188,14 +188,14 @@
   .search-recent-x{width:26px;height:26px;flex:none;display:grid;place-items:center;color:var(--neutral);
     border-radius:50%;transition:background .15s,color .15s}
   .search-recent-x:hover{background:var(--paper-2);color:var(--ink)}
-  .search-recent-x svg{width:14px;height:14px}
+  .search-recent-x svg{width:var(--ico-sm);height:var(--ico-sm)}
 
   /* ===== Visualizar — tela do contrato (título à esquerda, cabeçalho em linha, blocos num card) ===== */
   .vis-screen{--ink:#F5F5F3; --ink-soft:#9B9DA3; --neutral:#6A6C72; --line-soft:rgba(255,255,255,.07)}
   .vis-title{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:var(--text-2xl);line-height:1.2;color:var(--bib-ink);text-align:left;margin:2px 0 12px}
   .vis-head{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}
   .vis-head .vis-meta{display:inline-flex;align-items:center;gap:var(--sp-1);height:22px;box-sizing:border-box;font-size:var(--text-11);font-weight:500;color:var(--bib-ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:0 9px}
-  .vis-head .vis-meta .bc-lang-blocks-ico{width:14px;height:14px;background-color:var(--bib-ink-soft)}
+  .vis-head .vis-meta .bc-lang-blocks-ico{width:var(--ico-sm);height:var(--ico-sm);background-color:var(--bib-ink-soft)}
   .vis-card{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:6px;margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
   .vis-bloco{border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:12px 13px;background:rgba(255,255,255,.03)}
   .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);font-size:var(--text-13h);font-weight:500;color:var(--bib-ink);margin-bottom:6px}
@@ -225,7 +225,7 @@
   .sheet h3{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-xl);margin-bottom:14px;padding:0 4px}
   .sheet-primary{display:flex;align-items:center;gap:13px;padding:var(--sp-4);border-radius:var(--r);background:var(--ink);
     color:var(--paper);cursor:pointer;margin-bottom:14px}
-  .sheet-primary svg{width:20px;height:20px}
+  .sheet-primary svg{width:var(--ico-xl);height:var(--ico-xl)}
   .sheet-primary .t{font-size:var(--text-15h);font-weight:600}
   .sheet-primary .s{font-size:var(--text-12h);opacity:.65}
   .sheet-grid{display:grid;grid-template-columns:var(--cols-2);gap:9px}
@@ -239,7 +239,7 @@
     box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05);
     transition:background .15s,border-color .15s}
   .sheet-item:hover{background:var(--surface-row-hover);border-color:rgba(255,255,255,.16)}
-  .sheet-item svg{width:18px;height:18px;color:var(--ink-soft)}
-  .sheet-item .nav-ico{width:18px;height:18px;background-color:var(--ink-soft)}
+  .sheet-item svg{width:var(--ico-lg);height:var(--ico-lg);color:var(--ink-soft)}
+  .sheet-item .nav-ico{width:var(--ico-lg);height:var(--ico-lg);background-color:var(--ink-soft)}
   .sheet-item span{font-size:var(--text-13h);font-weight:500;line-height:1.3}
 
