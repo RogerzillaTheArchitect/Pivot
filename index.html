@@ -1787,7 +1787,7 @@
 
     if (precisaAssinar){
       html += '<div class="u-mb-18"><h4 style="margin:0 0 8px">'+escapeHtml(d.acordo.nome || (MODELOS_ACORDO[d.acordo.modelo]?t(MODELOS_ACORDO[d.acordo.modelo].nomeKey):''))+'</h4>';
-      html += '<p class="u-hint-bare u-pre-wrap">'+escapeHtml(d.acordo.texto||'')+'</p>';
+      html += '<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap">'+escapeHtml(d.acordo.texto||'')+'</p>';
       html += '<div class="field"><label>'+t('field.name')+'</label><input id="colab-sig-nome" placeholder="Nome e apelido"></div>';
       html += '<div class="field"><label>'+t('signature.instructions')+'</label><div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">'+t('signature.clear')+'</span></div></div>';
       html += '<button class="btn primary u-w-full u-mt-6" onclick="assinarAcordoColabPublico()">'+t('action.save')+'</button></div>';
@@ -4507,14 +4507,14 @@
     }
     sec.style.setProperty('--fill', pct);
     let html='';
-    for(let i=0;i<N;i++) class="segment'+(i<alcancados?' is-filled':'')+' ve-cur ve-cur ve-sep ve-tot" html += '<span></span>';
+    for(let i=0;i<N;i++) html += '<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
     track.innerHTML=html;
     /* formato "concluído/total": o número concluído usa a mesma cor da
        barra preenchida, o total permanece branco — modo 'contagem' (Fechados)
        não tem um total distinto do próprio valor, então mostra só o número. */
     end.innerHTML = modo==='contagem'
-      ? '<span>'+escapeHtml(textoTotal)+'</span>'
-      : '<span>'+escapeHtml(textoAtual)+'</span><span>/</span><span>'+escapeHtml(textoTotal)+'</span>';
+      ? '<span class="ve-cur">'+escapeHtml(textoTotal)+'</span>'
+      : '<span class="ve-cur">'+escapeHtml(textoAtual)+'</span><span class="ve-sep">/</span><span class="ve-tot">'+escapeHtml(textoTotal)+'</span>';
   }
   function pintarAnelComVolta(elId, r, num, den, trackElOverride){
     const el=document.getElementById(elId);
@@ -4880,9 +4880,9 @@
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
     calendar:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>',
     clock:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>',
-    check:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
-    checkSimples:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
-    checkLista:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
+    check:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
+    checkSimples:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
+    checkLista:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
   };
   /* mesmos ícones dos botões Simples/Checklist do menu Criar > Tarefa —
      usados no card de Tarefas (Dashboard) pra marcar itens soltos (sem
@@ -10871,11 +10871,11 @@
     bibSelClausDetail={blocks:(detail&&detail.blocks)||[]};
     const rows=bibSelClausDetail.blocks.map((b,idx)=>{
       const nomeTraduzido=blockName({key:null,name:b.name});
-      return '<div class="prow t pc-sub plist" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(nomeTraduzido).replace(/'/g,"\\'")+'\')">'+
-      '<div>'+escapeHtml(nomeTraduzido)+'</div><span style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>';
+      return '<div class="prow" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(nomeTraduzido).replace(/'/g,"\\'")+'\')">'+
+      '<div class="t">'+escapeHtml(nomeTraduzido)+'</div><span class="pc-sub" style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>';
     }).join('');
     document.getElementById('infoTitle').textContent=titulo;
-    document.getElementById('infoBody').innerHTML='<div>'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
+    document.getElementById('infoBody').innerHTML='<div class="plist">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
   }
   function abrirSelecaoClausulasDoBloco(idx, nomeBloco){
     bibSelClausBlockIdx=idx; bibSelClausSet=new Set(); bibSelClausTitulo=nomeBloco;
@@ -11570,7 +11570,7 @@
     const msg=construirMensagemPortalCliente(job);
     openInfo(t('portal.copyAccess'), `
       <p class="u-sm-nd u-mb-8">${t('portal.editMessageHint')}</p>
-      <textarea id="portal-msg-editavel" class="u-textarea">${escapeHtml(msg)}</textarea>
+      <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
       <button class="btn dark u-w-full u-mt-10" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemPortalEditada(){
@@ -11628,13 +11628,13 @@
     if(!passos.length) return '';
     let html='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
     passos.forEach((p,i)=>{
-      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line tl-dot-status tl-body t m tl-date btn ghost dm-item dm-item dm-item dm-row dm-row dm-sep card-info card-info-item lbl val card-info-item lbl val card-info-item lbl val csec-label"></div>':'')+
-        '<div>'+statusEmoji(p.status)+'</div>'+
-        '<div>'+
-          '<div>'+escapeHtml(p.label)+'</div>'+
-          (p.desc?'<div>'+escapeHtml(p.desc)+'</div>':'')+
-          (p.data?'<div>'+escapeHtml(p.data)+'</div>':'')+
-          (p.acaoLabel?'<button style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
+      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line"></div>':'')+
+        '<div class="tl-dot-status">'+statusEmoji(p.status)+'</div>'+
+        '<div class="tl-body">'+
+          '<div class="t">'+escapeHtml(p.label)+'</div>'+
+          (p.desc?'<div class="m">'+escapeHtml(p.desc)+'</div>':'')+
+          (p.data?'<div class="tl-date">'+escapeHtml(p.data)+'</div>':'')+
+          (p.acaoLabel?'<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
         '</div></div>';
     });
     html+='</div></div>';
@@ -11653,12 +11653,12 @@
     return dt.toLocaleDateString(jsLocale(), {day:'numeric', month:'long', year:'numeric'});
   }
   function detailMetaRowHtml(job){
-    const linha1='<span>'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
+    const linha1='<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
     const itens2=[];
-    if(job.dateRaw) itens2.push('<span>'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
-    if(job.horaIni) itens2.push('<span>'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' - '+job.horaFim):''))+'</span></span>');
-    let html='<div>'+linha1+'</div>';
-    if(itens2.length) html+='<div>'+itens2.join('<span></span>')+'</div>';
+    if(job.dateRaw) itens2.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
+    if(job.horaIni) itens2.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' - '+job.horaFim):''))+'</span></span>');
+    let html='<div class="dm-row">'+linha1+'</div>';
+    if(itens2.length) html+='<div class="dm-row">'+itens2.join('<span class="dm-sep"></span>')+'</div>';
     return html;
   }
   function renderJobDetailDynamic(id){
@@ -11684,14 +11684,14 @@
       if(sv.horas) bits.push(sv.horas+'h');
       if(sv.equipa) bits.push(sv.equipa+' na equipe');
       if(sv.equipamento.length) bits.push(sv.equipamento.join(', '));
-      html+='<div style="margin:0 0 16px;padding-top:0;border-top:none">';
-      html+='<div><span>Serviço</span><span>'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
-      if(sv.horas) html+='<div><span>Duração</span><span>'+sv.horas+'h</span></div>';
-      if(sv.equipa) html+='<div><span>'+t('profile.team')+'</span><span>'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
+      html+='<div class="card-info" style="margin:0 0 16px;padding-top:0;border-top:none">';
+      html+='<div class="card-info-item"><span class="lbl">Serviço</span><span class="val">'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
+      if(sv.horas) html+='<div class="card-info-item"><span class="lbl">Duração</span><span class="val">'+sv.horas+'h</span></div>';
+      if(sv.equipa) html+='<div class="card-info-item"><span class="lbl">'+t('profile.team')+'</span><span class="val">'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
       html+='</div>';
     }
     if(job.recursos && job.recursos.length){
-      html+='<p style="margin:0 2px 8px">'+t('job.resources')+'</p>';
+      html+='<p class="csec-label" style="margin:0 2px 8px">'+t('job.resources')+'</p>';
       job.recursos.forEach(r=>{
         html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(r.nome)+'</div><span class="sub">'+escapeHtml(r.tipo)+'</span></div>'+(r.custo?('<b class="u-label">'+fmtMoney(r.custo)+'</b>'):'')+'</div>';
       });
@@ -11777,19 +11777,19 @@
       }
       const hojeIso=new Date().toISOString().slice(0,10);
       job.payments.forEach((p,i)=>{
-        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso; class="struct-row struct-l nm sub u-row sig-tag '+pTagClasse+' btn soft"
+        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso;
         const pStatus = p.status==='pago'?'done':(p.status==='a_confirmar'?'progress':(atrasada?'late':'pending'));
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
-        html+='<div style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div class="u-flex-min"><div style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
-          '<span>'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
+        html+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+          '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
         const pTagClasse={done:'green',progress:'amber',pending:'gray',late:'late'}[pStatus];
-        html+='<div>';
-        html+='<span>'+statusTxt+'</span>';
+        html+='<div class="u-row">';
+        html+='<span class="sig-tag '+pTagClasse+'">'+statusTxt+'</span>';
         if(p.status!=='pago'){
-          html+='<button style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
+          html+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
         html+='</div></div>';
       });
@@ -11954,7 +11954,7 @@
     const msg=construirMensagemAcessoColaborador(c, job.nome||job.typeLabel);
     openInfo(t('portal.copyAccess'), `
       <p class="u-sm-nd u-mb-8">${t('portal.editMessageHint')}</p>
-      <textarea id="colab-msg-editavel" class="u-textarea">${escapeHtml(msg)}</textarea>
+      <textarea id="colab-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
       <button class="btn dark u-w-full u-mt-10" onclick="copiarMensagemColaboradorEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemColaboradorEditada(){
@@ -12109,14 +12109,14 @@
     const filtrados = todos.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.nome||'').toLowerCase().includes(q));
     let html=filtrados.map(c=>{
       const tag = c.origem==='team' ? t('collab.fromTeam') : t('collab.fromHistory');
-      return '<div class="pick-row nm sub pick-row nm sub" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
-        '<div><div>'+escapeHtml(c.nome||c.email||'')+'</div><span>'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
+      return '<div class="pick-row" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
+        '<div><div class="nm">'+escapeHtml(c.nome||c.email||'')+'</div><span class="sub">'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
     }).join('');
     /* email completo digitado que não corresponde a ninguém → oferecer adicionar novo */
     const exato=todos.some(c=>(c.email||'').toLowerCase()===q);
     if(ehEmail && !exato){
-      html+='<div style="border:1px solid var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
-        '<div><div>'+t('collab.addNew')+'</div><span>'+escapeHtml(q)+'</span></div></div>';
+      html+='<div class="pick-row" style="border:1px solid var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
+        '<div><div class="nm">'+t('collab.addNew')+'</div><span class="sub">'+escapeHtml(q)+'</span></div></div>';
     }
     if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('wizard.noMatchesFor')+escapeHtml(q)+'"</p>';
     wrap.innerHTML=html;
@@ -13257,7 +13257,7 @@
     const itens=jobsArquivados();
     wrap.style.display='block';
     wrap.innerHTML = itens.length ? itens.map(htmlCardArquivado).join('') :
-      '<div class="empty u-p-46-16"><div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div><h3 class="u-lg-label">'+t('jobs.archivedEmpty')+'</h3></div>';
+      '<div class="empty" style="padding:46px 16px"><div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div><h3 class="u-lg-label">'+t('jobs.archivedEmpty')+'</h3></div>';
   }
   /* ===== Classificação canónica de trabalho — fonte única usada em todo o lado ===== */
   /* Visibilidade por atribuição de equipa: Admin vê tudo; trabalhos sem
@@ -14453,18 +14453,18 @@
       const cheios=Math.round(pct/100*N);
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
-      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' class="bib-struct-row lbl bib-struct-tag bib-struct-track u-label-nd u-label-nd vis-meta vis-meta" is-filled':'')+'"></span>').join('');
-      return '<div><div>'+escapeHtml(blockName({key:null,name:b.name}))+' <span>'+icone+t(tagKey)+'</span></div><div style="--fill:'+pct+'">'+segs+'</div></div>';
+      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' is-filled':'')+'"></span>').join('');
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-track" style="--fill:'+pct+'">'+segs+'</div></div>';
     }).join('')+'</div>';
   }
   /* "Visualizar" — mostra TODOS os blocos do contrato (nome + cláusulas) no
      idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
      Importar leva ao editor com o painel de campos dinâmicos. */
   async function abrirVisualizarContratoCompleto(rawId, lang, titulo){
-    openInfo('', '<p>…</p>');
+    openInfo('', '<p class="u-label-nd">…</p>');
     const detail = await LegalLibrary.getDetail(rawId, lang||LANG);
     if(!detail || !detail.blocks || !detail.blocks.length){
-      document.getElementById('infoBody').innerHTML='<p>'+t('library.structureUnavailable')+'</p>';
+      document.getElementById('infoBody').innerHTML='<p class="u-label-nd">'+t('library.structureUnavailable')+'</p>';
       return;
     }
     const it=LegalLibrary.get(rawId);
@@ -14473,8 +14473,8 @@
        então a tag Jurídico não é usada aqui — só Pivots. */
     const head=[];
     head.push(bibOtag('oficial', t('library.origin.official')));
-    head.push('<span>'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
-    head.push('<span>'+BIB_ICON_BLOCKS+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
+    head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
+    head.push('<span class="vis-meta">'+BIB_ICON_BLOCKS+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
     const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
@@ -14530,14 +14530,14 @@
     if(tagsExibidas.length) html+='<div class="bc-tags u-mb-14">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn soft u-w-full u-mb-8" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
-    if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8 btn primary" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
+    if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
     /* Chega aqui só fora do modo de seleção de blocos/cláusulas (abrirItemBiblioteca
        roteia esses direto pros blocos, sem passar por este ecrã) — sobram o
        fluxo normal de import e o de escolher contrato pra colaborador. */
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button class="u-w-full" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
+    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
     openInfo(it.titulo, html, undefined, 'bib-title-font');
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
@@ -15046,18 +15046,18 @@
          texto do nome e quebrava de forma imprevisível (ora colada ao nome,
          ora empurrada pra baixo dele) por não ter layout próprio. */
       const tag = (c.tipo && c.tipo!=='Cliente') ? '<div style="margin:3px 0 1px"><span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft);font-size:10px">'+escapeHtml(c.tipo)+'</span></div>' : '';
-      return '<div class="pick-row u-row-full u-min-0 nm sub chevr u-flex-none prow u-cur-default u-flex-1" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
+      return '<div class="pick-row u-row-full" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
         '<div>'+avatarHtml(c.nome,34,c.foto)+
-        '<div>'+
-          '<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(c.nome)+'</div>'+
+        '<div class="u-min-0">'+
+          '<div class="nm" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(c.nome)+'</div>'+
           tag+
-          '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div>'+
+          '<div class="sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div>'+
         '</div></div>'+
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
+        '<svg class="chevr u-flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
     }).join('');
   }
   function linhaInfoContato(label,val){
-    return '<div><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500;white-space:pre-wrap">'+escapeHtml(val)+'</div></div></div>';
+    return '<div class="prow u-cur-default"><div class="u-flex-1"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500;white-space:pre-wrap">'+escapeHtml(val)+'</div></div></div>';
   }
   function abrirContatoDetalhe(key){
     const sep=key.indexOf(':');
@@ -15079,24 +15079,24 @@
     });
     const porReceber=Math.max(0, faturado-recebido);
     let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52,c.foto)+
-      '<div class="u-flex-min"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
+      '<div style="min-width:0;flex:1"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
       '<div class="u-sm-soft">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div>'+
-      '<button class="btn dark u-flex-none plist u-mb-16 prow u-cur-default sub u-c-neutral ct-stats ct-stat v l ct-stat v l ct-stat v l plabel" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
-    html+='<div>';
+      '<button class="btn dark u-flex-none" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
+    html+='<div class="plist u-mb-16">';
     if(c.email) html+=linhaInfoContato('Email', c.email);
     if(c.telefone) html+=linhaInfoContato(t('profile.company.phone'), c.telefone);
     if(c.empresa) html+=linhaInfoContato(t('field.company'), c.empresa);
     if(c.instagram) html+=linhaInfoContato('Instagram', c.instagram);
     if(c.notas) html+=linhaInfoContato(t('wizard.client.notes'), c.notas);
-    if(!c.email && !c.telefone && !c.empresa && !c.instagram && !c.notas) html+='<div><div>'+t('contacts.noEmail')+'</div></div>';
+    if(!c.email && !c.telefone && !c.empresa && !c.instagram && !c.notas) html+='<div class="prow u-cur-default"><div class="sub u-c-neutral">'+t('contacts.noEmail')+'</div></div>';
     html+='</div>';
     if(tipo==='cli'){
-      html+='<div>'+
-        '<div><div>'+fmtMoney(faturado)+'</div><div>'+t('contacts.totalBilled')+'</div></div>'+
-        '<div><div>'+fmtMoney(recebido)+'</div><div>'+t('contacts.received')+'</div></div>'+
-        '<div><div>'+fmtMoney(porReceber)+'</div><div>'+t('contacts.pending')+'</div></div></div>';
+      html+='<div class="ct-stats">'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(faturado)+'</div><div class="l">'+t('contacts.totalBilled')+'</div></div>'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(recebido)+'</div><div class="l">'+t('contacts.received')+'</div></div>'+
+        '<div class="ct-stat"><div class="v">'+fmtMoney(porReceber)+'</div><div class="l">'+t('contacts.pending')+'</div></div></div>';
     }
-    html+='<div style="margin:18px 2px 10px">'+(together?t('contacts.together'):t('contacts.history'))+' ('+jobs.length+')</div>';
+    html+='<div class="plabel" style="margin:18px 2px 10px">'+(together?t('contacts.together'):t('contacts.history'))+' ('+jobs.length+')</div>';
     if(jobs.length){
       html+=jobs.map(j=>{
         const ccl=classificarTrabalho(j);
@@ -15508,7 +15508,7 @@
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
       <div class="field"><label>${t('profile.account.phone')}</label><input value="${escapeHtml(perfilData.telefonePessoal||'')}" id="mc-telefone"></div>
       <div class="field"><label>${t('profile.account.docId')}</label><input value="${escapeHtml(perfilData.documentoNacional||'')}" id="mc-doc"></div>
-      <button class="btn primary u-w-full u-mt-2" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
+      <button class="btn primary" style="width:100%;margin-top:2px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
       <button class="btn soft u-w-full u-mt-8" onclick="abrirAlterarSenha()">${t('profile.account.changePassword')}</button>`);
   }
   function infoPlano(){
@@ -15525,7 +15525,7 @@
       ${linhasPlano}
       <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
       <div class="u-flex-g8">
-        <div class="field u-flex-1 u-mb-0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
+        <div class="field" style="flex:1;margin-bottom:0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
         <button class="btn soft u-flex-none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
       </div>
       <p class="plabel" style="margin:22px 2px 9px">${t('profile.plan.billingHistory')}</p>
@@ -15568,7 +15568,7 @@
     openInfo(t('profile.company'), `
       <div style="text-align:center;margin-bottom:16px">
         <div class="p-avatar" id="empresa-avatar-preview" style="width:64px;height:64px;font-size:22px;margin:0 auto 8px;${perfilData.empresaFotoUrl?('background-image:url('+perfilData.empresaFotoUrl+');background-size:cover;background-position:center'):''}">${perfilData.empresaFotoUrl?'':escapeHtml((perfilData.empresa||'?').charAt(0).toUpperCase())}</div>
-        <label class="inline-link u-cur-pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" class="u-hidden" onchange="onEmpresaAvatarSelected(this)"></label>
+        <label class="inline-link u-cur-pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" style="display:none" onchange="onEmpresaAvatarSelected(this)"></label>
       </div>
       <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="emp-nome"></div>
       <div class="field"><label>${t('profile.company.address')}</label><input value="${escapeHtml(perfilData.endereco||'')}" id="emp-endereco"></div>
@@ -15729,8 +15729,8 @@
         <div class="sig-pad-wrap"><canvas id="perfil-sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvasPerfil()">${t('signature.clear')}</span></div>
         <button class="btn primary u-w-full u-mt-10" onclick="guardarAssinaturaDesenhadaPerfil()">${t('action.saveSignature')}</button>
       </div>
-      <div id="perfil-sig-upload" class="u-hidden">
-        <input type="file" id="perfil-sig-file-input" accept="image/*" class="u-hidden" onchange="onAssinaturaFileSelected(this)">
+      <div id="perfil-sig-upload" style="display:none">
+        <input type="file" id="perfil-sig-file-input" accept="image/*" style="display:none" onchange="onAssinaturaFileSelected(this)">
         <div class="dropzone" onclick="document.getElementById('perfil-sig-file-input').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>
           <div class="t">${t('signature.tabUpload')}</div><div class="s">${t('signature.uploadHint')}</div>
@@ -16339,7 +16339,7 @@
       '<div class="state '+(j.contract.status==='assinado'?'s-active':'s-wait')+'">'+t(j.contract.status==='assinado'?'jobs.status.active':'jobs.status.waiting')+'</div></div></div>');
     const clienteMatches=Object.values(clientesData).filter(c=>
       (c.nome+' '+(c.email||'')+' '+(c.empresa||'')).toLowerCase().includes(q)
-    ).map(c=>'<div class="pick-row nm sub" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div>'+escapeHtml(c.nome)+'</div><div>'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
+    ).map(c=>'<div class="pick-row" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div class="nm">'+escapeHtml(c.nome)+'</div><div class="sub">'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
     const total=jobMatches.length+clienteMatches.length;
     res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+qRaw+'"';
     box.innerHTML = jobMatches.join('') + clienteMatches.join('');
