@@ -4,7 +4,7 @@
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
-  .rel-fin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2);margin:14px 0 20px}
+  .rel-fin-actions{display:grid;grid-template-columns:var(--cols-4);gap:var(--sp-2);margin:14px 0 20px}
   .rel-fin-actions .btn{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:var(--text-12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-fin-ico{width:16px;height:16px;background-color:currentColor}
 
@@ -121,7 +121,7 @@
   .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:var(--text-base);font-weight:600;color:var(--ink)}
   .rel-year-nav span{cursor:pointer;color:var(--ink-soft);width:24px;text-align:center}
   .rel-year-nav span:hover{color:var(--ink)}
-  .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
+  .rel-month-grid{display:grid;grid-template-columns:var(--cols-4);gap:var(--sp-2)}
   .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
   .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:var(--r);
     font-size:var(--text-12h);font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
@@ -144,8 +144,8 @@
     color:var(--ink-soft);display:grid;place-items:center;cursor:pointer;flex:none}
   .heat-nav-btn svg{width:15px;height:15px}
   .heat-nav-label{font-size:var(--text-12);font-weight:600;color:var(--ink-soft);min-width:64px;text-align:center;white-space:nowrap}
-  .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--sp-1);margin-top:14px}
-  .heat-grid-mes{grid-template-columns:repeat(4,1fr)}
+  .heat-grid{display:grid;grid-template-columns:var(--cols-7);gap:var(--sp-1);margin-top:14px}
+  .heat-grid-mes{grid-template-columns:var(--cols-4)}
   .heat-grid-ano{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
   .heat-grid-semana{grid-template-columns:repeat(auto-fill,minmax(28px,1fr));gap:3px}
   .heat-cell{aspect-ratio:1;border-radius:3px;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
@@ -172,7 +172,7 @@
   /* Card Fluxo — duas colunas independentes: ranking de categorias de
      Receitas (esquerda) e de Despesas (direita), cada uma ordenada da
      maior pra menor. Nunca compartilham espaço/linha entre si. */
-  .fluxo-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:0}
+  .fluxo-cols{display:grid;grid-template-columns:var(--cols-2);column-gap:0}
   .fluxo-col{min-width:0}
   .fluxo-col:first-child{border-right:1px solid var(--line-soft);padding-right:14px}
   .fluxo-col:last-child{padding-left:14px}
@@ -221,11 +221,11 @@
      borda física do card, sem sobra vazia nas pontas; o texto de cada
      célula compensa com padding extra no lado externo, ficando na MESMA
      posição visual de antes (só a linha bleed, o conteúdo não se move). */
-  .rel-split-subhead{display:grid;grid-template-columns:1fr 1fr;column-gap:0;margin:0 -16px;width:calc(100% + 32px)}
+  .rel-split-subhead{display:grid;grid-template-columns:var(--cols-2);column-gap:0;margin:0 -16px;width:calc(100% + 32px)}
   .rel-split-subhead-cell{font-size:var(--text-10h);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:10px 14px 8px;border-bottom:1px solid var(--line-soft)}
   .rel-split-subhead-cell.l{border-right:1px solid var(--line-soft);text-align:left;padding-left:30px}
   .rel-split-subhead-cell.r{text-align:right;padding-right:30px}
-  .rel-split{display:grid;grid-template-columns:1fr 1fr;column-gap:0;row-gap:0;margin:0 -16px;width:calc(100% + 32px)}
+  .rel-split{display:grid;grid-template-columns:var(--cols-2);column-gap:0;row-gap:0;margin:0 -16px;width:calc(100% + 32px)}
   .rel-split-cell{min-height:52px;padding:9px 14px;border-bottom:1px solid var(--line-soft);
     display:flex;flex-direction:column;justify-content:center;min-width:0}
   .rel-split-cell.l{border-right:1px solid var(--line-soft);align-items:flex-start;text-align:left;padding-left:30px}

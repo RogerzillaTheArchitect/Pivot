@@ -75,7 +75,7 @@
   .bib-toolbar{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}
 
   /* ===== filtros: grid rígido de 4 colunas, mesmo vidro do Header ===== */
-  .bib-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+  .bib-filters{display:grid;grid-template-columns:var(--cols-4);gap:7px}
   .bib-filter{height:36px;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-1);padding:0 9px;border-radius:var(--r);
     color:var(--bib-ink-soft);font-size:var(--text-11);font-weight:500;cursor:pointer;font-family:inherit;transition:color .15s}
   .bib-filter>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -90,7 +90,7 @@
   /* 2x2 em vez de 4 colunas na mesma linha — a 1fr/4 não tinha espaço pra
      palavras inteiras como "Recomendados"/"Comunidade", que ficavam cortadas
      em reticências. */
-  .bib-seals{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+  .bib-seals{display:grid;grid-template-columns:var(--cols-2);gap:6px}
   .bib-seal{height:36px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:0 var(--sp-2);border-radius:var(--r);
     cursor:pointer;font-family:inherit;font-size:var(--text-2xs);font-weight:600;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
@@ -228,7 +228,7 @@
   .sheet-primary svg{width:20px;height:20px}
   .sheet-primary .t{font-size:var(--text-15h);font-weight:600}
   .sheet-primary .s{font-size:var(--text-12h);opacity:.65}
-  .sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .sheet-grid{display:grid;grid-template-columns:var(--cols-2);gap:9px}
   /* Mesmo vidro escuro premium dos outros cards do app (.job/.card/.btn.dark)
      — antes era um preenchimento chapado (var(--paper), sem gradiente/blur),
      o que destoava do resto da interface. */
