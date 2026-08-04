@@ -15,7 +15,7 @@
      a lado (o que lia como um texto corrido/confuso ao envolver), fica
      sempre claro qual ícone pertence a qual frase. */
   .builder-legend{display:flex;flex-direction:column;gap:10px;margin:2px 0 16px}
-  .builder-legend .bl-item{display:flex;align-items:center;gap:8px;font-size:var(--text-12h);color:var(--neutral)}
+  .builder-legend .bl-item{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-12h);color:var(--neutral)}
   .builder-legend .bl-item svg{width:15px;height:15px;opacity:.8;flex:none}
   .builder-bottom-actions{display:flex;gap:10px;margin-top:18px}
   .builder-bottom-actions .addblock{width:auto;flex:1;min-width:0;margin-top:0}
@@ -27,7 +27,7 @@
      filha direta do .block, sem ficar espremida entre essas duas colunas
      pela altura inteira do bloco (era isso que deixava uma faixa vazia
      enorme dos dois lados de cada cláusula). */
-  .block-header{display:flex;align-items:center;gap:8px}
+  .block-header{display:flex;align-items:center;gap:var(--sp-2)}
   .block.dragging{opacity:.92;transition:none;position:relative;z-index:5;box-shadow:0 10px 24px rgba(0,0,0,.35);cursor:grabbing}
   /* Flash breve ao localizar um campo dinâmico dentro do texto do contrato
      (abrirCampoDinamicoComContexto) — chama atenção sem travar a leitura. */
@@ -47,7 +47,7 @@
     background:var(--paper-2);border-radius:var(--r);padding:11px 14px;margin-bottom:14px}
   .builder-locked-notice svg{width:16px;height:16px;flex:none;color:var(--neutral)}
   .block-name{flex:1;min-width:0;cursor:pointer;
-    display:flex;align-items:center;justify-content:space-between;gap:8px}
+    display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2)}
   .block-name-main{display:flex;flex-direction:column;gap:2px;min-width:0}
   .bn-row{display:flex;align-items:center;gap:7px;min-width:0}
   .bn-row .block-type-ico{width:14px;height:14px;flex:none;background-color:var(--ink-soft)}
@@ -59,7 +59,7 @@
   .block.off .block-preview,.block.off .block-name{opacity:.45}
   /* cláusulas numeradas, separadas e com hierarquia clara */
   .clause-list{display:flex;flex-direction:column;gap:9px;width:100%}
-  .clause{display:flex;gap:8px;align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
+  .clause{display:flex;gap:var(--sp-2);align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
     border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
@@ -85,7 +85,7 @@
   .block-textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;
     font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-size:var(--text-sm);color:var(--ink);line-height:1.5;min-height:74px;resize:vertical;margin-top:2px;background:var(--paper)}
-  .block-edit-actions{display:flex;gap:8px;margin-top:8px}
+  .block-edit-actions{display:flex;gap:var(--sp-2);margin-top:8px}
   .block-edit-actions .btn{padding:7px 12px;font-size:var(--text-12h)}
   .toggle{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;
     flex:none;transition:background .2s}
@@ -101,7 +101,7 @@
   .dyn-blocklist .toggle.on{background:rgba(255,255,255,.32)}
   .dyn-blocklist .toggle.on .kn{background:var(--ink)}
   .block.off{opacity:.7}
-  .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
+  .addblock{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;padding:13px;
     border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
     font-size:var(--text-base);font-weight:500;cursor:pointer;margin-top:6px}
   .addblock svg{width:16px;height:16px}
@@ -114,7 +114,7 @@
      uma única linha (nome — valor — seta) e abre um modal ao tocar, em vez
      de inputs sempre expostos. */
   .dynf-panel{padding:2px 0 0}
-  .dynf-head-title{display:flex;align-items:center;gap:8px;font-size:var(--text-lg);font-weight:700;color:var(--ink);margin-bottom:6px}
+  .dynf-head-title{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-lg);font-weight:700;color:var(--ink);margin-bottom:6px}
   .dynf-head-title svg{width:19px;height:19px;color:var(--ink-soft);flex:none}
   .dynf-hint{font-size:var(--text-12h);color:var(--neutral);line-height:1.5;margin:0 0 12px}
   .dynf-summary{font-size:var(--text-12h);color:var(--ink-soft);font-weight:600;margin-bottom:20px}
@@ -126,7 +126,7 @@
   .dynf-group.collapsed .dynf-group-chev{transform:rotate(-90deg)}
   .dynf-group-body{border-top:1px solid var(--line)}
   .dynf-group.collapsed .dynf-group-body{display:none}
-  .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:12px;padding:13px 14px;border-top:1px solid var(--line-soft)}
+  .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:var(--sp-3);padding:13px 14px;border-top:1px solid var(--line-soft)}
   .dynf-row:first-child,.dynf-row-ro:first-child{border-top:none}
   .dynf-row{cursor:pointer;transition:background .15s}
   .dynf-row:hover{background:rgba(255,255,255,.03)}
@@ -144,7 +144,7 @@
   .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
-  .pick-list{display:flex;flex-direction:column;gap:8px}
+  .pick-list{display:flex;flex-direction:column;gap:var(--sp-2)}
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
     border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
   .pick-check:hover{border-color:var(--ink-soft)}
@@ -177,7 +177,7 @@
   .imp-progress-step.on .imp-progress-dot{background:var(--ink);animation:imp-pulse 1s ease-in-out infinite}
   .imp-progress-step.done .imp-progress-dot{background:var(--brand)}
   @keyframes imp-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:16px;font-size:var(--text-13h);color:var(--ink-soft);
+  .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:var(--sp-4);font-size:var(--text-13h);color:var(--ink-soft);
     line-height:1.55;margin-top:8px}
 
   /* ===== REVISÃO DE IMPORTAÇÃO =====

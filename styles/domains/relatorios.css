@@ -4,7 +4,7 @@
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
-  .rel-fin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 20px}
+  .rel-fin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2);margin:14px 0 20px}
   .rel-fin-actions .btn{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:var(--text-12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-fin-ico{width:16px;height:16px;background-color:currentColor}
 
@@ -79,7 +79,7 @@
   .rel-card-body-flush{padding-left:0;padding-right:0}
 
   /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
-  .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
+  .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-2) 0;cursor:pointer}
   .rel-op-row .l{display:flex;align-items:center;gap:10px;font-size:var(--text-12h);color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
   .rel-op-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
   .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:var(--text-md);color:var(--ink)}
@@ -107,7 +107,7 @@
      aqui esse flex vence e quebra o grid 2x2. .card.radar-card.fin-item
      (três classes) garante que o grid sempre vence, tanto nos itens
      automáticos (.fin-item sozinho) quanto nos manuais (.card.radar-card.fin-item). */
-  .fin-item,.card.radar-card.fin-item{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:3px;align-items:baseline}
+  .fin-item,.card.radar-card.fin-item{display:grid;grid-template-columns:1fr auto;column-gap:var(--sp-3);row-gap:3px;align-items:baseline}
   .fin-item-title{font-size:var(--text-13h);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:1}
   .fin-item-date{font-size:var(--text-xs);color:var(--neutral);white-space:nowrap;text-align:right;grid-column:2;grid-row:1}
   .fin-item-sub{font-size:var(--text-xs);color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:2}
@@ -121,7 +121,7 @@
   .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:var(--text-base);font-weight:600;color:var(--ink)}
   .rel-year-nav span{cursor:pointer;color:var(--ink-soft);width:24px;text-align:center}
   .rel-year-nav span:hover{color:var(--ink)}
-  .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--sp-2)}
   .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
   .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:var(--r);
     font-size:var(--text-12h);font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
@@ -138,13 +138,13 @@
     color:var(--ink);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer}
   .heat-metric-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .heat-metric-btn .dd-arrow{width:12px;height:12px;flex:none;opacity:.6}
-  .heat-toolbar{display:flex;align-items:center;gap:8px;margin-top:12px}
+  .heat-toolbar{display:flex;align-items:center;gap:var(--sp-2);margin-top:12px}
   .heat-nav{display:flex;align-items:center;gap:6px;flex:none}
   .heat-nav-btn{width:30px;height:30px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper-2);
     color:var(--ink-soft);display:grid;place-items:center;cursor:pointer;flex:none}
   .heat-nav-btn svg{width:15px;height:15px}
   .heat-nav-label{font-size:var(--text-12);font-weight:600;color:var(--ink-soft);min-width:64px;text-align:center;white-space:nowrap}
-  .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
+  .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--sp-1);margin-top:14px}
   .heat-grid-mes{grid-template-columns:repeat(4,1fr)}
   .heat-grid-ano{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
   .heat-grid-semana{grid-template-columns:repeat(auto-fill,minmax(28px,1fr));gap:3px}
@@ -154,7 +154,7 @@
   .heat-grid-semana .heat-cell{font-size:8px}
   .heat-grid-empty{margin-top:14px}
   .heat-empty{font-size:var(--text-12h);color:var(--neutral);padding:14px 0;text-align:center}
-  .heat-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:var(--text-11);color:var(--neutral)}
+  .heat-legend{display:flex;align-items:center;gap:var(--sp-2);margin-top:12px;font-size:var(--text-11);color:var(--neutral)}
   .heat-legend-bar{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(232,118,58,.9))}
   .heat-insight{font-size:var(--text-12h);color:var(--ink-soft);margin-top:10px;min-height:16px}
   .heat-geo-note{font-size:var(--text-xs);color:var(--neutral);margin-top:10px;line-height:1.4}
@@ -197,7 +197,7 @@
   .rel-subhead{font-size:var(--text-11);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
   .rel-subhead-sub{font-size:var(--text-11);font-weight:500;color:var(--neutral);margin-bottom:8px}
 
-  .rel-indic-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line-soft)}
+  .rel-indic-row{display:flex;align-items:center;justify-content:space-between;padding:var(--sp-3) 0;border-bottom:1px solid var(--line-soft)}
   .rel-indic-row:last-child{border-bottom:0}
   .rel-indic-label{font-size:var(--text-sm);color:var(--ink-soft)}
   .rel-indic-val{font-family:var(--font-numeric);font-size:var(--text-sm);font-weight:600;color:var(--ink)}
@@ -232,7 +232,7 @@
   .rel-split-cell.r{align-items:flex-end;text-align:right;padding-right:30px}
   .rel-split-cell:nth-last-child(-n+2){border-bottom:0}
   .rel-split-cell.empty .rel-mrow-name{color:var(--neutral)}
-  .rel-split-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
+  .rel-split-inner{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);width:100%}
   .rel-mrow-side-txt{min-width:0}
   .rel-mrow-name{font-size:var(--text-12);color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-mrow-value{font-family:var(--font-numeric);font-size:var(--text-12h);font-weight:600;color:var(--ink);max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -244,7 +244,7 @@
      o percentual pra perto do centro do card (a linha ocupa a célula
      inteira), deixando uma área livre entre as duas colunas de texto (ver
      Evolução Mensal). O valor permanece alinhado à borda externa da célula. */
-  .rel-mrow-line{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-top:3px;width:100%}
+  .rel-mrow-line{display:flex;align-items:baseline;justify-content:space-between;gap:var(--sp-2);margin-top:3px;width:100%}
   /* barra do card Fluxo — mesmo .track/.segment do card Operacional
      (dashboard.css), só recolorida: verde pro lado Recebidos, laranja
      nativo (sem override) pro lado Despesas. */
