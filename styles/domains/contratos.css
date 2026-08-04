@@ -8,14 +8,14 @@
   .builder-tabs{margin-bottom:18px}
   .builder-tabs button{display:flex;align-items:center;justify-content:center;gap:7px}
   .builder-tabs button svg{width:15px;height:15px;flex:none}
-  .tab-badge{font-size:10.5px;font-weight:700;border-radius:var(--r);padding:1px 6px;background:rgba(255,255,255,.14);color:var(--ink)}
+  .tab-badge{font-size:var(--text-10h);font-weight:700;border-radius:var(--r);padding:1px 6px;background:rgba(255,255,255,.14);color:var(--ink)}
   .builder-tabs button.on .tab-badge{background:rgba(0,0,0,.14);color:#15170F}
-  .builder-hint{font-size:13px;color:var(--neutral);margin-bottom:18px}
+  .builder-hint{font-size:var(--text-sm);color:var(--neutral);margin-bottom:18px}
   /* Cada dica numa linha própria — em vez de deixar quebrar livremente lado
      a lado (o que lia como um texto corrido/confuso ao envolver), fica
      sempre claro qual ícone pertence a qual frase. */
   .builder-legend{display:flex;flex-direction:column;gap:10px;margin:2px 0 16px}
-  .builder-legend .bl-item{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--neutral)}
+  .builder-legend .bl-item{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-12h);color:var(--neutral)}
   .builder-legend .bl-item svg{width:15px;height:15px;opacity:.8;flex:none}
   .builder-bottom-actions{display:flex;gap:10px;margin-top:18px}
   .builder-bottom-actions .addblock{width:auto;flex:1;min-width:0;margin-top:0}
@@ -27,7 +27,7 @@
      filha direta do .block, sem ficar espremida entre essas duas colunas
      pela altura inteira do bloco (era isso que deixava uma faixa vazia
      enorme dos dois lados de cada cláusula). */
-  .block-header{display:flex;align-items:center;gap:8px}
+  .block-header{display:flex;align-items:center;gap:var(--sp-2)}
   .block.dragging{opacity:.92;transition:none;position:relative;z-index:5;box-shadow:0 10px 24px rgba(0,0,0,.35);cursor:grabbing}
   /* Flash breve ao localizar um campo dinâmico dentro do texto do contrato
      (abrirCampoDinamicoComContexto) — chama atenção sem travar a leitura. */
@@ -38,39 +38,39 @@
     100%{box-shadow:none}
   }
   .handle{cursor:grab;color:var(--neutral);touch-action:none;flex:none;padding:2px;display:flex;margin-top:2px}
-  .handle svg{width:16px;height:16px}
+  .handle svg{width:var(--ico-md);height:var(--ico-md)}
   .handle:active{cursor:grabbing}
   .handle-spacer{width:24px;flex:none}
   .block.locked{background:var(--paper-2)}
   .toggle.disabled{cursor:default;opacity:.55}
-  .builder-locked-notice{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--ink-soft);
+  .builder-locked-notice{display:flex;align-items:center;gap:9px;font-size:var(--text-12h);color:var(--ink-soft);
     background:var(--paper-2);border-radius:var(--r);padding:11px 14px;margin-bottom:14px}
-  .builder-locked-notice svg{width:16px;height:16px;flex:none;color:var(--neutral)}
+  .builder-locked-notice svg{width:var(--ico-md);height:var(--ico-md);flex:none;color:var(--neutral)}
   .block-name{flex:1;min-width:0;cursor:pointer;
-    display:flex;align-items:center;justify-content:space-between;gap:8px}
+    display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2)}
   .block-name-main{display:flex;flex-direction:column;gap:2px;min-width:0}
   .bn-row{display:flex;align-items:center;gap:7px;min-width:0}
-  .bn-row .block-type-ico{width:14px;height:14px;flex:none;background-color:var(--ink-soft)}
-  .bn-row .bn-title{font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .block-subtitle{font-size:11.5px;font-weight:400;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .block-chev{width:14px;height:14px;flex:none;color:var(--neutral);transition:transform .2s}
+  .bn-row .block-type-ico{width:var(--ico-sm);height:var(--ico-sm);flex:none;background-color:var(--ink-soft)}
+  .bn-row .bn-title{font-size:var(--text-base);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .block-subtitle{font-size:var(--text-xs);font-weight:400;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .block-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);transition:transform .2s}
   .block-preview{margin-top:12px}
   .block-preview.collapsed{display:none}
   .block.off .block-preview,.block.off .block-name{opacity:.45}
   /* cláusulas numeradas, separadas e com hierarquia clara */
   .clause-list{display:flex;flex-direction:column;gap:9px;width:100%}
-  .clause{display:flex;gap:8px;align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
+  .clause{display:flex;gap:var(--sp-2);align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
     border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
   .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
-    font-size:10px;font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
-  .clause-txt{flex:1;min-width:0;font-size:13px;color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
+    font-size:var(--text-2xs);font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
+  .clause-txt{flex:1;min-width:0;font-size:var(--text-sm);color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   /* Menu de três pontos por cláusula (editar/duplicar/mover/excluir) */
   .clause-kebab{flex:none;border:none;background:none;color:var(--neutral);cursor:pointer;
     padding:3px;margin:-2px -4px -2px 2px;display:flex;align-items:center;border-radius:var(--r);transition:color .15s,background .15s}
   .clause-kebab:hover{color:var(--ink);background:rgba(255,255,255,.08)}
-  .clause-kebab svg{width:16px;height:16px}
+  .clause-kebab svg{width:var(--ico-md);height:var(--ico-md)}
   .pick-row.disabled{opacity:.4;cursor:default}
   /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
      só esta ocorrência ou todas as ocorrências da mesma tag no contrato. */
@@ -81,15 +81,15 @@
   .icon-sm{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper);
     display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;transition:border-color .15s,color .15s}
   .icon-sm:hover{border-color:var(--brand);color:var(--ink)}
-  .icon-sm svg{width:14px;height:14px}
+  .icon-sm svg{width:var(--ico-sm);height:var(--ico-sm)}
   .block-textarea{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:9px 11px;
     font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:13px;color:var(--ink);line-height:1.5;min-height:74px;resize:vertical;margin-top:2px;background:var(--paper)}
-  .block-edit-actions{display:flex;gap:8px;margin-top:8px}
-  .block-edit-actions .btn{padding:7px 12px;font-size:12.5px}
+    font-size:var(--text-sm);color:var(--ink);line-height:1.5;min-height:74px;resize:vertical;margin-top:2px;background:var(--paper)}
+  .block-edit-actions{display:flex;gap:var(--sp-2);margin-top:8px}
+  .block-edit-actions .btn{padding:7px 12px;font-size:var(--text-12h)}
   .toggle{width:38px;height:22px;border-radius:99px;background:var(--line);position:relative;cursor:pointer;
     flex:none;transition:background .2s}
-  .toggle .kn{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
+  .toggle .kn{width:var(--ico-lg);height:var(--ico-lg);border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;
     transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
   /* "On" escurecido/dessaturado (era var(--brand), o verde vivo de marca) —
      mesma família de acento contido usada nos outros indicadores de estado
@@ -101,10 +101,10 @@
   .dyn-blocklist .toggle.on{background:rgba(255,255,255,.32)}
   .dyn-blocklist .toggle.on .kn{background:var(--ink)}
   .block.off{opacity:.7}
-  .addblock{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;
+  .addblock{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;padding:13px;
     border:1px solid var(--line);border-radius:var(--r);background:none;color:var(--ink-soft);font-family:inherit;
-    font-size:14px;font-weight:500;cursor:pointer;margin-top:6px}
-  .addblock svg{width:16px;height:16px}
+    font-size:var(--text-base);font-weight:500;cursor:pointer;margin-top:6px}
+  .addblock svg{width:var(--ico-md);height:var(--ico-md)}
   .save-tpl{flex:none;white-space:nowrap;margin-top:2px}
 
   /* ===== ABA VARIÁVEIS (antigo painel de Campos Dinâmicos) =====
@@ -114,48 +114,48 @@
      uma única linha (nome — valor — seta) e abre um modal ao tocar, em vez
      de inputs sempre expostos. */
   .dynf-panel{padding:2px 0 0}
-  .dynf-head-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .dynf-head-title{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--text-lg);font-weight:700;color:var(--ink);margin-bottom:6px}
   .dynf-head-title svg{width:19px;height:19px;color:var(--ink-soft);flex:none}
-  .dynf-hint{font-size:12.5px;color:var(--neutral);line-height:1.5;margin:0 0 12px}
-  .dynf-summary{font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:20px}
+  .dynf-hint{font-size:var(--text-12h);color:var(--neutral);line-height:1.5;margin:0 0 12px}
+  .dynf-summary{font-size:var(--text-12h);color:var(--ink-soft);font-weight:600;margin-bottom:20px}
   .dynf-group{border:1px solid var(--line);border-radius:var(--r);background:var(--paper);margin-bottom:14px;overflow:hidden}
-  .dynf-group-head{display:flex;align-items:center;gap:9px;padding:14px 14px;cursor:pointer;font-size:14px;font-weight:600;color:var(--ink)}
-  .dynf-group-head svg:first-child{width:16px;height:16px;color:var(--ink-soft);flex:none}
-  .dynf-count{font-size:11px;font-weight:700;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
-  .dynf-group-chev{width:14px;height:14px;flex:none;color:var(--neutral);margin-left:auto;transition:transform .2s}
+  .dynf-group-head{display:flex;align-items:center;gap:9px;padding:14px 14px;cursor:pointer;font-size:var(--text-base);font-weight:600;color:var(--ink)}
+  .dynf-group-head svg:first-child{width:var(--ico-md);height:var(--ico-md);color:var(--ink-soft);flex:none}
+  .dynf-count{font-size:var(--text-11);font-weight:700;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
+  .dynf-group-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);margin-left:auto;transition:transform .2s}
   .dynf-group.collapsed .dynf-group-chev{transform:rotate(-90deg)}
   .dynf-group-body{border-top:1px solid var(--line)}
   .dynf-group.collapsed .dynf-group-body{display:none}
-  .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:12px;padding:13px 14px;border-top:1px solid var(--line-soft)}
+  .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:var(--sp-3);padding:13px 14px;border-top:1px solid var(--line-soft)}
   .dynf-row:first-child,.dynf-row-ro:first-child{border-top:none}
   .dynf-row{cursor:pointer;transition:background .15s}
   .dynf-row:hover{background:rgba(255,255,255,.03)}
-  .dynf-row .dynf-key,.dynf-row-ro .dynf-key{flex:1;min-width:0;font-size:13.5px;font-weight:500;color:var(--ink);
+  .dynf-row .dynf-key,.dynf-row-ro .dynf-key{flex:1;min-width:0;font-size:var(--text-13h);font-weight:500;color:var(--ink);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;border:none;padding:0;height:auto;min-height:0;cursor:inherit}
-  .dynf-val{flex:1;min-width:0;font-size:13.5px;color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dynf-val{flex:1;min-width:0;font-size:var(--text-13h);color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .dynf-empty{color:var(--ink-faint);font-style:italic}
-  .dynf-arrow{width:14px;height:14px;color:var(--neutral);flex:none}
+  .dynf-arrow{width:var(--ico-sm);height:var(--ico-sm);color:var(--neutral);flex:none}
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
-    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer;
     transition:border-color .15s,color .15s,background .15s}
   .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
   .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
-  .pick-list{display:flex;flex-direction:column;gap:8px}
+  .pick-list{display:flex;flex-direction:column;gap:var(--sp-2)}
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
     border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
   .pick-check:hover{border-color:var(--ink-soft)}
   .pick-check.on{border-color:var(--ink);background:rgba(255,255,255,.06)}
-  .pick-check .pc-box{flex:none;width:20px;height:20px;border-radius:var(--r);border:1.5px solid var(--line);
+  .pick-check .pc-box{flex:none;width:var(--ico-xl);height:var(--ico-xl);border-radius:var(--r);border:1.5px solid var(--line);
     display:grid;place-items:center;color:transparent;margin-top:1px}
   .pick-check .pc-box.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
   .pick-check .pc-box svg{width:13px;height:13px}
   .pick-check .pc-main{min-width:0;flex:1}
-  .pick-check .pc-nm{font-size:14px;font-weight:600;color:var(--ink)}
-  .pick-check .pc-sub{font-size:12px;color:var(--neutral);margin-top:2px;line-height:1.4}
+  .pick-check .pc-nm{font-size:var(--text-base);font-weight:600;color:var(--ink)}
+  .pick-check .pc-sub{font-size:var(--text-12);color:var(--neutral);margin-top:2px;line-height:1.4}
   .btn[disabled]{opacity:.45;pointer-events:none}
 
   /* ===== IMPORTAR ARQUIVO (Modelos → + Criar → Arquivo) ===== */
@@ -163,21 +163,21 @@
     cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:16px}
   .imp-dropzone.drag-over{border-color:var(--brand);background:var(--brand-10)}
   .imp-dropzone svg{width:30px;height:30px;color:var(--neutral);margin-bottom:10px}
-  .imp-dropzone .ti{font-size:14.5px;font-weight:600;color:var(--ink);margin-bottom:4px}
-  .imp-dropzone .si{font-size:12.5px;color:var(--neutral)}
+  .imp-dropzone .ti{font-size:var(--text-14h);font-weight:600;color:var(--ink);margin-bottom:4px}
+  .imp-dropzone .si{font-size:var(--text-12h);color:var(--neutral)}
   .imp-formats{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
-  .imp-formats span{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--ink-soft);
+  .imp-formats span{font-size:var(--text-11);font-weight:600;letter-spacing:.02em;color:var(--ink-soft);
     background:var(--paper-2);border-radius:var(--r);padding:4px 8px}
-  .imp-hint{font-size:12.5px;color:var(--neutral);line-height:1.55;margin-bottom:4px}
+  .imp-hint{font-size:var(--text-12h);color:var(--neutral);line-height:1.55;margin-bottom:4px}
   .imp-progress{padding:6px 2px}
-  .imp-progress-step{display:flex;align-items:center;gap:10px;padding:10px 2px;font-size:14px;color:var(--neutral)}
+  .imp-progress-step{display:flex;align-items:center;gap:10px;padding:10px 2px;font-size:var(--text-base);color:var(--neutral)}
   .imp-progress-step.on{color:var(--ink);font-weight:600}
   .imp-progress-step.done{color:var(--brand)}
   .imp-progress-dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none}
   .imp-progress-step.on .imp-progress-dot{background:var(--ink);animation:imp-pulse 1s ease-in-out infinite}
   .imp-progress-step.done .imp-progress-dot{background:var(--brand)}
   @keyframes imp-pulse{0%,100%{opacity:1}50%{opacity:.35}}
-  .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:16px;font-size:13.5px;color:var(--ink-soft);
+  .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:var(--sp-4);font-size:var(--text-13h);color:var(--ink-soft);
     line-height:1.55;margin-top:8px}
 
   /* ===== REVISÃO DE IMPORTAÇÃO =====
@@ -185,21 +185,21 @@
      contratos.css acima) — aqui só o que é específico da revisão: o título
      do bloco vira um input editável, e cada cláusula ganha um select de
      "mover para outro bloco" + remover, ao lado do texto. */
-  .revb-title{flex:1;min-width:0;border:none;background:none;font-size:14px;font-weight:600;color:var(--ink);
+  .revb-title{flex:1;min-width:0;border:none;background:none;font-size:var(--text-base);font-weight:600;color:var(--ink);
     font-family:inherit;padding:2px 0;cursor:text}
   .revb-title:focus{outline:none;border-bottom:1.5px solid var(--brand)}
   .clause{cursor:pointer}
   .revc-actions{display:flex;flex-direction:column;gap:5px;flex:none;align-items:center}
-  .revc-move{border:1px solid var(--line-soft);background:var(--paper);border-radius:var(--r);font-size:10.5px;
+  .revc-move{border:1px solid var(--line-soft);background:var(--paper);border-radius:var(--r);font-size:var(--text-10h);
     color:var(--ink-soft);font-family:inherit;padding:2px 3px;max-width:84px}
-  .revc-rm{color:var(--neutral);cursor:pointer;font-size:13px;padding:2px 4px}
+  .revc-rm{color:var(--neutral);cursor:pointer;font-size:var(--text-sm);padding:2px 4px}
   .revc-rm:hover{color:var(--ink)}
 
   /* ===== CALENDÁRIO ===== */
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin-bottom:18px}
-  .cal-dow{text-align:center;font-size:11px;color:var(--neutral);font-weight:600;padding-bottom:6px}
+  .cal-grid{display:grid;grid-template-columns:var(--cols-7);gap:5px;margin-bottom:18px}
+  .cal-dow{text-align:center;font-size:var(--text-11);color:var(--neutral);font-weight:600;padding-bottom:6px}
   .cal-day{aspect-ratio:1;border-radius:var(--r);border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
-    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:12.5px;color:rgba(255,255,255,.85);
+    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:var(--text-12h);color:rgba(255,255,255,.85);
     position:relative;cursor:pointer;background:rgba(124,126,129,.34);
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%)}
   .cal-day.out{opacity:.3}
@@ -210,10 +210,10 @@
   .cal-day.cal-day-sel .cd{background:var(--paper)!important}
   .cal-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;justify-content:center}
   .cd{width:5px;height:5px;border-radius:50%}
-  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:12.5px;color:var(--ink-soft)}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:var(--text-12h);color:var(--ink-soft)}
   .legend span{display:inline-flex;align-items:center;gap:6px}
   .legend .cd{width:7px;height:7px}
   .agenda-item{display:flex;align-items:center;gap:11px;padding:11px 4px;border-bottom:1px solid var(--line-soft)}
-  .agenda-day{width:34px;text-align:center;font-size:11px;color:var(--neutral);flex:none}
-  .agenda-day b{display:block;font-size:15px;color:var(--ink);font-weight:600}
+  .agenda-day{width:34px;text-align:center;font-size:var(--text-11);color:var(--neutral);flex:none}
+  .agenda-day b{display:block;font-size:var(--text-md);color:var(--ink);font-weight:600}
 
