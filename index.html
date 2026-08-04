@@ -421,23 +421,23 @@
       <span id="sb-label-pesquisar" data-t="nav.search">Pesquisar</span>
     </div>
     <div class="sb-create" onclick="openSheet()">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);background-color:currentColor"></span> <span id="sb-label-criar" data-t="nav.create">Criar</span>
+      <span class="nav-ico ico-criar"></span> <span id="sb-label-criar" data-t="nav.create">Criar</span>
     </div>
     <div class="sb-sep"></div>
     <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:widgets.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:widgets.svg)"></span> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
+      <span class="nav-ico u-ico-18v ico-trabalhos"></span> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
     </div>
     <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg)"></span> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
+      <span class="nav-ico u-ico-18v ico-arquivos"></span> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
     </div>
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg);-webkit-mask-image:url(https://api.iconify.design/griddy-icons:files-filled.svg)"></span> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
+      <span class="nav-ico u-ico-18v ico-docs"></span> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </div>
     <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/ion:stats-chart-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/ion:stats-chart-sharp.svg)"></span> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
+      <span class="nav-ico u-ico-18v ico-relat"></span> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
     </div>
     <div class="sb-item u-relative" onclick="abrirNotificacoes()">
-      <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span> <span data-t="profile.notifications">Notificações</span>
+      <span class="nav-ico u-ico-18v ico-notif"></span> <span data-t="profile.notifications">Notificações</span>
       <span class="notif-dot u-hidden"></span>
     </div>
     <div class="sb-item u-hidden" id="sb-item-colaboracoes" data-nav="colaboracoes" onclick="go('colaboracoes')">
@@ -461,7 +461,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações">
-          <span class="nav-ico" style="width:22px;height:22px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span>
+          <span class="nav-ico u-ico-22 ico-notif"></span>
           <span class="notif-count u-hidden" id="notif-count"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
@@ -543,37 +543,37 @@
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
             <div class="track" id="opm-horas-track"></div>
             <div class="value-end" id="opm-horas-end"></div>
           </section>
           <section class="metric" id="opm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-receita"></span>
             <div class="label" data-t="home.pending">Pendências</div>
             <div class="track" id="opm-pendencias-track"></div>
             <div class="value-end" id="opm-pendencias-end"></div>
           </section>
           <section class="metric" id="opm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-despesa"></span>
             <div class="label" data-t="home.demands">Demandas</div>
             <div class="track" id="opm-demandas-track"></div>
             <div class="value-end" id="opm-demandas-end"></div>
           </section>
           <section class="metric" id="opm-fechados" onclick="abrirRelatorios('operacional')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-handshake"></span>
             <div class="label" data-t="home.closed">Fechados</div>
             <div class="track" id="opm-fechados-track"></div>
             <div class="value-end" id="opm-fechados-end"></div>
           </section>
           <section class="metric" id="opm-executados" onclick="go('historico')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-contrato"></span>
             <div class="label" data-t="home.executed">Executados</div>
             <div class="track" id="opm-executados-track"></div>
             <div class="value-end" id="opm-executados-end"></div>
           </section>
           <section class="metric" id="opm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/gridicons:flag.svg);-webkit-mask-image:url(https://api.iconify.design/gridicons:flag.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-flag"></span>
             <div class="label" data-t="home.completedTile">Concluídos</div>
             <div class="track" id="opm-concluidos-track"></div>
             <div class="value-end" id="opm-concluidos-end"></div>
@@ -621,9 +621,9 @@
              "Todos" é o estado padrão (calFiltroAtivo já começa como 'todos',
              nenhuma lógica nova em filterJobs precisa mudar). -->
         <div class="filter-row filter-row-even u-mt-22">
-          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg)"></span><span data-t="jobs.filter.client">Pendências</span></div>
-          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg)"></span><span data-t="jobs.filter.mine">Demandas</span></div>
-          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/ic:outline-history.svg);-webkit-mask-image:url(https://api.iconify.design/ic:outline-history.svg)"></span><span data-t="jobs.filter.history">Histórico</span></div>
+          <div class="chip chip-ic" data-key="cliente" onclick="filterJobs(this,'cliente')"><span class="chip-ic-mask ico-receita"></span><span data-t="jobs.filter.client">Pendências</span></div>
+          <div class="chip chip-ic" data-key="meucargo" onclick="filterJobs(this,'meucargo')"><span class="chip-ic-mask ico-despesa"></span><span data-t="jobs.filter.mine">Demandas</span></div>
+          <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><span class="chip-ic-mask ico-historico"></span><span data-t="jobs.filter.history">Histórico</span></div>
         </div>
 
         <div class="empty u-hidden u-p-46-16" id="jobsEmpty">
@@ -798,7 +798,7 @@
         <div class="page-head">
           <div class="page-title" data-t="profile.contacts">Contatos</div>
         </div>
-        <div class="segmented" style="margin-bottom:16px;display:flex;gap:8px">
+        <div class="segmented u-mb-16 u-flex-g8">
           <button class="on u-flex-1" id="ct-tab-clientes" onclick="mudarSubContatos('clientes')"><span data-t="contacts.clients">Clientes</span></button>
           <button class="u-flex-1" id="ct-tab-colaboradores" onclick="mudarSubContatos('colaboradores')"><span data-t="contacts.collaborators">Colaboradores</span></button>
           <button onclick="abrirNovoContato()" style="flex:none;width:38px;height:100%;display:flex;align-items:center;justify-content:center;border-left:1px solid var(--line)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -842,15 +842,15 @@
         <div class="plist">
           <div class="prow" onclick="infoMinhaConta()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" id="lbl-minha-conta" data-t="profile.myAccount">Conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('equipa')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" id="lbl-organizacao" data-t="profile.organization">Organização</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoServicos()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/formkit:group.svg);-webkit-mask-image:url(https://api.iconify.design/formkit:group.svg)"></span><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoMetodosPagamento()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/ri:money-dollar-circle-fill.svg);-webkit-mask-image:url(https://api.iconify.design/ri:money-dollar-circle-fill.svg)"></span><div class="t" data-t="profile.paymentMethods">Formas de recebimento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoServicos()"><span class="nav-ico u-ico-18 ico-equipa"></span><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoMetodosPagamento()"><span class="nav-ico u-ico-18 ico-cobr"></span><div class="t" data-t="profile.paymentMethods">Formas de recebimento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="go('contatos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoPlano()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg)"></span><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoAssinatura()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols-light:signature.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:signature.svg)"></span><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoNotificacoes()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoSincronizacaoCalendario()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span><div class="t" data-t="settings.calendarSync">Sincronização de Calendário</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoPlano()"><span class="nav-ico u-ico-18 ico-servicos"></span><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoAssinatura()"><span class="nav-ico u-ico-18 ico-assinat"></span><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoNotificacoes()"><span class="nav-ico u-ico-18 ico-notif"></span><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoSincronizacaoCalendario()"><span class="nav-ico u-ico-18 ico-calendar"></span><div class="t" data-t="settings.calendarSync">Sincronização de Calendário</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoConfiguracoes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><div class="t" id="lbl-configuracoes" data-t="profile.settings">Configurações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
-          <div class="prow" onclick="infoAjuda()"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/mdi:help-circle.svg);-webkit-mask-image:url(https://api.iconify.design/mdi:help-circle.svg)"></span><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+          <div class="prow" onclick="infoAjuda()"><span class="nav-ico u-ico-18 ico-ajuda"></span><div class="t" id="lbl-ajuda" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoPrivacidade()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="t" id="lbl-privacidade" data-t="profile.privacy">Privacidade</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
           <div class="prow" onclick="infoSobre()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div class="t" id="lbl-sobre" data-t="profile.about">Sobre</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
         </div>
@@ -939,10 +939,10 @@
         <!-- 4 botões de acesso às listas completas (add/editar/excluir),
              sem gráfico nenhum nessas telas — só o essencial de navegação. -->
         <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/fluent:target-arrow-16-regular.svg);-webkit-mask-image:url(https://api.iconify.design/fluent:target-arrow-16-regular.svg)"></span><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/game-icons:piggy-bank.svg);-webkit-mask-image:url(https://api.iconify.design/game-icons:piggy-bank.svg)"></span><span data-t="reports.finBtn.limites">Limites</span></button>
-          <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg)"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
-          <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico" style="mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg)"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
+          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico ico-meta"></span><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico ico-reserva"></span><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico ico-entrada"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico ico-saida"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
 
         <!-- Card: Fluxo — lista simples dos lançamentos mais recentes do
@@ -963,39 +963,39 @@
              recalculados pro período selecionado em Relatórios em vez do
              mês corrente fixo. Nenhuma classe/estilo novo. -->
         <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card ops-card" style="margin-top:0;border-radius:0 0 var(--r) var(--r)">
+        <div class="card ops-card rel-ops-card-sub">
           <section class="metric" id="ropm-horas">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
             <div class="track" id="ropm-horas-track"></div>
             <div class="value-end" id="ropm-horas-end"></div>
           </section>
           <section class="metric" id="ropm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-receita"></span>
             <div class="label" data-t="home.pending">Pendências</div>
             <div class="track" id="ropm-pendencias-track"></div>
             <div class="value-end" id="ropm-pendencias-end"></div>
           </section>
           <section class="metric" id="ropm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-despesa"></span>
             <div class="label" data-t="home.demands">Demandas</div>
             <div class="track" id="ropm-demandas-track"></div>
             <div class="value-end" id="ropm-demandas-end"></div>
           </section>
           <section class="metric" id="ropm-fechados">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-handshake"></span>
             <div class="label" data-t="home.closed">Fechados</div>
             <div class="track" id="ropm-fechados-track"></div>
             <div class="value-end" id="ropm-fechados-end"></div>
           </section>
           <section class="metric" id="ropm-executados" onclick="go('historico')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-contrato"></span>
             <div class="label" data-t="home.executed">Executados</div>
             <div class="track" id="ropm-executados-track"></div>
             <div class="value-end" id="ropm-executados-end"></div>
           </section>
           <section class="metric" id="ropm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <span class="icon" style="display:inline-block;background-color:currentColor;mask-image:url(https://api.iconify.design/gridicons:flag.svg);-webkit-mask-image:url(https://api.iconify.design/gridicons:flag.svg);mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center"></span>
+            <span class="icon u-ico-mask-base ico-flag"></span>
             <div class="label" data-t="home.completedTile">Concluídos</div>
             <div class="track" id="ropm-concluidos-track"></div>
             <div class="value-end" id="ropm-concluidos-end"></div>
@@ -1059,7 +1059,7 @@
         <div class="page-title" style="font-size:25px" data-t="profile.organization">Organização</div>
 
         <div class="org-head">
-          <div class="p-avatar" id="org-avatar-preview" style="width:76px;height:76px;font-size:28px">?</div>
+          <div class="p-avatar" id="org-avatar-preview">?</div>
           <div class="org-head-info">
             <div class="org-nome" id="org-nome-display">—</div>
             <div class="org-categoria" id="org-categoria-display"></div>
@@ -1131,10 +1131,10 @@
       <!-- HOME — grade de opções de criação -->
       <div class="panel show" data-panel="home">
         <div class="sheet-grid">
-          <div class="sheet-item" onclick="pushPanel('trabalho')"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg)"></span><span data-t="sheet.job">Trabalho</span></div>
-          <div class="sheet-item" onclick="pushPanel('tarefa')"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span><span data-t="sheet.task">Tarefa</span></div>
-          <div class="sheet-item" onclick="pushPanel('receita')"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-receive-circle.svg)"></span><span data-t="sheet.income">Receita</span></div>
-          <div class="sheet-item" onclick="pushPanel('despesa')"><span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg);-webkit-mask-image:url(https://api.iconify.design/hugeicons:money-send-circle.svg)"></span><span data-t="sheet.expense">Despesa</span></div>
+          <div class="sheet-item" onclick="pushPanel('trabalho')"><span class="nav-ico ico-arquivos"></span><span data-t="sheet.job">Trabalho</span></div>
+          <div class="sheet-item" onclick="pushPanel('tarefa')"><span class="nav-ico ico-contrato"></span><span data-t="sheet.task">Tarefa</span></div>
+          <div class="sheet-item" onclick="pushPanel('receita')"><span class="nav-ico ico-entrada"></span><span data-t="sheet.income">Receita</span></div>
+          <div class="sheet-item" onclick="pushPanel('despesa')"><span class="nav-ico ico-saida"></span><span data-t="sheet.expense">Despesa</span></div>
         </div>
       </div>
 
@@ -1232,11 +1232,11 @@
           </div>
           <div id="tw-equipa-wrap">
             <p class="plabel" style="margin:0 0 3px" data-t="wizard.responsibles">Responsáveis pelo trabalho</p>
-            <p style="font-size:12px;color:var(--neutral);margin:0 0 10px" data-t="wizard.responsiblesHint">Adicione quem participa neste trabalho. Cada pessoa só vê este trabalho.</p>
+            <p class="u-xs-nd u-m-010" data-t="wizard.responsiblesHint">Adicione quem participa neste trabalho. Cada pessoa só vê este trabalho.</p>
             <div id="tw-colab-externo-status"></div>
             <button class="btn ghost u-w-full u-mt-8" onclick="abrirColaboradorExternoNoWizard()"><span data-t="wizard.addCollaborator">+ Adicionar colaborador</span></button>
           </div>
-          <button class="btn primary" style="width:100%;margin-top:18px" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
+          <button class="btn primary u-w-full u-mt-18" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- ETAPA 3 — Portal do Cliente -->
@@ -1346,7 +1346,7 @@
       <div class="panel" data-panel="contrato-usar">
         <div class="field"><input id="usar-modelo-busca" oninput="renderListaUsarModelo()" placeholder="Procurar nos teus modelos" data-t-placeholder="wizard.searchTemplates"></div>
         <div id="usar-modelo-lista"></div>
-        <p style="font-size:13px;color:var(--neutral);margin-top:10px">Sem o modelo certo? <span class="inline-link" onclick="pushPanel('comunidade-contratos')"><span data-t="explore.browseLibrary">Explorar Modelos →</span></span></p>
+        <p class="u-label-nd u-mt-10">Sem o modelo certo? <span class="inline-link" onclick="pushPanel('comunidade-contratos')"><span data-t="explore.browseLibrary">Explorar Modelos →</span></span></p>
       </div>
 
       <div class="panel" data-panel="comunidade-contratos">
@@ -1424,8 +1424,8 @@
            (idem + itens) são só dois modos do mesmo formulário. -->
       <div class="panel" data-panel="tarefa">
         <div class="segmented">
-          <button class="on" onclick="setTarefaTipo(this,'simples')"><span class="nav-ico" style="width:15px;height:15px;display:inline-block;vertical-align:-3px;margin-right:5px;mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg)"></span><span data-t="field.tasksSimple">Simples</span></button>
-          <button onclick="setTarefaTipo(this,'checklist')"><span class="nav-ico" style="width:15px;height:15px;display:inline-block;vertical-align:-3px;margin-right:5px;mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg)"></span><span data-t="field.tasksChecklist">Checklist</span></button>
+          <button class="on" onclick="setTarefaTipo(this,'simples')"><span class="nav-ico u-ico-15v ico-tarefa-sim"></span><span data-t="field.tasksSimple">Simples</span></button>
+          <button onclick="setTarefaTipo(this,'checklist')"><span class="nav-ico u-ico-15v ico-tarefa-chk"></span><span data-t="field.tasksChecklist">Checklist</span></button>
         </div>
         <div id="tarefa-simples">
           <div class="field"><label data-t="field.taskTitle">Título</label><input id="ta-titulo" placeholder="O que precisa de ser feito?" data-t-placeholder="task.titlePlaceholder"></div>
@@ -1493,7 +1493,7 @@
 
       <!-- 📥 IMPORTAR -->
       <div class="panel" data-panel="importar">
-        <p style="font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:16px" data-t="import.description">Guarda um contrato antigo como referência — para consultar enquanto cria um modelo novo do seu jeito. Não interpretamos nem convertemos nada automaticamente.</p>
+        <p class="u-hint-bare u-lh-155 u-mb-16" data-t="import.description">Guarda um contrato antigo como referência — para consultar enquanto cria um modelo novo do seu jeito. Não interpretamos nem convertemos nada automaticamente.</p>
         <div class="field"><label data-t="field.name">Nome</label><input id="imp-ref-nome" placeholder="Ex: Contrato casamento 2024" data-t-placeholder="import.namePlaceholder"></div>
         <input type="file" id="imp-ref-file-input" accept="image/*,.pdf,application/pdf,.txt,text/plain" class="u-hidden" onchange="onImportRefFileSelected(this)">
         <div class="dropzone" id="imp-ref-dropzone" onclick="document.getElementById('imp-ref-file-input').click()">
@@ -1544,8 +1544,8 @@
   <div class="toast" id="toast"></div>
 
   <!-- ===== INFO SHEET — genérico (Perfil, Builder…) ===== -->
-  <div class="overlay" id="infoOverlay" style="z-index:75" onclick="closeInfo()"></div>
-  <div class="sheet" id="infoSheet" style="z-index:85;max-height:80vh">
+  <div class="overlay" id="infoOverlay" onclick="closeInfo()"></div>
+  <div class="sheet" id="infoSheet">
     <div class="sheet-grab"></div>
     <div class="sheet-header">
       <div class="sheet-back u-hidden" id="infoBackBtn" onclick="if(window.__infoBackHandler)window.__infoBackHandler();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
@@ -1787,7 +1787,7 @@
 
     if (precisaAssinar){
       html += '<div class="u-mb-18"><h4 style="margin:0 0 8px">'+escapeHtml(d.acordo.nome || (MODELOS_ACORDO[d.acordo.modelo]?t(MODELOS_ACORDO[d.acordo.modelo].nomeKey):''))+'</h4>';
-      html += '<p style="font-size:13px;color:var(--ink-soft);white-space:pre-wrap">'+escapeHtml(d.acordo.texto||'')+'</p>';
+      html += '<p class="u-hint-bare u-pre-wrap">'+escapeHtml(d.acordo.texto||'')+'</p>';
       html += '<div class="field"><label>'+t('field.name')+'</label><input id="colab-sig-nome" placeholder="Nome e apelido"></div>';
       html += '<div class="field"><label>'+t('signature.instructions')+'</label><div class="sig-pad-wrap"><canvas id="sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvas()">'+t('signature.clear')+'</span></div></div>';
       html += '<button class="btn primary u-w-full u-mt-6" onclick="assinarAcordoColabPublico()">'+t('action.save')+'</button></div>';
@@ -4880,9 +4880,9 @@
     action:'<svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-1.2 5.3 5 4.7-5 4.7-1.4-1.4L12.6 12l-3.2-3.3z"/></svg>',
     calendar:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>',
     clock:'<span class="nav-ico" style="width:13px;height:13px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>',
-    check:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
-    checkSimples:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
-    checkLista:'<span class="nav-ico rtk-check-ico" style="display:inline-block;mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);-webkit-mask-image:url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg)"></span>',
+    check:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
+    checkSimples:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
+    checkLista:'<span class="nav-ico rtk-check-ico u-ico-18 ico-contrato"></span>',
   };
   /* mesmos ícones dos botões Simples/Checklist do menu Criar > Tarefa —
      usados no card de Tarefas (Dashboard) pra marcar itens soltos (sem
@@ -11570,7 +11570,7 @@
     const msg=construirMensagemPortalCliente(job);
     openInfo(t('portal.copyAccess'), `
       <p class="u-sm-nd u-mb-8">${t('portal.editMessageHint')}</p>
-      <textarea id="portal-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
+      <textarea id="portal-msg-editavel" class="u-textarea">${escapeHtml(msg)}</textarea>
       <button class="btn dark u-w-full u-mt-10" onclick="copiarMensagemPortalEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemPortalEditada(){
@@ -11783,7 +11783,7 @@
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
         html+='<div style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div style="flex:1;min-width:0"><div style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+        html+='<div class="u-flex-min"><div style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
           '<span>'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
         const pTagClasse={done:'green',progress:'amber',pending:'gray',late:'late'}[pStatus];
         html+='<div>';
@@ -11954,7 +11954,7 @@
     const msg=construirMensagemAcessoColaborador(c, job.nome||job.typeLabel);
     openInfo(t('portal.copyAccess'), `
       <p class="u-sm-nd u-mb-8">${t('portal.editMessageHint')}</p>
-      <textarea id="colab-msg-editavel" style="width:100%;min-height:170px;font-size:13px;font-family:inherit;padding:10px;border:1px solid var(--line);border-radius:var(--r);resize:vertical">${escapeHtml(msg)}</textarea>
+      <textarea id="colab-msg-editavel" class="u-textarea">${escapeHtml(msg)}</textarea>
       <button class="btn dark u-w-full u-mt-10" onclick="copiarMensagemColaboradorEditada()">${t('action.copyLink')}</button>`);
   }
   function copiarMensagemColaboradorEditada(){
@@ -13257,7 +13257,7 @@
     const itens=jobsArquivados();
     wrap.style.display='block';
     wrap.innerHTML = itens.length ? itens.map(htmlCardArquivado).join('') :
-      '<div class="empty" style="padding:46px 16px"><div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div><h3 class="u-lg-label">'+t('jobs.archivedEmpty')+'</h3></div>';
+      '<div class="empty u-p-46-16"><div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div><h3 class="u-lg-label">'+t('jobs.archivedEmpty')+'</h3></div>';
   }
   /* ===== Classificação canónica de trabalho — fonte única usada em todo o lado ===== */
   /* Visibilidade por atribuição de equipa: Admin vê tudo; trabalhos sem
@@ -14537,7 +14537,7 @@
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
+    html+='<button class="u-w-full" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
     openInfo(it.titulo, html, undefined, 'bib-title-font');
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
@@ -15079,7 +15079,7 @@
     });
     const porReceber=Math.max(0, faturado-recebido);
     let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52,c.foto)+
-      '<div style="min-width:0;flex:1"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
+      '<div class="u-flex-min"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
       '<div class="u-sm-soft">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div>'+
       '<button class="btn dark u-flex-none plist u-mb-16 prow u-cur-default sub u-c-neutral ct-stats ct-stat v l ct-stat v l ct-stat v l plabel" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
     html+='<div>';
@@ -15508,7 +15508,7 @@
       <div class="field"><label>Email</label><input value="${escapeHtml(perfilData.email)}" id="mc-email"></div>
       <div class="field"><label>${t('profile.account.phone')}</label><input value="${escapeHtml(perfilData.telefonePessoal||'')}" id="mc-telefone"></div>
       <div class="field"><label>${t('profile.account.docId')}</label><input value="${escapeHtml(perfilData.documentoNacional||'')}" id="mc-doc"></div>
-      <button class="btn primary" style="width:100%;margin-top:2px" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
+      <button class="btn primary u-w-full u-mt-2" onclick="salvarMinhaConta()">${t('profile.account.save')}</button>
       <button class="btn soft u-w-full u-mt-8" onclick="abrirAlterarSenha()">${t('profile.account.changePassword')}</button>`);
   }
   function infoPlano(){
@@ -15525,7 +15525,7 @@
       ${linhasPlano}
       <p class="plabel" style="margin:18px 2px 9px">${t('profile.account.redeemLabel')}</p>
       <div class="u-flex-g8">
-        <div class="field" style="flex:1;margin-bottom:0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
+        <div class="field u-flex-1 u-mb-0"><input id="mc-codigo" placeholder="${t('profile.account.redeemPlaceholder')}" style="text-transform:uppercase" onkeydown="if(event.key==='Enter')resgatarCodigoPlano()"></div>
         <button class="btn soft u-flex-none" onclick="resgatarCodigoPlano()">${t('profile.account.redeemBtn')}</button>
       </div>
       <p class="plabel" style="margin:22px 2px 9px">${t('profile.plan.billingHistory')}</p>

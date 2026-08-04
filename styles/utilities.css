@@ -117,6 +117,47 @@
 .u-ico-inline-sm { width: 16px; height: 16px; vertical-align: -3px; margin-right: 6px }
 .u-ico-inline-xs { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px }
 
+/* Ícones de máscara — tamanho + display para inline contexts */
+.u-ico-18  { width: 18px; height: 18px; display: inline-block }
+.u-ico-18v { width: 18px; height: 18px; display: inline-block; vertical-align: -3px }
+.u-ico-22  { width: 22px; height: 22px }
+.u-ico-15v { width: 15px; height: 15px; display: inline-block; vertical-align: -3px; margin-right: 5px }
+
+/* Base de máscara: display + bg-color + mask-size/repeat/position (sem URL) */
+.u-ico-mask-base {
+  display: inline-block; background-color: currentColor;
+  mask-size: contain; -webkit-mask-size: contain;
+  mask-repeat: no-repeat; -webkit-mask-repeat: no-repeat;
+  mask-position: center; -webkit-mask-position: center
+}
+
+/* Classes de ícone nomeadas — apenas mask-image (URL). Compor com u-ico-* ou contexto. */
+.ico-loader    { mask-image: url(https://api.iconify.design/material-symbols:clock-loader-20.svg);           -webkit-mask-image: url(https://api.iconify.design/material-symbols:clock-loader-20.svg) }
+.ico-receita   { mask-image: url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);      -webkit-mask-image: url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg) }
+.ico-despesa   { mask-image: url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);     -webkit-mask-image: url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg) }
+.ico-handshake { mask-image: url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg);     -webkit-mask-image: url(https://api.iconify.design/material-symbols-light:handshake-sharp.svg) }
+.ico-contrato  { mask-image: url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg);          -webkit-mask-image: url(https://api.iconify.design/streamline-block:basic-ui-check-2.svg) }
+.ico-flag      { mask-image: url(https://api.iconify.design/gridicons:flag.svg);                             -webkit-mask-image: url(https://api.iconify.design/gridicons:flag.svg) }
+.ico-historico { mask-image: url(https://api.iconify.design/ic:outline-history.svg);                         -webkit-mask-image: url(https://api.iconify.design/ic:outline-history.svg) }
+.ico-meta      { mask-image: url(https://api.iconify.design/fluent:target-arrow-16-regular.svg);             -webkit-mask-image: url(https://api.iconify.design/fluent:target-arrow-16-regular.svg) }
+.ico-reserva   { mask-image: url(https://api.iconify.design/game-icons:piggy-bank.svg);                      -webkit-mask-image: url(https://api.iconify.design/game-icons:piggy-bank.svg) }
+.ico-entrada   { mask-image: url(https://api.iconify.design/hugeicons:money-receive-circle.svg);             -webkit-mask-image: url(https://api.iconify.design/hugeicons:money-receive-circle.svg) }
+.ico-saida     { mask-image: url(https://api.iconify.design/hugeicons:money-send-circle.svg);                -webkit-mask-image: url(https://api.iconify.design/hugeicons:money-send-circle.svg) }
+.ico-criar     { mask-image: url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg);     -webkit-mask-image: url(https://api.iconify.design/material-symbols:add-box-outline-sharp.svg) }
+.ico-trabalhos { mask-image: url(https://api.iconify.design/material-symbols:widgets.svg);                   -webkit-mask-image: url(https://api.iconify.design/material-symbols:widgets.svg) }
+.ico-arquivos  { mask-image: url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg);         -webkit-mask-image: url(https://api.iconify.design/material-symbols:folder-copy-sharp.svg) }
+.ico-docs      { mask-image: url(https://api.iconify.design/griddy-icons:files-filled.svg);                  -webkit-mask-image: url(https://api.iconify.design/griddy-icons:files-filled.svg) }
+.ico-relat     { mask-image: url(https://api.iconify.design/ion:stats-chart-sharp.svg);                      -webkit-mask-image: url(https://api.iconify.design/ion:stats-chart-sharp.svg) }
+.ico-notif     { mask-image: url(https://api.iconify.design/material-symbols:notifications-outline.svg);     -webkit-mask-image: url(https://api.iconify.design/material-symbols:notifications-outline.svg) }
+.ico-equipa    { mask-image: url(https://api.iconify.design/formkit:group.svg);                              -webkit-mask-image: url(https://api.iconify.design/formkit:group.svg) }
+.ico-cobr      { mask-image: url(https://api.iconify.design/ri:money-dollar-circle-fill.svg);                -webkit-mask-image: url(https://api.iconify.design/ri:money-dollar-circle-fill.svg) }
+.ico-servicos  { mask-image: url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg);     -webkit-mask-image: url(https://api.iconify.design/material-symbols-light:bookmark-stacks.svg) }
+.ico-assinat   { mask-image: url(https://api.iconify.design/material-symbols-light:signature.svg);           -webkit-mask-image: url(https://api.iconify.design/material-symbols-light:signature.svg) }
+.ico-calendar  { mask-image: url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);      -webkit-mask-image: url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg) }
+.ico-ajuda     { mask-image: url(https://api.iconify.design/mdi:help-circle.svg);                            -webkit-mask-image: url(https://api.iconify.design/mdi:help-circle.svg) }
+.ico-tarefa-sim { mask-image: url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg);  -webkit-mask-image: url(https://api.iconify.design/material-symbols:check-box-outline-sharp.svg) }
+.ico-tarefa-chk { mask-image: url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg); -webkit-mask-image: url(https://api.iconify.design/material-symbols:list-alt-check-outline-sharp.svg) }
+
 /* Botões quadrados */
 .u-sq-24 { width: 24px; height: 24px }
 .u-sq-28 { width: 28px; height: 28px; padding: 0; font-weight: 700 }
@@ -138,3 +179,6 @@
 
 /* --- Margin extra ---------------------------------------------------------- */
 .u-m-4-0-6 { margin: 4px 0 6px }
+
+/* --- Textarea padrão (form genérico de notes/desc) ------------------------- */
+.u-textarea { width: 100%; min-height: 170px; font-size: var(--text-sm); font-family: inherit; padding: 10px; border: 1px solid var(--line); border-radius: var(--r); resize: vertical }
