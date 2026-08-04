@@ -1,0 +1,143 @@
+/* ==========================================================================
+   Pivot — Utility Classes
+   Geradas a partir de padrões de style= inline repetidos no index.html.
+   Prefixo `u-` para distinguir de classes de componente.
+   ========================================================================== */
+
+/* --- Layout ---------------------------------------------------------------- */
+.u-w-full    { width: 100% }
+.u-flex-1    { flex: 1 }
+.u-flex-none { flex: none }
+.u-flex-min  { flex: 1; min-width: 0 }
+.u-min-0     { min-width: 0 }
+.u-relative  { position: relative }
+.u-block     { display: block }
+
+/* Flex rows reutilizáveis */
+.u-row      { display: flex; align-items: center; gap: var(--sp-2); flex: none }
+.u-row-full { display: flex; align-items: center; gap: 11px; flex: 1; min-width: 0 }
+.u-flex-g8  { display: flex; gap: var(--sp-2) }
+.u-row-link    { display: flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px; font-size: var(--text-sm) }
+.u-row-link-sm { display: flex; align-items: center; justify-content: center; text-decoration: none; gap: 6px; font-size: var(--text-12h) }
+
+/* --- Cursor ---------------------------------------------------------------- */
+.u-cur-default { cursor: default }
+.u-cur-pointer { cursor: pointer }
+
+/* --- Margin-top ------------------------------------------------------------ */
+.u-mt-2  { margin-top: 2px }
+.u-mt-6  { margin-top: 6px }
+.u-mt-8  { margin-top: var(--sp-2) }
+.u-mt-10 { margin-top: 10px }
+.u-mt-12 { margin-top: var(--sp-3) }
+.u-mt-14 { margin-top: 14px }
+.u-mt-16 { margin-top: var(--sp-4) }
+.u-mt-18 { margin-top: 18px }
+.u-mt-22 { margin-top: 22px }
+.u-mt-n6 { margin-top: -6px }
+
+/* --- Margin-bottom --------------------------------------------------------- */
+.u-mb-0  { margin-bottom: 0 }
+.u-mb-4  { margin-bottom: var(--sp-1) }
+.u-mb-6  { margin-bottom: 6px }
+.u-mb-8  { margin-bottom: var(--sp-2) }
+.u-mb-9  { margin-bottom: 9px }
+.u-mb-10 { margin-bottom: 10px }
+.u-mb-12 { margin-bottom: var(--sp-3) }
+.u-mb-14 { margin-bottom: 14px }
+.u-mb-16 { margin-bottom: var(--sp-4) }
+.u-mb-18 { margin-bottom: 18px }
+
+/* --- Margin shorthand ------------------------------------------------------ */
+.u-m-0        { margin: 0 }
+.u-m-006      { margin: 0 0 6px }
+.u-m-009      { margin: 0 0 9px }
+.u-m-010      { margin: 0 0 10px }
+.u-m-014      { margin: 0 0 14px }
+.u-m-016      { margin: 0 0 16px }
+.u-m-14-2-9   { margin: 14px 2px 9px }
+.u-m-16-2-6   { margin: 16px 2px 6px }
+.u-m-18-2-8   { margin: 18px 2px 8px }
+.u-m-n6-2-14  { margin: -6px 2px 14px }
+.u-m-auto-n34 { margin: 0 auto -34px }
+
+/* --- Padding --------------------------------------------------------------- */
+.u-p-4-2  { padding: 4px 2px }
+.u-p-6-2  { padding: 6px 2px }
+.u-p-8-2  { padding: 8px 2px }
+.u-p-802  { padding: 8px 0 2px }
+.u-p-10-2 { padding: 10px 2px }
+.u-p-12-2 { padding: 12px 2px }
+
+/* --- Color ----------------------------------------------------------------- */
+.u-c-neutral { color: var(--neutral) }
+.u-c-soft    { color: var(--ink-soft) }
+.u-c-ink     { color: var(--ink) }
+.u-c-late    { color: var(--late) }
+.u-c-green   { color: var(--c-text-green); font-weight: 600; font-size: var(--text-sm) }
+
+/* --- Font weight ----------------------------------------------------------- */
+.u-fw-normal { font-weight: 400 }
+
+/* --- Typography — tamanhos simples ---------------------------------------- */
+.u-label    { font-size: var(--text-sm) }       /* 13px */
+.u-sm       { font-size: var(--text-12h) }      /* 12.5px */
+.u-xs-label { font-size: var(--text-11) }       /* 11px */
+.u-lg-label { font-size: var(--text-xl) }       /* 19px */
+
+/* Modificadores compostos reutilizáveis */
+.u-op-75  { opacity: .75 }
+.u-lh-155 { line-height: 1.55 }
+.u-lh-16  { line-height: 1.6 }
+.u-pre-wrap  { white-space: pre-wrap }
+.u-text-center { text-align: center }
+
+/* --- Typography — texto com cor ------------------------------------------- */
+.u-label-nd   { font-size: var(--text-sm);  color: var(--neutral) }
+.u-label-soft { font-size: var(--text-sm);  color: var(--ink-soft) }
+.u-sm-nd      { font-size: var(--text-12h); color: var(--neutral) }
+.u-sm-soft    { font-size: var(--text-12h); color: var(--ink-soft) }
+.u-xs-nd      { font-size: var(--text-12);  color: var(--neutral) }   /* 12px */
+
+/* Hint: texto explicativo padrão (13.5px soft) */
+.u-hint      { font-size: var(--text-13h); color: var(--ink-soft); margin-bottom: 14px }
+.u-hint-bare { font-size: var(--text-13h); color: var(--ink-soft) }
+.u-lh-185    { line-height: 1.85 }
+
+/* Texto muito pequeno */
+.u-xxs-faint { font-size: var(--text-xs); color: var(--ink-faint); margin: 0 0 14px }  /* 11.5px */
+
+/* --- Divisor com margem ---------------------------------------------------- */
+.u-divider-top { margin-top: 22px; border-top: 1px solid var(--line-soft); padding-top: 18px }
+
+/* --- Componentes de ícone -------------------------------------------------- */
+.u-ico-sm        { width: 15px; height: 15px }
+.u-ico-md        { width: 16px; height: 16px }
+.u-ico-action    { width: 15px; height: 15px; color: var(--neutral); cursor: pointer }
+.u-ico-inline-sm { width: 16px; height: 16px; vertical-align: -3px; margin-right: 6px }
+.u-ico-inline-xs { width: 14px; height: 14px; vertical-align: -2px; margin-right: 4px }
+
+/* Botões quadrados */
+.u-sq-24 { width: 24px; height: 24px }
+.u-sq-28 { width: 28px; height: 28px; padding: 0; font-weight: 700 }
+.u-sq-40 { width: 40px; height: 40px; padding: 0; font-size: var(--text-17); font-weight: 700 }
+.u-sq-64 { width: 64px; height: 64px; font-size: var(--text-2xl) }
+
+/* --- Outros componentes ---------------------------------------------------- */
+.u-check       { margin-top: 2px; width: 17px; height: 17px; accent-color: var(--brand); flex: none }
+.u-btn-neutral { border-color: var(--neutral); color: var(--neutral) }
+.u-code-display { letter-spacing: 4px; font-size: var(--text-17); text-align: center }
+.u-badge-min   { min-width: 14px; text-align: center; font-weight: 600 }
+
+/* ==========================================================================
+   CASOS ISOLADOS — display:none gerenciado via JS (element.style.display)
+   Não extrair para classe: el.style.display='' reverte inline mas não reverte
+   classe, mudando comportamento de show/hide.
+
+   Padrões mantidos como style= inline (52 ocorrências no total):
+   - style="display:none"                       (48 estático, 4 JS)
+   - style="display:none;margin-top:22px"       (4 estático)
+   - style="display:none;margin-top:8px"        (4 estático)
+   - style="display:none;padding:46px 16px"     (2 estático)
+   - style="color:#B23A2E;font-size:12.5px;display:none;margin:4px 2px 0"  (2 JS)
+   ========================================================================== */
