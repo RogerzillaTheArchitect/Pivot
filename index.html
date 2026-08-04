@@ -95,11 +95,11 @@
   <div class="splash-tag">Contact, contract, compact.</div>
 </div>
 
-<div id="portal-publico" style="display:none">
+<div id="portal-publico" class="u-hidden">
   <div class="pp-card" id="pp-card"></div>
 </div>
 
-<div id="colab-publico" style="display:none">
+<div id="colab-publico" class="u-hidden">
   <div class="pp-card" id="colab-card"></div>
 </div>
 
@@ -317,7 +317,7 @@
       <p class="login-tag" id="lbl-login-tag" data-t="login.title">Your contacts, into contracts</p>
       <div class="field"><label data-t="login.email">Email</label><input id="login-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
       <div class="field"><label data-t="login.password">Password</label><input id="login-pass" type="password" placeholder="••••••••" autocomplete="current-password"></div>
-      <p class="field-err" id="login-err" style="display:none"><span>Preenche o email e a password.</span></p>
+      <p class="field-err u-hidden" id="login-err"><span>Preenche o email e a password.</span></p>
       <button class="btn primary u-w-full" onclick="entrarNaApp()"><span data-t="login.submit">Entrar</span></button>
       <p class="login-alt"><span class="inline-link" onclick="abrirResetPassword()" data-t="login.forgotPassword">Redefinir a senha</span></p>
       <div class="login-divider"><span data-t="login.or">ou</span></div>
@@ -328,7 +328,7 @@
       <p class="login-alt"><span data-t="login.noAccount">Ainda não tem conta?</span> <span class="inline-link" onclick="mostrarEcraCriarConta()" data-t="login.register">Criar conta</span></p>
     </div>
 
-    <div id="login-form-criar" style="display:none">
+    <div id="login-form-criar" class="u-hidden">
       <div id="signup-form-fields">
         <p class="login-tag" data-t="login.registerTitle">Cria a tua conta</p>
         <div class="field"><label data-t="field.name">Nome</label><input id="signup-nome" type="text" placeholder="O teu nome" data-t-placeholder="signup.namePlaceholder" autocomplete="name"></div>
@@ -337,7 +337,7 @@
         <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="signup-pass2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
         <label class="cc-check u-mb-4"><input type="checkbox" id="signup-termos"><span><span data-t="invite.acceptTermsPrefix">Li e aceito os </span><b data-t="invite.termsLink">Termos de Uso</b>.</span></label>
         <label class="cc-check u-mb-10"><input type="checkbox" id="signup-privacidade"><span><span data-t="invite.acceptCookiesPrefix">Li e aceito a </span><b data-t="invite.cookiesLink">Política de Privacidade e Cookies</b>.</span></label>
-        <p class="field-err" id="signup-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
+        <p class="field-err u-hidden" id="signup-err"><span data-t="signup.error">Preenche todos os campos.</span></p>
         <button class="btn primary u-w-full" id="signup-btn" onclick="criarContaNaApp()"><span data-t="login.register">Criar conta</span></button>
         <div class="login-divider"><span data-t="login.or">ou</span></div>
         <button class="btn soft u-w-full" onclick="pivotSignInGoogle()">
@@ -346,7 +346,7 @@
         </button>
         <p class="login-alt"><span data-t="login.haveAccount">Já tem conta?</span> <span class="inline-link" onclick="mostrarEcraEntrar()" data-t="login.submit">Entrar</span></p>
       </div>
-      <div id="signup-aguardando" style="display:none">
+      <div id="signup-aguardando" class="u-hidden">
         <p class="login-tag" data-t="signup.confirmEmailTitle">Confirma o teu email</p>
         <p class="u-hint u-text-center u-mb-18"><span data-t="signup.emailSentPrefix">Enviámos um link de confirmação para </span><b id="signup-email-enviado"></b><span data-t="signup.emailSentSuffix">. Abre o email e clica no link para ativares a tua conta.</span></p>
         <button class="btn soft u-w-full u-mb-9" id="signup-reenviar-btn" onclick="reenviarEmailConfirmacao()"><span data-t="signup.resendEmail">Reenviar email</span></button>
@@ -354,26 +354,26 @@
       </div>
     </div>
 
-    <div id="login-form-reset" style="display:none">
+    <div id="login-form-reset" class="u-hidden">
       <div id="reset-form-fields">
         <p class="login-tag" data-t="login.forgotPassword">Redefinir a senha</p>
         <div class="field"><label data-t="login.email">Email</label><input id="reset-email" type="email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" autocomplete="username"></div>
-        <p class="field-err" id="reset-err" style="display:none"><span data-t="login.error">Preenche o email e a password.</span></p>
+        <p class="field-err u-hidden" id="reset-err"><span data-t="login.error">Preenche o email e a password.</span></p>
         <button class="btn primary u-w-full" id="reset-btn" onclick="enviarResetPassword()"><span data-t="login.sendResetLink">Enviar link</span></button>
         <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
       </div>
-      <div id="reset-enviado" style="display:none">
+      <div id="reset-enviado" class="u-hidden">
         <p class="login-tag" data-t="signup.confirmEmailTitle">Confirma o teu email</p>
         <p class="u-hint u-text-center u-mb-18" data-t="login.resetSent">Se existir uma conta com este email, enviámos um link para redefinires a password.</p>
         <p class="login-alt"><span class="inline-link" onclick="mostrarEcraEntrar()" data-t="signup.backToLogin">Voltar ao login</span></p>
       </div>
     </div>
 
-    <div id="login-form-newpass" style="display:none">
+    <div id="login-form-newpass" class="u-hidden">
       <p class="login-tag" data-t="login.forgotPassword">Redefinir a senha</p>
       <div class="field"><label data-t="login.password">Password</label><input id="newpass-1" type="password" placeholder="mín. 8 caracteres, com letras e números" data-t-placeholder="signup.passwordHint" autocomplete="new-password"></div>
       <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="newpass-2" type="password" placeholder="••••••••" autocomplete="new-password"></div>
-      <p class="field-err" id="newpass-err" style="display:none"><span data-t="signup.error">Preenche todos os campos.</span></p>
+      <p class="field-err u-hidden" id="newpass-err"><span data-t="signup.error">Preenche todos os campos.</span></p>
       <button class="btn primary u-w-full" id="newpass-btn" onclick="salvarNovaPassword()"><span data-t="login.saveNewPassword">Guardar nova password</span></button>
     </div>
 
@@ -383,7 +383,7 @@
 <!-- Ecrã de conclusão de cadastro para convites de equipa — o link do convite já
      autentica a pessoa (isso serve de verificação do email), mas falta definir
      nome/password e aceitar termos antes de entrar na app. -->
-<div id="completar-convite-screen" style="display:none">
+<div id="completar-convite-screen" class="u-hidden">
   <div class="login-card">
     <div class="login-logo"><span class="pivot-logo-full" role="img" aria-label="Pivot"></span></div>
     <p class="login-tag" data-t="invite.completeTitle">Falta pouco para começares</p>
@@ -394,7 +394,7 @@
     <div class="field"><label data-t="field.confirmPassword">Confirmar password</label><input id="cc-pass2" type="password" autocomplete="new-password"></div>
     <label class="cc-check"><input type="checkbox" id="cc-termos"><span><span data-t="invite.acceptTermsPrefix">Li e aceito os </span><b data-t="invite.termsLink">Termos de Uso</b>.</span></label>
     <label class="cc-check"><input type="checkbox" id="cc-cookies"><span><span data-t="invite.acceptCookiesPrefix">Li e aceito a </span><b data-t="invite.cookiesLink">Política de Privacidade e Cookies</b>.</span></label>
-    <p class="field-err" id="cc-err" style="display:none"><span data-t="invite.fillError">Preenche tudo e aceita os termos para continuares.</span></p>
+    <p class="field-err u-hidden" id="cc-err"><span data-t="invite.fillError">Preenche tudo e aceita os termos para continuares.</span></p>
     <button class="btn primary u-w-full" id="cc-btn" onclick="concluirCadastroConvite()"><span data-t="invite.completeBtn">Concluir cadastro</span></button>
   </div>
 </div>
@@ -438,9 +438,9 @@
     </div>
     <div class="sb-item u-relative" onclick="abrirNotificacoes()">
       <span class="nav-ico" style="width:18px;height:18px;display:inline-block;vertical-align:-3px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span> <span data-t="profile.notifications">Notificações</span>
-      <span class="notif-dot" style="position:absolute;left:19px;top:6px;display:none"></span>
+      <span class="notif-dot u-hidden"></span>
     </div>
-    <div class="sb-item" id="sb-item-colaboracoes" data-nav="colaboracoes" style="display:none" onclick="go('colaboracoes')">
+    <div class="sb-item u-hidden" id="sb-item-colaboracoes" data-nav="colaboracoes" onclick="go('colaboracoes')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> <span data-t="nav.collaborations">Colaborações</span>
     </div>
     <div class="sb-spacer"></div>
@@ -462,7 +462,7 @@
         </div>
         <div class="icon-btn" id="notif-btn" onclick="abrirNotificacoes()" aria-label="Notificações">
           <span class="nav-ico" style="width:22px;height:22px;mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:notifications-outline.svg)"></span>
-          <span class="notif-count" id="notif-count" style="display:none"></span>
+          <span class="notif-count u-hidden" id="notif-count"></span>
         </div>
         <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-3l3-3h6l3 3v3"/></svg>
@@ -475,7 +475,7 @@
       <!-- ============ HOJE / DASHBOARD ============ -->
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
-        <div id="dash-card-financeiro" style="display:none">
+        <div id="dash-card-financeiro" class="u-hidden">
         <div class="tasks-header" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
         <div class="card finance-ops-card">
         <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
@@ -539,7 +539,7 @@
         </div>
         </div>
 
-        <div id="dash-card-operacional" style="display:none">
+        <div id="dash-card-operacional" class="u-hidden">
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
@@ -586,12 +586,12 @@
           <div id="tasks-list"></div>
         </div>
 
-        <div id="dash-card-fluxo" style="display:none;margin-top:22px"></div>
-        <div id="dash-card-evolucao" style="display:none;margin-top:22px"></div>
-        <div id="dash-card-eficiencia" style="display:none;margin-top:22px"></div>
-        <div id="dash-card-geografico" style="display:none;margin-top:22px"></div>
+        <div id="dash-card-fluxo" class="u-hidden u-mt-22"></div>
+        <div id="dash-card-evolucao" class="u-hidden u-mt-22"></div>
+        <div id="dash-card-eficiencia" class="u-hidden u-mt-22"></div>
+        <div id="dash-card-geografico" class="u-hidden u-mt-22"></div>
 
-        <div class="empty" id="hoje-empty" style="display:none">
+        <div class="empty u-hidden" id="hoje-empty">
           <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
           <h3 data-t="home.allGood">Está tudo em dia.</h3>
         </div>
@@ -626,11 +626,11 @@
           <div class="chip chip-ic" data-key="historico" onclick="filterJobs(this,'historico')"><span class="chip-ic-mask" style="mask-image:url(https://api.iconify.design/ic:outline-history.svg);-webkit-mask-image:url(https://api.iconify.design/ic:outline-history.svg)"></span><span data-t="jobs.filter.history">Histórico</span></div>
         </div>
 
-        <div class="empty" id="jobsEmpty" style="display:none;padding:46px 16px">
+        <div class="empty u-hidden u-p-46-16" id="jobsEmpty">
           <div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></div>
           <h3 class="u-lg-label" data-t="jobs.emptyFilter">Nada neste filtro.</h3>
         </div>
-        <div id="jobsArquivadosList" style="display:none"></div>
+        <div id="jobsArquivadosList" class="u-hidden"></div>
       </section>
 
       <!-- ============ HISTÓRICO (trabalhos concluídos/deletados) ============ -->
@@ -638,7 +638,7 @@
         <div class="back" onclick="go('trabalhos')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg> <span data-t="nav.jobs">Trabalhos</span></div>
         <div class="page-title" style="font-size:25px;text-transform:uppercase" data-t="jobs.history">Histórico</div>
         <div id="historico-lista"></div>
-        <div class="empty" id="historicoEmpty" style="display:none;padding:46px 16px">
+        <div class="empty u-hidden u-p-46-16" id="historicoEmpty">
           <div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18M7 14l4-4 3 3 5-6"/></svg></div>
           <h3 class="u-lg-label" data-t="jobs.historyEmpty">Ainda sem trabalhos no histórico.</h3>
         </div>
@@ -652,7 +652,7 @@
           <div class="detail-head-info">
             <div class="detail-h u-m-0" id="d-title"></div>
             <div class="detail-meta-row" id="d-meta-row"></div>
-            <div class="detail-sub" id="d-cal-sync" style="margin:6px 0 0;color:var(--c-text-green);font-weight:600;display:none"></div>
+            <div class="detail-sub u-hidden" id="d-cal-sync"></div>
           </div>
         </div>
 
@@ -696,7 +696,7 @@
           </button>
         </div>
 
-        <div class="builder-locked-notice" id="builder-locked-notice" style="display:none">
+        <div class="builder-locked-notice u-hidden" id="builder-locked-notice">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 11V7a7 7 0 0 1 14 0v4"/><rect x="3" y="11" width="18" height="11" rx="2"/></svg>
           <span id="builder-locked-text" data-t="job.contract.sent">Contrato já enviado ao cliente — já não pode ser editado.</span>
         </div>
@@ -711,12 +711,12 @@
             <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
           </div>
 
-          <div id="builder-progress" style="display:none;margin-top:18px">
+          <div id="builder-progress" class="u-hidden u-mt-18">
             <button class="btn primary u-w-full" onclick="gerarLinkDoBuilder()"><span data-t="builder.generateLink">Gerar contrato e link →</span></button>
           </div>
         </div>
 
-        <div id="builder-tab-content-variaveis" style="display:none">
+        <div id="builder-tab-content-variaveis" class="u-hidden">
           <div id="builder-dynfields" class="dynf-panel"></div>
         </div>
       </section>
@@ -725,7 +725,7 @@
       <!-- ============ BIBLIOTECAS ============ -->
       <section class="view" id="v-bibliotecas">
         <div class="bib-shell">
-          <div class="bib-pick-banner" id="bib-pick-banner" style="display:none">
+          <div class="bib-pick-banner u-hidden" id="bib-pick-banner">
             <span id="bib-pick-banner-txt"></span>
             <span class="inline-link" onclick="cancelarSelecaoBiblioteca()" data-t="action.back">Voltar</span>
           </div>
@@ -752,7 +752,7 @@
           </div>
 
           <div class="bib-grid" id="bib-lista"></div>
-          <p class="bib-empty" id="bib-empty" style="display:none"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
+          <p class="bib-empty u-hidden" id="bib-empty"><span data-t="library.empty">Nada encontrado. Tenta outra busca ou filtro.</span></p>
         </div>
       </section>
 
@@ -767,12 +767,12 @@
           <div class="ti" data-t="import.dropTitle">Arrasta o arquivo aqui</div>
           <div class="si" data-t="import.dropSub">ou toca para selecionar do dispositivo</div>
         </div>
-        <input type="file" id="imp-file-input" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png,.webp" style="display:none" onchange="handleImportFiles(this.files)">
+        <input type="file" id="imp-file-input" accept=".pdf,.docx,.doc,.jpg,.jpeg,.png,.webp" class="u-hidden" onchange="handleImportFiles(this.files)">
 
         <div class="imp-formats" id="imp-formats"></div>
 
-        <div class="imp-progress" id="imp-progress" style="display:none"></div>
-        <div class="imp-fail" id="imp-fail" style="display:none"></div>
+        <div class="imp-progress u-hidden" id="imp-progress"></div>
+        <div class="imp-fail u-hidden" id="imp-fail"></div>
       </section>
 
       <!-- ============ REVISÃO DE IMPORTAÇÃO ============ -->
@@ -783,7 +783,7 @@
           <div class="save-tpl" data-t="action.save" onclick="abrirGuardarModeloImportado()">Guardar</div>
         </div>
         <p class="imp-hint u-mb-16" data-t="import.reviewHint">Confere os blocos e cláusulas reconstruídos. Podes editar qualquer texto, mover cláusulas entre blocos, reordenar, criar ou remover — antes de guardar como Modelo.</p>
-        <p class="imp-hint" id="rev-variaveis" style="display:none;margin-bottom:16px"></p>
+        <p class="imp-hint u-hidden u-mb-16" id="rev-variaveis"></p>
 
         <div id="rev-blocos"></div>
 
@@ -808,7 +808,7 @@
           <input id="ct-busca" placeholder="Procurar contacto…" data-t-placeholder="contacts.search" oninput="renderContatos()">
         </div>
         <div id="contatos-lista"></div>
-        <div class="empty" id="contatosEmpty" style="display:none;padding:40px 16px">
+        <div class="empty u-hidden u-p-40-16" id="contatosEmpty">
           <div class="empty-mark u-btn-neutral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/></svg></div>
           <h3 style="font-size:18px" data-t="contacts.empty">Ainda sem contactos aqui.</h3>
         </div>
@@ -834,7 +834,7 @@
             <div class="p-avatar-edit" onclick="document.getElementById('avatar-file-input').click()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
             </div>
-            <input type="file" id="avatar-file-input" accept="image/*" style="display:none" onchange="onAvatarFileSelected(this)">
+            <input type="file" id="avatar-file-input" accept="image/*" class="u-hidden" onchange="onAvatarFileSelected(this)">
           </div>
           <div><div class="p-name">Usuário</div><div class="p-sub">Empresa Exemplo · Plano Pro</div></div>
         </div>
@@ -1082,7 +1082,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>
           <input placeholder="Cliente, email, local, data, trabalho…" id="searchin" oninput="fakeSearch()" data-t-placeholder="search.inputHint">
         </div>
-        <div class="res" id="searchres" style="display:none"></div>
+        <div class="res u-hidden" id="searchres"></div>
         <div id="search-recentes"></div>
         <div id="searchhits"></div>
       </section>
@@ -1116,7 +1116,7 @@
   <div class="sheet" id="sheet">
     <div class="sheet-grab"></div>
     <div class="sheet-header" id="sheetHeader">
-      <div class="sheet-back" id="sheetBack" style="display:none" onclick="panelBack()">
+      <div class="sheet-back u-hidden" id="sheetBack" onclick="panelBack()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
       </div>
       <h3 id="sheetTitle">Criar</h3>
@@ -1124,7 +1124,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </div>
     </div>
-    <div class="sheet-progress" id="sheetProgress" style="display:none"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="sheet-progress u-hidden" id="sheetProgress"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
 
     <div class="sheet-body" id="sheetBody">
 
@@ -1154,7 +1154,7 @@
               <select id="tw-categoria" onchange="onCategoriaWizardChange()">
                 <option value="" data-t="wizard.categoryPlaceholder">Selecionar categoria…</option>
               </select>
-              <div class="field" id="tw-categoria-custom-field" style="display:none;margin-top:8px">
+              <div class="field u-hidden u-mt-8" id="tw-categoria-custom-field">
                 <input id="tw-categoria-custom" placeholder="Nome da categoria…" data-t-placeholder="wizard.categoryCustomPlaceholder">
               </div>
             </div>
@@ -1163,7 +1163,7 @@
               <select id="tw-segmento" disabled onchange="onSegmentoWizardChange()">
                 <option value="" data-t="wizard.segmentPlaceholder">Selecionar segmento…</option>
               </select>
-              <div class="field" id="tw-segmento-custom-field" style="display:none;margin-top:8px">
+              <div class="field u-hidden u-mt-8" id="tw-segmento-custom-field">
                 <input id="tw-segmento-custom" placeholder="Nome do segmento…" data-t-placeholder="wizard.segmentCustomPlaceholder">
               </div>
             </div>
@@ -1172,9 +1172,9 @@
           <div class="field u-relative">
             <label data-t="wizard.client">Cliente</label>
             <input id="tw-cliente" placeholder="Procurar ou criar…" data-t-placeholder="wizard.searchOrCreate" autocomplete="off" oninput="checkNovoCliente()" onfocus="checkNovoCliente()">
-            <div class="addr-dropdown" id="tw-cliente-dropdown" style="display:none"></div>
-            <span class="inline-link" id="tw-criar-cliente" style="display:none;margin-top:8px" onclick="revelarNovoCliente()"><span data-t="wizard.createAsNewPrefix">+ Criar “</span><span id="tw-novo-nome"></span><span data-t="wizard.createAsNewSuffix">” como novo cliente</span></span>
-            <div id="tw-novo-cliente-fields" style="display:none;margin-top:10px">
+            <div class="addr-dropdown u-hidden" id="tw-cliente-dropdown"></div>
+            <span class="inline-link u-hidden u-mt-8" id="tw-criar-cliente" onclick="revelarNovoCliente()"><span data-t="wizard.createAsNewPrefix">+ Criar “</span><span id="tw-novo-nome"></span><span data-t="wizard.createAsNewSuffix">” como novo cliente</span></span>
+            <div id="tw-novo-cliente-fields" class="u-hidden u-mt-10">
               <div class="field-row">
                 <div class="field"><input id="tw-novo-email" placeholder="email" data-t-placeholder="field.email" type="email" autocomplete="off" name="tw-cliente-email-novo"></div>
                 <div class="field"><input id="tw-novo-tel" placeholder="telefone" data-t-placeholder="field.phone" type="tel" autocomplete="off" name="tw-cliente-tel-novo"></div>
@@ -1196,17 +1196,17 @@
               <div class="horario-divider"></div>
               <div class="horario-col"><label data-t="wizard.end">Fim</label><input type="time" id="tw-hora-fim" onchange="atualizarDuracaoCalculada()"></div>
             </div>
-            <div class="horario-duracao" id="tw-duracao-calc" style="display:none"></div>
+            <div class="horario-duracao u-hidden" id="tw-duracao-calc"></div>
           </div>
 
           <div class="field u-relative">
             <label data-t="wizard.address">Local</label>
             <input id="tw-local" placeholder="Rua, número, cidade…" data-t-placeholder="wizard.addressPlaceholder" autocomplete="off" oninput="onEnderecoInput()" onfocus="onEnderecoInput()">
-            <div class="addr-dropdown" id="tw-addr-dropdown" style="display:none"></div>
+            <div class="addr-dropdown u-hidden" id="tw-addr-dropdown"></div>
           </div>
 
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="recur.toggle">Contrato recorrente</div><span class="sub" data-t="recur.toggleHint">Para mensalidades, avenças e retainers.</span></div><div class="toggle" id="envio-recorrencia" onclick="toggleRecorrenciaWizard(this)"><div class="kn"></div></div></div>
-          <div id="tw-recorrencia-config" style="display:none;margin:4px 0 6px">
+          <div id="tw-recorrencia-config" class="u-hidden u-m-4-0-6">
             <div class="field"><label data-t="recur.frequency">Frequência</label>
               <select id="tw-recur-freq" class="tw-recur-input">
                 <option value="mensal" data-t="recur.freq.monthly">Mensal</option>
@@ -1217,14 +1217,14 @@
                 <option value="anual" data-t="recur.freq.yearly">Anual</option>
               </select></div>
             <div class="struct-row"><div class="struct-l"><div class="nm" data-t="recur.autoRenew">Renovação automática</div><span class="sub" data-t="recur.autoRenewHint">Renova indefinidamente até você terminar.</span></div><div class="toggle on" id="tw-recur-renova" onclick="toggleRenovacaoAutoWizard(this)"><div class="kn"></div></div></div>
-            <div class="field" id="tw-recur-fim-wrap" style="display:none"><label data-t="recur.endDate">Termina em</label><input id="tw-recur-fim" type="date"></div>
+            <div class="field u-hidden" id="tw-recur-fim-wrap"><label data-t="recur.endDate">Termina em</label><input id="tw-recur-fim" type="date"></div>
           </div>
 
           <button class="btn primary u-w-full u-mt-10" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- ETAPA 2 — Recursos e Equipe -->
-        <div class="moment" data-moment="2" style="display:none">
+        <div class="moment u-hidden" data-moment="2">
           <div style="margin:2px 0 20px">
             <p class="plabel u-m-009" data-t="job.resources">Recursos adicionais</p>
             <div id="tw-recursos-lista"></div>
@@ -1240,7 +1240,7 @@
         </div>
 
         <!-- ETAPA 3 — Portal do Cliente -->
-        <div class="moment" data-moment="3" style="display:none">
+        <div class="moment u-hidden" data-moment="3">
           <p class="u-label-nd u-mb-14" data-t="wizard.whatClientReceives">O que o cliente recebe?</p>
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="job.contract">Contrato</div></div><div class="toggle on" id="envio-contrato" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="wizard.schedule">Cronograma</div></div><div class="toggle on" id="envio-cronograma" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
@@ -1255,18 +1255,18 @@
              serviços salvos em Perfil > Serviços, com o valor de cada um
              editável aqui, e o total alimentando o valor da Etapa de
              Pagamento — que continua separada, só pra total final + parcelas). -->
-        <div class="moment" data-moment="4" style="display:none">
+        <div class="moment u-hidden" data-moment="4">
           <p class="u-label-nd u-mb-14" data-t="wizard.includedServicesHint">Selecione os serviços que fazem parte deste trabalho — entram automaticamente como um bloco no contrato.</p>
           <div id="tw-servicos-incluidos-lista"></div>
-          <p id="tw-servicos-incluidos-empty" style="display:none;font-size:13px;color:var(--ink-soft)" data-t="wizard.noServicesSaved">Ainda não tem serviços guardados em Perfil &gt; Serviços.</p>
+          <p id="tw-servicos-incluidos-empty" class="u-hidden u-label-soft" data-t="wizard.noServicesSaved">Ainda não tem serviços guardados em Perfil &gt; Serviços.</p>
           <div class="struct-row" style="margin-top:10px;padding:12px 2px;border-top:1px solid var(--line-soft)"><div class="nm" data-t="wizard.servicesTotal">Total dos serviços</div><b id="tw-servicos-total">0 €</b></div>
           <button class="btn primary u-w-full u-mt-14" onclick="trabalhoNext()"><span data-t="wizard.continue">Continuar</span></button>
         </div>
 
         <!-- ETAPA 5 — Entrega e Aprovação -->
-        <div class="moment" data-moment="5" style="display:none">
+        <div class="moment u-hidden" data-moment="5">
           <div class="struct-row"><div class="struct-l"><div class="nm" data-t="entrega.allowAdjustments">Revisões</div><span class="sub" data-t="entrega.allowAdjustmentsHint">Adicione quando houver necessidade de decupagem, pré-seleção, revisão do material entregue etc. — o cliente participa dessa etapa antes da entrega final.</span></div><div class="toggle" id="entrega-ajustes-toggle" onclick="toggleEntregaAjustes(this)"><div class="kn"></div></div></div>
-          <div id="entrega-ajustes-wrap" style="display:none;margin-top:8px">
+          <div id="entrega-ajustes-wrap" class="u-hidden u-mt-8">
             <p class="plabel u-m-009" data-t="entrega.revisionsQty">Quantidade de Revisões</p>
             <div style="display:flex;align-items:center;gap:16px">
               <button type="button" class="btn soft u-sq-40" onclick="alterarQuantidadeRevisoes(-1)">−</button>
@@ -1298,10 +1298,10 @@
         <!-- ETAPA 6 — Pagamento (valor total do trabalho, pré-preenchido pela
              soma dos serviços escolhidos na Etapa de Serviços — sempre
              editável — + parcelas). -->
-        <div class="moment" data-moment="6" style="display:none">
+        <div class="moment u-hidden" data-moment="6">
           <div class="field"><label data-t="wizard.fee">Valor</label><input id="tw-valor" placeholder="2.400 €" oninput="onValorWizardManual()"></div>
 
-          <div id="tw-pag-recorrente-nota" class="warn-box" style="display:none;background:var(--btn-06);border-color:var(--btn-14);color:var(--ink-soft)">
+          <div id="tw-pag-recorrente-nota" class="warn-box u-hidden">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg>
             <div data-t="wizard.paymentsRecurringNote">Este contrato é recorrente. As cobranças são geradas automaticamente a cada ciclo, conforme a frequência escolhida.</div>
           </div>
@@ -1314,7 +1314,7 @@
         </div>
 
         <!-- ETAPA 7 — Contrato -->
-        <div class="moment" data-moment="7" style="display:none">
+        <div class="moment u-hidden" data-moment="7">
           <p class="u-label-nd u-mb-14" data-t="wizard.suggestedFor">Modelos sugeridos da biblioteca</p>
           <div id="modelos-sugeridos-lista"></div>
           <div id="tw-modelo-escolhido-status"></div>
@@ -1326,7 +1326,7 @@
         </div>
 
         <!-- RESUMO -->
-        <div class="moment" data-moment="8" style="display:none">
+        <div class="moment u-hidden" data-moment="8">
           <div class="u-mb-14" id="trabalho-review-summary"></div>
           <div class="struct-row u-mb-14"><div class="struct-l"><div class="nm" data-t="wizard.autoReminders">Lembretes automáticos</div><span class="sub" data-t="wizard.autoRemindersHint">Email ao cliente antes e no dia de cada pagamento</span></div><div class="toggle on" id="tw-lembretes-toggle" onclick="this.classList.toggle('on')"><div class="kn"></div></div></div>
           <button class="btn primary u-w-full" onclick="trabalhoCreate()"><span data-t="wizard.createJob">Criar trabalho</span></button>
@@ -1386,7 +1386,7 @@
             <div class="p-avatar-edit" onclick="document.getElementById('cl-foto-input').click()">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9a2 2 0 0 1 2-2h1.5l1-1.5h7l1 1.5H19a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><circle cx="12" cy="13.5" r="3.5"/></svg>
             </div>
-            <input type="file" id="cl-foto-input" accept="image/*" style="display:none" onchange="onContatoFotoSelecionada(this)">
+            <input type="file" id="cl-foto-input" accept="image/*" class="u-hidden" onchange="onContatoFotoSelecionada(this)">
           </div>
         </div>
         <div class="field">
@@ -1403,7 +1403,7 @@
           <div class="field-err" id="cl-nome-err" data-t="wizard.client.nameError">Precisa de um nome para continuar.</div>
         </div>
         <div class="field"><label data-t="login.email">Email</label><input id="cl-email" placeholder="example@email.com" data-t-placeholder="field.emailPlaceholder" onblur="checkClienteDuplicado()" type="email" autocomplete="off" name="cl-email-cliente"></div>
-        <div class="warn-box" id="cl-dup" style="display:none">
+        <div class="warn-box u-hidden" id="cl-dup">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg>
           <div><span data-t="wizard.client.dupPrefix">Já existe </span><b id="cl-dup-nome"></b><span data-t="wizard.client.dupSuffix"> com este email.</span>
             <div class="detail-actions" style="margin-top:9px">
@@ -1444,7 +1444,7 @@
           </div>
           <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ta-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
         </div>
-        <div id="tarefa-checklist" style="display:none">
+        <div id="tarefa-checklist" class="u-hidden">
           <div class="field"><label data-t="wizard.checklistTitle">Título da checklist</label><input id="ls-titulo" placeholder="Checklist de entrega" data-t-placeholder="explore.deliveryChecklist"></div>
           <div id="ls-items"></div>
           <div class="addlist-input">
@@ -1495,12 +1495,12 @@
       <div class="panel" data-panel="importar">
         <p style="font-size:13px;color:var(--ink-soft);line-height:1.55;margin-bottom:16px" data-t="import.description">Guarda um contrato antigo como referência — para consultar enquanto cria um modelo novo do seu jeito. Não interpretamos nem convertemos nada automaticamente.</p>
         <div class="field"><label data-t="field.name">Nome</label><input id="imp-ref-nome" placeholder="Ex: Contrato casamento 2024" data-t-placeholder="import.namePlaceholder"></div>
-        <input type="file" id="imp-ref-file-input" accept="image/*,.pdf,application/pdf,.txt,text/plain" style="display:none" onchange="onImportRefFileSelected(this)">
+        <input type="file" id="imp-ref-file-input" accept="image/*,.pdf,application/pdf,.txt,text/plain" class="u-hidden" onchange="onImportRefFileSelected(this)">
         <div class="dropzone" id="imp-ref-dropzone" onclick="document.getElementById('imp-ref-file-input').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>
           <div class="t" data-t="wizard.upload.file">Carregar arquivo</div><div class="s" data-t="wizard.upload.hint">imagem, PDF ou .txt</div>
         </div>
-        <div class="filechip" id="imp-ref-filechip" style="display:none">
+        <div class="filechip u-hidden" id="imp-ref-filechip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
           <span class="nm" id="imp-ref-filename"></span>
           <span class="x" onclick="resetImportRefFile()">✕</span>
@@ -1531,12 +1531,12 @@
       </div>
     </div>
     <div class="sim-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.86 1.8 18a1 1 0 0 0 .87 1.5h18.66a1 1 0 0 0 .87-1.5L13.7 3.86a1 1 0 0 0-1.74 0Z"/></svg> <span id="sim-banner-text"><span data-t="portal.simulation">Modo de simulação. O cliente real não está visualizando este conteúdo.</span></span></div>
-    <div class="cal-sync-row" id="cw-cal-sync-row" style="display:none">
+    <div class="cal-sync-row u-hidden" id="cw-cal-sync-row">
       <button class="btn ghost" onclick="sincronizarComGoogleCalendar(clientContext)"><svg class="u-ico-inline-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Google Calendar</span></button>
       <button class="btn ghost" onclick="sincronizarComAppleCalendar(clientContext)"><svg class="u-ico-inline-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Apple Calendar</span></button>
     </div>
     <div class="client-scroll">
-      <div id="client-dynamic" style="display:none"></div>
+      <div id="client-dynamic" class="u-hidden"></div>
     </div>
   </div>
 
@@ -1548,7 +1548,7 @@
   <div class="sheet" id="infoSheet" style="z-index:85;max-height:80vh">
     <div class="sheet-grab"></div>
     <div class="sheet-header">
-      <div class="sheet-back" id="infoBackBtn" style="width:30px;flex:none;display:none;cursor:pointer" onclick="if(window.__infoBackHandler)window.__infoBackHandler();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
+      <div class="sheet-back u-hidden" id="infoBackBtn" onclick="if(window.__infoBackHandler)window.__infoBackHandler();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></div>
       <h3 id="infoTitle">Título</h3>
       <div class="sheet-x" onclick="closeInfo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
     </div>
@@ -4507,14 +4507,14 @@
     }
     sec.style.setProperty('--fill', pct);
     let html='';
-    for(let i=0;i<N;i++) html += '<span class="segment'+(i<alcancados?' is-filled':'')+'"></span>';
+    for(let i=0;i<N;i++) class="segment'+(i<alcancados?' is-filled':'')+' ve-cur ve-cur ve-sep ve-tot" html += '<span></span>';
     track.innerHTML=html;
     /* formato "concluído/total": o número concluído usa a mesma cor da
        barra preenchida, o total permanece branco — modo 'contagem' (Fechados)
        não tem um total distinto do próprio valor, então mostra só o número. */
     end.innerHTML = modo==='contagem'
-      ? '<span class="ve-cur">'+escapeHtml(textoTotal)+'</span>'
-      : '<span class="ve-cur">'+escapeHtml(textoAtual)+'</span><span class="ve-sep">/</span><span class="ve-tot">'+escapeHtml(textoTotal)+'</span>';
+      ? '<span>'+escapeHtml(textoTotal)+'</span>'
+      : '<span>'+escapeHtml(textoAtual)+'</span><span>/</span><span>'+escapeHtml(textoTotal)+'</span>';
   }
   function pintarAnelComVolta(elId, r, num, den, trackElOverride){
     const el=document.getElementById(elId);
@@ -10871,11 +10871,11 @@
     bibSelClausDetail={blocks:(detail&&detail.blocks)||[]};
     const rows=bibSelClausDetail.blocks.map((b,idx)=>{
       const nomeTraduzido=blockName({key:null,name:b.name});
-      return '<div class="prow" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(nomeTraduzido).replace(/'/g,"\\'")+'\')">'+
-      '<div class="t">'+escapeHtml(nomeTraduzido)+'</div><span class="pc-sub" style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>';
+      return '<div class="prow t pc-sub plist" onclick="abrirSelecaoClausulasDoBloco('+idx+',\''+escapeHtml(nomeTraduzido).replace(/'/g,"\\'")+'\')">'+
+      '<div>'+escapeHtml(nomeTraduzido)+'</div><span style="margin-left:auto;margin-right:8px">'+(b.clauses||[]).length+'</span>'+BIB_CHEVR_SVG+'</div>';
     }).join('');
     document.getElementById('infoTitle').textContent=titulo;
-    document.getElementById('infoBody').innerHTML='<div class="plist">'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
+    document.getElementById('infoBody').innerHTML='<div>'+(rows||('<p style="font-size:13px;color:var(--neutral);padding:8px 2px">'+t('library.empty')+'</p>'))+'</div>';
   }
   function abrirSelecaoClausulasDoBloco(idx, nomeBloco){
     bibSelClausBlockIdx=idx; bibSelClausSet=new Set(); bibSelClausTitulo=nomeBloco;
@@ -11628,13 +11628,13 @@
     if(!passos.length) return '';
     let html='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_CLOCK+'<div class="sec-title">'+t('job.timeline')+'</div></div></div><div class="timeline">';
     passos.forEach((p,i)=>{
-      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line"></div>':'')+
-        '<div class="tl-dot-status">'+statusEmoji(p.status)+'</div>'+
-        '<div class="tl-body">'+
-          '<div class="t">'+escapeHtml(p.label)+'</div>'+
-          (p.desc?'<div class="m">'+escapeHtml(p.desc)+'</div>':'')+
-          (p.data?'<div class="tl-date">'+escapeHtml(p.data)+'</div>':'')+
-          (p.acaoLabel?'<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
+      html+='<div class="tl">'+(i<passos.length-1?'<div class="tl-line tl-dot-status tl-body t m tl-date btn ghost dm-item dm-item dm-item dm-row dm-row dm-sep card-info card-info-item lbl val card-info-item lbl val card-info-item lbl val csec-label"></div>':'')+
+        '<div>'+statusEmoji(p.status)+'</div>'+
+        '<div>'+
+          '<div>'+escapeHtml(p.label)+'</div>'+
+          (p.desc?'<div>'+escapeHtml(p.desc)+'</div>':'')+
+          (p.data?'<div>'+escapeHtml(p.data)+'</div>':'')+
+          (p.acaoLabel?'<button style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
         '</div></div>';
     });
     html+='</div></div>';
@@ -11653,12 +11653,12 @@
     return dt.toLocaleDateString(jsLocale(), {day:'numeric', month:'long', year:'numeric'});
   }
   function detailMetaRowHtml(job){
-    const linha1='<span class="dm-item">'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
+    const linha1='<span>'+ICON_PERSON_SM+'<span>'+escapeHtml(job.client)+'</span></span>';
     const itens2=[];
-    if(job.dateRaw) itens2.push('<span class="dm-item">'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
-    if(job.horaIni) itens2.push('<span class="dm-item">'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' - '+job.horaFim):''))+'</span></span>');
-    let html='<div class="dm-row">'+linha1+'</div>';
-    if(itens2.length) html+='<div class="dm-row">'+itens2.join('<span class="dm-sep"></span>')+'</div>';
+    if(job.dateRaw) itens2.push('<span>'+ICON_CAL_SM+'<span>'+escapeHtml(fmtDataExtenso(job.dateRaw))+'</span></span>');
+    if(job.horaIni) itens2.push('<span>'+ICON_CLOCK+'<span>'+escapeHtml(job.horaIni+(job.horaFim?(' - '+job.horaFim):''))+'</span></span>');
+    let html='<div>'+linha1+'</div>';
+    if(itens2.length) html+='<div>'+itens2.join('<span></span>')+'</div>';
     return html;
   }
   function renderJobDetailDynamic(id){
@@ -11684,14 +11684,14 @@
       if(sv.horas) bits.push(sv.horas+'h');
       if(sv.equipa) bits.push(sv.equipa+' na equipe');
       if(sv.equipamento.length) bits.push(sv.equipamento.join(', '));
-      html+='<div class="card-info" style="margin:0 0 16px;padding-top:0;border-top:none">';
-      html+='<div class="card-info-item"><span class="lbl">Serviço</span><span class="val">'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
-      if(sv.horas) html+='<div class="card-info-item"><span class="lbl">Duração</span><span class="val">'+sv.horas+'h</span></div>';
-      if(sv.equipa) html+='<div class="card-info-item"><span class="lbl">'+t('profile.team')+'</span><span class="val">'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
+      html+='<div style="margin:0 0 16px;padding-top:0;border-top:none">';
+      html+='<div><span>Serviço</span><span>'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
+      if(sv.horas) html+='<div><span>Duração</span><span>'+sv.horas+'h</span></div>';
+      if(sv.equipa) html+='<div><span>'+t('profile.team')+'</span><span>'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
       html+='</div>';
     }
     if(job.recursos && job.recursos.length){
-      html+='<p class="csec-label" style="margin:0 2px 8px">'+t('job.resources')+'</p>';
+      html+='<p style="margin:0 2px 8px">'+t('job.resources')+'</p>';
       job.recursos.forEach(r=>{
         html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(r.nome)+'</div><span class="sub">'+escapeHtml(r.tipo)+'</span></div>'+(r.custo?('<b class="u-label">'+fmtMoney(r.custo)+'</b>'):'')+'</div>';
       });
@@ -11777,19 +11777,19 @@
       }
       const hojeIso=new Date().toISOString().slice(0,10);
       job.payments.forEach((p,i)=>{
-        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso;
+        const atrasada = p.status!=='pago' && p.dueDate && p.dueDate<hojeIso; class="struct-row struct-l nm sub u-row sig-tag '+pTagClasse+' btn soft"
         const pStatus = p.status==='pago'?'done':(p.status==='a_confirmar'?'progress':(atrasada?'late':'pending'));
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
-        html+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
-          '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
+        html+='<div style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        html+='<div style="flex:1;min-width:0"><div style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+          '<span>'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
         const pTagClasse={done:'green',progress:'amber',pending:'gray',late:'late'}[pStatus];
-        html+='<div class="u-row">';
-        html+='<span class="sig-tag '+pTagClasse+'">'+statusTxt+'</span>';
+        html+='<div>';
+        html+='<span>'+statusTxt+'</span>';
         if(p.status!=='pago'){
-          html+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
+          html+='<button style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
         html+='</div></div>';
       });
@@ -12109,14 +12109,14 @@
     const filtrados = todos.filter(c=>(c.email||'').toLowerCase().includes(q)||(c.nome||'').toLowerCase().includes(q));
     let html=filtrados.map(c=>{
       const tag = c.origem==='team' ? t('collab.fromTeam') : t('collab.fromHistory');
-      return '<div class="pick-row" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
-        '<div><div class="nm">'+escapeHtml(c.nome||c.email||'')+'</div><span class="sub">'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
+      return '<div class="pick-row nm sub pick-row nm sub" onclick="selecionarColabSugestao(\''+jobId+'\',\''+escapeHtml(c.email||'').replace(/'/g,"\\'")+'\',\''+(c.userId||'')+'\',\''+escapeHtml(c.nome||'').replace(/'/g,"\\'")+'\')">'+
+        '<div><div>'+escapeHtml(c.nome||c.email||'')+'</div><span>'+escapeHtml(c.email||'')+' · '+tag+'</span></div></div>';
     }).join('');
     /* email completo digitado que não corresponde a ninguém → oferecer adicionar novo */
     const exato=todos.some(c=>(c.email||'').toLowerCase()===q);
     if(ehEmail && !exato){
-      html+='<div class="pick-row" style="border:1px solid var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
-        '<div><div class="nm">'+t('collab.addNew')+'</div><span class="sub">'+escapeHtml(q)+'</span></div></div>';
+      html+='<div style="border:1px solid var(--brand);margin-top:6px" onclick="procurarColaboradorExterno(\''+jobId+'\')">'+
+        '<div><div>'+t('collab.addNew')+'</div><span>'+escapeHtml(q)+'</span></div></div>';
     }
     if(!html) html='<p style="font-size:12.5px;color:var(--neutral);padding:6px 2px">'+t('wizard.noMatchesFor')+escapeHtml(q)+'"</p>';
     wrap.innerHTML=html;
@@ -12669,7 +12669,7 @@
     } else {
       html+='<p style="font-size:13px;color:var(--neutral);margin-bottom:12px">'+t('payment.noReceiptYet')+'</p>';
     }
-    html+='<input type="file" id="detalhe-parc-file" accept="image/*,.pdf" style="display:none" onchange="substituirComprovanteParcela(\''+jobId+'\','+i+')">';
+    html+='<input type="file" id="detalhe-parc-file" accept="image/*,.pdf" class="u-hidden" onchange="substituirComprovanteParcela(\''+jobId+'\','+i+')">';
     html+='<button class="btn ghost u-w-full" onclick="document.getElementById(\'detalhe-parc-file\').click()">'+t('payment.replaceReceipt')+'</button>';
     if(p.status!=='pago') html+='<button class="btn primary u-w-full u-mt-8" onclick="closeInfo();marcarPagoDynamic(\''+jobId+'\','+i+')">'+t('action.complete')+'</button>';
     openInfo(t('payment.detailTitle'), html);
@@ -14453,18 +14453,18 @@
       const cheios=Math.round(pct/100*N);
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
-      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' is-filled':'')+'"></span>').join('');
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-track" style="--fill:'+pct+'">'+segs+'</div></div>';
+      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' class="bib-struct-row lbl bib-struct-tag bib-struct-track u-label-nd u-label-nd vis-meta vis-meta" is-filled':'')+'"></span>').join('');
+      return '<div><div>'+escapeHtml(blockName({key:null,name:b.name}))+' <span>'+icone+t(tagKey)+'</span></div><div style="--fill:'+pct+'">'+segs+'</div></div>';
     }).join('')+'</div>';
   }
   /* "Visualizar" — mostra TODOS os blocos do contrato (nome + cláusulas) no
      idioma do card, com os [PLACEHOLDERS] visíveis. Só leitura; o botão
      Importar leva ao editor com o painel de campos dinâmicos. */
   async function abrirVisualizarContratoCompleto(rawId, lang, titulo){
-    openInfo('', '<p class="u-label-nd">…</p>');
+    openInfo('', '<p>…</p>');
     const detail = await LegalLibrary.getDetail(rawId, lang||LANG);
     if(!detail || !detail.blocks || !detail.blocks.length){
-      document.getElementById('infoBody').innerHTML='<p class="u-label-nd">'+t('library.structureUnavailable')+'</p>';
+      document.getElementById('infoBody').innerHTML='<p>'+t('library.structureUnavailable')+'</p>';
       return;
     }
     const it=LegalLibrary.get(rawId);
@@ -14473,8 +14473,8 @@
        então a tag Jurídico não é usada aqui — só Pivots. */
     const head=[];
     head.push(bibOtag('oficial', t('library.origin.official')));
-    head.push('<span class="vis-meta">'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
-    head.push('<span class="vis-meta">'+BIB_ICON_BLOCKS+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
+    head.push('<span>'+(BIB_LANG_TAG[lang||LANG]||String(lang||LANG).toUpperCase())+'</span>');
+    head.push('<span>'+BIB_ICON_BLOCKS+detail.blocks.length+' '+t('library.blocksCount')+'</span>');
     const blocosHtml=detail.blocks.map(b=>{
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
@@ -14530,14 +14530,14 @@
     if(tagsExibidas.length) html+='<div class="bc-tags u-mb-14">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
     const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
     html+='<button class="btn soft u-w-full u-mb-8" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
-    if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
+    if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8 btn primary" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
     /* Chega aqui só fora do modo de seleção de blocos/cláusulas (abrirItemBiblioteca
        roteia esses direto pros blocos, sem passar por este ecrã) — sobram o
        fluxo normal de import e o de escolher contrato pra colaborador. */
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
+    html+='<button style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
     openInfo(it.titulo, html, undefined, 'bib-title-font');
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
@@ -15046,18 +15046,18 @@
          texto do nome e quebrava de forma imprevisível (ora colada ao nome,
          ora empurrada pra baixo dele) por não ter layout próprio. */
       const tag = (c.tipo && c.tipo!=='Cliente') ? '<div style="margin:3px 0 1px"><span class="sig-tag" style="background:var(--btn-06);color:var(--ink-soft);font-size:10px">'+escapeHtml(c.tipo)+'</span></div>' : '';
-      return '<div class="pick-row u-row-full" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
+      return '<div class="pick-row u-row-full u-min-0 nm sub chevr u-flex-none prow u-cur-default u-flex-1" onclick="abrirContatoDetalhe(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+
         '<div>'+avatarHtml(c.nome,34,c.foto)+
-        '<div class="u-min-0">'+
-          '<div class="nm" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(c.nome)+'</div>'+
+        '<div>'+
+          '<div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escapeHtml(c.nome)+'</div>'+
           tag+
-          '<div class="sub" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div>'+
+          '<div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml(sub)+'</div>'+
         '</div></div>'+
-        '<svg class="chevr u-flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
     }).join('');
   }
   function linhaInfoContato(label,val){
-    return '<div class="prow u-cur-default"><div class="u-flex-1"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500;white-space:pre-wrap">'+escapeHtml(val)+'</div></div></div>';
+    return '<div><div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--neutral)">'+escapeHtml(label)+'</div><div style="font-size:14px;font-weight:500;white-space:pre-wrap">'+escapeHtml(val)+'</div></div></div>';
   }
   function abrirContatoDetalhe(key){
     const sep=key.indexOf(':');
@@ -15081,22 +15081,22 @@
     let html='<div style="display:flex;align-items:center;gap:13px;margin-bottom:18px">'+avatarHtml(c.nome,52,c.foto)+
       '<div style="min-width:0;flex:1"><div style="font-size:21px;font-weight:700">'+escapeHtml(c.nome)+'</div>'+
       '<div class="u-sm-soft">'+escapeHtml(c.tipo||'Cliente')+(c.email?(' · '+escapeHtml(c.email)):'')+'</div></div>'+
-      '<button class="btn dark u-flex-none" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
-    html+='<div class="plist u-mb-16">';
+      '<button class="btn dark u-flex-none plist u-mb-16 prow u-cur-default sub u-c-neutral ct-stats ct-stat v l ct-stat v l ct-stat v l plabel" onclick="abrirEditarContato(\''+escapeHtml(key).replace(/'/g,"\\'")+'\')">'+t('action.edit')+'</button></div>';
+    html+='<div>';
     if(c.email) html+=linhaInfoContato('Email', c.email);
     if(c.telefone) html+=linhaInfoContato(t('profile.company.phone'), c.telefone);
     if(c.empresa) html+=linhaInfoContato(t('field.company'), c.empresa);
     if(c.instagram) html+=linhaInfoContato('Instagram', c.instagram);
     if(c.notas) html+=linhaInfoContato(t('wizard.client.notes'), c.notas);
-    if(!c.email && !c.telefone && !c.empresa && !c.instagram && !c.notas) html+='<div class="prow u-cur-default"><div class="sub u-c-neutral">'+t('contacts.noEmail')+'</div></div>';
+    if(!c.email && !c.telefone && !c.empresa && !c.instagram && !c.notas) html+='<div><div>'+t('contacts.noEmail')+'</div></div>';
     html+='</div>';
     if(tipo==='cli'){
-      html+='<div class="ct-stats">'+
-        '<div class="ct-stat"><div class="v">'+fmtMoney(faturado)+'</div><div class="l">'+t('contacts.totalBilled')+'</div></div>'+
-        '<div class="ct-stat"><div class="v">'+fmtMoney(recebido)+'</div><div class="l">'+t('contacts.received')+'</div></div>'+
-        '<div class="ct-stat"><div class="v">'+fmtMoney(porReceber)+'</div><div class="l">'+t('contacts.pending')+'</div></div></div>';
+      html+='<div>'+
+        '<div><div>'+fmtMoney(faturado)+'</div><div>'+t('contacts.totalBilled')+'</div></div>'+
+        '<div><div>'+fmtMoney(recebido)+'</div><div>'+t('contacts.received')+'</div></div>'+
+        '<div><div>'+fmtMoney(porReceber)+'</div><div>'+t('contacts.pending')+'</div></div></div>';
     }
-    html+='<div class="plabel" style="margin:18px 2px 10px">'+(together?t('contacts.together'):t('contacts.history'))+' ('+jobs.length+')</div>';
+    html+='<div style="margin:18px 2px 10px">'+(together?t('contacts.together'):t('contacts.history'))+' ('+jobs.length+')</div>';
     if(jobs.length){
       html+=jobs.map(j=>{
         const ccl=classificarTrabalho(j);
@@ -15568,7 +15568,7 @@
     openInfo(t('profile.company'), `
       <div style="text-align:center;margin-bottom:16px">
         <div class="p-avatar" id="empresa-avatar-preview" style="width:64px;height:64px;font-size:22px;margin:0 auto 8px;${perfilData.empresaFotoUrl?('background-image:url('+perfilData.empresaFotoUrl+');background-size:cover;background-position:center'):''}">${perfilData.empresaFotoUrl?'':escapeHtml((perfilData.empresa||'?').charAt(0).toUpperCase())}</div>
-        <label class="inline-link u-cur-pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" style="display:none" onchange="onEmpresaAvatarSelected(this)"></label>
+        <label class="inline-link u-cur-pointer">${t('profile.company.changeLogo')}<input type="file" accept="image/*" class="u-hidden" onchange="onEmpresaAvatarSelected(this)"></label>
       </div>
       <div class="field"><label>${t('profile.account.company')}</label><input value="${escapeHtml(perfilData.empresa)}" id="emp-nome"></div>
       <div class="field"><label>${t('profile.company.address')}</label><input value="${escapeHtml(perfilData.endereco||'')}" id="emp-endereco"></div>
@@ -15729,8 +15729,8 @@
         <div class="sig-pad-wrap"><canvas id="perfil-sig-canvas"></canvas><span class="sig-pad-clear" onclick="limparAssinaturaCanvasPerfil()">${t('signature.clear')}</span></div>
         <button class="btn primary u-w-full u-mt-10" onclick="guardarAssinaturaDesenhadaPerfil()">${t('action.saveSignature')}</button>
       </div>
-      <div id="perfil-sig-upload" style="display:none">
-        <input type="file" id="perfil-sig-file-input" accept="image/*" style="display:none" onchange="onAssinaturaFileSelected(this)">
+      <div id="perfil-sig-upload" class="u-hidden">
+        <input type="file" id="perfil-sig-file-input" accept="image/*" class="u-hidden" onchange="onAssinaturaFileSelected(this)">
         <div class="dropzone" onclick="document.getElementById('perfil-sig-file-input').click()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M5 20h14"/></svg>
           <div class="t">${t('signature.tabUpload')}</div><div class="s">${t('signature.uploadHint')}</div>
@@ -16339,7 +16339,7 @@
       '<div class="state '+(j.contract.status==='assinado'?'s-active':'s-wait')+'">'+t(j.contract.status==='assinado'?'jobs.status.active':'jobs.status.waiting')+'</div></div></div>');
     const clienteMatches=Object.values(clientesData).filter(c=>
       (c.nome+' '+(c.email||'')+' '+(c.empresa||'')).toLowerCase().includes(q)
-    ).map(c=>'<div class="pick-row" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div class="nm">'+escapeHtml(c.nome)+'</div><div class="sub">'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
+    ).map(c=>'<div class="pick-row nm sub" onclick="selecionarClienteDaPesquisa(\''+escapeHtml(c.nome).replace(/'/g,"\\'")+'\')"><div style="display:flex;align-items:center;gap:10px">'+avatarHtml(c.nome,28)+'<div><div>'+escapeHtml(c.nome)+'</div><div>'+escapeHtml(c.empresa||c.email||'cliente')+'</div></div></div></div>');
     const total=jobMatches.length+clienteMatches.length;
     res.textContent = total? total+' resultado'+(total>1?'s':'') : 'Sem resultados para "'+qRaw+'"';
     box.innerHTML = jobMatches.join('') + clienteMatches.join('');

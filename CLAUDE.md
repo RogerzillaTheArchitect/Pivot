@@ -132,4 +132,4 @@ Regra geral: leia **só** o CSS do domínio + grep pelo `id` ou função listada
 - Não hardcode font-sizes — usar `var(--text-*)`.
 - Não hardcode cores inline — usar tokens de `tokens.css`.
 - Não usar `style=` inline para padrões que já têm classe `u-*` em `utilities.css`.
-- Não converter `style="display:none"` para classe — esses 74 elementos são controlados por JS via `element.style.display` e devem permanecer como inline style.
+- Para ocultar elementos use `class="u-hidden"`. Para mostrar/esconder via JS use `el.classList.toggle('u-hidden')` ou `el.style.display`.

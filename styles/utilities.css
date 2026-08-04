@@ -123,21 +123,18 @@
 .u-sq-40 { width: 40px; height: 40px; padding: 0; font-size: var(--text-17); font-weight: 700 }
 .u-sq-64 { width: 64px; height: 64px; font-size: var(--text-2xl) }
 
+/* --- Visibilidade ---------------------------------------------------------- */
+.u-hidden { display: none }
+
 /* --- Outros componentes ---------------------------------------------------- */
 .u-check       { margin-top: 2px; width: 17px; height: 17px; accent-color: var(--brand); flex: none }
 .u-btn-neutral { border-color: var(--neutral); color: var(--neutral) }
 .u-code-display { letter-spacing: 4px; font-size: var(--text-17); text-align: center }
 .u-badge-min   { min-width: 14px; text-align: center; font-weight: 600 }
 
-/* ==========================================================================
-   CASOS ISOLADOS — display:none gerenciado via JS (element.style.display)
-   Não extrair para classe: el.style.display='' reverte inline mas não reverte
-   classe, mudando comportamento de show/hide.
+/* --- Padding extra --------------------------------------------------------- */
+.u-p-46-16 { padding: 46px 16px }
+.u-p-40-16 { padding: 40px 16px }
 
-   Padrões mantidos como style= inline (52 ocorrências no total):
-   - style="display:none"                       (48 estático, 4 JS)
-   - style="display:none;margin-top:22px"       (4 estático)
-   - style="display:none;margin-top:8px"        (4 estático)
-   - style="display:none;padding:46px 16px"     (2 estático)
-   - style="color:#B23A2E;font-size:12.5px;display:none;margin:4px 2px 0"  (2 JS)
-   ========================================================================== */
+/* --- Margin extra ---------------------------------------------------------- */
+.u-m-4-0-6 { margin: 4px 0 6px }
