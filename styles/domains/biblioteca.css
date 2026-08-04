@@ -21,7 +21,6 @@
     --bib-brass-base:rgba(56,45,25,.72); --bib-brass-ink:#C4A76C;
     --bib-bronze-base:rgba(50,36,27,.72); --bib-bronze-ink:#BA8F6C;
     --bib-silver-base:rgba(44,46,50,.72); --bib-silver-ink:#C9CDD4;
-    --bib-orange:#E8763A;
   }
 
   /* Sem background/painel próprio na view nem no shell — mesmo tratamento de
@@ -59,7 +58,7 @@
   .bib-pick-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;
     background:linear-gradient(135deg,rgba(203,162,106,.14),rgba(255,255,255,0) 45%),rgba(203,162,106,.08);
     border:1px solid rgba(203,162,106,.28);border-radius:var(--r);padding:11px 14px;margin-bottom:14px;
-    font-size:12.5px;color:var(--bib-ink)}
+    font-size:var(--text-12h);color:var(--bib-ink)}
   .bib-pick-banner .inline-link{flex:none;font-weight:600;color:var(--bib-ink);cursor:pointer}
 
   /* ===== cabeçalho: botão quadrado + busca (mesmo vidro) ===== */
@@ -69,7 +68,7 @@
   .bib-square-btn svg{width:17px;height:17px}
   .bib-search{flex:1;min-width:0;display:flex;align-items:center;gap:9px;height:40px;padding:0 12px;border-radius:var(--r)}
   .bib-search svg{width:16px;height:16px;color:var(--bib-ink-faint);flex:none}
-  .bib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:inherit;font-size:13.5px;color:var(--bib-ink)}
+  .bib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-13h);color:var(--bib-ink)}
   .bib-search input::placeholder{color:var(--bib-ink-faint)}
 
   /* filtros + selos: um único bloco visual (mesmo ritmo, gap curto entre as duas linhas) */
@@ -78,7 +77,7 @@
   /* ===== filtros: grid rígido de 4 colunas, mesmo vidro do Header ===== */
   .bib-filters{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
   .bib-filter{height:36px;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:4px;padding:0 9px;border-radius:var(--r);
-    color:var(--bib-ink-soft);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:color .15s}
+    color:var(--bib-ink-soft);font-size:var(--text-11);font-weight:500;cursor:pointer;font-family:inherit;transition:color .15s}
   .bib-filter>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bib-filter:hover{color:var(--bib-ink)}
   .bib-filter.on{color:var(--bib-ink)}
@@ -93,7 +92,7 @@
      em reticências. */
   .bib-seals{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
   .bib-seal{height:36px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:0 8px;border-radius:var(--r);
-    cursor:pointer;font-family:inherit;font-size:10px;font-weight:600;
+    cursor:pointer;font-family:inherit;font-size:var(--text-2xs);font-weight:600;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
     border:1px solid var(--bib-mat-line);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--bib-mat-shadow);
@@ -109,12 +108,12 @@
   .bib-seal.s-recomendados{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-brass-base);color:var(--bib-brass-ink)}
   .bib-seal.s-comunidade{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-bronze-base);color:var(--bib-bronze-ink)}
   /* versão inline (rodapé do card / cabeçalho de sheets) — largura ao conteúdo, ícone rente ao texto */
-  span.bib-seal{display:inline-flex;align-items:center;height:22px;box-sizing:border-box;padding:0 8px;font-size:10px;gap:5px;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+  span.bib-seal{display:inline-flex;align-items:center;height:22px;box-sizing:border-box;padding:0 8px;font-size:var(--text-2xs);gap:5px;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   span.bib-seal .sl-ic{width:12px;height:12px}
 
   /* ===== lista de contratos: bloco claramente separado do toolbar ===== */
   .bib-grid{display:flex;flex-direction:column;gap:10px}
-  .bib-empty{font-size:13px;color:var(--bib-ink-faint);margin-top:14px}
+  .bib-empty{font-size:var(--text-sm);color:var(--bib-ink-faint);margin-top:14px}
 
   /* ===== cards — placas do MESMO material do Header/Footer ===== */
   .bib-card{position:relative;display:flex;flex-direction:column;border-radius:var(--r);padding:14px 15px 12px;cursor:pointer;
@@ -126,27 +125,27 @@
     --ink:#F5F5F3; --ink-soft:#9B9DA3; --ink-faint:#6A6C72; --neutral:#6A6C72;
     --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.07)}
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
-  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:15px;font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
-  .bib-card .bc-desc{font-size:12px;color:var(--bib-ink-soft);line-height:1.45;
+  .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:var(--text-md);font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
+  .bib-card .bc-desc{font-size:var(--text-12);color:var(--bib-ink-soft);line-height:1.45;
     display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
-  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:11px;color:var(--bib-ink-faint);font-weight:400}
+  .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;font-size:var(--text-11);color:var(--bib-ink-faint);font-weight:400}
   .bib-card .bc-meta-l{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0}
   .bib-card .bc-lang{flex:none;width:22px;height:22px;padding:0;box-sizing:border-box;
     display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;letter-spacing:.02em;
     border-radius:3px;border:1px solid var(--bib-ink-soft);color:var(--bib-ink-soft);background:transparent}
-  .bib-card .bc-lang-blocks{height:22px;padding:0 7px;box-sizing:border-box;font-size:10px;color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;border-radius:3px;border:1px solid var(--bib-ink-faint)}
+  .bib-card .bc-lang-blocks{height:22px;padding:0 7px;box-sizing:border-box;font-size:var(--text-2xs);color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;border-radius:3px;border:1px solid var(--bib-ink-faint)}
   .bc-lang-blocks-ico{width:12px;height:12px;background-color:var(--bib-ink-faint)}
   .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
   .bib-fav svg{width:16px;height:16px}
   .bib-fav.on{color:var(--bib-brass-ink);opacity:1}
   .bib-minitag{font-size:9.5px;font-weight:500;padding:2px 6px;border-radius:var(--r);background:rgba(255,255,255,.05);color:var(--bib-ink-soft);border:1px solid var(--bib-mat-line)}
-  .bib-uses{height:18px;display:inline-flex;align-items:center;font-size:10px;color:var(--bib-ink-faint);white-space:nowrap}
+  .bib-uses{height:18px;display:inline-flex;align-items:center;font-size:var(--text-2xs);color:var(--bib-ink-faint);white-space:nowrap}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 
   .bib-struct-list{margin-bottom:14px}
   .bib-struct-row{margin-bottom:10px}
-  .bib-struct-row .lbl{font-size:12px;color:var(--ink-soft);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .bib-struct-row .lbl{font-size:var(--text-12);color:var(--ink-soft);margin-bottom:5px;display:flex;align-items:center;justify-content:space-between;gap:8px}
   .bib-struct-tag{display:inline-flex;align-items:center;gap:4px;flex:none;white-space:nowrap;opacity:.75}
   .bib-struct-tag svg{width:11px;height:11px;flex:none}
   /* Mesmo padrão visual do .ops-card .track/.segment da Dashboard (grid de
@@ -160,7 +159,7 @@
   .bib-struct-seg{z-index:1;height:10px;border:1px solid rgba(255,255,255,.35);border-radius:0;background:rgba(255,255,255,.03)}
   .bib-struct-seg.is-filled{border-color:#BED4CA;background:#BED4CA;box-shadow:inset 0 1px rgba(255,255,255,.35)}
   .bib-sort-row{display:flex;flex-direction:column;gap:6px}
-  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r);cursor:pointer;font-size:13.5px;color:var(--ink)}
+  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r);cursor:pointer;font-size:var(--text-13h);color:var(--ink)}
   .bib-sort-opt.on{border-color:var(--ink);font-weight:600}
   .opt-left{display:flex;align-items:center;gap:10px;min-width:0}
   .opt-icon{flex:none;width:17px;height:17px;color:var(--bib-ink-faint);display:inline-flex}
@@ -177,14 +176,14 @@
   .searchbox{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);
     border-radius:var(--r);padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
   .searchbox svg{width:18px;height:18px;color:var(--neutral)}
-  .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:15px;flex:1;color:var(--ink)}
-  .res{font-size:13px;color:var(--neutral);padding:0 2px}
+  .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-md);flex:1;color:var(--ink)}
+  .res{font-size:var(--text-sm);color:var(--neutral);padding:0 2px}
 
   .search-recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);
     margin-bottom:8px;cursor:pointer;transition:background .15s}
   .search-recent-item:active{background:var(--paper-2)}
-  .search-recent-txt{font-size:14px;color:var(--ink);flex:1;min-width:0;overflow:hidden;
+  .search-recent-txt{font-size:var(--text-base);color:var(--ink);flex:1;min-width:0;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
   .search-recent-x{width:26px;height:26px;flex:none;display:grid;place-items:center;color:var(--neutral);
     border-radius:50%;transition:background .15s,color .15s}
@@ -193,16 +192,16 @@
 
   /* ===== Visualizar — tela do contrato (título à esquerda, cabeçalho em linha, blocos num card) ===== */
   .vis-screen{--ink:#F5F5F3; --ink-soft:#9B9DA3; --neutral:#6A6C72; --line-soft:rgba(255,255,255,.07)}
-  .vis-title{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:21px;line-height:1.2;color:var(--bib-ink);text-align:left;margin:2px 0 12px}
+  .vis-title{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:var(--text-2xl);line-height:1.2;color:var(--bib-ink);text-align:left;margin:2px 0 12px}
   .vis-head{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}
-  .vis-head .vis-meta{display:inline-flex;align-items:center;gap:4px;height:22px;box-sizing:border-box;font-size:11px;font-weight:500;color:var(--bib-ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:0 9px}
+  .vis-head .vis-meta{display:inline-flex;align-items:center;gap:4px;height:22px;box-sizing:border-box;font-size:var(--text-11);font-weight:500;color:var(--bib-ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:0 9px}
   .vis-head .vis-meta .bc-lang-blocks-ico{width:14px;height:14px;background-color:var(--bib-ink-soft)}
   .vis-card{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:6px;margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
   .vis-bloco{border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:12px 13px;background:rgba(255,255,255,.03)}
-  .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13.5px;font-weight:500;color:var(--bib-ink);margin-bottom:6px}
+  .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:var(--text-13h);font-weight:500;color:var(--bib-ink);margin-bottom:6px}
   .vis-bloco-tag{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#9A9BA2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:1px 5px;white-space:nowrap}
   .vis-bloco-tag svg{width:9px;height:9px;flex:none}
-  .vis-bloco-txt{font-size:12.5px;line-height:1.55;color:var(--bib-ink-soft);white-space:pre-wrap;word-break:break-word}
+  .vis-bloco-txt{font-size:var(--text-12h);line-height:1.55;color:var(--bib-ink-soft);white-space:pre-wrap;word-break:break-word}
 
   /* ===== ACTION SHEET =====
      Backdrop neutro (preto translúcido) — chegou a usar var(--btn-32), a cor
@@ -223,12 +222,12 @@
     transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -12px 34px rgba(0,0,0,.32);overflow-x:hidden}
   .sheet.show{transform:translateY(0)}
   .sheet-grab{width:36px;height:4px;background:var(--line);border-radius:99px;margin:6px auto 14px}
-  .sheet h3{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:19px;margin-bottom:14px;padding:0 4px}
+  .sheet h3{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-xl);margin-bottom:14px;padding:0 4px}
   .sheet-primary{display:flex;align-items:center;gap:13px;padding:16px;border-radius:var(--r);background:var(--ink);
     color:var(--paper);cursor:pointer;margin-bottom:14px}
   .sheet-primary svg{width:20px;height:20px}
-  .sheet-primary .t{font-size:15.5px;font-weight:600}
-  .sheet-primary .s{font-size:12.5px;opacity:.65}
+  .sheet-primary .t{font-size:var(--text-15h);font-weight:600}
+  .sheet-primary .s{font-size:var(--text-12h);opacity:.65}
   .sheet-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   /* Mesmo vidro escuro premium dos outros cards do app (.job/.card/.btn.dark)
      — antes era um preenchimento chapado (var(--paper), sem gradiente/blur),
@@ -242,5 +241,5 @@
   .sheet-item:hover{background:var(--surface-row-hover);border-color:rgba(255,255,255,.16)}
   .sheet-item svg{width:18px;height:18px;color:var(--ink-soft)}
   .sheet-item .nav-ico{width:18px;height:18px;background-color:var(--ink-soft)}
-  .sheet-item span{font-size:13.5px;font-weight:500;line-height:1.3}
+  .sheet-item span{font-size:var(--text-13h);font-weight:500;line-height:1.3}
 

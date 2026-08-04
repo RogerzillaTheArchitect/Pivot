@@ -5,7 +5,7 @@
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
   .rel-fin-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0 20px}
-  .rel-fin-actions .btn{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-fin-actions .btn{padding:10px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:var(--text-12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-fin-ico{width:16px;height:16px;background-color:currentColor}
 
   /* Card "Segmentação Financeira" — identidade visual premium do Pivot: preto
@@ -15,17 +15,17 @@
      gradiente sutil branco-gelo → cinza claro, com transição suave no load
      (ver renderRelSegmentacaoFinanceira — largura muda de 0 pra final depois
      do primeiro paint). */
-  .seg-fin-sub{font-size:12.5px;color:var(--ink-soft);margin-top:3px;line-height:1.4}
+  .seg-fin-sub{font-size:var(--text-12h);color:var(--ink-soft);margin-top:3px;line-height:1.4}
   .seg-fin-row{margin-bottom:18px}
   .seg-fin-row:last-child{margin-bottom:0}
-  .seg-fin-name{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px}
+  .seg-fin-name{font-size:var(--text-13h);font-weight:600;color:var(--ink);margin-bottom:7px}
   .seg-fin-bar-track{height:10px;border-radius:var(--r);background:rgba(255,255,255,.05);overflow:hidden}
   .seg-fin-bar-fill{display:block;height:100%;width:0;border-radius:var(--r);
     background:linear-gradient(90deg,#F2F5F3,#B9BDC2);
     transition:width .9s cubic-bezier(.2,.8,.2,1)}
-  .seg-fin-meta{font-size:12px;color:var(--ink-soft);margin-top:7px}
-  .seg-fin-empty-title{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:6px}
-  .seg-fin-empty-text{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin:0}
+  .seg-fin-meta{font-size:var(--text-12);color:var(--ink-soft);margin-top:7px}
+  .seg-fin-empty-title{font-size:var(--text-base);font-weight:600;color:var(--ink);margin-bottom:6px}
+  .seg-fin-empty-text{font-size:var(--text-12h);color:var(--ink-soft);line-height:1.5;margin:0}
 
   /* Cabeçalho conectado dos cards de Relatórios — mesmo padrão visual do
      cabeçalho "Tarefas" no Dashboard (styles/domains/dashboard.css
@@ -43,7 +43,7 @@
     padding:11px 16px;margin:0;
     backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:12px;font-weight:600;font-stretch:100%;letter-spacing:.06em;text-transform:uppercase;
+    font-size:var(--text-12);font-weight:600;font-stretch:100%;letter-spacing:.06em;text-transform:uppercase;
     color:var(--label-out);text-align:center;
   }
   /* Toggle "mostrar na Dashboard" — bem discreto de propósito (não é um
@@ -80,9 +80,9 @@
 
   /* Fluxo de Tarefas — mesma linguagem de ícone monocromático, sem bordas nem divisórias */
   .rel-op-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;cursor:pointer}
-  .rel-op-row .l{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
+  .rel-op-row .l{display:flex;align-items:center;gap:10px;font-size:var(--text-12h);color:var(--ink-soft);font-weight:500;letter-spacing:.02em}
   .rel-op-row .l svg{width:14px;height:14px;flex:none;color:var(--ink-faint)}
-  .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:15px;color:var(--ink)}
+  .rel-op-row .v{font-family:var(--font-numeric),inherit;font-weight:600;font-size:var(--text-md);color:var(--ink)}
   .rel-op-row.zero{opacity:.45}
 
   /* Despesas/Receitas (telas dedicadas, Financeiro) — listas de cards
@@ -108,23 +108,23 @@
      (três classes) garante que o grid sempre vence, tanto nos itens
      automáticos (.fin-item sozinho) quanto nos manuais (.card.radar-card.fin-item). */
   .fin-item,.card.radar-card.fin-item{display:grid;grid-template-columns:1fr auto;column-gap:12px;row-gap:3px;align-items:baseline}
-  .fin-item-title{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:1}
-  .fin-item-date{font-size:11.5px;color:var(--neutral);white-space:nowrap;text-align:right;grid-column:2;grid-row:1}
-  .fin-item-sub{font-size:11.5px;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:2}
-  .fin-item-valor{font-family:var(--font-numeric),inherit;font-weight:600;font-size:14px;color:var(--ink);white-space:nowrap;text-align:right;grid-column:2;grid-row:2}
+  .fin-item-title{font-size:var(--text-13h);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:1}
+  .fin-item-date{font-size:var(--text-xs);color:var(--neutral);white-space:nowrap;text-align:right;grid-column:2;grid-row:1}
+  .fin-item-sub{font-size:var(--text-xs);color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;grid-column:1;grid-row:2}
+  .fin-item-valor{font-family:var(--font-numeric),inherit;font-weight:600;font-size:var(--text-base);color:var(--ink);white-space:nowrap;text-align:right;grid-column:2;grid-row:2}
   /* lançamento automático (parcela de contrato) — sem swipe, levemente
      recuado visualmente pra ler como "só leitura". */
   .fin-item-auto{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px;opacity:.72}
   .fin-item-auto::before{content:none}
 
   /* Seletor avançado de período (modal aberto ao tocar no mês/ano) */
-  .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:14px;font-weight:600;color:var(--ink)}
+  .rel-year-nav{display:flex;align-items:center;justify-content:center;gap:22px;margin-bottom:12px;font-size:var(--text-base);font-weight:600;color:var(--ink)}
   .rel-year-nav span{cursor:pointer;color:var(--ink-soft);width:24px;text-align:center}
   .rel-year-nav span:hover{color:var(--ink)}
   .rel-month-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
   .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:var(--r);
-    font-size:12.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
+    font-size:var(--text-12h);font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
   .rel-month-cell:hover{border-color:var(--brand)}
   .rel-month-cell.on{background:var(--ink);color:var(--paper);border-color:var(--ink);font-weight:600}
 
@@ -135,7 +135,7 @@
      todo o app, não uma paleta nova por tela. */
   .heat-metric-btn{height:36px;flex:1;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:6px;
     padding:0 12px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper-2);
-    color:var(--ink);font-family:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+    color:var(--ink);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer}
   .heat-metric-btn span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .heat-metric-btn .dd-arrow{width:12px;height:12px;flex:none;opacity:.6}
   .heat-toolbar{display:flex;align-items:center;gap:8px;margin-top:12px}
@@ -143,22 +143,22 @@
   .heat-nav-btn{width:30px;height:30px;border-radius:var(--r);border:1px solid var(--line);background:var(--paper-2);
     color:var(--ink-soft);display:grid;place-items:center;cursor:pointer;flex:none}
   .heat-nav-btn svg{width:15px;height:15px}
-  .heat-nav-label{font-size:12px;font-weight:600;color:var(--ink-soft);min-width:64px;text-align:center;white-space:nowrap}
+  .heat-nav-label{font-size:var(--text-12);font-weight:600;color:var(--ink-soft);min-width:64px;text-align:center;white-space:nowrap}
   .heat-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
   .heat-grid-mes{grid-template-columns:repeat(4,1fr)}
   .heat-grid-ano{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
   .heat-grid-semana{grid-template-columns:repeat(auto-fill,minmax(28px,1fr));gap:3px}
   .heat-cell{aspect-ratio:1;border-radius:3px;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
-    font-size:10px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:transform .12s}
+    font-size:var(--text-2xs);font-weight:600;color:var(--ink-soft);cursor:pointer;transition:transform .12s}
   .heat-cell:active{transform:scale(.92)}
   .heat-grid-semana .heat-cell{font-size:8px}
   .heat-grid-empty{margin-top:14px}
-  .heat-empty{font-size:12.5px;color:var(--neutral);padding:14px 0;text-align:center}
-  .heat-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:11px;color:var(--neutral)}
+  .heat-empty{font-size:var(--text-12h);color:var(--neutral);padding:14px 0;text-align:center}
+  .heat-legend{display:flex;align-items:center;gap:8px;margin-top:12px;font-size:var(--text-11);color:var(--neutral)}
   .heat-legend-bar{flex:1;height:6px;border-radius:3px;background:linear-gradient(90deg, rgba(255,255,255,.04), rgba(232,118,58,.9))}
-  .heat-insight{font-size:12.5px;color:var(--ink-soft);margin-top:10px;min-height:16px}
-  .heat-geo-note{font-size:11.5px;color:var(--neutral);margin-top:10px;line-height:1.4}
-  .heat-bar-fill{background:linear-gradient(90deg,#5A3620,var(--bib-orange,#E8763A))!important}
+  .heat-insight{font-size:var(--text-12h);color:var(--ink-soft);margin-top:10px;min-height:16px}
+  .heat-geo-note{font-size:var(--text-xs);color:var(--neutral);margin-top:10px;line-height:1.4}
+  .heat-bar-fill{background:linear-gradient(90deg,#5A3620,var(--bib-orange))!important}
 
   /* ===== FLUXO =====
      Eixo vertical central fixo, único e contínuo (ver .distfin-vline). Cada
@@ -168,7 +168,7 @@
      dashboard.css: 20 blocos fixos, moldura vazia nos não preenchidos,
      preenchimento progressivo), só recolorida (.green pro Recebidos,
      laranja nativo pro Despesas) — mesmo padrão visual pros dois lados. */
-  .distfin-empty,.fluxo-empty{font-size:12px;color:var(--neutral);text-align:center;padding:10px 0}
+  .distfin-empty,.fluxo-empty{font-size:var(--text-12);color:var(--neutral);text-align:center;padding:10px 0}
   /* Card Fluxo — duas colunas independentes: ranking de categorias de
      Receitas (esquerda) e de Despesas (direita), cada uma ordenada da
      maior pra menor. Nunca compartilham espaço/linha entre si. */
@@ -176,7 +176,7 @@
   .fluxo-col{min-width:0}
   .fluxo-col:first-child{border-right:1px solid var(--line-soft);padding-right:14px}
   .fluxo-col:last-child{padding-left:14px}
-  .fluxo-col-label{font-size:11px;font-weight:600;letter-spacing:.04em;margin-bottom:10px}
+  .fluxo-col-label{font-size:var(--text-11);font-weight:600;letter-spacing:.04em;margin-bottom:10px}
   .fluxo-col-label.in{color:#5E7A52}
   .fluxo-col-label.out{color:#FF9738}
   /* só lista — sem barra/indicador gráfico. Altura fixa por linha (não só
@@ -185,8 +185,8 @@
   .fluxo-rank-row{min-height:34px;display:flex;flex-direction:column;justify-content:center;
     border-top:1px solid var(--line-soft)}
   .fluxo-rank-row:first-child{border-top:none}
-  .fluxo-rank-name{font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .fluxo-rank-val{font-family:var(--font-numeric),inherit;font-size:11px;color:var(--ink-soft);margin-top:2px;font-variant-numeric:tabular-nums}
+  .fluxo-rank-name{font-size:var(--text-12);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fluxo-rank-val{font-family:var(--font-numeric),inherit;font-size:var(--text-11);color:var(--ink-soft);margin-top:2px;font-variant-numeric:tabular-nums}
 
   /* ===== Reorganização de Relatórios (3 áreas / 8 cards) =====
      Anéis do Resumo Financeiro: mesmas classes mr-ring/mr-tip/mr-base e
@@ -194,13 +194,13 @@
      (dashboard.css) — cor de cada indicador é setada por elemento via JS,
      não há mais binding de gradiente por CSS. */
 
-  .rel-subhead{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
-  .rel-subhead-sub{font-size:11px;font-weight:500;color:var(--neutral);margin-bottom:8px}
+  .rel-subhead{font-size:var(--text-11);font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:2px}
+  .rel-subhead-sub{font-size:var(--text-11);font-weight:500;color:var(--neutral);margin-bottom:8px}
 
   .rel-indic-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line-soft)}
   .rel-indic-row:last-child{border-bottom:0}
-  .rel-indic-label{font-size:13px;color:var(--ink-soft)}
-  .rel-indic-val{font-family:var(--font-numeric);font-size:13px;font-weight:600;color:var(--ink)}
+  .rel-indic-label{font-size:var(--text-sm);color:var(--ink-soft)}
+  .rel-indic-val{font-family:var(--font-numeric);font-size:var(--text-sm);font-weight:600;color:var(--ink)}
 
   /* ===== .rel-split — grid dividido OBRIGATÓRIO de qualquer card
      comparativo de 2 colunas em Relatórios (Fluxo, Evolução Mensal,
@@ -222,7 +222,7 @@
      célula compensa com padding extra no lado externo, ficando na MESMA
      posição visual de antes (só a linha bleed, o conteúdo não se move). */
   .rel-split-subhead{display:grid;grid-template-columns:1fr 1fr;column-gap:0;margin:0 -16px;width:calc(100% + 32px)}
-  .rel-split-subhead-cell{font-size:10.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:10px 14px 8px;border-bottom:1px solid var(--line-soft)}
+  .rel-split-subhead-cell{font-size:var(--text-10h);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:10px 14px 8px;border-bottom:1px solid var(--line-soft)}
   .rel-split-subhead-cell.l{border-right:1px solid var(--line-soft);text-align:left;padding-left:30px}
   .rel-split-subhead-cell.r{text-align:right;padding-right:30px}
   .rel-split{display:grid;grid-template-columns:1fr 1fr;column-gap:0;row-gap:0;margin:0 -16px;width:calc(100% + 32px)}
@@ -234,9 +234,9 @@
   .rel-split-cell.empty .rel-mrow-name{color:var(--neutral)}
   .rel-split-inner{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
   .rel-mrow-side-txt{min-width:0}
-  .rel-mrow-name{font-size:12px;color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rel-mrow-value{font-family:var(--font-numeric);font-size:12.5px;font-weight:600;color:var(--ink);max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .rel-mrow-pct{font-family:var(--font-numeric);font-size:12px;font-weight:600;white-space:nowrap;flex:none}
+  .rel-mrow-name{font-size:var(--text-12);color:var(--ink-soft);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-mrow-value{font-family:var(--font-numeric);font-size:var(--text-12h);font-weight:600;color:var(--ink);max-width:100%;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rel-mrow-pct{font-family:var(--font-numeric);font-size:var(--text-12);font-weight:600;white-space:nowrap;flex:none}
   .rel-mrow-pct.pos{color:#7FAA70}
   .rel-mrow-pct.neg{color:#D98068}
   /* nome sempre numa linha própria acima; valor+percentual na linha de
@@ -259,11 +259,11 @@
      sem rolagem horizontal; todo texto trunca em ellipsis em vez de
      empurrar a coluna. */
   .rel-table-wrap{overflow-x:hidden}
-  .rel-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:12.5px}
+  .rel-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:var(--text-12h)}
   /* cabeçalho pode quebrar em duas linhas (nunca corta em ellipsis — são só
      4 rótulos curtos); os valores das linhas continuam numa linha só,
      truncando se preciso. */
-  .rel-table th{text-align:left;font-size:10.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:10px 6px;border-bottom:1px solid var(--line-soft);white-space:normal;line-height:1.3}
+  .rel-table th{text-align:left;font-size:var(--text-10h);font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:var(--neutral);padding:10px 6px;border-bottom:1px solid var(--line-soft);white-space:normal;line-height:1.3}
   .rel-table td{padding:12px 6px;border-bottom:1px solid var(--line-soft);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .rel-table th:first-child, .rel-table td:first-child{padding-left:16px;width:28%}
   .rel-table th:nth-child(2), .rel-table td:nth-child(2){width:18%}

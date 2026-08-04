@@ -1,9 +1,9 @@
   /* ===== TRABALHOS ===== */
-  .page-title{font-family:var(--font-title),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:21px;margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
+  .page-title{font-family:var(--font-title),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-2xl);margin:14px 0 16px;letter-spacing:.05em;text-transform:uppercase}
   .page-head{display:flex;align-items:center;justify-content:space-between}
   .evento-tipo-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
   .evento-tipo-card{display:flex;align-items:center;gap:9px;padding:13px 12px;border-radius:var(--r);border:1px solid var(--line);
-    background:var(--paper);font-size:13.5px;font-weight:500;color:var(--ink-soft);cursor:pointer;min-width:0}
+    background:var(--paper);font-size:var(--text-13h);font-weight:500;color:var(--ink-soft);cursor:pointer;min-width:0}
   .evento-tipo-card svg{width:17px;height:17px;flex:none}
   .evento-tipo-card.on{background:var(--brand-10);border-color:var(--brand);color:var(--ink);font-weight:600}
   .filter-row{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;padding-bottom:2px}
@@ -14,7 +14,7 @@
   .filter-row-even{display:grid;grid-template-columns:repeat(3,1fr);overflow-x:visible}
   .filter-row-even .chip{padding:7px 6px;justify-content:center;text-align:center;min-width:0}
   .filter-row-even .chip span{overflow:hidden;text-overflow:ellipsis}
-  .chip{font-size:13px;font-weight:500;padding:7px 14px;border-radius:var(--r);border:1px solid var(--line);
+  .chip{font-size:var(--text-sm);font-weight:500;padding:7px 14px;border-radius:var(--r);border:1px solid var(--line);
     background:var(--paper);color:var(--ink-soft);white-space:nowrap;cursor:pointer;transition:all .15s;
     display:flex;align-items:center;justify-content:center;gap:6px}
   .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
@@ -30,7 +30,7 @@
   .priority-dot.media{background:var(--c-yellow-soft)}
   .priority-dot.normal{background:var(--c-green-soft)}
   .priority-picker{display:flex;gap:8px;flex-wrap:wrap}
-  .priority-opt{display:flex;align-items:center;font-size:13px;font-weight:500;padding:7px 12px;border-radius:var(--r);
+  .priority-opt{display:flex;align-items:center;font-size:var(--text-sm);font-weight:500;padding:7px 12px;border-radius:var(--r);
     border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);cursor:pointer;transition:all .15s}
   .priority-opt.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
   .priority-opt.on .priority-dot{box-shadow:0 0 0 1.5px var(--paper)}
@@ -50,7 +50,7 @@
   .job-footer-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
     padding:14px 8px;border-radius:var(--r);border:1px solid rgba(255,255,255,.10);
     background:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0) 45%),rgba(10,9,8,.32);
-    color:#E8E6E0;font-size:11.5px;font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;
+    color:#E8E6E0;font-size:var(--text-xs);font-weight:600;font-family:inherit;cursor:pointer;transition:background .15s;
     box-shadow:0 6px 18px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.04);
     backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%)}
   .job-footer-btn:hover{background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(10,9,8,.4)}
@@ -64,13 +64,13 @@
   .collab-block{padding:13px 2px;border-bottom:1px solid var(--line-soft);display:flex;flex-direction:column;gap:8px}
   .collab-block:last-child{border-bottom:none}
   .collab-block-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .collab-block-top .nm{font-size:13.5px;font-weight:600;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .collab-block-top .nm{font-size:var(--text-13h);font-weight:600;color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .collab-field{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .collab-field .k{font-size:11.5px;color:var(--ink-faint);flex:none}
-  .collab-field .v{font-size:12.5px;color:var(--ink-soft);text-align:right}
+  .collab-field .k{font-size:var(--text-xs);color:var(--ink-faint);flex:none}
+  .collab-field .v{font-size:var(--text-12h);color:var(--ink-soft);text-align:right}
   .collab-field .v.muted{color:var(--ink-faint);font-style:italic}
   .collab-field select{border:1px solid var(--line);border-radius:var(--r);background:var(--paper-2);
-    color:var(--ink);font-family:inherit;font-size:12px;padding:5px 8px;flex:none}
+    color:var(--ink);font-family:inherit;font-size:var(--text-12);padding:5px 8px;flex:none}
   /* checklist "quem recebe o contrato" — checkbox de tamanho fixo + texto
      com grid próprio (nunca quebra feio: email e função truncam com
      reticências em vez de dividir a palavra no meio). */
@@ -80,9 +80,9 @@
   .collab-select-row:hover{border-color:var(--brand)}
   .collab-select-row input[type="checkbox"]{flex:none;width:18px;height:18px;accent-color:var(--brand);margin:0}
   .collab-select-row .info{flex:1;min-width:0}
-  .collab-select-row .nm{font-size:14px;font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .collab-select-row .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .collab-pending-tag{flex:none;font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--brand);
+  .collab-select-row .nm{font-size:var(--text-base);font-weight:500;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .collab-select-row .sub{font-size:var(--text-12);color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .collab-pending-tag{flex:none;font-size:var(--text-11);font-weight:700;letter-spacing:.02em;color:var(--brand);
     background:rgba(203,162,106,.14);border:1px solid rgba(203,162,106,.3);border-radius:999px;padding:4px 10px}
   .job{
     background:var(--surface-row);
@@ -95,9 +95,7 @@
     /* altura fixa idêntica para todos os cards de projeto */
     height:112px;box-sizing:border-box;
     display:flex;flex-direction:column;justify-content:space-evenly;
-    color:#F5F5F3;
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+}
   /* exatamente o mesmo sistema visual do card Tarefas (Dashboard,
      .card.radar-card): borda fina cinza-escuro uniforme (sem cor de
      urgência), glow quase imperceptível só na base — a cor comunica o
@@ -125,28 +123,28 @@
   .job-head-info{flex:1;min-width:0;padding-top:1px}
   /* tipografia reduzida ~17% — título com leve destaque, demais textos uniformes */
   .job-title{font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:11.5px;font-weight:500;letter-spacing:0;
+    font-size:var(--text-xs);font-weight:500;letter-spacing:0;
     line-height:1.3;color:var(--ink);margin:0 0 2px;
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .job-client-name{display:flex;align-items:center;gap:5px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;font-weight:400;line-height:1.3;color:var(--ink-soft);overflow:hidden;min-width:0}
+  .job-client-name{display:flex;align-items:center;gap:5px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-11);font-weight:400;line-height:1.3;color:var(--ink-soft);overflow:hidden;min-width:0}
   .job-client-name svg{width:11px;height:11px;flex:none;color:var(--ink-soft)}
   .job-client-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   /* linhas abaixo do cabeçalho distribuídas pelo space-evenly do .job;
      gap reduzido porque o espaçamento vem do container pai. */
   .job-body-rows{margin-left:56px;display:flex;flex-direction:column;gap:5px}
-  .job-datetime{display:flex;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;font-weight:400;line-height:1.3;color:var(--ink)}
+  .job-datetime{display:flex;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-11);font-weight:400;line-height:1.3;color:var(--ink)}
   .job-datetime svg{width:11px;height:11px;flex:none;color:var(--ink-soft)}
   .job-datetime .nav-ico{width:11px;height:11px;flex:none;background-color:var(--ink-soft)}
-  .job-stage-row{display:flex;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:11px;font-weight:400;line-height:1.3;color:var(--ink-soft)}
+  .job-stage-row{display:flex;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-11);font-weight:400;line-height:1.3;color:var(--ink-soft)}
   .job-stage-row svg{width:11px;height:11px;flex:none;color:var(--ink-soft)}
   /* ===== Cards do Histórico (concluídos/arquivados) — versão simples,
      reaproveitada de htmlCardArquivado(); não faz parte da listagem
      principal, mantém o layout próprio (avatar/cliente/tipo + estado). */
   .job-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
   .job-top-l{display:flex;align-items:center;gap:11px;min-width:0}
-  .job-client{font-size:16px;font-weight:500}
-  .job-type{font-size:12.5px;color:var(--neutral);margin-top:1px}
-  .state{font-size:11px;font-weight:600;letter-spacing:.03em;padding:4px 9px;text-transform:uppercase;
+  .job-client{font-size:var(--text-lg);font-weight:500}
+  .job-type{font-size:var(--text-12h);color:var(--neutral);margin-top:1px}
+  .state{font-size:var(--text-11);font-weight:600;letter-spacing:.03em;padding:4px 9px;text-transform:uppercase;
     border-radius:var(--r);white-space:nowrap}
   .s-active{background:rgba(79,161,137,.28);color:#F5F5F3}
   .s-wait{background:rgba(203,162,106,.28);color:#F5F5F3}
@@ -154,10 +152,10 @@
   .s-done{background:rgba(255,255,255,.10);color:var(--neutral)}
   .job-next{display:flex;align-items:center;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft)}
   .job-next .nd{width:6px;height:6px;border-radius:50%;flex:none}
-  .job-next span{font-size:13px;color:var(--ink-soft)}
+  .job-next span{font-size:var(--text-sm);color:var(--ink-soft)}
 
   /* ===== DETALHE ===== */
-  .back{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink-soft);cursor:pointer;
+  .back{display:inline-flex;align-items:center;gap:6px;font-size:var(--text-base);color:var(--ink-soft);cursor:pointer;
     margin:14px 0 12px;font-weight:500}
   .back svg{width:16px;height:16px}
   /* topo do avatar = topo do título, sempre (align-items:flex-start em vez
@@ -165,8 +163,8 @@
      64px, ficava visualmente "empurrado" para baixo). */
   .detail-head-row{display:flex;gap:15px;align-items:flex-start;margin:14px 0 18px}
   .detail-head-info{flex:1;min-width:0;padding-top:1px}
-  .detail-h{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:19px;line-height:1.3;letter-spacing:.03em;text-transform:uppercase;margin:0}
-  .detail-sub{color:var(--neutral);font-size:13.5px;margin-top:4px}
+  .detail-h{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:var(--text-xl);line-height:1.3;letter-spacing:.03em;text-transform:uppercase;margin:0}
+  .detail-sub{color:var(--neutral);font-size:var(--text-13h);margin-top:4px}
   /* meta-informação do cabeçalho em duas linhas fixas — cliente sozinho
      na primeira (nunca disputa espaço com mais nada, só encolhe com
      reticências se for muito longo); data + hora juntas na segunda, sempre
@@ -174,7 +172,7 @@
      espessura/opacidade), mesma distância do texto. Sem valor financeiro aqui. */
   .detail-meta-row{display:flex;flex-direction:column;gap:5px;margin-top:6px}
   .dm-row{display:flex;align-items:center;flex-wrap:nowrap;gap:8px;overflow:hidden}
-  .dm-item{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--ink-soft);flex:none;min-width:0}
+  .dm-item{display:inline-flex;align-items:center;gap:5px;font-size:var(--text-12h);color:var(--ink-soft);flex:none;min-width:0}
   .dm-row .dm-item:first-child{flex-shrink:1}
   .dm-row .dm-item:first-child span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .dm-item svg{width:13px;height:13px;flex:none;opacity:.75}
@@ -184,7 +182,7 @@
      borda pontilhada verde nem aparência provisória. */
   .clientbtn{margin:18px 0 6px;width:100%;border:1px solid rgba(255,255,255,.14);color:var(--ink);
     background:var(--surface-btn-soft);
-    border-radius:var(--r);padding:13px;font-weight:500;font-size:14px;cursor:pointer;
+    border-radius:var(--r);padding:13px;font-weight:500;font-size:var(--text-base);cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;
     box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.07);
     backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
@@ -193,10 +191,7 @@
   .clientbtn svg{width:16px;height:16px}
   .sec{background:var(--surface-row);border:1px solid rgba(255,255,255,.09);border-radius:var(--r);margin:11px 0;
     overflow:hidden;backdrop-filter:blur(26px) saturate(160%);-webkit-backdrop-filter:blur(26px) saturate(160%);
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05);
-    color:#F5F5F3;
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06); --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10)}
+    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05)}
   /* Faixa de título sempre mais escura que o corpo do card logo abaixo —
      vidro frost escuro + linha de separação, mesmo padrão de .tasks-header/
      .rel-card-header (Dashboard/Relatórios), pra "título" nunca ler como a
@@ -215,12 +210,12 @@
   .sec-icon.sm svg{width:16px;height:16px}
   .sec-icon.sm .nav-ico{width:16px;height:16px}
   .c-contrato,.c-briefing,.c-cronograma,.c-pagamentos,.c-lembretes,.c-historico,.c-entrega{color:#fff}
-  .sec-title{flex:1;font-size:14.5px;font-weight:600;text-align:center;color:var(--ink);
+  .sec-title{flex:1;font-size:var(--text-14h);font-weight:600;text-align:center;color:var(--ink);
     overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-  .sec-state{font-size:11.5px;font-weight:600;padding:4px 9px;border-radius:var(--r);background:rgba(255,255,255,.06);white-space:nowrap}
+  .sec-state{font-size:var(--text-xs);font-weight:600;padding:4px 9px;border-radius:var(--r);background:rgba(255,255,255,.06);white-space:nowrap}
   /* badge de status do contrato/pagamento — só tons derivados da paleta do
      app (--pend/--done/--late), nunca amarelo forte nem cor solta. */
-  .sig-tag{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;letter-spacing:.04em;
+  .sig-tag{display:inline-flex;align-items:center;gap:5px;font-size:var(--text-10h);font-weight:600;letter-spacing:.04em;
     padding:4px 9px;border-radius:var(--r);flex:none}
   .sig-tag.gray{background:rgba(255,255,255,.07);color:var(--ink-soft)}
   .sig-tag.amber,.sig-tag.yellow{background:rgba(203,162,106,.14);color:var(--pend)}
@@ -237,12 +232,12 @@
   .tl-line{position:absolute;left:10.5px;top:23px;bottom:0;width:2px;background:var(--line-soft)}
   .tl:last-child .tl-line{display:none}
   .tl-body{padding-top:1px;min-width:0}
-  .tl-body .t{font-size:14px;font-weight:600;color:var(--ink)}
-  .tl-body .m{font-size:12.5px;color:var(--neutral);margin-top:2px;line-height:1.4}
-  .tl-dot-status{width:22px;height:22px;flex:none;display:grid;place-items:center;font-size:11px;line-height:1;
+  .tl-body .t{font-size:var(--text-base);font-weight:600;color:var(--ink)}
+  .tl-body .m{font-size:var(--text-12h);color:var(--neutral);margin-top:2px;line-height:1.4}
+  .tl-dot-status{width:22px;height:22px;flex:none;display:grid;place-items:center;font-size:var(--text-11);line-height:1;
     z-index:2;background:var(--paper-2);border-radius:50%}
   .tl-dot-status svg{width:15px;height:15px}
-  .tl-date{font-size:11.5px;color:var(--ink-faint);margin-top:5px;font-weight:500}
+  .tl-date{font-size:var(--text-xs);color:var(--ink-faint);margin-top:5px;font-weight:500}
   .sec.open .chev{transform:rotate(180deg)}
   .sec-body{display:none;padding:14px 16px 16px;border-top:1px solid var(--line-soft)}
   .sec.open .sec-body{display:block}
