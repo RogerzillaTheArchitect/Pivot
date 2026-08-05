@@ -578,15 +578,9 @@
         </div>
         </div>
 
-        <div class="card card-notch card-notch-tasks">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
-            <div class="card-notch-header-right"></div>
-          </div>
-          <div id="hoje-content">
-            <div id="tasks-list"></div>
-          </div>
+        <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
+        <div id="hoje-content">
+          <div id="tasks-list"></div>
         </div>
 
         <div id="dash-card-fluxo" class="u-hidden u-mt-22"></div>
@@ -16869,7 +16863,7 @@
       function px(n){return n*sx;}
       function py(n){return n*sy;}
       function mx(n){return (900-n)*sx;}
-      return 'M '+px(22)+',0'
+      return 'M '+px(8)+',0'
         +' H '+px(268)
         +' C '+px(280)+',0 '+px(284)+','+py(7)+' '+px(288)+','+py(19)
         +' L '+px(297)+','+py(43)
@@ -16878,14 +16872,14 @@
         +' C '+mx(308)+','+py(59)+' '+mx(301)+','+py(54)+' '+mx(297)+','+py(43)
         +' L '+mx(288)+','+py(19)
         +' C '+mx(284)+','+py(7)+' '+mx(280)+',0 '+mx(268)+',0'
-        +' H '+px(878)
-        +' Q '+w+',0 '+w+','+py(22)
-        +' V '+py(698)
-        +' Q '+w+','+h+' '+px(878)+','+h
-        +' H '+px(22)
-        +' Q 0,'+h+' 0,'+py(698)
-        +' V '+py(22)
-        +' Q 0,0 '+px(22)+',0 Z';
+        +' H '+px(892)
+        +' Q '+w+',0 '+w+','+py(8)
+        +' V '+py(712)
+        +' Q '+w+','+h+' '+px(892)+','+h
+        +' H '+px(8)
+        +' Q 0,'+h+' 0,'+py(712)
+        +' V '+py(8)
+        +' Q 0,0 '+px(8)+',0 Z';
     }
 
     function apply(el){
@@ -16899,6 +16893,7 @@
         svg.appendChild(document.createElementNS(NS,'path'));
         el.insertBefore(svg,el.firstChild);
       }
+      el.style.setProperty('--notch-depth', Math.round(59*h/720)+'px');
       svg.setAttribute('viewBox','0 0 '+w+' '+h);
       svg.querySelector('path').setAttribute('d',buildPath(w,h));
     }
