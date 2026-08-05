@@ -578,15 +578,15 @@
         </div>
         </div>
 
-        <div class="card card-notch card-notch-tasks">
+        <div class="card card-notch card-notch-tasks-bar">
           <div class="card-notch-header">
             <div class="card-notch-header-left"></div>
             <div class="card-notch-label" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
             <div class="card-notch-header-right"></div>
           </div>
-          <div id="hoje-content">
-            <div id="tasks-list"></div>
-          </div>
+        </div>
+        <div id="hoje-content">
+          <div id="tasks-list"></div>
         </div>
 
         <div id="dash-card-fluxo" class="u-hidden u-mt-22"></div>
@@ -16864,33 +16864,38 @@
 
     /* Escala a geometria exacta do arquivo-referência (viewBox 900×720)
        para as dimensões reais do card (w×h). */
-    function buildPath(w,h){
-      var sx=w/900,sy=h/720;
+    function buildPath(w,h,cavFrac){
+      var sx=w/900;
+      var cf=(cavFrac!==undefined)?cavFrac:59/720;
+      var cs=cf*h/59;
       function px(n){return n*sx;}
-      function py(n){return n*sy;}
       function mx(n){return (900-n)*sx;}
+      function pcav(n){return n*cs;}
+      function pcard(n){return n*h/720;}
       return 'M '+px(8)+',0'
         +' H '+px(268)
-        +' C '+px(280)+',0 '+px(284)+','+py(7)+' '+px(288)+','+py(19)
-        +' L '+px(297)+','+py(43)
-        +' C '+px(301)+','+py(54)+' '+px(308)+','+py(59)+' '+px(321)+','+py(59)
+        +' C '+px(280)+',0 '+px(284)+','+pcav(7)+' '+px(288)+','+pcav(19)
+        +' L '+px(297)+','+pcav(43)
+        +' C '+px(301)+','+pcav(54)+' '+px(308)+','+pcav(59)+' '+px(321)+','+pcav(59)
         +' H '+mx(321)
-        +' C '+mx(308)+','+py(59)+' '+mx(301)+','+py(54)+' '+mx(297)+','+py(43)
-        +' L '+mx(288)+','+py(19)
-        +' C '+mx(284)+','+py(7)+' '+mx(280)+',0 '+mx(268)+',0'
+        +' C '+mx(308)+','+pcav(59)+' '+mx(301)+','+pcav(54)+' '+mx(297)+','+pcav(43)
+        +' L '+mx(288)+','+pcav(19)
+        +' C '+mx(284)+','+pcav(7)+' '+mx(280)+',0 '+mx(268)+',0'
         +' H '+px(892)
-        +' Q '+w+',0 '+w+','+py(8)
-        +' V '+py(712)
+        +' Q '+w+',0 '+w+','+pcard(8)
+        +' V '+pcard(712)
         +' Q '+w+','+h+' '+px(892)+','+h
         +' H '+px(8)
-        +' Q 0,'+h+' 0,'+py(712)
-        +' V '+py(8)
+        +' Q 0,'+h+' 0,'+pcard(712)
+        +' V '+pcard(8)
         +' Q 0,0 '+px(8)+',0 Z';
     }
 
     function apply(el){
       var w=el.offsetWidth,h=el.offsetHeight;
       if(!w||!h) return;
+      var isTasksBar=el.classList.contains('card-notch-tasks-bar');
+      var cavFrac=isTasksBar?0.8:59/720;
       var svg=el.querySelector('.card-notch-shape');
       if(!svg){
         svg=document.createElementNS(NS,'svg');
@@ -16899,9 +16904,9 @@
         svg.appendChild(document.createElementNS(NS,'path'));
         el.insertBefore(svg,el.firstChild);
       }
-      el.style.setProperty('--notch-depth', Math.round(59*h/720)+'px');
+      el.style.setProperty('--notch-depth', Math.round(cavFrac*h)+'px');
       svg.setAttribute('viewBox','0 0 '+w+' '+h);
-      svg.querySelector('path').setAttribute('d',buildPath(w,h));
+      svg.querySelector('path').setAttribute('d',buildPath(w,h,cavFrac));
     }
 
     var ro=new ResizeObserver(function(entries){
