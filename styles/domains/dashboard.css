@@ -87,13 +87,6 @@
     backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);
     color:var(--ink);
   }
-  /* quando o ops-card ou finance-ops-card aparecem logo após um tasks-header
-     (ex. Dashboard), o cabeçalho já é a barra mais clara — o card-corpo
-     deve colar nele sem cantos superiores arredondados nem borda duplicada. */
-  #dash-card-financeiro .card.finance-ops-card,
-  #dash-card-operacional .card.ops-card{
-    border-top-left-radius:0;border-top-right-radius:0;border-top:none;margin-top:0;
-  }
   .ops-card h1{
     margin:0 0 var(--sp-3);
     color:var(--label-out);
@@ -317,6 +310,17 @@
     margin-bottom:11px;box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
     backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);
     transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,margin .35s,padding .35s}
+  /* --- Entalhe côncavo no topo (notch) ----------------------------------- */
+  .card-notch{
+    -webkit-mask-image:radial-gradient(ellipse 72px 32px at 50% 0px,transparent 96%,#000 100%);
+    mask-image:radial-gradient(ellipse 72px 32px at 50% 0px,transparent 96%,#000 100%);
+    padding-top:28px}
+  .card-notch-label{
+    display:flex;align-items:center;justify-content:center;gap:8px;position:relative;
+    margin:-4px 0 16px;
+    font-size:var(--text-11);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.70)}
+  .card-notch-label .dash-card-toggle{position:absolute;right:0;top:50%;transform:translateY(-50%)}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   /* Tarefas: altura FIXA e idêntica para todos os cards, independente de
      quantas linhas de conteúdo existam (2, 3 ou 4). O rtk-body usa
