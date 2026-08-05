@@ -3,12 +3,12 @@
      .logo-v-layer) continuam embutidas no index.html como base64 — nao foram
      movidas para nao arriscar corromper esses blobs binarios num editor de texto. */
   .sidebar{width:var(--sb-w);flex:none;display:flex;flex-direction:column;padding:22px 16px;position:relative;z-index:1;
-    border-right:1px solid rgba(255,255,255,.07);
-    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0) 30%),rgba(20,21,23,.82);
-    backdrop-filter:blur(34px) saturate(160%);-webkit-backdrop-filter:blur(34px) saturate(160%);
-    --ink-soft:#9FA0A3;--ink-faint:#646568;--neutral:#83837B;
-    --line:rgba(255,255,255,.08);--line-soft:rgba(255,255,255,.045);
-    --glass-5:rgba(24,25,27,.5);--glass-55:rgba(24,25,27,.55);--glass-6:rgba(24,25,27,.6);--glass-62:rgba(24,25,27,.62);--glass-65:rgba(24,25,27,.66);--glass-7:rgba(24,25,27,.7);--glass-85:rgba(24,25,27,.8)}
+    border-right:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(14px) saturate(115%);-webkit-backdrop-filter:blur(14px) saturate(115%);
+    --ink:#fff;--ink-soft:rgba(255,255,255,.7);--ink-faint:rgba(255,255,255,.45);--neutral:rgba(255,255,255,.6);
+    --line:rgba(255,255,255,.15);--line-soft:rgba(255,255,255,.09);
+    --paper:rgba(255,255,255,.10);--paper-2:rgba(255,255,255,.07)}
   .sb-mark{display:flex;align-items:center;gap:9px;padding:0 var(--sp-2);margin-bottom:4px}
   .logo-mark{flex:none;border-radius:var(--r)}
   .logo-text{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-2xl);letter-spacing:.01em;color:var(--ink)}
@@ -22,11 +22,11 @@
     color:var(--ink-soft);font-size:var(--text-14h);font-weight:500;transition:background .15s,color .15s;margin-bottom:2px}
   .sb-item svg{width:var(--ico-lg);height:var(--ico-lg);flex:none}
   .sb-item .nav-ico{background-color:currentColor;flex:none}
-  .sb-item:hover{background:var(--paper-2)}
-  .sb-item.on{background:var(--ink);color:var(--paper)}
+  .sb-item:hover{background:rgba(255,255,255,.10)}
+  .sb-item.on{background:rgba(255,255,255,.20);color:#fff;font-weight:600}
   .sb-sep{height:1px;background:var(--line);margin:14px 4px}
-  .sb-search{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid var(--line);
-    border-radius:var(--r);color:var(--neutral);font-size:var(--text-13h);cursor:pointer;margin-bottom:4px}
+  .sb-search{display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--r);color:rgba(255,255,255,.65);font-size:var(--text-13h);cursor:pointer;margin-bottom:4px;background:rgba(255,255,255,.06)}
   .sb-search svg{width:15px;height:15px}
   .sb-create{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:var(--r);background:var(--surface-btn);
     backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);border:1px solid rgba(255,255,255,.14);
@@ -37,7 +37,7 @@
   .sb-profile{display:flex;align-items:center;gap:10px;padding:10px 10px;border-radius:var(--r);cursor:pointer;
     border-top:1px solid var(--line);margin-top:8px;padding-top:16px;transition:background .15s}
   .sb-profile:hover{background:var(--paper-2)}
-  .sb-avatar{width:32px;height:32px;border-radius:var(--r);background:var(--ink);color:var(--paper);
+  .sb-avatar{width:32px;height:32px;border-radius:var(--r);background:rgba(255,255,255,.85);color:#1a1b1d;
     font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-md);display:grid;place-items:center;flex:none}
   .sb-avatar[style*="background-image"]{filter:grayscale(1) brightness(0.78)}
   .sb-profile .nm{font-size:var(--text-13h);font-weight:600}

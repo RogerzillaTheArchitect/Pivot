@@ -2,15 +2,15 @@
   .date-header{margin-top:14px;margin-bottom:28px;display:flex;flex-direction:column;line-height:1}
   .date-month{font-family:var(--font-month),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-display);font-weight:400;line-height:1;color:var(--ink);letter-spacing:.06em;text-transform:uppercase}
   .date-year{font-family:var(--font-year),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-base);font-weight:400;color:var(--ink);opacity:.7;letter-spacing:.02em;margin-top:4px}
-  .section-label-out{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-sm);color:var(--label-out);letter-spacing:.06em;font-weight:500;font-stretch:100%;text-transform:uppercase;display:block;margin:0 0 var(--sp-3);text-align:center}
+  .section-label-out{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-11);color:rgba(255,255,255,.65);letter-spacing:.14em;font-weight:600;font-stretch:100%;text-transform:uppercase;display:block;margin:0 0 var(--sp-3);text-align:center}
   .section-label-out:not(:first-of-type){margin-top:32px}
   /* Financeiro + Estatísticas Operacionais vivem no mesmo card, cada um
      com seu título centrado dentro; o menu (⋮) do Financeiro fica
      ancorado à direita do próprio título, não da largura do card. */
-  .finance-ops-card{position:relative;background:linear-gradient(135deg,rgba(255,255,255,.035) 0%,rgba(6,5,4,.16) 100%);border:1px solid rgba(255,255,255,.10);
-    border-radius:var(--r);margin:12px 0 22px;padding:var(--sp-3) 0;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);overflow:hidden;
-    --c-track-lt:rgba(255,255,255,.14)}
+  .finance-ops-card{position:relative;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);
+    border-radius:var(--r);margin:12px 0 22px;padding:var(--sp-3) 0;box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
+    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);overflow:hidden;
+    --c-track-lt:rgba(255,255,255,.18)}
   .ms-mes-atual{font-size:var(--text-12h);font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:155px;flex:none;display:flex;flex-direction:column;align-items:center}
   .ms-progress-row{display:grid;grid-template-columns:155px minmax(0,1fr);align-items:center;gap:10px;padding:6px 10px 12px;cursor:pointer}
@@ -50,8 +50,8 @@
   .ms-badge-gastos svg{color:var(--c-badge-expense)}
   .ms-section-label{font-size:var(--text-11);font-weight:600;letter-spacing:.08em;color:var(--label-out);margin:18px 2px 8px;text-transform:uppercase}
   .ms-cards-row{display:flex;gap:9px;margin:0 0 22px}
-  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--surface-card);border:1px solid rgba(255,255,255,.10);border-radius:var(--r);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
+  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--surface-card);border:1px solid rgba(255,255,255,.16);border-radius:var(--r);
+    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
     padding:var(--sp-3);display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;cursor:pointer;
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
@@ -80,11 +80,11 @@
      barra — só o valor no texto à direita. */
   .card.ops-card{
     background:var(--surface-row);
-    border:1px solid rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.14);
     border-radius:var(--r);
     padding:16px 16px 8px;
-    box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
+    box-shadow:0 4px 14px rgba(0,0,0,.08),inset 0 1px 0 rgba(255,255,255,.12);
+    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);
     color:var(--ink);
   }
   /* quando o ops-card ou finance-ops-card aparecem logo após um tasks-header
@@ -221,14 +221,14 @@
      dias); o texto do prazo (.rtk-prazo) comunica o tempo em si. */
   .card.radar-card{
     background:var(--surface-row);
-    border-color:rgba(255,255,255,.09);
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -14px 16px -14px rgba(255,255,255,.05)}
+    border-color:rgba(255,255,255,.15);
+    box-shadow:0 4px 14px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.12)}
   .card.radar-card.late{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(220,110,50,.6)}
+    box-shadow:0 4px 14px rgba(0,0,0,.10),inset 0 -14px 18px -10px rgba(220,110,50,.30)}
   .card.radar-card.soon{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(185,155,45,.5)}
+    box-shadow:0 4px 14px rgba(0,0,0,.10),inset 0 -14px 18px -10px rgba(185,155,45,.25)}
   .card.radar-card.normal{
-    box-shadow:0 8px 24px rgba(0,0,0,.18),inset 0 -16px 20px -12px rgba(80,110,60,.55)}
+    box-shadow:0 4px 14px rgba(0,0,0,.10),inset 0 -14px 18px -10px rgba(80,140,100,.25)}
   /* ===== Tarefas (Dashboard) — "próximas ações", não trabalhos completos.
      4 perguntas só: título, cliente, próxima ação, prazo. Nada de endereço/
      hora/equipa/observações aqui — isso é o Projeto (ver Trabalhos), pra não
@@ -292,14 +292,14 @@
      superfície. Mesmo padrão em .rel-card-header e .sec-head. */
   .tasks-header{
     display:block;cursor:pointer;
-    background:var(--surface-card);
-    border:1px solid rgba(255,255,255,.10);border-bottom:none;
+    background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.16);border-bottom:none;
     border-radius:var(--r) var(--r) 0 0;
-    padding:11px 16px;margin:0;
-    backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+    padding:10px 16px;margin:0;
+    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-    font-size:var(--text-12);font-weight:600;font-stretch:100%;letter-spacing:.06em;text-transform:uppercase;
-    color:var(--label-out);text-align:center;
+    font-size:var(--text-11);font-weight:600;font-stretch:100%;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.72);text-align:center;
   }
   #tasks-list .radar-card-wrap:first-child .card{border-top-left-radius:0;border-top-right-radius:0}
   /* Qualquer card logo abaixo de um .tasks-header encosta nele (cantos de
@@ -313,9 +313,9 @@
   .tasks-header.cal-header{display:flex;align-items:stretch;justify-content:space-between;
     gap:10px;cursor:default;padding:0 6px}
   .card{background:var(--surface-card);
-    border:1px solid rgba(255,255,255,.10);border-radius:var(--r);padding:var(--sp-4);
-    margin-bottom:11px;box-shadow:0 8px 30px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.08);
-    backdrop-filter:blur(24px) saturate(140%);-webkit-backdrop-filter:blur(24px) saturate(140%);
+    border:1px solid rgba(255,255,255,.16);border-radius:var(--r);padding:var(--sp-4);
+    margin-bottom:11px;box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
+    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);
     transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,margin .35s,padding .35s}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   /* Tarefas: altura FIXA e idêntica para todos os cards, independente de
@@ -339,27 +339,26 @@
   .card-info-item .val{font-size:var(--text-sm);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .actions{display:flex;gap:var(--sp-2);margin-top:14px;flex-wrap:wrap}
   .btn{font-family:inherit;font-size:var(--text-13h);font-weight:500;border-radius:var(--r);padding:9px 14px;
-    cursor:pointer;border:1px solid var(--line);background:var(--paper);color:var(--ink);transition:transform .12s,background .15s}
+    cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;transition:transform .12s,background .15s}
   .btn:active{transform:scale(.97)}
   /* .primary deixou de ser verde — mesma família de vidro escuro premium do
      resto do app (era var(--btn-72), o verde de marca antigo, que já não
      existe em mais nenhum botão fora daqui). Levemente mais opaco que
      .dark abaixo pra continuar a ler como a ação principal do ecrã. */
   .btn.primary{background:var(--surface-btn);
-    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    border-color:rgba(255,255,255,.18);color:var(--ink);font-weight:600}
+    backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
+    border-color:rgba(255,255,255,.20);color:#fff;font-weight:600}
   .btn.primary:hover{background:var(--surface-btn-hover)}
-  .btn.soft{background:var(--paper-2)}
-  .btn.ghost{background:transparent;border-color:transparent;color:var(--ink-soft);padding-left:6px}
-  /* variante neutra premium — glassmorphism escuro, sem cor de marca. */
+  .btn.soft{background:rgba(255,255,255,.08)}
+  .btn.ghost{background:transparent;border-color:transparent;color:rgba(255,255,255,.7);padding-left:6px}
   .btn.dark{background:var(--surface-btn-soft);
-    border-color:rgba(255,255,255,.14);color:var(--ink);font-weight:600;
-    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.06)}
+    border-color:rgba(255,255,255,.16);color:#fff;font-weight:600;
+    backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
+    box-shadow:0 2px 8px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.10)}
   .btn.dark:hover{background:var(--surface-btn-soft-hover)}
   .actions .btn{background:var(--surface-btn)!important;
-    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    border:1px solid rgba(255,255,255,.18)!important;color:var(--ink)!important;font-weight:600;box-shadow:0 3px 10px rgba(0,0,0,.2)}
+    backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
+    border:1px solid rgba(255,255,255,.20)!important;color:#fff!important;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.10)}
   .actions .btn:hover{background:var(--surface-btn-hover)!important}
   .btn svg{width:var(--ico-sm);height:var(--ico-sm);vertical-align:-2px;margin-right:2px;flex:none}
 
