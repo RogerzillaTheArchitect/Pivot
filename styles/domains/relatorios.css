@@ -1,6 +1,13 @@
   /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
+  /* Largura máxima alargada (vs. .view padrão de 680px) + compensação de
+     3px para que a borda SVG dos cards notch fique visualmente alinhada
+     com o topbar e a nav — o path começa em px(8) ≈ 4px dentro da borda
+     do elemento; -3px de margem restaura o alinhamento visual. */
+  #v-relatorios.view{max-width:860px}
+  #v-relatorios .card-notch{margin-left:-3px;margin-right:-3px}
+
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
