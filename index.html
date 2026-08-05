@@ -16819,6 +16819,68 @@
   ajustarPaddingEcra();
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
+
+  /* ---- initNotchCards: geometric SVG path border ----------------------- *
+   * Desenha o outline completo do card como path contínuo: bordas retas,   *
+   * raios suaves nos cantos do card e nos ombros/fundo do entalhe.         *
+   * Injeta <svg class="card-notch-border"> como primeiro filho e aplica    *
+   * clip-path:path() idêntico para cortar o glass no mesmo contorno.       * */
+  (function(){
+    var CR=12,  /* card corner radius                */
+        NW=50,  /* half-notch width (total = 100px)  */
+        ND=22,  /* notch depth                       */
+        NR=10;  /* notch inner corner radius         */
+
+    function makePath(w,h){
+      var cx=w/2;
+      /* topo esq → ombro esq → parede esq (desce) → fundo esq →
+         fundo dir → parede dir (sobe) → ombro dir → topo dir →
+         canto dir → lado dir → canto inf-dir → fundo → canto inf-esq →
+         lado esq → canto sup-esq (fecha)                               */
+      return 'M '+CR+',0'
+        +' H '+(cx-NW-NR)
+        +' Q '+(cx-NW)+',0 '+(cx-NW)+','+NR
+        +' V '+(ND-NR)
+        +' Q '+(cx-NW)+','+ND+' '+(cx-NW+NR)+','+ND
+        +' H '+(cx+NW-NR)
+        +' Q '+(cx+NW)+','+ND+' '+(cx+NW)+','+(ND-NR)
+        +' V '+NR
+        +' Q '+(cx+NW)+',0 '+(cx+NW+NR)+',0'
+        +' H '+(w-CR)
+        +' Q '+w+',0 '+w+','+CR
+        +' V '+(h-CR)
+        +' Q '+w+','+h+' '+(w-CR)+','+h
+        +' H '+CR
+        +' Q 0,'+h+' 0,'+(h-CR)
+        +' V '+CR
+        +' Q 0,0 '+CR+',0 Z';
+    }
+
+    function applyNotch(el){
+      var w=el.offsetWidth, h=el.offsetHeight;
+      if(!w||!h) return;
+      var d=makePath(w,h);
+      el.style.clipPath='path("'+d+'")';
+      var svg=el.querySelector('.card-notch-border');
+      if(!svg){
+        svg=document.createElementNS('http://www.w3.org/2000/svg','svg');
+        svg.setAttribute('class','card-notch-border');
+        svg.setAttribute('aria-hidden','true');
+        var path=document.createElementNS('http://www.w3.org/2000/svg','path');
+        svg.appendChild(path);
+        el.insertBefore(svg,el.firstChild);
+      }
+      svg.setAttribute('viewBox','0 0 '+w+' '+h);
+      svg.querySelector('path').setAttribute('d',d);
+    }
+
+    var ro=new ResizeObserver(function(entries){
+      entries.forEach(function(e){ applyNotch(e.target); });
+    });
+    document.querySelectorAll('.card-notch').forEach(function(el){
+      ro.observe(el);
+    });
+  })();
 </script>
 
 <script type="module">
