@@ -5,7 +5,7 @@
      O path SVG começa em px(8)=8w/900 ≈ 4px dentro da borda do elemento;
      -4px de margem faz o fill visual coincidir com as bordas do topbar e nav. */
   #v-relatorios.view{max-width:860px}
-  #v-relatorios .card-notch{margin-left:-4px;margin-right:-4px;width:calc(100% + 8px)}
+  #v-relatorios .card-notch{margin-left:calc((36px - 100vw)*8/884);margin-right:calc((36px - 100vw)*8/884);transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,padding .35s}
 
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
