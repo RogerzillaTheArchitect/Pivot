@@ -16821,27 +16821,37 @@
   iniciarColabPublicoSeAplicavel();
 
   /* ---- Notch Cards: cavidade geométrica + reflexo de vidro ---------------
-   * Forma: ombro arco esq (sweep=1) → bezier suave no fundo (sem chão
-   * plano, sem paredes verticais) → ombro arco dir (sweep=1).
-   * Borda = reflexo de vidro: gradiente linear topo-brilhante→base-sutil. */
+   * Spec exacto:
+   *   Abertura: 24% da largura (12% de cada lado do centro)
+   *   Paredes: linha reta inclinada, descida constante, sem segmentos verticais
+   *   Últimos 4px: curva com r=CR=18 (igual às arestas do card)
+   *   Piso: 18px horizontais entre as duas curvas
+   *   Profundidade total: 20px
+   *   Borda: highlight físico variável (topo 22%, curvas 28%, lados 16%, base 12%) */
   (function(){
-    var CR=18,   /* raio dos cantos do card */
-        ND=22,   /* profundidade da cavidade */
-        NR=16,   /* raio dos ombros */
+    var CR=18,  /* raio dos cantos do card e das curvas inferiores da cavidade */
+        ND=20,  /* profundidade total da cavidade */
+        SH=16,  /* altura da parede reta (ND − 4px de curva) */
+        FL=9,   /* meia-largura do piso plano (18px ÷ 2) */
+        /* deslocamento horizontal do arco inferior:
+           centro do arco fica em y = ND−CR = 2; ao nível y=SH=16
+           o afastamento vertical do centro é SH−(ND−CR) = 14
+           AX = √(CR²−14²) = √(324−196) = √128 ≈ 11.31 */
+        AX=Math.sqrt(CR*CR-196),
         _uid=0;
     var NS='http://www.w3.org/2000/svg';
 
-    /* meia-largura proporcional: ~32% da largura do card (mínimo 50px) */
-    function calcNW(w){ return Math.round(Math.max(50,w*0.162)); }
-
-    function buildPath(w,h,nw){
+    function buildPath(w,h){
       var c=w/2,
-          cy=2*ND-NR; /* controlo bezier: y=28 → curva atinge y≈22 a meio */
+          no=w*0.12, /* meia-abertura: 12% da largura */
+          we=FL+AX;  /* distância do centro ao início da parede reta no fundo */
       return 'M '+CR+',0'
-        +' H '+(c-nw-NR)
-        +' A '+NR+','+NR+' 0 0 1 '+(c-nw)+','+NR
-        +' Q '+c+','+cy+' '+(c+nw)+','+NR
-        +' A '+NR+','+NR+' 0 0 1 '+(c+nw+NR)+',0'
+        +' H '+(c-no)
+        +' L '+(c-we)+','+SH
+        +' A '+CR+','+CR+' 0 0 0 '+(c-FL)+','+ND
+        +' H '+(c+FL)
+        +' A '+CR+','+CR+' 0 0 0 '+(c+we)+','+SH
+        +' L '+(c+no)+',0'
         +' H '+(w-CR)
         +' A '+CR+','+CR+' 0 0 1 '+w+','+CR
         +' V '+(h-CR)
@@ -16863,7 +16873,7 @@
       g.setAttribute('gradientUnits','userSpaceOnUse');
       g.setAttribute('x1','0');g.setAttribute('y1','0');
       g.setAttribute('x2','0');g.setAttribute('y2','100');
-      [[0,'rgba(255,255,255,.35)'],[.10,'rgba(255,255,255,.22)'],[.45,'rgba(255,255,255,.10)'],[1,'rgba(255,255,255,.04)']].forEach(function(s){
+      [[0,'rgba(255,255,255,.22)'],[.06,'rgba(255,255,255,.28)'],[.15,'rgba(255,255,255,.16)'],[.85,'rgba(255,255,255,.16)'],[.94,'rgba(255,255,255,.28)'],[1,'rgba(255,255,255,.12)']].forEach(function(s){
         var st=document.createElementNS(NS,'stop');
         st.setAttribute('offset',s[0]);
         st.setAttribute('stop-color',s[1]);
@@ -16885,8 +16895,7 @@
     function apply(el){
       var w=el.offsetWidth,h=el.offsetHeight;
       if(!w||!h) return;
-      var nw=calcNW(w);
-      var d=buildPath(w,h,nw);
+      var d=buildPath(w,h);
       el.style.clipPath='path("'+d+'")';
       var svg=el.querySelector('.card-notch-border')||makeBorder(el);
       svg.setAttribute('viewBox','0 0 '+w+' '+h);
