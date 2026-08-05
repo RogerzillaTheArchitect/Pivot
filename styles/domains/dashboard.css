@@ -322,13 +322,26 @@
   .card-notch-shape path{
     fill:rgba(255,255,255,.10);stroke:rgba(255,255,255,.38);
     stroke-width:1.5;vector-effect:non-scaling-stroke}
+  .card-notch-header{
+    position:absolute;top:0;left:0;right:0;z-index:3;
+    display:grid;grid-template-columns:minmax(0,1fr) max-content minmax(0,1fr);
+    align-items:center;
+    height:var(--notch-header-height,54px);
+    padding-inline:var(--card-top-inline-padding,16px);
+    pointer-events:none}
+  .card-notch-header-left{grid-column:1;min-width:0}
   .card-notch-label{
-    position:absolute;top:13px;left:50%;transform:translateX(-50%);
-    white-space:nowrap;display:flex;align-items:center;gap:8px;padding:0 22px;
+    grid-column:2;justify-self:center;
+    display:block;width:max-content;margin:0;padding:0;
+    white-space:nowrap;text-align:center;
     color:rgba(255,255,255,.92);font-size:clamp(10px,1.8vw,16px);
     font-weight:500;letter-spacing:.16em;text-transform:uppercase;
-    line-height:1.2;z-index:2}
-  .card-notch-label .dash-card-toggle{position:static;transform:none}
+    line-height:1.2;pointer-events:auto}
+  .card-notch-header-right{
+    grid-column:3;justify-self:end;
+    display:flex;align-items:center;justify-content:flex-end;
+    min-width:0;pointer-events:auto}
+  .card-notch-header-right .dash-card-toggle{position:static;transform:none;margin:0}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   /* Tarefas: altura FIXA e idêntica para todos os cards, independente de
      quantas linhas de conteúdo existam (2, 3 ou 4). O rtk-body usa
