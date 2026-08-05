@@ -16829,30 +16829,24 @@
    * Borda = reflexo de vidro: gradiente linear topo-brilhante→base-sutil.   * */
   (function(){
     var CR=18,   /* raio dos cantos do card           */
-        NW=70,   /* meia-largura da cavidade (140px)  */
         ND=22,   /* profundidade da cavidade          */
         NR=16,   /* raio dos ombros — domina a parede */
         _uid=0;
     var NS='http://www.w3.org/2000/svg';
 
-    function buildPath(w,h){
+    /* meia-largura proporcional: ~32% da largura do card (mínimo 50px) */
+    function calcNW(w){ return Math.round(Math.max(50,w*0.162)); }
+
+    function buildPath(w,h,nw){
       var c=w/2;
       return 'M '+CR+',0'
-        /* topo esquerdo */
-        +' H '+(c-NW-NR)
-        /* ombro esq: arco de círculo tangencial horiz→vert (côncavo) */
-        +' A '+NR+','+NR+' 0 0 1 '+(c-NW)+','+NR
-        /* parede esquerda — absolutamente reta */
+        +' H '+(c-nw-NR)
+        +' A '+NR+','+NR+' 0 0 1 '+(c-nw)+','+NR
         +' V '+ND
-        /* fundo da cavidade — perfeitamente horizontal, SEM curva */
-        +' H '+(c+NW)
-        /* parede direita — absolutamente reta */
+        +' H '+(c+nw)
         +' V '+NR
-        /* ombro dir: arco de círculo tangencial vert→horiz (côncavo) */
-        +' A '+NR+','+NR+' 0 0 0 '+(c+NW+NR)+',0'
-        /* topo direito */
+        +' A '+NR+','+NR+' 0 0 0 '+(c+nw+NR)+',0'
         +' H '+(w-CR)
-        /* cantos convexos do card */
         +' A '+CR+','+CR+' 0 0 1 '+w+','+CR
         +' V '+(h-CR)
         +' A '+CR+','+CR+' 0 0 1 '+(w-CR)+','+h
@@ -16867,14 +16861,13 @@
       var svg=document.createElementNS(NS,'svg');
       svg.setAttribute('class','card-notch-border');
       svg.setAttribute('aria-hidden','true');
-      /* gradiente de reflexo: mais intenso no topo (como vidro real) */
       var defs=document.createElementNS(NS,'defs');
       var g=document.createElementNS(NS,'linearGradient');
       g.setAttribute('id',gid);
       g.setAttribute('gradientUnits','userSpaceOnUse');
       g.setAttribute('x1','0');g.setAttribute('y1','0');
       g.setAttribute('x2','0');g.setAttribute('y2','100');
-      [[0,'rgba(255,255,255,.32)'],[.10,'rgba(255,255,255,.24)'],[.38,'rgba(255,255,255,.13)'],[1,'rgba(255,255,255,.05)']].forEach(function(s){
+      [[0,'rgba(255,255,255,.35)'],[.10,'rgba(255,255,255,.22)'],[.45,'rgba(255,255,255,.10)'],[1,'rgba(255,255,255,.04)']].forEach(function(s){
         var st=document.createElementNS(NS,'stop');
         st.setAttribute('offset',s[0]);
         st.setAttribute('stop-color',s[1]);
@@ -16882,8 +16875,7 @@
       });
       defs.appendChild(g);
       svg.appendChild(defs);
-      /* dois paths: base constante + sobreposto com gradiente */
-      [['rgba(255,255,255,.06)',2],['url(#'+gid+')',2]].forEach(function(s){
+      [['rgba(255,255,255,.06)',1],['url(#'+gid+')',1]].forEach(function(s){
         var p=document.createElementNS(NS,'path');
         p.setAttribute('fill','none');
         p.setAttribute('stroke',s[0]);
@@ -16897,7 +16889,8 @@
     function apply(el){
       var w=el.offsetWidth,h=el.offsetHeight;
       if(!w||!h) return;
-      var d=buildPath(w,h);
+      var nw=calcNW(w);
+      var d=buildPath(w,h,nw);
       el.style.clipPath='path("'+d+'")';
       var svg=el.querySelector('.card-notch-border')||makeBorder(el);
       svg.setAttribute('viewBox','0 0 '+w+' '+h);
