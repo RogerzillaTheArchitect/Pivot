@@ -465,8 +465,8 @@
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
         <div id="dash-card-financeiro" class="u-hidden">
-        <div class="tasks-header" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
-        <div class="card finance-ops-card">
+        <div class="card finance-ops-card card-notch">
+        <span class="card-notch-label" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</span>
         <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
@@ -529,8 +529,8 @@
         </div>
 
         <div id="dash-card-operacional" class="u-hidden">
-        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
-        <div class="card ops-card" aria-labelledby="dash-op-title">
+        <div class="card ops-card card-notch" aria-labelledby="dash-op-title">
+        <span class="card-notch-label" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">Operacional</span>
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
             <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
@@ -874,8 +874,8 @@
              valores recalculados pro período selecionado em Relatórios em
              vez de fixos no mês corrente. O card já identifica a seção —
              sem rótulo de área solto acima. -->
-        <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
+        <div class="card rel-card rel-card-body card-notch u-mt-2" id="rel-anchor-financeiro">
+          <span class="card-notch-label"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <div class="ms-progress-row">
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
@@ -939,8 +939,8 @@
              um item por linha: título em cima, categoria embaixo, valor à
              direita ocupando a altura das duas linhas. Ver
              renderRelFluxoFinanceiro(). -->
-        <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
+        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-fluxo">
+          <span class="card-notch-label"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
         </div>
 
@@ -951,8 +951,8 @@
              Dashboard (pintarMetricaOp(...,'ropm-')), com os dados
              recalculados pro período selecionado em Relatórios em vez do
              mês corrente fixo. Nenhuma classe/estilo novo. -->
-        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card ops-card rel-ops-card-sub">
+        <div class="card ops-card rel-ops-card-sub card-notch" id="rel-anchor-operacional">
+          <span class="card-notch-label"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <section class="metric" id="ropm-horas">
             <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
@@ -1002,8 +1002,8 @@
              trabalhadas" incorpora essa mesma comparação de período. Mesmo
              grid dividido .rel-split das demais (divisória vertical
              central, linhas horizontais de borda a borda). -->
-        <div class="rel-card-header" id="rel-anchor-evolucao"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
+        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-evolucao">
+          <span class="card-notch-label"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
 
@@ -1013,8 +1013,8 @@
              rentabilidade por hora (maior → menor, até 5 subcategorias),
              direita = 5 médias gerais do período (ticket médio, receita/h,
              receita/projeto, lucro médio/projeto, margem média). -->
-        <div class="rel-card-header" id="rel-anchor-eficiencia"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
+        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-eficiencia">
+          <span class="card-notch-label"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <div class="rel-split-subhead">
             <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
             <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
@@ -1026,8 +1026,8 @@
              tabela real (Cidade/Eventos/Receita/Ticket Médio/€/h) ordenada
              por receita, clicável por linha (abre os trabalhos da cidade), e
              insights automáticos calculados da mesma tabela. -->
-        <div class="rel-card-header" id="rel-anchor-geografico"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body rel-card-body-flush">
+        <div class="card rel-card rel-card-body rel-card-body-flush card-notch" id="rel-anchor-geografico">
+          <span class="card-notch-label"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></span>
           <div class="rel-table-wrap">
             <table class="rel-table">
               <thead><tr>
