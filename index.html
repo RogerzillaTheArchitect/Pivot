@@ -16820,94 +16820,56 @@
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
 
-  /* ---- Notch Cards: cavidade geométrica + reflexo de vidro ---------------
-   * Spec exacto:
-   *   Abertura: 24% da largura (12% de cada lado do centro)
-   *   Paredes: linha reta inclinada, descida constante, sem segmentos verticais
-   *   Últimos 4px: curva com r=CR=18 (igual às arestas do card)
-   *   Piso: 18px horizontais entre as duas curvas
-   *   Profundidade total: 20px
-   *   Borda: highlight físico variável (topo 22%, curvas 28%, lados 16%, base 12%) */
+  /* ---- Notch Cards: SVG único — fundo + borda + cavidade (ref. card expenses) */
   (function(){
-    var CR=18,  /* raio dos cantos do card e das curvas inferiores da cavidade */
-        ND=20,  /* profundidade total da cavidade */
-        SH=16,  /* altura da parede reta (ND − 4px de curva) */
-        FL=9,   /* meia-largura do piso plano (18px ÷ 2) */
-        /* deslocamento horizontal do arco inferior:
-           centro do arco fica em y = ND−CR = 2; ao nível y=SH=16
-           o afastamento vertical do centro é SH−(ND−CR) = 14
-           AX = √(CR²−14²) = √(324−196) = √128 ≈ 11.31 */
-        AX=Math.sqrt(CR*CR-196),
-        _uid=0;
     var NS='http://www.w3.org/2000/svg';
 
+    /* Escala a geometria exacta do arquivo-referência (viewBox 900×720)
+       para as dimensões reais do card (w×h). */
     function buildPath(w,h){
-      var c=w/2,
-          no=w*0.12, /* meia-abertura: 12% da largura */
-          we=FL+AX;  /* distância do centro ao início da parede reta no fundo */
-      return 'M '+CR+',0'
-        +' H '+(c-no)
-        +' L '+(c-we)+','+SH
-        +' A '+CR+','+CR+' 0 0 0 '+(c-FL)+','+ND
-        +' H '+(c+FL)
-        +' A '+CR+','+CR+' 0 0 0 '+(c+we)+','+SH
-        +' L '+(c+no)+',0'
-        +' H '+(w-CR)
-        +' A '+CR+','+CR+' 0 0 1 '+w+','+CR
-        +' V '+(h-CR)
-        +' A '+CR+','+CR+' 0 0 1 '+(w-CR)+','+h
-        +' H '+CR
-        +' A '+CR+','+CR+' 0 0 1 0,'+(h-CR)
-        +' V '+CR
-        +' A '+CR+','+CR+' 0 0 1 '+CR+',0 Z';
-    }
-
-    function makeBorder(el){
-      var gid='ncg'+(++_uid);
-      var svg=document.createElementNS(NS,'svg');
-      svg.setAttribute('class','card-notch-border');
-      svg.setAttribute('aria-hidden','true');
-      var defs=document.createElementNS(NS,'defs');
-      var g=document.createElementNS(NS,'linearGradient');
-      g.setAttribute('id',gid);
-      g.setAttribute('gradientUnits','userSpaceOnUse');
-      g.setAttribute('x1','0');g.setAttribute('y1','0');
-      g.setAttribute('x2','0');g.setAttribute('y2','100');
-      [[0,'rgba(255,255,255,.22)'],[.06,'rgba(255,255,255,.28)'],[.15,'rgba(255,255,255,.16)'],[.85,'rgba(255,255,255,.16)'],[.94,'rgba(255,255,255,.28)'],[1,'rgba(255,255,255,.12)']].forEach(function(s){
-        var st=document.createElementNS(NS,'stop');
-        st.setAttribute('offset',s[0]);
-        st.setAttribute('stop-color',s[1]);
-        g.appendChild(st);
-      });
-      defs.appendChild(g);
-      svg.appendChild(defs);
-      [['rgba(255,255,255,.06)',1],['url(#'+gid+')',1]].forEach(function(s){
-        var p=document.createElementNS(NS,'path');
-        p.setAttribute('fill','none');
-        p.setAttribute('stroke',s[0]);
-        p.setAttribute('stroke-width',s[1]);
-        svg.appendChild(p);
-      });
-      el.insertBefore(svg,el.firstChild);
-      return svg;
+      var sx=w/900,sy=h/720;
+      function px(n){return n*sx;}
+      function py(n){return n*sy;}
+      function mx(n){return (900-n)*sx;}
+      return 'M '+px(22)+',0'
+        +' H '+px(268)
+        +' C '+px(280)+',0 '+px(284)+','+py(7)+' '+px(288)+','+py(19)
+        +' L '+px(297)+','+py(43)
+        +' C '+px(301)+','+py(54)+' '+px(308)+','+py(59)+' '+px(321)+','+py(59)
+        +' H '+mx(321)
+        +' C '+mx(308)+','+py(59)+' '+mx(301)+','+py(54)+' '+mx(297)+','+py(43)
+        +' L '+mx(288)+','+py(19)
+        +' C '+mx(284)+','+py(7)+' '+mx(280)+',0 '+mx(268)+',0'
+        +' H '+px(878)
+        +' Q '+w+',0 '+w+','+py(22)
+        +' V '+py(698)
+        +' Q '+w+','+h+' '+px(878)+','+h
+        +' H '+px(22)
+        +' Q 0,'+h+' 0,'+py(698)
+        +' V '+py(22)
+        +' Q 0,0 '+px(22)+',0 Z';
     }
 
     function apply(el){
       var w=el.offsetWidth,h=el.offsetHeight;
       if(!w||!h) return;
-      var d=buildPath(w,h);
-      el.style.clipPath='path("'+d+'")';
-      var svg=el.querySelector('.card-notch-border')||makeBorder(el);
+      var svg=el.querySelector('.card-notch-shape');
+      if(!svg){
+        svg=document.createElementNS(NS,'svg');
+        svg.setAttribute('class','card-notch-shape');
+        svg.setAttribute('aria-hidden','true');
+        svg.appendChild(document.createElementNS(NS,'path'));
+        el.insertBefore(svg,el.firstChild);
+      }
       svg.setAttribute('viewBox','0 0 '+w+' '+h);
-      var g=svg.querySelector('linearGradient');
-      if(g){g.setAttribute('y1','0');g.setAttribute('y2',String(h));}
-      svg.querySelectorAll('path').forEach(function(p){p.setAttribute('d',d);});
+      svg.querySelector('path').setAttribute('d',buildPath(w,h));
     }
 
     var ro=new ResizeObserver(function(entries){
       entries.forEach(function(e){apply(e.target);});
     });
     document.querySelectorAll('.card-notch').forEach(function(el){
+      apply(el);
       ro.observe(el);
     });
   })();
