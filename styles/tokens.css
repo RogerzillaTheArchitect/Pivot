@@ -1,10 +1,10 @@
   :root{
-    --paper:rgba(255,255,255,.09); --paper-2:rgba(255,255,255,.07); --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B;
-    --line:rgba(255,255,255,.10); --line-soft:rgba(255,255,255,.08); --bg-ice:#131416; --bg-ice-2:#0E0F11;
+    --paper:rgba(255,255,255,.09); --paper-2:rgba(255,255,255,.07); --ink:#fff; --ink-soft:rgba(255,255,255,.70); --ink-faint:rgba(255,255,255,.45);
+    --line:rgba(255,255,255,.18); --line-soft:rgba(255,255,255,.12); --bg-ice:#131416; --bg-ice-2:#0E0F11;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58; --extras:#2E8577; --extras-10:rgba(46,133,119,.14);
-    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
-    --label-out:rgba(255,255,255,.82);
-    --shadow:0 1px 2px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.12);
+    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:rgba(255,255,255,.45); --urgent:#E8C547;
+    --label-out:rgba(255,255,255,.70);
+    --shadow:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.10);
     /* raio único do sistema — quase quadrado, aplicado sem exceção a
        cards, botões, inputs, chips, avatares e janelas/sheets (ver
        auditoria completa nos ficheiros de styles/domains/*.css: tudo o
@@ -110,21 +110,8 @@
   .job, .sec,
   .pp-card, .map-card, .collapse,
   .plist {
-    --ink:#fff; --ink-soft:rgba(255,255,255,.82); --ink-faint:rgba(255,255,255,.55); --neutral:rgba(255,255,255,.65);
     --paper:rgba(255,255,255,.10); --paper-2:rgba(255,255,255,.08);
-    --line:rgba(255,255,255,.18); --line-soft:rgba(255,255,255,.12);
     --c-icon-bg:rgba(255,255,255,.12);
     color:var(--ink);
   }
 
-  /* chrome parcial — só texto (paper já é sólido-escuro pelo :root default) */
-  .sidebar, .topbar-mobile {
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    color:var(--ink);
-  }
-
-  /* dark-text parcial — componentes sem override de paper/line */
-  .notif-card {
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    color:var(--ink);
-  }

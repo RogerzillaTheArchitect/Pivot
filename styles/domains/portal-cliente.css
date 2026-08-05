@@ -13,9 +13,10 @@
   .cal-sync-row{display:flex;gap:var(--sp-2);padding:10px 20px;border-bottom:1px solid var(--line)}
   .cal-sync-row .btn{flex:1;font-size:var(--text-12h);padding:9px 10px}
   .client-scroll{flex:1;overflow-y:auto;padding:30px 24px 40px;max-width:480px;margin:0 auto;width:100%}
-  .sig-pad-wrap{position:relative;border:1px solid var(--line);border-radius:var(--r);
-    background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,0) 45%),var(--glass-7);
-    backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);overflow:hidden}
+  .sig-pad-wrap{position:relative;border:1px solid rgba(255,255,255,.18);border-radius:var(--r);
+    background:rgba(255,255,255,.09);
+    backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.10);overflow:hidden}
   /* #sig-canvas-cliente (preview do Portal do Cliente dentro da app) e
      #perfil-sig-canvas (assinatura padrão do Perfil) reaproveitam o MESMO
      .sig-pad-wrap deste ficheiro, mas nunca tiveram uma regra própria —
@@ -70,8 +71,8 @@
   /* ===== MOBILE NAV ===== */
   .nav{display:none;position:absolute;bottom:calc(10px + env(safe-area-inset-bottom));left:18px;right:18px;
     background:var(--surface-chrome);
-    backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);border-radius:var(--r);
-    border:1px solid rgba(255,255,255,.10);box-shadow:0 8px 30px rgba(0,0,0,.15);z-index:30;height:var(--nav-h);
+    backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);border-radius:var(--r);
+    border:1px solid rgba(255,255,255,.18);box-shadow:0 4px 16px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.10);z-index:30;height:var(--nav-h);
     align-items:center;padding:0 6px}
   .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
     align-items:center;gap:var(--sp-1);padding:6px 2px;color:rgba(255,255,255,.62);font-family:inherit;font-size:9.5px;font-weight:500}
