@@ -1,10 +1,10 @@
   :root{
-    --paper:#1A1B1D; --paper-2:#202225; --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B;
+    --paper:rgba(255,255,255,.09); --paper-2:rgba(255,255,255,.07); --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B;
     --line:rgba(255,255,255,.10); --line-soft:rgba(255,255,255,.08); --bg-ice:#131416; --bg-ice-2:#0E0F11;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58; --extras:#2E8577; --extras-10:rgba(46,133,119,.14);
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --label-out:rgba(255,255,255,.82);
-    --shadow:0 1px 2px rgba(0,0,0,.2),0 8px 28px rgba(0,0,0,.3);
+    --shadow:0 1px 2px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.12);
     /* raio único do sistema — quase quadrado, aplicado sem exceção a
        cards, botões, inputs, chips, avatares e janelas/sheets (ver
        auditoria completa nos ficheiros de styles/domains/*.css: tudo o
@@ -29,19 +29,19 @@
          surface-header — faixa de título, sempre mais escura que o corpo
          surface-chrome — chrome flutuante (nav, topbar) sobre o conteúdo
          surface-panel  — painel elevado/modal, praticamente opaco */
-    --surface-card:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,0) 45%),rgba(124,126,129,.10);
-    --surface-row:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(14,13,12,.10);
-    --surface-row-hover:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,0) 45%),rgba(14,13,12,.16);
-    --surface-header:linear-gradient(135deg,rgba(255,255,255,.04),rgba(255,255,255,0) 45%),rgba(8,8,9,.46);
-    --surface-chrome:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,0) 45%),rgba(26,27,29,.62);
-    --surface-panel:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,0) 45%),rgba(18,19,21,.94);
+    --surface-card:rgba(255,255,255,.09);
+    --surface-row:rgba(255,255,255,.07);
+    --surface-row-hover:rgba(255,255,255,.12);
+    --surface-header:rgba(255,255,255,.06);
+    --surface-chrome:rgba(255,255,255,.08);
+    --surface-panel:rgba(255,255,255,.13);
     /* botões de vidro — dois níveis (destaque e discreto), cada um com o seu
        estado hover. Base branca em vez de escura: os botões sobem sobre o
        material, não se afundam nele. */
-    --surface-btn:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,0) 45%),rgba(255,255,255,.07);
-    --surface-btn-hover:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,0) 45%),rgba(255,255,255,.10);
-    --surface-btn-soft:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,0) 45%),rgba(255,255,255,.05);
-    --surface-btn-soft-hover:linear-gradient(135deg,rgba(255,255,255,.11),rgba(255,255,255,0) 45%),rgba(255,255,255,.08);
+    --surface-btn:rgba(255,255,255,.12);
+    --surface-btn-hover:rgba(255,255,255,.17);
+    --surface-btn-soft:rgba(255,255,255,.09);
+    --surface-btn-soft-hover:rgba(255,255,255,.13);
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
     --c-orange:#CBA26A; --c-yellow-soft:#C9BB86; --c-green-soft:#4FA189;
     --c-date-bg-ok:rgba(79,161,137,.22); --c-date-bg-late:rgba(217,127,121,.22); --c-text-green:#8FD4BC; --c-text-red:#F0A8A2;
@@ -110,10 +110,10 @@
   .job, .sec,
   .pp-card, .map-card, .collapse,
   .plist {
-    --ink:#F5F5F3; --ink-soft:#C8C8C8; --ink-faint:#9B9B9B; --neutral:#B9B9B1;
-    --paper:rgba(255,255,255,.08); --paper-2:rgba(255,255,255,.06);
-    --line:rgba(255,255,255,.16); --line-soft:rgba(255,255,255,.10);
-    --c-icon-bg:rgba(255,255,255,.10);
+    --ink:#fff; --ink-soft:rgba(255,255,255,.82); --ink-faint:rgba(255,255,255,.55); --neutral:rgba(255,255,255,.65);
+    --paper:rgba(255,255,255,.10); --paper-2:rgba(255,255,255,.08);
+    --line:rgba(255,255,255,.18); --line-soft:rgba(255,255,255,.12);
+    --c-icon-bg:rgba(255,255,255,.12);
     color:var(--ink);
   }
 
