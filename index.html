@@ -10,7 +10,8 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Josefin+Sans:wght@400;500;600;700&family=Lexend+Deca:wght@300;400;500;600;700&family=Special+Gothic+Expanded+One&family=Six+Caps&family=JetBrains+Mono:wght@400;500;600;700&family=Zalando+Sans+Expanded:wght@400;500;600;700&family=TikTok+Sans:slnt,wdth,wght@0,115,900&family=Inter:wght@500;600&family=IBM+Plex+Sans:wght@500;600&family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/background.css">
 <link rel="stylesheet" href="styles/domains/landing.css">
@@ -34,7 +35,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overscroll-behavior-y:contain}
-  body{font-family:'Inter',system-ui,sans-serif;font-weight:300;background:var(--bg-ice-2);color:var(--ink);
+  body{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:var(--bg-ice-2);color:var(--ink);
     font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;font-synthesis:none}
   /* fundo único da app (todas as telas dentro do shell): textura granulada
      escura em tons de cinza/preto, recriada em CSS puro a partir da imagem
@@ -44,13 +45,13 @@
      e, por cima, um grão fotográfico via SVG (feTurbulence) a baixíssima
      opacidade, em mix-blend soft-light. */
   .shell{display:flex;height:100vh;width:100%;position:relative;overflow:hidden;
-    background:#1A1A1A;
+    background:linear-gradient(180deg,#323332 0%,#555555 14%,#676868 28%,#727377 50%,#676868 72%,#555555 86%,#323332 100%);
   }
   .shell::before{display:none}
 
 
   /* ===== SPLASH ===== */
-  #splash{position:fixed;inset:0;z-index:999;background:#1A1A1A;display:flex;flex-direction:column;
+  #splash{position:fixed;inset:0;z-index:999;background:linear-gradient(180deg,#323332 0%,#555555 14%,#676868 28%,#727377 50%,#676868 72%,#555555 86%,#323332 100%);display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease, visibility .5s}
   #splash.hide{opacity:0;visibility:hidden;pointer-events:none}
 
@@ -464,12 +465,8 @@
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
         <div id="dash-card-financeiro" class="u-hidden">
-        <div class="card finance-ops-card card-notch">
-        <div class="card-notch-header">
-          <div class="card-notch-header-left"></div>
-          <div class="card-notch-label" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
-          <div class="card-notch-header-right"></div>
-        </div>
+        <div class="tasks-header" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
+        <div class="card finance-ops-card">
         <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
@@ -532,12 +529,8 @@
         </div>
 
         <div id="dash-card-operacional" class="u-hidden">
-        <div class="card ops-card card-notch" aria-labelledby="dash-op-title">
-        <div class="card-notch-header">
-          <div class="card-notch-header-left"></div>
-          <div class="card-notch-label" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">Operacional</div>
-          <div class="card-notch-header-right"></div>
-        </div>
+        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
+        <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
             <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
@@ -577,13 +570,7 @@
         </div>
         </div>
 
-        <div class="card card-notch card-notch-tasks-bar">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
-            <div class="card-notch-header-right"></div>
-          </div>
-        </div>
+        <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
         <div id="hoje-content">
           <div id="tasks-list"></div>
         </div>
@@ -887,12 +874,8 @@
              valores recalculados pro período selecionado em Relatórios em
              vez de fixos no mês corrente. O card já identifica a seção —
              sem rótulo de área solto acima. -->
-        <div class="card rel-card rel-card-body card-notch u-mt-2" id="rel-anchor-financeiro">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.summary.title">Financeiro</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
           <div class="ms-progress-row">
             <div class="ms-rings-wrap-outer">
               <div class="ms-rings-wrap">
@@ -956,12 +939,8 @@
              um item por linha: título em cima, categoria embaixo, valor à
              direita ocupando a altura das duas linhas. Ver
              renderRelFluxoFinanceiro(). -->
-        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-fluxo">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.cashFlow">Fluxo</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
           <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
         </div>
 
@@ -972,12 +951,8 @@
              Dashboard (pintarMetricaOp(...,'ropm-')), com os dados
              recalculados pro período selecionado em Relatórios em vez do
              mês corrente fixo. Nenhuma classe/estilo novo. -->
-        <div class="card ops-card rel-ops-card-sub card-notch" id="rel-anchor-operacional">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.stats.title">Operacional</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card ops-card rel-ops-card-sub">
           <section class="metric" id="ropm-horas">
             <span class="icon u-ico-mask-base ico-loader"></span>
             <div class="label" data-t="home.hours">Horas</div>
@@ -1027,12 +1002,8 @@
              trabalhadas" incorpora essa mesma comparação de período. Mesmo
              grid dividido .rel-split das demais (divisória vertical
              central, linhas horizontais de borda a borda). -->
-        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-evolucao">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.evolution.title">Desempenho</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header" id="rel-anchor-evolucao"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
           <div class="rel-split" id="rel-evolucao-grid"></div>
         </div>
 
@@ -1042,12 +1013,8 @@
              rentabilidade por hora (maior → menor, até 5 subcategorias),
              direita = 5 médias gerais do período (ticket médio, receita/h,
              receita/projeto, lucro médio/projeto, margem média). -->
-        <div class="card rel-card rel-card-body card-notch" id="rel-anchor-eficiencia">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.profitability.title">Rentabilidade</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header" id="rel-anchor-eficiencia"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
           <div class="rel-split-subhead">
             <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
             <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
@@ -1059,12 +1026,8 @@
              tabela real (Cidade/Eventos/Receita/Ticket Médio/€/h) ordenada
              por receita, clicável por linha (abre os trabalhos da cidade), e
              insights automáticos calculados da mesma tabela. -->
-        <div class="card rel-card rel-card-body rel-card-body-flush card-notch" id="rel-anchor-geografico">
-          <div class="card-notch-header">
-            <div class="card-notch-header-left"></div>
-            <div class="card-notch-label"><span data-t="reports.regional.title">Geográfico</span></div>
-            <div class="card-notch-header-right"><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-          </div>
+        <div class="rel-card-header" id="rel-anchor-geografico"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body rel-card-body-flush">
           <div class="rel-table-wrap">
             <table class="rel-table">
               <thead><tr>
@@ -4202,7 +4165,7 @@
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
-    if(v==='relatorios'){ renderRelatorios(); if(window._applyNotch) document.querySelectorAll('#v-relatorios .card-notch').forEach(function(el){window._applyNotch(el);}); }
+    if(v==='relatorios') renderRelatorios();
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderDashCustomCards(); }
     if(v==='equipa') renderEquipaView();
@@ -16856,67 +16819,6 @@
   ajustarPaddingEcra();
   iniciarPortalPublicoSeAplicavel();
   iniciarColabPublicoSeAplicavel();
-
-  /* ---- Notch Cards: SVG único — fundo + borda + cavidade (ref. card expenses) */
-  (function(){
-    var NS='http://www.w3.org/2000/svg';
-
-    /* Escala a geometria exacta do arquivo-referência (viewBox 900×720)
-       para as dimensões reais do card (w×h). */
-    function buildPath(w,h,cavFrac){
-      var sx=w/900;
-      var cf=(cavFrac!==undefined)?cavFrac:59/720;
-      var cs=cf*h/59;
-      function px(n){return n*sx;}
-      function mx(n){return (900-n)*sx;}
-      function pcav(n){return n*cs;}
-      function pcard(n){return n*h/720;}
-      return 'M '+px(8)+',0'
-        +' H '+px(268)
-        +' C '+px(280)+',0 '+px(284)+','+pcav(7)+' '+px(288)+','+pcav(19)
-        +' L '+px(297)+','+pcav(43)
-        +' C '+px(301)+','+pcav(54)+' '+px(308)+','+pcav(59)+' '+px(321)+','+pcav(59)
-        +' H '+mx(321)
-        +' C '+mx(308)+','+pcav(59)+' '+mx(301)+','+pcav(54)+' '+mx(297)+','+pcav(43)
-        +' L '+mx(288)+','+pcav(19)
-        +' C '+mx(284)+','+pcav(7)+' '+mx(280)+',0 '+mx(268)+',0'
-        +' H '+px(892)
-        +' Q '+w+',0 '+w+','+pcard(8)
-        +' V '+pcard(712)
-        +' Q '+w+','+h+' '+px(892)+','+h
-        +' H '+px(8)
-        +' Q 0,'+h+' 0,'+pcard(712)
-        +' V '+pcard(8)
-        +' Q 0,0 '+px(8)+',0 Z';
-    }
-
-    function apply(el){
-      var w=el.offsetWidth,h=el.offsetHeight;
-      if(!w||!h) return;
-      var isTasksBar=el.classList.contains('card-notch-tasks-bar');
-      var cavFrac=isTasksBar?0.8:59/720;
-      var svg=el.querySelector('.card-notch-shape');
-      if(!svg){
-        svg=document.createElementNS(NS,'svg');
-        svg.setAttribute('class','card-notch-shape');
-        svg.setAttribute('aria-hidden','true');
-        svg.appendChild(document.createElementNS(NS,'path'));
-        el.insertBefore(svg,el.firstChild);
-      }
-      el.style.setProperty('--notch-depth', Math.round(cavFrac*h)+'px');
-      svg.setAttribute('viewBox','0 0 '+w+' '+h);
-      svg.querySelector('path').setAttribute('d',buildPath(w,h,cavFrac));
-    }
-
-    var ro=new ResizeObserver(function(entries){
-      entries.forEach(function(e){apply(e.target);});
-    });
-    document.querySelectorAll('.card-notch').forEach(function(el){
-      apply(el);
-      ro.observe(el);
-    });
-    window._applyNotch=apply;
-  })();
 </script>
 
 <script type="module">

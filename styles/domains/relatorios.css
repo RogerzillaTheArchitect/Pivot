@@ -1,26 +1,6 @@
   /* ===== RELATÓRIOS — página unificada; regra geral: espaçamento em vez de
      bordas/caixas/linhas — só tipografia, cor e respiro ===== */
 
-  /* Largura máxima alargada (vs. .view padrão de 680px).
-     O path SVG começa em px(8)=8w/900 ≈ 4px dentro da borda do elemento;
-     -4px de margem faz o fill visual coincidir com as bordas do topbar e nav. */
-  #v-relatorios.view{max-width:860px}
-  #v-relatorios .card-notch{
-    background:rgba(255,255,255,.09)!important;
-    border:1px solid rgba(255,255,255,.18)!important;
-    border-radius:var(--r)!important;
-    backdrop-filter:blur(12px) saturate(120%)!important;
-    -webkit-backdrop-filter:blur(12px) saturate(120%)!important;
-    box-shadow:0 4px 16px rgba(0,0,0,.10)!important;
-    transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,padding .35s;
-  }
-  #v-relatorios .card-notch-shape{display:none!important;}
-  #v-relatorios .card-notch-header{
-    border-bottom:1px solid rgba(255,255,255,.18);
-    background:rgba(255,255,255,.06);
-    border-radius:var(--r) var(--r) 0 0;
-  }
-
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
      abaixo do card Financeiro — mesmo .btn.soft já usado em todo o app,
      só em grid de 4 colunas iguais. */
@@ -61,7 +41,7 @@
     border:1px solid rgba(255,255,255,.10);border-bottom:none;
     border-radius:var(--r) var(--r) 0 0;
     padding:11px 16px;margin:0;
-    backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);
+    backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
     font-family:var(--font-section),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-size:var(--text-12);font-weight:600;font-stretch:100%;letter-spacing:.06em;text-transform:uppercase;
     color:var(--label-out);text-align:center;
@@ -82,8 +62,12 @@
      mais escuro, consistente com o resto da app. */
   .rel-card-header.tech{
     background:var(--surface-card);border-color:rgba(255,255,255,.10);
-    backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%);
+    backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
     letter-spacing:.3em;color:var(--label-out);
+  }
+  .rel-card-header + .rel-card-body{
+    border-top-left-radius:0;border-top-right-radius:0;margin-top:0;
+    background:var(--surface-row);
   }
   /* Fluxo Financeiro — filtros e lista precisam ir até a borda do próprio
      card (sem o respiro horizontal padrão de 16px), então zera o padding
