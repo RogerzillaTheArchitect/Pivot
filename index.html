@@ -1093,7 +1093,7 @@
         <div class="p-avatar-wrap">
           <div class="p-avatar p-avatar-profile">B</div>
         </div>
-        <div><div class="p-name">Usuário</div><div class="p-sub">Empresa · Pro</div></div>
+        <div style="min-width:0;flex:1"><div class="p-name">Usuário</div><div class="drawer-company" id="drawer-company">Empresa</div><span class="drawer-plan-badge" id="drawer-plan-badge">Free</span></div>
       </div>
       <button class="icon-btn" onclick="fecharMenuDrawer()" aria-label="Fechar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -5359,13 +5359,17 @@
   function resetSheet(){ panelStack=['home']; resetTrabalho(); showPanel('home'); }
 
   function openSheet(){
-    resetSheet();
-    document.getElementById('overlay').classList.add('show');
-    document.getElementById('sheet').classList.add('show');
+    _omOpen('sheet', function(){
+      resetSheet();
+      document.getElementById('overlay').classList.add('show');
+      document.getElementById('sheet').classList.add('show');
+    });
   }
   function closeSheet(){
-    document.getElementById('overlay').classList.remove('show');
-    document.getElementById('sheet').classList.remove('show');
+    _omClose('sheet', function(){
+      document.getElementById('overlay').classList.remove('show');
+      document.getElementById('sheet').classList.remove('show');
+    });
   }
 
   /* ✨ Trabalho — 3 momentos */
@@ -12541,13 +12545,45 @@
         '</div>'+
       '</div>';
   }
+  /* ===== GLOBAL OVERLAY MANAGER — um transient por vez ===== */
+  let __activeOverlay = null; // 'sheet' | 'info' | 'drawer' | null
+  function _omForceClose(id){
+    __activeOverlay = null;
+    if(id==='sheet'){ document.getElementById('overlay').classList.remove('show'); document.getElementById('sheet').classList.remove('show'); }
+    else if(id==='info'){ document.getElementById('infoOverlay').classList.remove('show'); document.getElementById('infoSheet').classList.remove('show'); window.__infoBackHandler=null; document.getElementById('infoBackBtn').style.display='none'; }
+    else if(id==='drawer'){ document.getElementById('menu-overlay').classList.add('u-hidden'); document.getElementById('menu-drawer').classList.remove('open'); }
+  }
+  function _omOpen(id, uiFn){
+    if(__activeOverlay && __activeOverlay!==id) _omForceClose(__activeOverlay);
+    __activeOverlay = id;
+    uiFn();
+  }
+  function _omClose(id, uiFn){
+    if(__activeOverlay===id) __activeOverlay=null;
+    uiFn();
+  }
+  /* Click outside — capture phase, fecha o overlay ativo ao clicar fora dele */
+  document.addEventListener('click', function(e){
+    if(!__activeOverlay) return;
+    if(e.target.closest('button,a,input,select,textarea,label,[role="button"],[onclick]')) return;
+    let panelEl=null;
+    if(__activeOverlay==='sheet') panelEl=document.getElementById('sheet');
+    else if(__activeOverlay==='info') panelEl=document.getElementById('infoSheet');
+    else if(__activeOverlay==='drawer') panelEl=document.getElementById('menu-drawer');
+    if(panelEl && !panelEl.contains(e.target)) _omForceClose(__activeOverlay);
+  }, true);
+
   function abrirMenuDrawer(){
-    document.getElementById('menu-overlay').classList.remove('u-hidden');
-    document.getElementById('menu-drawer').classList.add('open');
+    _omOpen('drawer', function(){
+      document.getElementById('menu-overlay').classList.remove('u-hidden');
+      document.getElementById('menu-drawer').classList.add('open');
+    });
   }
   function fecharMenuDrawer(){
-    document.getElementById('menu-overlay').classList.add('u-hidden');
-    document.getElementById('menu-drawer').classList.remove('open');
+    _omClose('drawer', function(){
+      document.getElementById('menu-overlay').classList.add('u-hidden');
+      document.getElementById('menu-drawer').classList.remove('open');
+    });
   }
     function abrirNotificacoes(){
     const items=gerarNotificacoes();
@@ -14818,6 +14854,8 @@
     document.querySelectorAll('.sb-profile .nm').forEach(el=>el.textContent=nomeExibido);
     document.querySelectorAll('.sb-profile .pl').forEach(el=>el.textContent=nomePlanoAtual());
     document.querySelectorAll('.p-sub').forEach(sub=>{ sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+nomePlanoAtual(); });
+    const _dc=document.getElementById('drawer-company'); if(_dc) _dc.textContent=perfilData.empresa||t('defaults.companyName');
+    const _dpb=document.getElementById('drawer-plan-badge'); if(_dpb) _dpb.textContent=nomePlanoAtual();
     const inicial=(nomeExibido||'U').charAt(0).toUpperCase();
     /* Só o avatar de perfil de verdade (.p-avatar-profile) — .p-avatar
        sozinho também é usado como preview de foto de contacto e de empresa,
@@ -15497,28 +15535,32 @@
 
   /* ===== INFO SHEET — Perfil, Builder (funções reais e contidas) ===== */
   function openInfo(title, bodyHtml, onBack, titleClass){
-    const titleEl=document.getElementById('infoTitle');
-    titleEl.textContent=title;
-    titleEl.className = titleClass||'';
-    document.getElementById('infoBody').innerHTML=bodyHtml;
-    document.getElementById('infoOverlay').classList.add('show');
-    document.getElementById('infoSheet').classList.add('show');
-    window.__infoBackHandler = onBack||null;
-    document.getElementById('infoBackBtn').style.display = onBack ? 'flex' : 'none';
-    document.querySelectorAll('#infoBody [data-t]').forEach(el=>{
-      const val=t(el.dataset.t);
-      if(val&&val!==el.dataset.t)el.textContent=val;
-    });
-    document.querySelectorAll('#infoBody [data-t-placeholder]').forEach(el=>{
-      const val=t(el.dataset.tPlaceholder);
-      if(val)el.placeholder=val;
+    _omOpen('info', function(){
+      const titleEl=document.getElementById('infoTitle');
+      titleEl.textContent=title;
+      titleEl.className = titleClass||'';
+      document.getElementById('infoBody').innerHTML=bodyHtml;
+      document.getElementById('infoOverlay').classList.add('show');
+      document.getElementById('infoSheet').classList.add('show');
+      window.__infoBackHandler = onBack||null;
+      document.getElementById('infoBackBtn').style.display = onBack ? 'flex' : 'none';
+      document.querySelectorAll('#infoBody [data-t]').forEach(el=>{
+        const val=t(el.dataset.t);
+        if(val&&val!==el.dataset.t)el.textContent=val;
+      });
+      document.querySelectorAll('#infoBody [data-t-placeholder]').forEach(el=>{
+        const val=t(el.dataset.tPlaceholder);
+        if(val)el.placeholder=val;
+      });
     });
   }
   function closeInfo(){
-    document.getElementById('infoOverlay').classList.remove('show');
-    document.getElementById('infoSheet').classList.remove('show');
-    window.__infoBackHandler=null;
-    document.getElementById('infoBackBtn').style.display='none';
+    _omClose('info', function(){
+      document.getElementById('infoOverlay').classList.remove('show');
+      document.getElementById('infoSheet').classList.remove('show');
+      window.__infoBackHandler=null;
+      document.getElementById('infoBackBtn').style.display='none';
+    });
   }
   function infoMinhaConta(){
     openInfo(t('profile.myAccount'), `
