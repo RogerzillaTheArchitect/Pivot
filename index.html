@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!-- redeploy trigger: força novo build na Vercel após integração parar de disparar após o commit b1cb8af -->
 <html lang="en">
 <head>
@@ -35,7 +35,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
   html,body{height:100%;overscroll-behavior-y:contain}
-  body{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:var(--bg-ice-2);color:var(--ink);
+  body{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:400;background:#000;color:var(--ink);
     font-size:15px;line-height:1.5;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;font-synthesis:none}
   /* fundo único da app (todas as telas dentro do shell): textura granulada
      escura em tons de cinza/preto, recriada em CSS puro a partir da imagem
@@ -45,13 +45,13 @@
      e, por cima, um grão fotográfico via SVG (feTurbulence) a baixíssima
      opacidade, em mix-blend soft-light. */
   .shell{display:flex;height:100vh;width:100%;position:relative;overflow:hidden;
-    background:linear-gradient(180deg,#323332 0%,#555555 14%,#676868 28%,#727377 50%,#676868 72%,#555555 86%,#323332 100%);
+    background:#000;
   }
   .shell::before{display:none}
 
 
   /* ===== SPLASH ===== */
-  #splash{position:fixed;inset:0;z-index:999;background:linear-gradient(180deg,#323332 0%,#555555 14%,#676868 28%,#727377 50%,#676868 72%,#555555 86%,#323332 100%);display:flex;flex-direction:column;
+  #splash{position:fixed;inset:0;z-index:999;background:#000;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:14px;transition:opacity .5s ease, visibility .5s}
   #splash.hide{opacity:0;visibility:hidden;pointer-events:none}
 
@@ -453,8 +453,11 @@
           <span class="nav-ico u-ico-22 ico-notif"></span>
           <span class="notif-count u-hidden" id="notif-count"></span>
         </div>
-        <div class="icon-btn" id="topbar-profile-btn" onclick="go('perfil')" aria-label="Perfil">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 21v-3l3-3h6l3 3v3"/></svg>
+        <div class="icon-btn" id="topbar-calendar-btn" onclick="abrirSeletorPeriodo()" aria-label="Período">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        </div>
+        <div class="icon-btn" id="topbar-menu-btn" onclick="abrirMenuDrawer()" aria-label="Menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </div>
       </div>
     </div>
@@ -851,22 +854,6 @@
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
       <section class="view" id="v-relatorios">
-        <!-- Seletor de período — barra global partilhada por todos os cards
-             da página (todo card usa relRangeMeses()/relPeriodo pra se
-             filtrar), por isso fica solta no topo, fora de qualquer área. -->
-        <!-- mesmo componente exato do cabeçalho de mês/ano de Projetos
-             (.tasks-header.cal-header + .rel-nav-tall + .rel-month-center) —
-             sem card/wrapper próprio, sem alteração de fonte/tamanho/peso/
-             espaçamento/alinhamento. Só o clique no mês/ano ganha o
-             comportamento próprio de Relatórios (abrir o seletor de período). -->
-        <div class="tasks-header cal-header">
-          <button class="rel-nav-tall" onclick="relMonthNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
-          <div class="rel-month-center" onclick="abrirSeletorPeriodo()">
-            <span class="rel-mes-big" id="rel-mes-label">Julho</span>
-            <span class="rel-ano-small" id="rel-ano-label">2026</span>
-          </div>
-          <button class="rel-nav-tall" onclick="relMonthNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
-        </div>
 
         <!-- Card: Financeiro — mesmo gráfico de anéis (Meta/Esperado/
              Recebido/Extras/Despesas/Teto) já usado no Dashboard, aqui com
@@ -1098,7 +1085,41 @@
       <span class="nav-ico nav-ico-relatorios"></span>
       <span id="nav-label-relatorios" data-t="reports.title">Relatórios</span>
     </button>
-  </nav>
+  <!-- ===== MENU DRAWER — slide-in da direita, substitui botão de Perfil no topbar mobile ===== -->
+  <div class="menu-overlay u-hidden" id="menu-overlay" onclick="fecharMenuDrawer()"></div>
+  <div class="menu-drawer" id="menu-drawer">
+    <div class="menu-drawer-hd">
+      <div class="profile-head" style="margin:0;padding:4px 0 0">
+        <div class="p-avatar-wrap">
+          <div class="p-avatar p-avatar-profile">B</div>
+        </div>
+        <div><div class="p-name">Usuário</div><div class="p-sub">Empresa · Pro</div></div>
+      </div>
+      <button class="icon-btn" onclick="fecharMenuDrawer()" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="menu-drawer-body">
+      <div class="plist">
+        <div class="prow" onclick="infoMinhaConta();fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg><div class="t" data-t="profile.myAccount">Conta</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="go('equipa');fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 21h18M6 21V7l6-4 6 4v14M9 9h1m4 0h1m-6 4h1m4 0h1m-6 4h1m4 0h1"/></svg><div class="t" data-t="profile.organization">Organização</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoServicos();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-equipa"></span><div class="t" data-t="profile.services">Serviços</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoMetodosPagamento();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-cobr"></span><div class="t" data-t="profile.paymentMethods">Formas de recebimento</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="go('contatos');fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="7" r="4"/><path d="M21 8v6M18 11h6"/></svg><div class="t" data-t="profile.contacts">Contatos</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoPlano();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-servicos"></span><div class="t" data-t="profile.plan">Plano</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoAssinatura();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-assinat"></span><div class="t" data-t="profile.signature">Assinatura</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoNotificacoes();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-notif"></span><div class="t" data-t="profile.notifications">Notificações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoSincronizacaoCalendario();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-calendar"></span><div class="t" data-t="settings.calendarSync">Sincronização de Calendário</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoConfiguracoes();fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><div class="t" data-t="profile.settings">Configurações</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoAjuda();fecharMenuDrawer()"><span class="nav-ico u-ico-18 ico-ajuda"></span><div class="t" data-t="profile.help">Ajuda</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoPrivacidade();fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg><div class="t" data-t="profile.privacy">Privacidade</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+        <div class="prow" onclick="infoSobre();fecharMenuDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v5h1"/></svg><div class="t" data-t="profile.about">Sobre</div><svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>
+      </div>
+      <div class="plist u-mt-22">
+        <div class="prow" onclick="terminarSessao()"><svg class="u-c-late" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg><div class="t u-c-late" data-t="profile.signOut">Terminar sessão</div></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ===== ACTION SHEET — CRIAR (único âmbito desta alteração) ===== -->
   <div class="overlay" id="overlay" onclick="closeSheet()"></div>
@@ -12520,7 +12541,15 @@
         '</div>'+
       '</div>';
   }
-  function abrirNotificacoes(){
+  function abrirMenuDrawer(){
+    document.getElementById('menu-overlay').classList.remove('u-hidden');
+    document.getElementById('menu-drawer').classList.add('open');
+  }
+  function fecharMenuDrawer(){
+    document.getElementById('menu-overlay').classList.add('u-hidden');
+    document.getElementById('menu-drawer').classList.remove('open');
+  }
+    function abrirNotificacoes(){
     const items=gerarNotificacoes();
     const atividade=gerarAtividadeCliente();
     items.forEach(it=>notifSeenIds.add(it.id));
@@ -14788,7 +14817,7 @@
     document.querySelectorAll('.p-name').forEach(el=>el.textContent=nomeExibido);
     document.querySelectorAll('.sb-profile .nm').forEach(el=>el.textContent=nomeExibido);
     document.querySelectorAll('.sb-profile .pl').forEach(el=>el.textContent=nomePlanoAtual());
-    const sub=document.querySelector('.p-sub'); if(sub) sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+nomePlanoAtual();
+    document.querySelectorAll('.p-sub').forEach(sub=>{ sub.textContent=(perfilData.empresa||t('defaults.companyName'))+' · '+nomePlanoAtual(); });
     const inicial=(nomeExibido||'U').charAt(0).toUpperCase();
     /* Só o avatar de perfil de verdade (.p-avatar-profile) — .p-avatar
        sozinho também é usado como preview de foto de contacto e de empresa,
