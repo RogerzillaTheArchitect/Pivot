@@ -1,10 +1,10 @@
   :root{
-    --paper:rgba(255,255,255,.09); --paper-2:rgba(255,255,255,.07); --ink:#fff; --ink-soft:rgba(255,255,255,.70); --ink-faint:rgba(255,255,255,.45);
-    --line:rgba(255,255,255,.18); --line-soft:rgba(255,255,255,.12); --bg-ice:#131416; --bg-ice-2:#0E0F11;
+    --paper:#F5F5F5; --paper-2:#EFEFEF; --ink:#111111; --ink-soft:rgba(17,17,17,.70); --ink-faint:rgba(17,17,17,.45);
+    --line:rgba(0,0,0,.12); --line-soft:rgba(0,0,0,.08); --bg-ice:#1A1A1A; --bg-ice-2:#151515;
     --brand:#4FA189; --brand-10:rgba(79,161,137,.14); --brand-dk:#2F6B58; --extras:#2E8577; --extras-10:rgba(46,133,119,.14);
-    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:rgba(255,255,255,.45); --urgent:#E8C547;
-    --label-out:rgba(255,255,255,.70);
-    --shadow:0 2px 8px rgba(0,0,0,.10),0 8px 24px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.10);
+    --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:rgba(17,17,17,.45); --urgent:#E8C547;
+    --label-out:rgba(17,17,17,.70);
+    --shadow:0 2px 8px rgba(0,0,0,.12),0 8px 24px rgba(0,0,0,.18);
     /* raio único do sistema — quase quadrado, aplicado sem exceção a
        cards, botões, inputs, chips, avatares e janelas/sheets (ver
        auditoria completa nos ficheiros de styles/domains/*.css: tudo o
@@ -16,8 +16,8 @@
        esses precisam de permanecer redondos para continuarem legíveis
        como o que são. */
     --r:4px; --radius-card:8px; --radius-control:6px; --radius-small:4px; --sb-w:236px; --nav-h:74px;
-    --glass-rgb:26,27,29; --glass-rgb-2:32,34,37; --btn-rgb:79,161,137;
-    --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:rgba(14,13,12,.90); --glass-55:rgba(14,13,12,.92); --glass-6:rgba(14,13,12,.93); --glass-62:rgba(14,13,12,.94); --glass-65:rgba(14,13,12,.95); --glass-7:rgba(14,13,12,.96); --glass-85:rgba(14,13,12,.98); --glass2-75:rgba(14,13,12,.7);
+    --glass-rgb:245,245,245; --glass-rgb-2:239,239,239; --btn-rgb:79,161,137;
+    --btn-05:rgba(79,161,137,.05); --btn-06:rgba(79,161,137,.06); --btn-07:rgba(79,161,137,.07); --btn-09:rgba(79,161,137,.09); --btn-10:rgba(79,161,137,.10); --btn-14:rgba(79,161,137,.14); --btn-32:rgba(79,161,137,.32); --btn-72:rgba(79,161,137,.72); --btn-74:rgba(79,161,137,.74); --btn-78:rgba(79,161,137,.78); --btn-8:rgba(79,161,137,.8); --btn-86:rgba(79,161,137,.86); --btn-88:rgba(79,161,137,.88); --glass-5:#F5F5F5; --glass-55:#F5F5F5; --glass-6:#F5F5F5; --glass-62:#F5F5F5; --glass-65:#F5F5F5; --glass-7:#F5F5F5; --glass-85:#F5F5F5; --glass2-75:rgba(245,245,245,.97);
     /* ===== Superfícies de vidro — 4 níveis, e só 4 =====
        Cada superfície da app cai num destes níveis; antes cada ficheiro
        inventava o seu próprio par (brilho, base) e existiam ~20 combinações
@@ -29,27 +29,24 @@
          surface-header — faixa de título, sempre mais escura que o corpo
          surface-chrome — chrome flutuante (nav, topbar) sobre o conteúdo
          surface-panel  — painel elevado/modal, praticamente opaco */
-    --surface-card:rgba(255,255,255,.09);
-    --surface-row:rgba(255,255,255,.07);
-    --surface-row-hover:rgba(255,255,255,.12);
-    --surface-header:rgba(255,255,255,.06);
-    --surface-chrome:rgba(255,255,255,.08);
-    --surface-panel:rgba(255,255,255,.13);
-    /* botões de vidro — dois níveis (destaque e discreto), cada um com o seu
-       estado hover. Base branca em vez de escura: os botões sobem sobre o
-       material, não se afundam nele. */
-    --surface-btn:rgba(255,255,255,.12);
-    --surface-btn-hover:rgba(255,255,255,.17);
-    --surface-btn-soft:rgba(255,255,255,.09);
-    --surface-btn-soft-hover:rgba(255,255,255,.13);
-    --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
+    --surface-card:#F5F5F5;
+    --surface-row:#EEEEEE;
+    --surface-row-hover:#E5E5E5;
+    --surface-header:#F0F0F0;
+    --surface-chrome:#F5F5F5;
+    --surface-panel:#F7F7F7;
+    --surface-btn:rgba(0,0,0,.08);
+    --surface-btn-hover:rgba(0,0,0,.13);
+    --surface-btn-soft:rgba(0,0,0,.05);
+    --surface-btn-soft-hover:rgba(0,0,0,.09);
+    --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(0,0,0,.08);
     --c-orange:#CBA26A; --c-yellow-soft:#C9BB86; --c-green-soft:#4FA189;
     --c-date-bg-ok:rgba(79,161,137,.22); --c-date-bg-late:rgba(217,127,121,.22); --c-text-green:#8FD4BC; --c-text-red:#F0A8A2;
-    --font-headline:'Instrument Serif',serif; --font-subtitle:'Josefin Sans',sans-serif; --font-subtext:'Lexend Deca',sans-serif; --font-numeric:'JetBrains Mono',monospace;
-    --font-month:'Six Caps',sans-serif; --font-year:'Special Gothic Expanded One',sans-serif;
-    --font-title:'Zalando Sans Expanded',sans-serif;
-    --font-section:'TikTok Sans',sans-serif; --font-label:'Inter',sans-serif; --font-financial:'IBM Plex Sans',sans-serif;
-    --font-ops:'Cormorant Garamond',Georgia,serif;
+    --font-headline:'Inter',system-ui,sans-serif; --font-subtitle:'Inter',system-ui,sans-serif; --font-subtext:'Inter',system-ui,sans-serif; --font-numeric:'Inter',system-ui,sans-serif;
+    --font-month:'Inter',system-ui,sans-serif; --font-year:'Inter',system-ui,sans-serif;
+    --font-title:'Inter',system-ui,sans-serif;
+    --font-section:'Inter',system-ui,sans-serif; --font-label:'Inter',system-ui,sans-serif; --font-financial:'Inter',system-ui,sans-serif;
+    --font-ops:'Inter',system-ui,sans-serif;
     /* ===== Escala tipográfica — substitui font-size hardcoded em toda a app =====
        Usar var(--text-*) em vez de px literal em componentes novos e em edições. */
     --text-2xs:10px; --text-10h:10.5px; --text-11:11px; --text-xs:11.5px;
@@ -79,7 +76,7 @@
      como já eram (os cards de vidro do app são intencionalmente sempre escuros, ver
      CONTEXTO_PROJETO.md). */
   [data-theme="light"]{
-    --ink:#1F1F1F; --ink-soft:#3A3A3A; --neutral:#5B5B5B;
+    --ink:#111111; --ink-soft:rgba(17,17,17,.70); --neutral:rgba(17,17,17,.45);
   }
   /* Quando o browser suporta mesmo backdrop-filter, baixamos a opacidade dos cartões
      para um vidro genuinamente translúcido. Sem suporte, fica a versão sólida legível acima.
@@ -90,8 +87,8 @@
      depois da reformulação pra vidro escuro no resto do app. */
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
     :root{
-      --glass-5:rgba(14,13,12,.34); --glass-55:rgba(14,13,12,.4); --glass-6:rgba(14,13,12,.44); --glass-62:rgba(14,13,12,.46);
-      --glass-65:rgba(14,13,12,.48); --glass-7:rgba(14,13,12,.5); --glass-85:rgba(14,13,12,.58); --glass2-75:rgba(14,13,12,.42);
+      --glass-5:#F5F5F5; --glass-55:#F5F5F5; --glass-6:#F5F5F5; --glass-62:#F5F5F5;
+      --glass-65:#F5F5F5; --glass-7:#F5F5F5; --glass-85:#F5F5F5; --glass2-75:rgba(245,245,245,.97);
     }
   }
 
@@ -105,13 +102,13 @@
        glass-card — paper como rgba translúcido (elementos aninhados ficam sobre o vidro)
        chrome     — paper sólido (sidebar/topbar são o próprio vidro, não ficam sobre ele) */
 
-  /* glass-card */
+  /* cards — branco gelo sólido, texto preto */
   .card, .finance-ops-card, .ms-card-sq,
   .job, .sec,
   .pp-card, .map-card, .collapse,
   .plist {
-    --paper:rgba(255,255,255,.10); --paper-2:rgba(255,255,255,.08);
-    --c-icon-bg:rgba(255,255,255,.12);
+    --paper:#F5F5F5; --paper-2:#EEEEEE;
+    --c-icon-bg:rgba(0,0,0,.08);
     color:var(--ink);
   }
 
