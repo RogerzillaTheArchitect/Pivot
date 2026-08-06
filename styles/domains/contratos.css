@@ -1,4 +1,4 @@
-  /* ===== BUILDER DE CONTRATO ===== */
+﻿  /* ===== BUILDER DE CONTRATO ===== */
   .builder-top{display:flex;justify-content:space-between;align-items:flex-start;margin:14px 0 16px;gap:10px}
   .builder-tutorial-btn{display:flex;align-items:center;gap:7px;flex:none;white-space:nowrap}
   .builder-tutorial-btn svg{width:15px;height:15px;flex:none}
@@ -8,8 +8,8 @@
   .builder-tabs{margin-bottom:18px}
   .builder-tabs button{display:flex;align-items:center;justify-content:center;gap:7px}
   .builder-tabs button svg{width:15px;height:15px;flex:none}
-  .tab-badge{font-size:var(--text-10h);font-weight:700;border-radius:var(--r);padding:1px 6px;background:rgba(255,255,255,.14);color:var(--ink)}
-  .builder-tabs button.on .tab-badge{background:rgba(0,0,0,.14);color:#15170F}
+  .tab-badge{font-size:var(--text-10h);font-weight:700;border-radius:var(--r);padding:1px 6px;background:rgba(0,0,0,.08);color:var(--ink)}
+  .builder-tabs button.on .tab-badge{background:rgba(255,255,255,.18);color:var(--paper)}
   .builder-hint{font-size:var(--text-sm);color:var(--neutral);margin-bottom:18px}
   /* Cada dica numa linha própria — em vez de deixar quebrar livremente lado
      a lado (o que lia como um texto corrido/confuso ao envolver), fica
@@ -63,13 +63,13 @@
     border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
-  .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r);background:rgba(255,255,255,.08);color:var(--ink);
+  .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r);background:rgba(0,0,0,.08);color:var(--ink);
     font-size:var(--text-2xs);font-weight:700;display:grid;place-items:center;font-variant-numeric:tabular-nums;margin-top:1px}
   .clause-txt{flex:1;min-width:0;font-size:var(--text-sm);color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   /* Menu de três pontos por cláusula (editar/duplicar/mover/excluir) */
   .clause-kebab{flex:none;border:none;background:none;color:var(--neutral);cursor:pointer;
     padding:3px;margin:-2px -4px -2px 2px;display:flex;align-items:center;border-radius:var(--r);transition:color .15s,background .15s}
-  .clause-kebab:hover{color:var(--ink);background:rgba(255,255,255,.08)}
+  .clause-kebab:hover{color:var(--ink);background:rgba(0,0,0,.06)}
   .clause-kebab svg{width:var(--ico-md);height:var(--ico-md)}
   .pick-row.disabled{opacity:.4;cursor:default}
   /* Campo dinâmico destacado dentro do texto da cláusula — toca pra editar
@@ -98,7 +98,7 @@
   .toggle.on .kn{left:18px}
   /* Editor de contrato: sem verde nenhum, nem o dessaturado acima — os
      blocos usam só a escala preto/cinza/branco do resto deste ecrã. */
-  .dyn-blocklist .toggle.on{background:rgba(255,255,255,.32)}
+  .dyn-blocklist .toggle.on{background:rgba(0,0,0,.22)}
   .dyn-blocklist .toggle.on .kn{background:var(--ink)}
   .block.off{opacity:.7}
   .addblock{display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;padding:13px;
@@ -121,7 +121,7 @@
   .dynf-group{border:1px solid var(--line);border-radius:var(--r);background:var(--paper);margin-bottom:14px;overflow:hidden}
   .dynf-group-head{display:flex;align-items:center;gap:9px;padding:14px 14px;cursor:pointer;font-size:var(--text-base);font-weight:600;color:var(--ink)}
   .dynf-group-head svg:first-child{width:var(--ico-md);height:var(--ico-md);color:var(--ink-soft);flex:none}
-  .dynf-count{font-size:var(--text-11);font-weight:700;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
+  .dynf-count{font-size:var(--text-11);font-weight:700;color:var(--ink);background:rgba(0,0,0,.07);border-radius:var(--r);padding:2px 8px}
   .dynf-group-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);margin-left:auto;transition:transform .2s}
   .dynf-group.collapsed .dynf-group-chev{transform:rotate(-90deg)}
   .dynf-group-body{border-top:1px solid var(--line)}
@@ -129,7 +129,7 @@
   .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:var(--sp-3);padding:13px 14px;border-top:1px solid var(--line-soft)}
   .dynf-row:first-child,.dynf-row-ro:first-child{border-top:none}
   .dynf-row{cursor:pointer;transition:background .15s}
-  .dynf-row:hover{background:rgba(255,255,255,.03)}
+  .dynf-row:hover{background:rgba(0,0,0,.04)}
   .dynf-row .dynf-key,.dynf-row-ro .dynf-key{flex:1;min-width:0;font-size:var(--text-13h);font-weight:500;color:var(--ink);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;border:none;padding:0;height:auto;min-height:0;cursor:inherit}
   .dynf-val{flex:1;min-width:0;font-size:var(--text-13h);color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -138,9 +138,9 @@
 
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
-    border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer;
+    border:1px solid var(--line);background:rgba(0,0,0,.03);color:var(--ink-soft);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer;
     transition:border-color .15s,color .15s,background .15s}
-  .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
+  .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(0,0,0,.06)}
   .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
@@ -148,10 +148,10 @@
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
     border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
   .pick-check:hover{border-color:var(--ink-soft)}
-  .pick-check.on{border-color:var(--ink);background:rgba(255,255,255,.06)}
+  .pick-check.on{border-color:var(--ink);background:rgba(0,0,0,.04)}
   .pick-check .pc-box{flex:none;width:var(--ico-xl);height:var(--ico-xl);border-radius:var(--r);border:1.5px solid var(--line);
     display:grid;place-items:center;color:transparent;margin-top:1px}
-  .pick-check .pc-box.on{background:rgba(255,255,255,.85);border-color:rgba(255,255,255,.85);color:#1a1b1d}
+  .pick-check .pc-box.on{background:var(--ink);border-color:var(--ink);color:var(--paper)}
   .pick-check .pc-box svg{width:13px;height:13px}
   .pick-check .pc-main{min-width:0;flex:1}
   .pick-check .pc-nm{font-size:var(--text-base);font-weight:600;color:var(--ink)}
@@ -190,24 +190,22 @@
   .revb-title:focus{outline:none;border-bottom:1.5px solid var(--brand)}
   .clause{cursor:pointer}
   .revc-actions{display:flex;flex-direction:column;gap:5px;flex:none;align-items:center}
-  .revc-move{border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.09);border-radius:var(--r);font-size:var(--text-10h);
-    color:#fff;font-family:inherit;padding:2px 3px;max-width:84px}
+  .revc-move{border:1px solid rgba(0,0,0,.10);background:var(--paper);border-radius:var(--r);font-size:var(--text-10h);
+    color:var(--ink);font-family:inherit;padding:2px 3px;max-width:84px}
   .revc-rm{color:var(--neutral);cursor:pointer;font-size:var(--text-sm);padding:2px 4px}
   .revc-rm:hover{color:var(--ink)}
 
   /* ===== CALENDÁRIO ===== */
   .cal-grid{display:grid;grid-template-columns:var(--cols-7);gap:5px;margin-bottom:18px}
   .cal-dow{text-align:center;font-size:var(--text-11);color:var(--neutral);font-weight:600;padding-bottom:6px}
-  .cal-day{aspect-ratio:1;border-radius:var(--r);border:1.5px solid rgba(255,255,255,.20);display:flex;flex-direction:column;
-    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:var(--text-12h);color:rgba(255,255,255,.85);
-    position:relative;cursor:pointer;background:rgba(255,255,255,.09);
-    backdrop-filter:blur(12px) saturate(120%);-webkit-backdrop-filter:blur(12px) saturate(120%)}
-  .cal-day.out{opacity:.3}
-  .cal-day.today{border-color:var(--brand);font-weight:600;color:var(--ink)}
+  .cal-day{aspect-ratio:1;border-radius:var(--r);border:1.5px solid rgba(0,0,0,.10);display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;padding:6px 2px;font-size:var(--text-12h);
+    position:relative;cursor:pointer;background:#FFFFFF;
+    font-weight:600;color:var(--ink-soft)}
   /* seleção de dia — mesma linguagem neutra "on" usada em chips/priority-opt
      no resto do app (fundo --ink, texto --paper), não mais o verde de marca. */
-  .cal-day.cal-day-sel{background:rgba(255,255,255,.85);border-color:rgba(255,255,255,.85);color:#1a1b1d;font-weight:700}
-  .cal-day.cal-day-sel .cd{background:#1a1b1d!important}
+  .cal-day.cal-day-sel{background:var(--ink);border-color:var(--ink);color:var(--paper);font-weight:700}
+  .cal-day.cal-day-sel .cd{background:var(--paper)!important}
   .cal-dots{display:flex;gap:2px;margin-top:3px;flex-wrap:wrap;justify-content:center}
   .cd{width:5px;height:5px;border-radius:50%}
   .legend{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;font-size:var(--text-12h);color:var(--ink-soft)}
