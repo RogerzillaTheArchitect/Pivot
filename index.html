@@ -4203,7 +4203,7 @@
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
-    if(v==='relatorios') renderRelatorios();
+    if(v==='relatorios'){ renderRelatorios(); if(window._applyNotch) document.querySelectorAll('#v-relatorios .card-notch').forEach(function(el){window._applyNotch(el);}); }
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
     if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderDashCustomCards(); }
     if(v==='equipa') renderEquipaView();
@@ -16916,6 +16916,7 @@
       apply(el);
       ro.observe(el);
     });
+    window._applyNotch=apply;
   })();
 </script>
 
