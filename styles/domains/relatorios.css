@@ -5,9 +5,14 @@
      O path SVG começa em px(8)=8w/900 ≈ 4px dentro da borda do elemento;
      -4px de margem faz o fill visual coincidir com as bordas do topbar e nav. */
   #v-relatorios.view{max-width:860px}
-  #v-relatorios .card-notch{transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,padding .35s}
-  @media (max-width:899px){
-    #v-relatorios .card-notch{margin-left:calc((36px - 100vw)*8/884);margin-right:calc((36px - 100vw)*8/884)}
+  #v-relatorios .card-notch{
+    background:rgba(255,255,255,.09)!important;
+    border:1px solid rgba(255,255,255,.18)!important;
+    border-radius:var(--r)!important;
+    backdrop-filter:blur(12px) saturate(120%)!important;
+    -webkit-backdrop-filter:blur(12px) saturate(120%)!important;
+    box-shadow:0 4px 16px rgba(0,0,0,.10)!important;
+    transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,padding .35s;
   }
 
   /* 4 botões de acesso às listas (Metas/Limites/Receitas/Despesas) logo
