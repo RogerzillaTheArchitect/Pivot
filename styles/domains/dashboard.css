@@ -7,9 +7,8 @@
   /* Financeiro + Estatísticas Operacionais vivem no mesmo card, cada um
      com seu título centrado dentro; o menu (⋮) do Financeiro fica
      ancorado à direita do próprio título, não da largura do card. */
-  .finance-ops-card{position:relative;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);
-    border-radius:var(--r);margin:12px 0 22px;padding:var(--sp-3) 0;box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
-    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);overflow:hidden;
+  .finance-ops-card{position:relative;background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--r);margin:12px 0 22px;padding:var(--sp-3) 0;box-shadow:var(--card-shadow);overflow:hidden;
     --c-track-lt:rgba(255,255,255,.18)}
   .ms-mes-atual{font-size:var(--text-12h);font-weight:600;color:var(--label-out);text-align:center;text-transform:uppercase}
   .ms-rings-wrap-outer{width:155px;flex:none;display:flex;flex-direction:column;align-items:center}
@@ -50,8 +49,8 @@
   .ms-badge-gastos svg{color:var(--c-badge-expense)}
   .ms-section-label{font-size:var(--text-11);font-weight:600;letter-spacing:.08em;color:var(--label-out);margin:18px 2px 8px;text-transform:uppercase}
   .ms-cards-row{display:flex;gap:9px;margin:0 0 22px}
-  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--surface-card);border:1px solid rgba(255,255,255,.16);border-radius:var(--r);
-    backdrop-filter:blur(12px) saturate(115%);-webkit-backdrop-filter:blur(12px) saturate(115%);box-shadow:0 4px 16px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.14);
+  .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r);
+    box-shadow:var(--card-shadow);
     padding:var(--sp-3);display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;cursor:pointer;
     transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
     animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
