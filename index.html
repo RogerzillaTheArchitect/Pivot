@@ -4931,16 +4931,16 @@
       : it.jobId
         ? '<div class="rtk-avatar-wrap">'+avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))+'<span class="rtk-avatar-badge">'+rtkIconeSolto(it.tipo)+'</span></div>'
         : '<div class="rtk-avatar-wrap rtk-avatar-check">'+rtkIconeSolto(it.tipo)+'</div>';
+    const nomeEsq = it.cliente ? '<div class="rtk-left-name">'+escapeHtml(it.cliente.split(' ')[0])+'</div>' : '';
     card+='<div class="rtk-side">'+
       avatarBlock+
+      nomeEsq+
       '<div class="rtk-sub rtk-sub-prazo '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></div>'+
     '</div>';
     card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
-    if(it.cliente) card+='<div class="rtk-client">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>';
     card+='<div class="rtk-prazo">'+RTK_ICONS.calendar+'<span>'+rtkDataCompleta(it.dataISO)+'</span></div>';
-    if(it.hora) card+='<div class="rtk-prazo rtk-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(it.hora)+'</span></div>';
-    card+='<div class="rtk-action">'+tipoBadge.icon+'<span>'+escapeHtml(it.acao)+'</span></div>';
+    card+='<div class="rtk-prazo rtk-hora">'+RTK_ICONS.clock+'<span>'+(it.hora ? escapeHtml(it.hora) : '—')+'</span></div>';
     card+='</div>';
     card+='</div>';
     const editarAction = solto
