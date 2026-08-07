@@ -63,10 +63,10 @@
 
   /* ===== cabeçalho: botão quadrado + busca (mesmo vidro) ===== */
   .bib-headrow{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:16px}
-  .bib-square-btn{flex:none;width:40px;height:40px;border-radius:var(--r);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-soft);padding:0}
+  .bib-square-btn{flex:none;width:40px;height:40px;border-radius:var(--r-sm);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-soft);padding:0}
   .bib-square-btn:hover{color:var(--bib-ink)}
   .bib-square-btn svg{width:17px;height:17px}
-  .bib-search{flex:1;min-width:0;display:flex;align-items:center;gap:9px;height:40px;padding:0 12px;border-radius:var(--r)}
+  .bib-search{flex:1;min-width:0;display:flex;align-items:center;gap:9px;height:40px;padding:0 12px;border-radius:var(--r-sm)}
   .bib-search svg{width:var(--ico-md);height:var(--ico-md);color:var(--bib-ink-faint);flex:none}
   .bib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-13h);color:var(--bib-ink)}
   .bib-search input::placeholder{color:var(--bib-ink-faint)}
@@ -76,7 +76,7 @@
 
   /* ===== filtros: grid rígido de 4 colunas, mesmo vidro do Header ===== */
   .bib-filters{display:grid;grid-template-columns:var(--cols-4);gap:7px}
-  .bib-filter{height:36px;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-1);padding:0 9px;border-radius:var(--r);
+  .bib-filter{height:36px;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-1);padding:0 9px;border-radius:var(--r-sm);
     color:var(--bib-ink-soft);font-size:var(--text-11);font-weight:500;cursor:pointer;font-family:inherit;transition:color .15s}
   .bib-filter>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bib-filter:hover{color:var(--bib-ink)}
@@ -91,7 +91,7 @@
      palavras inteiras como "Recomendados"/"Comunidade", que ficavam cortadas
      em reticências. */
   .bib-seals{display:grid;grid-template-columns:var(--cols-2);gap:6px}
-  .bib-seal{height:36px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:0 var(--sp-2);border-radius:var(--r);
+  .bib-seal{height:36px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:6px;padding:0 var(--sp-2);border-radius:var(--r-sm);
     cursor:pointer;font-family:inherit;font-size:var(--text-2xs);font-weight:600;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
     border:1px solid var(--bib-mat-line);
@@ -135,11 +135,11 @@
     border-radius:3px;border:1px solid var(--bib-ink-soft);color:var(--bib-ink-soft);background:transparent}
   .bib-card .bc-lang-blocks{height:22px;padding:0 7px;box-sizing:border-box;font-size:var(--text-2xs);color:var(--bib-ink-faint);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;border-radius:3px;border:1px solid var(--bib-ink-faint)}
   .bc-lang-blocks-ico{width:12px;height:12px;background-color:var(--bib-ink-faint)}
-  .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
+  .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r-sm);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
   .bib-fav svg{width:var(--ico-md);height:var(--ico-md)}
   .bib-fav.on{color:var(--bib-brass-ink);opacity:1}
-  .bib-minitag{font-size:9.5px;font-weight:500;padding:2px 6px;border-radius:var(--r);background:rgba(255,255,255,.05);color:var(--bib-ink-soft);border:1px solid var(--bib-mat-line)}
+  .bib-minitag{font-size:9.5px;font-weight:500;padding:2px 6px;border-radius:var(--r-chip);background:rgba(255,255,255,.05);color:var(--bib-ink-soft);border:1px solid var(--bib-mat-line)}
   .bib-uses{height:18px;display:inline-flex;align-items:center;font-size:var(--text-2xs);color:var(--bib-ink-faint);white-space:nowrap}
   .bc-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 
@@ -159,14 +159,14 @@
   .bib-struct-seg{z-index:1;height:10px;border:1px solid rgba(255,255,255,.35);border-radius:0;background:rgba(255,255,255,.03)}
   .bib-struct-seg.is-filled{border-color:#BED4CA;background:#BED4CA;box-shadow:inset 0 1px rgba(255,255,255,.35)}
   .bib-sort-row{display:flex;flex-direction:column;gap:6px}
-  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r);cursor:pointer;font-size:var(--text-13h);color:var(--ink)}
+  .bib-sort-opt{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border:1px solid var(--line-soft);border-radius:var(--r-sm);cursor:pointer;font-size:var(--text-13h);color:var(--ink)}
   .bib-sort-opt.on{border-color:var(--ink);font-weight:600}
   .opt-left{display:flex;align-items:center;gap:10px;min-width:0}
   .opt-icon{flex:none;width:17px;height:17px;color:var(--bib-ink-faint);display:inline-flex}
   .opt-icon svg{width:100%;height:100%}
   .bib-sort-opt.on .opt-icon{color:var(--ink)}
   .opt-lang-box{flex:none;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;
-    font-size:7.5px;font-weight:700;letter-spacing:.01em;border-radius:var(--r);border:1px solid currentColor;color:var(--bib-ink-faint)}
+    font-size:7.5px;font-weight:700;letter-spacing:.01em;border-radius:var(--r-chip);border:1px solid currentColor;color:var(--bib-ink-faint)}
   .bib-sort-opt.on .opt-lang-box{color:var(--ink)}
   .opt-check{flex:none;width:var(--ico-md);height:var(--ico-md);opacity:0;display:inline-flex}
   .opt-check svg{width:100%;height:100%}
@@ -174,7 +174,7 @@
 
   /* ===== PESQUISA (genérica, usada fora da biblioteca também) ===== */
   .searchbox{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);
-    border-radius:var(--r);padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
+    border-radius:var(--r-sm);padding:13px 15px;margin:14px 0 20px;box-shadow:var(--shadow)}
   .searchbox svg{width:var(--ico-lg);height:var(--ico-lg);color:var(--neutral)}
   .searchbox input{border:none;background:none;outline:none;font-family:inherit;font-size:var(--text-md);flex:1;color:var(--ink)}
   .res{font-size:var(--text-sm);color:var(--neutral);padding:0 2px}
@@ -194,12 +194,12 @@
   .vis-screen{--ink:#F5F5F3; --ink-soft:#9B9DA3; --neutral:#6A6C72; --line-soft:rgba(255,255,255,.07)}
   .vis-title{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:500;font-size:var(--text-2xl);line-height:1.2;color:var(--bib-ink);text-align:left;margin:2px 0 12px}
   .vis-head{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin-bottom:16px}
-  .vis-head .vis-meta{display:inline-flex;align-items:center;gap:var(--sp-1);height:22px;box-sizing:border-box;font-size:var(--text-11);font-weight:500;color:var(--bib-ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:0 9px}
+  .vis-head .vis-meta{display:inline-flex;align-items:center;gap:var(--sp-1);height:22px;box-sizing:border-box;font-size:var(--text-11);font-weight:500;color:var(--bib-ink-soft);background:rgba(255,255,255,.05);border:1px solid var(--bib-mat-line);border-radius:var(--r-chip);padding:0 9px}
   .vis-head .vis-meta .bc-lang-blocks-ico{width:var(--ico-sm);height:var(--ico-sm);background-color:var(--bib-ink-soft)}
   .vis-card{background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);border:1px solid var(--bib-mat-line);border-radius:var(--r);padding:6px;margin-bottom:16px;display:flex;flex-direction:column;gap:6px}
   .vis-bloco{border:1px solid rgba(255,255,255,.06);border-radius:var(--r);padding:12px 13px;background:rgba(255,255,255,.03)}
   .vis-bloco-h{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);font-size:var(--text-13h);font-weight:500;color:var(--bib-ink);margin-bottom:6px}
-  .vis-bloco-tag{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#9A9BA2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);padding:1px 5px;white-space:nowrap}
+  .vis-bloco-tag{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#9A9BA2;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);border-radius:var(--r-chip);padding:1px 5px;white-space:nowrap}
   .vis-bloco-tag svg{width:9px;height:9px;flex:none}
   .vis-bloco-txt{font-size:var(--text-12h);line-height:1.55;color:var(--bib-ink-soft);white-space:pre-wrap;word-break:break-word}
 
