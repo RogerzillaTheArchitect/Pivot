@@ -5,9 +5,9 @@
     --late:#D9564C; --pend:#CBA26A; --done:#4FA189; --progress:#4A7FB5; --neutral:#B9B9B1; --urgent:#E8C547;
     --label-out:rgba(255,255,255,.82);
     --shadow:0 1px 2px rgba(0,0,0,.08),0 6px 20px rgba(0,0,0,.12);
-    --card-bg:radial-gradient(ellipse 110% 95% at 8% 0%, rgba(60,73,76,.12), transparent 61%),linear-gradient(116deg, rgba(21,27,30,.72), rgba(11,15,17,.66));
-    --card-border:rgba(154,166,172,.135);
-    --card-shadow:0 17px 25px rgba(0,0,0,.27),inset 0 1px rgba(255,255,255,.025);
+    --card-bg:#111111;
+    --card-border:rgba(255,255,255,.05);
+    --card-shadow:0 8px 32px rgba(0,0,0,.55);
     --panel-divider:linear-gradient(90deg, transparent, rgba(174,184,188,.1) 9%, rgba(174,184,188,.1) 91%, transparent);
     /* raio único do sistema — quase quadrado, aplicado sem exceção a
        cards, botões, inputs, chips, avatares e janelas/sheets (ver
@@ -49,11 +49,11 @@
     --c-track-lt:rgba(234,243,239,.55); --c-dark-green:#4FA189; --c-yellow:#CBA26A; --c-icon-bg:rgba(255,255,255,.10);
     --c-orange:#CBA26A; --c-yellow-soft:#C9BB86; --c-green-soft:#4FA189;
     --c-date-bg-ok:rgba(79,161,137,.22); --c-date-bg-late:rgba(217,127,121,.22); --c-text-green:#8FD4BC; --c-text-red:#F0A8A2;
-    --font-headline:'Instrument Serif',serif; --font-subtitle:'Josefin Sans',sans-serif; --font-subtext:'Lexend Deca',sans-serif; --font-numeric:'JetBrains Mono',monospace;
-    --font-month:'Six Caps',sans-serif; --font-year:'Special Gothic Expanded One',sans-serif;
-    --font-title:'Zalando Sans Expanded',sans-serif;
-    --font-section:'TikTok Sans',sans-serif; --font-label:'Inter',sans-serif; --font-financial:'IBM Plex Sans',sans-serif;
-    --font-ops:'Cormorant Garamond',Georgia,serif;
+    --font-headline:'Bebas Neue',sans-serif; --font-subtitle:'Bebas Neue',sans-serif; --font-subtext:'Bebas Neue',sans-serif; --font-numeric:'Bebas Neue',sans-serif;
+    --font-month:'Bebas Neue',sans-serif; --font-year:'Bebas Neue',sans-serif;
+    --font-title:'Bebas Neue',sans-serif;
+    --font-section:'Bebas Neue',sans-serif; --font-label:'Bebas Neue',sans-serif; --font-financial:'Bebas Neue',sans-serif;
+    --font-ops:'Bebas Neue',sans-serif;
     /* ===== Escala tipográfica — substitui font-size hardcoded em toda a app =====
        Usar var(--text-*) em vez de px literal em componentes novos e em edições. */
     --text-2xs:10px; --text-10h:10.5px; --text-11:11px; --text-xs:11.5px;
@@ -109,11 +109,12 @@
        glass-card — paper como rgba translúcido (elementos aninhados ficam sobre o vidro)
        chrome     — paper sólido (sidebar/topbar são o próprio vidro, não ficam sobre ele) */
 
-  /* glass-card */
+  /* solid-card — posição relativa garante sobreposição aos títulos de fundo */
   .card, .finance-ops-card, .ms-card-sq,
   .job, .sec,
   .pp-card, .map-card, .collapse,
   .plist {
+    position:relative; z-index:1;
     --ink:#fff; --ink-soft:rgba(255,255,255,.82); --ink-faint:rgba(255,255,255,.55); --neutral:rgba(255,255,255,.65);
     --paper:rgba(255,255,255,.10); --paper-2:rgba(255,255,255,.08);
     --line:rgba(255,255,255,.18); --line-soft:rgba(255,255,255,.12);
