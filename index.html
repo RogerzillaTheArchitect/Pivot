@@ -4911,7 +4911,7 @@
      acontecer, com um ícone de calendário à esquerda. */
   function rtkDataCompleta(dataISO){
     const partes=dataISO.split('-');
-    return partes[2]+' · '+partes[1];
+    return partes[2]+' - '+partes[1];
   }
   function construirCardRadar(it){
     const nivel=gerarNivelPrioridade(it.dataISO);
@@ -4927,15 +4927,14 @@
        de um trabalho (contrato/pagamento/evento/entrega) mostram só a foto,
        sem selinho nenhum. */
     const avatarBlock = !solto
-      ? avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))
+      ? avatarHtml(it.cliente||it.nome,68,clienteFotoPorNome(it.cliente))
       : it.jobId
-        ? '<div class="rtk-avatar-wrap">'+avatarHtml(it.cliente||it.nome,44,clienteFotoPorNome(it.cliente))+'<span class="rtk-avatar-badge">'+rtkIconeSolto(it.tipo)+'</span></div>'
+        ? '<div class="rtk-avatar-wrap">'+avatarHtml(it.cliente||it.nome,68,clienteFotoPorNome(it.cliente))+'<span class="rtk-avatar-badge">'+rtkIconeSolto(it.tipo)+'</span></div>'
         : '<div class="rtk-avatar-wrap rtk-avatar-check">'+rtkIconeSolto(it.tipo)+'</div>';
-    const nomeEsq = it.cliente ? '<div class="rtk-left-name">'+escapeHtml(it.cliente.split(' ')[0])+'</div>' : '';
+    const nomeEsq = it.cliente ? '<div class="rtk-left-name">'+escapeHtml(it.cliente)+'</div>' : '';
     card+='<div class="rtk-side">'+
       avatarBlock+
       nomeEsq+
-      '<div class="rtk-sub rtk-sub-prazo '+prazoBadge.classe+'"><span>'+escapeHtml(prazoBadge.label)+'</span></div>'+
     '</div>';
     card+='<div class="rtk-body">';
     card+='<div class="rtk-title">'+escapeHtml(it.nome)+'</div>';
