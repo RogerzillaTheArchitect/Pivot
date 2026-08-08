@@ -5111,7 +5111,7 @@
     const solto=it.tipo==='lembrete'||it.tipo==='lista'||it.tipo==='tarefa';
     const fotoHtml=avatarHtml(it.cliente||it.nome,220,foto);
     const clienteHtml=it.cliente
-      ? '<div class="tc-client-row">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span><span class="tc-cli-tag">Cliente</span></div>'
+      ? '<div class="tc-client-row">'+RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span></div>'
       : '';
     const icoEdit='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 1 1 3 3L7 19l-4 1 1-4Z"/></svg>';
     const icoArch='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>';
@@ -5119,6 +5119,10 @@
     const icoCalendar='<span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>';
     const icoClock='<span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>';
     return '<div class="tc-slide" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" data-solto="'+solto+'">'+
+      '<div class="tc-notch tc-notch-tl"></div>'+
+      '<div class="tc-notch tc-notch-tr"></div>'+
+      '<div class="tc-notch tc-notch-bl"></div>'+
+      '<div class="tc-notch tc-notch-br"></div>'+
       '<div class="tc-layer-t">'+
         '<div class="tc-photo-area">'+fotoHtml+'</div>'+
         '<div class="tc-info-area">'+
@@ -5149,7 +5153,7 @@
     if(!viewport||!track) return;
     const slides=Array.from(track.querySelectorAll('.tc-slide'));
     if(!slides.length) return;
-    const ACTIONS_H=48, GAP=16, MARGIN=16;
+    const ACTIONS_H=48, GAP=16, MARGIN=48;
     let current=0, startX=0, startY=0, dragging=false, pointerId=null, dragOffset=0, lastTap=0;
 
     /* define largura dos slides baseada no viewport real */
@@ -5157,10 +5161,20 @@
     const slideW=vpW-MARGIN*2;
     slides.forEach(s=>{ s.style.width=slideW+'px'; });
 
+    const updateOpacity=()=>{
+      slides.forEach((s,i)=>{
+        const active=i===current;
+        s.style.opacity=active?'1':'0.5';
+        s.style.filter=active?'none':'brightness(0.6)';
+        s.style.transition='opacity .35s ease,filter .35s ease';
+      });
+    };
+
     const goTo=(idx,animate=true)=>{
       current=Math.max(0,Math.min(slides.length-1,idx));
       track.style.transition=animate?'transform .35s cubic-bezier(.25,.1,.25,1)':'none';
       track.style.transform='translateX('+(MARGIN-current*(slideW+GAP))+'px)';
+      updateOpacity();
     };
 
     const setOpen=(slide,open)=>{
