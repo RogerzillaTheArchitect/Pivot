@@ -5129,6 +5129,13 @@
           '<div class="tc-title">'+escapeHtml(it.nome)+'</div>'+
           clienteHtml+
         '</div>'+
+      '</div>'+
+      '<div class="tc-layer-b">'+
+        '<div class="tc-actions-row">'+
+          '<button class="tc-btn tc-btn-edit" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'EDITAR</button>'+
+          '<button class="tc-btn tc-btn-arch" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'ARQUIVAR</button>'+
+          '<button class="tc-btn tc-btn-done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'CONCLUIR</button>'+
+        '</div>'+
         '<div class="tc-datetime-row">'+
           '<div class="tc-dt-left">'+icoCalSmall+
             '<div class="tc-date-stack"><b class="tc-d-num">'+partes[2]+'</b><span class="tc-d-mon">'+mes+'</span></div>'+
@@ -5140,13 +5147,6 @@
               '<span class="tc-time-out">'+(it.horaFim||'—')+'</span>'+
             '</div>'+
           '</div>'+
-        '</div>'+
-      '</div>'+
-      '<div class="tc-layer-b">'+
-        '<div class="tc-actions-row">'+
-          '<button class="tc-btn tc-btn-edit" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'EDITAR</button>'+
-          '<button class="tc-btn tc-btn-arch" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'ARQUIVAR</button>'+
-          '<button class="tc-btn tc-btn-done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'CONCLUIR</button>'+
         '</div>'+
       '</div>'+
     '</div>';
