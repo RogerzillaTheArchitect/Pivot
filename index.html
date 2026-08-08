@@ -4107,7 +4107,7 @@
       if(vid==='builder'&&typeof renderBuilder==='function')renderBuilder();
       if(vid==='equipa'&&typeof renderEquipaView==='function')renderEquipaView();
       if(vid==='bibliotecas'&&typeof renderBiblioteca==='function')renderBiblioteca();
-      if(vid==='relatorios'&&typeof renderRelatorios==='function')renderRelatorios();
+      if((vid==='relatorios'||vid==='hoje')&&typeof renderRelatorios==='function')renderRelatorios();
     }
     if(document.getElementById('v-trabalhos').classList.contains('active')){
       document.querySelectorAll('.job[data-job-id]').forEach(div=>{
@@ -4134,9 +4134,8 @@
     document.querySelectorAll('.sb-item').forEach(el=>el.classList.toggle('on', el.dataset.nav===active));
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
-    if(v==='relatorios') renderRelatorios();
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
-    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderDashCustomCards(); }
+    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderDashCustomCards(); renderRelatorios(); }
     if(v==='equipa') renderEquipaView();
     if(v==='bibliotecas') renderBiblioteca();
     if(v==='historico') renderHistorico();
