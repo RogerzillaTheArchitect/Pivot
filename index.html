@@ -421,9 +421,6 @@
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico u-ico-18v ico-docs"></span> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </div>
-    <div class="sb-item" data-nav="relatorios" onclick="go('relatorios')">
-      <span class="nav-ico u-ico-18v ico-relat"></span> <span id="sb-label-relatorios" data-t="reports.title">Relatórios</span>
-    </div>
     <div class="sb-item u-relative" onclick="abrirNotificacoes()">
       <span class="nav-ico u-ico-18v ico-notif"></span> <span data-t="profile.notifications">Notificações</span>
       <span class="notif-dot u-hidden"></span>
@@ -454,9 +451,6 @@
         </div>
         <div class="icon-btn" id="topbar-calendar-btn" onclick="abrirSeletorPeriodo()" aria-label="Período">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        </div>
-        <div class="icon-btn" id="topbar-menu-btn" onclick="abrirMenuDrawer()" aria-label="Menu">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </div>
       </div>
     </div>
@@ -585,6 +579,134 @@
         <div class="empty u-hidden" id="hoje-empty">
           <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
           <h3 data-t="home.allGood">Está tudo em dia.</h3>
+        </div>
+
+        <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
+          <div class="ms-progress-row">
+            <div class="ms-rings-wrap-outer">
+              <div class="ms-rings-wrap">
+                <svg class="ms-rings-svg" id="rf-rings-svg" viewBox="0 0 150 150">
+                  <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
+                  <circle class="mr-trilho-edge" cx="75" cy="75" r="69"/>
+                  <circle class="mr-trilho-edge" cx="75" cy="75" r="55"/>
+                  <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
+                  <circle class="mr-trilho-edge" cx="75" cy="75" r="52"/>
+                  <circle class="mr-trilho-edge" cx="75" cy="75" r="38"/>
+                  <path class="mr-ring mr-base" id="rf-mr-esperado-base"/>
+                  <path class="mr-ring mr-base" id="rf-mr-recebido-base"/>
+                  <path class="mr-ring mr-base" id="rf-mr-extras-base"/>
+                  <path class="mr-ring mr-tip" id="rf-mr-esperado"/>
+                  <path class="mr-ring mr-tip" id="rf-mr-recebido"/>
+                  <path class="mr-ring mr-tip" id="rf-mr-extras"/>
+                  <path class="mr-ring mr-teto" id="rf-mr-teto"/>
+                  <path class="mr-ring" id="rf-mr-desp-b1" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-b2" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-b3" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-b4" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-b5" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-b6" d=""/>
+                  <path class="mr-ring" id="rf-mr-desp-over" d=""/>
+                  <path class="mr-ring mr-base" id="rf-mr-despesas-base" d=""/>
+                  <path class="mr-ring mr-tip" id="rf-mr-despesas" d=""/>
+                </svg>
+                <div class="ms-rings-center">
+                  <span class="ms-rings-center-lbl" data-t="home.totalProfit">Total</span>
+                  <span class="ms-rings-center-val" id="rf-mt-saldo">−1.850 €</span>
+                </div>
+              </div>
+            </div>
+            <div class="ms-progress-left">
+              <div class="ms-rings-legend">
+                <div class="mrl-item" onclick="abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
+                <div class="mrl-item"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="rf-mrl-esperado">3.200 €</b></div>
+                <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Receita</span> <b id="rf-mrl-receb">2.450 €</b></div>
+                <div class="mrl-item" onclick="abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="rf-mrl-extras">0 €</b></div>
+                <div class="mrl-item" onclick="abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="rf-mrl-gastos">45 €</b></div>
+                <div class="mrl-item" onclick="abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Limite</span> <b id="rf-mrl-teto">500 €</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="rel-fin-actions">
+          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico ico-meta"></span><span data-t="reports.finBtn.metas">Metas</span></button>
+          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico ico-reserva"></span><span data-t="reports.finBtn.limites">Limites</span></button>
+          <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico ico-entrada"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
+          <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico ico-saida"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
+        </div>
+
+        <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
+          <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
+        </div>
+
+        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card ops-card rel-ops-card-sub">
+          <section class="metric" id="ropm-horas">
+            <span class="icon u-ico-mask-base ico-loader"></span>
+            <div class="label" data-t="home.hours">Horas</div>
+            <div class="track" id="ropm-horas-track"></div>
+            <div class="value-end" id="ropm-horas-end"></div>
+          </section>
+          <section class="metric" id="ropm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
+            <span class="icon u-ico-mask-base ico-receita"></span>
+            <div class="label" data-t="home.pending">Pendências</div>
+            <div class="track" id="ropm-pendencias-track"></div>
+            <div class="value-end" id="ropm-pendencias-end"></div>
+          </section>
+          <section class="metric" id="ropm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
+            <span class="icon u-ico-mask-base ico-despesa"></span>
+            <div class="label" data-t="home.demands">Demandas</div>
+            <div class="track" id="ropm-demandas-track"></div>
+            <div class="value-end" id="ropm-demandas-end"></div>
+          </section>
+          <section class="metric" id="ropm-fechados">
+            <span class="icon u-ico-mask-base ico-handshake"></span>
+            <div class="label" data-t="home.closed">Fechados</div>
+            <div class="track" id="ropm-fechados-track"></div>
+            <div class="value-end" id="ropm-fechados-end"></div>
+          </section>
+          <section class="metric" id="ropm-executados" onclick="go('historico')">
+            <span class="icon u-ico-mask-base ico-contrato"></span>
+            <div class="label" data-t="home.executed">Executados</div>
+            <div class="track" id="ropm-executados-track"></div>
+            <div class="value-end" id="ropm-executados-end"></div>
+          </section>
+          <section class="metric" id="ropm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
+            <span class="icon u-ico-mask-base ico-flag"></span>
+            <div class="label" data-t="home.completedTile">Concluídos</div>
+            <div class="track" id="ropm-concluidos-track"></div>
+            <div class="value-end" id="ropm-concluidos-end"></div>
+          </section>
+        </div>
+
+        <div class="rel-card-header" id="rel-anchor-evolucao"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
+          <div class="rel-split" id="rel-evolucao-grid"></div>
+        </div>
+
+        <div class="rel-card-header" id="rel-anchor-eficiencia"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body">
+          <div class="rel-split-subhead">
+            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
+            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
+          </div>
+          <div class="rel-split" id="rel-rentabilidade-grid"></div>
+        </div>
+
+        <div class="rel-card-header" id="rel-anchor-geografico"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <div class="card rel-card rel-card-body rel-card-body-flush">
+          <div class="rel-table-wrap">
+            <table class="rel-table">
+              <thead><tr>
+                <th data-t="reports.regional.city">Cidade</th>
+                <th data-t="reports.regional.events">Eventos</th>
+                <th data-t="reports.regional.revenue">Receita</th>
+                <th data-t="reports.regional.ticket">Ticket Médio</th>
+              </tr></thead>
+              <tbody id="rel-mercado-tabela-body"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -852,181 +974,7 @@
       </section>
 
       <!-- ============ RELATÓRIOS (página unificada) ============ -->
-      <section class="view" id="v-relatorios">
-
-        <!-- Card: Financeiro — mesmo gráfico de anéis (Meta/Esperado/
-             Recebido/Extras/Despesas/Teto) já usado no Dashboard, aqui com
-             ids/gradientes próprios (prefixo rf-) pra não colidir, e os
-             valores recalculados pro período selecionado em Relatórios em
-             vez de fixos no mês corrente. O card já identifica a seção —
-             sem rótulo de área solto acima. -->
-        <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="ms-progress-row">
-            <div class="ms-rings-wrap-outer">
-              <div class="ms-rings-wrap">
-                <svg class="ms-rings-svg" id="rf-rings-svg" viewBox="0 0 150 150">
-                  <!-- Trilhos: canal escavado (white 3%) + bordas finas (white 8%) em cada aresta -->
-                  <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="69"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="55"/>
-                  <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="52"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="38"/>
-                  <!-- Anel externo: esperado (white 25% overlay), extras, recebido -->
-                  <path class="mr-ring mr-base" id="rf-mr-esperado-base"/>
-                  <path class="mr-ring mr-base" id="rf-mr-recebido-base"/>
-                  <path class="mr-ring mr-base" id="rf-mr-extras-base"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-esperado"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-recebido"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-extras"/>
-                  <!-- Anel interno: teto (invisible), bandas de gradiente despesas -->
-                  <path class="mr-ring mr-teto" id="rf-mr-teto"/>
-                  <path class="mr-ring" id="rf-mr-desp-b1" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b2" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b3" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b4" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b5" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b6" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-over" d=""/>
-                  <path class="mr-ring mr-base" id="rf-mr-despesas-base" d=""/>
-                  <path class="mr-ring mr-tip" id="rf-mr-despesas" d=""/>
-                </svg>
-                <div class="ms-rings-center">
-                  <span class="ms-rings-center-lbl" data-t="home.totalProfit">Total</span>
-                  <span class="ms-rings-center-val" id="rf-mt-saldo">−1.850 €</span>
-                </div>
-              </div>
-            </div>
-            <div class="ms-progress-left">
-              <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
-                <div class="mrl-item"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="rf-mrl-esperado">3.200 €</b></div>
-                <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Receita</span> <b id="rf-mrl-receb">2.450 €</b></div>
-                <div class="mrl-item" onclick="abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="rf-mrl-extras">0 €</b></div>
-                <div class="mrl-item" onclick="abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="rf-mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Limite</span> <b id="rf-mrl-teto">500 €</b></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4 botões de acesso às listas completas (add/editar/excluir),
-             sem gráfico nenhum nessas telas — só o essencial de navegação. -->
-        <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico ico-meta"></span><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico ico-reserva"></span><span data-t="reports.finBtn.limites">Limites</span></button>
-          <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico ico-entrada"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
-          <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico ico-saida"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
-        </div>
-
-        <!-- Card: Fluxo — lista simples dos lançamentos mais recentes do
-             período (recebidos e despesas misturados, ordenados por data),
-             um item por linha: título em cima, categoria embaixo, valor à
-             direita ocupando a altura das duas linhas. Ver
-             renderRelFluxoFinanceiro(). -->
-        <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
-        </div>
-
-        <!-- Card: Operacional — reaproveita EXATAMENTE o mesmo componente
-             "Estatísticas Operacionais" da Dashboard (.ops-card/.metric/
-             .track/.segment, mesmos ícones, mesma barra de 20 blocos): só
-             os ids têm o prefixo "ropm-" pra não colidir com os da
-             Dashboard (pintarMetricaOp(...,'ropm-')), com os dados
-             recalculados pro período selecionado em Relatórios em vez do
-             mês corrente fixo. Nenhuma classe/estilo novo. -->
-        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card ops-card rel-ops-card-sub">
-          <section class="metric" id="ropm-horas">
-            <span class="icon u-ico-mask-base ico-loader"></span>
-            <div class="label" data-t="home.hours">Horas</div>
-            <div class="track" id="ropm-horas-track"></div>
-            <div class="value-end" id="ropm-horas-end"></div>
-          </section>
-          <section class="metric" id="ropm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <span class="icon u-ico-mask-base ico-receita"></span>
-            <div class="label" data-t="home.pending">Pendências</div>
-            <div class="track" id="ropm-pendencias-track"></div>
-            <div class="value-end" id="ropm-pendencias-end"></div>
-          </section>
-          <section class="metric" id="ropm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <span class="icon u-ico-mask-base ico-despesa"></span>
-            <div class="label" data-t="home.demands">Demandas</div>
-            <div class="track" id="ropm-demandas-track"></div>
-            <div class="value-end" id="ropm-demandas-end"></div>
-          </section>
-          <section class="metric" id="ropm-fechados">
-            <span class="icon u-ico-mask-base ico-handshake"></span>
-            <div class="label" data-t="home.closed">Fechados</div>
-            <div class="track" id="ropm-fechados-track"></div>
-            <div class="value-end" id="ropm-fechados-end"></div>
-          </section>
-          <section class="metric" id="ropm-executados" onclick="go('historico')">
-            <span class="icon u-ico-mask-base ico-contrato"></span>
-            <div class="label" data-t="home.executed">Executados</div>
-            <div class="track" id="ropm-executados-track"></div>
-            <div class="value-end" id="ropm-executados-end"></div>
-          </section>
-          <section class="metric" id="ropm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <span class="icon u-ico-mask-base ico-flag"></span>
-            <div class="label" data-t="home.completedTile">Concluídos</div>
-            <div class="track" id="ropm-concluidos-track"></div>
-            <div class="value-end" id="ropm-concluidos-end"></div>
-          </section>
-        </div>
-
-        <!-- Card: Evolução Mensal — compara automaticamente o período atual
-             contra o período anterior equivalente (mesmo nº de meses),
-             classificando cada métrica como melhoria/queda pelo SIGNIFICADO
-             dela (nem todo aumento é bom — despesas/pendências/horas por
-             evento pioram ao subir), não pelo sinal bruto do %. Duas
-             colunas espelhadas de sempre 5 indicadores cada (altura fixa),
-             melhorias à esquerda e quedas à direita, sem título de seção.
-             O card "Carga de Trabalho" saiu daqui — a métrica "Horas
-             trabalhadas" incorpora essa mesma comparação de período. Mesmo
-             grid dividido .rel-split das demais (divisória vertical
-             central, linhas horizontais de borda a borda). -->
-        <div class="rel-card-header" id="rel-anchor-evolucao"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="rel-split" id="rel-evolucao-grid"></div>
-        </div>
-
-        <!-- Card: Rentabilidade — unifica Rentabilidade + Eficiência no mesmo
-             grid dividido .rel-split (divisória vertical central, linhas
-             horizontais de borda a borda): esquerda = ranking de
-             rentabilidade por hora (maior → menor, até 5 subcategorias),
-             direita = 5 médias gerais do período (ticket médio, receita/h,
-             receita/projeto, lucro médio/projeto, margem média). -->
-        <div class="rel-card-header" id="rel-anchor-eficiencia"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="rel-split-subhead">
-            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
-            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
-          </div>
-          <div class="rel-split" id="rel-rentabilidade-grid"></div>
-        </div>
-
-        <!-- Card: Mercado Regional — substitui o antigo Heatmap Geográfico:
-             tabela real (Cidade/Eventos/Receita/Ticket Médio/€/h) ordenada
-             por receita, clicável por linha (abre os trabalhos da cidade), e
-             insights automáticos calculados da mesma tabela. -->
-        <div class="rel-card-header" id="rel-anchor-geografico"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body rel-card-body-flush">
-          <div class="rel-table-wrap">
-            <table class="rel-table">
-              <thead><tr>
-                <th data-t="reports.regional.city">Cidade</th>
-                <th data-t="reports.regional.events">Eventos</th>
-                <th data-t="reports.regional.revenue">Receita</th>
-                <th data-t="reports.regional.ticket">Ticket Médio</th>
-              </tr></thead>
-              <tbody id="rel-mercado-tabela-body"></tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      <section class="view" id="v-relatorios"></section>
 
       <!-- ============ ORGANIZAÇÃO (dados da empresa + equipe) ============ -->
       <section class="view" id="v-equipa">
@@ -1080,9 +1028,9 @@
       <span class="nav-ico nav-ico-modelos"></span>
       <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
     </button>
-    <button id="n-relatorios" onclick="go('relatorios')">
-      <span class="nav-ico nav-ico-relatorios"></span>
-      <span id="nav-label-relatorios" data-t="reports.title">Relatórios</span>
+    <button id="n-geral" onclick="abrirMenuDrawer()">
+      <img src="https://api.iconify.design/formkit:group.svg?color=white" width="20" height="20" alt="" style="opacity:.7">
+      <span>Geral</span>
     </button>
   </nav>
   <!-- ===== MENU DRAWER — slide-in da direita, substitui botão de Perfil no topbar mobile ===== -->
@@ -4244,7 +4192,7 @@
     metasMesAtual().receita=r;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
@@ -4260,7 +4208,7 @@
     metasMesAtual().gastos=g;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
@@ -5367,7 +5315,7 @@
     saveCustosData();
     renderMonthTicker();
     if(document.getElementById('infoSheet').classList.contains('show') && document.getElementById('exp-lista')) renderDespesasLista();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     showToast(t('toast.costRemoved'));
   }
 
@@ -7086,7 +7034,7 @@
   }
   function abrirRelatorioDoMes(){
     relAno=new Date().getFullYear(); relMes=new Date().getMonth()+1; relPeriodo={tipo:'mes'};
-    go('relatorios');
+    go('hoje');
   }
 
   /* ===== seletor avançado de período — modal aberto ao tocar no mês/ano ===== */
@@ -7151,7 +7099,7 @@
   }
   /* a dashboard leva para a secção correspondente da página única de Relatórios */
   function abrirRelatorios(tab){
-    go('relatorios');
+    go('hoje');
     /* a view tem uma animação de entrada de 0.45s (fade + translateY) — rolar
        antes disso terminar faz o scrollIntoView mirar um alvo que ainda está
        a mover-se e falha silenciosamente (o ecrã fica preso no topo). Espera
@@ -8435,7 +8383,7 @@
       notas:document.getElementById('rc-notas').value.trim() };
     saveReceitasData();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     closeSheet();
     showToast(t('toast.incomeAdded'));
   }
@@ -8456,7 +8404,7 @@
     saveCustosData();
     registrarAnalyticsDespesa(custosData[id]);
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     closeSheet();
     showToast(t('toast.costAdded'));
   }
@@ -8495,7 +8443,7 @@
     }
     closeInfo();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     showToast(tipo==='despesa' ? t('toast.costAdded') : t('toast.incomeAdded'));
   }
   let receitasData={};
@@ -8556,7 +8504,7 @@
     r.categoria=(document.getElementById('rec-edit-categoria').value||'').trim();
     saveReceitasData();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     abrirReceitas();
     showToast(t('toast.incomeAdded'));
   }
@@ -8564,7 +8512,7 @@
     delete receitasData[id];
     saveReceitasData();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     if(document.getElementById('rec-lista')) renderReceitasLista(); else closeInfo();
   }
   /* ===== Despesas — tela dedicada (própria, sem nada em comum com Receitas):
@@ -8597,7 +8545,7 @@
     saveCustosData();
     registrarAnalyticsDespesa(custosData[id]);
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     abrirDespesas();
     showToast(t('toast.costAdded'));
   }
@@ -8636,7 +8584,7 @@
     c.descricao=desc; c.valor=valor; c.data=document.getElementById('exp-edit-data').value||c.data;
     c.categoria=(document.getElementById('exp-edit-categoria').value||'').trim();
     saveCustosData();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     abrirDespesas();
     showToast(t('toast.costAdded'));
   }
@@ -8670,7 +8618,7 @@
     receitasData[id]={ id, descricao:desc, valor, categoria, data:(dataEl&&dataEl.value)||new Date().toISOString().slice(0,10) };
     saveReceitasData();
     renderMonthTicker();
-    if(document.getElementById('v-relatorios').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
     abrirReceitas();
     showToast(t('toast.incomeAdded'));
   }
