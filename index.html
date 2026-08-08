@@ -4791,7 +4791,7 @@
         const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
         if(msEvento && msEvento.status!=='feito'){
           const acao=t('tasks.actionExecute').replace('{tipo}', (j.typeLabel||'').toLowerCase()||t('tasks.actionExecute').replace('{tipo}','').trim());
-          itens.push({ dataISO:j.dateRaw, nome:j.nome||j.client, cliente, acao, jobId:j.id, tipo:'evento', idx:null });
+          itens.push({ dataISO:j.dateRaw, nome:j.nome||j.client, cliente, acao, jobId:j.id, tipo:'evento', idx:null, hora:j.horaIni||'', horaFim:j.horaFim||'' });
         }
       }
       /* entrega final — antes não virava tarefa nenhuma no Dashboard; usa a
@@ -5119,10 +5119,6 @@
     const icoCalendar='<span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:calendar-month-sharp.svg)"></span>';
     const icoClock='<span class="nav-ico" style="width:18px;height:18px;display:inline-block;mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg);-webkit-mask-image:url(https://api.iconify.design/material-symbols:clock-loader-20.svg)"></span>';
     return '<div class="tc-slide" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" data-solto="'+solto+'">'+
-      '<div class="tc-notch tc-notch-tl"></div>'+
-      '<div class="tc-notch tc-notch-tr"></div>'+
-      '<div class="tc-notch tc-notch-bl"></div>'+
-      '<div class="tc-notch tc-notch-br"></div>'+
       '<div class="tc-layer-t">'+
         '<div class="tc-photo-area">'+fotoHtml+'</div>'+
         '<div class="tc-info-area">'+
@@ -5137,11 +5133,14 @@
           '<button class="tc-btn tc-btn-done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'Concluir</button>'+
         '</div>'+
         '<div class="tc-datetime-row">'+
-          '<div class="tc-dt-left">'+icoCalendar+
-            '<div class="tc-date-stack"><b class="tc-d-num">'+partes[2]+'</b><span class="tc-d-mon">'+mes+'</span><span class="tc-d-yr">'+partes[0]+'</span></div>'+
+          '<div class="tc-dt-left">'+
+            '<div class="tc-date-stack"><b class="tc-d-num">'+partes[2]+'</b><span class="tc-d-mon">'+mes+'</span></div>'+
           '</div>'+
           '<div class="tc-dt-sep"></div>'+
-          '<div class="tc-dt-right">'+icoClock+'<span class="tc-time-num">'+(it.hora||'—')+'</span></div>'+
+          '<div class="tc-dt-right">'+
+            '<span class="tc-time-in">'+(it.hora||'—')+'</span>'+
+            '<span class="tc-time-out">'+(it.horaFim||'—')+'</span>'+
+          '</div>'+
         '</div>'+
       '</div>'+
     '</div>';
@@ -5153,7 +5152,7 @@
     if(!viewport||!track) return;
     const slides=Array.from(track.querySelectorAll('.tc-slide'));
     if(!slides.length) return;
-    const ACTIONS_H=48, GAP=16, MARGIN=48;
+    const ACTIONS_H=48, GAP=16, MARGIN=56;
     let current=0, startX=0, startY=0, dragging=false, pointerId=null, dragOffset=0, lastTap=0;
 
     /* define largura dos slides baseada no viewport real */
