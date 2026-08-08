@@ -322,7 +322,7 @@
   .tc-track{display:flex;gap:16px;will-change:transform}
   .tc-slide{
     flex:none;position:relative;
-    /* width setada via JS baseada em viewport.offsetWidth */
+    isolation:isolate; /* stacking context estável — branco sempre acima do laranja */
   }
   /* notch ticket — 4 recortes semicirculares nas laterais do layer laranja */
   .tc-notch{
@@ -341,7 +341,8 @@
     backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
     border:1px solid rgba(255,255,255,.3);
     transition:transform .3s cubic-bezier(.4,0,.2,1);
-    box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.12)
+    box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.12);
+    will-change:transform
   }
   .tc-photo-area{
     margin:14px 14px 10px;border-radius:12px;overflow:hidden;
@@ -351,12 +352,12 @@
   .tc-photo-area .client-avatar{
     width:100%!important;height:100%!important;
     border-radius:0!important;font-size:56px!important;
-    min-width:100%!important;background:rgba(255,255,255,.8)!important
+    min-width:100%!important;background-color:rgba(255,255,255,.8)!important
   }
   .tc-info-area{
     padding:14px 20px 18px;
     height:72px;box-sizing:border-box;overflow:hidden;
-    background:rgba(255,255,255,.07)
+    background:transparent
   }
   .tc-title{
     font-size:var(--text-lg);font-weight:600;color:var(--ink);
@@ -367,7 +368,7 @@
   .tc-client-row svg{width:14px;height:14px;flex:none;color:rgba(255,255,255,.9)}
   /* LAYER INFERIOR (laranja) */
   .tc-layer-b{
-    position:relative;z-index:1;
+    position:relative;z-index:0;
     margin:-48px 20px 0;
     border-radius:0 0 18px 18px;overflow:hidden;
     background:linear-gradient(180deg,#C83505 0%,#FB6225 100%)
@@ -379,6 +380,7 @@
   .tc-btn{
     height:32px;border:none;border-radius:8px;
     background:rgba(255,255,255,.18);color:#fff;
+    font-family:'Bebas Neue',sans-serif;
     font-size:13px;font-weight:400;letter-spacing:.06em;cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:5px;
     white-space:nowrap;overflow:hidden;

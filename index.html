@@ -5175,14 +5175,16 @@
         s.style.opacity=active?'1':'0.5';
         s.style.filter=active?'none':'brightness(0.6)';
         s.style.transition='opacity .35s ease,filter .35s ease';
-        s.style.zIndex=active?'2':'1';
       });
       if(prevArrow) prevArrow.style.opacity=current===0?'0':'.16';
       if(nextArrow) nextArrow.style.opacity=current===slides.length-1?'0':'.16';
     };
 
     const goTo=(idx,animate=true)=>{
-      current=Math.max(0,Math.min(slides.length-1,idx));
+      const next=Math.max(0,Math.min(slides.length-1,idx));
+      /* z-index ANTES da animação — nunca deixa laranja aparecer sobre branco */
+      slides.forEach((s,i)=>{ s.style.zIndex=i===next?'2':'1'; });
+      current=next;
       track.style.transition=animate?'transform .35s cubic-bezier(.25,.1,.25,1)':'none';
       track.style.transform='translateX('+(MARGIN-current*(slideW+GAP))+'px)';
       updateOpacity();
