@@ -13347,9 +13347,9 @@
   }
   const _jobTapTimers={}, _jobLastTap={};
   function setJobOpen(card, open){
-    const gb=card.querySelector('.job-body-rows');
-    if(!gb) return;
-    gb.style.transform=open?'translateY(-44px)':'';
+    const hd=card.querySelector('.job-head-row');
+    if(!hd) return;
+    hd.style.transform=open?'translateY(-44px)':'';
     card.dataset.jobOpen=open?'1':'';
   }
   function onJobCardClick(e, card){
@@ -13605,15 +13605,17 @@
       '<div class="job-head-info"><div class="job-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
       '<div class="job-client-name">'+RTK_ICONS.client+'<span>'+escapeHtml(job.client)+'</span></div></div></div>'+
       '<div class="job-body-rows">'+
-      '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataLinhaJob(job))+'</span></div>'+
-      (hora ? '<div class="job-datetime job-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(hora)+'</span></div>' : '')+
-      '<div class="job-stage-row">'+(etapaIconJob(job)||RTK_ICONS.action)+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>'+
-      '</div>'+
-      '<div class="job-act-layer"><div class="tc-actions-row">'+
-        '<button class="tc-btn tc-btn-edit" onclick="event.stopPropagation();jobActEditar(this)">'+icoEdit+'EDITAR</button>'+
-        '<button class="tc-btn tc-btn-arch" onclick="event.stopPropagation();jobActArquivar(this)">'+icoArch+'ARQUIVAR</button>'+
-        '<button class="tc-btn tc-btn-done" onclick="event.stopPropagation();jobActConcluir(this)">'+icoDone+'CONCLUIR</button>'+
-      '</div></div>';
+        '<div class="job-act-section"><div class="tc-actions-row">'+
+          '<button class="tc-btn tc-btn-edit" style="font-family:\'Bebas Neue\',var(--font-label),sans-serif" onclick="event.stopPropagation();jobActEditar(this)">'+icoEdit+'EDITAR</button>'+
+          '<button class="tc-btn tc-btn-arch" style="font-family:\'Bebas Neue\',var(--font-label),sans-serif" onclick="event.stopPropagation();jobActArquivar(this)">'+icoArch+'ARQUIVAR</button>'+
+          '<button class="tc-btn tc-btn-done" style="font-family:\'Bebas Neue\',var(--font-label),sans-serif" onclick="event.stopPropagation();jobActConcluir(this)">'+icoDone+'CONCLUIR</button>'+
+        '</div></div>'+
+        '<div class="job-info-section">'+
+          '<div class="job-datetime">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataLinhaJob(job))+'</span></div>'+
+          (hora ? '<div class="job-datetime job-hora">'+RTK_ICONS.clock+'<span>'+escapeHtml(hora)+'</span></div>' : '')+
+          '<div class="job-stage-row">'+(etapaIconJob(job)||RTK_ICONS.action)+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>'+
+        '</div>'+
+      '</div>';
   }
   function updateJobCard(id){
     const job=jobsData[id];

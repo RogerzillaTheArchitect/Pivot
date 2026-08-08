@@ -102,7 +102,7 @@
     font-weight:600;color:#fff;flex:none;font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
   .client-avatar[style*="background-image"]{filter:grayscale(1) brightness(0.78)}
 
-  /* CARD SUPERIOR — preto */
+  /* CARD SUPERIOR — preto, sobe no tap para revelar o card de vidro */
   .job-head-row{
     display:flex;align-items:center;gap:var(--sp-3);
     background:var(--card-bg);
@@ -111,6 +111,7 @@
     padding:12px 14px;
     position:relative;z-index:2;
     box-shadow:0 4px 10px rgba(0,0,0,.32),0 1px 3px rgba(0,0,0,.18);
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
   }
   .job-head-info{flex:1;min-width:0}
   .job-title{font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
@@ -121,38 +122,48 @@
   .job-client-name svg{width:var(--ico-xs);height:var(--ico-xs);flex:none;color:var(--ink-soft)}
   .job-client-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-  /* CARD INFERIOR — vidro branco fosco */
+  /* CARD DE VIDRO — estende-se para cima, por baixo do card preto.
+     Topo (44px): botões de ação, escondidos atrás do card preto ao repouso.
+     Base (44px): data/hora/etapa, sempre visível. */
   .job-body-rows{
-    display:flex;flex-direction:row;align-items:center;
-    margin:0;
-    padding:0 14px;
-    height:44px;
+    display:flex;flex-direction:column;
+    margin-top:-44px;           /* 44px sobem por baixo do card preto */
+    height:88px;                /* 44px ações + 44px info */
     background:rgba(255,255,255,.62);
     backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
     border:1px solid rgba(255,255,255,.28);
-    border-top:none;
-    border-radius:0 0 var(--r) var(--r);
-    position:relative;z-index:2;
-    transition:transform .3s cubic-bezier(.4,0,.2,1);
-  }
-  /* camada de ações — idêntica ao tc-layer-b do carrossel */
-  .job-act-layer{
+    border-radius:var(--r);
     position:relative;z-index:1;
-    margin:-44px 0 0;
-    height:44px;
-    border-radius:0 0 var(--r) var(--r);overflow:hidden;
-    background:linear-gradient(180deg,#C83505 0%,#FB6225 100%);
+    overflow:hidden;
   }
-  /* 3 grupos horizontais separados por divisórias */
+  /* linha de ações (top — escondida atrás do card preto ao repouso) */
+  .job-act-section{
+    height:44px;flex:none;
+    display:flex;flex-direction:row;align-items:center;
+    padding:0 8px;gap:6px;
+  }
+  /* tc-btn dentro do card de vidro: adaptar ao fundo claro (sem laranja) */
+  .job-act-section .tc-btn{
+    flex:1;color:rgba(10,10,10,.75);
+    background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.08);
+  }
+  .job-act-section .tc-btn:active{background:rgba(0,0,0,.12);}
+  .job-act-section .tc-btn svg{color:rgba(10,10,10,.55)}
+  /* linha de info (base — sempre visível) */
+  .job-info-section{
+    height:44px;flex:none;
+    display:flex;flex-direction:row;align-items:center;
+    padding:0 14px;
+    border-top:1px solid rgba(255,255,255,.18);
+  }
+  /* 3 grupos info horizontais separados por divisórias */
   .job-datetime,.job-stage-row{
     flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
     font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-size:var(--text-11);font-weight:600;letter-spacing:.06em;text-transform:uppercase;
     line-height:1;color:rgba(10,10,10,.72);
   }
-  .job-datetime+.job-datetime,.job-datetime+.job-stage-row{
-    border-left:1px solid rgba(0,0,0,.1);
-  }
+  .job-datetime+.job-datetime,.job-datetime+.job-stage-row{border-left:1px solid rgba(0,0,0,.1)}
   .job-datetime svg,.job-stage-row svg{width:var(--ico-xs);height:var(--ico-xs);flex:none;color:rgba(10,10,10,.45)}
   .job-datetime .nav-ico{width:var(--ico-xs);height:var(--ico-xs);flex:none;background-color:rgba(10,10,10,.45)}
   .job-stage-row .nav-ico{width:var(--ico-xs);height:var(--ico-xs);flex:none;background-color:rgba(10,10,10,.45)}
