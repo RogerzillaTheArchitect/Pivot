@@ -333,13 +333,13 @@
   .tc-notch-tr{right:10px;bottom:50px}
   .tc-notch-bl{left:10px;bottom:-10px}
   .tc-notch-br{right:10px;bottom:-10px}
-  /* LAYER SUPERIOR — vidro fosco branco */
+  /* LAYER SUPERIOR — sempre acima, contém tudo visível incluindo datetime */
   .tc-layer-t{
     position:relative;z-index:2;
     border-radius:18px;overflow:hidden;
-    background:rgba(255,255,255,.13);
-    backdrop-filter:blur(22px) saturate(180%);-webkit-backdrop-filter:blur(22px) saturate(180%);
-    border:1px solid rgba(255,255,255,.3);
+    background:rgba(255,255,255,.82); /* opaco o suficiente para nunca deixar laranja vazar */
+    backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);
+    border:1px solid rgba(255,255,255,.35);
     transition:transform .3s cubic-bezier(.4,0,.2,1);
     box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.12);
     will-change:transform
@@ -366,10 +366,10 @@
   }
   .tc-client-row{display:flex;align-items:center;justify-content:center;gap:6px;font-size:var(--text-sm);color:rgba(255,255,255,.9)}
   .tc-client-row svg{width:14px;height:14px;flex:none;color:rgba(255,255,255,.9)}
-  /* LAYER INFERIOR (laranja) */
+  /* LAYER INFERIOR (laranja) — só botões, sempre coberto pelo card branco */
   .tc-layer-b{
-    position:relative;z-index:0;
-    margin:-48px 20px 0;
+    position:absolute;bottom:0;left:0;right:0;
+    height:48px;z-index:0;
     border-radius:0 0 18px 18px;overflow:hidden;
     background:linear-gradient(180deg,#C83505 0%,#FB6225 100%)
   }
@@ -391,7 +391,8 @@
   .tc-btn-done{background:rgba(255,255,255,.28)}
   .tc-datetime-row{
     display:flex;align-items:center;
-    padding:10px 20px;height:60px;box-sizing:border-box
+    padding:10px 20px;height:60px;box-sizing:border-box;
+    background:linear-gradient(180deg,#C83505 0%,#FB6225 100%)
   }
   .tc-dt-left{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;color:rgba(255,255,255,.9)}
   .tc-date-stack{display:flex;flex-direction:column;align-items:center;gap:2px}
