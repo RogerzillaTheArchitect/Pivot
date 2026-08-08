@@ -132,7 +132,16 @@
     border:1px solid rgba(255,255,255,.28);
     border-top:none;
     border-radius:0 0 var(--r) var(--r);
+    position:relative;z-index:2;
+    transition:transform .3s cubic-bezier(.4,0,.2,1);
+  }
+  /* camada de ações — idêntica ao tc-layer-b do carrossel */
+  .job-act-layer{
     position:relative;z-index:1;
+    margin:-44px 0 0;
+    height:44px;
+    border-radius:0 0 var(--r) var(--r);overflow:hidden;
+    background:linear-gradient(180deg,#C83505 0%,#FB6225 100%);
   }
   /* 3 grupos horizontais separados por divisórias */
   .job-datetime,.job-stage-row{
