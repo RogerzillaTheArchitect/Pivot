@@ -7835,66 +7835,150 @@
     if(destWrap){ destWrap.style.display=cfg.destaques?'block':'none'; if(cfg.destaques) clonarCardParaDashboard('rel-anchor-destaques','dash-card-destaques'); }
   }
 
+  /* ===== DESTAQUES — dados enriquecidos por categoria ===== */
+  function calcularCategoriasDetalhe(){
+    const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
+    const acc={};
+    jobsVisiveis().filter(j=>!j.arquivado||j.arquivado.motivo!=='deletado'||jobTemPagamentoRecebido(j)).forEach(j=>{
+      const mm=(j.dateRaw||'').slice(0,7);
+      if(!mesesSet.has(mm)||!j.value) return;
+      const nome=(j.segmento||'').trim()||t('reports.distFin.uncategorized');
+      if(!acc[nome]) acc[nome]={receita:0,horas:0,projetos:0};
+      acc[nome].receita+=j.value;
+      acc[nome].horas+=Number(j.duracaoHoras)||0;
+      acc[nome].projetos+=1;
+    });
+    const total=Object.values(acc).reduce((s,x)=>s+x.receita,0);
+    return Object.keys(acc).map(label=>{
+      const d=acc[label];
+      return {label, receita:d.receita, horas:d.horas, projetos:d.projetos,
+        porHora:d.horas>0?d.receita/d.horas:0,
+        ticket:d.projetos>0?d.receita/d.projetos:0,
+        pct:total>0?Math.round(d.receita/total*100):0};
+    });
+  }
+  function calcularDespesasDetalhe(){
+    const mesesSet=new Set(relRangeMeses().map(m=>m.ano+'-'+String(m.mes).padStart(2,'0')));
+    const acc={};
+    Object.values(custosData).forEach(c=>{
+      const mm=(c.data||'').slice(0,7);
+      if(!mesesSet.has(mm)) return;
+      const v=Number(c.valor)||0; if(!v) return;
+      const nome=(c.categoria||'').trim()||t('reports.distFin.uncategorized');
+      if(!acc[nome]) acc[nome]={valor:0,count:0};
+      acc[nome].valor+=v; acc[nome].count+=1;
+    });
+    const total=Object.values(acc).reduce((s,x)=>s+x.valor,0);
+    return Object.keys(acc).map(label=>({
+      label, valor:acc[label].valor, count:acc[label].count,
+      pct:total>0?Math.round(acc[label].valor/total*100):0
+    })).sort((a,b)=>b.valor-a.valor);
+  }
   function renderDestaques(){
-    const set=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v||'—'; };
-    const receitas=calcularReceitaPorSubcategoria();
-    const despesas=calcularGastosPorCategoria();
-    const rent=calcularRentabilidade();
-    const seg=calcularSegmentacaoFinanceira();
+    const txt=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+    const cats=calcularCategoriasDetalhe();
+    const desp=calcularDespesasDetalhe();
     const regioes=calcularMercadoRegional();
-
-    // MAIOR RECEITA — categoria com mais receita
-    if(receitas.length){
-      set('dest-maior-receita-nome', receitas[0].label);
-      set('dest-maior-receita-val', fmtMoney(receitas[0].valor));
-    }
-    // MELHOR POR HORA — categoria com maior €/h
-    if(rent.length){
-      const top=rent[0];
-      set('dest-melhor-hora-nome', top.label);
-      set('dest-melhor-hora-val', fmtMoney(top.porHora)+'/h');
-    }
-    // MAIS TRABALHOS — categoria com mais projetos
-    if(seg.linhas&&seg.linhas.length){
-      const top=[...seg.linhas].sort((a,b)=>b.projetos-a.projetos)[0];
-      set('dest-mais-trabalhos-nome', top.label);
-      set('dest-mais-trabalhos-val', top.projetos+' trabalhos');
-    }
-    // MAIOR TICKET MÉDIO — categoria com maior ticket (receita/projetos)
-    if(seg.linhas&&seg.linhas.length){
-      const top=[...seg.linhas].filter(l=>l.projetos>0).sort((a,b)=>(b.valor/b.projetos)-(a.valor/a.projetos))[0];
-      if(top){
-        set('dest-maior-ticket-nome', top.label);
-        set('dest-maior-ticket-val', fmtMoney(top.valor/top.projetos));
-      }
-    }
-    // MAIOR DESPESA — categoria de gasto com maior valor
-    if(despesas.length){
-      set('dest-maior-despesa-nome', despesas[0].label);
-      set('dest-maior-despesa-val', fmtMoney(despesas[0].valor));
-    }
-    // PIOR POR HORA — categoria com menor €/h (último do ranking)
-    if(rent.length>1){
-      const bot=rent[rent.length-1];
-      set('dest-pior-hora-nome', bot.label);
-      set('dest-pior-hora-val', fmtMoney(bot.porHora)+'/h');
-    }
-    // MAIOR RECEITA POR REGIÃO
-    if(regioes.length){
-      set('dest-receita-regiao-nome', regioes[0].cidade);
-      set('dest-receita-regiao-val', fmtMoney(regioes[0].receita));
-    }
-    // MAIS TRABALHOS POR REGIÃO
-    if(regioes.length){
-      const top=[...regioes].sort((a,b)=>b.eventos-a.eventos)[0];
-      set('dest-trabalhos-regiao-nome', top.cidade);
-      set('dest-trabalhos-regiao-val', top.eventos+' trabalhos');
-    }
+    const semDados='SEM DADOS';
+    /* MAIOR RECEITA */
+    const porReceita=[...cats].sort((a,b)=>b.receita-a.receita);
+    txt('dest-maior-receita-nome', porReceita[0]?porReceita[0].label:semDados);
+    txt('dest-maior-receita-val',  porReceita[0]?fmtMoney(porReceita[0].receita):'');
+    /* MELHOR POR HORA */
+    const comHoras=cats.filter(c=>c.horas>0).sort((a,b)=>b.porHora-a.porHora);
+    txt('dest-melhor-hora-nome', comHoras[0]?comHoras[0].label:semDados);
+    txt('dest-melhor-hora-val',  comHoras[0]?fmtMoney(comHoras[0].porHora)+'/h':'');
+    /* MAIS TRABALHOS */
+    const porProjetos=[...cats].sort((a,b)=>b.projetos-a.projetos);
+    txt('dest-mais-trabalhos-nome', porProjetos[0]?porProjetos[0].label:semDados);
+    txt('dest-mais-trabalhos-val',  porProjetos[0]?porProjetos[0].projetos+' trabalhos':'');
+    /* MAIOR TICKET */
+    const porTicket=cats.filter(c=>c.projetos>0).sort((a,b)=>b.ticket-a.ticket);
+    txt('dest-maior-ticket-nome', porTicket[0]?porTicket[0].label:semDados);
+    txt('dest-maior-ticket-val',  porTicket[0]?fmtMoney(porTicket[0].ticket):'');
+    /* MAIOR DESPESA */
+    txt('dest-maior-despesa-nome', desp[0]?desp[0].label:semDados);
+    txt('dest-maior-despesa-val',  desp[0]?fmtMoney(desp[0].valor):'');
+    /* PIOR POR HORA */
+    const piorHora=comHoras.length>0?comHoras[comHoras.length-1]:null;
+    txt('dest-pior-hora-nome', piorHora?piorHora.label:semDados);
+    txt('dest-pior-hora-val',  piorHora?fmtMoney(piorHora.porHora)+'/h':'');
+    /* MAIOR RECEITA POR REGIÃO */
+    const porReceitaReg=[...regioes].sort((a,b)=>b.receita-a.receita);
+    txt('dest-receita-regiao-nome', porReceitaReg[0]?porReceitaReg[0].cidade:semDados);
+    txt('dest-receita-regiao-val',  porReceitaReg[0]?fmtMoney(porReceitaReg[0].receita):'');
+    /* MAIS TRABALHOS POR REGIÃO */
+    const porEventosReg=[...regioes].sort((a,b)=>b.eventos-a.eventos);
+    txt('dest-trabalhos-regiao-nome', porEventosReg[0]?porEventosReg[0].cidade:semDados);
+    txt('dest-trabalhos-regiao-val',  porEventosReg[0]?porEventosReg[0].eventos+' trabalhos':'');
+  }
+  /* ===== DESTAQUE análises específicas ===== */
+  function fecharDestaqueOverlay(){
+    const el=document.getElementById('destaque-overlay');
+    if(el) el.classList.add('u-hidden');
   }
   function abrirDestaqueDetalhe(tipo){
-    if(tipo==='maior-despesa') return abrirDespesas();
-    if(tipo==='maior-receita'||tipo==='maior-ticket'||tipo==='melhor-hora'||tipo==='pior-hora') return abrirReceitas();
-    if(tipo==='mais-trabalhos'||tipo==='receita-regiao'||tipo==='trabalhos-regiao') return go('historico');
+    const overlay=document.getElementById('destaque-overlay');
+    const titulo=document.getElementById('da-title');
+    const body=document.getElementById('da-body');
+    if(!overlay||!titulo||!body) return;
+    const cats=calcularCategoriasDetalhe();
+    const desp=calcularDespesasDetalhe();
+    const regioes=calcularMercadoRegional();
+    const row=(nome,val,sub)=>'<div class="da-row"><div class="da-row-left"><div class="da-row-name">'+escapeHtml(nome)+'</div>'+(sub?'<div class="da-row-sub">'+sub+'</div>':'')+'</div><div class="da-row-val">'+escapeHtml(val)+'</div></div>';
+    const vazio='<div class="da-empty">SEM DADOS NO PERÍODO</div>';
+    let html='', label='';
+    if(tipo==='maior-receita'){
+      label='RECEITA POR CATEGORIA';
+      const list=[...cats].sort((a,b)=>b.receita-a.receita).slice(0,10);
+      html=list.length?list.map(c=>row(c.label, fmtMoney(c.receita),
+        c.projetos+' trabalhos · ticket '+fmtMoney(c.ticket)+(c.horas>0?' · '+fmtMoney(c.porHora)+'/h':'')+(c.pct?' · '+c.pct+'%':'')
+      )).join(''):vazio;
+    } else if(tipo==='melhor-hora'){
+      label='RECEITA POR HORA';
+      const list=cats.filter(c=>c.horas>0).sort((a,b)=>b.porHora-a.porHora).slice(0,10);
+      html=list.length?list.map(c=>row(c.label, fmtMoney(c.porHora)+'/h',
+        Math.round(c.horas)+'h · '+fmtMoney(c.receita)+' · '+c.projetos+' trabalhos'
+      )).join(''):vazio;
+    } else if(tipo==='mais-trabalhos'){
+      label='TRABALHOS POR CATEGORIA';
+      const list=[...cats].sort((a,b)=>b.projetos-a.projetos).slice(0,10);
+      html=list.length?list.map(c=>row(c.label, c.projetos+' trabalhos',
+        fmtMoney(c.receita)+' · ticket '+fmtMoney(c.ticket)+(c.horas>0?' · '+fmtMoney(c.porHora)+'/h':'')
+      )).join(''):vazio;
+    } else if(tipo==='maior-ticket'){
+      label='TICKET MÉDIO POR CATEGORIA';
+      const list=cats.filter(c=>c.projetos>0).sort((a,b)=>b.ticket-a.ticket).slice(0,10);
+      html=list.length?list.map(c=>row(c.label, fmtMoney(c.ticket),
+        fmtMoney(c.receita)+' · '+c.projetos+' trabalhos'+(c.horas>0?' · '+fmtMoney(c.porHora)+'/h':'')
+      )).join(''):vazio;
+    } else if(tipo==='maior-despesa'){
+      label='DESPESAS POR CATEGORIA';
+      html=desp.length?desp.slice(0,10).map(d=>row(d.label, fmtMoney(d.valor),
+        d.count+' lançamentos · '+d.pct+'% das despesas'
+      )).join(''):vazio;
+    } else if(tipo==='pior-hora'){
+      label='MENOR RECEITA POR HORA';
+      const list=cats.filter(c=>c.horas>0).sort((a,b)=>a.porHora-b.porHora).slice(0,10);
+      html=list.length?list.map(c=>row(c.label, fmtMoney(c.porHora)+'/h',
+        Math.round(c.horas)+'h · '+fmtMoney(c.receita)+' · '+c.projetos+' trabalhos · ticket '+fmtMoney(c.ticket)
+      )).join(''):vazio;
+    } else if(tipo==='receita-regiao'){
+      label='RECEITA POR REGIÃO';
+      const list=[...regioes].sort((a,b)=>b.receita-a.receita).slice(0,10);
+      html=list.length?list.map(r=>row(r.cidade, fmtMoney(r.receita),
+        r.eventos+' trabalhos · ticket '+fmtMoney(r.ticketMedio)+(r.pctReceita?' · '+r.pctReceita+'%':'')
+      )).join(''):vazio;
+    } else if(tipo==='trabalhos-regiao'){
+      label='TRABALHOS POR REGIÃO';
+      const list=[...regioes].sort((a,b)=>b.eventos-a.eventos).slice(0,10);
+      html=list.length?list.map(r=>row(r.cidade, r.eventos+' trabalhos',
+        fmtMoney(r.receita)+' · ticket '+fmtMoney(r.ticketMedio)
+      )).join(''):vazio;
+    }
+    titulo.textContent=label;
+    body.innerHTML=html;
+    overlay.classList.remove('u-hidden');
   }
 
   /* ===== Evolução Mensal — período atual vs período anterior equivalente
@@ -17340,5 +17424,17 @@ try {
   console.warn('[bg-glass] WebGL background indisponível, mantendo blobs CSS:', err);
 }
 </script>
+<div id="destaque-overlay" class="da-overlay u-hidden">
+  <div class="da-backdrop" onclick="fecharDestaqueOverlay()"></div>
+  <div class="da-sheet">
+    <div class="da-header">
+      <span class="da-title" id="da-title"></span>
+      <button class="da-close" onclick="fecharDestaqueOverlay()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="da-body" id="da-body"></div>
+  </div>
+</div>
 </body>
 </html>
