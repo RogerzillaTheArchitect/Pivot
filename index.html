@@ -557,57 +557,35 @@
         </div>
 
         <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="ms-progress-row">
-            <div class="ms-rings-wrap-outer">
-              <div class="ms-rings-wrap">
-                <svg class="ms-rings-svg" id="rf-rings-svg" viewBox="0 0 150 150">
-                  <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="69"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="55"/>
-                  <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="52"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="38"/>
-                  <path class="mr-ring mr-base" id="rf-mr-esperado-base"/>
-                  <path class="mr-ring mr-base" id="rf-mr-recebido-base"/>
-                  <path class="mr-ring mr-base" id="rf-mr-extras-base"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-esperado"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-recebido"/>
-                  <path class="mr-ring mr-tip" id="rf-mr-extras"/>
-                  <path class="mr-ring mr-teto" id="rf-mr-teto"/>
-                  <path class="mr-ring" id="rf-mr-desp-b1" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b2" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b3" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b4" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b5" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-b6" d=""/>
-                  <path class="mr-ring" id="rf-mr-desp-over" d=""/>
-                  <path class="mr-ring mr-base" id="rf-mr-despesas-base" d=""/>
-                  <path class="mr-ring mr-tip" id="rf-mr-despesas" d=""/>
-                </svg>
-                <div class="ms-rings-center">
-                  <span class="ms-rings-center-lbl" data-t="home.totalProfit">Total</span>
-                  <span class="ms-rings-center-val" id="rf-mt-saldo">−1.850 €</span>
-                </div>
-              </div>
+        <div class="fin-card">
+          <svg class="fin-rings-svg" viewBox="0 0 280 150">
+            <path class="fin-trk fin-trk-out" d="M25 145 A115 115 0 0 0 255 145"/>
+            <path class="fin-trk fin-trk-inn" d="M50 145 A90 90 0 0 0 230 145"/>
+            <path class="fin-arc fin-arc-g" id="rf-fin-arc-meta" d=""/>
+            <path class="fin-arc fin-arc-r" id="rf-fin-arc-desp" d=""/>
+            <text x="140" y="84" class="fin-c-lbl" text-anchor="middle">TOTAL</text>
+            <text x="140" y="114" class="fin-c-val" id="rf-fin-total" text-anchor="middle">€ 0</text>
+            <text x="140" y="130" class="fin-c-pct" id="rf-fin-pct" text-anchor="middle">0% da meta</text>
+            <rect x="50" y="65" width="180" height="75" fill="transparent" style="cursor:pointer" onclick="event.stopPropagation();abrirDefinirMetaReceita()"/>
+          </svg>
+          <div class="fin-blocks">
+            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+              <span class="fin-blk-lbl">ESPERADO</span>
+              <span class="fin-blk-val" id="rf-fin-esperado">€ 0</span>
             </div>
-            <div class="ms-progress-left">
-              <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="rf-mrl-meta">4.300 €</b></div>
-                <div class="mrl-item"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="rf-mrl-esperado">3.200 €</b></div>
-                <div class="mrl-item"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Receita</span> <b id="rf-mrl-receb">2.450 €</b></div>
-                <div class="mrl-item" onclick="abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="rf-mrl-extras">0 €</b></div>
-                <div class="mrl-item" onclick="abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="rf-mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Limite</span> <b id="rf-mrl-teto">500 €</b></div>
-              </div>
+            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
+              <span class="fin-blk-lbl">LIMITE</span>
+              <span class="fin-blk-val" id="rf-fin-limite">€ 0</span>
+            </div>
+            <div class="fin-block" onclick="abrirReceitas()">
+              <span class="fin-blk-lbl">RECEITAS</span>
+              <span class="fin-blk-val" id="rf-fin-receitas">€ 0</span>
+            </div>
+            <div class="fin-block" onclick="abrirDespesas()">
+              <span class="fin-blk-lbl">DESPESAS</span>
+              <span class="fin-blk-val" id="rf-fin-despesas">€ 0</span>
             </div>
           </div>
-        </div>
-        <div class="rel-fin-actions">
-          <button class="btn soft" onclick="abrirDefinirMetaReceita()"><span class="nav-ico rel-fin-ico ico-meta"></span><span data-t="reports.finBtn.metas">Metas</span></button>
-          <button class="btn soft" onclick="abrirDefinirLimiteGastos()"><span class="nav-ico rel-fin-ico ico-reserva"></span><span data-t="reports.finBtn.limites">Limites</span></button>
-          <button class="btn soft" onclick="abrirReceitas()"><span class="nav-ico rel-fin-ico ico-entrada"></span><span data-t="reports.finBtn.receitas">Receitas</span></button>
-          <button class="btn soft" onclick="abrirDespesas()"><span class="nav-ico rel-fin-ico ico-saida"></span><span data-t="reports.finBtn.despesas">Despesas</span></button>
         </div>
 
         <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
@@ -4388,33 +4366,25 @@
      do período (ver metasDoMes), pra continuar comparável e refletir o
      histórico real de cada mês, não o valor atual multiplicado. */
   function renderResumoFinanceiroRelatorios(){
-    if(!document.getElementById('rf-mr-esperado')) return;
+    if(!document.getElementById('rf-fin-arc-meta')) return;
     const meses=relRangeMeses();
     const s=relStatsAgregadas();
     const extrasPeriodo=meses.reduce((acc,m)=>acc+receitasDoMes(m.ano,m.mes),0);
     const recebido=s.recebido-extrasPeriodo, esperado=s.porReceber, custos=s.custos, extras=extrasPeriodo;
     const somaMetas=meses.reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
     const meta=somaMetas.receita||1, teto=somaMetas.gastos||1;
-    pintarTeto('rf-');
-    pintarFita('esperado', esperado, meta, 'rf-');
-    pintarFita('recebido', recebido, meta, 'rf-');
-    pintarFita('extras', extras, meta, 'rf-');
-    pintarFita('despesas', custos, teto, 'rf-');
-    reordenarCamadasFitas('#rf-rings-svg', 'rf-');
+    const total=recebido+extras-custos;
+    const pMeta=Math.min(1,Math.max(0,meta>0?total/meta:0));
+    const pDesp=Math.min(1,Math.max(0,teto>0?custos/teto:0));
+    setFinArc('rf-fin-arc-meta', pMeta, 115);
+    setFinArc('rf-fin-arc-desp', pDesp, 90);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
-    set('rf-mrl-meta', fmtMoney(meta));
-    set('rf-mrl-esperado', fmtMoney(esperado));
-    set('rf-mrl-receb', fmtMoney(recebido));
-    set('rf-mrl-extras', fmtMoney(extras));
-    set('rf-mrl-gastos', fmtMoney(custos));
-    set('rf-mrl-teto', fmtMoney(teto));
-    const saldo=recebido+extras-custos;
-    const saldoEl=document.getElementById('rf-mt-saldo');
-    if(saldoEl){
-      saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-      const len=saldoEl.textContent.length;
-      saldoEl.style.fontSize = len>11 ? '10px' : len>9 ? '12px' : len>7 ? '14px' : '16px';
-    }
+    set('rf-fin-total', fmtMoney(total));
+    set('rf-fin-pct', Math.round(meta>0?total/meta*100:0)+'% da meta');
+    set('rf-fin-esperado', fmtMoney(esperado));
+    set('rf-fin-limite', fmtMoney(teto));
+    set('rf-fin-receitas', fmtMoney(recebido+extras));
+    set('rf-fin-despesas', fmtMoney(custos));
   }
   /* anel genérico com suporte a "voltas": se num ultrapassa den, o arco não
      reinicia do zero — para cheio (círculo completo) e fica assim, com o
