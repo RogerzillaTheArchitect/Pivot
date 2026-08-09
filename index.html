@@ -461,64 +461,39 @@
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
         <div id="dash-card-financeiro" class="u-hidden">
-        <div class="tasks-header" data-t="home.financeTitle" onclick="abrirRelatorios('faturamento')">Financeiro</div>
-        <div class="card finance-ops-card">
-        <div class="ms-progress-row" onclick="abrirRelatorios('faturamento')">
-            <div class="ms-rings-wrap-outer">
-              <div class="ms-rings-wrap">
-                <svg class="ms-rings-svg" viewBox="0 0 150 150">
-                  <defs>
-                    <!-- canal escavado: sombra interna nas bordas do trilho (erode+borda+blur) -->
-                    <filter id="mr-carved" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="sRGB">
-                      <feMorphology in="SourceAlpha" operator="erode" radius="2" result="inner"/>
-                      <feComposite in="SourceAlpha" in2="inner" operator="out" result="edge"/>
-                      <feGaussianBlur in="edge" stdDeviation="0.9" result="soft-edge"/>
-                      <feFlood flood-color="#000" flood-opacity="0.48" result="dark"/>
-                      <feComposite in="dark" in2="soft-edge" operator="in" result="shadow"/>
-                      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="shadow"/></feMerge>
-                    </filter>
-                  </defs>
-                  <!-- Trilhos: canal escavado (white 3%) + bordas finas (white 8%) em cada aresta -->
-                  <circle class="mr-trilho" cx="75" cy="75" r="62" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="69"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="55"/>
-                  <circle class="mr-trilho" cx="75" cy="75" r="45" stroke-width="14"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="52"/>
-                  <circle class="mr-trilho-edge" cx="75" cy="75" r="38"/>
-                  <!-- Anel externo: esperado (white 25% overlay), extras, recebido -->
-                  <path class="mr-ring mr-base" id="mr-esperado-base"/>
-                  <path class="mr-ring mr-base" id="mr-recebido-base"/>
-                  <path class="mr-ring mr-base" id="mr-extras-base"/>
-                  <path class="mr-ring mr-tip" id="mr-esperado"/>
-                  <path class="mr-ring mr-tip" id="mr-recebido"/>
-                  <path class="mr-ring mr-tip" id="mr-extras"/>
-                  <!-- Anel interno: teto (invisible), bandas de gradiente despesas -->
-                  <path class="mr-ring mr-teto" id="mr-teto"/>
-                  <path class="mr-ring" id="mr-desp-b1" d=""/>
-                  <path class="mr-ring" id="mr-desp-b2" d=""/>
-                  <path class="mr-ring" id="mr-desp-b3" d=""/>
-                  <path class="mr-ring" id="mr-desp-b4" d=""/>
-                  <path class="mr-ring" id="mr-desp-b5" d=""/>
-                  <path class="mr-ring" id="mr-desp-b6" d=""/>
-                  <path class="mr-ring" id="mr-desp-over" d=""/>
-                  <path class="mr-ring mr-base" id="mr-despesas-base" d=""/>
-                  <path class="mr-ring mr-tip" id="mr-despesas" d=""/>
-                </svg>
-                <div class="ms-rings-center">
-                  <span class="ms-rings-center-lbl" id="mt-saldo-lbl" data-t="home.totalProfit">Total</span>
-                  <span class="ms-rings-center-val" id="mt-saldo">−1.850 €</span>
-                </div>
-              </div>
+        <div class="fin-card">
+          <svg class="fin-rings-svg" viewBox="0 0 280 150">
+            <!-- trilho externo (meta/lucro) -->
+            <path class="fin-trk fin-trk-out" d="M25 145 A115 115 0 0 0 255 145"/>
+            <!-- trilho interno (despesas/limite) -->
+            <path class="fin-trk fin-trk-inn" d="M50 145 A90 90 0 0 0 230 145"/>
+            <!-- arco externo (meta/lucro) — verde -->
+            <path class="fin-arc fin-arc-g" id="fin-arc-meta" d=""/>
+            <!-- arco interno (despesas/limite) — vermelho -->
+            <path class="fin-arc fin-arc-r" id="fin-arc-desp" d=""/>
+            <!-- texto central -->
+            <text x="140" y="84" class="fin-c-lbl" text-anchor="middle">TOTAL</text>
+            <text x="140" y="114" class="fin-c-val" id="fin-total" text-anchor="middle">€ 0</text>
+            <text x="140" y="130" class="fin-c-pct" id="fin-pct" text-anchor="middle">0% da meta</text>
+            <!-- área clicável para editar meta -->
+            <rect x="50" y="65" width="180" height="75" fill="transparent" style="cursor:pointer" onclick="event.stopPropagation();abrirDefinirMetaReceita()"/>
+          </svg>
+          <div class="fin-blocks">
+            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+              <span class="fin-blk-lbl">ESPERADO</span>
+              <span class="fin-blk-val" id="fin-esperado">€ 0</span>
             </div>
-            <div class="ms-progress-left">
-              <div class="ms-rings-legend">
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirMetaReceita()"><span class="mrl-dot mr-meta-c"></span><span data-t="home.target">Meta</span> <b id="mrl-meta">4.300 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-esperado-c"></span><span data-t="home.expected">Esperado</span> <b id="mrl-esperado">3.200 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRelatorios('faturamento')"><span class="mrl-dot mr-recebido-c"></span><span data-t="home.received">Receita</span> <b id="mrl-receb">2.450 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirRegistroManual()"><span class="mrl-dot mr-extras-c"></span><span data-t="home.extras">Extras</span> <b id="mrl-extras">0 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDespesas()"><span class="mrl-dot mr-gastos-c"></span><span data-t="home.expenses">Despesas</span> <b id="mrl-gastos">45 €</b></div>
-                <div class="mrl-item" onclick="event.stopPropagation();abrirDefinirLimiteGastos()"><span class="mrl-dot mr-teto-c"></span><span data-t="home.ceilingLabel">Limite</span> <b id="mrl-teto">500 €</b></div>
-              </div>
+            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
+              <span class="fin-blk-lbl">LIMITE</span>
+              <span class="fin-blk-val" id="fin-limite">€ 0</span>
+            </div>
+            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+              <span class="fin-blk-lbl">RECEITAS</span>
+              <span class="fin-blk-val" id="fin-receitas">€ 0</span>
+            </div>
+            <div class="fin-block" onclick="abrirDespesas()">
+              <span class="fin-blk-lbl">DESPESAS</span>
+              <span class="fin-blk-val" id="fin-despesas">€ 0</span>
             </div>
           </div>
         </div>
@@ -4370,32 +4345,41 @@
     for(let i=1;i<=6;i++){ const b=document.getElementById(prefixo+'mr-desp-b'+i); if(b) svg.appendChild(b); }
     const over=document.getElementById(prefixo+'mr-desp-over'); if(over) svg.appendChild(over);
   }
+  /* pinta um semiarco SVG (cúpula) de progresso p∈[0,1] no elemento id */
+  function setFinArc(id, p, r){
+    const el=document.getElementById(id);
+    if(!el) return;
+    const cx=140, cy=145;
+    if(p<=0.001){ el.setAttribute('d',''); return; }
+    const x0=cx-r, y0=cy;
+    if(p>=0.999){
+      /* semicírculo completo: dois arcos de 90° para evitar caso degenerado SVG */
+      el.setAttribute('d','M'+x0+' '+y0+' A'+r+' '+r+' 0 0 0 '+cx+' '+(cy-r)+
+        ' A'+r+' '+r+' 0 0 0 '+(cx+r)+' '+cy);
+      return;
+    }
+    const angle=Math.PI*(1-p);
+    const x1=cx+r*Math.cos(angle), y1=cy-r*Math.sin(angle);
+    const large=p>0.5?1:0;
+    el.setAttribute('d','M'+x0+' '+y0+' A'+r+' '+r+' 0 '+large+' 0 '+x1+' '+y1);
+  }
   function renderRingsDashboard(recebido, esperado, custos, extras){
     extras=extras||0;
     const mAtual=metasMesAtual();
     const meta=mAtual.receita||1, teto=mAtual.gastos||1;
-    pintarTeto('');
-    FITA_STATE.esperado=pintarFita('esperado', esperado, meta);
-    FITA_STATE.recebido=pintarFita('recebido', recebido, meta);
-    FITA_STATE.extras=pintarFita('extras', extras, meta);
-    FITA_STATE.despesas=pintarFita('despesas', custos, teto);
-    reordenarCamadasFitas();
-    const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
-    set('mrl-meta', fmtMoney(meta));
-    set('mrl-esperado', fmtMoney(esperado));
-    set('mrl-receb', fmtMoney(recebido));
-    set('mrl-extras', fmtMoney(extras));
-    set('mrl-gastos', fmtMoney(custos));
-    set('mrl-teto', fmtMoney(teto));
-    /* saldo real do mês até agora: o que entrou (trabalhos + extras) menos o que já saiu */
-    const saldo=recebido+extras-custos;
-    const saldoEl=document.getElementById('mt-saldo');
-    if(saldoEl){
-      saldoEl.textContent=(saldo<0?'−':'+')+fmtMoney(Math.abs(saldo)).replace('-','');
-      /* a fonte encolhe conforme o valor cresce, pra nunca encostar no anel interno */
-      const len=saldoEl.textContent.length;
-      saldoEl.style.fontSize = len>11 ? '10px' : len>9 ? '12px' : len>7 ? '14px' : '16px';
-    }
+    /* novo fin-card: arcos semicirculares */
+    const total=recebido+extras-custos;
+    const pMeta=Math.min(1,Math.max(0,meta>0?total/meta:0));
+    const pDesp=Math.min(1,Math.max(0,teto>0?custos/teto:0));
+    setFinArc('fin-arc-meta', pMeta, 115);
+    setFinArc('fin-arc-desp', pDesp, 90);
+    const fset=(id,v)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=v; };
+    fset('fin-total', fmtMoney(total));
+    fset('fin-pct', Math.round(meta>0?total/meta*100:0)+'% da meta');
+    fset('fin-esperado', fmtMoney(esperado));
+    fset('fin-limite', fmtMoney(teto));
+    fset('fin-receitas', fmtMoney(recebido+extras));
+    fset('fin-despesas', fmtMoney(custos));
   }
   /* mesmo gráfico de anéis do Dashboard, reaproveitado no card "Resumo
      Financeiro" de Relatórios (prefixo 'rf-'), mas com os valores somados
