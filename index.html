@@ -4805,12 +4805,8 @@
       return new Date(it.dataISO+'T00:00:00')<=_limite;
     });
     if(!itens.length){wrap.innerHTML='';return;}
-    const svgPrev='<svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M6.5 1L1 7l5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    const svgNext='<svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M1.5 1L7 7l-5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    wrap.innerHTML='<div class="tc-viewport" id="tc-viewport"><div class="tc-track" id="tc-track">'+itens.map(construirCarouselCard).join('')+'</div></div>'+
-      '<div class="tc-nav-prev" id="tc-nav-prev">'+svgPrev+'</div>'+
-      '<div class="tc-nav-next" id="tc-nav-next">'+svgNext+'</div>';
-    ativarCarrosselTarefas();
+    wrap.innerHTML='<div class="tsk-stack" id="tsk-stack">'+itens.map(construirStackCard).join('')+'</div>';
+    ativarStackTarefas();
   }
   /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
      (cor de acordo com o nível) + o próprio card ganha um leve degradê do lado
@@ -5039,186 +5035,158 @@
     });
   }
 
-  /* ===== CARROSSEL DE TAREFAS ===== */
+  /* ===== TASK STACK ===== */
   const TC_MESES=['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
-  function construirCarouselCard(it){
-    const partes=it.dataISO.split('-');
-    const mes=TC_MESES[parseInt(partes[1],10)-1]||partes[1];
+  function construirStackCard(it,idx){
     const foto=clienteFotoPorNome(it.cliente);
     const solto=it.tipo==='lembrete'||it.tipo==='lista'||it.tipo==='tarefa';
-    const fotoHtml=avatarHtml(it.cliente||it.nome,220,foto);
-    const clienteHtml='<div class="tc-client-row">'+
-      (it.cliente ? RTK_ICONS.client+'<span>'+escapeHtml(it.cliente)+'</span>' : '')+
-      '</div>';
+    const fotoHtml=avatarHtml(it.cliente||it.nome,136,foto);
+    const partes=(it.dataISO||'--').split('-');
+    const mes=TC_MESES[parseInt(partes[1],10)-1]||partes[1]||'—';
+    const dia=partes[2]||'—';
+    const TIPOS={lembrete:'LEMBRETE',lista:'CHECKLIST',tarefa:'TAREFA',pagamento:'PAGAMENTO',contrato:'CONTRATO',entrega:'ENTREGA',evento:'EVENTO'};
+    const tipoLbl=TIPOS[it.tipo]||(it.tipo||'').toUpperCase();
+    const icoLink='<svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5a3.5 3.5 0 0 0 5 0l2-2a3.5 3.5 0 0 0-5-5L7 4"/><path d="M9.5 6.5a3.5 3.5 0 0 0-5 0l-2 2a3.5 3.5 0 0 0 5 5L9 12"/></svg>';
     const icoEdit='<svg viewBox="0 0 11 11" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     const icoArch='<svg viewBox="0 0 11 11" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     const icoDone='<svg viewBox="0 0 11 11" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
-    const icoCalSmall='<svg class="tc-ico" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"><rect x="1" y="2.5" width="10" height="8.5" rx="1.5"/><path d="M4 1.5V3M8 1.5V3M1 5.5h10"/></svg>';
-    const icoClockSmall='<svg class="tc-ico" viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round"><circle cx="6" cy="6" r="4.5"/><path d="M6 3.5V6l2 1.5"/></svg>';
-    return '<div class="tc-slide" data-task data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'" data-solto="'+solto+'">'+
-      '<div class="tc-layer-t">'+
-        '<div class="tc-photo-area">'+fotoHtml+'</div>'+
-        '<div class="tc-info-area">'+
-          '<div class="tc-title">'+escapeHtml(it.nome)+'</div>'+
-          clienteHtml+
-        '</div>'+
-      '</div>'+
-      '<div class="tc-layer-b">'+
-        '<div class="tc-actions-row">'+
-          '<button class="tc-btn tc-btn-edit" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'EDITAR</button>'+
-          '<button class="tc-btn tc-btn-arch" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'ARQUIVAR</button>'+
-          '<button class="tc-btn tc-btn-done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'CONCLUIR</button>'+
-        '</div>'+
-        '<div class="tc-datetime-row">'+
-          '<div class="tc-dt-left">'+icoCalSmall+
-            '<div class="tc-date-stack"><b class="tc-d-num">'+partes[2]+'</b><span class="tc-d-mon">'+mes+'</span></div>'+
+    return '<div class="tsk-card" data-task'+
+      ' data-stack-idx="'+idx+'"'+
+      ' data-job-id="'+(it.jobId||'')+'"'+
+      ' data-tipo="'+it.tipo+'"'+
+      ' data-idx="'+(it.idx!=null?it.idx:'')+'"'+
+      ' data-solto="'+solto+'">'+
+      '<div class="tsk-body">'+
+        '<div class="tsk-photo-wrap">'+fotoHtml+'</div>'+
+        '<div class="tsk-content">'+
+          '<div class="tsk-row">'+
+            '<div class="tsk-col">'+
+              '<span class="tsk-big-name">'+escapeHtml(it.nome)+'</span>'+
+              '<span class="tsk-small-lbl">'+tipoLbl+'</span>'+
+            '</div>'+
+            '<div class="tsk-col tsk-col-r">'+
+              '<div class="tsk-linked">'+icoLink+
+                '<div class="tsk-linked-inner">'+
+                  '<span class="tsk-big-name">'+(it.cliente?escapeHtml(it.cliente):'—')+'</span>'+
+                  '<span class="tsk-small-lbl">CLIENTE</span>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
           '</div>'+
-          '<div class="tc-dt-sep"></div>'+
-          '<div class="tc-dt-right">'+icoClockSmall+
-            '<div class="tc-time-stack">'+
-              '<span class="tc-time-in">'+(it.hora||'—')+'</span>'+
-              '<span class="tc-time-out">'+(it.horaFim||'—')+'</span>'+
+          '<div class="tsk-sep"></div>'+
+          '<div class="tsk-row">'+
+            '<div class="tsk-col">'+
+              '<span class="tsk-code">'+dia+'<span style="opacity:.5"> — </span>'+mes+'</span>'+
+            '</div>'+
+            '<div class="tsk-col tsk-col-r">'+
+              '<span class="tsk-big-name">'+(it.hora||'—')+'</span>'+
+              '<span class="tsk-small-lbl">HORA</span>'+
             '</div>'+
           '</div>'+
         '</div>'+
       '</div>'+
+      '<div class="tsk-actions">'+
+        '<button class="tsk-act-btn" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+' EDITAR</button>'+
+        '<button class="tsk-act-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+' ARQUIVAR</button>'+
+        '<button class="tsk-act-btn tsk-act-done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+' CONCLUIR</button>'+
+      '</div>'+
     '</div>';
   }
 
-  function ativarCarrosselTarefas(){
-    const viewport=document.getElementById('tc-viewport');
-    const track=document.getElementById('tc-track');
-    if(!viewport||!track) return;
-    const realSlides=Array.from(track.querySelectorAll('.tc-slide'));
-    const n=realSlides.length;
+  function ativarStackTarefas(){
+    const stack=document.getElementById('tsk-stack');
+    if(!stack) return;
+    const cards=Array.from(stack.querySelectorAll('.tsk-card'));
+    const n=cards.length;
     if(!n) return;
-    const ACTIONS_H=48, GAP=16;
-    const vpW=viewport.offsetWidth||window.innerWidth;
-    /* MARGIN calculado para peek ≈ 50% de um card em cada lado:
-       peek = MARGIN-GAP = slideW/2  →  MARGIN = slideW/2+GAP = (vpW-2*MARGIN)/2+GAP
-       resolvendo: MARGIN = vpW/4 + GAP/2 */
-    const MARGIN=Math.round(vpW/4+GAP/2);
-    const slideW=vpW-MARGIN*2;
-    realSlides.forEach(s=>{s.style.width=slideW+'px';});
+    /* CARD_H = altura do tsk-body; STRIP_H = faixa visível dos cards posteriores;
+       ACTIONS_H = painel de ações aberto; MAX_BACK = máx cards visíveis atrás;
+       W_STEP = redução fracional de largura por nível de profundidade */
+    const CARD_H=136, STRIP_H=52, ACTIONS_H=48, MAX_BACK=2, W_STEP=0.08;
+    let activeIdx=0;
+    let lastTap=0, tapTimer=0, pointerStartY=0;
 
-    /* loop infinito: clonar último (prepend) e primeiro (append) */
-    let allSlides=realSlides;
-    if(n>1){
-      const cLast=realSlides[n-1].cloneNode(true);
-      const cFirst=realSlides[0].cloneNode(true);
-      track.insertBefore(cLast,realSlides[0]);
-      track.appendChild(cFirst);
-      allSlides=Array.from(track.querySelectorAll('.tc-slide'));
-      allSlides.forEach(s=>{s.style.width=slideW+'px';});
-    }
-
-    /* virtual=0 → clone do último, virtual=1..n → reais, virtual=n+1 → clone do primeiro */
-    let virtual=n>1?1:0;
-    let startX=0,startY=0,dragging=false,pointerId=null,dragOffset=0,lastTap=0,tapTimer=0;
-
-    const prevArrow=document.getElementById('tc-nav-prev');
-    const nextArrow=document.getElementById('tc-nav-next');
-
-    const posFor=v=>MARGIN-v*(slideW+GAP);
-
-    const updateOpacity=()=>{
-      allSlides.forEach((s,i)=>{
-        const active=i===virtual;
-        s.style.opacity=active?'1':'0.5';
-        s.style.filter=active?'none':'brightness(0.6)';
-        s.style.transition='opacity .35s ease,filter .35s ease';
-      });
-      /* loop infinito → setas sempre visíveis */
-      if(prevArrow) prevArrow.style.opacity=n>1?'.16':'0';
-      if(nextArrow) nextArrow.style.opacity=n>1?'.16':'0';
-    };
-
-    const goTo=(v,animate=true)=>{
-      virtual=v;
-      allSlides.forEach((s,i)=>{s.style.zIndex=i===v?'2':'1';});
-      track.style.transition=animate?'transform .35s cubic-bezier(.25,.1,.25,1)':'none';
-      track.style.transform='translateX('+posFor(v)+'px)';
-      updateOpacity();
-    };
-
-    /* após transição: saltar de clone para real equivalente sem animação */
-    if(n>1){
-      track.addEventListener('transitionend',()=>{
-        if(virtual===0)   goTo(n,false);   /* clone do último → real último */
-        if(virtual===n+1) goTo(1,false);   /* clone do primeiro → real primeiro */
+    function positionCards(animate){
+      const backCount=Math.min(n-1-activeIdx, MAX_BACK);
+      const containerH=CARD_H+STRIP_H*backCount;
+      stack.style.transition=animate?'height .4s cubic-bezier(.25,.1,.25,1)':'none';
+      stack.style.height=containerH+'px';
+      const tr=animate?'top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease':'none';
+      cards.forEach((card,i)=>{
+        const depth=i-activeIdx;
+        card.style.transition=tr;
+        if(depth<0||depth>MAX_BACK){
+          card.style.opacity='0';
+          card.style.pointerEvents='none';
+          card.style.zIndex='1';
+          card.style.top=(depth<0?(containerH+STRIP_H)+'px':'0px');
+          return;
+        }
+        card.style.zIndex=String(n-depth);
+        card.style.pointerEvents='auto';
+        if(depth===0){
+          card.style.top=STRIP_H*backCount+'px';
+          card.style.width='100%';
+          card.style.opacity='1';
+        } else {
+          card.style.top=STRIP_H*(backCount-depth)+'px';
+          card.style.width=((1-W_STEP*depth)*100)+'%';
+          card.style.opacity=String(Math.max(0.82,1-0.07*depth));
+        }
       });
     }
 
-    const setOpen=(slide,open)=>{
-      const lt=slide.querySelector('.tc-layer-t');
-      if(!lt) return;
-      lt.style.transform=open?'translateY(-'+ACTIONS_H+'px)':'translateY(0)';
-      slide.dataset.tcOpen=open?'1':'';
-    };
-
-    goTo(n>1?1:0,false);
-
-    viewport.addEventListener('pointerdown',e=>{
-      startX=e.clientX; startY=e.clientY;
-      dragging=true; pointerId=e.pointerId; dragOffset=0;
-      track.style.transition='none';
-      try{viewport.setPointerCapture(e.pointerId);}catch(err){}
-    });
-
-    viewport.addEventListener('pointermove',e=>{
-      if(!dragging||e.pointerId!==pointerId) return;
-      const dx=e.clientX-startX;
-      const dy=e.clientY-startY;
-      if(Math.abs(dy)>Math.abs(dx)+8) return; /* scroll vertical — ignorar */
-      dragOffset=dx;
-      track.style.transform='translateX('+(posFor(virtual)+dx)+'px)';
-    });
-
-    const fim=e=>{
-      if(!dragging||(e&&e.pointerId!==pointerId)) return;
-      dragging=false;
-      const THRESHOLD=52;
-      if(Math.abs(dragOffset)<8){
+    cards.forEach((card,i)=>{
+      card.addEventListener('pointerdown',e=>{pointerStartY=e.clientY;});
+      card.addEventListener('click',e=>{
+        if(Math.abs(e.clientY-pointerStartY)>8) return;
+        const depth=i-activeIdx;
+        if(depth>0){
+          /* tocar card posterior → trazer para frente */
+          const prevAct=cards[activeIdx]&&cards[activeIdx].querySelector('.tsk-actions');
+          if(prevAct){prevAct.classList.remove('open');}
+          activeIdx=i;
+          positionCards(true);
+          return;
+        }
+        if(depth<0) return;
+        /* card frontal — single/double tap */
         const now=Date.now();
         if(now-lastTap<320){
-          /* double tap → cancela timer, fecha ações, abre detalhe */
-          clearTimeout(tapTimer);
-          lastTap=0;
-          const sl=allSlides[virtual];
-          if(sl){
-            setOpen(sl,false);
-            if(sl.dataset.solto==='true') abrirDetalheItemSolto(sl.dataset.tipo,sl.dataset.idx);
-            else openJob(sl.dataset.jobId);
-          }
-        } else {
-          lastTap=now;
-          /* single tap → revela ações após 300ms (cancela se vier double tap) */
-          tapTimer=setTimeout(()=>{
-            const sl=allSlides[virtual];
-            if(sl) setOpen(sl,sl.dataset.tcOpen!=='1');
-          },300);
+          clearTimeout(tapTimer); lastTap=0;
+          if(card.dataset.solto==='true') abrirDetalheItemSolto(card.dataset.tipo,card.dataset.idx);
+          else openJob(card.dataset.jobId);
+          return;
         }
-      } else if(dragOffset<-THRESHOLD) goTo(virtual+1);
-      else if(dragOffset>THRESHOLD) goTo(virtual-1);
-      else goTo(virtual);
-    };
-    viewport.addEventListener('pointerup',fim);
-    viewport.addEventListener('pointercancel',fim);
+        lastTap=now;
+        tapTimer=setTimeout(()=>{
+          const act=card.querySelector('.tsk-actions');
+          if(!act) return;
+          const opening=!act.classList.contains('open');
+          act.classList.toggle('open',opening);
+          const backCount=Math.min(n-1-activeIdx,MAX_BACK);
+          const base=CARD_H+STRIP_H*backCount;
+          stack.style.height=(base+(opening?ACTIONS_H:0))+'px';
+        },300);
+      });
+    });
+
+    positionCards(false);
   }
 
   function tcEditar(btn){
-    const sl=btn.closest('.tc-slide');
+    const sl=btn.closest('.tsk-card');
     if(sl.dataset.solto==='true') abrirDetalheItemSolto(sl.dataset.tipo,sl.dataset.idx);
     else openJob(sl.dataset.jobId);
   }
   function tcArquivar(btn){
-    const sl=btn.closest('.tc-slide');
+    const sl=btn.closest('.tsk-card');
     _tcArquivados.add((sl.dataset.jobId||sl.dataset.tipo||'')+'_'+(sl.dataset.idx||''));
     renderTasksList();
     showToast(t('toast.archivedFromRadar'));
   }
   function tcConcluir(btn){
-    const sl=btn.closest('.tc-slide');
+    const sl=btn.closest('.tsk-card');
     const tipo=sl.dataset.tipo,idx=sl.dataset.idx,jobId=sl.dataset.jobId;
     if(tipo==='lembrete'){if(lembretesData[idx]){lembretesData[idx].feito=true;saveLembretesData();}}
     else if(tipo==='lista'){if(listasData[idx]){listasData[idx].feito=true;saveListasData();}}
@@ -5234,7 +5202,7 @@
     renderMonthTicker();
     showToast(t('toast.done'));
   }
-  /* ===== FIM CARROSSEL ===== */
+  /* ===== FIM TASK STACK ===== */
 
   function gerarProximosVencimentos(){
     const hoje=new Date(); hoje.setHours(0,0,0,0);
