@@ -316,67 +316,72 @@
   /* ===== TASK STACK ===== */
   #tasks-list{overflow:visible;padding:0;position:relative}
   .tsk-stack{position:relative;margin-bottom:16px}
+  /* card wrapper — no visual style, anchors behind-buttons and tsk-front */
   .tsk-card{
     position:absolute;left:50%;transform:translateX(-50%);
-    box-sizing:border-box;border-radius:20px;overflow:hidden;
+    box-sizing:border-box;height:108px;
+    cursor:pointer;will-change:top,width,opacity;
+    -webkit-tap-highlight-color:transparent;overflow:visible
+  }
+  /* front face — glass, slides on swipe */
+  .tsk-front{
+    position:relative;z-index:2;width:100%;height:100%;
+    border-radius:20px;overflow:hidden;
     background:rgba(255,255,255,.13);
     backdrop-filter:blur(22px) saturate(180%);
     -webkit-backdrop-filter:blur(22px) saturate(180%);
     border:1px solid rgba(255,255,255,.22);
-    box-shadow:0 8px 28px rgba(0,0,0,.22),0 2px 6px rgba(0,0,0,.12);
-    cursor:pointer;will-change:top,width,opacity;
-    -webkit-tap-highlight-color:transparent
+    box-shadow:0 4px 14px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.10);
+    will-change:transform;
+    transition:transform .3s cubic-bezier(.25,.1,.25,1)
   }
-  .tsk-body{display:flex;align-items:stretch;height:136px}
-  .tsk-photo-wrap{width:114px;flex:none;overflow:hidden}
+  .tsk-front.tsk-dragging{transition:none}
+  /* progressive depth shadows */
+  .tsk-card[data-depth="1"] .tsk-front{box-shadow:0 8px 24px rgba(0,0,0,.30),0 2px 8px rgba(0,0,0,.16)}
+  .tsk-card[data-depth="2"] .tsk-front{box-shadow:0 16px 40px rgba(0,0,0,.44),0 4px 14px rgba(0,0,0,.24)}
+  /* body */
+  .tsk-body{display:flex;align-items:flex-start;padding:10px 12px 10px 10px;gap:12px;height:100%;box-sizing:border-box}
+  /* photo — independent square */
+  .tsk-photo-wrap{
+    width:88px;flex:none;
+    border-radius:12px;overflow:hidden;
+    aspect-ratio:1
+  }
   .tsk-photo-wrap .client-avatar{
-    width:114px!important;height:136px!important;
-    border-radius:0!important;font-size:46px!important;
-    min-width:unset!important;background-size:cover!important;background-position:center!important
+    width:88px!important;height:88px!important;
+    border-radius:0!important;font-size:36px!important;
+    min-width:unset!important;background-size:cover!important;background-position:top center!important
   }
-  .tsk-content{flex:1;min-width:0;display:flex;flex-direction:column}
-  .tsk-row{
-    flex:1;display:grid;grid-template-columns:1fr 1fr;
-    padding:10px 14px 0;gap:10px;align-items:center
-  }
-  .tsk-row:last-child{padding-bottom:10px}
-  .tsk-col{display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0;overflow:hidden}
-  .tsk-col-r{border-left:1px solid rgba(255,255,255,.1);padding-left:10px}
-  .tsk-linked{display:flex;align-items:center;gap:5px}
-  .tsk-linked svg{flex:none;color:rgba(255,255,255,.45)}
-  .tsk-linked-inner{display:flex;flex-direction:column;gap:2px;min-width:0;overflow:hidden}
-  .tsk-big-name{
+  /* info column */
+  .tsk-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;padding-top:2px}
+  .tsk-title{
     font-size:var(--text-md,15px);font-weight:600;color:var(--ink);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2
   }
-  .tsk-code{
-    font-size:var(--text-lg);font-weight:700;color:#fff;
-    font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  .tsk-meta-row{display:flex;align-items:center;gap:6px;color:rgba(255,255,255,.8);min-width:0}
+  .tsk-meta-row svg{flex:none;opacity:.55}
+  .tsk-meta-text{font-size:var(--text-sm,13px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tsk-meta-sep{font-size:var(--text-sm,13px);color:rgba(255,255,255,.3);flex:none;margin:0 2px}
+  /* behind-card buttons — hidden at rest, revealed on swipe */
+  .tsk-btns-right,.tsk-btns-left{
+    position:absolute;top:0;bottom:0;z-index:1;
+    display:flex;align-items:stretch;
+    border-radius:20px;overflow:hidden;
+    opacity:0;pointer-events:none;
+    transition:opacity .12s ease
   }
-  .tsk-small-lbl{
-    font-size:8px;font-weight:700;text-transform:uppercase;
-    letter-spacing:.10em;color:rgba(255,255,255,.4);line-height:1
-  }
-  .tsk-sep{height:1px;background:rgba(255,255,255,.1);margin:0 14px}
-  .tsk-actions{
-    display:grid;grid-template-columns:repeat(3,1fr);
-    height:0;overflow:hidden;
-    background:linear-gradient(180deg,#C83505 0%,#FB6225 100%);
-    transition:height .3s cubic-bezier(.25,.1,.25,1);
-    gap:6px;padding:0 8px;align-items:center;box-sizing:border-box
-  }
-  .tsk-actions.open{height:48px}
-  .tsk-act-btn{
-    height:32px;border:none;border-radius:8px;
-    background:rgba(255,255,255,.18);color:#fff;
-    font-family:'Bebas Neue',sans-serif;
-    font-size:13px;letter-spacing:.06em;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;gap:5px;
+  .tsk-btns-right{right:0;width:55%;background:linear-gradient(135deg,#C83505,#FB6225)}
+  .tsk-btns-left{left:0;width:30%;background:linear-gradient(135deg,#3A5BF0,#2260C8)}
+  .tsk-btns-right.tsk-vis,.tsk-btns-left.tsk-vis{opacity:1;pointer-events:auto}
+  .tsk-swipe-btn{
+    flex:1;border:none;background:transparent;color:#fff;
+    font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
+    cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     -webkit-tap-highlight-color:transparent
   }
-  .tsk-act-btn:active{opacity:.65}
-  .tsk-act-btn svg{flex:none}
-  .tsk-act-done{background:rgba(255,255,255,.28)}
+  .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.2)}
+  .tsk-swipe-btn:active{opacity:.65}
+  .tsk-swipe-btn svg{flex:none}
   /* ===== FIM TASK STACK ===== */
 
   .card-head{display:flex;gap:11px;align-items:flex-start}
