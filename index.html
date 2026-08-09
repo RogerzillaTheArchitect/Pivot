@@ -547,10 +547,7 @@
           <div id="tasks-list"></div>
         </div>
 
-        <div id="dash-card-fluxo" class="u-hidden u-mt-22"></div>
-        <div id="dash-card-evolucao" class="u-hidden u-mt-22"></div>
-        <div id="dash-card-eficiencia" class="u-hidden u-mt-22"></div>
-        <div id="dash-card-geografico" class="u-hidden u-mt-22"></div>
+        <div id="dash-card-destaques" class="u-hidden u-mt-22"></div>
 
         <div class="empty u-hidden" id="hoje-empty">
           <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -596,11 +593,6 @@
           </div>
         </div>
 
-        <div class="rel-card-header" id="rel-anchor-fluxo"><span data-t="reports.cashFlow">Fluxo</span><span class="dash-card-toggle" data-dash-key="fluxo" onclick="toggleDashboardCard('fluxo')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="fluxo-rows" id="rel-fluxo-rows-subcategoria"></div>
-        </div>
-
         <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
         <div class="card ops-card rel-ops-card-sub">
           <section class="metric" id="ropm-horas">
@@ -641,32 +633,57 @@
           </section>
         </div>
 
-        <div class="rel-card-header" id="rel-anchor-evolucao"><span data-t="reports.evolution.title">Desempenho</span><span class="dash-card-toggle" data-dash-key="evolucao" onclick="toggleDashboardCard('evolucao')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="rel-split" id="rel-evolucao-grid"></div>
-        </div>
-
-        <div class="rel-card-header" id="rel-anchor-eficiencia"><span data-t="reports.profitability.title">Rentabilidade</span><span class="dash-card-toggle" data-dash-key="eficiencia" onclick="toggleDashboardCard('eficiencia')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body">
-          <div class="rel-split-subhead">
-            <div class="rel-split-subhead-cell l" data-t="reports.profitability.colRanking">Ranking hora</div>
-            <div class="rel-split-subhead-cell r" data-t="reports.profitability.colIndicators">Geral mensal</div>
-          </div>
-          <div class="rel-split" id="rel-rentabilidade-grid"></div>
-        </div>
-
-        <div class="rel-card-header" id="rel-anchor-geografico"><span data-t="reports.regional.title">Geográfico</span><span class="dash-card-toggle" data-dash-key="geografico" onclick="toggleDashboardCard('geografico')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
-        <div class="card rel-card rel-card-body rel-card-body-flush">
-          <div class="rel-table-wrap">
-            <table class="rel-table">
-              <thead><tr>
-                <th data-t="reports.regional.city">Cidade</th>
-                <th data-t="reports.regional.events">Eventos</th>
-                <th data-t="reports.regional.revenue">Receita</th>
-                <th data-t="reports.regional.ticket">Ticket Médio</th>
-              </tr></thead>
-              <tbody id="rel-mercado-tabela-body"></tbody>
-            </table>
+        <div class="rel-card-header" id="rel-anchor-destaques"><span>Destaques</span></div>
+        <div class="dest-card">
+          <div class="dest-grid">
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('maior-receita')">
+              <span class="dest-lbl">MAIOR RECEITA</span>
+              <span class="dest-name" id="dest-maior-receita-nome">—</span>
+              <span class="dest-val" id="dest-maior-receita-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('melhor-hora')">
+              <span class="dest-lbl">MELHOR POR HORA</span>
+              <span class="dest-name" id="dest-melhor-hora-nome">—</span>
+              <span class="dest-val" id="dest-melhor-hora-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('mais-trabalhos')">
+              <span class="dest-lbl">MAIS TRABALHOS</span>
+              <span class="dest-name" id="dest-mais-trabalhos-nome">—</span>
+              <span class="dest-val" id="dest-mais-trabalhos-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('maior-ticket')">
+              <span class="dest-lbl">MAIOR TICKET</span>
+              <span class="dest-name" id="dest-maior-ticket-nome">—</span>
+              <span class="dest-val" id="dest-maior-ticket-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('maior-despesa')">
+              <span class="dest-lbl">MAIOR DESPESA</span>
+              <span class="dest-name" id="dest-maior-despesa-nome">—</span>
+              <span class="dest-val" id="dest-maior-despesa-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('pior-hora')">
+              <span class="dest-lbl">PIOR POR HORA</span>
+              <span class="dest-name" id="dest-pior-hora-nome">—</span>
+              <span class="dest-val" id="dest-pior-hora-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('receita-regiao')">
+              <span class="dest-lbl">MAIOR RECEITA POR REGIÃO</span>
+              <span class="dest-name" id="dest-receita-regiao-nome">—</span>
+              <span class="dest-val" id="dest-receita-regiao-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
+            <div class="dest-subcard" onclick="abrirDestaqueDetalhe('trabalhos-regiao')">
+              <span class="dest-lbl">MAIS TRABALHOS POR REGIÃO</span>
+              <span class="dest-name" id="dest-trabalhos-regiao-nome">—</span>
+              <span class="dest-val" id="dest-trabalhos-regiao-val">—</span>
+              <span class="dest-arrow">→</span>
+            </div>
           </div>
         </div>
       </section>
@@ -7767,11 +7784,8 @@
     if(lblAnoNovo) lblAnoNovo.textContent=lbl.small;
 
     renderResumoFinanceiroRelatorios();
-    renderRelFluxoFinanceiro();
     renderRelOpBars(s);
-    renderRelEvolucaoMensal();
-    renderRelRentabilidade();
-    renderRelMercadoRegional();
+    renderDestaques();
     sincronizarTogglesDashboard();
   }
   /* ===== Personalizar Dashboard — cada card de Relatórios tem um toggle
@@ -7816,18 +7830,71 @@
     const cfg=perfilData.dashboardCards||{};
     const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro?'':'none';
     const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display=cfg.operacional?'':'none';
-    if(cfg.fluxo) renderRelFluxoFinanceiro();
-    if(cfg.evolucao) renderRelEvolucaoMensal();
-    if(cfg.eficiencia) renderRelRentabilidade();
-    if(cfg.geografico) renderRelMercadoRegional();
-    const fluxoWrap=document.getElementById('dash-card-fluxo');
-    if(fluxoWrap){ fluxoWrap.style.display=cfg.fluxo?'block':'none'; if(cfg.fluxo) clonarCardParaDashboard('rel-anchor-fluxo','dash-card-fluxo'); }
-    const evoWrap=document.getElementById('dash-card-evolucao');
-    if(evoWrap){ evoWrap.style.display=cfg.evolucao?'block':'none'; if(cfg.evolucao) clonarCardParaDashboard('rel-anchor-evolucao','dash-card-evolucao'); }
-    const efWrap=document.getElementById('dash-card-eficiencia');
-    if(efWrap){ efWrap.style.display=cfg.eficiencia?'block':'none'; if(cfg.eficiencia) clonarCardParaDashboard('rel-anchor-eficiencia','dash-card-eficiencia'); }
-    const geoWrap=document.getElementById('dash-card-geografico');
-    if(geoWrap){ geoWrap.style.display=cfg.geografico?'block':'none'; if(cfg.geografico) clonarCardParaDashboard('rel-anchor-geografico','dash-card-geografico'); }
+    renderDestaques();
+    const destWrap=document.getElementById('dash-card-destaques');
+    if(destWrap){ destWrap.style.display=cfg.destaques?'block':'none'; if(cfg.destaques) clonarCardParaDashboard('rel-anchor-destaques','dash-card-destaques'); }
+  }
+
+  function renderDestaques(){
+    const set=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v||'—'; };
+    const receitas=calcularReceitaPorSubcategoria();
+    const despesas=calcularGastosPorCategoria();
+    const rent=calcularRentabilidade();
+    const seg=calcularSegmentacaoFinanceira();
+    const regioes=calcularMercadoRegional();
+
+    // MAIOR RECEITA — categoria com mais receita
+    if(receitas.length){
+      set('dest-maior-receita-nome', receitas[0].label);
+      set('dest-maior-receita-val', fmtMoney(receitas[0].valor));
+    }
+    // MELHOR POR HORA — categoria com maior €/h
+    if(rent.length){
+      const top=rent[0];
+      set('dest-melhor-hora-nome', top.label);
+      set('dest-melhor-hora-val', fmtMoney(top.porHora)+'/h');
+    }
+    // MAIS TRABALHOS — categoria com mais projetos
+    if(seg.linhas&&seg.linhas.length){
+      const top=[...seg.linhas].sort((a,b)=>b.projetos-a.projetos)[0];
+      set('dest-mais-trabalhos-nome', top.label);
+      set('dest-mais-trabalhos-val', top.projetos+' trabalhos');
+    }
+    // MAIOR TICKET MÉDIO — categoria com maior ticket (receita/projetos)
+    if(seg.linhas&&seg.linhas.length){
+      const top=[...seg.linhas].filter(l=>l.projetos>0).sort((a,b)=>(b.valor/b.projetos)-(a.valor/a.projetos))[0];
+      if(top){
+        set('dest-maior-ticket-nome', top.label);
+        set('dest-maior-ticket-val', fmtMoney(top.valor/top.projetos));
+      }
+    }
+    // MAIOR DESPESA — categoria de gasto com maior valor
+    if(despesas.length){
+      set('dest-maior-despesa-nome', despesas[0].label);
+      set('dest-maior-despesa-val', fmtMoney(despesas[0].valor));
+    }
+    // PIOR POR HORA — categoria com menor €/h (último do ranking)
+    if(rent.length>1){
+      const bot=rent[rent.length-1];
+      set('dest-pior-hora-nome', bot.label);
+      set('dest-pior-hora-val', fmtMoney(bot.porHora)+'/h');
+    }
+    // MAIOR RECEITA POR REGIÃO
+    if(regioes.length){
+      set('dest-receita-regiao-nome', regioes[0].cidade);
+      set('dest-receita-regiao-val', fmtMoney(regioes[0].receita));
+    }
+    // MAIS TRABALHOS POR REGIÃO
+    if(regioes.length){
+      const top=[...regioes].sort((a,b)=>b.eventos-a.eventos)[0];
+      set('dest-trabalhos-regiao-nome', top.cidade);
+      set('dest-trabalhos-regiao-val', top.eventos+' trabalhos');
+    }
+  }
+  function abrirDestaqueDetalhe(tipo){
+    if(tipo==='maior-despesa') return abrirDespesas();
+    if(tipo==='maior-receita'||tipo==='maior-ticket'||tipo==='melhor-hora'||tipo==='pior-hora') return abrirReceitas();
+    if(tipo==='mais-trabalhos'||tipo==='receita-regiao'||tipo==='trabalhos-regiao') return go('historico');
   }
 
   /* ===== Evolução Mensal — período atual vs período anterior equivalente
