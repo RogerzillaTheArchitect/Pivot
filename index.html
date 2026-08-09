@@ -4787,7 +4787,13 @@
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
     if(!wrap) return;
-    const itens=gerarItensRadar().filter(it=>!_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:'')));
+    const _hoje=new Date(); _hoje.setHours(0,0,0,0);
+    const _limite=new Date(_hoje); _limite.setDate(_hoje.getDate()+14);
+    const itens=gerarItensRadar().filter(it=>{
+      if(_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''))) return false;
+      if(!it.dataISO) return true; /* sem data = item vencido, sempre inclui */
+      return new Date(it.dataISO+'T00:00:00')<=_limite;
+    });
     if(!itens.length){wrap.innerHTML='';return;}
     const svgPrev='<svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M6.5 1L1 7l5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
     const svgNext='<svg viewBox="0 0 8 14" width="8" height="14" fill="none"><path d="M1.5 1L7 7l-5.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -5073,39 +5079,65 @@
     const viewport=document.getElementById('tc-viewport');
     const track=document.getElementById('tc-track');
     if(!viewport||!track) return;
-    const slides=Array.from(track.querySelectorAll('.tc-slide'));
-    if(!slides.length) return;
-    const ACTIONS_H=48, GAP=16, MARGIN=56;
-    let current=0, startX=0, startY=0, dragging=false, pointerId=null, dragOffset=0, lastTap=0, tapTimer=0;
-
-    /* define largura dos slides baseada no viewport real */
+    const realSlides=Array.from(track.querySelectorAll('.tc-slide'));
+    const n=realSlides.length;
+    if(!n) return;
+    const ACTIONS_H=48, GAP=16;
     const vpW=viewport.offsetWidth||window.innerWidth;
+    /* MARGIN calculado para peek ≈ 50% de um card em cada lado:
+       peek = MARGIN-GAP = slideW/2  →  MARGIN = slideW/2+GAP = (vpW-2*MARGIN)/2+GAP
+       resolvendo: MARGIN = vpW/4 + GAP/2 */
+    const MARGIN=Math.round(vpW/4+GAP/2);
     const slideW=vpW-MARGIN*2;
-    slides.forEach(s=>{ s.style.width=slideW+'px'; });
+    realSlides.forEach(s=>{s.style.width=slideW+'px';});
+
+    /* loop infinito: clonar último (prepend) e primeiro (append) */
+    let allSlides=realSlides;
+    if(n>1){
+      const cLast=realSlides[n-1].cloneNode(true);
+      const cFirst=realSlides[0].cloneNode(true);
+      track.insertBefore(cLast,realSlides[0]);
+      track.appendChild(cFirst);
+      allSlides=Array.from(track.querySelectorAll('.tc-slide'));
+      allSlides.forEach(s=>{s.style.width=slideW+'px';});
+    }
+
+    /* virtual=0 → clone do último, virtual=1..n → reais, virtual=n+1 → clone do primeiro */
+    let virtual=n>1?1:0;
+    let startX=0,startY=0,dragging=false,pointerId=null,dragOffset=0,lastTap=0,tapTimer=0;
 
     const prevArrow=document.getElementById('tc-nav-prev');
     const nextArrow=document.getElementById('tc-nav-next');
 
+    const posFor=v=>MARGIN-v*(slideW+GAP);
+
     const updateOpacity=()=>{
-      slides.forEach((s,i)=>{
-        const active=i===current;
+      allSlides.forEach((s,i)=>{
+        const active=i===virtual;
         s.style.opacity=active?'1':'0.5';
         s.style.filter=active?'none':'brightness(0.6)';
         s.style.transition='opacity .35s ease,filter .35s ease';
       });
-      if(prevArrow) prevArrow.style.opacity=current===0?'0':'.16';
-      if(nextArrow) nextArrow.style.opacity=current===slides.length-1?'0':'.16';
+      /* loop infinito → setas sempre visíveis */
+      if(prevArrow) prevArrow.style.opacity=n>1?'.16':'0';
+      if(nextArrow) nextArrow.style.opacity=n>1?'.16':'0';
     };
 
-    const goTo=(idx,animate=true)=>{
-      const next=Math.max(0,Math.min(slides.length-1,idx));
-      /* z-index ANTES da animação — nunca deixa laranja aparecer sobre branco */
-      slides.forEach((s,i)=>{ s.style.zIndex=i===next?'2':'1'; });
-      current=next;
+    const goTo=(v,animate=true)=>{
+      virtual=v;
+      allSlides.forEach((s,i)=>{s.style.zIndex=i===v?'2':'1';});
       track.style.transition=animate?'transform .35s cubic-bezier(.25,.1,.25,1)':'none';
-      track.style.transform='translateX('+(MARGIN-current*(slideW+GAP))+'px)';
+      track.style.transform='translateX('+posFor(v)+'px)';
       updateOpacity();
     };
+
+    /* após transição: saltar de clone para real equivalente sem animação */
+    if(n>1){
+      track.addEventListener('transitionend',()=>{
+        if(virtual===0)   goTo(n,false);   /* clone do último → real último */
+        if(virtual===n+1) goTo(1,false);   /* clone do primeiro → real primeiro */
+      });
+    }
 
     const setOpen=(slide,open)=>{
       const lt=slide.querySelector('.tc-layer-t');
@@ -5114,13 +5146,13 @@
       slide.dataset.tcOpen=open?'1':'';
     };
 
-    goTo(0,false);
+    goTo(n>1?1:0,false);
 
     viewport.addEventListener('pointerdown',e=>{
       startX=e.clientX; startY=e.clientY;
       dragging=true; pointerId=e.pointerId; dragOffset=0;
       track.style.transition='none';
-      try{viewport.setPointerCapture(e.pointerId)}catch(err){}
+      try{viewport.setPointerCapture(e.pointerId);}catch(err){}
     });
 
     viewport.addEventListener('pointermove',e=>{
@@ -5129,8 +5161,7 @@
       const dy=e.clientY-startY;
       if(Math.abs(dy)>Math.abs(dx)+8) return; /* scroll vertical — ignorar */
       dragOffset=dx;
-      const base=MARGIN-current*(slideW+GAP);
-      track.style.transform='translateX('+(base+dx)+'px)';
+      track.style.transform='translateX('+(posFor(virtual)+dx)+'px)';
     });
 
     const fim=e=>{
@@ -5143,7 +5174,7 @@
           /* double tap → cancela timer, fecha ações, abre detalhe */
           clearTimeout(tapTimer);
           lastTap=0;
-          const sl=slides[current];
+          const sl=allSlides[virtual];
           if(sl){
             setOpen(sl,false);
             if(sl.dataset.solto==='true') abrirDetalheItemSolto(sl.dataset.tipo,sl.dataset.idx);
@@ -5153,13 +5184,13 @@
           lastTap=now;
           /* single tap → revela ações após 300ms (cancela se vier double tap) */
           tapTimer=setTimeout(()=>{
-            const sl=slides[current];
+            const sl=allSlides[virtual];
             if(sl) setOpen(sl,sl.dataset.tcOpen!=='1');
           },300);
         }
-      } else if(dragOffset<-THRESHOLD) goTo(current+1);
-      else if(dragOffset>THRESHOLD) goTo(current-1);
-      else goTo(current);
+      } else if(dragOffset<-THRESHOLD) goTo(virtual+1);
+      else if(dragOffset>THRESHOLD) goTo(virtual-1);
+      else goTo(virtual);
     };
     viewport.addEventListener('pointerup',fim);
     viewport.addEventListener('pointercancel',fim);
