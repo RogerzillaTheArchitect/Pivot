@@ -1367,16 +1367,17 @@
         <button class="btn primary u-w-full" id="cl-submit-btn" onclick="criarCliente()"><span data-t="wizard.createContact">Criar contacto →</span></button>
       </div>
 
-      <!-- ✅ TAREFA — unifica Tarefa/Lembrete/Lista de antes: Simples (título,
-           data, hora opcional, prioridade, trabalho, observações) e Checklist
-           (idem + itens) são só dois modos do mesmo formulário. -->
+      <!-- ✅ TAREFA — única forma, título + botão + para sub-itens opcionais. -->
       <div class="panel" data-panel="tarefa">
-        <div class="segmented">
-          <button class="on" onclick="setTarefaTipo(this,'simples')"><span class="nav-ico u-ico-15v ico-tarefa-sim"></span><span data-t="field.tasksSimple">Simples</span></button>
-          <button onclick="setTarefaTipo(this,'checklist')"><span class="nav-ico u-ico-15v ico-tarefa-chk"></span><span data-t="field.tasksChecklist">Checklist</span></button>
-        </div>
-        <div id="tarefa-simples">
-          <div class="field"><label data-t="field.taskTitle">Título</label><input id="ta-titulo" placeholder="O que precisa de ser feito?" data-t-placeholder="task.titlePlaceholder"></div>
+        <div>
+          <div class="field">
+            <label data-t="field.taskTitle">Título</label>
+            <div class="ta-titulo-row">
+              <input id="ta-titulo" placeholder="O que precisa de ser feito?" data-t-placeholder="task.titlePlaceholder">
+              <button class="btn soft ta-plus-btn" onclick="addTarefaItem()" title="Adicionar item">+</button>
+            </div>
+          </div>
+          <div id="ta-items"></div>
           <div class="field"><label data-t="field.date">Data</label><input type="date" id="ta-data"></div>
           <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ta-hora"></div>
           <div class="field">
@@ -1393,30 +1394,7 @@
           <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ta-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
           <div class="field u-hidden" id="ta-pessoas-field"><label>Pessoas associadas</label><div id="ta-pessoas-picker" class="pessoas-picker"></div></div>
         </div>
-        <div id="tarefa-checklist" class="u-hidden">
-          <div class="field"><label data-t="wizard.checklistTitle">Título da checklist</label><input id="ls-titulo" placeholder="Checklist de entrega" data-t-placeholder="explore.deliveryChecklist"></div>
-          <div id="ls-items"></div>
-          <div class="addlist-input">
-            <input id="ls-newitem" placeholder="Adicionar item…" data-t-placeholder="task.addItemPlaceholder" onkeydown="if(event.key==='Enter'){addListaItem();event.preventDefault();}">
-            <button class="btn soft" onclick="addListaItem()">+</button>
-          </div>
-          <div class="field u-mt-14"><label data-t="field.date">Data</label><input type="date" id="ls-data"></div>
-          <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ls-hora"></div>
-          <div class="field">
-            <label data-t="field.priority">Prioridade</label>
-            <div class="priority-picker" id="ls-prioridade-picker">
-              <div class="priority-opt on" data-val="Normal" onclick="selecionarPrioridade(this)"><span class="priority-dot normal"></span><span data-t="priority.normal">Normal</span></div>
-              <div class="priority-opt" data-val="Importante" onclick="selecionarPrioridade(this)"><span class="priority-dot media"></span><span data-t="priority.important">Importante</span></div>
-              <div class="priority-opt" data-val="Urgente" onclick="selecionarPrioridade(this)"><span class="priority-dot urgente"></span><span data-t="priority.urgent">Urgente</span></div>
-            </div>
-          </div>
-          <div class="field"><label data-t="task.linkToJob">Associar a trabalho</label>
-            <select id="ls-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
-          </div>
-          <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ls-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-          <div class="field u-hidden" id="ls-pessoas-field"><label>Pessoas associadas</label><div id="ls-pessoas-picker" class="pessoas-picker"></div></div>
-        </div>
-        <button class="btn primary u-w-full u-mt-14" onclick="salvarTarefaPanel()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
+        <button class="btn primary u-w-full u-mt-14" onclick="criarTarefa()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
       </div>
 
       <!-- 💰 RECEITA — tela exclusiva de captura rápida (a lista completa de
@@ -5137,6 +5115,14 @@
     else if(it.jobId) pessoasIds=(jobsData[it.jobId]&&jobsData[it.jobId].pessoas)||[];
     const pessoasHtml=buildPessoasHtml(pessoasIds);
     const infoClass='tsk-info'+(pessoasHtml?' has-people':'');
+    let progHtml='';
+    if(it.tipo==='tarefa'&&it.idx){
+      const tk=tarefasData[it.idx];
+      if(tk&&tk.itens&&tk.itens.length){
+        const feitos=tk.itens.filter(i=>i.feito).length;
+        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+feitos+'/'+tk.itens.length+'</span>';
+      }
+    }
     return '<div class="tsk-card" data-task'+
       ' data-stack-idx="'+idx+'"'+
       ' data-job-id="'+(it.jobId||'')+'"'+
@@ -5160,6 +5146,7 @@
             '<div class="tsk-meta-row">'+icoContact+'<span class="tsk-meta-text">'+(it.cliente?escapeHtml(it.cliente):'—')+'</span></div>'+
             '<div class="tsk-meta-row">'+icoCal+'<span class="tsk-meta-text">'+dataFmt+'</span>'+
               (it.hora?'<span class="tsk-meta-sep">·</span>'+icoClock+'<span class="tsk-meta-text">'+escapeHtml(it.hora)+'</span>':'')+
+              progHtml+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -5602,11 +5589,8 @@
     showPanel(name);
     if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); populateCategoriaWizardSelect(); }
     if(name==='tarefa'){
-      limparFormularioTarefa(); limparFormularioLista(); populateTrabalhoSelects();
-      const seg=document.querySelector('[data-panel="tarefa"] .segmented');
-      if(seg) setTarefaTipo(seg.querySelector('button'), 'simples');
+      limparFormularioTarefa(); populateTrabalhoSelects();
       renderPessoasPicker('ta-pessoas-picker');
-      renderPessoasPicker('ls-pessoas-picker');
     }
     if(name==='receita') limparFormularioReceitaPanel();
     if(name==='despesa') limparFormularioDespesaPanel();
@@ -15650,11 +15634,11 @@
     renderRecursosLista();
   }
   /* ✅ Tarefa */
-  function setTarefaTipo(el,tipo){
-    el.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    el.classList.add('on');
-    document.getElementById('tarefa-simples').style.display = tipo==='simples'?'block':'none';
-    document.getElementById('tarefa-checklist').style.display = tipo==='checklist'?'block':'none';
+  function addTarefaItem(){
+    const row=document.createElement('div'); row.className='addlist-row';
+    row.innerHTML='<span class="dots">⠿</span><input class="ta-item-input" placeholder="Item…" onkeydown="if(event.key===\'Enter\'){addTarefaItem();event.preventDefault();}"><span class="rm" onclick="this.parentElement.remove()">✕</span>';
+    document.getElementById('ta-items').appendChild(row);
+    row.querySelector('input').focus();
   }
   function selecionarPrioridade(el){
     el.parentElement.querySelectorAll('.priority-opt').forEach(o=>o.classList.remove('on'));
@@ -15663,10 +15647,7 @@
   /* Painel unificado (Tarefa) despacha pro modo ativo: Simples grava em
      tarefasData (criarTarefa), Checklist grava em listasData (criarLista,
      reaproveitada tal e qual do antigo painel "Lista"). */
-  function salvarTarefaPanel(){
-    const ehChecklist=document.getElementById('tarefa-checklist').style.display!=='none';
-    if(ehChecklist) criarLista(); else criarTarefa();
-  }
+  function salvarTarefaPanel(){ criarTarefa(); }
   function criarTarefa(){
     const titulo=document.getElementById('ta-titulo').value.trim();
     if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
@@ -15674,12 +15655,15 @@
     const jobId=document.getElementById('ta-trabalho').value||null;
     const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
     const pessoas=getPessoasSelecionadas('ta-pessoas-picker');
+    const itens=[...document.querySelectorAll('#ta-items .ta-item-input')]
+      .map(el=>el.value.trim()).filter(Boolean).map(tx=>({t:tx,feito:false}));
     tarefasData[id]={ id, tipo:'simples', titulo,
       data:document.getElementById('ta-data').value||null,
       hora:document.getElementById('ta-hora').value||null,
       prioridade: prioEl ? prioEl.dataset.val : t('task.priorityNormal'),
       jobId, notas:document.getElementById('ta-notas').value.trim(), feito:false,
-      pessoas:pessoas.length?pessoas:undefined };
+      pessoas:pessoas.length?pessoas:undefined,
+      itens:itens.length?itens:undefined };
     if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], 'Tarefa criada: '+titulo); saveJobsData(); }
     criarNotificacoesPessoas(pessoas,'tarefa',id,titulo);
     showToast(t('toast.taskPrefix')+titulo+t('toast.createdFemSuffix'));
@@ -15697,6 +15681,7 @@
     const sel=document.getElementById('ta-trabalho'); if(sel) sel.value='';
     const prioPicker=document.getElementById('ta-prioridade-picker');
     if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
+    const taItems=document.getElementById('ta-items'); if(taItems) taItems.innerHTML='';
   }
 
   /* 🔔 Lembrete — a criação foi unificada em Tarefa > Simples (o antigo
