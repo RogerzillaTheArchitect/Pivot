@@ -112,12 +112,12 @@
   span.bib-seal .sl-ic{width:12px;height:12px}
 
   /* ===== lista de contratos: masonry 2 colunas ===== */
-  .bib-grid{column-count:2;column-gap:10px;width:100%;box-sizing:border-box}
+  .bib-grid{display:flex;align-items:flex-start;gap:10px;width:100%}
+  .bib-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
   .bib-empty{font-size:var(--text-sm);color:var(--bib-ink-faint);margin-top:14px}
 
   /* ===== cards — placas do MESMO material do Header/Footer ===== */
   .bib-card{position:relative;display:flex;flex-direction:column;border-radius:var(--r);padding:14px 15px 12px;cursor:pointer;
-    break-inside:avoid;margin-bottom:10px;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid var(--bib-mat-line);color:var(--bib-ink);
@@ -131,16 +131,16 @@
   .bib-card .bc-desc{font-size:var(--text-12);color:var(--bib-ink-soft);line-height:1.45}
   .bib-card .bc-sep{border:none;border-top:1px solid var(--bib-mat-line);margin:10px 0 8px}
   .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);font-size:var(--text-11);color:var(--bib-ink-faint);font-weight:400}
-  .bib-card .bc-meta-l{display:flex;align-items:center;gap:5px;flex-wrap:wrap;min-width:0}
-  /* badges: idioma e blocos com mesma altura das span.bib-seal (22px) */
-  .bc-badge{display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 6px;box-sizing:border-box;
-    border-radius:4px;border:1px solid var(--bib-mat-line);font-size:10px;font-weight:600;letter-spacing:.03em;
-    white-space:nowrap;color:var(--bib-ink-soft);background:rgba(255,255,255,.03);flex:none}
-  .bc-badge.bc-lang{letter-spacing:.04em;font-size:9px}
-  .bc-badge.bc-blocks{padding:0 5px}
-  /* origem (span.bib-seal inline) redimensionado para alinhar com bc-badge */
-  .bib-card .bc-meta-l span.bib-seal{height:22px;padding:0 6px;gap:4px;font-size:10px;flex:none}
-  .bib-card .bc-meta-l span.bib-seal .sl-ic{width:11px;height:11px}
+  .bib-card .bc-meta-l{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;min-width:0;flex:1}
+  /* insígnias compactas — só o símbolo, sem moldura/cápsula/chip */
+  .bc-bdg{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;color:var(--bib-ink-soft)}
+  .bc-bdg>svg{width:100%;height:100%;display:block;overflow:visible}
+  .bc-bdg-lang{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
+    font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--bib-ink-soft);flex:none;line-height:1}
+  .bc-bdg.s-oficial{color:var(--bib-silver-ink)}
+  .bc-bdg.s-juridico{color:var(--bib-wine-ink)}
+  .bc-bdg.s-recomendados{color:var(--bib-brass-ink)}
+  .bc-bdg.s-comunidade{color:var(--bib-bronze-ink)}
   .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r-sm);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
   .bib-fav svg{width:var(--ico-md);height:var(--ico-md)}

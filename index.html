@@ -14894,15 +14894,22 @@
     if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tagsBusca||i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
     itens=ordenarBibItens(itens);
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
-    wrap.innerHTML=itens.map(i=>{
+    const _bdgIco={
+      oficial:'<svg viewBox="0 0 18 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 1L16 4.5V10C16 14.5 12.5 17.5 9 19C5.5 17.5 2 14.5 2 10V4.5L9 1Z"/><path d="M6.5 10.5L8.5 12.5L12.5 8.5"/></svg>',
+      juridico:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 14l2.5-6 2.5 6"/><path d="M1 14l2.5-6 2.5 6"/><path d="M5.5 18h7"/><path d="M9 2v16"/><path d="M2 5h2a7 7 0 0 0 5-2 7 7 0 0 0 5 2h2"/></svg>',
+      recomendados:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15H3a1 1 0 0 1-1-1v-5a1 1 0 0 1 1-1h2"/><path d="M9 5V3a1.5 1.5 0 0 0-1.5-1.5L5 9v6h9.25a1 1 0 0 0 1-.76L16.5 10a1 1 0 0 0-1-.76H11"/></svg>',
+      comunidade:'<svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="5" r="2.5"/><path d="M1 17c0-3.3 2.7-6 6-6s6 2.7 6 6"/><circle cx="14" cy="4.5" r="2"/><path d="M13.5 11a4 4 0 0 1 3.5 3.5"/></svg>'
+    };
+    const _mkCard=i=>{
       const fav=bibFavoritos.has(i.baseId);
       const catLabel=escapeHtml(i.categoriaAmigavel||i.profissao||'');
       const langTag=BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase();
-      const origBadge=bibAutorLinha(i);
-      const langBadge='<span class="bc-badge bc-lang">'+langTag+'</span>';
+      const origKey=i.origem||'oficial';
+      const origBadge='<span class="bc-bdg s-'+origKey+'">'+(_bdgIco[origKey]||_bdgIco.oficial)+'</span>';
+      const langBadge='<span class="bc-bdg-lang">'+langTag+'</span>';
       const hexN=i.numBlocos?String(i.numBlocos):'';
-      const hexFs=hexN.length<=1?6.5:hexN.length<=2?5.5:4.5;
-      const blocksBadge=hexN?'<span class="bc-badge bc-blocks"><svg viewBox="0 0 14 16" width="12" height="14" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 .5L13 4V12L7 15.5L1 12V4Z"/><text x="7" y="10.5" text-anchor="middle" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
+      const hexFs=hexN.length<=1?6:hexN.length<=2?5:4;
+      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9L13 2H5L1 9L5 16H13Z"/><text x="9" y="9" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
@@ -14911,7 +14918,10 @@
         '<hr class="bc-sep">'+
         '<div class="bc-meta"><div class="bc-meta-l">'+origBadge+langBadge+blocksBadge+'</div>'+favBtn+'</div>'+
       '</div>';
-    }).join('');
+    };
+    const _col1=[], _col2=[];
+    itens.forEach((it,idx)=>{(idx%2===0?_col1:_col2).push(_mkCard(it));});
+    wrap.innerHTML='<div class="bib-col">'+_col1.join('')+'</div><div class="bib-col">'+_col2.join('')+'</div>';
   }
   function toggleFavBiblioteca(id){
     if(bibFavoritos.has(id)){ bibFavoritos.delete(id); showToast(t('library.unfavorited')); }
