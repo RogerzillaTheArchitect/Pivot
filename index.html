@@ -5032,8 +5032,8 @@
     if(!pessoasIds||!pessoasIds.length) return '';
     const MAX=2, extra=pessoasIds.length-MAX;
     let html='';
-    pessoasIds.slice(0,MAX).forEach(uid=>{
-      const nome=nomeMembro(uid);
+    pessoasIds.slice(0,MAX).forEach(id=>{
+      const nome=id.includes('@')?id.split('@')[0]:nomeMembro(id);
       html+='<div class="tsk-av" title="'+escapeHtml(nome)+'">'+avatarInitials(nome)+'</div>';
     });
     if(extra>0) html+='<div class="tsk-av tsk-av-more">+'+extra+'</div>';
@@ -5061,10 +5061,16 @@
   let notificacoesData={};
   function saveNotificacoesData(){ savePersisted('pivot-notificacoesData',()=>notificacoesData); }
   async function loadNotificacoesData(){ await loadPersisted('pivot-notificacoesData',d=>{notificacoesData=d||{};}); }
-  function criarNotificacoesPessoas(pessoasIds, tipo, itemId, itemTitulo){
-    if(!pessoasIds||!pessoasIds.length) return;
+  function criarNotificacoesPessoas(pessoas, tipo, itemId, itemTitulo){
+    if(!pessoas||!pessoas.length) return;
     const deNome=perfilData.nome||currentUser?.email||'Alguém';
-    pessoasIds.forEach(uid=>{
+    pessoas.forEach(idOrEmail=>{
+      let uid=idOrEmail;
+      if(idOrEmail.includes('@')){
+        const m=(membrosEquipa||[]).find(x=>(x.email||'').toLowerCase()===idOrEmail);
+        if(!m) return;
+        uid=m.user_id;
+      }
       if(uid===currentUser?.id) return;
       const id='notif'+Date.now()+Math.random().toString(36).slice(2,6);
       notificacoesData[id]={id, tipo, itemId, itemTitulo, deNome, paraUserId:uid, estado:'pendente', criadoEm:new Date().toISOString()};
@@ -15659,8 +15665,7 @@
     const id='tar'+Date.now();
     const jobId=document.getElementById('ta-trabalho').value||null;
     const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
-    const pessoaEmails=[...document.querySelectorAll('#ta-pessoas-rows .ta-pessoa-email')].map(el=>el.value.trim().toLowerCase()).filter(Boolean);
-    const pessoas=pessoaEmails.map(email=>{const m=(membrosEquipa||[]).find(x=>(x.email||'').toLowerCase()===email);return m?m.user_id:null;}).filter(Boolean);
+    const pessoas=[...document.querySelectorAll('#ta-pessoas-rows .ta-pessoa-email')].map(el=>el.value.trim().toLowerCase()).filter(Boolean);
     const itens=[...document.querySelectorAll('#ta-items .ta-item-input')]
       .map(el=>el.value.trim()).filter(Boolean).map(tx=>({t:tx,feito:false}));
     tarefasData[id]={ id, tipo:'simples', titulo,
