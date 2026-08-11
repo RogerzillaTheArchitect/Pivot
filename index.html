@@ -464,10 +464,10 @@
         <div class="fin-card">
           <div class="fin-top">
             <svg class="fin-svg" viewBox="0 0 340 200">
-              <path class="fin-trk-out" d="M 40 195 A 130 130 0 0 1 170 65 A 130 130 0 0 1 300 195"/>
-              <path class="fin-trk-inn" d="M 80 195 A 90 90 0 0 1 170 105 A 90 90 0 0 1 260 195"/>
-              <path class="fin-arc-g" id="fin-arc-meta" d="M 40 195 A 130 130 0 0 1 170 65 A 130 130 0 0 1 300 195"/>
-              <path class="fin-arc-r" id="fin-arc-desp" d="M 80 195 A 90 90 0 0 1 170 105 A 90 90 0 0 1 260 195"/>
+              <circle class="fin-trk-out" cx="170" cy="195" r="130"/>
+              <circle class="fin-trk-inn" cx="170" cy="195" r="90"/>
+              <circle class="fin-arc-g" id="fin-arc-meta" cx="170" cy="195" r="130"/>
+              <circle class="fin-arc-r" id="fin-arc-desp" cx="170" cy="195" r="90"/>
               <text class="fin-tip-lbl fin-tip-g" id="fin-tip-meta" x="40" y="182" text-anchor="end"></text>
               <text class="fin-tip-lbl fin-tip-r" id="fin-tip-desp" x="80" y="182" text-anchor="end"></text>
             </svg>
@@ -481,18 +481,22 @@
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="fin-receitas">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--g"></span>
             </div>
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
               <span class="fin-blk-lbl">ESPERADO</span>
               <span class="fin-blk-val" id="fin-esperado">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--n"></span>
             </div>
             <div class="fin-block" onclick="abrirDespesas()">
               <span class="fin-blk-lbl">DESPESAS</span>
               <span class="fin-blk-val" id="fin-despesas">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--r"></span>
             </div>
             <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
               <span class="fin-blk-lbl">LIMITE</span>
               <span class="fin-blk-val" id="fin-limite">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--n"></span>
             </div>
           </div>
         </div>
@@ -575,18 +579,22 @@
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="rf-fin-receitas">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--g"></span>
             </div>
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
               <span class="fin-blk-lbl">ESPERADO</span>
               <span class="fin-blk-val" id="rf-fin-esperado">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--n"></span>
             </div>
             <div class="fin-block" onclick="abrirDespesas()">
               <span class="fin-blk-lbl">DESPESAS</span>
               <span class="fin-blk-val" id="rf-fin-despesas">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--r"></span>
             </div>
             <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
               <span class="fin-blk-lbl">LIMITE</span>
               <span class="fin-blk-val" id="rf-fin-limite">€ 0</span>
+              <span class="fin-blk-bar fin-blk-bar--n"></span>
             </div>
           </div>
         </div>
@@ -4332,11 +4340,12 @@
   function setFinArc(id, p, r){
     const el=document.getElementById(id);
     if(!el) return;
-    const cx=170, cy=195, halfC=Math.PI*r;
+    const cx=170, cy=195, halfC=Math.PI*r, C=2*halfC;
     const ratio=Math.max(0,p);
     const laps=Math.floor(ratio), frac=ratio-laps;
     const pct=(laps>0 && frac<0.001) ? 1 : frac;
-    el.style.strokeDasharray=pct>0.001 ? pct*halfC+' '+(halfC+1) : '0 '+(halfC+1);
+    const arcLen=pct*halfC;
+    el.style.strokeDasharray=arcLen>0.5 ? arcLen.toFixed(1)+' '+(C-arcLen).toFixed(1) : '0 '+C.toFixed(1);
     const lblEl=document.getElementById(id.replace('-arc-','-tip-'));
     if(lblEl){
       const tp=Math.min(Math.max(pct,0.01),0.99);
@@ -4354,8 +4363,8 @@
     const meta=mAtual.receita||1, teto=mAtual.gastos||1;
     /* novo fin-card: arcos semicirculares */
     const total=recebido+extras-custos;
-    const pMeta=Math.min(1,Math.max(0,meta>0?total/meta:0));
-    const pDesp=Math.min(1,Math.max(0,teto>0?custos/teto:0));
+    const pMeta=Math.max(0,meta>0?total/meta:0);
+    const pDesp=Math.max(0,teto>0?custos/teto:0);
     setFinArc('fin-arc-meta', pMeta, 130);
     setFinArc('fin-arc-desp', pDesp, 90);
     const fset=(id,v)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=v; };
@@ -4381,8 +4390,8 @@
     const somaMetas=meses.reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
     const meta=somaMetas.receita||1, teto=somaMetas.gastos||1;
     const total=recebido+extras-custos;
-    const pMeta=Math.min(1,Math.max(0,meta>0?total/meta:0));
-    const pDesp=Math.min(1,Math.max(0,teto>0?custos/teto:0));
+    const pMeta=Math.max(0,meta>0?total/meta:0);
+    const pDesp=Math.max(0,teto>0?custos/teto:0);
     setFinArc('rf-fin-arc-meta', pMeta, 130);
     setFinArc('rf-fin-arc-desp', pDesp, 90);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
