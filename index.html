@@ -5161,34 +5161,28 @@
       openItem=item;openSide=side;
     }
 
-    /* rotate front card to back when fully invisible — seamless infinite loop */
-    function rotateCards(){
-      let count=0;
-      while(scrollPos>=1){
+    /* after spring settles, silently move passed cards to back — same visual, infinite cycle */
+    function rotateAfterSettle(){
+      const numPassed=Math.round(scrollPos);
+      if(numPassed<=0) return;
+      if(openItem) snapClose(openItem,false);
+      for(let i=0;i<numPassed;i++){
         const gone=cards.shift();
         stack.appendChild(gone);
         cards.push(gone);
-        scrollPos-=1;
-        scrollPosStart=Math.max(0,scrollPosStart-1);
-        count++;
       }
-      return count;
+      scrollPos=0;scrollPosStart=0;
+      positionCardsAt(0);
     }
 
-    /* Spring-snap to nearest card; adjusts target if rotation happens mid-spring */
+    /* spring-snap to nearest card (original physics) */
     function springToCard(target){
       if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-      let tgt=Math.max(0,Math.round(target));
+      const tgt=Math.max(0,Math.min(n-1,Math.round(target)));
       const step=()=>{
         const dist=tgt-scrollPos;
-        if(Math.abs(dist)<0.005){
-          scrollPos=tgt;
-          tgt=Math.max(0,tgt-rotateCards());
-          positionCardsAt(scrollPos);
-          rafId=null;return;
-        }
+        if(Math.abs(dist)<0.005){scrollPos=tgt;positionCardsAt(tgt);rafId=null;rotateAfterSettle();return;}
         scrollPos+=dist*0.20;
-        tgt=Math.max(0,tgt-rotateCards());
         positionCardsAt(scrollPos);
         rafId=requestAnimationFrame(step);
       };
@@ -5196,9 +5190,15 @@
     }
 
     function momentumTick(){
-      scrollPos+=velScroll;
-      if(scrollPos<0){scrollPos=0;velScroll=0;}
-      rotateCards();
+      const next=scrollPos+velScroll;
+      if(next<=0||next>=n-1){
+        scrollPos=Math.max(0,Math.min(n-1,next));
+        positionCardsAt(scrollPos);
+        rafId=null;
+        springToCard(scrollPos);
+        return;
+      }
+      scrollPos=next;
       positionCardsAt(scrollPos);
       velScroll*=0.93;
       if(Math.abs(velScroll)<0.005){rafId=null;springToCard(scrollPos);return;}
@@ -5236,8 +5236,7 @@
       if(dragAxis==='v'){
         if(openItem) snapClose(openItem,false);
         /* drag up = advance (startY - e.clientY > 0), drag down = go back */
-        scrollPos=Math.max(0,scrollPosStart+(startY-e.clientY)/CARD_PX);
-        rotateCards();
+        scrollPos=Math.max(0,Math.min(n-1,scrollPosStart+(startY-e.clientY)/CARD_PX));
         positionCardsAt(scrollPos);
         const dt=e.timeStamp-prevT;
         if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
