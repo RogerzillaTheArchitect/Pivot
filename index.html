@@ -5160,23 +5160,26 @@
       openItem=item;openSide=side;
     }
 
-    /* after spring settles, advance ringOffset — no DOM mutation, no card loss */
-    function rotateAfterSettle(){
-      const numPassed=Math.round(scrollPos);
-      if(numPassed<=0) return;
+    /* advance ring by 1 — keeps scrollPos in [0,1) so bc never collapses */
+    function rotateOne(){
       if(openItem) snapClose(openItem,false);
-      ringOffset=(ringOffset+numPassed)%n;
-      scrollPos=0;scrollPosStart=0;
-      positionCardsAt(0);
+      ringOffset=(ringOffset+1)%n;
+      scrollPos-=1;
+      scrollPosStart-=1;
     }
 
-    /* spring-snap to nearest card (original physics) */
+    /* spring-snap to 0 or 1; if snapping to 1, rotateOne makes it invisible then shows at 0 */
     function springToCard(target){
       if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-      const tgt=Math.max(0,Math.min(n-1,Math.round(target)));
+      const tgt=Math.round(target)<=0?0:1;   /* only snap to 0 or 1 — ring keeps the rest */
       const step=()=>{
         const dist=tgt-scrollPos;
-        if(Math.abs(dist)<0.005){scrollPos=tgt;positionCardsAt(tgt);rafId=null;rotateAfterSettle();return;}
+        if(Math.abs(dist)<0.005){
+          scrollPos=tgt;
+          positionCardsAt(scrollPos);
+          if(tgt===1){rotateOne();positionCardsAt(0);}
+          rafId=null;return;
+        }
         scrollPos+=dist*0.20;
         positionCardsAt(scrollPos);
         rafId=requestAnimationFrame(step);
@@ -5185,15 +5188,10 @@
     }
 
     function momentumTick(){
-      const next=scrollPos+velScroll;
-      if(next<=0||next>=n-1){
-        scrollPos=Math.max(0,Math.min(n-1,next));
-        positionCardsAt(scrollPos);
-        rafId=null;
-        springToCard(scrollPos);
-        return;
-      }
-      scrollPos=next;
+      scrollPos+=velScroll;
+      if(scrollPos<0){scrollPos=0;velScroll=0;positionCardsAt(0);rafId=null;springToCard(0);return;}
+      /* rotate incrementally — bc stays stable, no layout collapse */
+      while(scrollPos>=1) rotateOne();
       positionCardsAt(scrollPos);
       velScroll*=0.93;
       if(Math.abs(velScroll)<0.005){rafId=null;springToCard(scrollPos);return;}
@@ -5230,8 +5228,8 @@
       }
       if(dragAxis==='v'){
         if(openItem) snapClose(openItem,false);
-        /* drag up = advance (startY - e.clientY > 0), drag down = go back */
-        scrollPos=Math.max(0,Math.min(n-1,scrollPosStart+(startY-e.clientY)/CARD_PX));
+        scrollPos=Math.max(0,scrollPosStart+(startY-e.clientY)/CARD_PX);
+        while(scrollPos>=1) rotateOne();
         positionCardsAt(scrollPos);
         const dt=e.timeStamp-prevT;
         if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
