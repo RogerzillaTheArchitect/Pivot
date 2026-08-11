@@ -5229,10 +5229,10 @@
       if(dragAxis==='v'){
         if(openItem) snapClose(openItem,false);
         /* cap at 1 — one card per gesture */
-        scrollPos=Math.max(0,Math.min(1,scrollPosStart+(startY-e.clientY)/CARD_PX));
+        scrollPos=Math.max(0,Math.min(1,scrollPosStart+(e.clientY-startY)/CARD_PX));
         positionCardsAt(scrollPos);
         const dt=e.timeStamp-prevT;
-        if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
+        if(dt>0) velScroll=(e.clientY-prevY)/dt/CARD_PX*16;
         prevY=e.clientY;prevT=e.timeStamp;
       } else if(dragAxis==='h'){
         if(!dragItem) return;
