@@ -315,36 +315,29 @@
 
   /* ===== TASK STACK ===== */
   #tasks-list{overflow:visible;padding:0;position:relative}
-  .tsk-stack{position:relative;margin-bottom:16px}
-  /* card wrapper — no visual style, anchors behind-buttons and tsk-front */
-  .tsk-card{
-    position:absolute;left:50%;transform:translateX(-50%);
-    box-sizing:border-box;height:108px;
-    cursor:pointer;will-change:top,width,opacity;
-    -webkit-tap-highlight-color:transparent;overflow:visible
-  }
-  /* front face — opaque dark card with subtle glass border */
+  /* scroll viewport — fixed-height window, clips the scrollable list */
+  .tsk-stack{position:relative;overflow:hidden;height:156px;margin-bottom:16px}
+  /* scrollable list — JS controls translateY */
+  .tsk-list{position:absolute;top:0;left:0;right:0;will-change:transform}
+  /* card row — natural flow, no absolute positioning */
+  .tsk-card{position:relative;height:108px;margin-bottom:8px;-webkit-tap-highlight-color:transparent}
+  /* front face — black glass */
   .tsk-front{
-    position:relative;z-index:2;width:100%;height:100%;
+    position:absolute;left:0;top:0;right:0;bottom:0;z-index:2;
     border-radius:20px;overflow:hidden;
-    background:var(--card,#1e2028);
+    background:rgba(18,20,28,.82);
+    backdrop-filter:blur(20px) saturate(160%);
+    -webkit-backdrop-filter:blur(20px) saturate(160%);
     border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 4px 14px rgba(0,0,0,.18),0 1px 4px rgba(0,0,0,.10);
+    box-shadow:0 4px 16px rgba(0,0,0,.32),0 1px 4px rgba(0,0,0,.16);
     will-change:transform;
     transition:transform .3s cubic-bezier(.25,.1,.25,1)
   }
   .tsk-front.tsk-dragging{transition:none}
-  /* progressive depth shadows */
-  .tsk-card[data-depth="1"] .tsk-front{box-shadow:0 8px 24px rgba(0,0,0,.30),0 2px 8px rgba(0,0,0,.16)}
-  .tsk-card[data-depth="2"] .tsk-front{box-shadow:0 16px 40px rgba(0,0,0,.44),0 4px 14px rgba(0,0,0,.24)}
   /* body */
   .tsk-body{display:flex;align-items:flex-start;padding:10px 12px 10px 10px;gap:12px;height:100%;box-sizing:border-box}
-  /* photo — independent square */
-  .tsk-photo-wrap{
-    width:88px;flex:none;
-    border-radius:12px;overflow:hidden;
-    aspect-ratio:1
-  }
+  /* photo */
+  .tsk-photo-wrap{width:88px;flex:none;border-radius:12px;overflow:hidden;aspect-ratio:1}
   .tsk-photo-wrap .client-avatar{
     width:88px!important;height:88px!important;
     border-radius:0!important;font-size:36px!important;
@@ -360,26 +353,41 @@
   .tsk-meta-row svg{flex:none;opacity:.55}
   .tsk-meta-text{font-size:var(--text-sm,13px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tsk-meta-sep{font-size:var(--text-sm,13px);color:rgba(255,255,255,.3);flex:none;margin:0 2px}
-  /* behind-card buttons — hidden at rest, revealed on swipe */
+  /* side buttons — white glass, visually integrated with card (no border on the joining edge) */
   .tsk-btns-right,.tsk-btns-left{
     position:absolute;top:0;bottom:0;z-index:1;
     display:flex;align-items:stretch;
-    border-radius:20px;overflow:hidden;
     opacity:0;pointer-events:none;
     transition:opacity .12s ease
   }
-  .tsk-btns-right{right:0;width:55%;background:linear-gradient(135deg,#C83505,#FB6225)}
-  .tsk-btns-left{left:0;width:30%;background:linear-gradient(135deg,#3A5BF0,#2260C8)}
+  /* right: flat left edge (joins card), rounded right edge */
+  .tsk-btns-right{
+    right:0;width:56%;
+    border-radius:0 20px 20px 0;overflow:hidden;
+    background:rgba(255,255,255,.07);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border:1px solid rgba(255,255,255,.13);border-left:none
+  }
+  /* left: rounded left edge, flat right edge (joins card) */
+  .tsk-btns-left{
+    left:0;width:31%;
+    border-radius:20px 0 0 20px;overflow:hidden;
+    background:rgba(255,255,255,.07);
+    backdrop-filter:blur(14px) saturate(130%);
+    -webkit-backdrop-filter:blur(14px) saturate(130%);
+    border:1px solid rgba(255,255,255,.13);border-right:none
+  }
   .tsk-btns-right.tsk-vis,.tsk-btns-left.tsk-vis{opacity:1;pointer-events:auto}
   .tsk-swipe-btn{
-    flex:1;border:none;background:transparent;color:#fff;
+    flex:1;border:none;background:transparent;color:rgba(255,255,255,.85);
     font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
     cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     -webkit-tap-highlight-color:transparent
   }
-  .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.2)}
-  .tsk-swipe-btn:active{opacity:.65}
-  .tsk-swipe-btn svg{flex:none}
+  .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.14)}
+  .tsk-swipe-btn:active{opacity:.55}
+  .tsk-swipe-btn svg{flex:none;opacity:.65}
   /* ===== FIM TASK STACK ===== */
 
   .card-head{display:flex;gap:11px;align-items:flex-start}
