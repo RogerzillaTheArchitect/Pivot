@@ -395,6 +395,20 @@
   .job-people{display:flex;align-items:center;margin-top:6px}
   .job-people .tsk-av{width:20px;height:20px;font-size:7.5px;border-width:1.5px;margin-left:-5px}
   .job-people .tsk-av:first-child{margin-left:0}
+  /* título + botão + da tarefa unificada */
+  .ta-titulo-row{display:flex;gap:8px;align-items:center}
+  .ta-titulo-row input{flex:1;min-width:0}
+  .ta-plus-btn{flex:none;padding:0 14px;height:38px;font-size:22px;font-weight:300;line-height:1;min-width:0}
+  /* linhas de sub-item da tarefa */
+  #ta-items .addlist-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  #ta-items .addlist-row:last-child{border-bottom:none}
+  #ta-items .ta-item-input{flex:1;border:none;background:transparent;color:var(--ink);font-size:var(--text-sm);padding:0;outline:none;font-family:inherit}
+  #ta-items .ta-item-input::placeholder{color:var(--ink-soft)}
+  #ta-items .dots{color:var(--ink-soft);opacity:.4;font-size:14px;cursor:grab}
+  #ta-items .rm{color:var(--ink-soft);opacity:.5;cursor:pointer;font-size:13px;padding:0 2px;line-height:1;flex:none}
+  #ta-items .rm:hover{opacity:1}
+  /* progresso de itens no card */
+  .tsk-prog{font-size:10.5px;color:rgba(255,255,255,.55);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
   /* people picker no formulário */
   .pessoas-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
   .pessoa-chip{
