@@ -5087,135 +5087,104 @@
     const cards=Array.from(stack.querySelectorAll('.tsk-card'));
     const n=cards.length;
     if(!n) return;
-    const CARD_H=108,STRIP_H=24,MAX_BACK=2,W_STEP=0.08,CARD_PX=STRIP_H;
-
-    let scrollPos=0,scrollPosStart=0,velScroll=0,rafId=null;
-    let ringOffset=0;
+    const CARD_H=108,STRIP_H=24,MAX_BACK=2,W_STEP=0.08;
+    let ringOffset=0,animating=false;
     let dragging=false,dragAxis=null,pointerId=null;
-    let startX=0,startY=0,prevY=0,prevT=0;
-    let openItem=null,openSide=null;
-    let dragItem=null,dragStartOffset=0;
+    let startX=0,startY=0,swipedOpen=false;
 
-    /* Continuous fractional positioning — scrollPos is a float [0, n-1] */
-    function positionCardsAt(pos){
-      const p=Math.max(0,Math.min(n-1,pos));
-      const bc=Math.max(0,Math.min(MAX_BACK,n-1-p));
-      const containerH=CARD_H+STRIP_H*bc;
-      const frontTop=bc*STRIP_H;
-      stack.style.transition='none';
+    function cardAt(i){return cards[(i+ringOffset)%n];}
+    function getFront(){return cardAt(0);}
+
+    function positionCards(animate){
+      const backCount=Math.min(n-1,MAX_BACK);
+      const containerH=CARD_H+STRIP_H*backCount;
+      const tr=animate?'top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease':'none';
+      stack.style.transition=animate?'height .4s cubic-bezier(.25,.1,.25,1)':'none';
       stack.style.height=containerH+'px';
       for(let i=0;i<n;i++){
-        const card=cards[(i+ringOffset)%n];
-        const depth=i-p;
-        card.dataset.depth=String(Math.max(0,Math.round(depth)));
-        card.style.transition='none';
-        if(depth<0){
-          const t=Math.max(0,1+depth);
-          card.style.opacity=String(t);
-          card.style.top=(frontTop+(1-t)*(containerH+20-frontTop))+'px';
-          card.style.width='100%';
-          card.style.zIndex=String(n+1);
-          card.style.pointerEvents='none';
-          continue;
-        }
-        if(depth>MAX_BACK){
-          card.style.opacity='0';
-          card.style.top='0';
+        const card=cardAt(i);
+        card.style.transition=tr;
+        if(i>MAX_BACK){
+          card.style.opacity='0';card.style.pointerEvents='none';
+          card.style.zIndex='1';card.style.top='0px';
           card.style.width=((1-W_STEP*MAX_BACK)*100)+'%';
-          card.style.zIndex='1';
-          card.style.pointerEvents='none';
           continue;
         }
-        card.style.zIndex=String(n-Math.round(depth));
-        card.style.pointerEvents=Math.round(depth)<=1?'auto':'none';
-        card.style.top=((bc-depth)*STRIP_H)+'px';
-        card.style.width=((1-W_STEP*depth)*100)+'%';
-        card.style.opacity=String(Math.max(0.82,1-0.07*depth));
-      }
-    }
-
-    function snapClose(item,animate){
-      if(!item) return;
-      const front=item.querySelector('.tsk-front');
-      if(front){
-        front.classList.remove('tsk-dragging');
-        front.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';
-        front.style.transform='translateX(0)';
-      }
-      item.querySelector('.tsk-actions').classList.remove('tsk-vis');
-      if(openItem===item){openItem=null;openSide=null;}
-    }
-
-    function snapOpen(item,side){
-      if(openItem&&openItem!==item) snapClose(openItem,false);
-      const front=item.querySelector('.tsk-front');
-      const cardW=item.offsetWidth;
-      if(front){
-        front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';
-        front.style.transform=side==='right'
-          ?'translateX(-'+Math.round(cardW*.55)+'px)'
-          :'translateX('+Math.round(cardW*.30)+'px)';
-      }
-      item.querySelector('.tsk-actions').classList.add('tsk-vis');
-      openItem=item;openSide=side;
-    }
-
-    /* advance ring by 1 — keeps scrollPos in [0,1) so bc never collapses */
-    function rotateOne(){
-      if(openItem) snapClose(openItem,false);
-      ringOffset=(ringOffset+1)%n;
-      scrollPos-=1;
-      scrollPosStart-=1;
-    }
-
-    /* spring-snap to 0 or 1; if snapping to 1, rotateOne makes it invisible then shows at 0 */
-    function springToCard(target){
-      if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-      const tgt=Math.round(target)<=0?0:1;   /* only snap to 0 or 1 — ring keeps the rest */
-      const step=()=>{
-        const dist=tgt-scrollPos;
-        if(Math.abs(dist)<0.005){
-          scrollPos=tgt;
-          positionCardsAt(scrollPos);
-          if(tgt===1){rotateOne();positionCardsAt(0);}
-          rafId=null;return;
+        card.style.zIndex=String(n-i);
+        card.style.pointerEvents=i<=1?'auto':'none';
+        if(i===0){
+          card.style.top=STRIP_H*backCount+'px';card.style.width='100%';card.style.opacity='1';
+        } else {
+          card.style.top=STRIP_H*(backCount-i)+'px';
+          card.style.width=((1-W_STEP*i)*100)+'%';
+          card.style.opacity=String(Math.max(0.82,1-0.07*i));
         }
-        scrollPos+=dist*0.20;
-        positionCardsAt(scrollPos);
-        rafId=requestAnimationFrame(step);
-      };
-      rafId=requestAnimationFrame(step);
+      }
     }
 
-    function momentumTick(){
-      scrollPos+=velScroll;
-      if(scrollPos<0){scrollPos=0;velScroll=0;positionCardsAt(0);rafId=null;springToCard(0);return;}
-      /* rotate incrementally — bc stays stable, no layout collapse */
-      while(scrollPos>=1) rotateOne();
-      positionCardsAt(scrollPos);
-      velScroll*=0.93;
-      if(Math.abs(velScroll)<0.005){rafId=null;springToCard(scrollPos);return;}
-      rafId=requestAnimationFrame(momentumTick);
+    function snapClose(animate){
+      const front=getFront();if(!front) return;
+      const f=front.querySelector('.tsk-front');
+      if(f){f.classList.remove('tsk-dragging');f.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';f.style.transform='translateX(0)';}
+      const act=front.querySelector('.tsk-actions');
+      if(act) act.classList.remove('tsk-vis');
+      swipedOpen=false;
+    }
+
+    function advance(){
+      if(animating||n<=1) return;
+      animating=true;snapClose(false);
+      const oldFront=cardAt(0);
+      const backCount=Math.min(n-1,MAX_BACK);
+      const containerH=CARD_H+STRIP_H*backCount;
+      oldFront.style.transition='top .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease';
+      oldFront.style.top=(containerH+20)+'px';
+      oldFront.style.opacity='0';oldFront.style.zIndex='0';
+      ringOffset=(ringOffset+1)%n;
+      const tr='top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease';
+      stack.style.height=containerH+'px';
+      for(let i=0;i<n;i++){
+        const card=cardAt(i);if(card===oldFront) continue;
+        card.style.transition=tr;
+        if(i>MAX_BACK){card.style.opacity='0';card.style.pointerEvents='none';card.style.zIndex='1';card.style.top='0px';card.style.width=((1-W_STEP*MAX_BACK)*100)+'%';continue;}
+        card.style.zIndex=String(n-i);card.style.pointerEvents=i<=1?'auto':'none';
+        if(i===0){card.style.top=STRIP_H*backCount+'px';card.style.width='100%';card.style.opacity='1';}
+        else{card.style.top=STRIP_H*(backCount-i)+'px';card.style.width=((1-W_STEP*i)*100)+'%';card.style.opacity=String(Math.max(0.82,1-0.07*i));}
+      }
+      setTimeout(()=>{
+        oldFront.style.transition='none';oldFront.style.top='0px';oldFront.style.opacity='0';
+        positionCards(false);animating=false;
+      },420);
+    }
+
+    function goBack(){
+      if(animating||n<=1) return;
+      animating=true;snapClose(false);
+      ringOffset=(ringOffset-1+n)%n;
+      const newFront=cardAt(0);
+      const backCount=Math.min(n-1,MAX_BACK);
+      const containerH=CARD_H+STRIP_H*backCount;
+      newFront.style.transition='none';newFront.style.top=(containerH+20)+'px';newFront.style.opacity='0';
+      newFront.getBoundingClientRect();
+      positionCards(true);
+      setTimeout(()=>{animating=false;},420);
     }
 
     document.addEventListener('pointerdown',function(e){
-      if(!openItem) return;
-      if(!openItem.contains(e.target)) snapClose(openItem,true);
+      if(!swipedOpen) return;
+      const fc=getFront();
+      if(fc&&!fc.contains(e.target)) snapClose(true);
     },{passive:true});
 
     stack.addEventListener('pointerdown',e=>{
-      if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+      if(animating) return;
+      const card=e.target.closest('.tsk-card');
+      if(!card) return;
+      let vi=-1;for(let i=0;i<n;i++){if(cardAt(i)===card){vi=i;break;}}
+      if(vi>0){advance();return;}
+      if(vi<0) return;
       dragging=true;dragAxis=null;pointerId=e.pointerId;
       startX=e.clientX;startY=e.clientY;
-      prevY=e.clientY;prevT=e.timeStamp;velScroll=0;
-      scrollPosStart=scrollPos;
-      dragItem=e.target.closest('.tsk-card');
-      if(dragItem&&openItem===dragItem){
-        const cardW=dragItem.offsetWidth;
-        dragStartOffset=openSide==='right'?-Math.round(cardW*.55):Math.round(cardW*.30);
-      } else {
-        dragStartOffset=0;
-      }
       try{stack.setPointerCapture(e.pointerId);}catch(err){}
     });
 
@@ -5226,22 +5195,12 @@
         if(Math.abs(dx)>12||Math.abs(dy)>12) dragAxis=Math.abs(dx)>Math.abs(dy)*1.8?'h':'v';
         else return;
       }
-      if(dragAxis==='v'){
-        if(openItem) snapClose(openItem,false);
-        /* cap at 1 — one card per gesture */
-        scrollPos=Math.max(0,Math.min(1,scrollPosStart+(e.clientY-startY)/CARD_PX));
-        positionCardsAt(scrollPos);
-        const dt=e.timeStamp-prevT;
-        if(dt>0) velScroll=(e.clientY-prevY)/dt/CARD_PX*16;
-        prevY=e.clientY;prevT=e.timeStamp;
-      } else if(dragAxis==='h'){
-        if(!dragItem) return;
-        const front=dragItem.querySelector('.tsk-front');
+      if(dragAxis==='h'){
+        const card=getFront();const front=card&&card.querySelector('.tsk-front');
         if(!front) return;
-        const tx=dragStartOffset+dx;
-        front.classList.add('tsk-dragging');
-        front.style.transform='translateX('+tx+'px)';
-        dragItem.querySelector('.tsk-actions').classList.toggle('tsk-vis',Math.abs(tx)>8);
+        front.classList.add('tsk-dragging');front.style.transform='translateX('+dx+'px)';
+        const act=card.querySelector('.tsk-actions');
+        if(act) act.classList.toggle('tsk-vis',Math.abs(dx)>8);
       }
     });
 
@@ -5249,39 +5208,29 @@
       if(!dragging||e.pointerId!==pointerId) return;
       dragging=false;
       const dx=e.clientX-startX,dy=e.clientY-startY;
-      if(dragAxis==='v'){
-        /* advance if dragged past 40% or fast flick upward */
-        springToCard(scrollPos>=0.4||velScroll>0.35?1:0);
-      } else if(dragAxis==='h'){
-        if(!dragItem){dragAxis=null;return;}
-        const front=dragItem.querySelector('.tsk-front');
+      const card=getFront();
+      if(dragAxis==='h'){
+        const front=card&&card.querySelector('.tsk-front');
         if(front) front.classList.remove('tsk-dragging');
-        /* 3-state machine: one gesture = one transition, no accumulation */
-        const startState=openItem===dragItem?openSide:null;
-        const THRESH=50;
-        if(!startState){
-          if(dx<-THRESH) snapOpen(dragItem,'right');
-          else if(dx>THRESH) snapOpen(dragItem,'left');
-          else snapClose(dragItem,true);
-        } else if(startState==='right'){
-          if(dx>THRESH) snapClose(dragItem,true);
-          else snapOpen(dragItem,'right');
-        } else if(startState==='left'){
-          if(dx<-THRESH) snapClose(dragItem,true);
-          else snapOpen(dragItem,'left');
-        }
+        const cardW=card?card.offsetWidth:300;
+        const snapR=Math.round(cardW*0.55),snapL=Math.round(cardW*0.30);
+        if(dx<-60){
+          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX(-'+snapR+'px)';}
+          const act=card&&card.querySelector('.tsk-actions');if(act) act.classList.add('tsk-vis');
+          swipedOpen=true;
+        } else if(dx>60){
+          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX('+snapL+'px)';}
+          const act=card&&card.querySelector('.tsk-actions');if(act) act.classList.add('tsk-vis');
+          swipedOpen=true;
+        } else {snapClose(true);}
+      } else if(dragAxis==='v'){
+        if(dy>50) advance();
+        else if(dy<-50) goBack();
       } else if(Math.abs(dx)<8&&Math.abs(dy)<8){
-        /* tap */
-        if(openItem){snapClose(openItem,true);}
-        else if(dragItem){
-          let vi=-1;for(let i=0;i<n;i++){if(cards[(i+ringOffset)%n]===dragItem){vi=i;break;}}
-          const tappedDepth=vi-scrollPos;
-          if(tappedDepth>0.3){
-            springToCard(vi);
-          } else {
-            if(dragItem.dataset.solto==='true') abrirDetalheItemSolto(dragItem.dataset.tipo,dragItem.dataset.idx);
-            else openJob(dragItem.dataset.jobId);
-          }
+        if(swipedOpen){snapClose(true);return;}
+        if(card){
+          if(card.dataset.solto==='true') abrirDetalheItemSolto(card.dataset.tipo,card.dataset.idx);
+          else openJob(card.dataset.jobId);
         }
       }
       dragAxis=null;
@@ -5289,17 +5238,14 @@
 
     stack.addEventListener('pointercancel',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
-      dragging=false;
-      const axis=dragAxis;
-      dragAxis=null;
-      if(axis==='h'&&dragItem) snapClose(dragItem,true);
-      velScroll=0;
+      dragging=false;dragAxis=null;snapClose(true);
     });
 
-    /* block page scroll for all touches inside the stack */
-    stack.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
+    stack.addEventListener('touchmove',e=>{
+      const fc=getFront();if(fc&&fc.contains(e.target)) e.preventDefault();
+    },{passive:false});
 
-    positionCardsAt(0);
+    positionCards(false);
   }
 
   function tcEditar(btn){
