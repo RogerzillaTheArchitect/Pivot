@@ -5090,6 +5090,7 @@
     const CARD_H=108,STRIP_H=24,MAX_BACK=2,W_STEP=0.08,CARD_PX=STRIP_H;
 
     let scrollPos=0,scrollPosStart=0,velScroll=0,rafId=null;
+    let ringOffset=0;
     let dragging=false,dragAxis=null,pointerId=null;
     let startX=0,startY=0,prevY=0,prevT=0;
     let openItem=null,openSide=null;
@@ -5098,25 +5099,24 @@
     /* Continuous fractional positioning — scrollPos is a float [0, n-1] */
     function positionCardsAt(pos){
       const p=Math.max(0,Math.min(n-1,pos));
-      /* smooth backCount: changes continuously as pos advances */
       const bc=Math.max(0,Math.min(MAX_BACK,n-1-p));
       const containerH=CARD_H+STRIP_H*bc;
       const frontTop=bc*STRIP_H;
       stack.style.transition='none';
       stack.style.height=containerH+'px';
-      cards.forEach((card,i)=>{
+      for(let i=0;i<n;i++){
+        const card=cards[(i+ringOffset)%n];
         const depth=i-p;
         card.dataset.depth=String(Math.max(0,Math.round(depth)));
         card.style.transition='none';
         if(depth<0){
-          /* fade out: 1 at depth=0, 0 at depth=-1, slide toward bottom */
           const t=Math.max(0,1+depth);
           card.style.opacity=String(t);
           card.style.top=(frontTop+(1-t)*(containerH+20-frontTop))+'px';
           card.style.width='100%';
           card.style.zIndex=String(n+1);
           card.style.pointerEvents='none';
-          return;
+          continue;
         }
         if(depth>MAX_BACK){
           card.style.opacity='0';
@@ -5124,15 +5124,14 @@
           card.style.width=((1-W_STEP*MAX_BACK)*100)+'%';
           card.style.zIndex='1';
           card.style.pointerEvents='none';
-          return;
+          continue;
         }
         card.style.zIndex=String(n-Math.round(depth));
-        /* allow pointer events on front card and first back card (tap-to-advance) */
         card.style.pointerEvents=Math.round(depth)<=1?'auto':'none';
         card.style.top=((bc-depth)*STRIP_H)+'px';
         card.style.width=((1-W_STEP*depth)*100)+'%';
         card.style.opacity=String(Math.max(0.82,1-0.07*depth));
-      });
+      }
     }
 
     function snapClose(item,animate){
@@ -5161,16 +5160,12 @@
       openItem=item;openSide=side;
     }
 
-    /* after spring settles, silently move passed cards to back — same visual, infinite cycle */
+    /* after spring settles, advance ringOffset — no DOM mutation, no card loss */
     function rotateAfterSettle(){
       const numPassed=Math.round(scrollPos);
       if(numPassed<=0) return;
       if(openItem) snapClose(openItem,false);
-      for(let i=0;i<numPassed;i++){
-        const gone=cards.shift();
-        stack.appendChild(gone);
-        cards.push(gone);
-      }
+      ringOffset=(ringOffset+numPassed)%n;
       scrollPos=0;scrollPosStart=0;
       positionCardsAt(0);
     }
@@ -5280,10 +5275,10 @@
         /* tap */
         if(openItem){snapClose(openItem,true);}
         else if(dragItem){
-          const tappedDepth=cards.indexOf(dragItem)-scrollPos;
+          let vi=-1;for(let i=0;i<n;i++){if(cards[(i+ringOffset)%n]===dragItem){vi=i;break;}}
+          const tappedDepth=vi-scrollPos;
           if(tappedDepth>0.3){
-            /* tap on back card — advance to it */
-            springToCard(cards.indexOf(dragItem));
+            springToCard(vi);
           } else {
             if(dragItem.dataset.solto==='true') abrirDetalheItemSolto(dragItem.dataset.tipo,dragItem.dataset.idx);
             else openJob(dragItem.dataset.jobId);
