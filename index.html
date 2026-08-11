@@ -5042,7 +5042,7 @@
     const fieldId=pickerId.replace('-picker','-field');
     const field=document.getElementById(fieldId);
     const outros=membrosEquipa.filter(m=>m.user_id!==currentUser?.id);
-    if(!souAdmin()||!outros.length){if(field) field.classList.add('u-hidden');return;}
+    if(!outros.length){if(field) field.classList.add('u-hidden');return;}
     if(field) field.classList.remove('u-hidden');
     wrap.innerHTML=outros.map(m=>{
       const nome=m.email||'?';
@@ -5057,7 +5057,7 @@
   }
   function abrirJobPessoasPicker(jobId){
     const outros=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser?.id);
-    if(!outros.length) return;
+    if(!outros.length){ showToast('Não há outros membros no workspace.'); return; }
     const job=jobsData[jobId];if(!job) return;
     const selecionados=job.pessoas||[];
     const chips=outros.map(m=>{
@@ -12257,7 +12257,7 @@
 
     const pessoasJobIds=job.pessoas||[];
     const outrosJob=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser?.id);
-    const addPessoaJobBtn=souAdmin()&&outrosJob.length?'<button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirJobPessoasPicker(\''+id+'\')">+ Adicionar</button>':'';
+    const addPessoaJobBtn=outrosJob.length?'<button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirJobPessoasPicker(\''+id+'\')">+ Adicionar</button>':'';
     const pessoasJobBody=pessoasJobIds.length?'<div style="display:flex;flex-wrap:wrap;gap:6px">'+pessoasJobIds.map(uid=>'<div style="display:flex;align-items:center;gap:6px;padding:4px 8px 4px 5px;background:rgba(255,255,255,.06);border-radius:20px"><div class="tsk-av" style="margin:0">'+avatarInitials(nomeMembro(uid))+'</div><span style="font-size:var(--text-xs);color:var(--ink-soft)">'+escapeHtml(nomeMembro(uid).split('@')[0])+'</span></div>').join('')+'</div>':'<p class="u-label-nd">Nenhuma pessoa associada</p>';
     html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_PIN+'<div class="sec-title">Pessoas Associadas</div></div>'+addPessoaJobBtn+'</div><div class="sec-body u-block">'+pessoasJobBody+'</div></div>';
 
