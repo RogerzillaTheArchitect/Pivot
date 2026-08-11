@@ -463,16 +463,13 @@
         <div id="dash-card-financeiro" class="u-hidden">
         <div class="fin-card">
           <div class="fin-top">
-            <svg class="fin-svg" viewBox="0 0 340 240">
-              <circle class="fin-trk-out" cx="170" cy="156" r="130" transform="rotate(150, 170, 156)"/>
-              <circle class="fin-trk-inn" cx="170" cy="156" r="90" transform="rotate(150, 170, 156)"/>
-              <!-- continuação vertical dos anéis até a linha divisória (y=240) -->
-              <line x1="57.42" y1="221" x2="57.42" y2="240" stroke="#9BCB32" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="282.58" y1="221" x2="282.58" y2="240" stroke="#9BCB32" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="92.06" y1="201" x2="92.06" y2="240" stroke="#FF7800" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="247.94" y1="201" x2="247.94" y2="240" stroke="#FF7800" stroke-width="30" stroke-linecap="butt"/>
-              <circle class="fin-arc-g" id="fin-arc-meta" cx="170" cy="156" r="130" transform="rotate(150, 170, 156)"/>
-              <circle class="fin-arc-r" id="fin-arc-desp" cx="170" cy="156" r="90" transform="rotate(150, 170, 156)"/>
+            <svg class="fin-svg" viewBox="0 0 340 200">
+              <path class="fin-trk-out" d="M 40 195 A 130 130 0 0 1 170 65 A 130 130 0 0 1 300 195"/>
+              <path class="fin-trk-inn" d="M 80 195 A 90 90 0 0 1 170 105 A 90 90 0 0 1 260 195"/>
+              <path class="fin-arc-g" id="fin-arc-meta" d="M 40 195 A 130 130 0 0 1 170 65 A 130 130 0 0 1 300 195"/>
+              <path class="fin-arc-r" id="fin-arc-desp" d="M 80 195 A 90 90 0 0 1 170 105 A 90 90 0 0 1 260 195"/>
+              <text class="fin-tip-lbl fin-tip-g" id="fin-tip-meta" x="40" y="182" text-anchor="end"></text>
+              <text class="fin-tip-lbl fin-tip-r" id="fin-tip-desp" x="80" y="182" text-anchor="end"></text>
             </svg>
             <div class="fin-center" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
               <span class="fin-c-lbl">TOTAL</span>
@@ -482,24 +479,20 @@
           </div>
           <div class="fin-blocks">
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
-              <span class="fin-blk-lbl">ESPERADO</span>
-              <span class="fin-blk-val" id="fin-esperado">€ 0</span>
-              <span class="fin-blk-bar" style="background:#777777"></span>
-            </div>
-            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
-              <span class="fin-blk-lbl">LIMITE</span>
-              <span class="fin-blk-val" id="fin-limite">€ 0</span>
-              <span class="fin-blk-bar" style="background:#777777"></span>
-            </div>
-            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="fin-receitas">€ 0</span>
-              <span class="fin-blk-bar" style="background:#9BCB32"></span>
+            </div>
+            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+              <span class="fin-blk-lbl">ESPERADO</span>
+              <span class="fin-blk-val" id="fin-esperado">€ 0</span>
             </div>
             <div class="fin-block" onclick="abrirDespesas()">
               <span class="fin-blk-lbl">DESPESAS</span>
               <span class="fin-blk-val" id="fin-despesas">€ 0</span>
-              <span class="fin-blk-bar" style="background:#FF7800"></span>
+            </div>
+            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
+              <span class="fin-blk-lbl">LIMITE</span>
+              <span class="fin-blk-val" id="fin-limite">€ 0</span>
             </div>
           </div>
         </div>
@@ -564,16 +557,13 @@
         <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
         <div class="fin-card">
           <div class="fin-top">
-            <svg class="fin-svg" viewBox="0 0 340 240">
-              <circle class="fin-trk-out" cx="170" cy="156" r="130" transform="rotate(150, 170, 156)"/>
-              <circle class="fin-trk-inn" cx="170" cy="156" r="90" transform="rotate(150, 170, 156)"/>
-              <!-- continuação vertical dos anéis até a linha divisória (y=240) -->
-              <line x1="57.42" y1="221" x2="57.42" y2="240" stroke="#9BCB32" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="282.58" y1="221" x2="282.58" y2="240" stroke="#9BCB32" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="92.06" y1="201" x2="92.06" y2="240" stroke="#FF7800" stroke-width="30" stroke-linecap="butt"/>
-              <line x1="247.94" y1="201" x2="247.94" y2="240" stroke="#FF7800" stroke-width="30" stroke-linecap="butt"/>
-              <circle class="fin-arc-g" id="rf-fin-arc-meta" cx="170" cy="156" r="130" transform="rotate(150, 170, 156)"/>
-              <circle class="fin-arc-r" id="rf-fin-arc-desp" cx="170" cy="156" r="90" transform="rotate(150, 170, 156)"/>
+            <svg class="fin-svg" viewBox="0 0 340 200">
+              <path class="fin-trk-out" d="M 40 195 A 130 130 0 0 0 170 65 A 130 130 0 0 0 300 195"/>
+              <path class="fin-trk-inn" d="M 80 195 A 90 90 0 0 0 170 105 A 90 90 0 0 0 260 195"/>
+              <path class="fin-arc-g" id="rf-fin-arc-meta" d="M 40 195 A 130 130 0 0 0 170 65 A 130 130 0 0 0 300 195"/>
+              <path class="fin-arc-r" id="rf-fin-arc-desp" d="M 80 195 A 90 90 0 0 0 170 105 A 90 90 0 0 0 260 195"/>
+              <text class="fin-tip-lbl fin-tip-g" id="rf-fin-tip-meta" x="40" y="182" text-anchor="end"></text>
+              <text class="fin-tip-lbl fin-tip-r" id="rf-fin-tip-desp" x="80" y="182" text-anchor="end"></text>
             </svg>
             <div class="fin-center" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
               <span class="fin-c-lbl">TOTAL</span>
@@ -583,24 +573,20 @@
           </div>
           <div class="fin-blocks">
             <div class="fin-block" onclick="abrirRelatorios('faturamento')">
-              <span class="fin-blk-lbl">ESPERADO</span>
-              <span class="fin-blk-val" id="rf-fin-esperado">€ 0</span>
-              <span class="fin-blk-bar" style="background:#777777"></span>
-            </div>
-            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
-              <span class="fin-blk-lbl">LIMITE</span>
-              <span class="fin-blk-val" id="rf-fin-limite">€ 0</span>
-              <span class="fin-blk-bar" style="background:#777777"></span>
-            </div>
-            <div class="fin-block" onclick="abrirReceitas()">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="rf-fin-receitas">€ 0</span>
-              <span class="fin-blk-bar" style="background:#9BCB32"></span>
+            </div>
+            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+              <span class="fin-blk-lbl">ESPERADO</span>
+              <span class="fin-blk-val" id="rf-fin-esperado">€ 0</span>
             </div>
             <div class="fin-block" onclick="abrirDespesas()">
               <span class="fin-blk-lbl">DESPESAS</span>
               <span class="fin-blk-val" id="rf-fin-despesas">€ 0</span>
-              <span class="fin-blk-bar" style="background:#FF7800"></span>
+            </div>
+            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
+              <span class="fin-blk-lbl">LIMITE</span>
+              <span class="fin-blk-val" id="rf-fin-limite">€ 0</span>
             </div>
           </div>
         </div>
@@ -4346,10 +4332,21 @@
   function setFinArc(id, p, r){
     const el=document.getElementById(id);
     if(!el) return;
-    const C=2*Math.PI*r;
-    const full=(240/360)*C; /* comprimento do arco de 240° */
-    const arc=Math.min(p,1)*full;
-    el.style.strokeDasharray=arc+' '+C;
+    const cx=170, cy=195, halfC=Math.PI*r;
+    const ratio=Math.max(0,p);
+    const laps=Math.floor(ratio), frac=ratio-laps;
+    const pct=(laps>0 && frac<0.001) ? 1 : frac;
+    el.style.strokeDasharray=pct>0.001 ? pct*halfC+' '+(halfC+1) : '0 '+(halfC+1);
+    const lblEl=document.getElementById(id.replace('-arc-','-tip-'));
+    if(lblEl){
+      const tp=Math.min(Math.max(pct,0.01),0.99);
+      const theta=Math.PI+tp*Math.PI;
+      const tipX=cx+r*Math.cos(theta), tipY=cy+r*Math.sin(theta);
+      lblEl.setAttribute('x',tipX.toFixed(1));
+      lblEl.setAttribute('y',(tipY-12).toFixed(1));
+      lblEl.textContent=pct>0.005 ? Math.round(ratio*100)+'%' : '';
+      lblEl.setAttribute('text-anchor',tipX<cx-15?'end':tipX>cx+15?'start':'middle');
+    }
   }
   function renderRingsDashboard(recebido, esperado, custos, extras){
     extras=extras||0;
