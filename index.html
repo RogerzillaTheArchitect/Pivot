@@ -5228,8 +5228,8 @@
       }
       if(dragAxis==='v'){
         if(openItem) snapClose(openItem,false);
-        scrollPos=Math.max(0,scrollPosStart+(startY-e.clientY)/CARD_PX);
-        while(scrollPos>=1) rotateOne();
+        /* cap at 1 — one card per gesture */
+        scrollPos=Math.max(0,Math.min(1,scrollPosStart+(startY-e.clientY)/CARD_PX));
         positionCardsAt(scrollPos);
         const dt=e.timeStamp-prevT;
         if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
@@ -5250,7 +5250,8 @@
       dragging=false;
       const dx=e.clientX-startX,dy=e.clientY-startY;
       if(dragAxis==='v'){
-        rafId=requestAnimationFrame(momentumTick);
+        /* advance if dragged past 40% or fast flick upward */
+        springToCard(scrollPos>=0.4||velScroll>0.35?1:0);
       } else if(dragAxis==='h'){
         if(!dragItem){dragAxis=null;return;}
         const front=dragItem.querySelector('.tsk-front');
