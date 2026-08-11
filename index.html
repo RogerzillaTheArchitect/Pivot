@@ -5085,138 +5085,196 @@
     const cards=Array.from(stack.querySelectorAll('.tsk-card'));
     const n=cards.length;
     if(!n) return;
-    const CARD_H=108, STRIP_H=24, MAX_BACK=2, W_STEP=0.08;
-    let activeIdx=0;
-    let dragging=false, dragAxis=null, pointerId=null;
-    let startX=0, startY=0, swipedOpen=false; /* swipedOpen: front is currently snapped to reveal buttons */
+    const CARD_H=108,STRIP_H=24,MAX_BACK=2,W_STEP=0.08,CARD_PX=STRIP_H;
 
-    function getFront(){return cards[activeIdx];}
+    let scrollPos=0,scrollPosStart=0,velScroll=0,rafId=null;
+    let dragging=false,dragAxis=null,pointerId=null;
+    let startX=0,startY=0,prevY=0,prevT=0;
+    let openItem=null,openSide=null;
+    let dragItem=null,dragStartOffset=0;
 
-    function positionCards(animate){
-      const backCount=Math.min(n-1-activeIdx,MAX_BACK);
-      const containerH=CARD_H+STRIP_H*backCount;
-      stack.style.transition=animate?'height .4s cubic-bezier(.25,.1,.25,1)':'none';
+    /* Continuous fractional positioning — scrollPos is a float [0, n-1] */
+    function positionCardsAt(pos){
+      const p=Math.max(0,Math.min(n-1,pos));
+      /* smooth backCount: changes continuously as pos advances */
+      const bc=Math.max(0,Math.min(MAX_BACK,n-1-p));
+      const containerH=CARD_H+STRIP_H*bc;
+      const frontTop=bc*STRIP_H;
+      stack.style.transition='none';
       stack.style.height=containerH+'px';
-      const tr=animate?'top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease':'none';
       cards.forEach((card,i)=>{
-        const depth=i-activeIdx;
-        card.dataset.depth=String(Math.max(0,depth));
-        card.style.transition=tr;
-        if(depth<0||depth>MAX_BACK){
-          card.style.opacity='0';
+        const depth=i-p;
+        card.dataset.depth=String(Math.max(0,Math.round(depth)));
+        card.style.transition='none';
+        if(depth<0){
+          /* fade out: 1 at depth=0, 0 at depth=-1, slide toward bottom */
+          const t=Math.max(0,1+depth);
+          card.style.opacity=String(t);
+          card.style.top=(frontTop+(1-t)*(containerH+20-frontTop))+'px';
+          card.style.width='100%';
+          card.style.zIndex=String(n+1);
           card.style.pointerEvents='none';
-          card.style.zIndex='1';
-          card.style.top=(depth<0?(containerH+20)+'px':'0px');
           return;
         }
-        card.style.zIndex=String(n-depth);
-        card.style.pointerEvents='auto';
-        if(depth===0){
-          card.style.top=STRIP_H*backCount+'px';
-          card.style.width='100%';
-          card.style.opacity='1';
-        } else {
-          card.style.top=STRIP_H*(backCount-depth)+'px';
-          card.style.width=((1-W_STEP*depth)*100)+'%';
-          card.style.opacity=String(Math.max(0.82,1-0.07*depth));
+        if(depth>MAX_BACK){
+          card.style.opacity='0';
+          card.style.top='0';
+          card.style.width=((1-W_STEP*MAX_BACK)*100)+'%';
+          card.style.zIndex='1';
+          card.style.pointerEvents='none';
+          return;
         }
+        card.style.zIndex=String(n-Math.round(depth));
+        /* allow pointer events on front card and first back card (tap-to-advance) */
+        card.style.pointerEvents=Math.round(depth)<=1?'auto':'none';
+        card.style.top=((bc-depth)*STRIP_H)+'px';
+        card.style.width=((1-W_STEP*depth)*100)+'%';
+        card.style.opacity=String(Math.max(0.82,1-0.07*depth));
       });
     }
 
-    function snapClose(animate){
-      const card=getFront();
-      if(!card) return;
-      const front=card.querySelector('.tsk-front');
+    function snapClose(item,animate){
+      if(!item) return;
+      const front=item.querySelector('.tsk-front');
       if(front){
         front.classList.remove('tsk-dragging');
         front.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';
         front.style.transform='translateX(0)';
       }
-      card.querySelector('.tsk-btns-right').classList.remove('tsk-vis');
-      card.querySelector('.tsk-btns-left').classList.remove('tsk-vis');
-      swipedOpen=false;
+      item.querySelector('.tsk-btns-right').classList.remove('tsk-vis');
+      item.querySelector('.tsk-btns-left').classList.remove('tsk-vis');
+      if(openItem===item){openItem=null;openSide=null;}
     }
 
-    function goTo(idx,animate){
-      snapClose(false);
-      activeIdx=Math.max(0,Math.min(n-1,idx));
-      positionCards(animate);
+    function snapOpen(item,side){
+      if(openItem&&openItem!==item) snapClose(openItem,false);
+      const front=item.querySelector('.tsk-front');
+      const cardW=item.offsetWidth;
+      if(front){
+        front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';
+        front.style.transform=side==='right'
+          ?'translateX(-'+Math.round(cardW*.55)+'px)'
+          :'translateX('+Math.round(cardW*.30)+'px)';
+      }
+      item.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',side==='right');
+      item.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',side==='left');
+      openItem=item;openSide=side;
     }
 
-    /* close swipe if user taps outside front card */
-    document.addEventListener('pointerdown',function tskOutside(e){
-      if(!swipedOpen) return;
-      const fc=getFront();
-      if(fc&&!fc.contains(e.target)) snapClose(true);
+    /* Spring-snap to nearest card after momentum decays */
+    function springToCard(target){
+      if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+      const tgt=Math.max(0,Math.min(n-1,Math.round(target)));
+      const step=()=>{
+        const dist=tgt-scrollPos;
+        if(Math.abs(dist)<0.005){scrollPos=tgt;positionCardsAt(tgt);rafId=null;return;}
+        scrollPos+=dist*0.20;
+        positionCardsAt(scrollPos);
+        rafId=requestAnimationFrame(step);
+      };
+      rafId=requestAnimationFrame(step);
+    }
+
+    function momentumTick(){
+      const next=scrollPos+velScroll;
+      if(next<=0||next>=n-1){
+        scrollPos=Math.max(0,Math.min(n-1,next));
+        positionCardsAt(scrollPos);
+        rafId=null;
+        springToCard(scrollPos);
+        return;
+      }
+      scrollPos=next;
+      positionCardsAt(scrollPos);
+      velScroll*=0.93;
+      if(Math.abs(velScroll)<0.005){rafId=null;springToCard(scrollPos);return;}
+      rafId=requestAnimationFrame(momentumTick);
+    }
+
+    document.addEventListener('pointerdown',function(e){
+      if(!openItem) return;
+      if(!openItem.contains(e.target)) snapClose(openItem,true);
     },{passive:true});
 
     stack.addEventListener('pointerdown',e=>{
-      const card=e.target.closest('.tsk-card');
-      if(!card) return;
-      const ci=cards.indexOf(card);
-      const depth=ci-activeIdx;
-      if(depth>0){goTo(ci,true);return;}
-      if(depth<0) return;
-      /* front card */
-      dragging=true; dragAxis=null; pointerId=e.pointerId;
-      startX=e.clientX; startY=e.clientY;
+      if(rafId){cancelAnimationFrame(rafId);rafId=null;}
+      dragging=true;dragAxis=null;pointerId=e.pointerId;
+      startX=e.clientX;startY=e.clientY;
+      prevY=e.clientY;prevT=e.timeStamp;velScroll=0;
+      scrollPosStart=scrollPos;
+      dragItem=e.target.closest('.tsk-card');
+      if(dragItem&&openItem===dragItem){
+        const cardW=dragItem.offsetWidth;
+        dragStartOffset=openSide==='right'?-Math.round(cardW*.55):Math.round(cardW*.30);
+      } else {
+        dragStartOffset=0;
+      }
       try{stack.setPointerCapture(e.pointerId);}catch(err){}
     });
 
     stack.addEventListener('pointermove',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
-      const dx=e.clientX-startX, dy=e.clientY-startY;
+      const dx=e.clientX-startX,dy=e.clientY-startY;
       if(!dragAxis){
         if(Math.abs(dx)>7||Math.abs(dy)>7) dragAxis=Math.abs(dx)>=Math.abs(dy)?'h':'v';
         else return;
       }
-      if(dragAxis==='h'){
-        const card=getFront();
-        const front=card&&card.querySelector('.tsk-front');
+      if(dragAxis==='v'){
+        if(openItem) snapClose(openItem,false);
+        /* drag up = advance (startY - e.clientY > 0), drag down = go back */
+        scrollPos=Math.max(0,Math.min(n-1,scrollPosStart+(startY-e.clientY)/CARD_PX));
+        positionCardsAt(scrollPos);
+        const dt=e.timeStamp-prevT;
+        if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
+        prevY=e.clientY;prevT=e.timeStamp;
+      } else if(dragAxis==='h'){
+        if(!dragItem) return;
+        const front=dragItem.querySelector('.tsk-front');
         if(!front) return;
+        const tx=dragStartOffset+dx;
         front.classList.add('tsk-dragging');
-        front.style.transform='translateX('+dx+'px)';
-        /* show the correct button container */
-        const btnR=card.querySelector('.tsk-btns-right');
-        const btnL=card.querySelector('.tsk-btns-left');
-        btnR.classList.toggle('tsk-vis',dx<-8);
-        btnL.classList.toggle('tsk-vis',dx>8);
+        front.style.transform='translateX('+tx+'px)';
+        dragItem.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',tx<-8);
+        dragItem.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',tx>8);
       }
     });
 
     stack.addEventListener('pointerup',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
       dragging=false;
-      const dx=e.clientX-startX, dy=e.clientY-startY;
-      const card=getFront();
-
-      if(dragAxis==='h'){
-        const front=card&&card.querySelector('.tsk-front');
+      const dx=e.clientX-startX,dy=e.clientY-startY;
+      if(dragAxis==='v'){
+        rafId=requestAnimationFrame(momentumTick);
+      } else if(dragAxis==='h'){
+        if(!dragItem){dragAxis=null;return;}
+        const front=dragItem.querySelector('.tsk-front');
         if(front) front.classList.remove('tsk-dragging');
-        const cardW=card?card.offsetWidth:300;
-        const snapR=Math.round(cardW*0.55), snapL=Math.round(cardW*0.30);
-        if(dx<-60){
-          /* snap left — reveal Archive+Concluir */
-          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX(-'+snapR+'px)';}
-          if(card) card.querySelector('.tsk-btns-right').classList.add('tsk-vis');
-          swipedOpen=true;
-        } else if(dx>60){
-          /* snap right — reveal Edit */
-          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX('+snapL+'px)';}
-          if(card) card.querySelector('.tsk-btns-left').classList.add('tsk-vis');
-          swipedOpen=true;
-        } else {
-          snapClose(true);
+        /* 3-state machine: one gesture = one transition, no accumulation */
+        const startState=openItem===dragItem?openSide:null;
+        const THRESH=50;
+        if(!startState){
+          if(dx<-THRESH) snapOpen(dragItem,'right');
+          else if(dx>THRESH) snapOpen(dragItem,'left');
+          else snapClose(dragItem,true);
+        } else if(startState==='right'){
+          if(dx>THRESH) snapClose(dragItem,true);
+          else snapOpen(dragItem,'right');
+        } else if(startState==='left'){
+          if(dx<-THRESH) snapClose(dragItem,true);
+          else snapOpen(dragItem,'left');
         }
-      } else if(dragAxis==='v'){
-        if(dy>50) goTo(activeIdx+1,true);
-        else if(dy<-50) goTo(activeIdx-1,true);
       } else if(Math.abs(dx)<8&&Math.abs(dy)<8){
         /* tap */
-        if(swipedOpen){snapClose(true);return;}
-        if(card){
-          if(card.dataset.solto==='true') abrirDetalheItemSolto(card.dataset.tipo,card.dataset.idx);
-          else openJob(card.dataset.jobId);
+        if(openItem){snapClose(openItem,true);}
+        else if(dragItem){
+          const tappedDepth=cards.indexOf(dragItem)-scrollPos;
+          if(tappedDepth>0.3){
+            /* tap on back card — advance to it */
+            springToCard(cards.indexOf(dragItem));
+          } else {
+            if(dragItem.dataset.solto==='true') abrirDetalheItemSolto(dragItem.dataset.tipo,dragItem.dataset.idx);
+            else openJob(dragItem.dataset.jobId);
+          }
         }
       }
       dragAxis=null;
@@ -5224,17 +5282,17 @@
 
     stack.addEventListener('pointercancel',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
-      dragging=false; dragAxis=null;
-      snapClose(true);
+      dragging=false;
+      const axis=dragAxis;
+      dragAxis=null;
+      if(axis==='h'&&dragItem) snapClose(dragItem,true);
+      velScroll=0;
     });
 
-    /* safezone: block page scroll only while finger is on front card */
-    stack.addEventListener('touchmove',e=>{
-      const fc=getFront();
-      if(fc&&fc.contains(e.target)) e.preventDefault();
-    },{passive:false});
+    /* block page scroll for all touches inside the stack */
+    stack.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
 
-    positionCards(false);
+    positionCardsAt(0);
   }
 
   function tcEditar(btn){
