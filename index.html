@@ -5055,6 +5055,29 @@
     const wrap=document.getElementById(pickerId);if(!wrap) return [];
     return [...wrap.querySelectorAll('.pessoa-chip.on')].map(el=>el.dataset.uid);
   }
+  function abrirJobPessoasPicker(jobId){
+    const outros=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser?.id);
+    if(!outros.length) return;
+    const job=jobsData[jobId];if(!job) return;
+    const selecionados=job.pessoas||[];
+    const chips=outros.map(m=>{
+      const nome=m.email||'?';
+      const on=selecionados.includes(m.user_id);
+      return '<div class="pessoa-chip'+(on?' on':'')+'" data-uid="'+escapeHtml(m.user_id)+'" onclick="toggleJobPessoa(\''+jobId+'\',\''+escapeHtml(m.user_id)+'\',this)">'+
+        '<div class="tsk-av">'+avatarInitials(nome)+'</div>'+
+        '<span>'+escapeHtml(nome.split('@')[0])+'</span></div>';
+    }).join('');
+    openInfo('Pessoas Associadas','<div class="pessoas-picker" style="margin-top:8px">'+chips+'</div>',()=>renderJobDetailDynamic(jobId));
+  }
+  function toggleJobPessoa(jobId,uid,el){
+    const job=jobsData[jobId];if(!job) return;
+    job.pessoas=job.pessoas||[];
+    const idx=job.pessoas.indexOf(uid);
+    if(idx>=0) job.pessoas.splice(idx,1); else job.pessoas.push(uid);
+    saveJobsData();
+    el.classList.toggle('on');
+    updateJobCard(jobId);
+  }
 
   /* Notificações de convite de tarefa/lista/trabalho */
   let notificacoesData={};
@@ -12231,6 +12254,12 @@
       });
       html+='</div></div>';
     }
+
+    const pessoasJobIds=job.pessoas||[];
+    const outrosJob=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser?.id);
+    const addPessoaJobBtn=souAdmin()&&outrosJob.length?'<button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirJobPessoasPicker(\''+id+'\')">+ Adicionar</button>':'';
+    const pessoasJobBody=pessoasJobIds.length?'<div style="display:flex;flex-wrap:wrap;gap:6px">'+pessoasJobIds.map(uid=>'<div style="display:flex;align-items:center;gap:6px;padding:4px 8px 4px 5px;background:rgba(255,255,255,.06);border-radius:20px"><div class="tsk-av" style="margin:0">'+avatarInitials(nomeMembro(uid))+'</div><span style="font-size:var(--text-xs);color:var(--ink-soft)">'+escapeHtml(nomeMembro(uid).split('@')[0])+'</span></div>').join('')+'</div>':'<p class="u-label-nd">Nenhuma pessoa associada</p>';
+    html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_PIN+'<div class="sec-title">Pessoas Associadas</div></div>'+addPessoaJobBtn+'</div><div class="sec-body u-block">'+pessoasJobBody+'</div></div>';
 
     html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body u-block">'+
       '<div id="colab-lista-'+id+'"><p class="u-label-nd">'+t('collab.loading')+'</p></div>'+
