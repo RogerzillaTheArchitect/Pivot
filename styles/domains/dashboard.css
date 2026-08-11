@@ -488,17 +488,22 @@
   }
   .fin-top{position:relative}
   .fin-svg{display:block;width:100%}
-  /* trilhos semicirculares 180° — canais escavados escuros (dashoffset=πr esconde a metade inferior) */
-  .fin-trk-out{fill:none;stroke:rgba(255,255,255,.055);stroke-width:22;stroke-linecap:butt;
-    stroke-dasharray:408 409}
-  .fin-trk-inn{fill:none;stroke:rgba(255,255,255,.04);stroke-width:22;stroke-linecap:butt;
-    stroke-dasharray:283 283}
+  /* trilhos semicirculares — r_out=150 (halfC≈471), r_inn=105 (halfC≈330) */
+  .fin-trk-out{fill:none;stroke:rgba(255,255,255,.055);stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:471 472}
+  .fin-trk-inn{fill:none;stroke:rgba(255,255,255,.04);stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:330 330}
+  /* ghost: volta completa a meia opacidade (dasharray via JS) */
+  .fin-arc-ghost-g{fill:none;stroke:#3A7229;stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:0 943;opacity:.42}
+  .fin-arc-ghost-r{fill:none;stroke:#B05018;stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:0 660;opacity:.42}
   /* arcos de progresso — verde profundo / laranja queimado; dasharray via JS */
-  .fin-arc-g{fill:none;stroke:#3A7229;stroke-width:22;stroke-linecap:butt;
-    stroke-dasharray:0 817;
+  .fin-arc-g{fill:none;stroke:#3A7229;stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:0 943;
     filter:drop-shadow(0 4px 6px rgba(0,0,0,.65))}
-  .fin-arc-r{fill:none;stroke:#B05018;stroke-width:22;stroke-linecap:butt;
-    stroke-dasharray:0 566;
+  .fin-arc-r{fill:none;stroke:#B05018;stroke-width:26;stroke-linecap:butt;
+    stroke-dasharray:0 660;
     filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
   /* rótulos na ponta dos arcos */
   .fin-tip-lbl{
@@ -509,7 +514,7 @@
   .fin-tip-r{fill:rgba(210,115,65,.85)}
   /* texto central */
   .fin-center{
-    position:absolute;left:50%;top:73%;
+    position:absolute;left:50%;top:75%;
     transform:translate(-50%,-50%);
     text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;
     display:flex;flex-direction:column;align-items:center;gap:1px;

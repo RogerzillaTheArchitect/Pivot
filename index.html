@@ -463,13 +463,15 @@
         <div id="dash-card-financeiro" class="u-hidden">
         <div class="fin-card">
           <div class="fin-top">
-            <svg class="fin-svg" viewBox="0 0 340 200">
-              <circle class="fin-trk-out" cx="170" cy="195" r="130" transform="rotate(180,170,195)"/>
-              <circle class="fin-trk-inn" cx="170" cy="195" r="90" transform="rotate(180,170,195)"/>
-              <circle class="fin-arc-g" id="fin-arc-meta" cx="170" cy="195" r="130" transform="rotate(180,170,195)"/>
-              <circle class="fin-arc-r" id="fin-arc-desp" cx="170" cy="195" r="90" transform="rotate(180,170,195)"/>
-              <text class="fin-tip-lbl fin-tip-g" id="fin-tip-meta" x="40" y="182" text-anchor="end"></text>
-              <text class="fin-tip-lbl fin-tip-r" id="fin-tip-desp" x="80" y="182" text-anchor="end"></text>
+            <svg class="fin-svg" viewBox="0 0 340 222">
+              <circle class="fin-trk-out" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-trk-inn" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-ghost-g" id="fin-ghost-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-ghost-r" id="fin-ghost-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-g" id="fin-arc-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-r" id="fin-arc-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <text class="fin-tip-lbl fin-tip-g" id="fin-tip-meta" x="20" y="205" text-anchor="end"></text>
+              <text class="fin-tip-lbl fin-tip-r" id="fin-tip-desp" x="65" y="205" text-anchor="end"></text>
             </svg>
             <div class="fin-center" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
               <span class="fin-c-lbl">TOTAL</span>
@@ -478,7 +480,7 @@
             </div>
           </div>
           <div class="fin-blocks">
-            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+            <div class="fin-block" onclick="abrirReceitas()">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="fin-receitas">€ 0</span>
               <span class="fin-blk-bar fin-blk-bar--g"></span>
@@ -561,13 +563,15 @@
         <div class="rel-card-header u-mt-2" id="rel-anchor-financeiro"><span data-t="reports.summary.title">Financeiro</span><span class="dash-card-toggle" data-dash-key="financeiro" onclick="toggleDashboardCard('financeiro')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
         <div class="fin-card">
           <div class="fin-top">
-            <svg class="fin-svg" viewBox="0 0 340 200">
-              <circle class="fin-trk-out" cx="170" cy="195" r="130" transform="rotate(180,170,195)"/>
-              <circle class="fin-trk-inn" cx="170" cy="195" r="90" transform="rotate(180,170,195)"/>
-              <circle class="fin-arc-g" id="rf-fin-arc-meta" cx="170" cy="195" r="130" transform="rotate(180,170,195)"/>
-              <circle class="fin-arc-r" id="rf-fin-arc-desp" cx="170" cy="195" r="90" transform="rotate(180,170,195)"/>
-              <text class="fin-tip-lbl fin-tip-g" id="rf-fin-tip-meta" x="40" y="182" text-anchor="end"></text>
-              <text class="fin-tip-lbl fin-tip-r" id="rf-fin-tip-desp" x="80" y="182" text-anchor="end"></text>
+            <svg class="fin-svg" viewBox="0 0 340 222">
+              <circle class="fin-trk-out" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-trk-inn" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-ghost-g" id="rf-fin-ghost-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-ghost-r" id="rf-fin-ghost-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-g" id="rf-fin-arc-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
+              <circle class="fin-arc-r" id="rf-fin-arc-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
+              <text class="fin-tip-lbl fin-tip-g" id="rf-fin-tip-meta" x="20" y="205" text-anchor="end"></text>
+              <text class="fin-tip-lbl fin-tip-r" id="rf-fin-tip-desp" x="65" y="205" text-anchor="end"></text>
             </svg>
             <div class="fin-center" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
               <span class="fin-c-lbl">TOTAL</span>
@@ -576,7 +580,7 @@
             </div>
           </div>
           <div class="fin-blocks">
-            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
+            <div class="fin-block" onclick="abrirReceitas()">
               <span class="fin-blk-lbl">RECEITAS</span>
               <span class="fin-blk-val" id="rf-fin-receitas">€ 0</span>
               <span class="fin-blk-bar fin-blk-bar--g"></span>
@@ -4340,12 +4344,15 @@
   function setFinArc(id, p, r){
     const el=document.getElementById(id);
     if(!el) return;
-    const cx=170, cy=195, halfC=Math.PI*r, C=2*halfC;
+    const cx=170, cy=218, halfC=Math.PI*r, C=2*halfC;
     const ratio=Math.max(0,p);
     const laps=Math.floor(ratio), frac=ratio-laps;
     const pct=(laps>0 && frac<0.001) ? 1 : frac;
     const arcLen=pct*halfC;
     el.style.strokeDasharray=arcLen>0.5 ? arcLen.toFixed(1)+' '+(C-arcLen).toFixed(1) : '0 '+C.toFixed(1);
+    /* ghost: arco completo a meia opacidade quando há pelo menos 1 volta completa */
+    const ghostEl=document.getElementById(id.replace('-arc-','-ghost-'));
+    if(ghostEl) ghostEl.style.strokeDasharray=laps>=1 ? halfC.toFixed(1)+' '+halfC.toFixed(1) : '0 '+C.toFixed(1);
     const lblEl=document.getElementById(id.replace('-arc-','-tip-'));
     if(lblEl){
       const tp=Math.min(Math.max(pct,0.01),0.99);
@@ -4361,12 +4368,12 @@
     extras=extras||0;
     const mAtual=metasMesAtual();
     const meta=mAtual.receita||1, teto=mAtual.gastos||1;
-    /* novo fin-card: arcos semicirculares */
     const total=recebido+extras-custos;
-    const pMeta=Math.max(0,meta>0?total/meta:0);
+    /* arco verde: RECEITAS ÷ ESPERADO; arco laranja: DESPESAS ÷ LIMITE */
+    const pVerde=Math.max(0,esperado>0?(recebido+extras)/esperado:0);
     const pDesp=Math.max(0,teto>0?custos/teto:0);
-    setFinArc('fin-arc-meta', pMeta, 130);
-    setFinArc('fin-arc-desp', pDesp, 90);
+    setFinArc('fin-arc-meta', pVerde, 150);
+    setFinArc('fin-arc-desp', pDesp, 105);
     const fset=(id,v)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=v; };
     fset('fin-total', fmtMoney(total));
     fset('fin-pct', Math.round(meta>0?total/meta*100:0)+'% da meta');
@@ -4390,10 +4397,11 @@
     const somaMetas=meses.reduce((acc,m)=>{ const mm=metasDoMes(m.ano,m.mes); acc.receita+=mm.receita||0; acc.gastos+=mm.gastos||0; return acc; }, {receita:0,gastos:0});
     const meta=somaMetas.receita||1, teto=somaMetas.gastos||1;
     const total=recebido+extras-custos;
-    const pMeta=Math.max(0,meta>0?total/meta:0);
+    /* arco verde: RECEITAS ÷ ESPERADO; arco laranja: DESPESAS ÷ LIMITE */
+    const pVerde=Math.max(0,esperado>0?(recebido+extras)/esperado:0);
     const pDesp=Math.max(0,teto>0?custos/teto:0);
-    setFinArc('rf-fin-arc-meta', pMeta, 130);
-    setFinArc('rf-fin-arc-desp', pDesp, 90);
+    setFinArc('rf-fin-arc-meta', pVerde, 150);
+    setFinArc('rf-fin-arc-desp', pDesp, 105);
     const set=(id,val)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=val; };
     set('rf-fin-total', fmtMoney(total));
     set('rf-fin-pct', Math.round(meta>0?total/meta*100:0)+'% da meta');
