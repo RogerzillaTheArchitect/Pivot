@@ -4805,7 +4805,7 @@
       return new Date(it.dataISO+'T00:00:00')<=_limite;
     });
     if(!itens.length){wrap.innerHTML='';return;}
-    wrap.innerHTML='<div class="tsk-stack" id="tsk-stack"><div class="tsk-list">'+itens.map(construirStackCard).join('')+'</div></div>';
+    wrap.innerHTML='<div class="tsk-stack" id="tsk-stack">'+itens.map(construirStackCard).join('')+'</div>';
     ativarStackTarefas();
   }
   /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
@@ -5082,151 +5082,141 @@
   function ativarStackTarefas(){
     const stack=document.getElementById('tsk-stack');
     if(!stack) return;
-    const list=stack.querySelector('.tsk-list');
-    if(!list) return;
-    const cards=Array.from(list.querySelectorAll('.tsk-card'));
+    const cards=Array.from(stack.querySelectorAll('.tsk-card'));
     const n=cards.length;
     if(!n) return;
+    const CARD_H=108, STRIP_H=24, MAX_BACK=2, W_STEP=0.08;
+    let activeIdx=0;
+    let dragging=false, dragAxis=null, pointerId=null;
+    let startX=0, startY=0, swipedOpen=false; /* swipedOpen: front is currently snapped to reveal buttons */
 
-    const CARD_H=108,CARD_GAP=8,CONTAINER_H=156;
-    const totalH=n*(CARD_H+CARD_GAP)-CARD_GAP;
-    const maxSY=Math.max(0,totalH-CONTAINER_H);
+    function getFront(){return cards[activeIdx];}
 
-    let scrollY=0;
-    let dragging=false,dragAxis=null,pointerId=null;
-    let startX=0,startY=0,prevY=0,prevT=0,velY=0;
-    let rafId=null;
-    let openItem=null,openSide=null; /* currently snapped card + which side */
-    let dragItem=null,dragStartOffset=0; /* horizontal swipe tracking */
-
-    function clampSY(v){return Math.max(0,Math.min(maxSY,v));}
-
-    function applyScroll(y){
-      scrollY=clampSY(y);
-      list.style.transform='translateY(-'+scrollY+'px)';
+    function positionCards(animate){
+      const backCount=Math.min(n-1-activeIdx,MAX_BACK);
+      const containerH=CARD_H+STRIP_H*backCount;
+      stack.style.transition=animate?'height .4s cubic-bezier(.25,.1,.25,1)':'none';
+      stack.style.height=containerH+'px';
+      const tr=animate?'top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease':'none';
+      cards.forEach((card,i)=>{
+        const depth=i-activeIdx;
+        card.dataset.depth=String(Math.max(0,depth));
+        card.style.transition=tr;
+        if(depth<0||depth>MAX_BACK){
+          card.style.opacity='0';
+          card.style.pointerEvents='none';
+          card.style.zIndex='1';
+          card.style.top=(depth<0?(containerH+20)+'px':'0px');
+          return;
+        }
+        card.style.zIndex=String(n-depth);
+        card.style.pointerEvents='auto';
+        if(depth===0){
+          card.style.top=STRIP_H*backCount+'px';
+          card.style.width='100%';
+          card.style.opacity='1';
+        } else {
+          card.style.top=STRIP_H*(backCount-depth)+'px';
+          card.style.width=((1-W_STEP*depth)*100)+'%';
+          card.style.opacity=String(Math.max(0.82,1-0.07*depth));
+        }
+      });
     }
 
-    function snapClose(item,animate){
-      if(!item) return;
-      const front=item.querySelector('.tsk-front');
+    function snapClose(animate){
+      const card=getFront();
+      if(!card) return;
+      const front=card.querySelector('.tsk-front');
       if(front){
         front.classList.remove('tsk-dragging');
         front.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';
         front.style.transform='translateX(0)';
       }
-      item.querySelector('.tsk-btns-right').classList.remove('tsk-vis');
-      item.querySelector('.tsk-btns-left').classList.remove('tsk-vis');
-      if(openItem===item){openItem=null;openSide=null;}
+      card.querySelector('.tsk-btns-right').classList.remove('tsk-vis');
+      card.querySelector('.tsk-btns-left').classList.remove('tsk-vis');
+      swipedOpen=false;
     }
 
-    function snapOpen(item,side){
-      if(openItem&&openItem!==item) snapClose(openItem,false);
-      const front=item.querySelector('.tsk-front');
-      const cardW=item.offsetWidth;
-      if(front){
-        front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';
-        front.style.transform=side==='right'
-          ?'translateX(-'+Math.round(cardW*.56)+'px)'
-          :'translateX('+Math.round(cardW*.31)+'px)';
-      }
-      item.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',side==='right');
-      item.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',side==='left');
-      openItem=item;openSide=side;
+    function goTo(idx,animate){
+      snapClose(false);
+      activeIdx=Math.max(0,Math.min(n-1,idx));
+      positionCards(animate);
     }
 
-    function momentumTick(){
-      if(Math.abs(velY)<0.3){rafId=null;return;}
-      const target=scrollY+velY;
-      const clamped=Math.max(0,Math.min(maxSY,target));
-      scrollY=clamped;
-      list.style.transition='none';
-      list.style.transform='translateY(-'+scrollY+'px)';
-      if(clamped!==target){rafId=null;return;} /* boundary reached */
-      velY*=0.93;
-      rafId=requestAnimationFrame(momentumTick);
-    }
-
-    /* close open item on tap outside */
+    /* close swipe if user taps outside front card */
     document.addEventListener('pointerdown',function tskOutside(e){
-      if(!openItem) return;
-      if(!openItem.contains(e.target)) snapClose(openItem,true);
+      if(!swipedOpen) return;
+      const fc=getFront();
+      if(fc&&!fc.contains(e.target)) snapClose(true);
     },{passive:true});
 
     stack.addEventListener('pointerdown',e=>{
-      if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-      dragging=true;dragAxis=null;pointerId=e.pointerId;
-      startX=e.clientX;startY=e.clientY;
-      prevY=e.clientY;prevT=e.timeStamp;velY=0;
-      dragItem=e.target.closest('.tsk-card');
-      /* if dragging an already-open card, start from its current offset */
-      if(dragItem&&openItem===dragItem){
-        const cardW=dragItem.offsetWidth;
-        dragStartOffset=openSide==='right'?-Math.round(cardW*.56):Math.round(cardW*.31);
-      } else {
-        dragStartOffset=0;
-      }
-      list.style.transition='none';
+      const card=e.target.closest('.tsk-card');
+      if(!card) return;
+      const ci=cards.indexOf(card);
+      const depth=ci-activeIdx;
+      if(depth>0){goTo(ci,true);return;}
+      if(depth<0) return;
+      /* front card */
+      dragging=true; dragAxis=null; pointerId=e.pointerId;
+      startX=e.clientX; startY=e.clientY;
       try{stack.setPointerCapture(e.pointerId);}catch(err){}
     });
 
     stack.addEventListener('pointermove',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
-      const dx=e.clientX-startX,dy=e.clientY-startY;
+      const dx=e.clientX-startX, dy=e.clientY-startY;
       if(!dragAxis){
         if(Math.abs(dx)>7||Math.abs(dy)>7) dragAxis=Math.abs(dx)>=Math.abs(dy)?'h':'v';
         else return;
       }
-      if(dragAxis==='v'){
-        const delta=prevY-e.clientY;
-        const dt=e.timeStamp-prevT;
-        if(dt>0) velY=delta/dt*16;
-        prevY=e.clientY;prevT=e.timeStamp;
-        applyScroll(scrollY+delta);
-      } else if(dragAxis==='h'){
-        if(!dragItem) return;
-        const front=dragItem.querySelector('.tsk-front');
+      if(dragAxis==='h'){
+        const card=getFront();
+        const front=card&&card.querySelector('.tsk-front');
         if(!front) return;
-        const tx=dragStartOffset+dx;
         front.classList.add('tsk-dragging');
-        front.style.transform='translateX('+tx+'px)';
-        dragItem.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',tx<-8);
-        dragItem.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',tx>8);
+        front.style.transform='translateX('+dx+'px)';
+        /* show the correct button container */
+        const btnR=card.querySelector('.tsk-btns-right');
+        const btnL=card.querySelector('.tsk-btns-left');
+        btnR.classList.toggle('tsk-vis',dx<-8);
+        btnL.classList.toggle('tsk-vis',dx>8);
       }
     });
 
     stack.addEventListener('pointerup',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
       dragging=false;
-      const dx=e.clientX-startX,dy=e.clientY-startY;
-      if(dragAxis==='v'){
-        rafId=requestAnimationFrame(momentumTick);
-      } else if(dragAxis==='h'){
-        if(!dragItem){dragAxis=null;return;}
-        const front=dragItem.querySelector('.tsk-front');
+      const dx=e.clientX-startX, dy=e.clientY-startY;
+      const card=getFront();
+
+      if(dragAxis==='h'){
+        const front=card&&card.querySelector('.tsk-front');
         if(front) front.classList.remove('tsk-dragging');
-        /* state machine: one gesture = one state transition, no accumulation */
-        const startState=openItem===dragItem?openSide:null;
-        const THRESH=50;
-        if(!startState){
-          /* NORMAL → swipe → open right, open left, or stay closed */
-          if(dx<-THRESH) snapOpen(dragItem,'right');
-          else if(dx>THRESH) snapOpen(dragItem,'left');
-          else snapClose(dragItem,true);
-        } else if(startState==='right'){
-          /* RIGHT OPEN → swipe right enough → NORMAL; otherwise re-snap to right */
-          if(dx>THRESH) snapClose(dragItem,true);
-          else snapOpen(dragItem,'right');
-        } else if(startState==='left'){
-          /* LEFT OPEN → swipe left enough → NORMAL; otherwise re-snap to left */
-          if(dx<-THRESH) snapClose(dragItem,true);
-          else snapOpen(dragItem,'left');
+        const cardW=card?card.offsetWidth:300;
+        const snapR=Math.round(cardW*0.55), snapL=Math.round(cardW*0.30);
+        if(dx<-60){
+          /* snap left — reveal Archive+Concluir */
+          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX(-'+snapR+'px)';}
+          if(card) card.querySelector('.tsk-btns-right').classList.add('tsk-vis');
+          swipedOpen=true;
+        } else if(dx>60){
+          /* snap right — reveal Edit */
+          if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX('+snapL+'px)';}
+          if(card) card.querySelector('.tsk-btns-left').classList.add('tsk-vis');
+          swipedOpen=true;
+        } else {
+          snapClose(true);
         }
+      } else if(dragAxis==='v'){
+        if(dy>50) goTo(activeIdx+1,true);
+        else if(dy<-50) goTo(activeIdx-1,true);
       } else if(Math.abs(dx)<8&&Math.abs(dy)<8){
-        /* tap: close open item, or navigate */
-        if(openItem) snapClose(openItem,true);
-        else if(dragItem){
-          if(dragItem.dataset.solto==='true') abrirDetalheItemSolto(dragItem.dataset.tipo,dragItem.dataset.idx);
-          else openJob(dragItem.dataset.jobId);
+        /* tap */
+        if(swipedOpen){snapClose(true);return;}
+        if(card){
+          if(card.dataset.solto==='true') abrirDetalheItemSolto(card.dataset.tipo,card.dataset.idx);
+          else openJob(card.dataset.jobId);
         }
       }
       dragAxis=null;
@@ -5234,17 +5224,17 @@
 
     stack.addEventListener('pointercancel',e=>{
       if(!dragging||e.pointerId!==pointerId) return;
-      dragging=false;
-      const axis=dragAxis;
-      dragAxis=null;
-      if(axis==='h'&&dragItem) snapClose(dragItem,true);
-      velY=0;
+      dragging=false; dragAxis=null;
+      snapClose(true);
     });
 
-    /* block page scroll for all touches inside the stack */
-    stack.addEventListener('touchmove',e=>{e.preventDefault();},{passive:false});
+    /* safezone: block page scroll only while finger is on front card */
+    stack.addEventListener('touchmove',e=>{
+      const fc=getFront();
+      if(fc&&fc.contains(e.target)) e.preventDefault();
+    },{passive:false});
 
-    applyScroll(0);
+    positionCards(false);
   }
 
   function tcEditar(btn){
