@@ -5057,12 +5057,14 @@
       ' data-tipo="'+it.tipo+'"'+
       ' data-idx="'+(it.idx!=null?it.idx:'')+'"'+
       ' data-solto="'+solto+'">'+
-      '<div class="tsk-btns-right">'+
-        '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'<span>ARQUIVAR</span></button>'+
-        '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'<span>CONCLUIR</span></button>'+
-      '</div>'+
-      '<div class="tsk-btns-left">'+
-        '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'<span>EDITAR</span></button>'+
+      '<div class="tsk-actions">'+
+        '<div class="tsk-act-left">'+
+          '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'<span>EDITAR</span></button>'+
+        '</div>'+
+        '<div class="tsk-act-right">'+
+          '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'<span>ARQUIVAR</span></button>'+
+          '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'<span>CONCLUIR</span></button>'+
+        '</div>'+
       '</div>'+
       '<div class="tsk-front">'+
         '<div class="tsk-body">'+
@@ -5141,8 +5143,7 @@
         front.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';
         front.style.transform='translateX(0)';
       }
-      item.querySelector('.tsk-btns-right').classList.remove('tsk-vis');
-      item.querySelector('.tsk-btns-left').classList.remove('tsk-vis');
+      item.querySelector('.tsk-actions').classList.remove('tsk-vis');
       if(openItem===item){openItem=null;openSide=null;}
     }
 
@@ -5156,19 +5157,38 @@
           ?'translateX(-'+Math.round(cardW*.55)+'px)'
           :'translateX('+Math.round(cardW*.30)+'px)';
       }
-      item.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',side==='right');
-      item.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',side==='left');
+      item.querySelector('.tsk-actions').classList.add('tsk-vis');
       openItem=item;openSide=side;
     }
 
-    /* Spring-snap to nearest card after momentum decays */
+    /* rotate front card to back when fully invisible — seamless infinite loop */
+    function rotateCards(){
+      let count=0;
+      while(scrollPos>=1){
+        const gone=cards.shift();
+        stack.appendChild(gone);
+        cards.push(gone);
+        scrollPos-=1;
+        scrollPosStart=Math.max(0,scrollPosStart-1);
+        count++;
+      }
+      return count;
+    }
+
+    /* Spring-snap to nearest card; adjusts target if rotation happens mid-spring */
     function springToCard(target){
       if(rafId){cancelAnimationFrame(rafId);rafId=null;}
-      const tgt=Math.max(0,Math.min(n-1,Math.round(target)));
+      let tgt=Math.max(0,Math.round(target));
       const step=()=>{
         const dist=tgt-scrollPos;
-        if(Math.abs(dist)<0.005){scrollPos=tgt;positionCardsAt(tgt);rafId=null;return;}
+        if(Math.abs(dist)<0.005){
+          scrollPos=tgt;
+          tgt=Math.max(0,tgt-rotateCards());
+          positionCardsAt(scrollPos);
+          rafId=null;return;
+        }
         scrollPos+=dist*0.20;
+        tgt=Math.max(0,tgt-rotateCards());
         positionCardsAt(scrollPos);
         rafId=requestAnimationFrame(step);
       };
@@ -5176,15 +5196,9 @@
     }
 
     function momentumTick(){
-      const next=scrollPos+velScroll;
-      if(next<=0||next>=n-1){
-        scrollPos=Math.max(0,Math.min(n-1,next));
-        positionCardsAt(scrollPos);
-        rafId=null;
-        springToCard(scrollPos);
-        return;
-      }
-      scrollPos=next;
+      scrollPos+=velScroll;
+      if(scrollPos<0){scrollPos=0;velScroll=0;}
+      rotateCards();
       positionCardsAt(scrollPos);
       velScroll*=0.93;
       if(Math.abs(velScroll)<0.005){rafId=null;springToCard(scrollPos);return;}
@@ -5216,13 +5230,14 @@
       if(!dragging||e.pointerId!==pointerId) return;
       const dx=e.clientX-startX,dy=e.clientY-startY;
       if(!dragAxis){
-        if(Math.abs(dx)>7||Math.abs(dy)>7) dragAxis=Math.abs(dx)>=Math.abs(dy)?'h':'v';
+        if(Math.abs(dx)>12||Math.abs(dy)>12) dragAxis=Math.abs(dx)>Math.abs(dy)*1.8?'h':'v';
         else return;
       }
       if(dragAxis==='v'){
         if(openItem) snapClose(openItem,false);
         /* drag up = advance (startY - e.clientY > 0), drag down = go back */
-        scrollPos=Math.max(0,Math.min(n-1,scrollPosStart+(startY-e.clientY)/CARD_PX));
+        scrollPos=Math.max(0,scrollPosStart+(startY-e.clientY)/CARD_PX);
+        rotateCards();
         positionCardsAt(scrollPos);
         const dt=e.timeStamp-prevT;
         if(dt>0) velScroll=(prevY-e.clientY)/dt/CARD_PX*16;
@@ -5234,8 +5249,7 @@
         const tx=dragStartOffset+dx;
         front.classList.add('tsk-dragging');
         front.style.transform='translateX('+tx+'px)';
-        dragItem.querySelector('.tsk-btns-right').classList.toggle('tsk-vis',tx<-8);
-        dragItem.querySelector('.tsk-btns-left').classList.toggle('tsk-vis',tx>8);
+        dragItem.querySelector('.tsk-actions').classList.toggle('tsk-vis',Math.abs(tx)>8);
       }
     });
 

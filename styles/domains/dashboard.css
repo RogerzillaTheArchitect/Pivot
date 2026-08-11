@@ -349,37 +349,35 @@
   .tsk-meta-row svg{flex:none;opacity:.55}
   .tsk-meta-text{font-size:var(--text-sm,13px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .tsk-meta-sep{font-size:var(--text-sm,13px);color:rgba(255,255,255,.3);flex:none;margin:0 2px}
-  /* side buttons — white glass; outer edge rounded, card-side edge flat and borderless */
-  .tsk-btns-right,.tsk-btns-left{
-    position:absolute;top:0;bottom:0;z-index:1;
-    display:flex;align-items:stretch;
-    opacity:0;pointer-events:none;
-    transition:opacity .12s ease
+  /* unified action surface — spans full card width behind .tsk-front */
+  .tsk-actions{
+    position:absolute;inset:0;z-index:1;
+    display:flex;align-items:stretch;overflow:hidden;
+    border-radius:20px;
+    background:rgba(255,255,255,.07);
+    backdrop-filter:blur(24px) saturate(130%);
+    -webkit-backdrop-filter:blur(24px) saturate(130%);
+    border:1px solid rgba(255,255,255,.10);
+    pointer-events:none
   }
-  .tsk-btns-right{
-    right:0;width:55%;
-    border-radius:0 20px 20px 0;overflow:hidden;
-    background:rgba(255,255,255,.06);
-    backdrop-filter:blur(16px) saturate(120%);
-    -webkit-backdrop-filter:blur(16px) saturate(120%);
-    border:1px solid rgba(255,255,255,.10);border-left:none
+  .tsk-actions.tsk-vis{pointer-events:auto}
+  /* left zone (EDITAR) — 30% */
+  .tsk-act-left{
+    width:30%;display:flex;align-items:stretch;flex:none;
+    border-right:1px solid rgba(255,255,255,.09)
   }
-  .tsk-btns-left{
-    left:0;width:30%;
-    border-radius:20px 0 0 20px;overflow:hidden;
-    background:rgba(255,255,255,.06);
-    backdrop-filter:blur(16px) saturate(120%);
-    -webkit-backdrop-filter:blur(16px) saturate(120%);
-    border:1px solid rgba(255,255,255,.10);border-right:none
+  /* right zone (ARQUIVAR + CONCLUIR) — remaining */
+  .tsk-act-right{
+    flex:1;display:flex;align-items:stretch;
+    border-left:none
   }
-  .tsk-btns-right.tsk-vis,.tsk-btns-left.tsk-vis{opacity:1;pointer-events:auto}
   .tsk-swipe-btn{
     flex:1;border:none;background:transparent;color:rgba(255,255,255,.8);
     font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
     cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     -webkit-tap-highlight-color:transparent
   }
-  .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.12)}
+  .tsk-act-right .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.09)}
   .tsk-swipe-btn:active{opacity:.55}
   .tsk-swipe-btn svg{flex:none;opacity:.6}
   /* ===== FIM TASK STACK ===== */
