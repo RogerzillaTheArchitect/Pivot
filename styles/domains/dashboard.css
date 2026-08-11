@@ -352,8 +352,8 @@
   /* unified action surface — spans full card width behind .tsk-front */
   .tsk-actions{
     position:absolute;inset:0;z-index:1;
-    display:flex;align-items:stretch;overflow:hidden;
-    border-radius:20px;
+    display:flex;align-items:stretch;justify-content:space-between;
+    overflow:hidden;border-radius:20px;
     background:rgba(255,255,255,.07);
     backdrop-filter:blur(24px) saturate(130%);
     -webkit-backdrop-filter:blur(24px) saturate(130%);
@@ -361,23 +361,17 @@
     pointer-events:none
   }
   .tsk-actions.tsk-vis{pointer-events:auto}
-  /* left zone (EDITAR) — 30% */
-  .tsk-act-left{
-    width:30%;display:flex;align-items:stretch;flex:none;
-    border-right:1px solid rgba(255,255,255,.09)
-  }
-  /* right zone (ARQUIVAR + CONCLUIR) — remaining */
-  .tsk-act-right{
-    flex:1;display:flex;align-items:stretch;
-    border-left:none
-  }
+  /* left zone anchored to left edge — matches snap offset 30% */
+  .tsk-act-left{width:30%;display:flex;align-items:stretch;flex:none}
+  /* right zone anchored to right edge — matches snap offset 55% */
+  .tsk-act-right{width:55%;display:flex;align-items:stretch;flex:none}
   .tsk-swipe-btn{
     flex:1;border:none;background:transparent;color:rgba(255,255,255,.8);
     font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
     cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     -webkit-tap-highlight-color:transparent
   }
-  .tsk-act-right .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.09)}
+  .tsk-act-right .tsk-swipe-btn + .tsk-swipe-btn{border-left:1px solid rgba(255,255,255,.12)}
   .tsk-swipe-btn:active{opacity:.55}
   .tsk-swipe-btn svg{flex:none;opacity:.6}
   /* ===== FIM TASK STACK ===== */
