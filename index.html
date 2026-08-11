@@ -14894,22 +14894,23 @@
     if(q) itens=itens.filter(i=>((i.titulo||'')+' '+(i.desc||'')+' '+((i.tagsBusca||i.tags||[]).join(' '))+' '+(i.categoria||'')+' '+(i.autor||'')).toLowerCase().includes(q));
     itens=ordenarBibItens(itens);
     document.getElementById('bib-empty').style.display = itens.length? 'none':'block';
+    const _shieldIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+    const _hexIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>';
     wrap.innerHTML=itens.map(i=>{
       const fav=bibFavoritos.has(i.baseId);
-      /* Idioma e nº de blocos vieram da antiga bc-lang-row (entre título e
-         descrição) pra dentro deste MESMO rodapé onde já ficam os selos
-         Oficial/Jurídico/Recomendados — cria uma hierarquia visual clara:
-         título → descrição → uma única linha de tags informacionais, em vez
-         de duas linhas de metadados espalhadas em pontos diferentes do card. */
-      const rodape=bibBadgesItem(i);
-      rodape.push('<span class="bc-lang">'+(BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase())+'</span>');
-      if(i.numBlocos) rodape.push('<span class="bc-lang-blocks">'+BIB_ICON_BLOCKS+i.numBlocos+' '+t('builder.blocksCount')+'</span>');
-      if(i.usos) rodape.push('<span class="bib-uses">'+i.usos+' '+t('library.recommendCount')+'</span>');
+      const catLabel=escapeHtml(i.categoriaAmigavel||i.profissao||'');
+      const langTag=BIB_LANG_TAG[i.lang]||String(i.lang||'').toUpperCase();
+      const origLabel=i.origem==='comunidade'?(i.autor||t('library.origin.community')):t('library.origin.official');
+      const shieldBadge='<span class="bc-badge bc-shield">'+_shieldIco+escapeHtml(origLabel)+'</span>';
+      const langBadge='<span class="bc-badge bc-lang">'+langTag+'</span>';
+      const blocksBadge=i.numBlocos?'<span class="bc-badge bc-blocks">'+_hexIco+i.numBlocos+'</span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
+        (catLabel?'<div class="bc-cat">'+catLabel+'</div>':'')+
         '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
-        '<div class="bc-meta"><div class="bc-meta-l">'+rodape.join('')+'</div>'+favBtn+'</div>'+
+        '<hr class="bc-sep">'+
+        '<div class="bc-meta"><div class="bc-meta-l">'+shieldBadge+langBadge+blocksBadge+'</div>'+favBtn+'</div>'+
       '</div>';
     }).join('');
   }
