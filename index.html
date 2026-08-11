@@ -1392,7 +1392,7 @@
             <select id="ta-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
           </div>
           <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ta-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-          <div class="field u-hidden" id="ta-pessoas-field"><label>Pessoas associadas</label><div id="ta-pessoas-picker" class="pessoas-picker"></div></div>
+          <div class="field" id="ta-pessoas-field"><label>Pessoas associadas</label><div id="ta-pessoas-picker" class="pessoas-picker"></div></div>
         </div>
         <button class="btn primary u-w-full u-mt-14" onclick="criarTarefa()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
       </div>
@@ -5039,11 +5039,11 @@
   }
   function renderPessoasPicker(pickerId){
     const wrap=document.getElementById(pickerId);if(!wrap) return;
-    const fieldId=pickerId.replace('-picker','-field');
-    const field=document.getElementById(fieldId);
-    const outros=membrosEquipa.filter(m=>m.user_id!==currentUser?.id);
-    if(!outros.length){if(field) field.classList.add('u-hidden');return;}
-    if(field) field.classList.remove('u-hidden');
+    const outros=(membrosEquipa||[]).filter(m=>m.user_id!==currentUser?.id);
+    if(!outros.length){
+      wrap.innerHTML='<span style="font-size:var(--text-xs);color:var(--ink-soft)">Nenhum membro disponível no workspace.</span>';
+      return;
+    }
     wrap.innerHTML=outros.map(m=>{
       const nome=m.email||'?';
       return '<div class="pessoa-chip" data-uid="'+escapeHtml(m.user_id)+'" onclick="this.classList.toggle(\'on\')">'+
