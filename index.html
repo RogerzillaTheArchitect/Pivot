@@ -1392,7 +1392,9 @@
             <select id="ta-trabalho"><option value="" data-t="field.optionalDropdown">Opcional</option></select>
           </div>
           <div class="field"><label data-t="wizard.client.notes">Observações</label><textarea id="ta-notas" placeholder="opcional" data-t-placeholder="field.optionalPlaceholder"></textarea></div>
-          <div class="field" id="ta-pessoas-field"><label>Pessoas associadas</label><div id="ta-pessoas-picker" class="pessoas-picker"></div></div>
+          <div class="field" id="ta-pessoas-field"><label>Pessoas associadas</label>
+            <div id="ta-pessoas-rows"><div class="ta-pessoa-row"><input class="ta-pessoa-email" type="email" placeholder="email do membro"><button class="btn soft ta-plus-btn" onclick="addPessoaRow()">+</button></div></div>
+          </div>
         </div>
         <button class="btn primary u-w-full u-mt-14" onclick="criarTarefa()"><span data-t="wizard.createTask">Criar tarefa →</span></button>
       </div>
@@ -5613,7 +5615,6 @@
     if(name==='trabalho'){ trabalhoGoto(1); populateEnderecoSuggestions(); populateCategoriaWizardSelect(); }
     if(name==='tarefa'){
       limparFormularioTarefa(); populateTrabalhoSelects();
-      renderPessoasPicker('ta-pessoas-picker');
     }
     if(name==='receita') limparFormularioReceitaPanel();
     if(name==='despesa') limparFormularioDespesaPanel();
@@ -15663,6 +15664,12 @@
     renderRecursosLista();
   }
   /* ✅ Tarefa */
+  function addPessoaRow(){
+    const rows=document.getElementById('ta-pessoas-rows');if(!rows) return;
+    const row=document.createElement('div'); row.className='ta-pessoa-row';
+    row.innerHTML='<input class="ta-pessoa-email" type="email" placeholder="email do membro"><span class="rm" onclick="this.parentElement.remove()">✕</span>';
+    rows.appendChild(row); row.querySelector('input').focus();
+  }
   function addTarefaItem(){
     const row=document.createElement('div'); row.className='addlist-row';
     row.innerHTML='<span class="dots">⠿</span><input class="ta-item-input" placeholder="Item…" onkeydown="if(event.key===\'Enter\'){addTarefaItem();event.preventDefault();}"><span class="rm" onclick="this.parentElement.remove()">✕</span>';
@@ -15683,7 +15690,8 @@
     const id='tar'+Date.now();
     const jobId=document.getElementById('ta-trabalho').value||null;
     const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
-    const pessoas=getPessoasSelecionadas('ta-pessoas-picker');
+    const pessoaEmails=[...document.querySelectorAll('#ta-pessoas-rows .ta-pessoa-email')].map(el=>el.value.trim().toLowerCase()).filter(Boolean);
+    const pessoas=pessoaEmails.map(email=>{const m=(membrosEquipa||[]).find(x=>(x.email||'').toLowerCase()===email);return m?m.user_id:null;}).filter(Boolean);
     const itens=[...document.querySelectorAll('#ta-items .ta-item-input')]
       .map(el=>el.value.trim()).filter(Boolean).map(tx=>({t:tx,feito:false}));
     tarefasData[id]={ id, tipo:'simples', titulo,
@@ -15711,6 +15719,8 @@
     const prioPicker=document.getElementById('ta-prioridade-picker');
     if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
     const taItems=document.getElementById('ta-items'); if(taItems) taItems.innerHTML='';
+    const pessoasRows=document.getElementById('ta-pessoas-rows');
+    if(pessoasRows) pessoasRows.innerHTML='<div class="ta-pessoa-row"><input class="ta-pessoa-email" type="email" placeholder="email do membro"><button class="btn soft ta-plus-btn" onclick="addPessoaRow()">+</button></div>';
   }
 
   /* 🔔 Lembrete — a criação foi unificada em Tarefa > Simples (o antigo
