@@ -4816,6 +4816,19 @@
   }
   /* círculo de progresso em unicode aproximado */
   function progCircleChar(f,tot){ return f>=tot?'●':f/tot>=0.75?'◕':f/tot>=0.5?'◑':f>0?'◔':'○'; }
+  /* anel SVG de progresso para os chips de tag */
+  function progRingHtml(f,tot){
+    if(!tot) return '';
+    const r=7,cx=9,cy=9,C=2*Math.PI*r;
+    const arc=(f/tot*C).toFixed(1),gap=(C-f/tot*C).toFixed(1);
+    const done=f>=tot;
+    return '<span class="tsk-tag tsk-tag--prog'+(done?' done':'')+'">'+
+      '<svg viewBox="0 0 18 18" width="12" height="12" style="flex:none">'+
+        '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" class="prg-bg"/>'+
+        '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" class="prg-fill" stroke-dasharray="'+arc+' '+gap+'" transform="rotate(-90,'+cx+','+cy+')"/>'+
+      '</svg>'+
+      f+'/'+tot+'</span>';
+  }
   let _tcArquivados=new Set();
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
@@ -5162,19 +5175,19 @@
     else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
     else if(it.jobId) pessoasIds=(jobsData[it.jobId]&&jobsData[it.jobId].pessoas)||[];
     const pessoasHtml=buildPessoasHtml(pessoasIds);
-    /* progresso de itens (circle char + X/Y) */
-    let progHtml='';
+    /* progresso de itens — anel SVG na coluna de tags */
+    let progRingTag='';
     if(it.tipo==='lista'&&it.idx){
       const ls=listasData[it.idx];
       if(ls&&ls.itens&&ls.itens.length){
         const f=ls.itens.filter(i=>i.feito).length, tot=ls.itens.length;
-        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+progCircleChar(f,tot)+' '+f+'/'+tot+'</span>';
+        progRingTag=progRingHtml(f,tot);
       }
     } else if(it.tipo==='tarefa'&&it.idx){
       const tk=tarefasData[it.idx];
       if(tk&&tk.itens&&tk.itens.length){
         const f=tk.itens.filter(i=>i.feito).length, tot=tk.itens.length;
-        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+progCircleChar(f,tot)+' '+f+'/'+tot+'</span>';
+        progRingTag=progRingHtml(f,tot);
       }
     }
     /* vínculo com projeto */
@@ -5184,8 +5197,8 @@
       const jNome=jn.nome||jn.client||'';
       if(jNome) projHtml='<div class="tsk-proj-link">'+icoLink+'<span>'+escapeHtml(jNome)+'</span></div>';
     }
-    /* chips direita: tipo + prazo */
-    const tagsHtml='<div class="tsk-tags">'+tipoChipHtml(it)+prazoChipHtml(it.dataISO)+'</div>';
+    /* chips direita: tipo + prazo + anel de progresso */
+    const tagsHtml='<div class="tsk-tags">'+tipoChipHtml(it)+prazoChipHtml(it.dataISO)+progRingTag+'</div>';
     const infoClass='tsk-info has-tags'+(pessoasHtml?' has-people':'');
     return '<div class="tsk-card" data-task'+
       ' data-stack-idx="'+idx+'"'+
@@ -5211,7 +5224,6 @@
             '<div class="tsk-meta-row">'+icoContact+'<span class="tsk-meta-text">'+(it.cliente?escapeHtml(it.cliente):'—')+'</span></div>'+
             '<div class="tsk-meta-row">'+icoCal+'<span class="tsk-meta-text">'+dataFmt+'</span>'+
               (it.hora?'<span class="tsk-meta-sep">·</span>'+icoClock+'<span class="tsk-meta-text">'+escapeHtml(it.hora)+'</span>':'')+
-              progHtml+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -15862,6 +15874,16 @@
     abrirDetalheItemSolto('lista', id);
     if(ls.jobId) renderJobDetailDynamic(ls.jobId);
   }
+  function toggleTarefaSubItem(id, i, el){
+    const tk=tarefasData[id];
+    if(!tk||!tk.itens) return;
+    tk.itens[i].feito=!tk.itens[i].feito;
+    el.classList.toggle('on');
+    saveTarefasData();
+    abrirDetalheItemSolto('tarefa', id);
+    if(tk.jobId) renderJobDetailDynamic(tk.jobId);
+    if(typeof renderTasksList==='function') renderTasksList();
+  }
   function excluirLista(id){
     const ls=listasData[id];
     const jobId=ls&&ls.jobId;
@@ -15890,10 +15912,15 @@
         '<button class="btn ghost u-w-full u-mt-14" onclick="excluirLista(\''+id+'\')">'+t('action.remove')+'</button>');
     } else if(tipo==='tarefa'){
       const tk=tarefasData[id]; if(!tk) return;
+      const tkItensHtml=(tk.itens&&tk.itens.length)
+        ? (tk.itens.map((it,i)=>'<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(it.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(it.t)+'</div></div><div class="toggle'+(it.feito?' on':'')+'" onclick="toggleTarefaSubItem(\''+id+'\','+i+',this)"><div class="kn"></div></div></div>').join(''))
+        : '';
+      const hasItens=tk.itens&&tk.itens.length;
       openInfo(tk.titulo,
-        (tk.data?('<p class="u-label-soft u-mb-10">'+t('field.date')+': '+tk.data.split('-').reverse().join('/')+(tk.hora?(' · '+tk.hora):'')+'</p>'):'')+
+        (tk.data?('<p class="u-label-soft u-mb-10">'+t('field.date')+': '+tk.data.split('-').reverse().join('/')+(tk.hora?(' \u00B7 '+tk.hora):'')+'</p>'):'')+
+        tkItensHtml+
         (tk.notas?('<p class="u-hint u-pre-wrap">'+escapeHtml(tk.notas)+'</p>'):'')+
-        (tk.feito?'':'<button class="btn primary u-w-full u-mb-8" onclick="marcarTarefaFeita(\''+id+'\')">'+t('action.complete')+'</button>')+
+        (!hasItens&&!tk.feito?'<button class="btn primary u-w-full u-mb-8" onclick="marcarTarefaFeita(\''+id+'\')">'+t('action.complete')+'</button>':'')+
         '<button class="btn ghost u-w-full" onclick="excluirTarefa(\''+id+'\')">'+t('action.remove')+'</button>');
     }
   }
