@@ -4791,6 +4791,31 @@
     pendencia:'<span class="nav-ico" style="width:14px;height:14px;display:inline-block;mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-up-right-stroke-square.svg)"></span>',
     demanda:'<span class="nav-ico" style="width:14px;height:14px;display:inline-block;mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg);-webkit-mask-image:url(https://api.iconify.design/boxicons:arrow-down-left-stroke-square.svg)"></span>',
   };
+  /* chip de tipo: TASK / LIST / STAGE-name */
+  function tipoChipHtml(it){
+    const SOLTO=['lembrete','lista','tarefa'];
+    if(!SOLTO.includes(it.tipo))
+      return '<span class="tsk-tag tsk-tag--tipo stage">'+it.tipo.toUpperCase()+'</span>';
+    if(it.tipo==='lista') return '<span class="tsk-tag tsk-tag--tipo">LIST</span>';
+    if(it.tipo==='tarefa'&&it.idx){
+      const tk=tarefasData[it.idx];
+      if(tk&&tk.itens&&tk.itens.length>=2) return '<span class="tsk-tag tsk-tag--tipo">LIST</span>';
+    }
+    return '<span class="tsk-tag tsk-tag--tipo">TASK</span>';
+  }
+  /* chip de prazo: verde / âmbar / vermelho */
+  function prazoChipHtml(dataISO){
+    if(!dataISO) return '';
+    const d=diasEntre(dataISO);
+    let cl,lbl;
+    if(d<0){ const n=Math.abs(d); cl='tsk-prazo-late'; lbl=n+(n===1?' DIA':' DIAS'); }
+    else if(d===0){ cl='tsk-prazo-amber'; lbl='HOJE'; }
+    else if(d===1){ cl='tsk-prazo-amber'; lbl='AMANHÃ'; }
+    else{ cl='tsk-prazo-neutral'; lbl=d+' DIAS'; }
+    return '<span class="tsk-tag tsk-tag--prazo '+cl+'">'+lbl+'</span>';
+  }
+  /* círculo de progresso em unicode aproximado */
+  function progCircleChar(f,tot){ return f>=tot?'●':f/tot>=0.75?'◕':f/tot>=0.5?'◑':f>0?'◔':'○'; }
   let _tcArquivados=new Set();
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
@@ -5127,23 +5152,41 @@
     const icoContact='<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13c0-3 2.5-4.5 5.5-4.5s5.5 1.5 5.5 4.5"/></svg>';
     const icoCal='<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="3.5" width="12" height="10" rx="2"/><path d="M5 2v3M11 2v3M2 7.5h12"/></svg>';
     const icoClock='<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="5.5"/><path d="M8 5.5V8l2 1.5"/></svg>';
+    const icoLink='<svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5a3 3 0 0 0 4.24 0l2-2A3 3 0 0 0 7.5 2.25l-1.1 1.1"/><path d="M8.5 5.5a3 3 0 0 0-4.24 0l-2 2a3 3 0 0 0 4.25 4.25l1.1-1.1"/></svg>';
     const icoEdit='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     const icoArch='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     const icoDone='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
+    /* pessoas associadas */
     let pessoasIds=[];
     if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
     else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
     else if(it.jobId) pessoasIds=(jobsData[it.jobId]&&jobsData[it.jobId].pessoas)||[];
     const pessoasHtml=buildPessoasHtml(pessoasIds);
-    const infoClass='tsk-info'+(pessoasHtml?' has-people':'');
+    /* progresso de itens (circle char + X/Y) */
     let progHtml='';
-    if(it.tipo==='tarefa'&&it.idx){
+    if(it.tipo==='lista'&&it.idx){
+      const ls=listasData[it.idx];
+      if(ls&&ls.itens&&ls.itens.length){
+        const f=ls.itens.filter(i=>i.feito).length, tot=ls.itens.length;
+        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+progCircleChar(f,tot)+' '+f+'/'+tot+'</span>';
+      }
+    } else if(it.tipo==='tarefa'&&it.idx){
       const tk=tarefasData[it.idx];
       if(tk&&tk.itens&&tk.itens.length){
-        const feitos=tk.itens.filter(i=>i.feito).length;
-        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+feitos+'/'+tk.itens.length+'</span>';
+        const f=tk.itens.filter(i=>i.feito).length, tot=tk.itens.length;
+        progHtml='<span class="tsk-meta-sep">·</span><span class="tsk-prog">'+progCircleChar(f,tot)+' '+f+'/'+tot+'</span>';
       }
     }
+    /* vínculo com projeto */
+    let projHtml='';
+    if(it.jobId&&jobsData[it.jobId]){
+      const jn=jobsData[it.jobId];
+      const jNome=jn.nome||jn.client||'';
+      if(jNome) projHtml='<div class="tsk-proj-link">'+icoLink+'<span>'+escapeHtml(jNome)+'</span></div>';
+    }
+    /* chips direita: tipo + prazo */
+    const tagsHtml='<div class="tsk-tags">'+tipoChipHtml(it)+prazoChipHtml(it.dataISO)+'</div>';
+    const infoClass='tsk-info has-tags'+(pessoasHtml?' has-people':'');
     return '<div class="tsk-card" data-task'+
       ' data-stack-idx="'+idx+'"'+
       ' data-job-id="'+(it.jobId||'')+'"'+
@@ -5164,6 +5207,7 @@
           '<div class="tsk-photo-wrap">'+fotoHtml+'</div>'+
           '<div class="'+infoClass+'">'+
             '<span class="tsk-title">'+escapeHtml(it.nome)+'</span>'+
+            projHtml+
             '<div class="tsk-meta-row">'+icoContact+'<span class="tsk-meta-text">'+(it.cliente?escapeHtml(it.cliente):'—')+'</span></div>'+
             '<div class="tsk-meta-row">'+icoCal+'<span class="tsk-meta-text">'+dataFmt+'</span>'+
               (it.hora?'<span class="tsk-meta-sep">·</span>'+icoClock+'<span class="tsk-meta-text">'+escapeHtml(it.hora)+'</span>':'')+
@@ -5171,6 +5215,7 @@
             '</div>'+
           '</div>'+
         '</div>'+
+        tagsHtml+
       '</div>'+
       (pessoasHtml?'<div class="tsk-people">'+pessoasHtml+'</div>':'')+
     '</div>';
