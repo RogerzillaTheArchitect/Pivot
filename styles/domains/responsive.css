@@ -20,6 +20,14 @@
     .sheet.show{ transform:translate(-50%,-50%) scale(1); opacity:1; pointer-events:all }
     .sheet-grab{display:none}
     .sheet-header{padding-top:4px}
+    /* Glass modal não segue o padrão de modal centrado pequeno do desktop */
+    #infoSheet{
+      left:0;right:0;top:0;bottom:0;
+      width:100%;max-width:none;
+      transform:none;opacity:0;pointer-events:none;
+      border-radius:0;box-shadow:none;
+    }
+    #infoSheet.show{transform:none;opacity:1;pointer-events:all}
 
     /* Portal do cliente vira uma pré-visualização emoldurada, como uma janela de telefone flutuante */
     .client-wrap{
