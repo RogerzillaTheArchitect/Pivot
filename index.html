@@ -548,57 +548,10 @@
 
         <div id="notif-pendentes-wrap"></div>
 
-        <!-- ============ AGENDA ============ -->
-        <div id="agenda-wrap">
-          <!-- Cabeçalho -->
-          <div class="agd-header">
-            <div class="agd-month" id="agd-month"></div>
-            <div class="agd-nav-row">
-              <button class="agd-nav-btn" onclick="agendaNavegar(-1)">&#8249;</button>
-              <div class="agd-days" id="agd-days"></div>
-              <button class="agd-nav-btn" onclick="agendaNavegar(1)">&#8250;</button>
-            </div>
-          </div>
-
-          <!-- Controle de atrasados -->
-          <div class="agd-late-ctrl u-hidden" id="agd-late-ctrl" onclick="abrirAgendaAtrasados()">
-            <svg class="agd-late-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 5v3.5l2 1.5"/></svg>
-            <span class="agd-late-count" id="agd-late-count">0</span>
-            <span class="agd-late-lbl">atrasados</span>
-          </div>
-
-          <!-- Timeline -->
-          <div class="agd-tl-wrap">
-            <div class="agd-tl" id="agd-tl"></div>
-            <div class="agd-tl-empty u-hidden" id="agd-tl-empty">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-              <span>Nenhum compromisso neste dia</span>
-            </div>
-          </div>
-
-          <!-- Cards sem horário -->
-          <div class="agd-sh-wrap u-hidden" id="agd-sh-wrap">
-            <div class="agd-sh-label">SEM HORÁRIO</div>
-            <div class="agd-sh-strip" id="agd-sh-strip"></div>
-          </div>
+        <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
+        <div id="hoje-content">
+          <div id="tasks-list"></div>
         </div>
-
-        <!-- Overlay de atrasados -->
-        <div class="agd-overlay u-hidden" id="agd-overlay">
-          <div class="agd-overlay-back" onclick="fecharAgendaAtrasados()"></div>
-          <div class="agd-overlay-sheet">
-            <div class="agd-overlay-hd">
-              <span class="agd-overlay-title">ATRASADOS</span>
-              <button class="agd-overlay-close" onclick="fecharAgendaAtrasados()">
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 3l10 10M13 3L3 13"/></svg>
-              </button>
-            </div>
-            <div class="agd-overlay-body" id="agd-overlay-body"></div>
-          </div>
-        </div>
-
-        <!-- Mantém tasks-list oculto para compatibilidade com chamadas externas -->
-        <div id="hoje-content" class="u-hidden"><div id="tasks-list"></div></div>
 
         <div id="dash-card-destaques" class="u-hidden u-mt-22"></div>
 
@@ -4729,7 +4682,7 @@
     const nomesMeses=LANG==='en'?nomesMesesEn:LANG==='es'?nomesMesesEs:nomesMesesPt;
     const mesEl=document.getElementById('ms-mes-atual');
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
-    renderAgenda();
+    renderTasksList();
     updateHoje();
   }
   function diasEntre(dataISO){
@@ -5184,7 +5137,7 @@
     n.estado=aceitar?'aceito':'recusado';
     saveNotificacoesData();
     renderNotificacoesPendentes();
-    if(aceitar) renderAgenda();
+    if(aceitar) renderTasksList();
   }
   function renderNotificacoesPendentes(){
     const wrap=document.getElementById('notif-pendentes-wrap');if(!wrap) return;
@@ -5282,260 +5235,6 @@
       (pessoasHtml?'<div class="tsk-people">'+pessoasHtml+'</div>':'')+
     '</div>';
   }
-
-  /* =====================================================================
-     AGENDA — substituição da view de Tarefas por experiência de agenda diária
-     ===================================================================== */
-
-  let _agendaDataSel = new Date();
-
-  const AGD_MESES_PT = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const AGD_DIAS_CURTOS = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-
-  /* Mapa tipo → classe de cor */
-  const AGD_COR = {
-    evento:'c-teal', entrega:'c-petrol', tarefa:'c-teal',
-    lista:'c-blue', lembrete:'c-blue',
-    contrato:'c-wine', pagamento:'c-amber'
-  };
-
-  /* Gera todos os itens do radar sem filtro de mês */
-  function gerarItensAgendaCompleta(){
-    const itens=[];
-    jobsVisiveis().filter(j=>!j.arquivado).forEach(j=>{
-      const cliente=j.client||'';
-      if(j.structure&&j.structure.contrato&&j.contract&&j.contract.status!=='assinado'){
-        itens.push({dataISO:j.dateRaw||new Date().toISOString().slice(0,10),nome:j.nome||j.client,cliente,acao:t('tasks.actionSign'),jobId:j.id,tipo:'contrato',idx:null});
-      }
-      (j.payments||[]).forEach((p,i)=>{
-        if(p.status==='pago'||!p.dueDate) return;
-        itens.push({dataISO:p.dueDate,nome:j.nome||j.client,cliente,acao:t('tasks.actionReceivePayment'),jobId:j.id,tipo:'pagamento',idx:i});
-      });
-      if(j.dateRaw){
-        const msEvento=(j.milestones||[]).find(m=>m.key==='principal');
-        if(msEvento&&msEvento.status!=='feito'){
-          const acao=t('tasks.actionExecute').replace('{tipo}',(j.typeLabel||'').toLowerCase()||t('tasks.actionExecute').replace('{tipo}','').trim());
-          itens.push({dataISO:j.dateRaw,nome:j.nome||j.client,cliente,acao,jobId:j.id,tipo:'evento',idx:null,hora:j.horaIni||'',horaFim:j.horaFim||''});
-        }
-      }
-      const msEntrega=(j.milestones||[]).find(m=>m.key==='entrega');
-      if(msEntrega&&msEntrega.status!=='feito'){
-        const dataEntrega=(j.entrega&&j.entrega.dataEntrega)||j.dateRaw;
-        if(dataEntrega) itens.push({dataISO:dataEntrega,nome:j.nome||j.client,cliente,acao:t('milestone.finalDelivery'),jobId:j.id,tipo:'entrega',idx:null});
-      }
-    });
-    Object.values(lembretesData).forEach(l=>{
-      if(l.feito||l.jobId||!l.data) return;
-      itens.push({dataISO:l.data,hora:l.hora||'',nome:l.titulo,cliente:'',acao:t('reminder.action'),jobId:null,tipo:'lembrete',idx:l.id});
-    });
-    Object.values(listasData).forEach(ls=>{
-      if(ls.feito||!ls.data||!ls.prioridade) return;
-      const jobLs=ls.jobId?jobsData[ls.jobId]:null;
-      itens.push({dataISO:ls.data,hora:ls.hora||'',nome:ls.titulo,cliente:jobLs?jobLs.client:'',acao:t('list.action'),jobId:ls.jobId||null,tipo:'lista',idx:ls.id});
-    });
-    Object.values(tarefasData).forEach(tk=>{
-      if(tk.tipo!=='simples'||tk.feito||!tk.data) return;
-      const jobTk=tk.jobId?jobsData[tk.jobId]:null;
-      itens.push({dataISO:tk.data,hora:tk.hora||'',nome:tk.titulo,cliente:jobTk?jobTk.client:'',acao:t('task.action'),jobId:tk.jobId||null,tipo:'tarefa',idx:tk.id});
-    });
-    itens.sort((a,b)=>a.dataISO!==b.dataISO?a.dataISO.localeCompare(b.dataISO):(a.hora||'').localeCompare(b.hora||''));
-    return itens;
-  }
-
-  function agendaNavegar(delta){
-    _agendaDataSel=new Date(_agendaDataSel);
-    _agendaDataSel.setDate(_agendaDataSel.getDate()+delta);
-    renderAgenda();
-  }
-
-  function renderAgenda(){
-    const dataISO=_agendaDataSel.toISOString().slice(0,10);
-    const todos=gerarItensAgendaCompleta();
-    const hoje=new Date(); hoje.setHours(0,0,0,0);
-    const hojeISO=hoje.toISOString().slice(0,10);
-    const atrasados=todos.filter(it=>it.dataISO<hojeISO);
-    const doDia=todos.filter(it=>it.dataISO===dataISO);
-    const comHora=doDia.filter(it=>it.hora);
-    const semHora=doDia.filter(it=>!it.hora);
-    _renderAgendaHeader(dataISO);
-    _renderAgendaAtrasadosCtrl(atrasados);
-    _renderAgendaTimeline(comHora);
-    _renderAgendaSemHora(semHora);
-  }
-
-  function _renderAgendaHeader(dataISO){
-    const sel=new Date(dataISO+'T00:00:00');
-    const monthEl=document.getElementById('agd-month');
-    const daysEl=document.getElementById('agd-days');
-    if(monthEl) monthEl.textContent=AGD_MESES_PT[sel.getMonth()];
-    if(!daysEl) return;
-    const hoje=new Date(); hoje.setHours(0,0,0,0);
-    const hojeISO=hoje.toISOString().slice(0,10);
-    const dias=[-1,0,1].map(d=>{
-      const dt=new Date(sel); dt.setDate(dt.getDate()+d);
-      const iso=dt.toISOString().slice(0,10);
-      const isSel=iso===dataISO;
-      const isHoje=iso===hojeISO;
-      const diaNum=String(dt.getDate()).padStart(2,'0');
-      const mesAbr=AGD_MESES_PT[dt.getMonth()].slice(0,3).toUpperCase();
-      return '<div class="agd-day'+(isSel?' is-sel':'')+(isHoje?' is-today':'')+'" onclick="agendaNavegar('+(d===0?0:d<0?-1:1)+')">'+
-        '<div class="agd-day-num">'+diaNum+'</div>'+
-        '<div class="agd-day-lbl">'+mesAbr+'</div>'+
-      '</div>';
-    });
-    // Corrigir: dia anterior já navegado, central = selecionado, próximo = +1
-    // Re-render com offsets corretos relativos ao dia selecionado
-    const diaCentral=new Date(dataISO+'T00:00:00');
-    daysEl.innerHTML=[-1,0,1].map(delta=>{
-      const dt=new Date(diaCentral); dt.setDate(dt.getDate()+delta);
-      const iso=dt.toISOString().slice(0,10);
-      const isSel=(delta===0);
-      const isHoje=iso===hojeISO;
-      const diaNum=String(dt.getDate()).padStart(2,'0');
-      const mesAbr=AGD_MESES_PT[dt.getMonth()].slice(0,3).toUpperCase();
-      const clickFn='agendaNavegar('+delta+')';
-      return '<div class="agd-day'+(isSel?' is-sel':'')+(isHoje?' is-today':'')+'" onclick="'+clickFn+'">'+
-        '<div class="agd-day-num">'+diaNum+'</div>'+
-        '<div class="agd-day-lbl">'+mesAbr+'</div>'+
-      '</div>';
-    }).join('');
-  }
-
-  function _renderAgendaAtrasadosCtrl(atrasados){
-    const ctrl=document.getElementById('agd-late-ctrl');
-    const count=document.getElementById('agd-late-count');
-    if(!ctrl) return;
-    if(!atrasados.length){ctrl.classList.add('u-hidden');return;}
-    ctrl.classList.remove('u-hidden');
-    if(count) count.textContent=atrasados.length;
-  }
-
-  /* Constrói o card de agenda para a timeline */
-  function _construirCardAgenda(it){
-    const foto=clienteFotoPorNome(it.cliente);
-    const cor=AGD_COR[it.tipo]||'c-teal';
-    const fotoHtml=avatarHtml(it.cliente||it.nome,48,foto);
-    const icoContact='<svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="4.5" r="2.5"/><path d="M2 12c0-3 2.2-4.5 5-4.5s5 1.5 5 4.5"/></svg>';
-    const icoLink='<svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5a3 3 0 0 0 4.24 0l2-2A3 3 0 0 0 7.5 2.25l-1.1 1.1"/><path d="M8.5 5.5a3 3 0 0 0-4.24 0l-2 2a3 3 0 0 0 4.25 4.25l1.1-1.1"/></svg>';
-    /* projeto vinculado */
-    let projHtml='';
-    if(it.jobId&&jobsData[it.jobId]){
-      const jn=jobsData[it.jobId];
-      const jNome=jn.nome||jn.client||'';
-      if(jNome) projHtml='<div class="agd-card-proj">'+icoLink+'<span>'+escapeHtml(jNome)+'</span></div>';
-    }
-    /* pessoas */
-    let pessoasIds=[];
-    if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
-    else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
-    else if(it.jobId) pessoasIds=(jobsData[it.jobId]&&jobsData[it.jobId].pessoas)||[];
-    const pessoasHtml=buildPessoasHtml(pessoasIds);
-    /* etapa do job */
-    let stageHtml='';
-    if(it.jobId&&jobsData[it.jobId]){
-      const jn=jobsData[it.jobId];
-      const msAtiva=(jn.milestones||[]).find(m=>m.status==='ativo'||m.status==='em-andamento');
-      if(msAtiva&&msAtiva.nome) stageHtml='<span class="agd-card-stage">'+escapeHtml(msAtiva.nome)+'</span>';
-      else if(jn.typeLabel) stageHtml='<span class="agd-card-stage">'+escapeHtml(jn.typeLabel)+'</span>';
-    }
-    const rightHtml=(pessoasHtml||stageHtml)?
-      '<div class="agd-card-right">'+
-        (pessoasHtml?'<div class="agd-card-people">'+pessoasHtml+'</div>':'')+
-        stageHtml+
-      '</div>':'';
-    const clickFn=it.jobId?'openJob(\''+it.jobId+'\')':
-      (it.idx?'abrirDetalheItemSolto(\''+it.tipo+'\',\''+it.idx+'\')':'');
-    return '<div class="agd-card '+cor+'"'+(clickFn?' onclick="'+clickFn+'"':'')+
-      ' data-job-id="'+(it.jobId||'')+'" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+'">' +
-      '<div class="agd-card-time">'+escapeHtml(it.hora)+'</div>'+
-      '<div class="agd-card-photo">'+fotoHtml+'</div>'+
-      '<div class="agd-card-body">'+
-        '<div class="agd-card-title">'+escapeHtml(it.nome)+'</div>'+
-        projHtml+
-        '<div class="agd-card-cli">'+icoContact+'<span>'+(it.cliente?escapeHtml(it.cliente):'—')+'</span></div>'+
-      '</div>'+
-      rightHtml+
-    '</div>';
-  }
-
-  function _renderAgendaTimeline(itens){
-    const tl=document.getElementById('agd-tl');
-    const empty=document.getElementById('agd-tl-empty');
-    if(!tl) return;
-    if(!itens.length){
-      tl.innerHTML='';tl.style.height='';
-      if(empty) empty.classList.remove('u-hidden');
-      return;
-    }
-    if(empty) empty.classList.add('u-hidden');
-    /* determinar range de horas */
-    const horas=itens.map(it=>{const p=it.hora.split(':');return parseInt(p[0],10);});
-    const hMin=Math.max(0,Math.min(...horas)-1);
-    const hMax=Math.min(23,Math.max(...horas)+2);
-    const HORA_H=100;  /* px por hora */
-    const MIN_H=HORA_H/60; /* px por minuto */
-    const totalH=(hMax-hMin)*HORA_H;
-    tl.style.height=totalH+'px';
-    let html='';
-    /* marcações de tempo */
-    for(let h=hMin;h<hMax;h++){
-      for(let m=0;m<60;m+=10){
-        const topPx=((h-hMin)*60+m)*MIN_H;
-        const isHour=(m===0);
-        const lbl=String(h).padStart(2,'0')+':'+(m===0?'00':String(m));
-        html+='<div class="agd-tm'+(isHour?' is-hour':'')+'" style="top:'+topPx.toFixed(1)+'px">'+
-          '<div class="agd-tm-lbl">'+(isHour||m===30?lbl:'')+'</div>'+
-          '<div class="agd-tm-line"></div>'+
-        '</div>';
-      }
-    }
-    /* cards de evento */
-    itens.forEach(it=>{
-      const p=it.hora.split(':');
-      const h=parseInt(p[0],10),m=parseInt(p[1]||'0',10);
-      const topPx=((h-hMin)*60+m)*MIN_H;
-      html+='<div style="position:absolute;left:52px;right:0;top:'+topPx.toFixed(1)+'px;padding:0 0 8px">'+
-        _construirCardAgenda(it)+
-      '</div>';
-    });
-    tl.innerHTML=html;
-  }
-
-  function _renderAgendaSemHora(itens){
-    const wrap=document.getElementById('agd-sh-wrap');
-    const strip=document.getElementById('agd-sh-strip');
-    if(!wrap||!strip) return;
-    if(!itens.length){wrap.classList.add('u-hidden');return;}
-    wrap.classList.remove('u-hidden');
-    strip.innerHTML='<div class="tsk-stack" style="position:relative;display:flex;gap:10px;height:108px">'+
-      itens.map((it,idx)=>construirStackCard(it,idx)).join('')+
-    '</div>';
-    /* reposicionar cards como flex horizontal em vez de stack */
-    strip.querySelectorAll('.tsk-card').forEach(card=>{
-      card.style.cssText='position:relative;left:auto;top:auto;width:220px;transform:none;opacity:1;flex:none;height:108px';
-    });
-  }
-
-  function abrirAgendaAtrasados(){
-    const overlay=document.getElementById('agd-overlay');
-    const body=document.getElementById('agd-overlay-body');
-    if(!overlay||!body) return;
-    const hoje=new Date(); hoje.setHours(0,0,0,0);
-    const hojeISO=hoje.toISOString().slice(0,10);
-    const atrasados=gerarItensAgendaCompleta().filter(it=>it.dataISO<hojeISO);
-    body.innerHTML=atrasados.map(construirCardRadar).join('');
-    ativarSwipeRadar();
-    overlay.classList.remove('u-hidden');
-    document.body.style.overflow='hidden';
-  }
-
-  function fecharAgendaAtrasados(){
-    const overlay=document.getElementById('agd-overlay');
-    if(overlay) overlay.classList.add('u-hidden');
-    document.body.style.overflow='';
-  }
-
-  /* ===== FIM AGENDA ===== */
 
   function ativarStackTarefas(){
     const stack=document.getElementById('tsk-stack');
@@ -5712,7 +5411,7 @@
   function tcArquivar(btn){
     const sl=btn.closest('.tsk-card');
     _tcArquivados.add((sl.dataset.jobId||sl.dataset.tipo||'')+'_'+(sl.dataset.idx||''));
-    renderAgenda();
+    renderTasksList();
     showToast(t('toast.archivedFromRadar'));
   }
   function tcConcluir(btn){
@@ -5728,7 +5427,7 @@
       else if(tipo==='contrato'){openJob(jobId);return;}
       else{const ms=(job.milestones||[]).find(m=>m.key==='principal');if(ms){ms.status='feito';ms.feitoEm=new Date().toISOString();pushHistory(job,t('toast.markedDone'));saveJobsData();}}
     }
-    renderAgenda();
+    renderTasksList();
     renderMonthTicker();
     showToast(t('toast.done'));
   }
@@ -16065,7 +15764,7 @@
     showToast(t('toast.taskPrefix')+titulo+t('toast.createdFemSuffix'));
     saveTarefasData();
     renderMonthTicker();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(jobId && currentJobId===jobId && document.getElementById('detalhe-dynamic').style.display!=='none'){
       renderJobDetailDynamic(jobId);
     }
@@ -16103,7 +15802,7 @@
     l.feito=true;
     saveLembretesData();
     closeInfo();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(l.jobId) renderJobDetailDynamic(l.jobId);
     showToast(t('toast.done'));
   }
@@ -16113,7 +15812,7 @@
     delete lembretesData[id];
     saveLembretesData();
     closeInfo();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(jobId) renderJobDetailDynamic(jobId);
     showToast(t('toast.removed'));
   }
@@ -16155,7 +15854,7 @@
     if(jobId && jobsData[jobId]){ pushHistory(jobsData[jobId], t('list.historyCreated')+titulo); saveJobsData(); }
     showToast(t('toast.listPrefix')+titulo+t('toast.createdFemSuffix'));
     renderMonthTicker();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(jobId && currentJobId===jobId && document.getElementById('detalhe-dynamic').style.display!=='none'){
       renderJobDetailDynamic(jobId);
     }
@@ -16186,7 +15885,7 @@
     saveTarefasData();
     abrirDetalheItemSolto('tarefa', id);
     if(tk.jobId) renderJobDetailDynamic(tk.jobId);
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
   }
   function excluirLista(id){
     const ls=listasData[id];
@@ -16194,7 +15893,7 @@
     delete listasData[id];
     saveListasData();
     closeInfo();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(jobId) renderJobDetailDynamic(jobId);
     showToast(t('toast.removed'));
   }
@@ -16234,7 +15933,7 @@
     tk.feito=true;
     saveTarefasData();
     closeInfo();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(tk.jobId) renderJobDetailDynamic(tk.jobId);
     showToast(t('toast.done'));
   }
@@ -16244,7 +15943,7 @@
     delete tarefasData[id];
     saveTarefasData();
     closeInfo();
-    if(typeof renderAgenda==='function') renderAgenda();
+    if(typeof renderTasksList==='function') renderTasksList();
     if(jobId) renderJobDetailDynamic(jobId);
     showToast(t('toast.removed'));
   }
