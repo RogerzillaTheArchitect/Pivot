@@ -5238,8 +5238,8 @@
     function positionCards(animate){
       const backCount=Math.min(n-1,MAX_BACK);
       const containerH=CARD_H+STRIP_H*backCount;
-      const tr=animate?'top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease':'none';
-      stack.style.transition=animate?'height .4s cubic-bezier(.25,.1,.25,1)':'none';
+      const tr=animate?'top .18s cubic-bezier(.25,.1,.25,1),width .18s cubic-bezier(.25,.1,.25,1),opacity .18s ease':'none';
+      stack.style.transition=animate?'height .18s cubic-bezier(.25,.1,.25,1)':'none';
       stack.style.height=containerH+'px';
       for(let i=0;i<n;i++){
         const card=cardAt(i);
@@ -5265,7 +5265,7 @@
     function snapClose(animate){
       const front=getFront();if(!front) return;
       const f=front.querySelector('.tsk-front');
-      if(f){f.classList.remove('tsk-dragging');f.style.transition=animate?'transform .3s cubic-bezier(.25,.1,.25,1)':'none';f.style.transform='translateX(0)';}
+      if(f){f.classList.remove('tsk-dragging');f.style.transition=animate?'transform .15s cubic-bezier(.25,.1,.25,1)':'none';f.style.transform='translateX(0)';}
       const act=front.querySelector('.tsk-actions');
       if(act) act.classList.remove('tsk-vis');
       swipedOpen=false;
@@ -5277,11 +5277,11 @@
       const oldFront=cardAt(0);
       const backCount=Math.min(n-1,MAX_BACK);
       const containerH=CARD_H+STRIP_H*backCount;
-      oldFront.style.transition='top .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease';
+      oldFront.style.transition='top .18s cubic-bezier(.25,.1,.25,1),opacity .18s ease';
       oldFront.style.top=(containerH+20)+'px';
       oldFront.style.opacity='0';oldFront.style.zIndex='0';
       ringOffset=(ringOffset+1)%n;
-      const tr='top .4s cubic-bezier(.25,.1,.25,1),width .4s cubic-bezier(.25,.1,.25,1),opacity .4s ease';
+      const tr='top .18s cubic-bezier(.25,.1,.25,1),width .18s cubic-bezier(.25,.1,.25,1),opacity .18s ease';
       stack.style.height=containerH+'px';
       for(let i=0;i<n;i++){
         const card=cardAt(i);if(card===oldFront) continue;
@@ -5294,7 +5294,7 @@
       setTimeout(()=>{
         oldFront.style.transition='none';oldFront.style.top='0px';oldFront.style.opacity='0';
         positionCards(false);animating=false;
-      },420);
+      },200);
     }
 
     function goBack(){
@@ -5307,7 +5307,7 @@
       newFront.style.transition='none';newFront.style.top=(containerH+20)+'px';newFront.style.opacity='0';
       newFront.getBoundingClientRect();
       positionCards(true);
-      setTimeout(()=>{animating=false;},420);
+      setTimeout(()=>{animating=false;},200);
     }
 
     document.addEventListener('pointerdown',function(e){
