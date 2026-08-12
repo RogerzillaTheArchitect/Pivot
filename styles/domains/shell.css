@@ -25,9 +25,139 @@
   .view.active{display:block}
   @keyframes fade{from{opacity:0;transform:translateY(10px) scale(.99)}to{opacity:1;transform:none}}
 
-  /* Info overlay / sheet — z-index específico desta camada */
-  #infoOverlay{z-index:75}
-  #infoSheet{z-index:85;max-height:80vh}
+  /* ===== GLASS MODAL — infoOverlay + infoSheet ===== */
+  /* Overlay: blur forte + escurecimento, fundo permanece visível */
+  #infoOverlay{
+    z-index:75;
+    background:rgba(4,5,6,.72);
+    backdrop-filter:blur(28px) saturate(130%);
+    -webkit-backdrop-filter:blur(28px) saturate(130%);
+  }
+  /* Sheet vira camada de vidro escuro full-screen flutuando */
+  #infoSheet{
+    z-index:85;
+    position:absolute;
+    inset:0;
+    max-height:none;
+    background:transparent;
+    border:none;
+    border-radius:0;
+    padding:0;
+    box-shadow:none;
+    transform:none;
+    opacity:0;
+    pointer-events:none;
+    display:flex;
+    flex-direction:column;
+    transition:opacity .22s cubic-bezier(.2,.8,.2,1);
+  }
+  #infoSheet.show{opacity:1;pointer-events:all;transform:none}
+  #infoSheet .sheet-grab{display:none}
+
+  /* Título: centralizado, hierarquia forte, sem container */
+  #infoSheet .sheet-header{
+    padding:58px 28px 8px;
+    justify-content:center;
+    position:relative;
+    flex:none;
+  }
+  #infoSheet .sheet-header h3{
+    flex:none;
+    text-align:center;
+    font-family:var(--font-headline),-apple-system,sans-serif;
+    font-size:var(--text-2xl);
+    font-weight:700;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color:rgba(255,255,255,.92);
+    margin:0;padding:0;
+  }
+  /* Back arrow: canto sup-esq, absoluto */
+  #infoSheet .sheet-back{
+    position:absolute;
+    left:20px;
+    top:58px;
+  }
+  /* X do header: escondido — o fechar fica no fundo */
+  #infoSheet .sheet-x{display:none}
+
+  /* Corpo: scrollável, largura limitada, centralizado */
+  #infoSheet .sheet-body{
+    flex:1;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:20px 28px 12px;
+    max-width:480px;
+    width:100%;
+    margin:0 auto;
+    box-sizing:border-box;
+  }
+  #infoSheet .sheet-body::-webkit-scrollbar{width:3px}
+  #infoSheet .sheet-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:99px}
+
+  /* Botão X centralizado no fundo — vidro flutuante discreto */
+  #infoSheet .gls-close{
+    display:flex;
+    justify-content:center;
+    padding:18px 0 max(36px,env(safe-area-inset-bottom,20px));
+    flex:none;
+  }
+  #infoSheet .gls-close button{
+    width:50px;height:50px;
+    border-radius:50%;
+    background:rgba(255,255,255,.07);
+    border:1px solid rgba(255,255,255,.14);
+    color:rgba(255,255,255,.55);
+    cursor:pointer;
+    display:grid;place-items:center;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  #infoSheet .gls-close button:hover{background:rgba(255,255,255,.13);color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.22)}
+  #infoSheet .gls-close button svg{width:20px;height:20px}
+
+  /* ===== Checklist rows — minimalistas, sem caixas ===== */
+  #infoSheet .struct-row{
+    border-bottom:1px solid rgba(255,255,255,.055);
+    padding:18px 0;
+    margin:0;
+  }
+  #infoSheet .struct-row:last-child{border-bottom:none}
+  #infoSheet .struct-l .nm{
+    font-size:var(--text-15h);
+    font-weight:400;
+    letter-spacing:.01em;
+    color:rgba(255,255,255,.82);
+    line-height:1.4;
+  }
+  /* Checkbox elegante — anel minimalista substituindo o toggle switch */
+  #infoSheet .toggle{
+    display:flex;align-items:center;justify-content:center;
+    width:24px;height:24px;
+    border:1.5px solid rgba(255,255,255,.22);
+    border-radius:7px;
+    background:rgba(255,255,255,.03);
+    cursor:pointer;flex:none;
+    transition:background .18s,border-color .18s;
+  }
+  #infoSheet .toggle .kn{
+    width:11px;height:7px;
+    border-left:2px solid transparent;
+    border-bottom:2px solid transparent;
+    border-radius:1px;
+    transform:rotate(-48deg) translateY(-1px);
+    transition:border-color .15s;
+  }
+  #infoSheet .toggle.on{
+    background:rgba(65,140,40,.22);
+    border-color:rgba(90,175,55,.55);
+  }
+  #infoSheet .toggle.on .kn{border-color:rgba(130,210,75,.9)}
+
+  /* Botões de ação dentro do glass modal */
+  #infoSheet .btn{margin-top:18px}
+  #infoSheet .btn.primary{background:rgba(80,150,55,.28);border:1px solid rgba(100,180,65,.35);color:rgba(160,230,100,.95)}
+  #infoSheet .btn.ghost{border-color:rgba(255,255,255,.14);color:rgba(255,255,255,.45)}
+  #infoSheet .btn.ghost:hover{border-color:rgba(255,255,255,.22);color:rgba(255,255,255,.7)}
 
   /* ===== MENU DRAWER — slide-in da direita (substitui botão Perfil no topbar mobile) ===== */
   .menu-overlay{position:fixed;inset:0;z-index:89;background:rgba(0,0,0,.55);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
