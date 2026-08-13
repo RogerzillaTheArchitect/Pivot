@@ -5453,16 +5453,23 @@
      AGENDA FAN CAROUSEL — v2
   ===================================================== */
   !function(){
-    /* Fan positions — less vertical drop so side cards align with center */
+    /* Radial fan — cards tangentially oriented on an arc, flat baseline (y=0) */
     var AGD = {
-      '-2':{ x:-220, y:28, r:-13, z:10 },
-      '-1':{ x:-118, y:9,  r:-6.5,z:20 },
-       '0':{ x:0,   y:-8,  r:0,   z:40 },
-       '1':{ x:118, y:9,   r:6.5, z:20 },
-       '2':{ x:220, y:28,  r:13,  z:10 }
+      '-2':{ x:-205, y:0, r:-13,  z:10, s:0.65, f:'blur(1px) brightness(0.62)' },
+      '-1':{ x:-122, y:0, r:-6.5, z:20, s:0.72, f:'blur(0.5px) brightness(0.78)' },
+       '0':{ x:0,   y:0, r:0,    z:40, s:1.00, f:'' },
+       '1':{ x:122, y:0, r:6.5,  z:20, s:0.72, f:'blur(0.5px) brightness(0.78)' },
+       '2':{ x:205, y:0, r:13,   z:10, s:0.65, f:'blur(1px) brightness(0.62)' }
     };
     var AGD_W_ACT=192, AGD_H_ACT=352;
-    var AGD_W_IN =174, AGD_H_IN =318;
+
+    /* Minimal hourglass SVG icon (stroke, no emoji) */
+    var ICO_HG='<svg width="10" height="13" viewBox="0 0 10 13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'
+      +'<line x1="0.5" y1="0.65" x2="9.5" y2="0.65"/>'
+      +'<line x1="0.5" y1="12.35" x2="9.5" y2="12.35"/>'
+      +'<path d="M1.5 1 L5 5.8 L8.5 1"/>'
+      +'<path d="M1.5 12 L5 7.2 L8.5 12"/>'
+      +'</svg>';
 
     var AGD_MESES=['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
     var AGD_TIPO_LABEL={contrato:'CONTRATO',pagamento:'PGMT',evento:'EVENTO',entrega:'ENTREGA',lembrete:'LEMBRETE',lista:'LISTA',tarefa:'TAREFA'};
@@ -5476,6 +5483,7 @@
     var ICO_DONE='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
 
     var _items=[], _active=0, _day='', _lpTimer=null, _swipeX=null, _swipeY=null;
+    var _fanEls={}, _fanDirty=true; /* persistent positioner elements + dirty flag */
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -5504,113 +5512,170 @@
       bindDaysSwipe();
     }
 
-    /* ── RULER (3-point: startTime · ⏳ · endTime) ── */
+    /* ── RULER TICKS — canvas rendering ─────────── */
+    function drawRulerTicks(canvas, filledL, filledR){
+      if(!canvas) return;
+      var rect=canvas.getBoundingClientRect();
+      var W=rect.width||canvas.parentElement.offsetWidth||240;
+      canvas.width=W; canvas.height=34;
+      var ctx=canvas.getContext('2d');
+      ctx.clearRect(0,0,W,34);
+      var N=33, H=34, cx=Math.floor(N/2);
+      for(var i=0;i<N;i++){
+        var x=(i/(N-1))*W;
+        var isCx=(i===cx);
+        var inFill=(filledL!==null&&filledR!==null&&(x/W*100)>=filledL&&(x/W*100)<=filledR);
+        var alpha=inFill?(isCx?1:0.6):(isCx?0.75:(i%4===0?0.32:0.14));
+        ctx.strokeStyle=inFill?'rgba(79,161,137,'+alpha+')':'rgba(255,255,255,'+alpha+')';
+        ctx.lineWidth=isCx?2:(i%4===0?1.2:0.7);
+        var tH=isCx?H*0.82:(i%4===0?H*0.48:H*0.26);
+        var tY=(H-tH)/2;
+        ctx.beginPath(); ctx.moveTo(x,tY); ctx.lineTo(x,tY+tH); ctx.stroke();
+      }
+    }
+
+    /* ── RULER (tick marks + time labels + hourglass below) ── */
     function renderRuler(){
       var viz=document.getElementById('agd-ruler-viz');
       var cd=document.getElementById('agd-ruler-cd');
       if(!viz) return;
       var ctr=_items[_active];
 
+      /* No event with time: draw blank ticks, hide cd */
       if(!ctr||!ctr.hora){
-        viz.innerHTML='<div class="agd-ruler-track-bg"></div>'
-          +'<div class="agd-ruler-hg-mark">⏳</div>';
-        if(cd){ cd.className='agd-ruler-cd'; cd.textContent=''; cd.style.visibility='hidden'; }
+        viz.innerHTML='<canvas id="agd-ruler-canvas" class="agd-ruler-canvas"></canvas>';
+        requestAnimationFrame(function(){
+          drawRulerTicks(document.getElementById('agd-ruler-canvas'),null,null);
+        });
+        if(cd){ cd.innerHTML=''; cd.style.visibility='hidden'; cd.className='agd-ruler-cd'; }
         bindRulerSwipe(); return;
       }
 
       var now=new Date();
       var nowMin=now.getHours()*60+now.getMinutes();
-
       var sp=ctr.hora.split(':');
       var startMin=+sp[0]*60+(+sp[1]||0);
-
       var hasEnd=!!(ctr.horaFim);
       var ep=hasEnd?ctr.horaFim.split(':'):null;
       var endMin=hasEnd?(+ep[0]*60+(+ep[1]||0)):(startMin+120);
 
-      /* Is item today? (ruler centers on current time only for today) */
       var todayISO=now.toISOString().slice(0,10);
       var isToday=!ctr.dataISO||(ctr.dataISO===todayISO);
-      /* For non-today items, center ruler on event midpoint */
       var center=isToday?nowMin:Math.round((startMin+endMin)/2);
-
-      /* Ruler spans ±4 hours (480 min) around center */
-      var HALF=240;
+      var HALF=240; /* ±4h visible range */
       function minToX(m){ return 50+(m-center)/(HALF*2)*100; }
 
-      var startX=minToX(startMin);
-      var endX=minToX(endMin);
+      var startX=minToX(startMin), endX=minToX(endMin);
+      var startLX=Math.max(5,Math.min(42,startX));
+      var endLX=Math.max(58,Math.min(95,endX));
+      var fL=Math.max(0,Math.min(startX,100));
+      var fR=Math.max(0,Math.min(endX,100));
 
-      /* Clamp label positions — keep clear of center hourglass */
-      var startLX=Math.max(5, Math.min(42, startX));
-      var endLX=Math.max(58, Math.min(95, endX));
-
-      /* Filled section (clamp to ruler bounds) */
-      var fL=Math.max(0, Math.min(startX, 100));
-      var fR=Math.max(0, Math.min(endX, 100));
-      var filledHtml=fR>fL
-        ?'<div class="agd-ruler-filled" style="left:'+fL.toFixed(1)+'%;width:'+(fR-fL).toFixed(1)+'%"></div>'
-        :'';
-
-      /* Time labels */
       var startLabel=pad(+sp[0])+':'+pad(+(sp[1]||0));
       var endLabel=hasEnd?(pad(+ep[0])+':'+pad(+(ep[1]||0))):'';
 
       viz.innerHTML=
-        '<div class="agd-ruler-track-bg"></div>'
-        +filledHtml
-        +'<div class="agd-ruler-hg-mark">⏳</div>'
+        '<canvas id="agd-ruler-canvas" class="agd-ruler-canvas"></canvas>'
         +'<span class="agd-ruler-t-label" style="left:'+startLX.toFixed(1)+'%">'+startLabel+'</span>'
         +(endLabel?'<span class="agd-ruler-t-label" style="left:'+endLX.toFixed(1)+'%">'+endLabel+'</span>':'');
 
-      /* Countdown: time until event ends */
+      requestAnimationFrame(function(){
+        drawRulerTicks(document.getElementById('agd-ruler-canvas'), fR>fL?fL:null, fR>fL?fR:null);
+      });
+
+      /* Hourglass icon + countdown below the center tick */
       if(cd){
-        cd.style.visibility='';
         var diffMin=endMin-nowMin;
         if(!isToday||diffMin<=0||diffMin>600){
-          cd.className='agd-ruler-cd'; cd.textContent=''; cd.style.visibility='hidden';
+          cd.innerHTML=''; cd.style.visibility='hidden'; cd.className='agd-ruler-cd';
         } else {
           var h=Math.floor(diffMin/60), m=diffMin%60;
           var cdText=h>0?(h+':'+pad(m)):(m+'MIN');
-          cd.className='agd-ruler-cd '+(nowMin>=startMin?'agd-c-active':'agd-c-upcoming');
-          cd.textContent=cdText;
+          var cdCls=nowMin>=startMin?'agd-c-active':'agd-c-upcoming';
+          cd.innerHTML=ICO_HG+'<span class="agd-ruler-timer-text">'+cdText+'</span>';
+          cd.className='agd-ruler-cd '+cdCls;
+          cd.style.visibility='';
         }
       }
 
       bindRulerSwipe();
     }
 
-    /* ── FAN ─────────────────────────────────────── */
+    /* ── FAN (persistent elements — CSS transition animates position changes) ── */
     function renderFan(){
       var fan=document.getElementById('agd-fan');
       if(!fan) return;
-      fan.innerHTML='';
+
       if(!_items.length){
+        Object.keys(_fanEls).forEach(function(k){
+          try{fan.removeChild(_fanEls[k]);}catch(e){}
+        });
+        _fanEls={}; _fanDirty=false;
         fan.innerHTML='<div class="agd-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>'
           +'<div class="agd-empty-text">Sem compromissos</div></div>';
         return;
       }
+
+      /* Full rebuild when items list changed (archive/conclude/initial) */
+      if(_fanDirty){
+        var emptyEl=fan.querySelector('.agd-empty');
+        if(emptyEl) fan.removeChild(emptyEl);
+        Object.keys(_fanEls).forEach(function(k){
+          try{fan.removeChild(_fanEls[k]);}catch(e){}
+        });
+        _fanEls={}; _fanDirty=false;
+      }
+
+      /* Compute which items need a positioner element */
+      var needed={};
       for(var off=-2;off<=2;off++){
         var idx=_active+off;
-        if(idx<0||idx>=_items.length) continue;
-        var isAct=(off===0);
-        var pos=AGD[String(off)];
-        var w=isAct?AGD_W_ACT:AGD_W_IN;
-        var h=isAct?AGD_H_ACT:AGD_H_IN;
-        var el=document.createElement('div');
-        el.className='agd-card-positioner';
-        el.dataset.idx=idx;
-        el.style.cssText='width:'+w+'px;height:'+h+'px;'
-          +'transform:translateX(-50%) translate3d('+pos.x+'px,'+pos.y+'px,0) rotate('+pos.r+'deg);'
-          +'z-index:'+pos.z+';';
-        el.innerHTML=buildCard(_items[idx],idx,isAct);
-        if(!isAct){
-          (function(i){ el.addEventListener('click',function(e){
-            if(!e.target.closest('.agd-act-btn')) agdSetActive(i);
-          }); })(idx);
-        }
-        fan.appendChild(el);
+        if(idx>=0&&idx<_items.length) needed[idx]=off;
       }
+
+      /* Remove positioners that scrolled out of range */
+      Object.keys(_fanEls).forEach(function(k){
+        if(!(+k in needed)){
+          try{fan.removeChild(_fanEls[k]);}catch(e){}
+          delete _fanEls[+k];
+        }
+      });
+
+      /* Create or update (animate) each visible positioner */
+      Object.keys(needed).sort(function(a,b){
+        return (AGD[String(needed[+a])].z||0)-(AGD[String(needed[+b])].z||0);
+      }).forEach(function(k){
+        var idx=+k, off=needed[idx], isAct=(off===0);
+        var pos=AGD[String(off)];
+        var tr='translateX(-50%) translate3d('+pos.x+'px,'+pos.y+'px,0) rotate('+pos.r+'deg) scale('+pos.s+')';
+        var f=pos.f||'none';
+
+        var el=_fanEls[idx];
+        if(el){
+          /* Update transform → CSS transition animates the change */
+          el.style.transform=tr;
+          el.style.filter=f;
+          el.style.zIndex=pos.z;
+          var card=el.querySelector('.agd-card');
+          if(card) card.classList.toggle('agd-active',isAct);
+        } else {
+          el=document.createElement('div');
+          el.className='agd-card-positioner';
+          el.dataset.idx=idx;
+          el.style.cssText='width:'+AGD_W_ACT+'px;height:'+AGD_H_ACT+'px;'
+            +'transform:'+tr+';z-index:'+pos.z+';'+(f&&f!=='none'?'filter:'+f+';':'');
+          el.innerHTML=buildCard(_items[idx],idx,isAct);
+          el.addEventListener('click',(function(i){
+            return function(e){
+              if(e.target.closest('.agd-act-btn')) return;
+              if(i!==_active) agdSetActive(i);
+            };
+          })(idx));
+          fan.appendChild(el);
+          _fanEls[idx]=el;
+        }
+      });
+
       bindLongPress();
       bindFanSwipe();
     }
@@ -5779,6 +5844,7 @@
       _items=gerarItensRadar();
       _active=findCenter(_items);
       _day=(_items[_active]&&_items[_active].dataISO)||new Date().toISOString().slice(0,10);
+      _fanDirty=true;
       renderDays(); renderRuler(); renderFan();
     };
 
@@ -5831,6 +5897,7 @@
       var fan=document.getElementById('agd-fan');
       if(fan){ var a=fan.querySelector('.agd-card-actions.agd-vis'); if(a) a.classList.remove('agd-vis'); }
       _items.splice(idx,1);
+      _fanDirty=true;
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
       renderDays(); renderRuler(); renderFan();
       showToast(t('toast.archivedFromRadar'));
@@ -5852,6 +5919,7 @@
         }
       }
       _items.splice(idx,1);
+      _fanDirty=true;
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
       renderDays(); renderRuler(); renderFan();
       if(typeof renderMonthTicker==='function') renderMonthTicker();
