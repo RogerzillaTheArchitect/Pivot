@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="styles/domains/criar.css">
 <link rel="stylesheet" href="styles/domains/portal-cliente.css">
 <link rel="stylesheet" href="styles/domains/responsive.css">
+<link rel="stylesheet" href="styles/domains/agenda.css">
 <link rel="stylesheet" href="styles/utilities.css">
 <style>
   :root{
@@ -547,6 +548,8 @@
         </div>
 
         <div id="notif-pendentes-wrap"></div>
+
+        <div id="agenda-section"></div>
 
         <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
         <div id="hoje-content">
@@ -4683,6 +4686,7 @@
     const mesEl=document.getElementById('ms-mes-atual');
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
     renderTasksList();
+    renderAgendaDashboard();
     updateHoje();
   }
   function diasEntre(dataISO){
@@ -5432,6 +5436,214 @@
     showToast(t('toast.done'));
   }
   /* ===== FIM TASK STACK ===== */
+
+  /* ===== AGENDA CAROUSEL 3D ===== */
+  const _TSK_M_PT=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  function renderAgendaDashboard(){
+    const wrap=document.getElementById('agenda-section');
+    if(!wrap) return;
+    const _hoje=new Date(); _hoje.setHours(0,0,0,0);
+    const _limite=new Date(_hoje); _limite.setDate(_hoje.getDate()+14);
+    const itens=gerarItensRadar().filter(it=>{
+      if(!it.dataISO) return true;
+      return new Date(it.dataISO+'T00:00:00')<=_limite;
+    });
+    if(!itens.length){wrap.innerHTML='';return;}
+    const atrasados=itens.filter(it=>it.dataISO&&diasEntre(it.dataISO)<0);
+    const futuros=itens.filter(it=>!(it.dataISO&&diasEntre(it.dataISO)<0));
+    const comHora=futuros.filter(it=>it.hora);
+    const semHora=futuros.filter(it=>!it.hora);
+    let html='<div class="agenda-wrap">';
+    if(atrasados.length) html+=_agendaLateHtml(atrasados);
+    if(comHora.length)   html+=_agendaCarouselHtml(comHora);
+    if(semHora.length)   html+=_agendaNotimedHtml(semHora);
+    html+='</div>';
+    wrap.innerHTML=html;
+    if(comHora.length) ativarAgendaCarousel(comHora.length);
+  }
+
+  function agArquivar(btn){
+    const sl=btn.closest('.tsk-card');
+    if(sl) sl.style.display='none';
+    showToast(t('toast.archivedFromRadar'));
+  }
+
+  function agConcluir(btn){
+    const sl=btn.closest('.tsk-card');
+    if(!sl) return;
+    const tipo=sl.dataset.tipo,idx=sl.dataset.idx,jobId=sl.dataset.jobId;
+    if(tipo==='lembrete'){if(lembretesData[idx]){lembretesData[idx].feito=true;saveLembretesData();}}
+    else if(tipo==='lista'){if(listasData[idx]){listasData[idx].feito=true;saveListasData();}}
+    else if(tipo==='tarefa'){if(tarefasData[idx]){tarefasData[idx].feito=true;saveTarefasData();}}
+    else{
+      const job=jobsData[jobId];
+      if(!job){showToast(t('toast.jobNotFound'));return;}
+      if(tipo==='pagamento') marcarPagoDynamic(jobId,parseInt(idx,10));
+      else if(tipo==='contrato'){openJob(jobId);return;}
+      else{const ms=(job.milestones||[]).find(m=>m.key==='principal');if(ms){ms.status='feito';ms.feitoEm=new Date().toISOString();pushHistory(job,t('toast.markedDone'));saveJobsData();}}
+    }
+    renderAgendaDashboard();
+    renderMonthTicker();
+    showToast(t('toast.done'));
+  }
+
+  function _agendaLateHtml(itens){
+    return '<div class="agenda-late-section">'+
+      '<div class="agenda-late-label">'+t('jobs.filter.overdue')+'</div>'+
+      itens.map(it=>{
+        const d=Math.abs(diasEntre(it.dataISO));
+        const dLabel=d===1?t('tasks.dayLate'):d+t('tasks.daysLate');
+        const solto=it.tipo==='lembrete'||it.tipo==='lista'||it.tipo==='tarefa';
+        return '<div class="tsk-card agenda-late-item" data-task data-job-id="'+(it.jobId||'')+
+          '" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+
+          '" data-solto="'+solto+'" onclick="onRadarCardClick(event,this)">'+
+          '<div class="agenda-late-dot"></div>'+
+          '<div class="agenda-late-name">'+escapeHtml(it.nome)+'</div>'+
+          '<div class="agenda-late-days">'+dLabel+'</div>'+
+        '</div>';
+      }).join('')+
+    '</div>';
+  }
+
+  function _agendaCarouselHtml(itens){
+    return '<div class="agenda-carousel-section">'+
+      '<div class="agenda-stage" id="agenda-stage">'+
+      itens.map((it,i)=>_construirAgendaCard(it,i,i%2===0)).join('')+
+      '</div>'+
+    '</div>';
+  }
+
+  function _construirAgendaCard(it,idx,isPaper){
+    const foto=clienteFotoPorNome(it.cliente);
+    const fotoHtml=avatarHtml(it.cliente||it.nome,160,foto);
+    const solto=it.tipo==='lembrete'||it.tipo==='lista'||it.tipo==='tarefa';
+    const partes=(it.dataISO||'--').split('-');
+    const dataFmt=partes[2]+' '+(_TSK_M_PT[parseInt(partes[1],10)-1]||partes[1]||'—');
+    const tipoLabel=it.tipo.charAt(0).toUpperCase()+it.tipo.slice(1);
+    const icoArch='<svg viewBox="0 0 11 11" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
+    const icoDone='<svg viewBox="0 0 11 11" width="9" height="9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
+    return '<div class="tsk-card agenda-card '+(isPaper?'agenda-card--paper':'agenda-card--ink')+
+      '" data-task data-ag-idx="'+idx+
+      '" data-job-id="'+(it.jobId||'')+
+      '" data-tipo="'+it.tipo+
+      '" data-idx="'+(it.idx!=null?it.idx:'')+
+      '" data-solto="'+solto+'">'+
+      /* Foto — 44% da altura, igual ao h-[44%] do Lovable */
+      '<div class="agenda-card-photo">'+fotoHtml+'</div>'+
+      /* Conteúdo */
+      '<div class="agenda-card-content">'+
+        '<h3 class="agenda-card-title">'+escapeHtml(it.nome)+'</h3>'+
+        '<p class="agenda-card-sub">'+(it.cliente?escapeHtml(it.cliente):escapeHtml(it.acao||''))+'</p>'+
+        '<div class="agenda-card-divider"></div>'+
+        /* Stats row — data | hora | tipo */
+        '<div class="agenda-card-stats">'+
+          '<div class="agenda-stat"><span class="agenda-stat-val">'+dataFmt+'</span><span class="agenda-stat-lbl">data</span></div>'+
+          '<div class="agenda-stat-sep"></div>'+
+          '<div class="agenda-stat"><span class="agenda-stat-val">'+(it.hora||'—')+'</span><span class="agenda-stat-lbl">hora</span></div>'+
+          '<div class="agenda-stat-sep"></div>'+
+          '<div class="agenda-stat"><span class="agenda-stat-val">'+tipoLabel+'</span><span class="agenda-stat-lbl">tipo</span></div>'+
+        '</div>'+
+        /* CTA principal — equivale ao "Start Route" do Lovable */
+        '<button class="agenda-card-cta" onclick="event.stopPropagation();tcEditar(this)">Abrir</button>'+
+        /* Ações secundárias — só visíveis no card central (.ag-center) */
+        '<div class="agenda-card-extras">'+
+          '<button class="agenda-extra-btn" onclick="event.stopPropagation();agArquivar(this)">'+icoArch+' ARQUIVAR</button>'+
+          '<button class="agenda-extra-btn agenda-extra-btn--done" onclick="event.stopPropagation();agConcluir(this)">'+icoDone+' CONCLUIR</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }
+
+  function _agendaNotimedHtml(itens){
+    return '<div class="agenda-notimed">'+
+    itens.map(it=>{
+      const solto=it.tipo==='lembrete'||it.tipo==='lista'||it.tipo==='tarefa';
+      return '<div class="tsk-card agenda-chip" data-task data-job-id="'+(it.jobId||'')+
+        '" data-tipo="'+it.tipo+'" data-idx="'+(it.idx!=null?it.idx:'')+
+        '" data-solto="'+solto+'" onclick="onRadarCardClick(event,this)">'+
+        '<div class="agenda-chip-dot"></div>'+
+        '<div class="agenda-chip-name">'+escapeHtml(it.nome)+'</div>'+
+      '</div>';
+    }).join('')+
+    '</div>';
+  }
+
+  /* Layout discreto adaptado do Lovable TrailFan — posições escaladas para mobile.
+     Original desktop (max-w 1180px): x=±400/±215, y=96/34/-18, r=±17/±8.5
+     Escala mobile (~390px): fator ≈ 0.52 no x, y proporcional.              */
+  const _AG_POS={
+    '-2':{x:-208,y:50,r:-17,z:10},
+    '-1':{x:-112,y:18,r:-8.5,z:20},
+    '0':{x:0,y:-8,r:0,z:40},
+    '1':{x:112,y:18,r:8.5,z:20},
+    '2':{x:208,y:50,r:17,z:10}
+  };
+
+  function ativarAgendaCarousel(n){
+    const stage=document.getElementById('agenda-stage');
+    if(!stage||!n) return;
+    const cards=Array.from(stage.querySelectorAll('.agenda-card'));
+    if(!cards.length) return;
+    let active=0;
+
+    function applyPos(){
+      cards.forEach((card,i)=>{
+        const off=Math.max(-2,Math.min(2,i-active));
+        const p=_AG_POS[String(off)];
+        const isCenter=off===0;
+        card.style.transform='translateX(-50%) translate3d('+p.x+'px,'+p.y+'px,0) rotate('+p.r+'deg)';
+        card.style.zIndex=p.z;
+        card.style.boxShadow=isCenter
+          ?'0 40px 70px -22px rgba(48,47,44,.42)'
+          :'0 22px 45px -16px rgba(48,47,44,.32)';
+        card.classList.toggle('ag-center',isCenter);
+        const hidden=Math.abs(off)>2;
+        card.style.opacity=hidden?'0':'1';
+        card.style.pointerEvents=hidden?'none':'auto';
+      });
+    }
+
+    /* Layout inicial sem transition; CSS transitions ativadas após 1º paint */
+    applyPos();
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      cards.forEach(c=>c.classList.add('ag-animated'));
+    }));
+
+    let ptrId=null,startX=0,dragMoved=false;
+
+    stage.addEventListener('pointerdown',e=>{
+      ptrId=e.pointerId; startX=e.clientX; dragMoved=false;
+    });
+
+    stage.addEventListener('pointermove',e=>{
+      if(e.pointerId!==ptrId) return;
+      if(Math.abs(e.clientX-startX)>10) dragMoved=true;
+    },{passive:true});
+
+    const onEnd=e=>{
+      if(e&&e.pointerId!==ptrId) return;
+      const endX=e?e.clientX:startX;
+      const wasMoved=dragMoved;
+      ptrId=null; dragMoved=false;
+      if(wasMoved){
+        const dx=endX-startX;
+        if(dx<-40&&active<n-1){ active++; applyPos(); }
+        else if(dx>40&&active>0){ active--; applyPos(); }
+        return;
+      }
+      /* Tap — navegar para o card tocado (se não for o centro) */
+      const card=e?e.target.closest('.agenda-card'):null;
+      if(card){
+        const idx=parseInt(card.dataset.agIdx,10);
+        if(idx!==active){ active=idx; applyPos(); }
+      }
+    };
+
+    stage.addEventListener('pointerup',onEnd);
+    stage.addEventListener('pointercancel',onEnd);
+  }
+  /* ===== FIM AGENDA CAROUSEL 3D ===== */
 
   function gerarProximosVencimentos(){
     const hoje=new Date(); hoje.setHours(0,0,0,0);
