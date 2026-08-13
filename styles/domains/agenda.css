@@ -268,17 +268,28 @@
   position: absolute;
   bottom: -1px; left: 0; right: 0;
   height: 90%;
-  background: linear-gradient(
-    to bottom,
-    transparent                                0%,
-    color-mix(in srgb, var(--agd-card-bg) 4%,  transparent) 18%,
-    color-mix(in srgb, var(--agd-card-bg) 14%, transparent) 35%,
-    color-mix(in srgb, var(--agd-card-bg) 35%, transparent) 52%,
-    color-mix(in srgb, var(--agd-card-bg) 65%, transparent) 68%,
-    color-mix(in srgb, var(--agd-card-bg) 88%, transparent) 82%,
-    var(--agd-card-bg)                        100%
-  );
   pointer-events: none;
+}
+/* Per-theme gradients use exact bg color at varying alpha (no transparent artifact) */
+.agd-ink .agd-card-photo::after {
+  background: linear-gradient(to bottom,
+    oklch(0.19 0.002 106 / 0)    0%,
+    oklch(0.19 0.002 106 / 0.06) 18%,
+    oklch(0.19 0.002 106 / 0.22) 35%,
+    oklch(0.19 0.002 106 / 0.52) 55%,
+    oklch(0.19 0.002 106 / 0.82) 72%,
+    oklch(0.19 0.002 106)       100%
+  );
+}
+.agd-paper .agd-card-photo::after {
+  background: linear-gradient(to bottom,
+    oklch(0.985 0.003 92 / 0)    0%,
+    oklch(0.985 0.003 92 / 0.06) 18%,
+    oklch(0.985 0.003 92 / 0.22) 35%,
+    oklch(0.985 0.003 92 / 0.52) 55%,
+    oklch(0.985 0.003 92 / 0.82) 72%,
+    oklch(0.985 0.003 92)       100%
+  );
 }
 
 /* ── Card body — centered layout ─────────────── */
