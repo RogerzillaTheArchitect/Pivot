@@ -5681,13 +5681,12 @@
     }
 
     /* ── PHOTO HTML ───────────────────────────────── */
-    function agdPhotoHtml(nome,cliente,foto){
-      if(foto) return '<div class="agd-photo-fill" style="background-image:url('+foto+')"></div>';
-      var nm=cliente||nome||'?';
-      var color=typeof avatarColor==='function'?avatarColor(nm):'#2c3e35';
-      var inits=typeof avatarInitials==='function'?avatarInitials(nm):nm.slice(0,2).toUpperCase();
-      return '<div class="agd-photo-fill agd-photo-initials" style="background:'+color+'">'
-        +'<span class="agd-initials-text">'+inits+'</span></div>';
+    var AGD_PH_INK='assets/agd-ph-ink.svg';
+    var AGD_PH_PAPER='assets/agd-ph-paper.svg';
+
+    function agdPhotoHtml(nome,cliente,foto,ink){
+      var src=foto||(ink?AGD_PH_INK:AGD_PH_PAPER);
+      return '<div class="agd-photo-fill" style="background-image:url('+src+')"></div>';
     }
 
     /* ── BUILD CARD ───────────────────────────────── */
@@ -5696,7 +5695,7 @@
       var theme=ink?'agd-ink':'agd-paper';
       var actCls=isAct?' agd-active':'';
       var foto=clienteFotoPorNome(it.cliente);
-      var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto);
+      var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto,ink);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
 
       /* Project name */

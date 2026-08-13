@@ -262,13 +262,22 @@
   line-height: 1;
   text-transform: uppercase;
 }
-/* Gradient fade photo → card body */
+/* Gradient fade photo → card body — large, multi-stop smooth ease */
 .agd-card-photo::after {
   content: '';
   position: absolute;
   bottom: -1px; left: 0; right: 0;
-  height: 60%;
-  background: linear-gradient(to bottom, transparent, var(--agd-card-bg));
+  height: 90%;
+  background: linear-gradient(
+    to bottom,
+    transparent                                0%,
+    color-mix(in srgb, var(--agd-card-bg) 4%,  transparent) 18%,
+    color-mix(in srgb, var(--agd-card-bg) 14%, transparent) 35%,
+    color-mix(in srgb, var(--agd-card-bg) 35%, transparent) 52%,
+    color-mix(in srgb, var(--agd-card-bg) 65%, transparent) 68%,
+    color-mix(in srgb, var(--agd-card-bg) 88%, transparent) 82%,
+    var(--agd-card-bg)                        100%
+  );
   pointer-events: none;
 }
 
