@@ -115,7 +115,7 @@
 
 .agd-ruler-viz {
   position: relative;
-  height: 44px;
+  height: 62px;
   margin: 0 18px 0;
   overflow: hidden;
 }
@@ -155,9 +155,10 @@
 ══════════════════════════════════════════════════ */
 .agd-fan-wrap {
   position: relative;
-  height: 420px;
+  height: 320px;
   overflow: visible;
   touch-action: pan-y;
+  margin-top: -8px;
 }
 .agd-fan {
   position: absolute;
@@ -439,6 +440,34 @@
 .agd-act-editar   { background: rgba(255,255,255,.1);  color: rgba(255,255,255,.88); }
 .agd-act-arquivar { background: rgba(217,86,76,.2);    color: #E07878; }
 .agd-act-concluir { background: rgba(79,161,137,.2);   color: var(--brand); }
+
+/* ── Card timer (countdown to event start) ──── */
+.agd-card-timer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-family: var(--font-headline);
+  font-size: .62rem;
+  letter-spacing: .1em;
+  color: var(--agd-card-soft);
+  margin-bottom: 8px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Hourglass icon animation ─────────────── */
+@keyframes agd-hg-flip {
+  0%   { transform: rotate(0deg); }
+  45%  { transform: rotate(0deg); }
+  55%  { transform: rotate(180deg); }
+  100% { transform: rotate(180deg); }
+}
+.agd-hg-ico {
+  animation: agd-hg-flip 3s ease-in-out infinite alternate;
+  flex-shrink: 0;
+  display: inline-block;
+}
 
 /* Empty state */
 .agd-empty {
