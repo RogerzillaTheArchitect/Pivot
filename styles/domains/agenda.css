@@ -1,5 +1,5 @@
 /* =====================================================
-   AGENDA FAN — v3
+   AGENDA FAN — v4
    ===================================================== */
 
 :root {
@@ -38,7 +38,7 @@
   align-items: stretch;
 }
 
-/* Slide-in animations for day shifts */
+/* Slide-in animations (shared by days and ruler) */
 @keyframes agd-slide-from-r {
   from { transform: translateX(28%); opacity: 0; }
   to   { transform: translateX(0);   opacity: 1; }
@@ -57,7 +57,7 @@
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 14px 8px 12px;
+  padding: 12px 8px 10px;
   border: none;
   background: none;
   cursor: pointer;
@@ -66,14 +66,25 @@
 }
 .agd-day-col:active { background: rgba(255,255,255,.04); }
 
-/* Side days */
-.agd-day-col.agd-day-side .agd-day-num { font-size: 2.4rem; color: rgba(255,255,255,.25); }
-.agd-day-col.agd-day-side .agd-day-mon { font-size: .65rem; color: rgba(255,255,255,.18); letter-spacing:.1em; text-transform: uppercase; font-family: var(--font-headline); }
+/* Side days — smaller, muted */
+.agd-day-col.agd-day-side .agd-day-num {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.25);
+  line-height: 1;
+}
+.agd-day-col.agd-day-side .agd-day-mon {
+  font-family: var(--font-headline);
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.18);
+}
 
-/* Center day */
+/* Center day — num width ≈ month label width */
 .agd-day-col.agd-day-center { cursor: default; }
 .agd-day-col.agd-day-center .agd-day-num {
-  font-size: 3.6rem;
+  font-size: 1.9rem;
   font-weight: 700;
   line-height: 1;
   color: var(--ink);
@@ -91,82 +102,69 @@
   width: 4px; height: 4px;
   border-radius: 50%;
   background: var(--brand);
-  margin-top: 4px;
+  margin-top: 3px;
 }
 
 /* ══════════════════════════════════════════════════
-   RULER — 3-point timeline: startTime · ⏳ · endTime
+   RULER — tick marks + event range highlight
 ══════════════════════════════════════════════════ */
 .agd-ruler-outer {
-  margin: 0 0 6px;
+  margin: 0 0 4px;
   touch-action: pan-y;
 }
 
-/* Visual ruler track */
+/* Container for time labels + canvas ticks */
 .agd-ruler-viz {
   position: relative;
-  height: 34px;
-  margin: 0 18px 2px;
+  height: 52px;         /* 18px label row + 34px tick canvas */
+  margin: 0 18px 0;
   overflow: visible;
 }
 
-/* Slide animations for ruler viz on item navigation */
+/* Slide animations for ruler navigation */
 .agd-ruler-viz.agd-anim-from-r { animation: agd-slide-from-r .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
 .agd-ruler-viz.agd-anim-from-l { animation: agd-slide-from-l .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
 
-.agd-ruler-track-bg {
-  position: absolute;
-  top: 50%; left: 0; right: 0;
-  height: 2px;
-  background: rgba(255,255,255,.1);
-  transform: translateY(-50%);
-  border-radius: 1px;
-}
-.agd-ruler-filled {
-  position: absolute;
-  top: 50%;
-  height: 3px;
-  border-radius: 1.5px;
-  transform: translateY(-50%);
-  background: var(--brand, #4FA189);
-  opacity: .6;
-  pointer-events: none;
-}
-.agd-ruler-hg-mark {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 13px;
-  line-height: 1;
-  z-index: 2;
-  pointer-events: none;
-}
+/* Time labels sit above the tick canvas */
 .agd-ruler-t-label {
   position: absolute;
-  top: 3px;
+  top: 0;
   transform: translateX(-50%);
   font-family: var(--font-headline);
-  font-size: .62rem;
+  font-size: .6rem;
   letter-spacing: .07em;
-  color: rgba(255,255,255,.48);
+  color: rgba(255,255,255,.45);
   white-space: nowrap;
-  z-index: 1;
+  pointer-events: none;
+  line-height: 1.6;
+}
+
+/* Canvas for tick-mark ruler */
+.agd-ruler-canvas {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 34px;
+  display: block;
   pointer-events: none;
 }
 
-/* Countdown below ruler */
+/* Hourglass icon + countdown below the ruler, aligned to center tick */
 .agd-ruler-cd {
-  text-align: center;
-  font-family: var(--font-headline);
-  font-size: .7rem;
-  letter-spacing: .1em;
-  min-height: 18px;
-  padding-bottom: 4px;
-  color: rgba(255,255,255,.32);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 22px;
+  padding: 2px 0 6px;
+  color: rgba(255,255,255,.35);
 }
 .agd-ruler-cd.agd-c-active   { color: #CBA26A; }
 .agd-ruler-cd.agd-c-upcoming { color: var(--brand, #4FA189); }
+.agd-ruler-timer-text {
+  font-family: var(--font-headline);
+  font-size: .7rem;
+  letter-spacing: .1em;
+}
 
 /* ══════════════════════════════════════════════════
    FAN CAROUSEL
@@ -191,10 +189,9 @@
   transform-origin: bottom center;
   transition:
     transform  .44s cubic-bezier(0.34, 1.06, 0.64, 1),
-    width      .44s cubic-bezier(0.34, 1.06, 0.64, 1),
-    height     .44s cubic-bezier(0.34, 1.06, 0.64, 1),
+    filter     .38s ease,
     opacity    .3s ease;
-  will-change: transform;
+  will-change: transform, filter;
   -webkit-tap-highlight-color: transparent;
 }
 .agd-card-positioner.agd-offscreen {
@@ -304,7 +301,7 @@
 .agd-card.agd-active .agd-card-title { font-size: .98rem; }
 .agd-card:not(.agd-active) .agd-card-title { font-size: .82rem; }
 
-/* Project link row — full text, wraps if needed */
+/* Project link row — full text, wraps */
 .agd-card-proj {
   display: flex;
   align-items: flex-start;
@@ -322,7 +319,7 @@
   line-height: 1.35;
 }
 
-/* Client name row — full text, wraps if needed */
+/* Client name row — full text, wraps */
 .agd-card-client {
   display: flex;
   align-items: flex-start;
@@ -340,7 +337,7 @@
   line-height: 1.35;
 }
 
-/* Tipo chip — absolute BOTTOM of card (above people) */
+/* Tipo chip — absolute bottom of card, above people chips */
 .agd-card-tipo {
   position: absolute;
   bottom: 38px;
@@ -360,13 +357,12 @@
   line-height: 1.6;
   white-space: nowrap;
 }
-/* Paper card: tipo chip darker text */
 .agd-paper .agd-card-tipo {
-  background: rgba(0,0,0,.18);
-  color: rgba(0,0,0,.45);
+  background: rgba(0,0,0,.14);
+  color: rgba(0,0,0,.4);
 }
 
-/* People chips — absolute bottom of card */
+/* People chips — absolute very bottom */
 .agd-people {
   position: absolute;
   bottom: 10px;
