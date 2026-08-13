@@ -1393,6 +1393,7 @@
           <div id="ta-items"></div>
           <div class="field"><label data-t="field.date">Data</label><input type="date" id="ta-data"></div>
           <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ta-hora"></div>
+          <div class="field" id="ta-duracao-field"><label>Duração da tarefa</label><select id="ta-duracao"><option value="">Sem duração definida</option><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hora</option><option value="90">1h 30min</option><option value="120">2 horas</option><option value="180">3 horas</option><option value="240">4 horas</option><option value="480">8 horas</option></select></div>
           <div class="field">
             <label data-t="field.priority">Prioridade</label>
             <div class="priority-picker" id="ta-prioridade-picker">
@@ -4770,7 +4771,7 @@
     Object.values(tarefasData).forEach(tk=>{
       if(tk.tipo!=='simples' || tk.feito || !tk.data) return;
       const jobTk=tk.jobId?jobsData[tk.jobId]:null;
-      itens.push({ dataISO:tk.data, hora:tk.hora||'', nome:tk.titulo, cliente:jobTk?jobTk.client:'', acao:t('task.action'), jobId:tk.jobId||null, tipo:'tarefa', idx:tk.id });
+      itens.push({ dataISO:tk.data, hora:tk.hora||'', horaFim:tk.horaFim||'', nome:tk.titulo, cliente:jobTk?jobTk.client:'', acao:t('task.action'), jobId:tk.jobId||null, tipo:'tarefa', idx:tk.id });
     });
     const mesAtualISO=new Date().toISOString().slice(0,7);
     const itensDoMes=itens.filter(it=> diasEntre(it.dataISO)<0 || it.dataISO.slice(0,7)===mesAtualISO);
@@ -5461,7 +5462,7 @@
        '1':{ x:122, y:0, r:6.5,  z:20, s:0.72, f:'blur(0.5px) brightness(0.78)' },
        '2':{ x:205, y:0, r:13,   z:10, s:0.65, f:'blur(1px) brightness(0.62)' }
     };
-    var AGD_W_ACT=192, AGD_H_ACT=352;
+    var AGD_W_ACT=192, AGD_H_ACT=282;
 
     /* Minimal hourglass SVG icon (stroke, no emoji) */
     var ICO_HG='<svg width="10" height="13" viewBox="0 0 10 13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'
@@ -5481,11 +5482,20 @@
     var ICO_EDIT='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     var ICO_ARCH='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     var ICO_DONE='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
+    var ICO_HOURGLASS='<svg class="agd-hg-ico" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M6 2v6l4 4-4 4v6h12v-6l-4-4 4-4V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/></svg>';
+
+    function agdFmtTimer(diffMin){
+      if(diffMin<=0) return '00:00';
+      var h=Math.floor(diffMin/60), m=diffMin%60;
+      if(h>99){ return Math.ceil(diffMin/1440)+' dias'; }
+      if(h>0) return h+':'+pad(m);
+      return m+'MIN';
+    }
 
     var _items=[], _active=0, _day='', _lpTimer=null, _swipeX=null, _swipeY=null;
     var _fanEls={}, _fanDirty=true;
     var _agdRulerRAF=null, _agdRulerCanvas=null;
-    var _agdRulerRange=null, _agdRulerTimerLast='';
+    var _agdRulerRange=null, _agdRulerRanges=[], _agdRulerTimerLast='';
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -5524,7 +5534,7 @@
       var par=cv.parentElement;
       var W=par?par.offsetWidth:0;
       if(!W) return;
-      var H=44;
+      var H=62;
       if(cv.width!==W) cv.width=W;
       if(cv.height!==H) cv.height=H;
       var ctx=cv.getContext('2d');
@@ -5547,8 +5557,8 @@
 
       /* Tick geometry — all bottom-aligned */
       var BOT=H-4;
-      var H_H=22, H_T=13; /* hour height, ten/one height (one=ten per spec) */
-      var W_H=2.5, W_T=1.5, W_O=0.75; /* widths */
+      var H_H=22, H_T=13;
+      var W_H=2.5, W_T=1.5, W_O=0.75;
 
       var er=_agdRulerRange;
       var halfM=Math.ceil(cx/AGD_R_PPM)+2;
@@ -5585,8 +5595,48 @@
         ctx.moveTo(x,BOT-tH);
         ctx.lineTo(x,BOT);
         ctx.stroke();
+
+        /* Time labels on hours and 10-min marks */
+        if((isHr||isTn)&&op>0.15){
+          var hh=Math.floor(aMin/60), mm=aMin%60;
+          var lbl=isHr?(hh+':00'):(hh+':'+pad(mm));
+          ctx.font=(isHr?'bold 8.5px':'8px')+' Inter Tight,sans-serif';
+          ctx.textAlign='center';
+          ctx.textBaseline='bottom';
+          ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
+          ctx.fillText(lbl, x, BOT-tH-3);
+        }
         ctx.restore();
       }
+
+      /* Event boundary markers — start and end of each event range */
+      _agdRulerRanges.forEach(function(rng){
+        [rng.startMin, rng.endMin].forEach(function(bMin){
+          var bx=cx+(bMin-totMin-sub)*AGD_R_PPM;
+          if(bx<-4||bx>W+4) return;
+          var bDfrac=Math.abs(bx-cx)/cx;
+          var bOp;
+          if(bDfrac<0.12) bOp=1;
+          else{ var bt=(bDfrac-0.12)/0.88; bOp=Math.max(0,1-bt*bt*(3-2*bt)); }
+          if(bOp<0.05) return;
+          var bc=rng.isActive?'rgba(255,210,55,':'rgba(79,200,110,';
+          ctx.save();
+          ctx.strokeStyle=bc+bOp.toFixed(2)+')';
+          ctx.shadowColor=bc+'0.9)';
+          ctx.shadowBlur=10;
+          ctx.lineWidth=2;
+          ctx.lineCap='round';
+          ctx.beginPath();
+          ctx.moveTo(bx, BOT-H_H-6);
+          ctx.lineTo(bx, BOT);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(bx, BOT-H_H-6, 2.5, 0, Math.PI*2);
+          ctx.fillStyle=bc+bOp.toFixed(2)+')';
+          ctx.fill();
+          ctx.restore();
+        });
+      });
     }
 
     function _agdRulerUpdateTimer(cd){
@@ -5594,22 +5644,74 @@
       var er=_agdRulerRange;
       var now=new Date();
       var nowMin=now.getHours()*60+now.getMinutes();
-      if(!er||!er.isActive||nowMin>=er.endMin){
+      var todayISO=now.toISOString().slice(0,10);
+      var txt='', cls='agd-ruler-cd';
+
+      /* Active event — show remaining time */
+      if(er&&er.isActive&&nowMin<er.endMin){
+        txt=agdFmtTimer(er.endMin-nowMin);
+        cls='agd-ruler-cd agd-c-active';
+      } else {
+        /* Find next event across all items */
+        var nextMin=Infinity;
+        for(var i=0;i<_items.length;i++){
+          var it=_items[i];
+          if(!it.hora||!it.dataISO) continue;
+          var sp=it.hora.split(':');
+          var sM=+sp[0]*60+(+sp[1]||0);
+          var diff;
+          if(it.dataISO===todayISO&&sM>nowMin){
+            diff=sM-nowMin;
+          } else if(it.dataISO>todayISO){
+            var futureDays=Math.round((new Date(it.dataISO+'T00:00:00')-new Date(todayISO+'T00:00:00'))/86400000);
+            diff=futureDays*1440+(sM-nowMin);
+          } else { continue; }
+          if(diff>0&&diff<nextMin) nextMin=diff;
+        }
+        if(nextMin<Infinity){
+          txt=agdFmtTimer(nextMin);
+          cls='agd-ruler-cd agd-c-upcoming';
+        }
+      }
+
+      if(!txt){
         if(_agdRulerTimerLast!=='__h'){
           cd.innerHTML=''; cd.className='agd-ruler-cd'; cd.style.visibility='hidden';
           _agdRulerTimerLast='__h';
         }
         return;
       }
-      var diff=er.endMin-nowMin;
-      var h=Math.floor(diff/60), m=diff%60;
-      var txt=h>0?(h+':'+pad(m)):(m+'MIN');
       if(txt!==_agdRulerTimerLast){
         _agdRulerTimerLast=txt;
-        cd.innerHTML='<span class="agd-ruler-timer-text">'+txt+'</span>';
-        cd.className='agd-ruler-cd agd-c-active';
+        cd.innerHTML=ICO_HOURGLASS+'<span class="agd-ruler-timer-text">'+txt+'</span>';
+        cd.className=cls;
         cd.style.visibility='';
       }
+
+      /* Update card timer live */
+      _agdUpdateCardTimer();
+    }
+
+    function _agdUpdateCardTimer(){
+      var el=document.getElementById('agd-card-timer');
+      if(!el) return;
+      var it=_items[_active];
+      if(!it||!it.hora){ el.style.display='none'; return; }
+      var now=new Date();
+      var todayISO=now.toISOString().slice(0,10);
+      var nowMin=now.getHours()*60+now.getMinutes();
+      var sp=it.hora.split(':');
+      var sM=+sp[0]*60+(+sp[1]||0);
+      var diffMin;
+      if(it.dataISO===todayISO){ diffMin=sM-nowMin; }
+      else {
+        var td=new Date((it.dataISO||todayISO)+'T'+it.hora+':00');
+        diffMin=Math.round((td-now)/60000);
+      }
+      if(diffMin<=0){ el.style.display='none'; return; }
+      el.style.display='';
+      var span=el.querySelector('.agd-timer-val');
+      if(span) span.textContent=agdFmtTimer(diffMin);
     }
 
     function _agdRulerLoop(){
@@ -5621,6 +5723,15 @@
       });
     }
 
+    /* Throttled card timer update (called from ruler timer, max 1x/sec) */
+    var _agdCardTimerLast=0;
+    var _agdUpdateCardTimerThrottled=function(){
+      var now=Date.now();
+      if(now-_agdCardTimerLast<900) return;
+      _agdCardTimerLast=now;
+      _agdUpdateCardTimer();
+    };
+
     function renderRuler(){
       var viz=document.getElementById('agd-ruler-viz');
       var cd=document.getElementById('agd-ruler-cd');
@@ -5631,16 +5742,25 @@
       var todayISO=now.toISOString().slice(0,10);
       var nowMin=now.getHours()*60+now.getMinutes();
 
-      /* Event range for glow — only applies when item has hora and is today */
+      /* Event range for active card glow — only when horaFim is explicit */
       _agdRulerRange=null;
-      if(ctr&&ctr.hora){
+      if(ctr&&ctr.hora&&ctr.horaFim){
         var sp=ctr.hora.split(':');
         var sM=+sp[0]*60+(+sp[1]||0);
-        var ep=ctr.horaFim?ctr.horaFim.split(':'):null;
-        var eM=ep?(+ep[0]*60+(+ep[1]||0)):(sM+120);
+        var ep=ctr.horaFim.split(':');
+        var eM=+ep[0]*60+(+ep[1]||0);
         var isToday=!ctr.dataISO||(ctr.dataISO===todayISO);
         if(isToday) _agdRulerRange={startMin:sM,endMin:eM,isActive:nowMin>=sM&&nowMin<eM};
       }
+
+      /* All event ranges for boundary markers */
+      _agdRulerRanges=[];
+      _items.forEach(function(it){
+        if(!it.hora||!it.horaFim||!it.dataISO||it.dataISO!==todayISO) return;
+        var s=it.hora.split(':'), e=it.horaFim.split(':');
+        var sM=+s[0]*60+(+s[1]||0), eM=+e[0]*60+(+e[1]||0);
+        _agdRulerRanges.push({startMin:sM,endMin:eM,isActive:nowMin>=sM&&nowMin<eM});
+      });
 
       /* Ensure canvas is in DOM */
       if(!_agdRulerCanvas||!_agdRulerCanvas.isConnected){
@@ -5727,7 +5847,11 @@
           el.addEventListener('click',(function(i){
             return function(e){
               if(e.target.closest('.agd-act-btn')) return;
-              if(i!==_active) agdSetActive(i);
+              if(i!==_active){ agdSetActive(i); return; }
+              /* Active card tap: close overlay if open, else open details */
+              var overlay=el.querySelector('.agd-card-actions.agd-vis');
+              if(overlay){ overlay.classList.remove('agd-vis'); return; }
+              agdVerDetalhes(i);
             };
           })(idx));
           fan.appendChild(el);
@@ -5757,6 +5881,19 @@
       var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto,ink);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
 
+      /* Timer countdown — shown only on active card, only if event hasn't started */
+      var timerHtml='';
+      if(isAct&&it.hora){
+        var nowT=new Date();
+        var todayT=nowT.toISOString().slice(0,10);
+        var nowMinT=nowT.getHours()*60+nowT.getMinutes();
+        var spT=it.hora.split(':'), sMT=+spT[0]*60+(+spT[1]||0);
+        var diffT;
+        if(it.dataISO===todayT){ diffT=sMT-nowMinT; }
+        else if(it.dataISO){ var td=new Date(it.dataISO+'T'+it.hora+':00'); diffT=Math.round((td-nowT)/60000); }
+        if(diffT>0) timerHtml='<div class="agd-card-timer" id="agd-card-timer">'+ICO_HOURGLASS+'<span class="agd-timer-val">'+agdFmtTimer(diffT)+'</span></div>';
+      }
+
       /* Project name */
       var projNome='';
       if(it.jobId&&jobsData&&jobsData[it.jobId])
@@ -5782,6 +5919,7 @@
       return '<article class="agd-card '+theme+actCls+'">'
         +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
+          +timerHtml
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
           +(projNome
             ?'<div class="agd-card-proj">'+ICO_LINK
@@ -5887,6 +6025,16 @@
       if(!items.length) return 0;
       var now=new Date();
       var hojeISO=now.toISOString().slice(0,10);
+      var nowMin=now.getHours()*60+now.getMinutes();
+      /* 1. Prioridade: evento/tarefa em curso agora */
+      for(var i=0;i<items.length;i++){
+        var it=items[i];
+        if(!it.dataISO||it.dataISO!==hojeISO||!it.hora) continue;
+        var sp=it.hora.split(':'); var sM=+sp[0]*60+(+sp[1]||0);
+        var eM=it.horaFim?(function(h){var p=h.split(':');return +p[0]*60+(+p[1]||0);})(it.horaFim):(sM+60);
+        if(nowMin>=sM&&nowMin<eM) return i;
+      }
+      /* 2. Próximo compromisso */
       var hora=pad(now.getHours())+':'+pad(now.getMinutes());
       for(var i=0;i<items.length;i++){
         if(!items[i].dataISO) continue;
@@ -16306,9 +16454,18 @@
     const pessoas=[...document.querySelectorAll('#ta-pessoas-rows .ta-pessoa-email')].map(el=>el.value.trim().toLowerCase()).filter(Boolean);
     const itens=[...document.querySelectorAll('#ta-items .ta-item-input')]
       .map(el=>el.value.trim()).filter(Boolean).map(tx=>({t:tx,feito:false}));
+    const horaVal=document.getElementById('ta-hora').value||null;
+    const duracaoMin=parseInt(document.getElementById('ta-duracao').value||'0',10)||0;
+    let horaFimVal=null;
+    if(horaVal&&duracaoMin>0){
+      const [hh,mm]=horaVal.split(':').map(Number);
+      const totM=hh*60+mm+duracaoMin;
+      horaFimVal=String(Math.floor(totM/60)%24).padStart(2,'0')+':'+String(totM%60).padStart(2,'0');
+    }
     tarefasData[id]={ id, tipo:'simples', titulo,
       data:document.getElementById('ta-data').value||null,
-      hora:document.getElementById('ta-hora').value||null,
+      hora:horaVal,
+      horaFim:horaFimVal,
       prioridade: prioEl ? prioEl.dataset.val : t('task.priorityNormal'),
       jobId, notas:document.getElementById('ta-notas').value.trim(), feito:false,
       pessoas:pessoas.length?pessoas:undefined,
@@ -16326,7 +16483,7 @@
     limparFormularioTarefa();
   }
   function limparFormularioTarefa(){
-    ['ta-titulo','ta-data','ta-hora','ta-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
+    ['ta-titulo','ta-data','ta-hora','ta-duracao','ta-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const sel=document.getElementById('ta-trabalho'); if(sel) sel.value='';
     const prioPicker=document.getElementById('ta-prioridade-picker');
     if(prioPicker){ prioPicker.querySelectorAll('.priority-opt').forEach((o,i)=>o.classList.toggle('on', i===0)); }
