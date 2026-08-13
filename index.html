@@ -549,6 +549,8 @@
 
         <div id="notif-pendentes-wrap"></div>
 
+        <div id="agenda-section"></div>
+
         <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
         <div id="hoje-content">
           <div id="tasks-list"></div>
@@ -4684,6 +4686,7 @@
     const mesEl=document.getElementById('ms-mes-atual');
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
     renderTasksList();
+    renderAgendaDashboard();
     updateHoje();
   }
   function diasEntre(dataISO){
@@ -4841,22 +4844,13 @@
     const _limite=new Date(_hoje); _limite.setDate(_hoje.getDate()+14);
     const itens=gerarItensRadar().filter(it=>{
       if(_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''))) return false;
-      if(!it.dataISO) return true;
+      if(!it.dataISO) return true; /* sem data = item vencido, sempre inclui */
       return new Date(it.dataISO+'T00:00:00')<=_limite;
     });
     renderNotificacoesPendentes();
     if(!itens.length){wrap.innerHTML='';return;}
-    const atrasados=itens.filter(it=>it.dataISO&&diasEntre(it.dataISO)<0);
-    const hoje=itens.filter(it=>!(it.dataISO&&diasEntre(it.dataISO)<0));
-    const comHora=hoje.filter(it=>it.hora);
-    const semHora=hoje.filter(it=>!it.hora);
-    let html='<div class="agenda-wrap">';
-    if(atrasados.length) html+=_agendaLateHtml(atrasados);
-    if(comHora.length)   html+=_agendaCarouselHtml(comHora);
-    if(semHora.length)   html+=_agendaNotimedHtml(semHora);
-    html+='</div>';
-    wrap.innerHTML=html;
-    if(comHora.length) ativarAgendaCarousel(comHora.length);
+    wrap.innerHTML='<div class="tsk-stack" id="tsk-stack">'+itens.map(construirStackCard).join('')+'</div>';
+    ativarStackTarefas();
   }
   /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
      (cor de acordo com o nível) + o próprio card ganha um leve degradê do lado
@@ -5446,6 +5440,54 @@
   /* ===== AGENDA CAROUSEL 3D ===== */
   const _TSK_M_PT=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
 
+  function renderAgendaDashboard(){
+    const wrap=document.getElementById('agenda-section');
+    if(!wrap) return;
+    const _hoje=new Date(); _hoje.setHours(0,0,0,0);
+    const _limite=new Date(_hoje); _limite.setDate(_hoje.getDate()+14);
+    const itens=gerarItensRadar().filter(it=>{
+      if(!it.dataISO) return true;
+      return new Date(it.dataISO+'T00:00:00')<=_limite;
+    });
+    if(!itens.length){wrap.innerHTML='';return;}
+    const atrasados=itens.filter(it=>it.dataISO&&diasEntre(it.dataISO)<0);
+    const futuros=itens.filter(it=>!(it.dataISO&&diasEntre(it.dataISO)<0));
+    const comHora=futuros.filter(it=>it.hora);
+    const semHora=futuros.filter(it=>!it.hora);
+    let html='<div class="agenda-wrap">';
+    if(atrasados.length) html+=_agendaLateHtml(atrasados);
+    if(comHora.length)   html+=_agendaCarouselHtml(comHora);
+    if(semHora.length)   html+=_agendaNotimedHtml(semHora);
+    html+='</div>';
+    wrap.innerHTML=html;
+    if(comHora.length) ativarAgendaCarousel(comHora.length);
+  }
+
+  function agArquivar(btn){
+    const sl=btn.closest('.tsk-card');
+    if(sl) sl.style.display='none';
+    showToast(t('toast.archivedFromRadar'));
+  }
+
+  function agConcluir(btn){
+    const sl=btn.closest('.tsk-card');
+    if(!sl) return;
+    const tipo=sl.dataset.tipo,idx=sl.dataset.idx,jobId=sl.dataset.jobId;
+    if(tipo==='lembrete'){if(lembretesData[idx]){lembretesData[idx].feito=true;saveLembretesData();}}
+    else if(tipo==='lista'){if(listasData[idx]){listasData[idx].feito=true;saveListasData();}}
+    else if(tipo==='tarefa'){if(tarefasData[idx]){tarefasData[idx].feito=true;saveTarefasData();}}
+    else{
+      const job=jobsData[jobId];
+      if(!job){showToast(t('toast.jobNotFound'));return;}
+      if(tipo==='pagamento') marcarPagoDynamic(jobId,parseInt(idx,10));
+      else if(tipo==='contrato'){openJob(jobId);return;}
+      else{const ms=(job.milestones||[]).find(m=>m.key==='principal');if(ms){ms.status='feito';ms.feitoEm=new Date().toISOString();pushHistory(job,t('toast.markedDone'));saveJobsData();}}
+    }
+    renderAgendaDashboard();
+    renderMonthTicker();
+    showToast(t('toast.done'));
+  }
+
   function _agendaLateHtml(itens){
     return '<div class="agenda-late-section">'+
       '<div class="agenda-late-label">'+t('jobs.filter.overdue')+'</div>'+
@@ -5506,8 +5548,8 @@
         '<button class="agenda-card-cta" onclick="event.stopPropagation();tcEditar(this)">Abrir</button>'+
         /* Ações secundárias — só visíveis no card central (.ag-center) */
         '<div class="agenda-card-extras">'+
-          '<button class="agenda-extra-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+' ARQUIVAR</button>'+
-          '<button class="agenda-extra-btn agenda-extra-btn--done" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+' CONCLUIR</button>'+
+          '<button class="agenda-extra-btn" onclick="event.stopPropagation();agArquivar(this)">'+icoArch+' ARQUIVAR</button>'+
+          '<button class="agenda-extra-btn agenda-extra-btn--done" onclick="event.stopPropagation();agConcluir(this)">'+icoDone+' CONCLUIR</button>'+
         '</div>'+
       '</div>'+
     '</div>';
