@@ -551,15 +551,23 @@
 
         <!-- ===== AGENDA FAN ===== -->
         <div id="agenda-section" class="agenda-section">
-          <div class="agd-days" id="agd-days"></div>
-          <div class="agd-ruler-wrap" id="agd-ruler-wrap">
-            <canvas class="agd-ruler-canvas" id="agd-ruler-canvas" height="54"></canvas>
-            <div class="agd-hourglass u-hidden" id="agd-hourglass">
-              <span class="agd-hg-ico">⏳</span>
-              <span class="agd-hg-label" id="agd-hg-label"></span>
+          <div class="agd-days-wrap" id="agd-days-wrap">
+            <div class="agd-days" id="agd-days"></div>
+          </div>
+          <div class="agd-ruler-outer" id="agd-ruler-outer">
+            <div class="agd-ruler-timer" id="agd-ruler-timer">
+              <span class="agd-ruler-hg">⏳</span>
+              <span class="agd-ruler-countdown" id="agd-ruler-countdown"></span>
+            </div>
+            <div class="agd-ruler-track">
+              <span class="agd-ruler-t" id="agd-ruler-t-start"></span>
+              <div class="agd-ruler-ticks">
+                <canvas class="agd-ruler-canvas" id="agd-ruler-canvas" height="28"></canvas>
+              </div>
+              <span class="agd-ruler-t" id="agd-ruler-t-end"></span>
             </div>
           </div>
-          <div class="agd-fan-wrap">
+          <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>
           </div>
         </div>
@@ -5451,131 +5459,116 @@
   /* ===== FIM TASK STACK ===== */
 
   /* =====================================================
-     AGENDA FAN CAROUSEL
+     AGENDA FAN CAROUSEL — v2
   ===================================================== */
   !function(){
-    /* Fan layout positions (scaled from TrailFan.tsx for mobile) */
+    /* Fan positions — less vertical drop so side cards align with center */
     var AGD = {
-      '-2':{ x:-224, y:68, r:-17, z:10 },
-      '-1':{ x:-120, y:24, r:-8.5, z:20 },
-       '0':{ x:0,   y:-12, r:0,   z:40 },
-       '1':{ x:120, y:24,  r:8.5, z:20 },
-       '2':{ x:224, y:68,  r:17,  z:10 }
+      '-2':{ x:-220, y:28, r:-13, z:10 },
+      '-1':{ x:-118, y:9,  r:-6.5,z:20 },
+       '0':{ x:0,   y:-8,  r:0,   z:40 },
+       '1':{ x:118, y:9,   r:6.5, z:20 },
+       '2':{ x:220, y:28,  r:13,  z:10 }
     };
-    var AGD_W_ACT=194, AGD_H_ACT=358;
-    var AGD_W_IN =176, AGD_H_IN =324;
+    var AGD_W_ACT=192, AGD_H_ACT=352;
+    var AGD_W_IN =174, AGD_H_IN =318;
 
     var AGD_MESES=['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
     var AGD_TIPO_LABEL={contrato:'CONTRATO',pagamento:'PGMT',evento:'EVENTO',entrega:'ENTREGA',lembrete:'LEMBRETE',lista:'LISTA',tarefa:'TAREFA'};
     var AGD_WDAYS=['D','S','T','Q','Q','S','S'];
+    var AGD_WDAYS_FULL=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
 
+    var ICO_LINK='<svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5a3 3 0 0 0 4.24 0l2-2A3 3 0 0 0 7.5 2.25l-1.1 1.1"/><path d="M8.5 5.5a3 3 0 0 0-4.24 0l-2 2a3 3 0 0 0 4.25 4.25l1.1-1.1"/></svg>';
+    var ICO_USER='<svg viewBox="0 0 16 16" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="5.5" r="2.5"/><path d="M2.5 13c0-3 2.5-4.5 5.5-4.5s5.5 1.5 5.5 4.5"/></svg>';
     var ICO_EDIT='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     var ICO_ARCH='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     var ICO_DONE='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
 
-    var _items=[], _active=0, _day='', _lpTimer=null;
-
-    /* ── DAY NAV ──────────────────────────────────── */
-    function renderDays(){
-      var wrap=document.getElementById('agd-days');
-      if(!wrap) return;
-      var today=new Date(); today.setHours(0,0,0,0);
-      var html='';
-      for(var i=-3;i<=3;i++){
-        var d=new Date(today); d.setDate(today.getDate()+i);
-        var iso=d.toISOString().slice(0,10);
-        var isToday=(i===0);
-        var isActive=(iso===_day);
-        var hasItems=_items.some(function(it){return it.dataISO===iso;});
-        var cls='agd-day-btn'+(isToday?' agd-today':'')+(isActive?' agd-active':'')+(hasItems?' agd-has-items':'');
-        html+='<button class="'+cls+'" onclick="agdSelectDay(\''+iso+'\')">'
-          +'<span class="agd-day-weekday">'+AGD_WDAYS[d.getDay()]+'</span>'
-          +'<span class="agd-day-num">'+d.getDate()+'</span>'
-          +'<span class="agd-day-dot"></span>'
-          +'</button>';
-      }
-      wrap.innerHTML=html;
-    }
-
-    /* ── RULER ────────────────────────────────────── */
-    function renderRuler(){
-      var canvas=document.getElementById('agd-ruler-canvas');
-      if(!canvas) return;
-      var W=canvas.parentElement.offsetWidth||360;
-      canvas.width=W;
-      var ctx=canvas.getContext('2d');
-      ctx.clearRect(0,0,W,54);
-      var now=new Date();
-      var N=49, ARC=16;
-
-      /* Ticks */
-      for(var i=0;i<N;i++){
-        var t=(i/(N-1))*2-1;
-        var x=(i/(N-1))*W;
-        var drop=t*t*ARC;
-        var baseY=8+drop;
-        var isHour=(i%2===0);
-        ctx.strokeStyle='rgba(255,255,255,'+(isHour?'0.5':'0.22')+')';
-        ctx.lineWidth=isHour?1.4:0.7;
-        ctx.beginPath();
-        ctx.moveTo(x,baseY);
-        ctx.lineTo(x,baseY+(isHour?10:6));
-        ctx.stroke();
-      }
-
-      /* Hour labels — 16h window centered on current time */
-      var centerH=now.getHours()+now.getMinutes()/60;
-      var startH=centerH-8, endH=centerH+8;
-      ctx.font='9px monospace';
-      ctx.fillStyle='rgba(255,255,255,0.38)';
-      ctx.textAlign='center';
-      for(var h=0;h<=24;h+=2){
-        if(h<startH-0.4||h>endH+0.4) continue;
-        var frac=(h-startH)/16;
-        if(frac<0||frac>1) continue;
-        var hx=frac*W;
-        var ht=(frac*2-1);
-        var hy=8+ht*ht*ARC+12;
-        ctx.fillText(h+'h',hx,hy);
-      }
-
-      /* Current time marker at center */
-      var cx=W/2;
-      ctx.strokeStyle='rgba(255,255,255,0.85)';
-      ctx.lineWidth=1.5;
-      ctx.beginPath(); ctx.moveTo(cx,2); ctx.lineTo(cx,20); ctx.stroke();
-      ctx.font='bold 9px monospace';
-      ctx.fillStyle='rgba(255,255,255,0.85)';
-      ctx.fillText(pad(now.getHours())+':'+pad(now.getMinutes()),cx,34);
-
-      updateHourglass();
-    }
+    var _items=[], _active=0, _day='', _lpTimer=null, _swipeX=null, _swipeY=null;
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
-    /* ── HOURGLASS ────────────────────────────────── */
-    function updateHourglass(){
-      var wrap=document.getElementById('agd-hourglass');
-      var lbl=document.getElementById('agd-hg-label');
+    /* ── DAY NAV (3 cols) ────────────────────────── */
+    function renderDays(){
+      var wrap=document.getElementById('agd-days');
       if(!wrap) return;
-      var ctr=_items[_active];
-      if(!ctr||!ctr.hora){ wrap.classList.add('u-hidden'); return; }
-      var now=new Date();
-      var parts=ctr.hora.split(':');
-      var evDate=new Date(now);
-      if(ctr.dataISO){ var dp=ctr.dataISO.split('-'); evDate.setFullYear(+dp[0],+dp[1]-1,+dp[2]); }
-      evDate.setHours(+parts[0],+parts[1]||0,0,0);
-      var diffMin=Math.round((evDate-now)/60000);
-      wrap.classList.remove('u-hidden','agd-hg-active','agd-hg-upcoming');
-      if(diffMin<0&&diffMin>-120){
-        wrap.classList.add('agd-hg-active');
-        lbl.textContent=Math.abs(diffMin)+'min';
-      } else if(diffMin>=0&&diffMin<480){
-        wrap.classList.add('agd-hg-upcoming');
-        lbl.textContent=diffMin<60?diffMin+'min':Math.floor(diffMin/60)+'h'+(diffMin%60?pad(diffMin%60):'');
-      } else {
-        wrap.classList.add('u-hidden');
+      var cDate=new Date(_day+'T00:00:00');
+      var prev=new Date(cDate); prev.setDate(cDate.getDate()-1);
+      var next=new Date(cDate); next.setDate(cDate.getDate()+1);
+      function col(d,cls,onclick){
+        var iso=d.toISOString().slice(0,10);
+        var hasItems=_items.some(function(it){return it.dataISO===iso;});
+        var tag=onclick?'button':'div';
+        return '<'+tag+' class="agd-day-col '+cls+(hasItems?' agd-has-items':'')+'"'
+          +(onclick?' onclick="'+onclick+'"':'')+' type="button">'
+          +'<span class="agd-day-num">'+d.getDate()+'</span>'
+          +'<span class="agd-day-mon">'+AGD_MESES[d.getMonth()]+'</span>'
+          +'<span class="agd-day-dot"></span>'
+          +'</'+tag+'>';
       }
+      wrap.innerHTML=col(prev,'agd-day-side',"agdShiftDay(-1)")
+        +col(cDate,'agd-day-center',null)
+        +col(next,'agd-day-side',"agdShiftDay(1)");
+      /* swipe on days-wrap */
+      bindDaysSwipe();
+    }
+
+    /* ── RULER (commitment time range) ──────────── */
+    function renderRuler(){
+      var ctr=_items[_active];
+      /* Start/end labels */
+      var tStart=document.getElementById('agd-ruler-t-start');
+      var tEnd=document.getElementById('agd-ruler-t-end');
+      var cdEl=document.getElementById('agd-ruler-countdown');
+      var timerEl=document.getElementById('agd-ruler-timer');
+      if(!tStart) return;
+      if(ctr&&ctr.hora){
+        tStart.textContent=ctr.hora;
+        tEnd.textContent=ctr.horaFim||'';
+      } else {
+        tStart.textContent=''; tEnd.textContent='';
+      }
+      /* Countdown */
+      if(ctr&&ctr.hora){
+        var now=new Date();
+        var parts=ctr.hora.split(':');
+        var evDate=new Date(now);
+        if(ctr.dataISO){ var dp=ctr.dataISO.split('-'); evDate.setFullYear(+dp[0],+dp[1]-1,+dp[2]); }
+        evDate.setHours(+parts[0],+(parts[1]||0),0,0);
+        var diffMin=Math.round((evDate-now)/60000);
+        timerEl.style.display='flex';
+        cdEl.className='agd-ruler-countdown';
+        if(diffMin<0&&diffMin>-240){
+          cdEl.classList.add('agd-c-active');
+          cdEl.textContent=Math.abs(diffMin)+'MIN RESTANTE';
+        } else if(diffMin>=0&&diffMin<600){
+          cdEl.classList.add('agd-c-upcoming');
+          cdEl.textContent=diffMin<60?diffMin+'MIN':Math.floor(diffMin/60)+'H '+(diffMin%60?pad(diffMin%60)+'MIN':'');
+        } else {
+          timerEl.style.display='none';
+        }
+      } else {
+        timerEl.style.display='none';
+      }
+      /* Canvas ticks */
+      var canvas=document.getElementById('agd-ruler-canvas');
+      if(!canvas) return;
+      var W=canvas.parentElement.offsetWidth||240;
+      canvas.width=W; canvas.height=28;
+      var ctx=canvas.getContext('2d');
+      ctx.clearRect(0,0,W,28);
+      var N=33;
+      for(var i=0;i<N;i++){
+        var x=(i/(N-1))*W;
+        var big=(i===Math.floor(N/2));
+        ctx.strokeStyle='rgba(255,255,255,'+(big?'0.7':(i%4===0?'0.4':'0.18'))+')';
+        ctx.lineWidth=big?1.8:(i%4===0?1.2:0.6);
+        var tickH=big?14:(i%4===0?8:4);
+        var tickY=(28-tickH)/2;
+        ctx.beginPath(); ctx.moveTo(x,tickY); ctx.lineTo(x,tickY+tickH); ctx.stroke();
+      }
+      /* Bind ruler swipe for commitment navigation */
+      bindRulerSwipe();
     }
 
     /* ── FAN ─────────────────────────────────────── */
@@ -5584,9 +5577,8 @@
       if(!fan) return;
       fan.innerHTML='';
       if(!_items.length){
-        fan.innerHTML='<div class="agd-empty">'
-          +'<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>'
-          +'<div class="agd-empty-text">Nenhuma tarefa</div></div>';
+        fan.innerHTML='<div class="agd-empty"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>'
+          +'<div class="agd-empty-text">Sem compromissos</div></div>';
         return;
       }
       for(var off=-2;off<=2;off++){
@@ -5604,41 +5596,73 @@
           +'z-index:'+pos.z+';';
         el.innerHTML=buildCard(_items[idx],idx,isAct);
         if(!isAct){
-          (function(i){ el.addEventListener('click',function(){agdSetActive(i);}); })(idx);
+          (function(i){ el.addEventListener('click',function(e){
+            if(!e.target.closest('.agd-act-btn')) agdSetActive(i);
+          }); })(idx);
         }
         fan.appendChild(el);
       }
       bindLongPress();
+      bindFanSwipe();
     }
 
+    /* ── PHOTO HTML ───────────────────────────────── */
+    function agdPhotoHtml(nome,cliente,foto){
+      if(foto) return '<div class="agd-photo-fill" style="background-image:url('+foto+')"></div>';
+      var nm=cliente||nome||'?';
+      var color=typeof avatarColor==='function'?avatarColor(nm):'#2c3e35';
+      var inits=typeof avatarInitials==='function'?avatarInitials(nm):nm.slice(0,2).toUpperCase();
+      return '<div class="agd-photo-fill agd-photo-initials" style="background:'+color+'">'
+        +'<span class="agd-initials-text">'+inits+'</span></div>';
+    }
+
+    /* ── BUILD CARD ───────────────────────────────── */
     function buildCard(it,idx,isAct){
       var ink=(idx%2===0);
       var theme=ink?'agd-ink':'agd-paper';
       var actCls=isAct?' agd-active':'';
       var foto=clienteFotoPorNome(it.cliente);
-      var photoHtml=avatarHtml(it.cliente||it.nome,200,foto);
-      var partes=(it.dataISO||'').split('-');
-      var dataFmt=partes.length===3?partes[2]+' '+(AGD_MESES[parseInt(partes[1],10)-1]||''):'—';
+      var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
-      var horaLbl=it.hora||'—';
+
+      /* Project name */
+      var projNome='';
+      if(it.jobId&&jobsData&&jobsData[it.jobId])
+        projNome=jobsData[it.jobId].nome||jobsData[it.jobId].client||'';
+
+      /* People at bottom */
+      var pessoasIds=[];
+      if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
+      else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
+      else if(it.jobId&&jobsData[it.jobId]) pessoasIds=jobsData[it.jobId].pessoas||[];
+      var peopleHtml='';
+      if(pessoasIds.length){
+        var MAX=3, extra=pessoasIds.length-MAX;
+        pessoasIds.slice(0,MAX).forEach(function(id){
+          var nm=id.indexOf('@')>-1?id.split('@')[0]:(typeof nomeMembro==='function'?nomeMembro(id):id);
+          var inits=typeof avatarInitials==='function'?avatarInitials(nm):nm.slice(0,2).toUpperCase();
+          peopleHtml+='<div class="agd-av" title="'+escapeHtml(nm)+'">'+inits+'</div>';
+        });
+        if(extra>0) peopleHtml+='<div class="agd-av agd-av-more">+'+extra+'</div>';
+        peopleHtml='<div class="agd-people">'+peopleHtml+'</div>';
+      }
+
       return '<article class="agd-card '+theme+actCls+'">'
         +'<div class="agd-card-photo">'
           +photoHtml
-          +'<div class="agd-photo-overlay"></div>'
           +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
         +'</div>'
         +'<div class="agd-card-body">'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
-          +'<p class="agd-card-subtitle">'+escapeHtml(it.cliente||'—')+'</p>'
-          +'<div class="agd-stats">'
-            +'<div class="agd-stat"><div class="agd-stat-val">'+escapeHtml(dataFmt)+'</div><div class="agd-stat-label">Data</div></div>'
-            +'<div class="agd-stat-divider"></div>'
-            +'<div class="agd-stat"><div class="agd-stat-val">'+tipoLbl+'</div><div class="agd-stat-label">Tipo</div></div>'
-            +'<div class="agd-stat-divider"></div>'
-            +'<div class="agd-stat"><div class="agd-stat-val">'+escapeHtml(horaLbl)+'</div><div class="agd-stat-label">Hora</div></div>'
-          +'</div>'
-          +'<p class="agd-card-desc">'+escapeHtml(it.acao||'')+'</p>'
-          +(isAct?'<button class="agd-card-cta" onclick="agdVerDetalhes('+idx+')">Ver detalhes</button>':'')
+          +(projNome
+            ?'<div class="agd-card-proj">'+ICO_LINK
+              +'<span class="agd-card-proj-name">'+escapeHtml(projNome)+'</span></div>'
+            :'')
+          +(it.cliente
+            ?'<div class="agd-card-client">'+ICO_USER
+              +'<span class="agd-card-client-name">'+escapeHtml(it.cliente)+'</span></div>'
+            :'')
+          +peopleHtml
         +'</div>'
         +'<div class="agd-card-actions" id="agd-actions-'+idx+'">'
           +'<button class="agd-act-btn agd-act-editar" onclick="agdEditar('+idx+')">'+ICO_EDIT+' EDITAR</button>'
@@ -5648,28 +5672,82 @@
         +'</article>';
     }
 
-    /* ── LONG PRESS ──────────────────────────────── */
+    /* ── LONG PRESS on active card ───────────────── */
     function bindLongPress(){
       var fan=document.getElementById('agd-fan');
       if(!fan) return;
       var card=fan.querySelector('.agd-card.agd-active');
       if(!card) return;
-      function showActions(v){
+      function showAct(v){
         var a=card.querySelector('.agd-card-actions');
         if(a) a.classList.toggle('agd-vis',v);
       }
-      card.addEventListener('pointerdown',function(){
-        clearTimeout(_lpTimer);
-        _lpTimer=setTimeout(function(){ showActions(true); },620);
-      });
+      card.addEventListener('pointerdown',function(){ clearTimeout(_lpTimer); _lpTimer=setTimeout(function(){showAct(true);},620); });
       function cancel(){ clearTimeout(_lpTimer); }
       card.addEventListener('pointerup',cancel);
       card.addEventListener('pointercancel',cancel);
       card.addEventListener('pointermove',cancel);
       card.addEventListener('click',function(e){
         var a=card.querySelector('.agd-card-actions.agd-vis');
-        if(a&&!e.target.closest('.agd-act-btn')) showActions(false);
+        if(a&&!e.target.closest('.agd-act-btn')) showAct(false);
       });
+    }
+
+    /* ── FAN SWIPE (left/right) ──────────────────── */
+    function bindFanSwipe(){
+      var wrap=document.getElementById('agd-fan-wrap');
+      if(!wrap||wrap._agdSwipeBound) return;
+      wrap._agdSwipeBound=true;
+      var sx=null,sy=null;
+      wrap.addEventListener('pointerdown',function(e){ sx=e.clientX; sy=e.clientY; });
+      wrap.addEventListener('pointermove',function(e){ if(sx!==null&&Math.abs(e.clientX-sx)>8) e.preventDefault(); },{passive:false});
+      wrap.addEventListener('pointerup',function(e){
+        if(sx===null) return;
+        var dx=e.clientX-sx, dy=e.clientY-sy;
+        sx=null; sy=null;
+        if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>44){
+          if(dx<0&&_active<_items.length-1) agdSetActive(_active+1);
+          else if(dx>0&&_active>0) agdSetActive(_active-1);
+        }
+      });
+      wrap.addEventListener('pointercancel',function(){ sx=null; sy=null; });
+    }
+
+    /* ── RULER SWIPE (navigate same-day items) ───── */
+    function bindRulerSwipe(){
+      var outer=document.getElementById('agd-ruler-outer');
+      if(!outer||outer._agdSwipeBound) return;
+      outer._agdSwipeBound=true;
+      var sx=null;
+      outer.addEventListener('pointerdown',function(e){ sx=e.clientX; });
+      outer.addEventListener('pointerup',function(e){
+        if(sx===null) return;
+        var dx=e.clientX-sx; sx=null;
+        if(Math.abs(dx)<40) return;
+        /* Find next/prev item on the same day */
+        var dir=dx<0?1:-1;
+        var cur=_items[_active];
+        var curDay=cur?cur.dataISO:_day;
+        var newIdx=_active+dir;
+        while(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO!==curDay) newIdx+=dir;
+        if(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO===curDay) agdSetActive(newIdx);
+      });
+      outer.addEventListener('pointercancel',function(){ sx=null; });
+    }
+
+    /* ── DAYS SWIPE ──────────────────────────────── */
+    function bindDaysSwipe(){
+      var wrap=document.getElementById('agd-days-wrap');
+      if(!wrap||wrap._agdSwipeBound) return;
+      wrap._agdSwipeBound=true;
+      var sx=null;
+      wrap.addEventListener('pointerdown',function(e){ sx=e.clientX; });
+      wrap.addEventListener('pointerup',function(e){
+        if(sx===null) return;
+        var dx=e.clientX-sx; sx=null;
+        if(Math.abs(dx)>44) agdShiftDay(dx<0?1:-1);
+      });
+      wrap.addEventListener('pointercancel',function(){ sx=null; });
     }
 
     /* ── HELPERS ─────────────────────────────────── */
@@ -5677,23 +5755,32 @@
       if(!items.length) return 0;
       var now=new Date();
       var hojeISO=now.toISOString().slice(0,10);
-      var horaAtual=pad(now.getHours())+':'+pad(now.getMinutes());
+      var hora=pad(now.getHours())+':'+pad(now.getMinutes());
       for(var i=0;i<items.length;i++){
-        var it=items[i];
-        if(!it.dataISO) continue;
-        if(it.dataISO>hojeISO) return i;
-        if(it.dataISO===hojeISO&&(!it.hora||it.hora>=horaAtual)) return i;
+        if(!items[i].dataISO) continue;
+        if(items[i].dataISO>hojeISO) return i;
+        if(items[i].dataISO===hojeISO&&(!items[i].hora||items[i].hora>=hora)) return i;
       }
       return items.length-1;
     }
 
     /* ── PUBLIC API ──────────────────────────────── */
     window.renderAgenda=function(){
-      var sec=document.getElementById('agenda-section');
-      if(!sec) return;
+      if(!document.getElementById('agenda-section')) return;
       _items=gerarItensRadar();
       _active=findCenter(_items);
-      _day=_items[_active]?(_items[_active].dataISO||new Date().toISOString().slice(0,10)):new Date().toISOString().slice(0,10);
+      _day=(_items[_active]&&_items[_active].dataISO)||new Date().toISOString().slice(0,10);
+      renderDays(); renderRuler(); renderFan();
+    };
+
+    window.agdShiftDay=function(dir){
+      var d=new Date(_day+'T00:00:00');
+      d.setDate(d.getDate()+dir);
+      var iso=d.toISOString().slice(0,10);
+      _day=iso;
+      /* Find first item on that day */
+      var idx=_items.findIndex(function(it){return it.dataISO===iso;});
+      if(idx>=0) _active=idx;
       renderDays(); renderRuler(); renderFan();
     };
 
@@ -5705,8 +5792,8 @@
     };
 
     window.agdSetActive=function(idx){
-      _active=idx;
-      _day=_items[idx]?(_items[idx].dataISO||_day):_day;
+      _active=Math.max(0,Math.min(idx,_items.length-1));
+      _day=(_items[_active]&&_items[_active].dataISO)||_day;
       renderDays(); renderRuler(); renderFan();
     };
 
@@ -5723,7 +5810,7 @@
       if(fan){ var a=fan.querySelector('.agd-card-actions.agd-vis'); if(a) a.classList.remove('agd-vis'); }
       _items.splice(idx,1);
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
-      renderDays(); renderFan();
+      renderDays(); renderRuler(); renderFan();
       showToast(t('toast.archivedFromRadar'));
     };
 
@@ -5734,18 +5821,17 @@
       else if(tipo==='lista'&&listasData[itemIdx]){ listasData[itemIdx].feito=true; saveListasData(); }
       else if(tipo==='tarefa'&&tarefasData[itemIdx]){ tarefasData[itemIdx].feito=true; saveTarefasData(); }
       else if(jobId){
-        var job=jobsData[jobId];
-        if(job){
-          if(tipo==='pagamento') marcarPagoDynamic(jobId,parseInt(itemIdx,10));
-          else if(tipo!=='contrato'){
-            var ms=(job.milestones||[]).find(function(m){return m.key==='principal';});
-            if(ms){ ms.status='feito'; ms.feitoEm=new Date().toISOString(); pushHistory(job,t('toast.markedDone')); saveJobsData(); }
-          } else { openJob(jobId); return; }
+        var job=jobsData[jobId]; if(!job) return;
+        if(tipo==='pagamento') marcarPagoDynamic(jobId,parseInt(itemIdx,10));
+        else if(tipo==='contrato'){ openJob(jobId); return; }
+        else{
+          var ms=(job.milestones||[]).find(function(m){return m.key==='principal';});
+          if(ms){ ms.status='feito'; ms.feitoEm=new Date().toISOString(); pushHistory(job,t('toast.markedDone')); saveJobsData(); }
         }
       }
       _items.splice(idx,1);
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
-      renderDays(); renderFan();
+      renderDays(); renderRuler(); renderFan();
       if(typeof renderMonthTicker==='function') renderMonthTicker();
       showToast(t('toast.done'));
     };
