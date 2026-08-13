@@ -106,49 +106,33 @@
 }
 
 /* ══════════════════════════════════════════════════
-   RULER — tick marks + event range highlight
+   RULER v2 — scrolling minute timeline
 ══════════════════════════════════════════════════ */
 .agd-ruler-outer {
   margin: 0 0 4px;
   touch-action: pan-y;
 }
 
-/* Container for time labels + canvas ticks */
 .agd-ruler-viz {
   position: relative;
-  height: 52px;         /* 18px label row + 34px tick canvas */
+  height: 44px;
   margin: 0 18px 0;
-  overflow: visible;
+  overflow: hidden;
 }
 
 /* Slide animations for ruler navigation */
 .agd-ruler-viz.agd-anim-from-r { animation: agd-slide-from-r .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
 .agd-ruler-viz.agd-anim-from-l { animation: agd-slide-from-l .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
 
-/* Time labels sit above the tick canvas */
-.agd-ruler-t-label {
-  position: absolute;
-  top: 0;
-  transform: translateX(-50%);
-  font-family: var(--font-headline);
-  font-size: .6rem;
-  letter-spacing: .07em;
-  color: rgba(255,255,255,.45);
-  white-space: nowrap;
-  pointer-events: none;
-  line-height: 1.6;
-}
-
-/* Canvas for tick-mark ruler */
+/* Canvas fills the viz container */
 .agd-ruler-canvas {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 34px;
   display: block;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
 }
 
-/* Hourglass icon + countdown below the ruler, aligned to center tick */
+/* Timer below the triangle indicator */
 .agd-ruler-cd {
   display: flex;
   align-items: center;

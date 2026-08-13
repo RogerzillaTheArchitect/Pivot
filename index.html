@@ -5483,7 +5483,9 @@
     var ICO_DONE='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
 
     var _items=[], _active=0, _day='', _lpTimer=null, _swipeX=null, _swipeY=null;
-    var _fanEls={}, _fanDirty=true; /* persistent positioner elements + dirty flag */
+    var _fanEls={}, _fanDirty=true;
+    var _agdRulerRAF=null, _agdRulerCanvas=null;
+    var _agdRulerRange=null, _agdRulerTimerLast='';
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -5513,90 +5515,147 @@
     }
 
     /* ── RULER TICKS — canvas rendering ─────────── */
-    function drawRulerTicks(canvas, filledL, filledR){
-      if(!canvas) return;
-      var rect=canvas.getBoundingClientRect();
-      var W=rect.width||canvas.parentElement.offsetWidth||240;
-      canvas.width=W; canvas.height=34;
-      var ctx=canvas.getContext('2d');
-      ctx.clearRect(0,0,W,34);
-      var N=33, H=34, cx=Math.floor(N/2);
-      for(var i=0;i<N;i++){
-        var x=(i/(N-1))*W;
-        var isCx=(i===cx);
-        var inFill=(filledL!==null&&filledR!==null&&(x/W*100)>=filledL&&(x/W*100)<=filledR);
-        var alpha=inFill?(isCx?1:0.6):(isCx?0.75:(i%4===0?0.32:0.14));
-        ctx.strokeStyle=inFill?'rgba(79,161,137,'+alpha+')':'rgba(255,255,255,'+alpha+')';
-        ctx.lineWidth=isCx?2:(i%4===0?1.2:0.7);
-        var tH=isCx?H*0.82:(i%4===0?H*0.48:H*0.26);
-        var tY=(H-tH)/2;
-        ctx.beginPath(); ctx.moveTo(x,tY); ctx.lineTo(x,tY+tH); ctx.stroke();
+    /* ── RULER v2 — scrolling minute timeline ─────────── */
+    var AGD_R_PPM=8; /* pixels per minute */
+
+    function _agdRulerDraw(){
+      var cv=_agdRulerCanvas;
+      if(!cv||!cv.isConnected) return;
+      var par=cv.parentElement;
+      var W=par?par.offsetWidth:0;
+      if(!W) return;
+      var H=44;
+      if(cv.width!==W) cv.width=W;
+      if(cv.height!==H) cv.height=H;
+      var ctx=cv.getContext('2d');
+      ctx.clearRect(0,0,W,H);
+
+      var now=new Date();
+      var totMin=now.getHours()*60+now.getMinutes();
+      var sub=(now.getSeconds()*1000+now.getMilliseconds())/60000;
+      var cx=W/2;
+
+      /* Inverted triangle indicator — fixed at center top */
+      var TRI_TIP=13, TRI_H=7, TRI_W=10;
+      ctx.beginPath();
+      ctx.moveTo(cx-TRI_W/2, TRI_TIP-TRI_H);
+      ctx.lineTo(cx+TRI_W/2, TRI_TIP-TRI_H);
+      ctx.lineTo(cx, TRI_TIP);
+      ctx.closePath();
+      ctx.fillStyle='rgba(255,255,255,0.82)';
+      ctx.fill();
+
+      /* Tick geometry — all bottom-aligned */
+      var BOT=H-4;
+      var H_H=22, H_T=13; /* hour height, ten/one height (one=ten per spec) */
+      var W_H=2.5, W_T=1.5, W_O=0.75; /* widths */
+
+      var er=_agdRulerRange;
+      var halfM=Math.ceil(cx/AGD_R_PPM)+2;
+
+      for(var i=-halfM;i<=halfM;i++){
+        var aMin=totMin+i;
+        if(aMin<0) continue;
+        var x=cx+(i-sub)*AGD_R_PPM;
+        if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
+
+        var isHr=(aMin%60===0);
+        var isTn=!isHr&&(aMin%10===0);
+        var tH=isHr?H_H:H_T;
+        var tW=isHr?W_H:(isTn?W_T:W_O);
+
+        /* Smooth opacity fade by distance from center */
+        var dFrac=Math.abs(x-cx)/cx;
+        var op;
+        if(dFrac<0.12) op=1;
+        else{ var t=(dFrac-0.12)/0.88; op=Math.max(0,1-t*t*(3-2*t)); }
+        if(op<0.01) continue;
+
+        /* Event glow */
+        var inEv=er&&aMin>=er.startMin&&aMin<er.endMin;
+        var r=255,g=255,b=255;
+        if(inEv){ if(er.isActive){g=210;b=55;}else{r=79;g=200;b=110;} }
+
+        ctx.save();
+        if(inEv){ ctx.shadowColor='rgba('+r+','+g+','+b+',0.9)'; ctx.shadowBlur=8; }
+        ctx.strokeStyle='rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
+        ctx.lineWidth=tW;
+        ctx.lineCap='round';
+        ctx.beginPath();
+        ctx.moveTo(x,BOT-tH);
+        ctx.lineTo(x,BOT);
+        ctx.stroke();
+        ctx.restore();
       }
     }
 
-    /* ── RULER (tick marks + time labels + hourglass below) ── */
+    function _agdRulerUpdateTimer(cd){
+      if(!cd) return;
+      var er=_agdRulerRange;
+      var now=new Date();
+      var nowMin=now.getHours()*60+now.getMinutes();
+      if(!er||!er.isActive||nowMin>=er.endMin){
+        if(_agdRulerTimerLast!=='__h'){
+          cd.innerHTML=''; cd.className='agd-ruler-cd'; cd.style.visibility='hidden';
+          _agdRulerTimerLast='__h';
+        }
+        return;
+      }
+      var diff=er.endMin-nowMin;
+      var h=Math.floor(diff/60), m=diff%60;
+      var txt=h>0?(h+':'+pad(m)):(m+'MIN');
+      if(txt!==_agdRulerTimerLast){
+        _agdRulerTimerLast=txt;
+        cd.innerHTML='<span class="agd-ruler-timer-text">'+txt+'</span>';
+        cd.className='agd-ruler-cd agd-c-active';
+        cd.style.visibility='';
+      }
+    }
+
+    function _agdRulerLoop(){
+      if(!_agdRulerCanvas||!_agdRulerCanvas.isConnected){ _agdRulerRAF=null; return; }
+      _agdRulerRAF=requestAnimationFrame(function(){
+        _agdRulerDraw();
+        _agdRulerUpdateTimer(document.getElementById('agd-ruler-cd'));
+        _agdRulerLoop();
+      });
+    }
+
     function renderRuler(){
       var viz=document.getElementById('agd-ruler-viz');
       var cd=document.getElementById('agd-ruler-cd');
       if(!viz) return;
+
       var ctr=_items[_active];
-
-      /* No event with time: draw blank ticks, hide cd */
-      if(!ctr||!ctr.hora){
-        viz.innerHTML='<canvas id="agd-ruler-canvas" class="agd-ruler-canvas"></canvas>';
-        requestAnimationFrame(function(){
-          drawRulerTicks(document.getElementById('agd-ruler-canvas'),null,null);
-        });
-        if(cd){ cd.innerHTML=''; cd.style.visibility='hidden'; cd.className='agd-ruler-cd'; }
-        bindRulerSwipe(); return;
-      }
-
       var now=new Date();
-      var nowMin=now.getHours()*60+now.getMinutes();
-      var sp=ctr.hora.split(':');
-      var startMin=+sp[0]*60+(+sp[1]||0);
-      var hasEnd=!!(ctr.horaFim);
-      var ep=hasEnd?ctr.horaFim.split(':'):null;
-      var endMin=hasEnd?(+ep[0]*60+(+ep[1]||0)):(startMin+120);
-
       var todayISO=now.toISOString().slice(0,10);
-      var isToday=!ctr.dataISO||(ctr.dataISO===todayISO);
-      var center=isToday?nowMin:Math.round((startMin+endMin)/2);
-      var HALF=240; /* ±4h visible range */
-      function minToX(m){ return 50+(m-center)/(HALF*2)*100; }
+      var nowMin=now.getHours()*60+now.getMinutes();
 
-      var startX=minToX(startMin), endX=minToX(endMin);
-      var startLX=Math.max(5,Math.min(42,startX));
-      var endLX=Math.max(58,Math.min(95,endX));
-      var fL=Math.max(0,Math.min(startX,100));
-      var fR=Math.max(0,Math.min(endX,100));
-
-      var startLabel=pad(+sp[0])+':'+pad(+(sp[1]||0));
-      var endLabel=hasEnd?(pad(+ep[0])+':'+pad(+(ep[1]||0))):'';
-
-      viz.innerHTML=
-        '<canvas id="agd-ruler-canvas" class="agd-ruler-canvas"></canvas>'
-        +'<span class="agd-ruler-t-label" style="left:'+startLX.toFixed(1)+'%">'+startLabel+'</span>'
-        +(endLabel?'<span class="agd-ruler-t-label" style="left:'+endLX.toFixed(1)+'%">'+endLabel+'</span>':'');
-
-      requestAnimationFrame(function(){
-        drawRulerTicks(document.getElementById('agd-ruler-canvas'), fR>fL?fL:null, fR>fL?fR:null);
-      });
-
-      /* Hourglass icon + countdown below the center tick */
-      if(cd){
-        var diffMin=endMin-nowMin;
-        if(!isToday||diffMin<=0||diffMin>600){
-          cd.innerHTML=''; cd.style.visibility='hidden'; cd.className='agd-ruler-cd';
-        } else {
-          var h=Math.floor(diffMin/60), m=diffMin%60;
-          var cdText=h>0?(h+':'+pad(m)):(m+'MIN');
-          var cdCls=nowMin>=startMin?'agd-c-active':'agd-c-upcoming';
-          cd.innerHTML=ICO_HG+'<span class="agd-ruler-timer-text">'+cdText+'</span>';
-          cd.className='agd-ruler-cd '+cdCls;
-          cd.style.visibility='';
-        }
+      /* Event range for glow — only applies when item has hora and is today */
+      _agdRulerRange=null;
+      if(ctr&&ctr.hora){
+        var sp=ctr.hora.split(':');
+        var sM=+sp[0]*60+(+sp[1]||0);
+        var ep=ctr.horaFim?ctr.horaFim.split(':'):null;
+        var eM=ep?(+ep[0]*60+(+ep[1]||0)):(sM+120);
+        var isToday=!ctr.dataISO||(ctr.dataISO===todayISO);
+        if(isToday) _agdRulerRange={startMin:sM,endMin:eM,isActive:nowMin>=sM&&nowMin<eM};
       }
+
+      /* Ensure canvas is in DOM */
+      if(!_agdRulerCanvas||!_agdRulerCanvas.isConnected){
+        viz.innerHTML='';
+        _agdRulerCanvas=document.createElement('canvas');
+        _agdRulerCanvas.className='agd-ruler-canvas';
+        viz.appendChild(_agdRulerCanvas);
+      }
+
+      /* Start animation loop if not running */
+      if(!_agdRulerRAF) _agdRulerLoop();
+
+      /* Force timer refresh */
+      _agdRulerTimerLast='';
+      _agdRulerUpdateTimer(cd);
 
       bindRulerSwipe();
     }
