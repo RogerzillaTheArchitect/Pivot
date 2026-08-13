@@ -560,6 +560,8 @@
           </div>
           <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>
+            <div class="agd-fan-grad agd-fan-grad--l" aria-hidden="true"></div>
+            <div class="agd-fan-grad agd-fan-grad--r" aria-hidden="true"></div>
           </div>
         </div>
 
@@ -5534,7 +5536,7 @@
       var par=cv.parentElement;
       var W=par?par.offsetWidth:0;
       if(!W) return;
-      var H=62;
+      var H=72;
       var dpr=Math.round(window.devicePixelRatio||1);
       if(cv.width!==W*dpr){ cv.width=W*dpr; cv.style.width=W+'px'; }
       if(cv.height!==H*dpr){ cv.height=H*dpr; cv.style.height=H+'px'; }
@@ -5545,11 +5547,18 @@
 
       var now=new Date();
       var totMin=now.getHours()*60+now.getMinutes();
-      var sub=(now.getSeconds()*1000+now.getMilliseconds())/60000;
+      var sub=0; /* snap on minute boundaries — no sub-minute scroll */
       var cx=W/2;
 
-      /* Inverted triangle indicator — fixed at center top */
-      var TRI_TIP=11, TRI_H=6, TRI_W=9;
+      /* Current time label above triangle */
+      ctx.font='bold 9px Inter Tight,sans-serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='top';
+      ctx.fillStyle='rgba(255,255,255,0.62)';
+      ctx.fillText(pad(now.getHours())+':'+pad(now.getMinutes()), cx, 2);
+
+      /* Inverted triangle indicator */
+      var TRI_TIP=20, TRI_H=5, TRI_W=9;
       ctx.beginPath();
       ctx.moveTo(cx-TRI_W/2, TRI_TIP-TRI_H);
       ctx.lineTo(cx+TRI_W/2, TRI_TIP-TRI_H);
@@ -5559,17 +5568,16 @@
       ctx.fill();
 
       /* Tick geometry — top-aligned close to triangle */
-      var TICK_TOP=17;
+      var TICK_TOP=25;
       var H_H=10, H_T=7;
       var W_H=2.5, W_T=1.5, W_O=0.75;
-      var LBL_OFF=10;
 
       var er=_agdRulerRange;
       var halfM=Math.ceil(cx/AGD_R_PPM)+2;
 
       for(var i=-halfM;i<=halfM;i++){
         var aMin=totMin+i;
-        /* wrap to display correct hour for past/future minutes */
+        /* wrap to display correct label for past/future minutes */
         var displayMin=((aMin%1440)+1440)%1440;
         var x=cx+(i-sub)*AGD_R_PPM;
         if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
@@ -5601,7 +5609,7 @@
         ctx.lineTo(x, TICK_TOP+tH);
         ctx.stroke();
 
-        /* Time labels — hours: "13h", 10-min: "10" */
+        /* Time labels — hours: "13h", 10-min: just minutes "10" */
         if((isHr||isTn)&&op>0.15){
           var hh=Math.floor(displayMin/60), mm=displayMin%60;
           var lbl=isHr?(hh+'h'):(mm<10?'0'+mm:''+mm);
@@ -5633,7 +5641,7 @@
           ctx.lineCap='round';
           ctx.beginPath();
           ctx.moveTo(bx, TICK_TOP);
-          ctx.lineTo(bx, TICK_TOP+H_H+8);
+          ctx.lineTo(bx, TICK_TOP+H_H+6);
           ctx.stroke();
           ctx.beginPath();
           ctx.arc(bx, TICK_TOP-2, 2.5, 0, Math.PI*2);
@@ -5650,10 +5658,11 @@
       var now=new Date();
       var nowMin=now.getHours()*60+now.getMinutes();
       var todayISO=now.toISOString().slice(0,10);
-      var txt='', cls='agd-ruler-cd';
+      var txt='', lbl='', cls='agd-ruler-cd';
 
       /* Active event — show remaining time */
       if(er&&er.isActive&&nowMin<er.endMin){
+        lbl='Finaliza em';
         txt=agdFmtTimer(er.endMin-nowMin);
         cls='agd-ruler-cd agd-c-active';
       } else {
@@ -5674,11 +5683,13 @@
           if(diff>0&&diff<nextMin) nextMin=diff;
         }
         if(nextMin<Infinity){
+          lbl='Próxima em';
           txt=agdFmtTimer(nextMin);
           cls='agd-ruler-cd agd-c-upcoming';
         }
       }
 
+      var state=lbl+'|'+txt;
       if(!txt){
         if(_agdRulerTimerLast!=='__h'){
           cd.innerHTML=''; cd.className='agd-ruler-cd'; cd.style.visibility='hidden';
@@ -5686,31 +5697,29 @@
         }
         return;
       }
-      if(txt!==_agdRulerTimerLast){
-        _agdRulerTimerLast=txt;
-        cd.innerHTML='<span class="agd-ruler-timer-text">'+txt+'</span>';
+      if(state!==_agdRulerTimerLast){
+        _agdRulerTimerLast=state;
+        cd.innerHTML='<span class="agd-ruler-timer-label">'+lbl+'</span>'
+                    +'<span class="agd-ruler-timer-text">'+txt+'</span>';
         cd.className=cls;
         cd.style.visibility='';
       }
     }
 
+    var _agdLastRulerMin=-1;
     function _agdRulerLoop(){
       if(!_agdRulerCanvas||!_agdRulerCanvas.isConnected){ _agdRulerRAF=null; return; }
       _agdRulerRAF=requestAnimationFrame(function(){
-        _agdRulerDraw();
-        _agdRulerUpdateTimer(document.getElementById('agd-ruler-cd'));
+        var now=new Date();
+        var curMin=now.getHours()*60+now.getMinutes();
+        if(curMin!==_agdLastRulerMin){
+          _agdLastRulerMin=curMin;
+          _agdRulerDraw();
+          _agdRulerUpdateTimer(document.getElementById('agd-ruler-cd'));
+        }
         _agdRulerLoop();
       });
     }
-
-    /* Throttled card timer update (called from ruler timer, max 1x/sec) */
-    var _agdCardTimerLast=0;
-    var _agdUpdateCardTimerThrottled=function(){
-      var now=Date.now();
-      if(now-_agdCardTimerLast<900) return;
-      _agdCardTimerLast=now;
-      _agdUpdateCardTimer();
-    };
 
     function renderRuler(){
       var viz=document.getElementById('agd-ruler-viz');
@@ -5752,6 +5761,10 @@
 
       /* Start animation loop if not running */
       if(!_agdRulerRAF) _agdRulerLoop();
+
+      /* Force immediate redraw (event ranges may have changed) */
+      _agdLastRulerMin=-1;
+      _agdRulerDraw();
 
       /* Force timer refresh */
       _agdRulerTimerLast='';
