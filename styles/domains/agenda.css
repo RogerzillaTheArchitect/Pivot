@@ -1,6 +1,5 @@
-/* ===== AGENDA CAROUSEL 3D ===== */
+/* ===== AGENDA CAROUSEL 3D — Trail Fan (adaptado do Lovable) ===== */
 
-/* garantir que o carrossel não seja clipado pelo overflow dos pais */
 #tasks-list { overflow: visible !important; }
 #hoje-content { overflow: visible !important; }
 
@@ -56,11 +55,26 @@
   flex: none;
 }
 
-/* --- Seção do carrossel 3D --- */
+/* --- Fan Carousel --- */
 .agenda-carousel-section {
   position: relative;
-  height: 340px;
+  height: 380px;
   overflow: visible;
+}
+
+/* Sombra ambiente no chão (floor shadow — igual ao ::after do Lovable) */
+.agenda-carousel-section::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  width: 70%;
+  height: 80px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(48, 47, 44, .18), transparent 70%);
+  filter: blur(12px);
 }
 
 .agenda-stage {
@@ -69,42 +83,50 @@
   overflow: visible;
 }
 
-/* Cards individuais — posicionados em JS via transform */
+/* --- Card individual ---
+   left:50% + translateX(-50%) centralize; translate3d(x,y,0) offset do fan.
+   Sizes: inativo = 152×278, ativo = 170×310 (mesma proporção do Lovable w/h ≈ 0.54)   */
 .agenda-card {
   position: absolute;
-  width: 164px;
-  height: 273px;
-  top: 20px;
-  left: calc(50% - 82px);
-  border-radius: 22px;
+  left: 50%;
+  top: 24px;
+  width: 152px;
+  height: 278px;
+  border-radius: 2rem;    /* igual: rounded-[2rem] */
   overflow: hidden;
-  border: 1.5px solid rgba(255, 255, 255, .5);
   cursor: pointer;
-  will-change: transform, opacity, filter;
-  transform-origin: bottom center;
+  display: flex;
+  flex-direction: column;
   -webkit-tap-highlight-color: transparent;
-  /* sem transition aqui: a física spring controla a animação */
+  /* Sem transition inicial — JS adiciona .ag-animated após primeiro paint */
 }
 
-.agenda-card--light {
-  background: linear-gradient(175deg, #F8F5EE 0%, #EDE9DF 100%);
-  border-color: rgba(255, 255, 255, .92);
+.agenda-card.ag-animated {
+  transition: transform 500ms ease-out,
+              width  500ms ease-out,
+              height 500ms ease-out,
+              box-shadow 500ms ease-out;
 }
 
-.agenda-card--dark {
-  background: linear-gradient(175deg, #272B29 0%, #1A1E1C 100%);
-  border-color: rgba(255, 255, 255, .10);
+.agenda-card.ag-center {
+  width: 170px;
+  height: 310px;
 }
 
-/* Foto / avatar */
+/* Ink (dark) — oklch(0.19 0.002 106) */
+.agenda-card--ink  { background: #272B29; color: #F3F0E9; }
+/* Paper (light) — oklch(0.985 0.003 92) */
+.agenda-card--paper { background: #F8F5EE; color: #1A1A18; }
+
+/* Foto do cliente — 44% da altura (mesmo do Lovable: h-[44%]) */
 .agenda-card-photo {
   width: 100%;
-  height: 138px;
+  height: 44%;
   overflow: hidden;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(128, 128, 128, .06);
 }
 
 .agenda-card-photo .client-avatar {
@@ -115,118 +137,152 @@
   min-width: unset !important;
 }
 
-/* Corpo (nome + cliente) */
-.agenda-card-body {
-  padding: 10px 14px 8px;
+/* Conteúdo (56% restante) */
+.agenda-card-content {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 12px 10px;
+  overflow: hidden;
 }
 
+.agenda-card.ag-center .agenda-card-content { padding: 14px 14px 12px; }
+
+/* Título */
 .agenda-card-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   line-height: 1.25;
+  letter-spacing: -.01em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
+.agenda-card.ag-center .agenda-card-title { font-size: 14px; }
+.agenda-card--ink   .agenda-card-title { color: #F3F0E9; }
+.agenda-card--paper .agenda-card-title { color: #1A1A18; }
 
-.agenda-card--light .agenda-card-title { color: #1A1A18; }
-.agenda-card--dark  .agenda-card-title { color: #F3F0E9; }
-
-.agenda-card-client {
+/* Subtítulo (cliente ou ação) */
+.agenda-card-sub {
   font-size: 10px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  margin: 0;
 }
+.agenda-card--ink   .agenda-card-sub { color: rgba(243, 240, 233, .55); }
+.agenda-card--paper .agenda-card-sub { color: rgba(26,  26,  24,  .50); }
 
-.agenda-card--light .agenda-card-client { color: rgba(26, 26, 24, .5); }
-.agenda-card--dark  .agenda-card-client { color: rgba(243, 240, 233, .5); }
+/* Divisor — paper-line / ink-line */
+.agenda-card-divider {
+  height: 1px;
+  margin: 8px 0;
+  flex-shrink: 0;
+}
+.agenda-card--ink   .agenda-card-divider { background: rgba(255, 255, 255, .14); }
+.agenda-card--paper .agenda-card-divider { background: rgba(26,  26,  24,  .12); }
 
-/* Rodapé (hora + data) */
-.agenda-card-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 8px 14px 10px;
+/* Stats row — 3 colunas + separadores (igual ao Lovable) */
+.agenda-card-stats {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  margin-bottom: 8px;
+  flex-shrink: 0;
 }
 
-.agenda-card-time-badge {
-  background: #B8841A;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .04em;
-  padding: 3px 9px;
-  border-radius: 20px;
-  font-variant-numeric: tabular-nums;
-}
-
-.agenda-card-date {
-  font-size: 10px;
-  font-variant-numeric: tabular-nums;
-  opacity: .42;
-}
-
-.agenda-card--light .agenda-card-date { color: #1A1A18; }
-.agenda-card--dark  .agenda-card-date { color: #F3F0E9; }
-
-/* Overlay de ações (visível ao tocar no card central) */
-.agenda-card-actions {
-  position: absolute;
-  inset: 0;
+.agenda-stat {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-end;
-  gap: 5px;
-  padding: 10px;
-  background: rgba(0, 0, 0, .58);
-  opacity: 0;
-  transition: opacity .18s ease;
-  pointer-events: none;
-  border-radius: 22px;
+  align-items: center;
+  gap: 1px;
 }
 
-.agenda-card.ag-open .agenda-card-actions {
+.agenda-stat-val {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.agenda-card--ink   .agenda-stat-val { color: #F3F0E9; }
+.agenda-card--paper .agenda-stat-val { color: #1A1A18; }
+
+.agenda-stat-lbl {
+  font-size: 7.5px;
+  text-transform: uppercase;
+  letter-spacing: .10em;
+}
+.agenda-card--ink   .agenda-stat-lbl { color: rgba(243, 240, 233, .48); }
+.agenda-card--paper .agenda-stat-lbl { color: rgba(26,  26,  24,  .44); }
+
+.agenda-stat-sep {
+  width: 1px;
+  height: 26px;
+  flex: none;
+}
+.agenda-card--ink   .agenda-stat-sep { background: rgba(255, 255, 255, .14); }
+.agenda-card--paper .agenda-stat-sep { background: rgba(26,  26,  24,  .12); }
+
+/* CTA — "Abrir" (equivale ao "Start Route" do Lovable) */
+.agenda-card-cta {
+  width: 100%;
+  border: none;
+  border-radius: 999px;
+  height: 34px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: .01em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+.agenda-card.ag-center .agenda-card-cta { height: 38px; font-size: 13px; }
+.agenda-card--ink   .agenda-card-cta { background: #3F3E3C; color: #F3F0E9; }   /* ink-elevated */
+.agenda-card--paper .agenda-card-cta { background: #EDE9DF; color: #1A1A18; }   /* paper-elevated */
+.agenda-card-cta:active { opacity: .75; }
+
+/* Ações secundárias — só visíveis no card central */
+.agenda-card-extras {
+  display: flex;
+  gap: 5px;
+  flex-shrink: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+.agenda-card.ag-center .agenda-card-extras {
   opacity: 1;
   pointer-events: auto;
 }
 
-.agenda-act-row {
-  display: flex;
-  gap: 5px;
-}
-
-.agenda-act-btn {
+.agenda-extra-btn {
   flex: 1;
-  height: 34px;
+  height: 26px;
   border: none;
-  border-radius: 9px;
-  background: rgba(255, 255, 255, .18);
-  color: #fff;
+  border-radius: 7px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 13px;
+  font-size: 11.5px;
   letter-spacing: .05em;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   -webkit-tap-highlight-color: transparent;
-  white-space: nowrap;
 }
+.agenda-card--ink   .agenda-extra-btn { background: rgba(255,255,255,.12); color: rgba(243,240,233,.80); }
+.agenda-card--paper .agenda-extra-btn { background: rgba(26,26,24,.09);    color: rgba(26,26,24,.65);   }
+.agenda-extra-btn:active { opacity: .65; }
 
-.agenda-act-btn:active { opacity: .65; }
-
-.agenda-act-btn--done { background: rgba(255, 255, 255, .28); }
-
-/* --- Itens sem hora (chips) --- */
+/* --- Chips sem hora --- */
 .agenda-notimed {
   margin-top: 10px;
   display: flex;
