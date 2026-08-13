@@ -555,17 +555,8 @@
             <div class="agd-days" id="agd-days"></div>
           </div>
           <div class="agd-ruler-outer" id="agd-ruler-outer">
-            <div class="agd-ruler-timer" id="agd-ruler-timer">
-              <span class="agd-ruler-hg">⏳</span>
-              <span class="agd-ruler-countdown" id="agd-ruler-countdown"></span>
-            </div>
-            <div class="agd-ruler-track">
-              <span class="agd-ruler-t" id="agd-ruler-t-start"></span>
-              <div class="agd-ruler-ticks">
-                <canvas class="agd-ruler-canvas" id="agd-ruler-canvas" height="28"></canvas>
-              </div>
-              <span class="agd-ruler-t" id="agd-ruler-t-end"></span>
-            </div>
+            <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
+            <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
           </div>
           <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>
@@ -5513,61 +5504,79 @@
       bindDaysSwipe();
     }
 
-    /* ── RULER (commitment time range) ──────────── */
+    /* ── RULER (3-point: startTime · ⏳ · endTime) ── */
     function renderRuler(){
+      var viz=document.getElementById('agd-ruler-viz');
+      var cd=document.getElementById('agd-ruler-cd');
+      if(!viz) return;
       var ctr=_items[_active];
-      /* Start/end labels */
-      var tStart=document.getElementById('agd-ruler-t-start');
-      var tEnd=document.getElementById('agd-ruler-t-end');
-      var cdEl=document.getElementById('agd-ruler-countdown');
-      var timerEl=document.getElementById('agd-ruler-timer');
-      if(!tStart) return;
-      if(ctr&&ctr.hora){
-        tStart.textContent=ctr.hora;
-        tEnd.textContent=ctr.horaFim||'';
-      } else {
-        tStart.textContent=''; tEnd.textContent='';
+
+      if(!ctr||!ctr.hora){
+        viz.innerHTML='<div class="agd-ruler-track-bg"></div>'
+          +'<div class="agd-ruler-hg-mark">⏳</div>';
+        if(cd){ cd.className='agd-ruler-cd'; cd.textContent=''; cd.style.visibility='hidden'; }
+        bindRulerSwipe(); return;
       }
-      /* Countdown */
-      if(ctr&&ctr.hora){
-        var now=new Date();
-        var parts=ctr.hora.split(':');
-        var evDate=new Date(now);
-        if(ctr.dataISO){ var dp=ctr.dataISO.split('-'); evDate.setFullYear(+dp[0],+dp[1]-1,+dp[2]); }
-        evDate.setHours(+parts[0],+(parts[1]||0),0,0);
-        var diffMin=Math.round((evDate-now)/60000);
-        timerEl.style.display='flex';
-        cdEl.className='agd-ruler-countdown';
-        if(diffMin<0&&diffMin>-240){
-          cdEl.classList.add('agd-c-active');
-          cdEl.textContent=Math.abs(diffMin)+'MIN RESTANTE';
-        } else if(diffMin>=0&&diffMin<600){
-          cdEl.classList.add('agd-c-upcoming');
-          cdEl.textContent=diffMin<60?diffMin+'MIN':Math.floor(diffMin/60)+'H '+(diffMin%60?pad(diffMin%60)+'MIN':'');
+
+      var now=new Date();
+      var nowMin=now.getHours()*60+now.getMinutes();
+
+      var sp=ctr.hora.split(':');
+      var startMin=+sp[0]*60+(+sp[1]||0);
+
+      var hasEnd=!!(ctr.horaFim);
+      var ep=hasEnd?ctr.horaFim.split(':'):null;
+      var endMin=hasEnd?(+ep[0]*60+(+ep[1]||0)):(startMin+120);
+
+      /* Is item today? (ruler centers on current time only for today) */
+      var todayISO=now.toISOString().slice(0,10);
+      var isToday=!ctr.dataISO||(ctr.dataISO===todayISO);
+      /* For non-today items, center ruler on event midpoint */
+      var center=isToday?nowMin:Math.round((startMin+endMin)/2);
+
+      /* Ruler spans ±4 hours (480 min) around center */
+      var HALF=240;
+      function minToX(m){ return 50+(m-center)/(HALF*2)*100; }
+
+      var startX=minToX(startMin);
+      var endX=minToX(endMin);
+
+      /* Clamp label positions — keep clear of center hourglass */
+      var startLX=Math.max(5, Math.min(42, startX));
+      var endLX=Math.max(58, Math.min(95, endX));
+
+      /* Filled section (clamp to ruler bounds) */
+      var fL=Math.max(0, Math.min(startX, 100));
+      var fR=Math.max(0, Math.min(endX, 100));
+      var filledHtml=fR>fL
+        ?'<div class="agd-ruler-filled" style="left:'+fL.toFixed(1)+'%;width:'+(fR-fL).toFixed(1)+'%"></div>'
+        :'';
+
+      /* Time labels */
+      var startLabel=pad(+sp[0])+':'+pad(+(sp[1]||0));
+      var endLabel=hasEnd?(pad(+ep[0])+':'+pad(+(ep[1]||0))):'';
+
+      viz.innerHTML=
+        '<div class="agd-ruler-track-bg"></div>'
+        +filledHtml
+        +'<div class="agd-ruler-hg-mark">⏳</div>'
+        +'<span class="agd-ruler-t-label" style="left:'+startLX.toFixed(1)+'%">'+startLabel+'</span>'
+        +(endLabel?'<span class="agd-ruler-t-label" style="left:'+endLX.toFixed(1)+'%">'+endLabel+'</span>':'');
+
+      /* Countdown: time until event ends */
+      if(cd){
+        cd.style.visibility='';
+        var diffMin=endMin-nowMin;
+        if(!isToday||diffMin<=0||diffMin>600){
+          cd.className='agd-ruler-cd'; cd.textContent=''; cd.style.visibility='hidden';
         } else {
-          timerEl.style.display='none';
+          var h=Math.floor(diffMin/60), m=diffMin%60;
+          var cdText=h>0?(h+':'+pad(m)):(m+'MIN');
+          cd.className='agd-ruler-cd '+(nowMin>=startMin?'agd-c-active':'agd-c-upcoming');
+          cd.textContent=cdText;
         }
-      } else {
-        timerEl.style.display='none';
       }
-      /* Canvas ticks */
-      var canvas=document.getElementById('agd-ruler-canvas');
-      if(!canvas) return;
-      var W=canvas.parentElement.offsetWidth||240;
-      canvas.width=W; canvas.height=28;
-      var ctx=canvas.getContext('2d');
-      ctx.clearRect(0,0,W,28);
-      var N=33;
-      for(var i=0;i<N;i++){
-        var x=(i/(N-1))*W;
-        var big=(i===Math.floor(N/2));
-        ctx.strokeStyle='rgba(255,255,255,'+(big?'0.7':(i%4===0?'0.4':'0.18'))+')';
-        ctx.lineWidth=big?1.8:(i%4===0?1.2:0.6);
-        var tickH=big?14:(i%4===0?8:4);
-        var tickY=(28-tickH)/2;
-        ctx.beginPath(); ctx.moveTo(x,tickY); ctx.lineTo(x,tickY+tickH); ctx.stroke();
-      }
-      /* Bind ruler swipe for commitment navigation */
+
       bindRulerSwipe();
     }
 
@@ -5630,7 +5639,7 @@
       if(it.jobId&&jobsData&&jobsData[it.jobId])
         projNome=jobsData[it.jobId].nome||jobsData[it.jobId].client||'';
 
-      /* People at bottom */
+      /* People chips at absolute bottom */
       var pessoasIds=[];
       if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
       else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
@@ -5648,10 +5657,7 @@
       }
 
       return '<article class="agd-card '+theme+actCls+'">'
-        +'<div class="agd-card-photo">'
-          +photoHtml
-          +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
-        +'</div>'
+        +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
           +(projNome
@@ -5662,6 +5668,7 @@
             ?'<div class="agd-card-client">'+ICO_USER
               +'<span class="agd-card-client-name">'+escapeHtml(it.cliente)+'</span></div>'
             :'')
+          +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
           +peopleHtml
         +'</div>'
         +'<div class="agd-card-actions" id="agd-actions-'+idx+'">'
@@ -5724,13 +5731,15 @@
         if(sx===null) return;
         var dx=e.clientX-sx; sx=null;
         if(Math.abs(dx)<40) return;
-        /* Find next/prev item on the same day */
         var dir=dx<0?1:-1;
         var cur=_items[_active];
         var curDay=cur?cur.dataISO:_day;
         var newIdx=_active+dir;
         while(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO!==curDay) newIdx+=dir;
-        if(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO===curDay) agdSetActive(newIdx);
+        if(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO===curDay){
+          agdSetActive(newIdx);
+          agdAnimSlide('agd-ruler-viz',dir);
+        }
       });
       outer.addEventListener('pointercancel',function(){ sx=null; });
     }
@@ -5773,15 +5782,28 @@
       renderDays(); renderRuler(); renderFan();
     };
 
+    function agdAnimSlide(elId,dir){
+      var el=document.getElementById(elId);
+      if(!el) return;
+      el.classList.remove('agd-anim-from-r','agd-anim-from-l');
+      void el.offsetWidth; /* force reflow to restart animation */
+      /* dir>0 = forward/next = content enters from right */
+      el.classList.add(dir>0?'agd-anim-from-r':'agd-anim-from-l');
+      el.addEventListener('animationend',function h(){
+        el.classList.remove('agd-anim-from-r','agd-anim-from-l');
+        el.removeEventListener('animationend',h);
+      });
+    }
+
     window.agdShiftDay=function(dir){
       var d=new Date(_day+'T00:00:00');
       d.setDate(d.getDate()+dir);
       var iso=d.toISOString().slice(0,10);
       _day=iso;
-      /* Find first item on that day */
       var idx=_items.findIndex(function(it){return it.dataISO===iso;});
       if(idx>=0) _active=idx;
       renderDays(); renderRuler(); renderFan();
+      agdAnimSlide('agd-days',dir);
     };
 
     window.agdSelectDay=function(iso){
