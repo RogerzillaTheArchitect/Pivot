@@ -16504,6 +16504,16 @@
        antes desta correção — passam a vazio para o placeholder reagir ao idioma. */
     if(perfilData.nome==='Utilizador') perfilData.nome='';
     if(perfilData.empresa==='Empresa Exemplo') perfilData.empresa='';
+    /* Migração única: financeiro/operacional/destaques passaram a ficar visíveis
+       por omissão em contas novas — contas antigas que os tinham gravados como false
+       também devem recebê-los. _dashV2 evita re-forçar se o utilizador os desligar. */
+    if(!perfilData._dashV2){
+      perfilData.dashboardCards.financeiro=true;
+      perfilData.dashboardCards.operacional=true;
+      perfilData.dashboardCards.destaques=true;
+      perfilData._dashV2=true;
+      savePerfilData();
+    }
     /* Sincronizar LANG com o idioma guardado */
     const langMap = {'Português':'pt','English':'en','Español':'es'};
     LANG = langMap[perfilData.idiomaUI] || 'pt';
