@@ -5962,6 +5962,7 @@
         if(curSec!==_agdLastRulerSec){
           _agdLastRulerSec=curSec;
           _agdUpdateChipTimer();
+          _agdUpdateCardFootTimers();
         }
         _agdRulerLoop();
       });
@@ -6101,15 +6102,64 @@
       bindFanSwipe();
     }
 
-    /* ── PHOTO HTML ───────────────────────────────── */
-    var AGD_PH_INK='/assets/agd-ph-ink.png';
-    var AGD_PH_PAPER='/assets/agd-ph-paper.png';
-    var AGD_PH_SOLTO='/assets/agd-ph-solto.png';
-    var AGD_PH_SOLTO_INK='/assets/agd-ph-solto-ink.png';
+    /* ── CARD FOOTER — timer / status chip ──────── */
+    function _agdFootHtml(it){
+      var now=new Date();
+      var todayISO=now.toISOString().slice(0,10);
+      var nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+      if(it.hora&&it.dataISO){
+        var sp=it.hora.split(':');
+        var sSec=+sp[0]*3600+(+sp[1]||0)*60;
+        var eSec=it.horaFim?(function(){var p=it.horaFim.split(':');return +p[0]*3600+(+p[1]||0)*60;}()):sSec+3600;
+        var txt,cls;
+        if(it.dataISO===todayISO){
+          if(nowSec<sSec){ txt='Próxima tarefa em '+agdFmtChipTimer(sSec-nowSec); cls='agd-ft-lbl agd-ft-upcoming'; }
+          else if(nowSec<eSec){ txt='Finaliza em '+agdFmtChipTimer(eSec-nowSec); cls='agd-ft-lbl agd-ft-active'; }
+          else { txt=it.hora; cls='agd-ft-lbl agd-ft-past'; }
+        } else if(it.dataISO>todayISO){
+          var fd=Math.round((new Date(it.dataISO+'T00:00:00')-new Date(todayISO+'T00:00:00'))/86400000);
+          txt='Próxima tarefa em '+agdFmtChipTimer(Math.max(0,fd*86400+sSec-nowSec));
+          cls='agd-ft-lbl agd-ft-upcoming';
+        } else { txt=it.hora; cls='agd-ft-lbl agd-ft-past'; }
+        return '<span class="'+cls+'">'+txt+'</span>';
+      }
+      if(it.dataISO){
+        if(it.dataISO<todayISO) return '<span class="agd-ft-chip agd-ft-late">ATRASADO</span>';
+        if(it.dataISO===todayISO) return '<span class="agd-ft-chip agd-ft-today">HOJE</span>';
+      }
+      return '';
+    }
 
-    function agdPhotoHtml(nome,cliente,foto,ink){
-      var src=foto||(ink?AGD_PH_INK:AGD_PH_PAPER);
-      return '<div class="agd-photo-fill" style="background-image:url('+src+')"></div>';
+    /* Atualiza o timer em cada card visível (chamado pelo loop do ruler, 1×/s) */
+    function _agdUpdateCardFootTimers(){
+      var now=new Date();
+      var todayISO=now.toISOString().slice(0,10);
+      var nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
+      var fan=document.getElementById('agd-fan');
+      if(!fan) return;
+      fan.querySelectorAll('.agd-card').forEach(function(card){
+        var foot=card.querySelector('.agd-card-foot');
+        if(!foot) return;
+        var hora=card.dataset.hora, horafim=card.dataset.horafim, dataiso=card.dataset.dataiso;
+        if(!hora||!dataiso) return;
+        var lbl=foot.querySelector('.agd-ft-lbl');
+        if(!lbl) return;
+        var sp=hora.split(':');
+        var sSec=+sp[0]*3600+(+sp[1]||0)*60;
+        var eSec=horafim?(function(){var p=horafim.split(':');return +p[0]*3600+(+p[1]||0)*60;}()):sSec+3600;
+        var txt,cls;
+        if(dataiso===todayISO){
+          if(nowSec<sSec){ txt='Próxima tarefa em '+agdFmtChipTimer(sSec-nowSec); cls='agd-ft-lbl agd-ft-upcoming'; }
+          else if(nowSec<eSec){ txt='Finaliza em '+agdFmtChipTimer(eSec-nowSec); cls='agd-ft-lbl agd-ft-active'; }
+          else { txt=hora; cls='agd-ft-lbl agd-ft-past'; }
+        } else if(dataiso>todayISO){
+          var fd=Math.round((new Date(dataiso+'T00:00:00')-new Date(todayISO+'T00:00:00'))/86400000);
+          txt='Próxima tarefa em '+agdFmtChipTimer(Math.max(0,fd*86400+sSec-nowSec));
+          cls='agd-ft-lbl agd-ft-upcoming';
+        } else { txt=hora; cls='agd-ft-lbl agd-ft-past'; }
+        lbl.textContent=txt;
+        lbl.className=cls;
+      });
     }
 
     /* ── BUILD CARD ───────────────────────────────── */
@@ -6117,9 +6167,6 @@
       var ink=(idx%2===0);
       var theme=ink?'agd-ink':'agd-paper';
       var actCls=isAct?' agd-active':'';
-      var foto=clienteFotoPorNome(it.cliente);
-      if(!foto && !it.cliente && !it.jobId) foto=ink?AGD_PH_SOLTO_INK:AGD_PH_SOLTO;
-      var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto,ink);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
 
       /* Project name */
@@ -6127,7 +6174,7 @@
       if(it.jobId&&jobsData&&jobsData[it.jobId])
         projNome=jobsData[it.jobId].nome||jobsData[it.jobId].client||'';
 
-      /* People chips at absolute bottom */
+      /* People chips */
       var pessoasIds=[];
       if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
       else if(it.tipo==='lista'&&it.idx) pessoasIds=(listasData[it.idx]&&listasData[it.idx].pessoas)||[];
@@ -6144,9 +6191,23 @@
         peopleHtml='<div class="agd-people">'+peopleHtml+'</div>';
       }
 
-      return '<article class="agd-card '+theme+actCls+'">'
-        +'<div class="agd-card-photo">'+photoHtml+'</div>'
+      /* Date + time row */
+      var dateTxt='';
+      if(it.dataISO){
+        var pts=it.dataISO.split('-');
+        dateTxt=parseInt(pts[2],10)+' '+AGD_MESES[parseInt(pts[1],10)-1];
+      }
+      var dateRowHtml='<div class="agd-card-datetime">'
+        +'<span class="agd-card-date">'+dateTxt+'</span>'
+        +(it.hora?'<span class="agd-card-hour">'+escapeHtml(it.hora)+'</span>':'')
+        +'</div>';
+
+      return '<article class="agd-card '+theme+actCls+'"'
+        +' data-hora="'+(it.hora||'')+'"'
+        +' data-horafim="'+(it.horaFim||'')+'"'
+        +' data-dataiso="'+(it.dataISO||'')+'">'
         +'<div class="agd-card-body">'
+          +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
           +(projNome
             ?'<div class="agd-card-proj">'+ICO_LINK
@@ -6156,9 +6217,10 @@
             ?'<div class="agd-card-client">'+ICO_USER
               +'<span class="agd-card-client-name">'+escapeHtml(it.cliente)+'</span></div>'
             :'')
-          +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
+          +dateRowHtml
           +peopleHtml
         +'</div>'
+        +'<div class="agd-card-foot">'+_agdFootHtml(it)+'</div>'
         +'<div class="agd-card-actions" id="agd-actions-'+idx+'">'
           +'<button class="agd-act-btn agd-act-editar" onclick="agdEditar('+idx+')">'+ICO_EDIT+' EDITAR</button>'
           +'<button class="agd-act-btn agd-act-tempo" onclick="agdTempo('+idx+')">'+ICO_TEMPO+' TEMPO</button>'
@@ -16715,6 +16777,12 @@
   function criarTarefa(){
     const titulo=document.getElementById('ta-titulo').value.trim();
     if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
+    const novaData=document.getElementById('ta-data').value||null;
+    const novaHora=document.getElementById('ta-hora').value||null;
+    if(novaData&&novaHora){
+      const conflito=gerarItensRadar().find(it=>it.dataISO===novaData&&it.hora&&it.hora===novaHora);
+      if(conflito){ showToast('Conflito de horário: este horário já está ocupado por "'+conflito.nome+'"'); return; }
+    }
     const id='tar'+Date.now();
     const jobId=document.getElementById('ta-trabalho').value||null;
     const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
