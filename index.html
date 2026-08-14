@@ -6104,6 +6104,7 @@
     /* ── PHOTO HTML ───────────────────────────────── */
     var AGD_PH_INK='/assets/agd-ph-ink.png';
     var AGD_PH_PAPER='/assets/agd-ph-paper.png';
+    var AGD_PH_SOLTO='/assets/agd-ph-solto.png';
 
     function agdPhotoHtml(nome,cliente,foto,ink){
       var src=foto||(ink?AGD_PH_INK:AGD_PH_PAPER);
@@ -6116,6 +6117,7 @@
       var theme=ink?'agd-ink':'agd-paper';
       var actCls=isAct?' agd-active':'';
       var foto=clienteFotoPorNome(it.cliente);
+      if(!foto && !it.cliente && !it.jobId) foto=AGD_PH_SOLTO;
       var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto,ink);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
 
