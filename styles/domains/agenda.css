@@ -207,7 +207,9 @@
   left: 50%;
   top: 150px; /* vertical center of 300px wrap */
   width: 0; height: 0;
-  transform: translateZ(-230px); /* offset stage back so center card renders at Z=0 */
+  /* R = W/(2·tan(STEP/2)) = 192/(2·tan(20°)) ≈ 264px.
+     Stage pulled back -R so the center card lands at world-Z=0 = natural size. */
+  transform: translateZ(-264px);
   transform-style: preserve-3d;
 }
 
@@ -215,11 +217,12 @@
   position: absolute;
   left: -96px;  /* -AGD_W_ACT/2: center card on fan origin */
   top: -141px;  /* -AGD_H_ACT/2 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition:
     transform  .22s cubic-bezier(0.25, 0.8, 0.35, 1),
-    filter     .16s ease,
-    opacity    .16s ease;
-  will-change: transform, filter, opacity;
+    filter     .16s ease;
+  will-change: transform, filter;
   -webkit-tap-highlight-color: transparent;
 }
 /* Disable transition during live drag so cards follow the finger */
