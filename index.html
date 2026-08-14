@@ -5475,6 +5475,7 @@
   }
 
   /* ===== WORK SESSIONS — cronômetro por tarefa ===== */
+  function _wsPad(n){return n<10?'0'+n:String(n);}
   var worksessionsData={};
   var _wsActive=null; /* { key, nome, jobId, startedAt(ms), tickId } */
 
@@ -5490,7 +5491,7 @@
   }
   function wsFmtDurLong(sec){
     var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
-    return pad(h)+'h '+pad(m)+'min '+pad(s)+'s';
+    return _wsPad(h)+'h '+_wsPad(m)+'min '+_wsPad(s)+'s';
   }
   function wsTotalSecMesAtual(){
     var now=new Date();
@@ -5503,7 +5504,7 @@
   }
   function _wsFmtTopbar(sec){
     var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
-    return pad(h)+':'+pad(m)+':'+pad(s);
+    return _wsPad(h)+':'+_wsPad(m)+':'+_wsPad(s);
   }
   function _wsTick(){
     if(!_wsActive) return;
@@ -5579,8 +5580,8 @@
     var eNome=escapeHtml(nome).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
     var timerHtml=isAtivo
       ?'<div class="ws-panel-active"><div id="ws-panel-elapsed" class="ws-panel-elapsed">'+wsFmtDurLong(activeSec)+'</div>'+
-        '<button class="btn primary ws-btn-parar" onclick="wsPararEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">&#9632; PARAR</button></div>'
-      :'<div style="padding-bottom:4px"><button class="btn primary ws-btn-iniciar" onclick="wsIniciarEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">&#9654; INICIAR SESSÃO</button></div>';
+        '<button class="btn primary ws-btn-parar" onclick="wsPararEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">PARAR</button></div>'
+      :'<div style="padding-bottom:4px"><button class="btn primary ws-btn-iniciar" onclick="wsIniciarEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">INICIAR SESSÃO</button></div>';
     var totalHtml='<div class="ws-total-row"><span class="ws-total-lbl">TEMPO TOTAL</span><span class="ws-total-val">'+(totalComAtivo>0?wsFmtDur(totalComAtivo):'—')+'</span></div>';
     var MABB=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
     var sessoesHtml=sessoes.length===0
@@ -5588,7 +5589,7 @@
       :sessoes.map(function(s,i){
           var start=new Date(s.startedAt),end=new Date(s.endedAt);
           var dateFmt=start.getDate()+' '+MABB[start.getMonth()]+' '+start.getFullYear();
-          var timeFmt=pad(start.getHours())+':'+pad(start.getMinutes())+' — '+pad(end.getHours())+':'+pad(end.getMinutes());
+          var timeFmt=_wsPad(start.getHours())+':'+_wsPad(start.getMinutes())+' — '+_wsPad(end.getHours())+':'+_wsPad(end.getMinutes());
           return '<div class="ws-sessao-row">'+
             '<div class="ws-sessao-info">'+
               '<div class="ws-sessao-date">'+dateFmt+'</div>'+
@@ -5620,8 +5621,8 @@
     openInfo('Editar sessão',
       '<div class="field"><label>Data</label><input type="date" id="wse-date" value="'+start.toISOString().slice(0,10)+'"></div>'+
       '<div class="field-row">'+
-        '<div class="field"><label>Início</label><input type="time" id="wse-start" value="'+pad(start.getHours())+':'+pad(start.getMinutes())+'"></div>'+
-        '<div class="field"><label>Fim</label><input type="time" id="wse-end" value="'+pad(end.getHours())+':'+pad(end.getMinutes())+'"></div>'+
+        '<div class="field"><label>Início</label><input type="time" id="wse-start" value="'+_wsPad(start.getHours())+':'+_wsPad(start.getMinutes())+'"></div>'+
+        '<div class="field"><label>Fim</label><input type="time" id="wse-end" value="'+_wsPad(end.getHours())+':'+_wsPad(end.getMinutes())+'"></div>'+
       '</div>'+
       '<button class="btn primary u-w-full u-mt-8" onclick="wsSalvarEdicao(\''+eKey+'\','+sessIdx+',\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">SALVAR</button>',
       function(){ abrirTempoTarefa(tipo,taskIdx,jobId,nome); }
