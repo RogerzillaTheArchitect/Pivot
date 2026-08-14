@@ -5811,9 +5811,9 @@
 
     /* ── RULER TICKS — canvas rendering ─────────── */
     /* ── RULER v2 — scrolling minute timeline ─────────── */
-    var AGD_R_PPM=8; /* pixels per minute */
+    var AGD_R_PPM=8; /* pixels per minute — updated whenever _rulerStep changes */
     var _rulerStep=1; /* minutes between drawn ticks (1,5,10,15,30) */
-    (function(){ var s=parseInt(localStorage.getItem('agd_ruler_step')||'0'); if([1,5,10,15,30].indexOf(s)!==-1) _rulerStep=s; })();
+    (function(){ var s=parseInt(localStorage.getItem('agd_ruler_step')||'0'); if([1,5,10,15,30].indexOf(s)!==-1){ _rulerStep=s; AGD_R_PPM=8/s; } })();
 
     function _agdRulerDraw(){
       var cv=_agdRulerCanvas;
@@ -6019,12 +6019,15 @@
         if(isToday) _agdRulerRange={startMin:sM,endMin:eM,isActive:nowMin>=sM&&nowMin<eM,isPast:nowMin>=eM};
       }
 
-      /* All event ranges for boundary markers */
+      /* All event ranges for glow lines */
       _agdRulerRanges=[];
       _items.forEach(function(it){
-        if(!it.hora||!it.horaFim||!it.dataISO||it.dataISO!==todayISO) return;
-        var s=it.hora.split(':'), e=it.horaFim.split(':');
-        var sM=+s[0]*60+(+s[1]||0), eM=+e[0]*60+(+e[1]||0);
+        if(!it.hora||!it.dataISO||it.dataISO!==todayISO) return;
+        var s=it.hora.split(':');
+        var sM=+s[0]*60+(+s[1]||0);
+        var eM;
+        if(it.horaFim){ var e=it.horaFim.split(':'); eM=+e[0]*60+(+e[1]||0); }
+        else { eM=sM+30; } /* default 30-min block when no end time */
         _agdRulerRanges.push({startMin:sM,endMin:eM,isActive:nowMin>=sM&&nowMin<eM,isPast:nowMin>=eM});
       });
 
@@ -6431,6 +6434,8 @@
     function agdShowRulerIntervalSel(){
       var el=document.getElementById('agd-isel');
       if(!el) return;
+      /* Move to body so position:fixed isn't broken by ancestor transforms */
+      if(el.parentNode!==document.body) document.body.appendChild(el);
       el.querySelectorAll('.agd-isel-opt').forEach(function(btn){
         btn.classList.toggle('agd-isel-opt--active',+btn.dataset.step===_rulerStep);
       });
@@ -6447,6 +6452,7 @@
       el.querySelectorAll('.agd-isel-opt').forEach(function(btn){
         btn.addEventListener('click',function(){
           _rulerStep=+btn.dataset.step;
+          AGD_R_PPM=8/_rulerStep;
           try{ localStorage.setItem('agd_ruler_step',_rulerStep); }catch(ex){}
           el.classList.add('u-hidden');
           _agdRulerDraw();
