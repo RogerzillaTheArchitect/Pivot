@@ -125,49 +125,52 @@
   pointer-events: none;
 }
 
-/* Timer below the triangle indicator — card centralizado */
-.agd-ruler-cd {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1px;
-  padding: 7px 22px 9px;
-  margin: 2px auto 10px;
-  width: fit-content;
-  min-width: 118px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.06);
-  border-radius: 12px;
-  color: rgba(255,255,255,.35);
+/* Separator between date nav and ruler */
+.agd-ruler-sep {
+  height: 1px;
+  margin: 0 18px;
+  background: rgba(255,255,255,.08);
 }
-.agd-ruler-cd.agd-c-active,
-.agd-ruler-cd.agd-c-upcoming { color: #9FE35A; }
-.agd-ruler-timer-label {
+
+/* Old ruler timer card — hidden (timer moved to card chip) */
+.agd-ruler-cd { display: none; }
+
+/* ── Timer chip — top-left of active card ──────── */
+.agd-chip-timer {
+  display: none;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 5;
   font-family: var(--font-headline);
-  font-size: .48rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  opacity: 0.65;
-  color: inherit;
+  font-size: 8.5px;
+  letter-spacing: .08em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  line-height: 1.6;
+  white-space: nowrap;
+  pointer-events: none;
 }
-.agd-ruler-timer-text {
-  font-family: var(--font-headline);
-  font-size: .78rem;
-  letter-spacing: .1em;
+.agd-card:not(.agd-active) .agd-chip-timer { display: none !important; }
+.agd-chip-timer--active {
+  display: block;
+  color: #FFD237;
+  background: rgba(255,210,55,.12);
+  border: 1px solid rgba(255,210,55,.28);
 }
-@keyframes agd-timer-pulse {
-  0%, 100% {
-    text-shadow: 0 0 14px rgba(159,227,90,.95), 0 0 28px rgba(159,227,90,.55);
-    opacity: 1;
-  }
-  50% {
-    text-shadow: 0 0 4px rgba(159,227,90,.3);
-    opacity: 0.6;
-  }
+.agd-chip-timer--upcoming {
+  display: block;
+  color: #4FC86E;
+  background: rgba(79,200,110,.12);
+  border: 1px solid rgba(79,200,110,.28);
 }
-.agd-c-active .agd-ruler-timer-text,
-.agd-c-upcoming .agd-ruler-timer-text {
-  animation: agd-timer-pulse 2.4s ease-in-out infinite;
+@keyframes agd-chip-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.agd-chip-timer--active,
+.agd-chip-timer--upcoming {
+  animation: agd-chip-pulse 2.4s ease-in-out infinite;
 }
 
 /* ══════════════════════════════════════════════════

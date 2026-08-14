@@ -505,6 +505,23 @@
         </div>
         </div>
 
+        <div id="notif-pendentes-wrap"></div>
+
+        <!-- ===== AGENDA FAN ===== -->
+        <div id="agenda-section" class="agenda-section">
+          <div class="agd-days-wrap" id="agd-days-wrap">
+            <div class="agd-days" id="agd-days"></div>
+          </div>
+          <div class="agd-ruler-sep"></div>
+          <div class="agd-ruler-outer" id="agd-ruler-outer">
+            <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
+            <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
+          </div>
+          <div class="agd-fan-wrap" id="agd-fan-wrap">
+            <div class="agd-fan" id="agd-fan"></div>
+          </div>
+        </div>
+
         <div id="dash-card-operacional" class="u-hidden">
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
@@ -545,29 +562,6 @@
             <div class="value-end" id="opm-concluidos-end"></div>
           </section>
         </div>
-        </div>
-
-        <div id="notif-pendentes-wrap"></div>
-
-        <!-- ===== AGENDA FAN ===== -->
-        <div id="agenda-section" class="agenda-section">
-          <div class="agd-days-wrap" id="agd-days-wrap">
-            <div class="agd-days" id="agd-days"></div>
-          </div>
-          <div class="agd-ruler-outer" id="agd-ruler-outer">
-            <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
-            <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
-          </div>
-          <div class="agd-fan-wrap" id="agd-fan-wrap">
-            <div class="agd-fan" id="agd-fan"></div>
-            <div class="agd-fan-grad agd-fan-grad--l" aria-hidden="true"></div>
-            <div class="agd-fan-grad agd-fan-grad--r" aria-hidden="true"></div>
-          </div>
-        </div>
-
-        <div class="tasks-header" data-t="home.tasksTitle" onclick="abrirRelatorios('tarefas')">Tarefas</div>
-        <div id="hoje-content">
-          <div id="tasks-list"></div>
         </div>
 
         <div id="dash-card-destaques" class="u-hidden u-mt-22"></div>
@@ -5493,11 +5487,20 @@
       if(h>0) return h+':'+pad(m);
       return m+'MIN';
     }
+    function agdFmtChipTimer(diffSec){
+      if(diffSec<=0) return '00:00';
+      var h=Math.floor(diffSec/3600);
+      var m=Math.floor((diffSec%3600)/60);
+      var s=diffSec%60;
+      if(h>99) return Math.ceil(diffSec/86400)+' d';
+      if(h>0) return h+':'+pad(m)+':'+pad(s);
+      return pad(m)+':'+pad(s);
+    }
 
     var _items=[], _active=0, _day='', _lpTimer=null, _swipeX=null, _swipeY=null;
     var _fanEls={}, _fanDirty=true;
     var _agdRulerRAF=null, _agdRulerCanvas=null;
-    var _agdRulerRange=null, _agdRulerRanges=[], _agdRulerTimerLast='';
+    var _agdRulerRange=null, _agdRulerRanges=[];
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -5609,15 +5612,21 @@
         ctx.lineTo(x, TICK_TOP+tH);
         ctx.stroke();
 
-        /* Time labels — hours: "13h", 10-min: just minutes "10" */
-        if((isHr||isTn)&&op>0.15){
-          var hh=Math.floor(displayMin/60), mm=displayMin%60;
-          var lbl=isHr?(hh+'h'):(mm<10?'0'+mm:''+mm);
-          ctx.font=(isHr?'bold 8.5px':'7.5px')+' Inter Tight,sans-serif';
-          ctx.textAlign='center';
-          ctx.textBaseline='top';
-          ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
-          ctx.fillText(lbl, x, TICK_TOP+tH+3);
+        /* Hour labels; 10-min marks get a discrete dot instead of a number */
+        if(op>0.15){
+          if(isHr){
+            var hh=Math.floor(displayMin/60);
+            ctx.font='bold 8.5px Inter Tight,sans-serif';
+            ctx.textAlign='center';
+            ctx.textBaseline='top';
+            ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
+            ctx.fillText(hh+'h', x, TICK_TOP+tH+3);
+          } else if(isTn){
+            ctx.beginPath();
+            ctx.arc(x, TICK_TOP+tH+5, 1.5, 0, Math.PI*2);
+            ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.55).toFixed(3)+')';
+            ctx.fill();
+          }
         }
         ctx.restore();
       }
@@ -5652,22 +5661,22 @@
       });
     }
 
-    function _agdRulerUpdateTimer(cd){
-      if(!cd) return;
+    function _agdUpdateChipTimer(){
+      var chip=document.querySelector('.agd-card.agd-active .agd-chip-timer');
+      if(!chip) return;
       var er=_agdRulerRange;
       var now=new Date();
       var nowMin=now.getHours()*60+now.getMinutes();
+      var nowSec=now.getHours()*3600+now.getMinutes()*60+now.getSeconds();
       var todayISO=now.toISOString().slice(0,10);
-      var txt='', lbl='', cls='agd-ruler-cd';
+      var txt='', cls='agd-chip-timer';
 
-      /* Active event — show remaining time */
       if(er&&er.isActive&&nowMin<er.endMin){
-        lbl='Finaliza em';
-        txt=agdFmtTimer(er.endMin-nowMin);
-        cls='agd-ruler-cd agd-c-active';
+        var remSec=er.endMin*60-nowSec;
+        txt=agdFmtChipTimer(Math.max(0,remSec));
+        cls='agd-chip-timer agd-chip-timer--active';
       } else {
-        /* Find next event across all items */
-        var nextMin=Infinity;
+        var nextSec=Infinity;
         for(var i=0;i<_items.length;i++){
           var it=_items[i];
           if(!it.hora||!it.dataISO) continue;
@@ -5675,47 +5684,39 @@
           var sM=+sp[0]*60+(+sp[1]||0);
           var diff;
           if(it.dataISO===todayISO&&sM>nowMin){
-            diff=sM-nowMin;
+            diff=sM*60-nowSec;
           } else if(it.dataISO>todayISO){
             var futureDays=Math.round((new Date(it.dataISO+'T00:00:00')-new Date(todayISO+'T00:00:00'))/86400000);
-            diff=futureDays*1440+(sM-nowMin);
+            diff=futureDays*86400+sM*60-nowSec;
           } else { continue; }
-          if(diff>0&&diff<nextMin) nextMin=diff;
+          if(diff>0&&diff<nextSec) nextSec=diff;
         }
-        if(nextMin<Infinity){
-          lbl='Próxima em';
-          txt=agdFmtTimer(nextMin);
-          cls='agd-ruler-cd agd-c-upcoming';
+        if(nextSec<Infinity){
+          txt=agdFmtChipTimer(nextSec);
+          cls='agd-chip-timer agd-chip-timer--upcoming';
         }
       }
 
-      var state=lbl+'|'+txt;
-      if(!txt){
-        if(_agdRulerTimerLast!=='__h'){
-          cd.innerHTML=''; cd.className='agd-ruler-cd'; cd.style.visibility='hidden';
-          _agdRulerTimerLast='__h';
-        }
-        return;
-      }
-      if(state!==_agdRulerTimerLast){
-        _agdRulerTimerLast=state;
-        cd.innerHTML='<span class="agd-ruler-timer-label">'+lbl+'</span>'
-                    +'<span class="agd-ruler-timer-text">'+txt+'</span>';
-        cd.className=cls;
-        cd.style.visibility='';
-      }
+      if(!txt){ chip.style.display='none'; return; }
+      chip.textContent=txt;
+      chip.className=cls;
+      chip.style.display='';
     }
 
-    var _agdLastRulerMin=-1;
+    var _agdLastRulerMin=-1, _agdLastRulerSec=-1;
     function _agdRulerLoop(){
       if(!_agdRulerCanvas||!_agdRulerCanvas.isConnected){ _agdRulerRAF=null; return; }
       _agdRulerRAF=requestAnimationFrame(function(){
         var now=new Date();
         var curMin=now.getHours()*60+now.getMinutes();
+        var curSec=curMin*60+now.getSeconds();
         if(curMin!==_agdLastRulerMin){
           _agdLastRulerMin=curMin;
           _agdRulerDraw();
-          _agdRulerUpdateTimer(document.getElementById('agd-ruler-cd'));
+        }
+        if(curSec!==_agdLastRulerSec){
+          _agdLastRulerSec=curSec;
+          _agdUpdateChipTimer();
         }
         _agdRulerLoop();
       });
@@ -5766,9 +5767,8 @@
       _agdLastRulerMin=-1;
       _agdRulerDraw();
 
-      /* Force timer refresh */
-      _agdRulerTimerLast='';
-      _agdRulerUpdateTimer(cd);
+      /* Force chip timer refresh on next RAF tick */
+      _agdLastRulerSec=-1;
 
       bindRulerSwipe();
     }
@@ -5897,6 +5897,7 @@
       }
 
       return '<article class="agd-card '+theme+actCls+'">'
+        +'<div class="agd-chip-timer"></div>'
         +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
@@ -8750,8 +8751,8 @@
   function renderDashCustomCards(){
     sincronizarTogglesDashboard();
     const cfg=perfilData.dashboardCards||{};
-    const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro?'':'none';
-    const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display=cfg.operacional?'':'none';
+    const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro?'block':'none';
+    const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display=cfg.operacional?'block':'none';
     renderDestaques();
     const destWrap=document.getElementById('dash-card-destaques');
     if(destWrap){ destWrap.style.display=cfg.destaques?'block':'none'; if(cfg.destaques) clonarCardParaDashboard('rel-anchor-destaques','dash-card-destaques'); }
@@ -15949,7 +15950,7 @@
   async function loadServicosData(){ await loadPersisted('pivot-servicosData', d=>{ servicosData=d||[]; }); }
   let perfilData={nome:'', email:'', telefonePessoal:'', documentoNacional:'', empresa:'', categoria:'', telefone:'', endereco:'', website:'', empresaEmail:'', empresaFotoUrl:null, taxId:'', corMarca:'#295244', corNome:'verde', idiomaUI:'English', idiomaPortal:'English', fotoUrl:null, assinaturaImg:null, plano:'Free', timezone:'UTC', dateFormat:'DD/MM/YYYY', moeda:'EUR', notifEmail:false, notifApp:true,
     metodosPagamento:{ revolut:{ativo:false,valor:'',padrao:false}, iban:{ativo:false,valor:'',padrao:false}, mbway:{ativo:false,valor:'',padrao:false}, paypal:{ativo:false,valor:'',padrao:false}, applepay:{ativo:false,valor:'',padrao:false}, googlepay:{ativo:false,valor:'',padrao:false} },
-    dashboardCards:{ financeiro:false, operacional:false, fluxo:false, evolucao:false, eficiencia:false, geografico:false } };
+    dashboardCards:{ financeiro:true, operacional:true, fluxo:false, evolucao:false, eficiencia:false, geografico:false, destaques:true } };
   const METODOS_PAGAMENTO_META=[
     ['revolut','payment.method.revolut','@utilizador', 'https://api.iconify.design/simple-icons:revolut.svg'],
     ['iban','payment.method.iban','PT50 0000 0000 0000 0000 0000 0', 'https://api.iconify.design/mdi:bank.svg'],
