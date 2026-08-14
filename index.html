@@ -5256,9 +5256,9 @@
       '<div class="tsk-actions">'+
         '<div class="tsk-act-left">'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'<span>EDITAR</span></button>'+
-          '<button class="tsk-swipe-btn tsk-tempo" onclick="event.stopPropagation();tcTempo(this)">'+icoTimer+'<span>TEMPO</span></button>'+
         '</div>'+
         '<div class="tsk-act-right">'+
+          '<button class="tsk-swipe-btn tsk-tempo" onclick="event.stopPropagation();tcTempo(this)">'+icoTimer+'<span>TEMPO</span></button>'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'<span>ARQUIVAR</span></button>'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'<span>CONCLUIR</span></button>'+
         '</div>'+
@@ -5414,7 +5414,7 @@
         const front=card&&card.querySelector('.tsk-front');
         if(front) front.classList.remove('tsk-dragging');
         const cardW=card?card.offsetWidth:300;
-        const snapR=Math.round(cardW*0.55),snapL=Math.round(cardW*0.30);
+        const snapR=Math.round(cardW*0.75),snapL=Math.round(cardW*0.25);
         if(dx<-60){
           if(front){front.style.transition='transform .3s cubic-bezier(.25,.1,.25,1)';front.style.transform='translateX(-'+snapR+'px)';}
           const act=card&&card.querySelector('.tsk-actions');if(act) act.classList.add('tsk-vis');
