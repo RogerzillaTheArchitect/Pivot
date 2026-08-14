@@ -181,6 +181,8 @@
   margin-top: -16px;
   isolation: isolate;
   transform: translate3d(0,0,0);
+  perspective: 600px;
+  perspective-origin: 50% 50%;
 }
 
 /* Edge-fade gradients — soften side cards near screen borders */
@@ -203,21 +205,26 @@
 .agd-fan {
   position: absolute;
   left: 50%;
-  bottom: 0;
+  top: 150px; /* vertical center of 300px wrap */
   width: 0; height: 0;
+  transform: translateZ(-230px); /* offset stage back so center card renders at Z=0 */
+  transform-style: preserve-3d;
 }
 
 .agd-card-positioner {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  transform-origin: bottom center;
+  left: -96px;  /* -AGD_W_ACT/2: center card on fan origin */
+  top: -141px;  /* -AGD_H_ACT/2 */
   transition:
-    transform  .2s cubic-bezier(0.25, 0.8, 0.35, 1),
+    transform  .22s cubic-bezier(0.25, 0.8, 0.35, 1),
     filter     .16s ease,
-    opacity    .13s ease;
-  will-change: transform, filter;
+    opacity    .16s ease;
+  will-change: transform, filter, opacity;
   -webkit-tap-highlight-color: transparent;
+}
+/* Disable transition during live drag so cards follow the finger */
+.agd-fan-wrap.agd-dragging .agd-card-positioner {
+  transition: none;
 }
 .agd-card-positioner.agd-offscreen {
   opacity: 0;
