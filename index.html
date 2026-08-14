@@ -5698,13 +5698,27 @@
   ===================================================== */
   !function(){
     /* Radial fan — cards tangentially oriented on an arc, flat baseline (y=0) */
-    var AGD = {
-      '-2':{ x:-205, y:0, r:-13,  z:10, s:0.65, f:'blur(1px) brightness(0.62)' },
-      '-1':{ x:-122, y:0, r:-6.5, z:20, s:0.72, f:'blur(0.5px) brightness(0.78)' },
-       '0':{ x:0,   y:0, r:0,    z:40, s:1.00, f:'' },
-       '1':{ x:122, y:0, r:6.5,  z:20, s:0.72, f:'blur(0.5px) brightness(0.78)' },
-       '2':{ x:205, y:0, r:13,   z:10, s:0.65, f:'blur(1px) brightness(0.62)' }
-    };
+    /* ── 3D RADIAL CAROUSEL ─────────────────────────
+       Cards sit on a virtual cylinder around a vertical axis.
+       STEP = degrees between adjacent slots.
+       R = cylinder radius (px). Stage is pulled back -R so the
+       center card (rotateY(0)+translateZ(R)) ends at Z=0 = natural size.
+    ─────────────────────────────────────────────── */
+    var AGD_3D_STEP=40, AGD_3D_R=230;
+    function _agd3dPos(off){
+      var theta=off*AGD_3D_STEP;
+      var aOff=Math.abs(off);
+      /* Explicit scale adds visual hierarchy on top of perspective scaling */
+      var scale=Math.max(0.72, 1-aOff*0.055);
+      var bright=Math.max(0.52, 1-aOff*0.18);
+      var opacity=Math.max(0.22, 1-aOff*0.24);
+      return {
+        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px) scale('+scale.toFixed(3)+')',
+        f:aOff===0?'none':'brightness('+bright.toFixed(2)+')',
+        opacity:opacity.toFixed(3),
+        z:40-aOff*12
+      };
+    }
     var AGD_W_ACT=192, AGD_H_ACT=282;
 
     /* Minimal hourglass SVG icon (stroke, no emoji) */
@@ -6078,20 +6092,20 @@
         }
       });
 
-      /* Create or update (animate) each visible positioner */
+      /* Create or update (animate) each visible positioner
+         Sort: farthest first so center card paints on top */
       Object.keys(needed).sort(function(a,b){
-        return (AGD[String(needed[+a])].z||0)-(AGD[String(needed[+b])].z||0);
+        return Math.abs(needed[+b])-Math.abs(needed[+a]);
       }).forEach(function(k){
         var idx=+k, off=needed[idx], isAct=(off===0);
-        var pos=AGD[String(off)];
-        var tr='translateX(-50%) translate3d('+pos.x+'px,'+pos.y+'px,0) rotate('+pos.r+'deg) scale('+pos.s+')';
-        var f=pos.f||'none';
+        var pos=_agd3dPos(off);
 
         var el=_fanEls[idx];
         if(el){
           /* Update transform → CSS transition animates the change */
-          el.style.transform=tr;
-          el.style.filter=f;
+          el.style.transform=pos.tr;
+          el.style.filter=pos.f;
+          el.style.opacity=pos.opacity;
           el.style.zIndex=pos.z;
           var card=el.querySelector('.agd-card');
           if(card) card.classList.toggle('agd-active',isAct);
@@ -6100,7 +6114,8 @@
           el.className='agd-card-positioner';
           el.dataset.idx=idx;
           el.style.cssText='width:'+AGD_W_ACT+'px;height:'+AGD_H_ACT+'px;'
-            +'transform:'+tr+';z-index:'+pos.z+';'+(f&&f!=='none'?'filter:'+f+';':'');
+            +'transform:'+pos.tr+';z-index:'+pos.z+';opacity:'+pos.opacity+';'
+            +(pos.f&&pos.f!=='none'?'filter:'+pos.f+';':'');
           el.innerHTML=buildCard(_items[idx],idx,isAct);
           el.addEventListener('click',(function(i){
             return function(e){
@@ -6290,22 +6305,63 @@
       var wrap=document.getElementById('agd-fan-wrap');
       if(!wrap||wrap._agdSwipeBound) return;
       wrap._agdSwipeBound=true;
-      var sx=null,sy=null;
-      wrap.addEventListener('pointerdown',function(e){ sx=e.clientX; sy=e.clientY; });
-      wrap.addEventListener('pointermove',function(e){ if(sx!==null&&Math.abs(e.clientX-sx)>8) e.preventDefault(); },{passive:false});
+      var sx=null, sy=null;
+
+      function _dayHasItems(){ return _items.some(function(it){return it.dataISO===_day;}); }
+
+      /* Snap positioners back to their resting transforms (called after drag cancel/no-op) */
+      function _snapBack(){
+        Object.keys(_fanEls).forEach(function(k){
+          var idx=+k, off=idx-_active, pos=_agd3dPos(off), el=_fanEls[idx];
+          if(!el) return;
+          el.style.transform=pos.tr; el.style.filter=pos.f; el.style.opacity=pos.opacity;
+        });
+      }
+
+      wrap.addEventListener('pointerdown',function(e){
+        if(!_dayHasItems()) return;
+        sx=e.clientX; sy=e.clientY;
+        wrap.classList.add('agd-dragging'); /* disable CSS transition for real-time drag */
+      });
+
+      wrap.addEventListener('pointermove',function(e){
+        if(sx===null) return;
+        var dx=e.clientX-sx;
+        if(Math.abs(dx)>8) e.preventDefault();
+        /* Live drag: cards rotate continuously with finger movement */
+        var prog=Math.max(-1,Math.min(1,-dx/110)); /* 110px = 1 card unit */
+        Object.keys(_fanEls).forEach(function(k){
+          var idx=+k, baseOff=idx-_active, effOff=baseOff-prog;
+          var theta=effOff*AGD_3D_STEP;
+          var aOff=Math.abs(effOff);
+          var el=_fanEls[idx]; if(!el) return;
+          el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px) scale('+(Math.max(0.72,1-aOff*0.055)).toFixed(3)+')';
+          el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.52,1-aOff*0.18)).toFixed(2)+')';
+          el.style.opacity=(Math.max(0.22,1-aOff*0.24)).toFixed(3);
+        });
+      },{passive:false});
+
       wrap.addEventListener('pointerup',function(e){
         if(sx===null) return;
         var dx=e.clientX-sx, dy=e.clientY-sy;
         sx=null; sy=null;
+        wrap.classList.remove('agd-dragging'); /* re-enable transition for snap animation */
         if(Math.abs(dx)>Math.abs(dy)&&Math.abs(dx)>44){
-          /* Guard: don't override a manually selected day that has no items */
-          var dhi=_items.some(function(it){return it.dataISO===_day;});
-          if(!dhi) return;
+          if(!_dayHasItems()) return;
           if(dx<0&&_active<_items.length-1) agdSetActive(_active+1);
           else if(dx>0&&_active>0) agdSetActive(_active-1);
+          else _snapBack(); /* at boundary — snap back */
+        } else {
+          _snapBack();
         }
       });
-      wrap.addEventListener('pointercancel',function(){ sx=null; sy=null; });
+
+      wrap.addEventListener('pointercancel',function(){
+        if(sx===null) return;
+        sx=null; sy=null;
+        wrap.classList.remove('agd-dragging');
+        _snapBack();
+      });
     }
 
     /* ── RULER SWIPE — drag to scroll hours ─────── */
