@@ -5837,9 +5837,9 @@
 
       /* Layout — labels above | ticks | indicator+label below */
       var TICK_TOP=24;
-      var H_H=10, H_T=7, H_O=3;
+      var H_H=10, H_T=7;
       var W_H=2.5, W_T=1.5, W_O=0.75;
-      var LINE_CENTER=TICK_TOP+H_H/2; /* 29 — glow line crosses tick midpoint */
+      var LINE_CENTER=TICK_TOP+H_T/2; /* 27.5 — glow line at center of all non-hour ticks */
       var TRI_TIP_Y=TICK_TOP+H_H+5;  /* 39 — upward triangle below ticks */
       var TRI_H=5, TRI_W=9;
 
@@ -5878,7 +5878,7 @@
         if(!isHr&&displayMin%_rulerStep!==0) continue;
 
         var isTn=!isHr&&(displayMin%10===0);
-        var tH=isHr?H_H:(isTn?H_T:H_O);
+        var tH=isHr?H_H:H_T;
         var tW=isHr?W_H:(isTn?W_T:W_O);
         var x=cx+(i-sub)*AGD_R_PPM;
         if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
