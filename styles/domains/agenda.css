@@ -328,8 +328,24 @@
   z-index: 1;
   overflow: hidden;
 }
-.agd-ink .agd-card-body   { background: oklch(0.19 0.002 106 / 0.80); }
-.agd-paper .agd-card-body { background: oklch(0.985 0.003 92 / 0.80); }
+.agd-ink .agd-card-body {
+  background: linear-gradient(to bottom,
+    oklch(0.19 0.002 106 / 0)    0%,
+    oklch(0.19 0.002 106 / 0)   51%,
+    oklch(0.19 0.002 106 / 0.55) 67%,
+    oklch(0.19 0.002 106 / 0.80) 84%,
+    oklch(0.19 0.002 106 / 0.80) 100%
+  );
+}
+.agd-paper .agd-card-body {
+  background: linear-gradient(to bottom,
+    oklch(0.985 0.003 92 / 0)    0%,
+    oklch(0.985 0.003 92 / 0)   51%,
+    oklch(0.985 0.003 92 / 0.55) 67%,
+    oklch(0.985 0.003 92 / 0.80) 84%,
+    oklch(0.985 0.003 92 / 0.80) 100%
+  );
+}
 .agd-card.agd-active .agd-card-body    { padding: 14px 16px 10px; }
 .agd-card:not(.agd-active) .agd-card-body { padding: 10px 12px 8px; }
 
@@ -576,4 +592,19 @@
   letter-spacing: .1em;
   color: var(--ink-faint);
   text-transform: uppercase;
+}
+/* Empty state for a day with no tasks — anchored to fan-wrap (has height) */
+.agd-empty-day {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-headline);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
 }
