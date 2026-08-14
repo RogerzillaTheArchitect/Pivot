@@ -94,7 +94,7 @@
   font-size: .75rem;
   letter-spacing: .14em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.55);
+  color: #E03030;
 }
 .agd-day-dot { display: none !important; }
 
@@ -102,7 +102,7 @@
    RULER v2 — scrolling minute timeline
 ══════════════════════════════════════════════════ */
 .agd-ruler-outer {
-  margin: 0 0 4px;
+  margin: 8px 0 4px;
   touch-action: pan-y;
 }
 
@@ -135,34 +135,35 @@
 /* Old ruler timer card — hidden (timer moved to card chip) */
 .agd-ruler-cd { display: none; }
 
-/* ── Timer chip — top-left of active card ──────── */
+/* ── Timer chip — above the fan carousel ──────── */
+#agd-chip-timer-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 0 2px;
+}
 .agd-chip-timer {
   display: none;
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  z-index: 5;
   font-family: var(--font-headline);
   font-size: 8.5px;
   letter-spacing: .08em;
-  padding: 3px 9px;
+  padding: 3px 12px;
   border-radius: 999px;
   line-height: 1.6;
   white-space: nowrap;
   pointer-events: none;
+  background: none;
 }
-.agd-card:not(.agd-active) .agd-chip-timer { display: none !important; }
 .agd-chip-timer--active {
-  display: block;
-  color: #FFD237;
-  background: rgba(255,210,55,.12);
-  border: 1px solid rgba(255,210,55,.28);
+  display: inline-block;
+  color: #FCA311;
+  border: 1px solid rgba(252,163,17,.65);
 }
 .agd-chip-timer--upcoming {
-  display: block;
-  color: #4FC86E;
-  background: rgba(79,200,110,.12);
-  border: 1px solid rgba(79,200,110,.28);
+  display: inline-block;
+  color: #5DD62C;
+  border: 1px solid rgba(93,214,44,.6);
 }
 @keyframes agd-chip-pulse {
   0%, 100% { opacity: 1; }
