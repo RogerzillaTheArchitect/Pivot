@@ -1,0 +1,216 @@
+/* =====================================================
+   WORK SESSIONS — cronômetro por tarefa
+   ===================================================== */
+
+/* ── Floating timer chip — fixed top-left ─────── */
+#ws-float-chip {
+  position: fixed;
+  top: 62px;
+  left: 12px;
+  z-index: 9100;
+  display: none;
+}
+
+.ws-float-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card-bg);
+  border: 1px solid rgba(93,214,44,.45);
+  border-radius: 999px;
+  padding: 8px 14px 8px 8px;
+  box-shadow: 0 4px 18px rgba(0,0,0,.5), 0 0 0 1px rgba(93,214,44,.18);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  font-family: inherit;
+  max-width: 240px;
+  transition: opacity .12s;
+}
+.ws-float-btn:active { opacity: .7; }
+
+.ws-float-ico {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(93,214,44,.16);
+  border: 1px solid rgba(93,214,44,.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #5DD62C;
+}
+
+.ws-float-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+}
+
+.ws-float-nome {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 148px;
+  text-transform: uppercase;
+}
+
+.ws-float-time {
+  font-family: var(--font-numeric, 'JetBrains Mono', monospace);
+  font-size: 12px;
+  font-weight: 700;
+  color: #5DD62C;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Timer swipe action button ─────────────────── */
+.tsk-swipe-btn.tsk-tempo { color: #5DD62C; }
+
+/* ── Task card time indicator chip ─────────────── */
+.ws-card-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--brand);
+  font-variant-numeric: tabular-nums;
+  margin-top: 3px;
+  white-space: nowrap;
+}
+.ws-card-chip.ws-card-running {
+  color: #5DD62C;
+}
+.ws-card-chip svg { flex-shrink: 0; }
+
+@keyframes ws-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.ws-dot { animation: ws-blink 1s step-end infinite; }
+
+/* ── Panel content — inside #infoBody ─────────── */
+.ws-panel-active {
+  text-align: center;
+  padding: 12px 0 18px;
+}
+
+.ws-panel-elapsed {
+  font-family: var(--font-numeric, 'JetBrains Mono', monospace);
+  font-size: 2.8rem;
+  font-weight: 700;
+  color: #5DD62C;
+  letter-spacing: -.01em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.ws-btn-iniciar,
+.ws-btn-parar { width: 100%; }
+
+.ws-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-top: 1px solid var(--line-soft);
+  margin-top: 8px;
+}
+
+.ws-total-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+.ws-total-val {
+  font-family: var(--font-numeric, monospace);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ws-sessoes-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.ws-sessoes-list { margin-top: 4px; }
+
+.ws-sessao-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 0;
+  border-top: 1px solid var(--line-soft);
+}
+.ws-sessao-row:first-child { border-top: none; }
+
+.ws-sessao-info { flex: 1; min-width: 0; }
+
+.ws-sessao-date {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.ws-sessao-time {
+  font-size: 13px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: 2px;
+}
+
+.ws-sessao-dur {
+  font-family: var(--font-numeric, monospace);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--brand);
+  font-variant-numeric: tabular-nums;
+}
+
+.ws-sessao-acts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ws-act-btn {
+  font-family: var(--font-label, inherit);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 5px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.ws-act-del {
+  border-color: rgba(217,86,76,.35);
+  color: #E07878;
+}
+.ws-act-btn:active { opacity: .6; }

@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="styles/domains/relatorios.css">
 <link rel="stylesheet" href="styles/domains/biblioteca.css">
 <link rel="stylesheet" href="styles/domains/criar.css">
+<link rel="stylesheet" href="styles/domains/worksession.css">
 <link rel="stylesheet" href="styles/domains/portal-cliente.css">
 <link rel="stylesheet" href="styles/domains/responsive.css">
 <link rel="stylesheet" href="styles/utilities.css">
@@ -1485,6 +1486,17 @@
   <div class="toast" id="toast"></div>
 
   <!-- ===== GLASS MODAL — genérico (Tarefas, Perfil, Builder…) ===== -->
+  <!-- Floating timer chip — shown while a session is active -->
+  <div id="ws-float-chip">
+    <button class="ws-float-btn" onclick="wsAbrirPainelAtivo()">
+      <span class="ws-float-ico"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 7v3l2 1.5"/><path d="M10 3V1.5M7 3.5l-.5-.9"/></svg></span>
+      <div class="ws-float-info">
+        <span class="ws-float-nome"></span>
+        <span class="ws-float-time">00h 00min 00s</span>
+      </div>
+    </button>
+  </div>
+
   <div class="overlay" id="infoOverlay" onclick="closeInfo()"></div>
   <div class="sheet" id="infoSheet">
     <div class="sheet-grab"></div>
@@ -4671,8 +4683,10 @@
        devem mostrar os mesmos números para o mesmo mês */
     const totalJobs=s.totalJobsEsteMes||0;
     const eventosTot=s.eventosPrevistosEsteMes||0;
-    /* Horas: executadas (marco principal "feito") sobre o total previsto no mês */
-    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes));
+    /* Horas: executadas + sessões reais registradas, sobre total previsto no mês */
+    var _wsHrsEste=(typeof wsTotalSecMesAtual==='function'?wsTotalSecMesAtual():0)/3600;
+    var _horasExec=s.horasExecutadasEsteMes+_wsHrsEste;
+    pintarMetricaOp('horas', _horasExec, s.horasEsteMes, horasOpNum(_horasExec), horasOpNum(s.horasEsteMes));
     /* Pendências (cliente) sobre trabalhos do mês — não global */
     pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs));
     /* Demandas (meu lado) sobre trabalhos do mês — não global */
@@ -5186,6 +5200,7 @@
     const icoEdit='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     const icoArch='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     const icoDone='<svg viewBox="0 0 11 11" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
+    const icoTimer='<svg viewBox="0 0 12 12" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6" cy="7" r="4.2"/><path d="M6 5v2l1.4 1"/><path d="M6 2.8V1.5M4.4 3l-.4-.7"/></svg>';
     /* pessoas associadas */
     let pessoasIds=[];
     if(it.tipo==='tarefa'&&it.idx) pessoasIds=(tarefasData[it.idx]&&tarefasData[it.idx].pessoas)||[];
@@ -5214,6 +5229,20 @@
       const jNome=jn.nome||jn.client||'';
       if(jNome) projHtml='<div class="tsk-proj-link">'+icoLink+'<span>'+escapeHtml(jNome)+'</span></div>';
     }
+    /* work session indicator */
+    var wsTaskIdx=(it.tipo==='evento')?((it.jobId||'')+'_'+(it.hora||'')):(it.idx!=null?it.idx:'');
+    var wsKeyVal=_wsKey(it.tipo,wsTaskIdx);
+    var wsIsRunning=_wsActive&&_wsActive.key===wsKeyVal;
+    var wsSec=wsTotalSec(wsKeyVal)+(wsIsRunning?Math.round((Date.now()-_wsActive.startedAt)/1000):0);
+    var wsChipHtml='';
+    if(wsIsRunning){
+      wsChipHtml='<span class="ws-card-chip ws-card-running" data-ws-key="'+wsKeyVal+'">'+
+        '<span class="ws-dot">●</span><span class="ws-card-elapsed">Trabalhando</span></span>';
+    } else if(wsSec>0){
+      wsChipHtml='<span class="ws-card-chip">'+
+        '<svg viewBox="0 0 12 12" width="10" height="10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="6" cy="7" r="4"/><path d="M6 5.5V7l1 .8"/></svg>'+
+        '<span>'+wsFmtDur(wsSec)+'</span></span>';
+    }
     /* chips direita: tipo + prazo + anel de progresso */
     const tagsHtml='<div class="tsk-tags">'+tipoChipHtml(it)+prazoChipHtml(it.dataISO)+progRingTag+'</div>';
     const infoClass='tsk-info has-tags'+(pessoasHtml?' has-people':'');
@@ -5222,12 +5251,14 @@
       ' data-job-id="'+(it.jobId||'')+'"'+
       ' data-tipo="'+it.tipo+'"'+
       ' data-idx="'+(it.idx!=null?it.idx:'')+'"'+
+      ' data-hora="'+(it.hora||'')+'"'+
       ' data-solto="'+solto+'">'+
       '<div class="tsk-actions">'+
         '<div class="tsk-act-left">'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcEditar(this)">'+icoEdit+'<span>EDITAR</span></button>'+
         '</div>'+
         '<div class="tsk-act-right">'+
+          '<button class="tsk-swipe-btn tsk-tempo" onclick="event.stopPropagation();tcTempo(this)">'+icoTimer+'<span>TEMPO</span></button>'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcArquivar(this)">'+icoArch+'<span>ARQUIVAR</span></button>'+
           '<button class="tsk-swipe-btn" onclick="event.stopPropagation();tcConcluir(this)">'+icoDone+'<span>CONCLUIR</span></button>'+
         '</div>'+
@@ -5237,6 +5268,7 @@
           '<div class="tsk-photo-wrap">'+fotoHtml+'</div>'+
           '<div class="'+infoClass+'">'+
             '<span class="tsk-title">'+escapeHtml(it.nome)+'</span>'+
+            wsChipHtml+
             projHtml+
             '<div class="tsk-meta-row">'+icoContact+'<span class="tsk-meta-text">'+(it.cliente?escapeHtml(it.cliente):'—')+'</span></div>'+
             '<div class="tsk-meta-row">'+icoCal+'<span class="tsk-meta-text">'+dataFmt+'</span>'+
@@ -5445,6 +5477,168 @@
     renderMonthTicker();
     showToast(t('toast.done'));
   }
+
+  /* ===== WORK SESSIONS — cronômetro por tarefa ===== */
+  var worksessionsData={};
+  var _wsActive=null; /* { key, nome, jobId, startedAt(ms), tickId } */
+
+  function _wsLoad(){ try{ worksessionsData=JSON.parse(localStorage.getItem('pivot_worksessions')||'{}'); }catch(e){ worksessionsData={}; } }
+  function _wsSave(){ try{ localStorage.setItem('pivot_worksessions',JSON.stringify(worksessionsData)); }catch(e){} }
+  function _wsKey(tipo,idx){ return tipo+'_'+(idx!=null?idx:''); }
+  function wsSessoes(key){ return (worksessionsData[key]||{}).sessoes||[]; }
+  function wsTotalSec(key){ return wsSessoes(key).reduce(function(s,r){ return s+(r.duracaoSec||0); },0); }
+  function wsFmtDur(sec){
+    if(!sec||sec<0) return '0min';
+    var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60);
+    return h>0?h+'h '+m+'min':m+'min';
+  }
+  function wsFmtDurLong(sec){
+    var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+    return pad(h)+'h '+pad(m)+'min '+pad(s)+'s';
+  }
+  function wsTotalSecMesAtual(){
+    var now=new Date();
+    var mesISO=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+    var total=0;
+    Object.values(worksessionsData).forEach(function(d){
+      (d.sessoes||[]).forEach(function(s){ if(s.startedAt&&s.startedAt.slice(0,7)===mesISO) total+=(s.duracaoSec||0); });
+    });
+    return total;
+  }
+  function _wsTick(){
+    if(!_wsActive) return;
+    var elapsed=Math.round((Date.now()-_wsActive.startedAt)/1000);
+    var ft=document.querySelector('#ws-float-chip .ws-float-time');
+    if(ft) ft.textContent=wsFmtDurLong(elapsed);
+    var pe=document.getElementById('ws-panel-elapsed');
+    if(pe) pe.textContent=wsFmtDurLong(elapsed);
+    document.querySelectorAll('.ws-card-elapsed').forEach(function(el){ el.textContent=wsFmtDurLong(elapsed); });
+  }
+  function _wsUpdateFloat(){
+    var chip=document.getElementById('ws-float-chip');
+    if(!chip) return;
+    chip.style.display=_wsActive?'flex':'none';
+    if(_wsActive){ var nm=chip.querySelector('.ws-float-nome'); if(nm){ nm.textContent=_wsActive.nome; nm.title=_wsActive.nome; } }
+  }
+  function _wsPararSilently(){
+    if(!_wsActive) return;
+    clearInterval(_wsActive.tickId);
+    var duracaoSec=Math.max(0,Math.round((Date.now()-_wsActive.startedAt)/1000));
+    if(duracaoSec>5){
+      if(!worksessionsData[_wsActive.key]) worksessionsData[_wsActive.key]={sessoes:[]};
+      worksessionsData[_wsActive.key].sessoes.unshift({
+        id:'ws_'+Date.now()+'_'+Math.random().toString(36).slice(2,7),
+        startedAt:new Date(_wsActive.startedAt).toISOString(),
+        endedAt:new Date().toISOString(),
+        duracaoSec:duracaoSec
+      });
+      _wsSave();
+    }
+    _wsActive=null;
+    _wsUpdateFloat();
+  }
+  function wsIniciar(tipo,idx,jobId,nome){
+    if(_wsActive) _wsPararSilently();
+    var key=_wsKey(tipo,idx);
+    _wsActive={key:key,nome:nome,jobId:jobId||null,startedAt:Date.now(),tickId:null};
+    _wsActive.tickId=setInterval(_wsTick,1000);
+    _wsUpdateFloat();
+    _wsTick();
+  }
+  function tcTempo(btn){
+    var sl=btn.closest('.tsk-card');
+    var tipo=sl.dataset.tipo, idx=sl.dataset.idx, jobId=sl.dataset.jobId||'', hora=sl.dataset.hora||'';
+    var wsIdx=(tipo==='evento')?(jobId+'_'+hora):(idx||'');
+    var nome=sl.querySelector('.tsk-title')?sl.querySelector('.tsk-title').textContent:tipo;
+    abrirTempoTarefa(tipo,wsIdx,jobId,nome);
+  }
+  function wsAbrirPainelAtivo(){
+    if(!_wsActive) return;
+    var parts=_wsActive.key.indexOf('_')>-1?[_wsActive.key.slice(0,_wsActive.key.indexOf('_')),_wsActive.key.slice(_wsActive.key.indexOf('_')+1)]:['tarefa',''];
+    abrirTempoTarefa(parts[0],parts[1],_wsActive.jobId||'',_wsActive.nome);
+  }
+  function wsIniciarEAtualizar(tipo,idx,jobId,nome){ wsIniciar(tipo,idx,jobId,nome); abrirTempoTarefa(tipo,idx,jobId,nome); }
+  function wsPararEAtualizar(tipo,idx,jobId,nome){
+    _wsPararSilently();
+    renderTasksList(); renderMonthTicker();
+    abrirTempoTarefa(tipo,idx,jobId,nome);
+  }
+  function abrirTempoTarefa(tipo,idx,jobId,nome){
+    var key=_wsKey(tipo,idx);
+    var isAtivo=_wsActive&&_wsActive.key===key;
+    var sessoes=wsSessoes(key);
+    var totalSec=wsTotalSec(key);
+    var activeSec=isAtivo?Math.round((Date.now()-_wsActive.startedAt)/1000):0;
+    var totalComAtivo=totalSec+activeSec;
+    var eTipo=escapeHtml(tipo),eIdx=escapeHtml(idx||''),eJobId=escapeHtml(jobId||'');
+    var eNome=escapeHtml(nome).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+    var timerHtml=isAtivo
+      ?'<div class="ws-panel-active"><div id="ws-panel-elapsed" class="ws-panel-elapsed">'+wsFmtDurLong(activeSec)+'</div>'+
+        '<button class="btn primary ws-btn-parar" onclick="wsPararEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">&#9632; PARAR</button></div>'
+      :'<div style="padding-bottom:4px"><button class="btn primary ws-btn-iniciar" onclick="wsIniciarEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">&#9654; INICIAR SESSÃO</button></div>';
+    var totalHtml='<div class="ws-total-row"><span class="ws-total-lbl">TEMPO TOTAL</span><span class="ws-total-val">'+(totalComAtivo>0?wsFmtDur(totalComAtivo):'—')+'</span></div>';
+    var MABB=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    var sessoesHtml=sessoes.length===0
+      ?'<p style="color:var(--ink-faint);font-size:13px;text-align:center;padding:24px 0 8px">Nenhuma sessão registrada</p>'
+      :sessoes.map(function(s,i){
+          var start=new Date(s.startedAt),end=new Date(s.endedAt);
+          var dateFmt=start.getDate()+' '+MABB[start.getMonth()]+' '+start.getFullYear();
+          var timeFmt=pad(start.getHours())+':'+pad(start.getMinutes())+' — '+pad(end.getHours())+':'+pad(end.getMinutes());
+          return '<div class="ws-sessao-row">'+
+            '<div class="ws-sessao-info">'+
+              '<div class="ws-sessao-date">'+dateFmt+'</div>'+
+              '<div class="ws-sessao-time">'+timeFmt+'</div>'+
+              '<div class="ws-sessao-dur">'+wsFmtDur(s.duracaoSec)+'</div>'+
+            '</div>'+
+            '<div class="ws-sessao-acts">'+
+              '<button class="ws-act-btn" onclick="wsEditarSessao(\''+escapeHtml(key)+'\','+i+',\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">EDITAR</button>'+
+              '<button class="ws-act-btn ws-act-del" onclick="wsExcluirSessao(\''+escapeHtml(key)+'\','+i+',\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">EXCLUIR</button>'+
+            '</div>'+
+          '</div>';
+        }).join('');
+    openInfo(nome,timerHtml+totalHtml+'<div class="ws-sessoes-lbl">SESSÕES</div><div class="ws-sessoes-list">'+sessoesHtml+'</div>');
+  }
+  function wsExcluirSessao(key,idx,tipo,taskIdx,jobId,nome){
+    if(!(worksessionsData[key]&&worksessionsData[key].sessoes)) return;
+    if(!confirm('Excluir esta sessão?')) return;
+    worksessionsData[key].sessoes.splice(idx,1);
+    _wsSave(); renderTasksList(); renderMonthTicker();
+    abrirTempoTarefa(tipo,taskIdx,jobId,nome);
+  }
+  function wsEditarSessao(key,sessIdx,tipo,taskIdx,jobId,nome){
+    var s=worksessionsData[key]&&worksessionsData[key].sessoes[sessIdx];
+    if(!s) return;
+    var start=new Date(s.startedAt),end=new Date(s.endedAt);
+    var eTipo=escapeHtml(tipo),eIdx=escapeHtml(taskIdx||''),eJobId=escapeHtml(jobId||'');
+    var eNome=escapeHtml(nome).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
+    var eKey=escapeHtml(key);
+    openInfo('Editar sessão',
+      '<div class="field"><label>Data</label><input type="date" id="wse-date" value="'+start.toISOString().slice(0,10)+'"></div>'+
+      '<div class="field-row">'+
+        '<div class="field"><label>Início</label><input type="time" id="wse-start" value="'+pad(start.getHours())+':'+pad(start.getMinutes())+'"></div>'+
+        '<div class="field"><label>Fim</label><input type="time" id="wse-end" value="'+pad(end.getHours())+':'+pad(end.getMinutes())+'"></div>'+
+      '</div>'+
+      '<button class="btn primary u-w-full u-mt-8" onclick="wsSalvarEdicao(\''+eKey+'\','+sessIdx+',\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">SALVAR</button>',
+      function(){ abrirTempoTarefa(tipo,taskIdx,jobId,nome); }
+    );
+  }
+  function wsSalvarEdicao(key,sessIdx,tipo,taskIdx,jobId,nome){
+    var sd=document.getElementById('wse-date').value;
+    var st=document.getElementById('wse-start').value;
+    var et=document.getElementById('wse-end').value;
+    if(!sd||!st||!et){ showToast('Preencha todos os campos'); return; }
+    var startedAt=new Date(sd+'T'+st+':00').toISOString();
+    var endedAt=new Date(sd+'T'+et+':00').toISOString();
+    var dur=Math.max(0,Math.round((new Date(endedAt)-new Date(startedAt))/1000));
+    if(dur<=0){ showToast('O horário de fim deve ser após o início'); return; }
+    if(!worksessionsData[key]) worksessionsData[key]={sessoes:[]};
+    Object.assign(worksessionsData[key].sessoes[sessIdx],{startedAt,endedAt,duracaoSec:dur});
+    _wsSave(); renderTasksList(); renderMonthTicker();
+    abrirTempoTarefa(tipo,taskIdx,jobId,nome);
+  }
+  _wsLoad();
+  /* ===== FIM WORK SESSIONS ===== */
+
   /* ===== FIM TASK STACK ===== */
 
   /* =====================================================
@@ -8514,7 +8708,9 @@
     if(!document.getElementById('ropm-horas')) return;
     const totalJobs=s.totalJobsEsteMes||0;
     const eventosTot=s.eventosPrevistosEsteMes||0;
-    pintarMetricaOp('horas', s.horasExecutadasEsteMes, s.horasEsteMes, horasOpNum(s.horasExecutadasEsteMes), horasOpNum(s.horasEsteMes), null, 'ropm-');
+    var _wsHrsEsteR=(typeof wsTotalSecMesAtual==='function'?wsTotalSecMesAtual():0)/3600;
+    var _horasExecR=s.horasExecutadasEsteMes+_wsHrsEsteR;
+    pintarMetricaOp('horas', _horasExecR, s.horasEsteMes, horasOpNum(_horasExecR), horasOpNum(s.horasEsteMes), null, 'ropm-');
     pintarMetricaOp('pendencias', s.pendClienteEsteMes||0, totalJobs, String(s.pendClienteEsteMes||0), String(totalJobs), null, 'ropm-');
     pintarMetricaOp('demandas', s.pendMeuEsteMes||0, totalJobs, String(s.pendMeuEsteMes||0), String(totalJobs), null, 'ropm-');
     pintarMetricaOp('fechados', s.fechadosPorDataEsteMes||0, 0, '', String(s.fechadosPorDataEsteMes||0), 'contagem', 'ropm-');
