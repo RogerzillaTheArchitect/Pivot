@@ -440,8 +440,15 @@
   <!-- ===== MAIN ===== -->
   <div class="main">
     <div class="topbar-mobile">
-      <div class="wordmark">
+      <div id="ws-topbar-logo" class="wordmark">
         <span class="logo-text"><span class="pivot-logo-full" role="img" aria-label="Pivot"></span></span>
+      </div>
+      <div id="ws-topbar-timer" class="ws-topbar-timer u-hidden" onclick="wsAbrirPainelAtivo()">
+        <button class="ws-topbar-pp" onclick="event.stopPropagation();_wsPararSilently()">
+          <svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><rect x="4" y="3" width="4" height="14" rx="1"/><rect x="12" y="3" width="4" height="14" rx="1"/></svg>
+        </button>
+        <span class="ws-topbar-nome" id="ws-topbar-nome"></span>
+        <span class="ws-topbar-time" id="ws-topbar-time">00:00:00</span>
       </div>
       <div class="u-flex-g8">
         <div class="icon-btn" onclick="go('pesquisa')" aria-label="Pesquisar">
@@ -1486,17 +1493,6 @@
   <div class="toast" id="toast"></div>
 
   <!-- ===== GLASS MODAL — genérico (Tarefas, Perfil, Builder…) ===== -->
-  <!-- Floating timer chip — shown while a session is active -->
-  <div id="ws-float-chip">
-    <button class="ws-float-btn" onclick="wsAbrirPainelAtivo()">
-      <span class="ws-float-ico"><svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="10" cy="10" r="7"/><path d="M10 7v3l2 1.5"/><path d="M10 3V1.5M7 3.5l-.5-.9"/></svg></span>
-      <div class="ws-float-info">
-        <span class="ws-float-nome"></span>
-        <span class="ws-float-time">00h 00min 00s</span>
-      </div>
-    </button>
-  </div>
-
   <div class="overlay" id="infoOverlay" onclick="closeInfo()"></div>
   <div class="sheet" id="infoSheet">
     <div class="sheet-grab"></div>
@@ -5505,20 +5501,29 @@
     });
     return total;
   }
+  function _wsFmtTopbar(sec){
+    var h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;
+    return pad(h)+':'+pad(m)+':'+pad(s);
+  }
   function _wsTick(){
     if(!_wsActive) return;
     var elapsed=Math.round((Date.now()-_wsActive.startedAt)/1000);
-    var ft=document.querySelector('#ws-float-chip .ws-float-time');
-    if(ft) ft.textContent=wsFmtDurLong(elapsed);
+    var tt=document.getElementById('ws-topbar-time');
+    if(tt) tt.textContent=_wsFmtTopbar(elapsed);
     var pe=document.getElementById('ws-panel-elapsed');
     if(pe) pe.textContent=wsFmtDurLong(elapsed);
-    document.querySelectorAll('.ws-card-elapsed').forEach(function(el){ el.textContent=wsFmtDurLong(elapsed); });
   }
   function _wsUpdateFloat(){
-    var chip=document.getElementById('ws-float-chip');
-    if(!chip) return;
-    chip.style.display=_wsActive?'flex':'none';
-    if(_wsActive){ var nm=chip.querySelector('.ws-float-nome'); if(nm){ nm.textContent=_wsActive.nome; nm.title=_wsActive.nome; } }
+    var logo=document.getElementById('ws-topbar-logo');
+    var timer=document.getElementById('ws-topbar-timer');
+    if(logo) logo.classList.toggle('u-hidden',!!_wsActive);
+    if(timer) timer.classList.toggle('u-hidden',!_wsActive);
+    if(_wsActive){
+      var nm=document.getElementById('ws-topbar-nome');
+      if(nm){ nm.textContent=_wsActive.nome; nm.title=_wsActive.nome; }
+      var tt=document.getElementById('ws-topbar-time');
+      if(tt) tt.textContent=_wsFmtTopbar(Math.round((Date.now()-_wsActive.startedAt)/1000));
+    }
   }
   function _wsPararSilently(){
     if(!_wsActive) return;
@@ -5560,7 +5565,7 @@
   function wsIniciarEAtualizar(tipo,idx,jobId,nome){ wsIniciar(tipo,idx,jobId,nome); abrirTempoTarefa(tipo,idx,jobId,nome); }
   function wsPararEAtualizar(tipo,idx,jobId,nome){
     _wsPararSilently();
-    renderTasksList(); renderMonthTicker();
+    if(typeof renderMonthTicker==='function') renderMonthTicker();
     abrirTempoTarefa(tipo,idx,jobId,nome);
   }
   function abrirTempoTarefa(tipo,idx,jobId,nome){
@@ -5602,7 +5607,7 @@
     if(!(worksessionsData[key]&&worksessionsData[key].sessoes)) return;
     if(!confirm('Excluir esta sessão?')) return;
     worksessionsData[key].sessoes.splice(idx,1);
-    _wsSave(); renderTasksList(); renderMonthTicker();
+    _wsSave(); if(typeof renderMonthTicker==='function') renderMonthTicker();
     abrirTempoTarefa(tipo,taskIdx,jobId,nome);
   }
   function wsEditarSessao(key,sessIdx,tipo,taskIdx,jobId,nome){
@@ -5633,7 +5638,7 @@
     if(dur<=0){ showToast('O horário de fim deve ser após o início'); return; }
     if(!worksessionsData[key]) worksessionsData[key]={sessoes:[]};
     Object.assign(worksessionsData[key].sessoes[sessIdx],{startedAt,endedAt,duracaoSec:dur});
-    _wsSave(); renderTasksList(); renderMonthTicker();
+    _wsSave(); if(typeof renderMonthTicker==='function') renderMonthTicker();
     abrirTempoTarefa(tipo,taskIdx,jobId,nome);
   }
   _wsLoad();
