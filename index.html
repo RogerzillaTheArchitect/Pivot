@@ -5521,11 +5521,12 @@
   var ICO_PLAY='<svg viewBox="0 0 20 20" width="14" height="14" fill="currentColor"><polygon points="4,2 18,10 4,18"/></svg>';
   function _wsTick(){
     if(!_wsActive||_wsActive.paused) return;
-    var elapsed=Math.round((Date.now()-_wsActive.startedAt)/1000);
+    var lapSec=Math.round((Date.now()-_wsActive.startedAt)/1000);
+    var total=wsTotalSec(_wsActive.key)+lapSec;
     var tt=document.getElementById('ws-topbar-time');
-    if(tt) tt.textContent=_wsFmtTopbar(elapsed);
+    if(tt) tt.textContent=_wsFmtTopbar(total);
     var pe=document.getElementById('ws-panel-elapsed');
-    if(pe) pe.textContent=wsFmtDurLong(elapsed);
+    if(pe) pe.textContent=wsFmtDurLong(total);
   }
   function _wsUpdateFloat(){
     var logo=document.getElementById('ws-topbar-logo');
@@ -5543,7 +5544,8 @@
           var tot=wsTotalSec(_wsActive.key);
           tt.textContent=_wsFmtTopbar(tot);
         } else {
-          tt.textContent=_wsFmtTopbar(Math.round((Date.now()-_wsActive.startedAt)/1000));
+          var lapSec=Math.round((Date.now()-_wsActive.startedAt)/1000);
+          tt.textContent=_wsFmtTopbar(wsTotalSec(_wsActive.key)+lapSec);
         }
       }
     }
@@ -5623,7 +5625,7 @@
     var eTipo=escapeHtml(tipo),eIdx=escapeHtml(idx||''),eJobId=escapeHtml(jobId||'');
     var eNome=escapeHtml(nome).replace(/'/g,'&#39;').replace(/"/g,'&quot;');
     var timerHtml=isAtivo
-      ?'<div class="ws-panel-active"><div id="ws-panel-elapsed" class="ws-panel-elapsed">'+wsFmtDurLong(activeSec)+'</div>'+
+      ?'<div class="ws-panel-active"><div id="ws-panel-elapsed" class="ws-panel-elapsed">'+wsFmtDurLong(totalComAtivo)+'</div>'+
         '<button class="btn primary ws-btn-parar" onclick="wsPararEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">PARAR</button></div>'
       :'<div style="padding-bottom:4px"><button class="btn primary ws-btn-iniciar" onclick="wsIniciarEAtualizar(\''+eTipo+'\',\''+eIdx+'\',\''+eJobId+'\',\''+eNome+'\')">INICIAR SESSÃO</button></div>';
     var totalHtml='<div class="ws-total-row"><span class="ws-total-lbl">TEMPO TOTAL</span><span class="ws-total-val">'+(totalComAtivo>0?wsFmtDur(totalComAtivo):'—')+'</span></div>';
