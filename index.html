@@ -5674,6 +5674,7 @@
     var ICO_ARCH='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     var ICO_DONE='<svg viewBox="0 0 11 11" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
     var ICO_HOURGLASS='<svg class="agd-hg-ico" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="currentColor" d="M6 2v6l4 4-4 4v6h12v-6l-4-4 4-4V2H6zm10 14.5V20H8v-3.5l4-4 4 4zm-4-5l-4-4V4h8v3.5l-4 4z"/></svg>';
+    var ICO_TEMPO='<svg viewBox="0 0 12 12" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="6" cy="7" r="4.2"/><path d="M6 5v2l1.4 1"/><path d="M6 2.8V1.5M4.4 3l-.4-.7"/></svg>';
 
     function agdFmtTimer(diffMin){
       if(diffMin<=0) return '00:00';
@@ -6105,6 +6106,7 @@
         +'</div>'
         +'<div class="agd-card-actions" id="agd-actions-'+idx+'">'
           +'<button class="agd-act-btn agd-act-editar" onclick="agdEditar('+idx+')">'+ICO_EDIT+' EDITAR</button>'
+          +'<button class="agd-act-btn agd-act-tempo" onclick="agdTempo('+idx+')">'+ICO_TEMPO+' TEMPO</button>'
           +'<button class="agd-act-btn agd-act-arquivar" onclick="agdArquivar('+idx+')">'+ICO_ARCH+' ARQUIVAR</button>'
           +'<button class="agd-act-btn agd-act-concluir" onclick="agdConcluir('+idx+')">'+ICO_DONE+' CONCLUIR</button>'
         +'</div>'
@@ -6274,6 +6276,14 @@
     };
 
     window.agdEditar=function(idx){ agdVerDetalhes(idx); };
+
+    window.agdTempo=function(idx){
+      var it=_items[idx]; if(!it) return;
+      var fan=document.getElementById('agd-fan');
+      if(fan){ var a=fan.querySelector('.agd-card-actions.agd-vis'); if(a) a.classList.remove('agd-vis'); }
+      var taskIdx=(it.tipo==='evento')?((it.jobId||'')+'_'+(it.hora||'')):(it.idx!=null?it.idx:'');
+      abrirTempoTarefa(it.tipo, taskIdx, it.jobId||'', it.nome);
+    };
 
     window.agdArquivar=function(idx){
       var fan=document.getElementById('agd-fan');
