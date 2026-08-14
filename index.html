@@ -6102,6 +6102,17 @@
       bindFanSwipe();
     }
 
+    /* ── PHOTO HTML ───────────────────────────────── */
+    var AGD_PH_INK='/assets/agd-ph-ink.png';
+    var AGD_PH_PAPER='/assets/agd-ph-paper.png';
+    var AGD_PH_SOLTO='/assets/agd-ph-solto.png';
+    var AGD_PH_SOLTO_INK='/assets/agd-ph-solto-ink.png';
+
+    function agdPhotoHtml(nome,cliente,foto,ink){
+      var src=foto||(ink?AGD_PH_INK:AGD_PH_PAPER);
+      return '<div class="agd-photo-fill" style="background-image:url('+src+')"></div>';
+    }
+
     /* ── CARD FOOTER — timer / status chip ──────── */
     function _agdFootHtml(it){
       var now=new Date();
@@ -6167,6 +6178,9 @@
       var ink=(idx%2===0);
       var theme=ink?'agd-ink':'agd-paper';
       var actCls=isAct?' agd-active':'';
+      var foto=clienteFotoPorNome(it.cliente);
+      if(!foto && !it.cliente && !it.jobId) foto=ink?AGD_PH_SOLTO_INK:AGD_PH_SOLTO;
+      var photoHtml=agdPhotoHtml(it.nome,it.cliente,foto,ink);
       var tipoLbl=AGD_TIPO_LABEL[it.tipo]||it.tipo.toUpperCase();
 
       /* Project name */
@@ -6206,6 +6220,7 @@
         +' data-hora="'+(it.hora||'')+'"'
         +' data-horafim="'+(it.horaFim||'')+'"'
         +' data-dataiso="'+(it.dataISO||'')+'">'
+        +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
           +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
