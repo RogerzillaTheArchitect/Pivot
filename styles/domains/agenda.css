@@ -209,7 +209,7 @@
   width: 0; height: 0;
   /* R = W/(2·tan(STEP/2)) = 192/(2·tan(20°)) ≈ 264px.
      Stage pulled back -R so the center card lands at world-Z=0 = natural size. */
-  transform: translateZ(-264px);
+  transform: translateZ(-273px);
   transform-style: preserve-3d;
 }
 
@@ -228,6 +228,11 @@
 /* Disable transition during live drag so cards follow the finger */
 .agd-fan-wrap.agd-dragging .agd-card-positioner {
   transition: none;
+}
+/* Side cards lose their shadow — in preserve-3d, box-shadow composites 2D
+   and can bleed visually over the front card's surface */
+.agd-fan .agd-card:not(.agd-active) {
+  box-shadow: none;
 }
 .agd-card-positioner.agd-offscreen {
   opacity: 0;
