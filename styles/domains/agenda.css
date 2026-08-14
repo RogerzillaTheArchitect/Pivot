@@ -260,7 +260,7 @@
     0 28px 60px rgba(0,0,0,.32);
 }
 
-/* ── Photo area — full-card background behind body ─── */
+/* ── Photo area — absolute, full card, behind body ─── */
 .agd-card-photo {
   position: absolute;
   inset: 0;
@@ -286,7 +286,7 @@
   line-height: 1;
   text-transform: uppercase;
 }
-/* Gradient fade — extends full card height, fades in lower portion */
+/* Gradient fade — same feel as original, extended lower, not fully opaque at end */
 .agd-card-photo::after {
   content: '';
   position: absolute;
@@ -296,23 +296,27 @@
 .agd-ink .agd-card-photo::after {
   background: linear-gradient(to bottom,
     oklch(0.19 0.002 106 / 0)    0%,
-    oklch(0.19 0.002 106 / 0)   35%,
-    oklch(0.19 0.002 106 / 0.25) 58%,
-    oklch(0.19 0.002 106 / 0.60) 78%,
+    oklch(0.19 0.002 106 / 0)   38%,
+    oklch(0.19 0.002 106 / 0.06) 46%,
+    oklch(0.19 0.002 106 / 0.22) 57%,
+    oklch(0.19 0.002 106 / 0.52) 68%,
+    oklch(0.19 0.002 106 / 0.76) 80%,
     oklch(0.19 0.002 106 / 0.82) 100%
   );
 }
 .agd-paper .agd-card-photo::after {
   background: linear-gradient(to bottom,
     oklch(0.985 0.003 92 / 0)    0%,
-    oklch(0.985 0.003 92 / 0)   35%,
-    oklch(0.985 0.003 92 / 0.25) 58%,
-    oklch(0.985 0.003 92 / 0.60) 78%,
+    oklch(0.985 0.003 92 / 0)   38%,
+    oklch(0.985 0.003 92 / 0.06) 46%,
+    oklch(0.985 0.003 92 / 0.22) 57%,
+    oklch(0.985 0.003 92 / 0.52) 68%,
+    oklch(0.985 0.003 92 / 0.76) 80%,
     oklch(0.985 0.003 92 / 0.82) 100%
   );
 }
 
-/* ── Card body — semi-transparent over photo ─────── */
+/* ── Card body — sits above photo, semi-transparent so image bleeds through ── */
 .agd-card-body {
   flex: 1;
   min-height: 0;
@@ -324,10 +328,17 @@
   z-index: 1;
   overflow: hidden;
 }
-.agd-ink .agd-card-body { background: oklch(0.19 0.002 106 / 0.78); }
-.agd-paper .agd-card-body { background: oklch(0.985 0.003 92 / 0.78); }
-.agd-card.agd-active .agd-card-body { padding: 14px 16px 10px; }
+.agd-ink .agd-card-body   { background: oklch(0.19 0.002 106 / 0.80); }
+.agd-paper .agd-card-body { background: oklch(0.985 0.003 92 / 0.80); }
+.agd-card.agd-active .agd-card-body    { padding: 14px 16px 10px; }
 .agd-card:not(.agd-active) .agd-card-body { padding: 10px 12px 8px; }
+
+/* Spacer that pushes content to where it would be in the original stacked layout */
+.agd-card-body-spacer {
+  flex-shrink: 0;
+  height: 124px; /* 44% of AGD_H_ACT=282 — mirrors original photo height */
+  pointer-events: none;
+}
 
 .agd-card-title {
   font-weight: 600;
@@ -492,20 +503,17 @@
 .agd-ft-active { color: #ff4040; font-weight: 700; }
 .agd-ft-past { color: #ff4040; }
 
-/* Status chips — white text */
+/* Status chips — text only, no border or background */
 .agd-ft-chip {
   font-family: var(--font-headline);
-  font-size: 8px;
+  font-size: 9px;
   letter-spacing: .13em;
   text-transform: uppercase;
-  padding: 3px 10px;
-  border-radius: 999px;
   line-height: 1.6;
   white-space: nowrap;
-  color: rgba(255,255,255,.88);
 }
-.agd-ft-today { background: rgba(79,161,137,.32); }
-.agd-ft-late  { background: rgba(217,86,76,.32); }
+.agd-ft-today { color: #FCA311; }
+.agd-ft-late  { color: #ff4040; }
 
 /* ── Long-press action overlay ─────────────────── */
 .agd-card-actions {

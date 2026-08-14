@@ -5751,6 +5751,7 @@
     var _fanEls={}, _fanDirty=true;
     var _agdRulerRAF=null, _agdRulerCanvas=null;
     var _agdRulerRange=null, _agdRulerRanges=[];
+    var _rulerOffsetMin=0;
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -5799,16 +5800,17 @@
       ctx.setTransform(dpr,0,0,dpr,0,0);
 
       var now=new Date();
-      var totMin=now.getHours()*60+now.getMinutes();
+      var totMin=now.getHours()*60+now.getMinutes()+(_rulerOffsetMin||0);
       var sub=0; /* snap on minute boundaries — no sub-minute scroll */
       var cx=W/2;
 
-      /* Current time label above triangle */
+      /* Center time label above triangle */
+      var displayCtrMin=((totMin%1440)+1440)%1440;
       ctx.font='bold 9px Inter Tight,sans-serif';
       ctx.textAlign='center';
       ctx.textBaseline='top';
       ctx.fillStyle='rgba(255,255,255,0.92)';
-      ctx.fillText(pad(now.getHours())+':'+pad(now.getMinutes()), cx, 2);
+      ctx.fillText(pad(Math.floor(displayCtrMin/60))+':'+pad(displayCtrMin%60), cx, 2);
 
       /* Inverted triangle indicator */
       var TRI_TIP=20, TRI_H=5, TRI_W=9;
@@ -6029,6 +6031,17 @@
         return;
       }
 
+      /* Empty state for selected day (other days have items) */
+      var dayHasItems=_items.some(function(it){return it.dataISO===_day;});
+      if(!dayHasItems){
+        Object.keys(_fanEls).forEach(function(k){try{fan.removeChild(_fanEls[k]);}catch(e){}});
+        _fanEls={}; _fanDirty=true; /* force rebuild when day changes back */
+        fan.innerHTML='<div class="agd-empty"><div class="agd-empty-text">Não há tarefas registradas</div></div>';
+        return;
+      }
+      var emptyEl=fan.querySelector('.agd-empty');
+      if(emptyEl) fan.removeChild(emptyEl);
+
       /* Full rebuild when items list changed (archive/conclude/initial) */
       if(_fanDirty){
         var emptyEl=fan.querySelector('.agd-empty');
@@ -6216,6 +6229,7 @@
         +' data-dataiso="'+(it.dataISO||'')+'">'
         +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
+          +'<div class="agd-card-body-spacer"></div>'
           +'<span class="agd-card-tipo">'+tipoLbl+'</span>'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
           +(projNome
@@ -6280,27 +6294,23 @@
       wrap.addEventListener('pointercancel',function(){ sx=null; sy=null; });
     }
 
-    /* ── RULER SWIPE (navigate same-day items) ───── */
+    /* ── RULER SWIPE — drag to scroll hours ─────── */
     function bindRulerSwipe(){
       var outer=document.getElementById('agd-ruler-outer');
       if(!outer||outer._agdSwipeBound) return;
       outer._agdSwipeBound=true;
-      var sx=null;
-      outer.addEventListener('pointerdown',function(e){ sx=e.clientX; });
-      outer.addEventListener('pointerup',function(e){
-        if(sx===null) return;
-        var dx=e.clientX-sx; sx=null;
-        if(Math.abs(dx)<40) return;
-        var dir=dx<0?1:-1;
-        var cur=_items[_active];
-        var curDay=cur?cur.dataISO:_day;
-        var newIdx=_active+dir;
-        while(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO!==curDay) newIdx+=dir;
-        if(newIdx>=0&&newIdx<_items.length&&_items[newIdx].dataISO===curDay){
-          agdSetActive(newIdx);
-          agdAnimSlide('agd-ruler-viz',dir);
-        }
+      var sx=null, startOffset=0;
+      outer.addEventListener('pointerdown',function(e){
+        sx=e.clientX; startOffset=_rulerOffsetMin;
+        try{ outer.setPointerCapture(e.pointerId); }catch(e){}
       });
+      outer.addEventListener('pointermove',function(e){
+        if(sx===null) return;
+        e.preventDefault();
+        _rulerOffsetMin=startOffset-Math.round((e.clientX-sx)/AGD_R_PPM);
+        _agdRulerDraw();
+      },{passive:false});
+      outer.addEventListener('pointerup',function(){ sx=null; });
       outer.addEventListener('pointercancel',function(){ sx=null; });
     }
 
@@ -6354,6 +6364,7 @@
       _items=gerarItensRadar();
       _active=findCenter(_items);
       _day=(_items[_active]&&_items[_active].dataISO)||new Date().toISOString().slice(0,10);
+      _rulerOffsetMin=0; /* reset ruler scroll to current time */
       _fanDirty=true;
       renderDays(); renderRuler(); renderFan();
     };
@@ -6376,6 +6387,7 @@
       d.setDate(d.getDate()+dir);
       var iso=d.toISOString().slice(0,10);
       _day=iso;
+      _rulerOffsetMin=0; /* reset ruler scroll on day change */
       var idx=_items.findIndex(function(it){return it.dataISO===iso;});
       if(idx>=0) _active=idx;
       renderDays(); renderRuler(); renderFan();
