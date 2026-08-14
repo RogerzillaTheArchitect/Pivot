@@ -5707,16 +5707,17 @@
        Cards are fully opaque (opacity:1). Depth hierarchy via brightness only.
        backface-visibility:hidden (CSS) prevents backs from showing at >90°.
     ──────────────────────────────────────────────── */
-    var AGD_3D_STEP=40, AGD_3D_R=264;
+    /* R = (W/2*(1+cos(STEP)) + gap) / sin(STEP) = (96*1.766+6)/0.643 ≈ 273px (~6px gap) */
+    var AGD_3D_STEP=40, AGD_3D_R=273;
     function _agd3dPos(off){
       var theta=off*AGD_3D_STEP;
       var aOff=Math.abs(off);
-      /* No opacity trick — cards are solid. Only brightness for depth cue. */
-      var bright=Math.max(0.55, 1-aOff*0.20);
+      var bright=aOff===0?null:Math.max(0.55, 1-aOff*0.18);
+      var opacity=aOff===0?'1':(Math.max(0.65, 1-aOff*0.17)).toFixed(2);
       return {
         tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px)',
         f:aOff===0?'none':'brightness('+bright.toFixed(2)+')',
-        opacity:'1',
+        opacity:opacity,
         z:40-aOff*12
       };
     }
@@ -6337,8 +6338,8 @@
           var aOff=Math.abs(effOff);
           var el=_fanEls[idx]; if(!el) return;
           el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px)';
-          el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.55,1-aOff*0.20)).toFixed(2)+')';
-          el.style.opacity='1';
+          el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.55,1-aOff*0.18)).toFixed(2)+')';
+          el.style.opacity=aOff<0.06?'1':(Math.max(0.65,1-aOff*0.17)).toFixed(2);
         });
       },{passive:false});
 
