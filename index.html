@@ -461,10 +461,18 @@
           <span class="nav-ico u-ico-22 ico-notif"></span>
           <span class="notif-count u-hidden" id="notif-count"></span>
         </div>
-        <div class="icon-btn" id="topbar-calendar-btn" onclick="abrirSeletorPeriodo()" aria-label="Período">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-        </div>
       </div>
+    </div>
+
+    <div id="dash-fullview-hdr" class="dash-fullview-hdr u-hidden">
+      <button class="dash-fvh-back" onclick="fecharDashCard()">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      </button>
+      <span id="dash-fvh-titulo" class="dash-fvh-titulo"></span>
+      <button class="dash-fvh-periodo" onclick="abrirSeletorPeriodo()">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        PERÍODO
+      </button>
     </div>
 
     <div class="screen">
@@ -472,7 +480,7 @@
       <!-- ============ HOJE / DASHBOARD ============ -->
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
-        <div id="dash-card-financeiro" class="u-hidden">
+        <div id="dash-card-financeiro" class="u-hidden" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer">
         <div class="fin-card">
           <div class="fin-top">
             <svg class="fin-svg" viewBox="0 0 340 222">
@@ -534,7 +542,7 @@
           </div>
         </div>
 
-        <div id="dash-card-operacional" class="u-hidden">
+        <div id="dash-card-operacional" class="u-hidden" onclick="abrirDashCard(event,'operacional')" style="cursor:pointer">
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
           <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
@@ -576,7 +584,7 @@
         </div>
         </div>
 
-        <div id="dash-card-destaques" class="u-hidden u-mt-22"></div>
+        <div id="dash-card-destaques" class="u-hidden u-mt-22" onclick="abrirDashCard(event,'destaques')" style="cursor:pointer"></div>
 
         <div class="empty u-hidden" id="hoje-empty">
           <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
@@ -8233,16 +8241,40 @@
         '<button class="btn primary u-w-full" onclick="relAplicarIntervalo()">'+t('collab.apply')+'</button>';
     }
   }
-  function relEscolherMes(ano,mes){ relPeriodo={tipo:'mes'}; relAno=ano; relMes=mes; closeInfo(); renderRelatorios(); }
-  function relEscolherTrimestre(ano,q){ relPeriodo={tipo:'trimestre',ano,mesFim:q*3}; relAno=ano; relMes=q*3; closeInfo(); renderRelatorios(); }
-  function relEscolherAno(ano){ relPeriodo={tipo:'ano',ano}; relAno=ano; relMes=12; closeInfo(); renderRelatorios(); }
+  function _relRefreshDash(){ if(typeof renderMonthTicker==='function') renderMonthTicker(); if(typeof clonarCardParaDashboard==='function') clonarCardParaDashboard('rel-anchor-destaques','dash-card-destaques'); }
+  function relEscolherMes(ano,mes){ relPeriodo={tipo:'mes'}; relAno=ano; relMes=mes; closeInfo(); renderRelatorios(); _relRefreshDash(); }
+  function relEscolherTrimestre(ano,q){ relPeriodo={tipo:'trimestre',ano,mesFim:q*3}; relAno=ano; relMes=q*3; closeInfo(); renderRelatorios(); _relRefreshDash(); }
+  function relEscolherAno(ano){ relPeriodo={tipo:'ano',ano}; relAno=ano; relMes=12; closeInfo(); renderRelatorios(); _relRefreshDash(); }
   function relAplicarIntervalo(){
     const ini=document.getElementById('periodo-ini').value, fim=document.getElementById('periodo-fim').value;
     if(!ini || !fim || ini>fim) return;
     relPeriodo={tipo:'intervalo', ini, fim};
     const fimD=new Date(fim+'T00:00:00');
     relAno=fimD.getFullYear(); relMes=fimD.getMonth()+1;
-    closeInfo(); renderRelatorios();
+    closeInfo(); renderRelatorios(); _relRefreshDash();
+  }
+
+  /* ── Dashboard card full-view expansion ── */
+  var _dashCardAberto=null;
+  var _DASH_TITULOS={financeiro:'Financeiro',operacional:'Operacional',destaques:'Destaques'};
+  function abrirDashCard(e,tipo){
+    var el=e.target, wrpId='dash-card-'+tipo;
+    while(el && el.id!==wrpId){
+      if(el.hasAttribute('onclick')||el.tagName==='BUTTON'||el.tagName==='A') return;
+      el=el.parentElement;
+    }
+    _dashCardAberto=tipo;
+    var card=document.getElementById(wrpId);
+    if(!card) return;
+    card.classList.add('dash-card-expanded');
+    var hdr=document.getElementById('dash-fullview-hdr');
+    if(hdr){ hdr.classList.remove('u-hidden'); var tit=document.getElementById('dash-fvh-titulo'); if(tit) tit.textContent=_DASH_TITULOS[tipo]||tipo; }
+    document.body.style.overflow='hidden';
+  }
+  function fecharDashCard(){
+    if(_dashCardAberto){ var card=document.getElementById('dash-card-'+_dashCardAberto); if(card) card.classList.remove('dash-card-expanded'); _dashCardAberto=null; }
+    var hdr=document.getElementById('dash-fullview-hdr'); if(hdr) hdr.classList.add('u-hidden');
+    document.body.style.overflow='';
   }
   /* a dashboard leva para a secção correspondente da página única de Relatórios */
   function abrirRelatorios(tab){
