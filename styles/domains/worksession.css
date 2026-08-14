@@ -14,22 +14,32 @@
 }
 .ws-topbar-timer:active { opacity: .7; }
 
-.ws-topbar-pp {
+.ws-topbar-pp,
+.ws-topbar-stop {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 1px solid rgba(93,214,44,.5);
-  background: rgba(93,214,44,.12);
-  color: #5DD62C;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
+  border: none;
   -webkit-tap-highlight-color: transparent;
   transition: opacity .12s;
 }
-.ws-topbar-pp:active { opacity: .6; }
+.ws-topbar-pp {
+  border: 1px solid rgba(93,214,44,.5);
+  background: rgba(93,214,44,.12);
+  color: #5DD62C;
+}
+.ws-topbar-stop {
+  border: 1px solid rgba(217,86,76,.4);
+  background: rgba(217,86,76,.12);
+  color: #E07878;
+}
+.ws-topbar-pp:active,
+.ws-topbar-stop:active { opacity: .6; }
 
 .ws-topbar-nome {
   font-size: 10px;
