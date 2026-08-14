@@ -542,6 +542,19 @@
           </div>
         </div>
 
+        <!-- Ruler interval selector — fullscreen overlay, position:fixed -->
+        <div id="agd-isel" class="agd-isel u-hidden">
+          <div class="agd-isel-bd"></div>
+          <div class="agd-isel-sheet">
+            <div class="agd-isel-title">Intervalo dos ponteiros</div>
+            <button class="agd-isel-opt" data-step="1">1 minuto</button>
+            <button class="agd-isel-opt" data-step="5">5 minutos</button>
+            <button class="agd-isel-opt" data-step="10">10 minutos</button>
+            <button class="agd-isel-opt" data-step="15">15 minutos</button>
+            <button class="agd-isel-opt" data-step="30">30 minutos</button>
+          </div>
+        </div>
+
         <div id="dash-card-operacional" class="u-hidden" onclick="abrirDashCard(event,'operacional')" style="cursor:pointer">
         <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
         <div class="card ops-card" aria-labelledby="dash-op-title">
@@ -5799,6 +5812,8 @@
     /* ── RULER TICKS — canvas rendering ─────────── */
     /* ── RULER v2 — scrolling minute timeline ─────────── */
     var AGD_R_PPM=8; /* pixels per minute */
+    var _rulerStep=1; /* minutes between drawn ticks (1,5,10,15,30) */
+    (function(){ var s=parseInt(localStorage.getItem('agd_ruler_step')||'0'); if([1,5,10,15,30].indexOf(s)!==-1) _rulerStep=s; })();
 
     function _agdRulerDraw(){
       var cv=_agdRulerCanvas;
@@ -5820,43 +5835,53 @@
       var sub=0; /* snap on minute boundaries — no sub-minute scroll */
       var cx=W/2;
 
-      /* Center time label above triangle */
-      var displayCtrMin=((totMin%1440)+1440)%1440;
-      ctx.font='bold 9px Inter Tight,sans-serif';
-      ctx.textAlign='center';
-      ctx.textBaseline='top';
-      ctx.fillStyle='rgba(255,255,255,0.92)';
-      ctx.fillText(pad(Math.floor(displayCtrMin/60))+':'+pad(displayCtrMin%60), cx, 2);
-
-      /* Inverted triangle indicator */
-      var TRI_TIP=20, TRI_H=5, TRI_W=9;
-      ctx.beginPath();
-      ctx.moveTo(cx-TRI_W/2, TRI_TIP-TRI_H);
-      ctx.lineTo(cx+TRI_W/2, TRI_TIP-TRI_H);
-      ctx.lineTo(cx, TRI_TIP);
-      ctx.closePath();
-      ctx.fillStyle='rgba(255,255,255,0.82)';
-      ctx.fill();
-
-      /* Tick geometry — top-aligned close to triangle */
-      var TICK_TOP=25;
-      var H_H=10, H_T=7;
+      /* Layout — labels above | ticks | indicator+label below */
+      var TICK_TOP=24;
+      var H_H=10, H_T=7, H_O=3;
       var W_H=2.5, W_T=1.5, W_O=0.75;
+      var LINE_CENTER=TICK_TOP+H_H/2; /* 29 — glow line crosses tick midpoint */
+      var TRI_TIP_Y=TICK_TOP+H_H+5;  /* 39 — upward triangle below ticks */
+      var TRI_H=5, TRI_W=9;
 
+      /* ── 1. Appointment glow lines (drawn behind ticks) ── */
+      _agdRulerRanges.forEach(function(rng){
+        var x0=cx+(rng.startMin-totMin-sub)*AGD_R_PPM;
+        var x1=cx+(rng.endMin-totMin-sub)*AGD_R_PPM;
+        var vx0=Math.max(0,x0), vx1=Math.min(W,x1);
+        if(vx0>=vx1) return;
+        var r,g,b;
+        if(rng.isActive){r=255;g=210;b=55;}
+        else if(rng.isPast){r=55;g=55;b=55;}
+        else{r=79;g=200;b=110;}
+        ctx.save();
+        ctx.shadowColor='rgba('+r+','+g+','+b+',0.85)';
+        ctx.shadowBlur=7;
+        ctx.strokeStyle='rgba('+r+','+g+','+b+',0.85)';
+        ctx.lineWidth=1.5;
+        ctx.lineCap='square';
+        ctx.beginPath();
+        ctx.moveTo(vx0, LINE_CENTER);
+        ctx.lineTo(vx1, LINE_CENTER);
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      /* ── 2. Ticks ── */
       var er=_agdRulerRange;
       var halfM=Math.ceil(cx/AGD_R_PPM)+2;
 
       for(var i=-halfM;i<=halfM;i++){
         var aMin=totMin+i;
-        /* wrap to display correct label for past/future minutes */
         var displayMin=((aMin%1440)+1440)%1440;
+        var isHr=(displayMin%60===0);
+        /* Interval filter — hours always drawn regardless of step */
+        if(!isHr&&displayMin%_rulerStep!==0) continue;
+
+        var isTn=!isHr&&(displayMin%10===0);
+        var tH=isHr?H_H:(isTn?H_T:H_O);
+        var tW=isHr?W_H:(isTn?W_T:W_O);
         var x=cx+(i-sub)*AGD_R_PPM;
         if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
-
-        var isHr=(displayMin%60===0);
-        var isTn=!isHr&&(displayMin%10===0);
-        var tH=isHr?H_H:H_T;
-        var tW=isHr?W_H:(isTn?W_T:W_O);
 
         /* Smooth opacity fade by distance from center */
         var dFrac=Math.abs(x-cx)/cx;
@@ -5865,15 +5890,14 @@
         else{ var t=(dFrac-0.12)/0.88; op=Math.max(0,1-t*t*(3-2*t)); }
         if(op<0.01) continue;
 
-        /* Event range — use aMin (not wrapped) for range checks */
+        /* Event range color */
         var inEv=er&&aMin>=er.startMin&&aMin<er.endMin;
         var r,g,b;
         if(inEv){ if(er.isActive){r=255;g=210;b=55;}else if(er.isPast){r=255;g=140;b=60;}else{r=79;g=200;b=110;} }
         else if(isHr){ r=255;g=255;b=255; }
-        else{ r=70;g=70;b=70; } /* non-event ticks — dark so yellow/green pops */
+        else{ r=70;g=70;b=70; }
 
         ctx.save();
-        /* no shadow/glow */
         ctx.strokeStyle='rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
         ctx.lineWidth=tW;
         ctx.lineCap='round';
@@ -5882,41 +5906,34 @@
         ctx.lineTo(x, TICK_TOP+tH);
         ctx.stroke();
 
-        /* Hour labels only */
-        if(op>0.15 && isHr){
+        /* Hour labels above the ticks */
+        if(op>0.15&&isHr){
           var hh=Math.floor(displayMin/60);
           ctx.font='bold 8.5px Inter Tight,sans-serif';
           ctx.textAlign='center';
-          ctx.textBaseline='top';
+          ctx.textBaseline='bottom';
           ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
-          ctx.fillText(String(hh), x, TICK_TOP+tH+3);
+          ctx.fillText(String(hh), x, TICK_TOP-3);
         }
         ctx.restore();
       }
 
-      /* Event boundary markers — inverted triangle at start and end */
-      var BTW=8, BTH=6;
-      _agdRulerRanges.forEach(function(rng){
-        [rng.startMin, rng.endMin].forEach(function(bMin){
-          var bx=cx+(bMin-totMin-sub)*AGD_R_PPM;
-          if(bx<-4||bx>W+4) return;
-          var bDfrac=Math.abs(bx-cx)/cx;
-          var bOp;
-          if(bDfrac<0.12) bOp=1;
-          else{ var bt=(bDfrac-0.12)/0.88; bOp=Math.max(0,1-bt*bt*(3-2*bt)); }
-          if(bOp<0.05) return;
-          var bc=rng.isActive?'rgba(255,210,55,':rng.isPast?'rgba(255,140,60,':'rgba(79,200,110,';
-          ctx.save();
-          ctx.beginPath();
-          ctx.moveTo(bx-BTW/2, TICK_TOP);
-          ctx.lineTo(bx+BTW/2, TICK_TOP);
-          ctx.lineTo(bx, TICK_TOP+BTH);
-          ctx.closePath();
-          ctx.fillStyle=bc+bOp.toFixed(2)+')';
-          ctx.fill();
-          ctx.restore();
-        });
-      });
+      /* ── 3. Upward triangle (▲) below ticks ── */
+      ctx.beginPath();
+      ctx.moveTo(cx, TRI_TIP_Y);
+      ctx.lineTo(cx-TRI_W/2, TRI_TIP_Y+TRI_H);
+      ctx.lineTo(cx+TRI_W/2, TRI_TIP_Y+TRI_H);
+      ctx.closePath();
+      ctx.fillStyle='rgba(255,255,255,0.82)';
+      ctx.fill();
+
+      /* ── 4. Current time label below triangle ── */
+      var displayCtrMin=((totMin%1440)+1440)%1440;
+      ctx.font='bold 9px Inter Tight,sans-serif';
+      ctx.textAlign='center';
+      ctx.textBaseline='top';
+      ctx.fillStyle='rgba(255,255,255,0.92)';
+      ctx.fillText(pad(Math.floor(displayCtrMin/60))+':'+pad(displayCtrMin%60), cx, TRI_TIP_Y+TRI_H+4);
     }
 
     function _agdUpdateChipTimer(){
@@ -6030,6 +6047,7 @@
       _agdLastRulerSec=-1;
 
       bindRulerSwipe();
+      agdInitIntervalSel();
     }
 
     /* ── FAN (persistent elements — CSS transition animates position changes) ── */
@@ -6366,23 +6384,32 @@
       });
     }
 
-    /* ── RULER SWIPE — drag to scroll hours ─────── */
+    /* ── RULER SWIPE — drag to scroll hours; long-press to set interval ── */
     function bindRulerSwipe(){
       var outer=document.getElementById('agd-ruler-outer');
       if(!outer||outer._agdSwipeBound) return;
       outer._agdSwipeBound=true;
-      var sx=null, startOffset=0;
+      var sx=null, startOffset=0, lpTimer=null, lpFired=false;
+      function cancelLp(){ if(lpTimer){clearTimeout(lpTimer);lpTimer=null;} }
       outer.addEventListener('pointerdown',function(e){
-        sx=e.clientX; startOffset=_rulerOffsetMin;
-        try{ outer.setPointerCapture(e.pointerId); }catch(e){}
+        sx=e.clientX; startOffset=_rulerOffsetMin; lpFired=false;
+        try{ outer.setPointerCapture(e.pointerId); }catch(ex){}
+        lpTimer=setTimeout(function(){
+          lpFired=true; sx=null; cancelLp();
+          agdShowRulerIntervalSel();
+        },500);
       });
       outer.addEventListener('pointermove',function(e){
         if(sx===null) return;
+        var dx=e.clientX-sx;
+        if(Math.abs(dx)>8) cancelLp();
         e.preventDefault();
-        _rulerOffsetMin=startOffset-Math.round((e.clientX-sx)/AGD_R_PPM);
+        _rulerOffsetMin=startOffset-Math.round(dx/AGD_R_PPM);
         _agdRulerDraw();
       },{passive:false});
       outer.addEventListener('pointerup',function(){
+        cancelLp();
+        if(sx===null||lpFired){ sx=null; return; }
         sx=null;
         /* Auto-focus card when ruler center lands on an event range */
         var now2=new Date();
@@ -6398,7 +6425,33 @@
           if(dMin>=sM2&&dMin<eM2){ _active=ii; renderDays(); renderFan(); break; }
         }
       });
-      outer.addEventListener('pointercancel',function(){ sx=null; });
+      outer.addEventListener('pointercancel',function(){ cancelLp(); sx=null; });
+    }
+
+    function agdShowRulerIntervalSel(){
+      var el=document.getElementById('agd-isel');
+      if(!el) return;
+      el.querySelectorAll('.agd-isel-opt').forEach(function(btn){
+        btn.classList.toggle('agd-isel-opt--active',+btn.dataset.step===_rulerStep);
+      });
+      el.classList.remove('u-hidden');
+    }
+
+    function agdInitIntervalSel(){
+      var el=document.getElementById('agd-isel');
+      if(!el||el._agdBound) return;
+      el._agdBound=true;
+      el.querySelector('.agd-isel-bd').addEventListener('click',function(){
+        el.classList.add('u-hidden');
+      });
+      el.querySelectorAll('.agd-isel-opt').forEach(function(btn){
+        btn.addEventListener('click',function(){
+          _rulerStep=+btn.dataset.step;
+          try{ localStorage.setItem('agd_ruler_step',_rulerStep); }catch(ex){}
+          el.classList.add('u-hidden');
+          _agdRulerDraw();
+        });
+      });
     }
 
     /* ── DAYS SWIPE ──────────────────────────────── */

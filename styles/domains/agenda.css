@@ -125,11 +125,56 @@
   pointer-events: none;
 }
 
-/* Separator between date nav and ruler */
-.agd-ruler-sep {
-  height: 1px;
-  margin: 0 18px;
-  background: rgba(255,255,255,.08);
+/* Separator — removed (ruler moved below cards) */
+.agd-ruler-sep { display: none; }
+
+/* ── Interval selector overlay ──────────────────── */
+.agd-isel {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.agd-isel-bd {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+}
+.agd-isel-sheet {
+  position: relative;
+  background: oklch(0.13 0.002 106);
+  border-radius: 16px 16px 0 0;
+  padding: 16px 0 40px;
+}
+.agd-isel-title {
+  font-family: var(--font-headline);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  text-align: center;
+  padding: 4px 24px 14px;
+}
+.agd-isel-opt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 13px 24px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.78);
+  font-family: 'Inter Tight', ui-sans-serif, sans-serif;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity .1s;
+}
+.agd-isel-opt:active { opacity: .55; }
+.agd-isel-opt--active {
+  color: oklch(0.82 0.16 90);
+  font-weight: 600;
 }
 
 /* Old ruler timer card — hidden (timer moved to card chip) */
