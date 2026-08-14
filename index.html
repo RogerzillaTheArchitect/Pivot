@@ -517,6 +517,7 @@
             <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
             <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
           </div>
+          <div id="agd-chip-timer-wrap"><span class="agd-chip-timer"></span></div>
           <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>
           </div>
@@ -4120,7 +4121,7 @@
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
-    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderDashCustomCards(); renderRelatorios(); }
+    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderRelatorios(); renderDashCustomCards(); }
     if(v==='equipa') renderEquipaView();
     if(v==='bibliotecas') renderBiblioteca();
     if(v==='historico') renderHistorico();
@@ -5557,7 +5558,7 @@
       ctx.font='bold 9px Inter Tight,sans-serif';
       ctx.textAlign='center';
       ctx.textBaseline='top';
-      ctx.fillStyle='rgba(255,255,255,0.62)';
+      ctx.fillStyle='rgba(220,50,50,0.92)';
       ctx.fillText(pad(now.getHours())+':'+pad(now.getMinutes()), cx, 2);
 
       /* Inverted triangle indicator */
@@ -5604,7 +5605,11 @@
 
         ctx.save();
         if(inEv){ ctx.shadowColor='rgba('+r+','+g+','+b+',0.9)'; ctx.shadowBlur=8; }
-        ctx.strokeStyle='rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
+        /* 10-min marks use dark red unless inside an event glow */
+        var tickStyle = (isTn && !inEv)
+          ? 'rgba(140,0,0,'+(op*0.9).toFixed(3)+')'
+          : 'rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
+        ctx.strokeStyle=tickStyle;
         ctx.lineWidth=tW;
         ctx.lineCap='round';
         ctx.beginPath();
@@ -5612,21 +5617,14 @@
         ctx.lineTo(x, TICK_TOP+tH);
         ctx.stroke();
 
-        /* Hour labels; 10-min marks get a discrete dot instead of a number */
-        if(op>0.15){
-          if(isHr){
-            var hh=Math.floor(displayMin/60);
-            ctx.font='bold 8.5px Inter Tight,sans-serif';
-            ctx.textAlign='center';
-            ctx.textBaseline='top';
-            ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
-            ctx.fillText(hh+'h', x, TICK_TOP+tH+3);
-          } else if(isTn){
-            ctx.beginPath();
-            ctx.arc(x, TICK_TOP+tH+5, 1.5, 0, Math.PI*2);
-            ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.55).toFixed(3)+')';
-            ctx.fill();
-          }
+        /* Hour labels only — 10-min marks have no label or dot */
+        if(op>0.15 && isHr){
+          var hh=Math.floor(displayMin/60);
+          ctx.font='bold 8.5px Inter Tight,sans-serif';
+          ctx.textAlign='center';
+          ctx.textBaseline='top';
+          ctx.fillStyle='rgba('+r+','+g+','+b+','+(op*0.72).toFixed(3)+')';
+          ctx.fillText(hh+'h', x, TICK_TOP+tH+3);
         }
         ctx.restore();
       }
@@ -5662,7 +5660,7 @@
     }
 
     function _agdUpdateChipTimer(){
-      var chip=document.querySelector('.agd-card.agd-active .agd-chip-timer');
+      var chip=document.querySelector('#agd-chip-timer-wrap .agd-chip-timer');
       if(!chip) return;
       var er=_agdRulerRange;
       var now=new Date();
@@ -5897,7 +5895,6 @@
       }
 
       return '<article class="agd-card '+theme+actCls+'">'
-        +'<div class="agd-chip-timer"></div>'
         +'<div class="agd-card-photo">'+photoHtml+'</div>'
         +'<div class="agd-card-body">'
           +'<h3 class="agd-card-title">'+escapeHtml(it.nome)+'</h3>'
