@@ -5698,24 +5698,25 @@
   ===================================================== */
   !function(){
     /* Radial fan — cards tangentially oriented on an arc, flat baseline (y=0) */
-    /* ── 3D RADIAL CAROUSEL ─────────────────────────
-       Cards sit on a virtual cylinder around a vertical axis.
-       STEP = degrees between adjacent slots.
-       R = cylinder radius (px). Stage is pulled back -R so the
-       center card (rotateY(0)+translateZ(R)) ends at Z=0 = natural size.
-    ─────────────────────────────────────────────── */
-    var AGD_3D_STEP=40, AGD_3D_R=230;
+    /* ── 3D RADIAL CYLINDER CAROUSEL ────────────────
+       Edge-touching geometry: adjacent card edges meet exactly.
+       Formula: R = W / (2 × tan(STEP/2))
+         W=192, STEP=40° → R = 192/(2·tan(20°)) ≈ 264px
+       Stage is pulled back -R so the center card (rotateY(0)+translateZ(R))
+       lands at world-Z=0 = natural perspective scale (no forced scaling).
+       Cards are fully opaque (opacity:1). Depth hierarchy via brightness only.
+       backface-visibility:hidden (CSS) prevents backs from showing at >90°.
+    ──────────────────────────────────────────────── */
+    var AGD_3D_STEP=40, AGD_3D_R=264;
     function _agd3dPos(off){
       var theta=off*AGD_3D_STEP;
       var aOff=Math.abs(off);
-      /* Explicit scale adds visual hierarchy on top of perspective scaling */
-      var scale=Math.max(0.72, 1-aOff*0.055);
-      var bright=Math.max(0.52, 1-aOff*0.18);
-      var opacity=Math.max(0.22, 1-aOff*0.24);
+      /* No opacity trick — cards are solid. Only brightness for depth cue. */
+      var bright=Math.max(0.55, 1-aOff*0.20);
       return {
-        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px) scale('+scale.toFixed(3)+')',
+        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px)',
         f:aOff===0?'none':'brightness('+bright.toFixed(2)+')',
-        opacity:opacity.toFixed(3),
+        opacity:'1',
         z:40-aOff*12
       };
     }
@@ -6335,9 +6336,9 @@
           var theta=effOff*AGD_3D_STEP;
           var aOff=Math.abs(effOff);
           var el=_fanEls[idx]; if(!el) return;
-          el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px) scale('+(Math.max(0.72,1-aOff*0.055)).toFixed(3)+')';
-          el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.52,1-aOff*0.18)).toFixed(2)+')';
-          el.style.opacity=(Math.max(0.22,1-aOff*0.24)).toFixed(3);
+          el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px)';
+          el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.55,1-aOff*0.20)).toFixed(2)+')';
+          el.style.opacity='1';
         });
       },{passive:false});
 
