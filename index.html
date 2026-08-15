@@ -486,13 +486,13 @@
           <div class="fin2-col">
             <div class="fin2-ring-wrap">
               <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
-                <circle class="fin2-trk" cx="60" cy="60" r="50"/>
+                <circle class="fin2-trk fin2-trk--g" cx="60" cy="60" r="50"/>
                 <circle class="fin2-arc fin2-arc--g" id="fin-arc-meta" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
               </svg>
               <div class="fin2-inner">
                 <span class="fin2-main" id="fin-receitas">€ 0</span>
                 <span class="fin2-ref" id="fin-esperado">€ 0</span>
-                <span class="fin2-plus" onclick="event.stopPropagation();abrirDefinirMetaReceita()">+</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirReceitas()">+</span>
               </div>
             </div>
             <span class="fin2-lbl fin2-lbl--g" onclick="event.stopPropagation();abrirReceitas()">RECEITAS</span>
@@ -509,13 +509,13 @@
           <div class="fin2-col">
             <div class="fin2-ring-wrap">
               <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
-                <circle class="fin2-trk" cx="60" cy="60" r="50"/>
+                <circle class="fin2-trk fin2-trk--r" cx="60" cy="60" r="50"/>
                 <circle class="fin2-arc fin2-arc--r" id="fin-arc-desp" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
               </svg>
               <div class="fin2-inner">
                 <span class="fin2-main" id="fin-despesas">€ 0</span>
                 <span class="fin2-ref" id="fin-limite">€ 0</span>
-                <span class="fin2-plus" onclick="event.stopPropagation();abrirDefinirLimiteGastos()">+</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirDespesas()">+</span>
               </div>
             </div>
             <span class="fin2-lbl fin2-lbl--r" onclick="event.stopPropagation();abrirDespesas()">DESPESAS</span>
@@ -10037,7 +10037,8 @@
      reaproveitando o mesmo swipe do radar (.radar-card-wrap/ativarSwipeRadar)
      — esquerda revela Excluir, direita revela Editar. ===== */
   function abrirDespesas(){
-    const html='<button class="btn primary u-w-full u-mb-14" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
+    const html='<button class="btn sec u-w-full u-mb-8" onclick="abrirDefinirLimiteGastos()">'+t('settings.limitLabel')+'</button>'+
+      '<button class="btn primary u-w-full u-mb-14" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
       '<div id="exp-lista"></div>';
     openInfo(t('reports.expensesTitle'), html);
     renderDespesasLista();
