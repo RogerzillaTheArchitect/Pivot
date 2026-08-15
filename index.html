@@ -480,49 +480,6 @@
       <!-- ============ HOJE / DASHBOARD ============ -->
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
-        <div id="dash-card-financeiro" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer">
-        <div class="fin2">
-          <!-- ── RECEITAS ── -->
-          <div class="fin2-col">
-            <div class="fin2-ring-wrap">
-              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
-                <circle class="fin2-trk fin2-trk--g" cx="60" cy="60" r="50"/>
-                <circle class="fin2-arc fin2-arc--g" id="fin-arc-meta" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
-              </svg>
-              <div class="fin2-inner">
-                <span class="fin2-main" id="fin-receitas">€ 0</span>
-                <span class="fin2-ref" id="fin-esperado">€ 0</span>
-                <span class="fin2-plus" onclick="event.stopPropagation();abrirReceitas()">+</span>
-              </div>
-            </div>
-            <span class="fin2-lbl fin2-lbl--g" onclick="event.stopPropagation();abrirReceitas()">RECEITAS</span>
-          </div>
-          <div class="fin2-sep"></div>
-          <!-- ── TOTAL ── -->
-          <div class="fin2-col fin2-col--mid" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
-            <span class="fin2-tot-lbl">TOTAL</span>
-            <span class="fin2-tot-val" id="fin-total">€ 0</span>
-            <span class="fin2-tot-pct" id="fin-pct">↑ 0% até a meta</span>
-          </div>
-          <div class="fin2-sep"></div>
-          <!-- ── DESPESAS ── -->
-          <div class="fin2-col">
-            <div class="fin2-ring-wrap">
-              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
-                <circle class="fin2-trk fin2-trk--r" cx="60" cy="60" r="50"/>
-                <circle class="fin2-arc fin2-arc--r" id="fin-arc-desp" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
-              </svg>
-              <div class="fin2-inner">
-                <span class="fin2-main" id="fin-despesas">€ 0</span>
-                <span class="fin2-ref" id="fin-limite">€ 0</span>
-                <span class="fin2-plus" onclick="event.stopPropagation();abrirDespesas()">+</span>
-              </div>
-            </div>
-            <span class="fin2-lbl fin2-lbl--r" onclick="event.stopPropagation();abrirDespesas()">DESPESAS</span>
-          </div>
-        </div>
-        </div>
-
         <div id="notif-pendentes-wrap"></div>
 
         <!-- ===== AGENDA FAN ===== -->
@@ -539,6 +496,50 @@
             <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
             <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
           </div>
+        </div>
+
+        <!-- ── CARD FINANCEIRO (abaixo da agenda) ── -->
+        <div id="dash-card-financeiro" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer;margin-top:16px">
+        <div class="fin2">
+          <!-- RECEITAS -->
+          <div class="fin2-col">
+            <div class="fin2-ring-wrap">
+              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
+                <circle class="fin2-trk fin2-trk--g" cx="60" cy="60" r="50"/>
+                <circle class="fin2-arc fin2-arc--g" id="fin-arc-meta" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
+              </svg>
+              <div class="fin2-inner">
+                <span class="fin2-main" id="fin-receitas">€ 0</span>
+                <span class="fin2-ref" id="fin-esperado">€ 0</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirReceitas()">+</span>
+              </div>
+            </div>
+            <span class="fin2-lbl fin2-lbl--g" onclick="event.stopPropagation();abrirReceitas()">RECEITAS</span>
+          </div>
+          <div class="fin2-sep"></div>
+          <!-- TOTAL -->
+          <div class="fin2-col fin2-col--mid" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
+            <span class="fin2-tot-lbl">TOTAL</span>
+            <span class="fin2-tot-val" id="fin-total">€ 0</span>
+            <span class="fin2-tot-pct" id="fin-pct">↑ 0% até a meta</span>
+          </div>
+          <div class="fin2-sep"></div>
+          <!-- DESPESAS -->
+          <div class="fin2-col">
+            <div class="fin2-ring-wrap">
+              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
+                <circle class="fin2-trk fin2-trk--r" cx="60" cy="60" r="50"/>
+                <circle class="fin2-arc fin2-arc--r" id="fin-arc-desp" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
+              </svg>
+              <div class="fin2-inner">
+                <span class="fin2-main" id="fin-despesas">€ 0</span>
+                <span class="fin2-ref" id="fin-limite">€ 0</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirDespesas()">+</span>
+              </div>
+            </div>
+            <span class="fin2-lbl fin2-lbl--r" onclick="event.stopPropagation();abrirDespesas()">DESPESAS</span>
+          </div>
+        </div>
         </div>
 
         <!-- Ruler interval selector — fullscreen overlay, position:fixed -->
