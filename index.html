@@ -480,7 +480,7 @@
       <!-- ============ HOJE / DASHBOARD ============ -->
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
-        <div id="dash-card-financeiro" class="u-hidden" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer">
+        <div id="dash-card-financeiro" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer">
         <div class="fin2">
           <!-- ── RECEITAS ── -->
           <div class="fin2-col">
@@ -9229,7 +9229,7 @@
   function renderDashCustomCards(){
     sincronizarTogglesDashboard();
     const cfg=perfilData.dashboardCards||{};
-    const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro?'block':'none';
+    const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro!==false?'block':'none';
     const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display=cfg.operacional?'block':'none';
     renderDestaques();
     const destWrap=document.getElementById('dash-card-destaques');
