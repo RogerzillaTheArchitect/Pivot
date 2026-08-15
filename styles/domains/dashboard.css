@@ -592,71 +592,80 @@
 /* ── Card Financeiro V2 (panorâmico 3 colunas) ── */
 .fin2{
   display:flex;align-items:center;
-  background:#0d0d10;
-  border:3px solid rgba(255,255,255,.88);
-  border-radius:22px;
-  padding:14px 4px;
+  background:#0a0a0a;
+  border:6px solid rgba(255,255,255,.96);
+  border-radius:28px;
+  padding:20px 2px 16px;
   margin-bottom:12px;
   gap:0;
+  box-shadow:0 6px 24px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.35);
 }
 .fin2-col{
-  flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;
   padding:0 4px;
 }
 .fin2-col--mid{
-  gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  gap:4px;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .fin2-sep{
-  width:1px;height:72px;
-  background:rgba(255,255,255,.09);
+  width:1px;height:90px;
+  background:rgba(255,255,255,.1);
   flex-shrink:0;
 }
 .fin2-ring-wrap{
-  position:relative;width:100px;height:100px;
+  position:relative;width:144px;height:144px;
 }
 .fin2-svg{display:block;width:100%;height:100%}
 .fin2-trk{
-  fill:none;stroke:rgba(255,255,255,.08);stroke-width:10;
+  fill:none;stroke-width:13;
 }
+.fin2-trk--g{stroke:rgba(61,232,74,.12)}
+.fin2-trk--r{stroke:rgba(255,154,0,.12)}
 .fin2-arc{
-  fill:none;stroke-width:10;stroke-linecap:round;
+  fill:none;stroke-width:13;stroke-linecap:round;
   stroke-dasharray:0 314;
-  transition:stroke-dasharray .5s ease;
+  transition:stroke-dasharray .6s ease;
 }
-.fin2-arc--g{stroke:#3ddc84;filter:drop-shadow(0 0 5px rgba(61,220,132,.45))}
-.fin2-arc--r{stroke:#f97316;filter:drop-shadow(0 0 5px rgba(249,115,22,.4))}
+.fin2-arc--g{
+  stroke:#3de84a;
+  filter:drop-shadow(0 0 7px rgba(61,232,74,.65));
+}
+.fin2-arc--r{
+  stroke:#ff9a00;
+  filter:drop-shadow(0 0 7px rgba(255,154,0,.6));
+}
 .fin2-inner{
   position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
 }
 .fin2-main{
-  font-size:clamp(13px,3.8vw,17px);font-weight:700;font-variant-numeric:tabular-nums;
+  font-size:clamp(15px,4.2vw,20px);font-weight:700;font-variant-numeric:tabular-nums;
   color:#fff;letter-spacing:-.5px;line-height:1;
 }
 .fin2-ref{
-  font-size:10px;font-weight:500;font-variant-numeric:tabular-nums;
-  color:rgba(255,255,255,.35);line-height:1;
+  font-size:11px;font-weight:500;font-variant-numeric:tabular-nums;
+  color:rgba(255,255,255,.38);line-height:1;
 }
 .fin2-plus{
-  font-size:15px;color:rgba(255,255,255,.6);cursor:pointer;
-  line-height:1;-webkit-tap-highlight-color:transparent;margin-top:1px;
+  font-size:22px;font-weight:300;color:rgba(255,255,255,.75);cursor:pointer;
+  line-height:1;-webkit-tap-highlight-color:transparent;margin-top:2px;
 }
 .fin2-lbl{
-  font-size:9px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;
+  font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;
   cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
-.fin2-lbl--g{color:#3ddc84}
-.fin2-lbl--r{color:#f97316}
+.fin2-lbl--g{color:#3de84a}
+.fin2-lbl--r{color:#ff9a00}
 .fin2-tot-lbl{
-  font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:rgba(255,255,255,.32);
+  font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.3);
 }
 .fin2-tot-val{
-  font-size:clamp(20px,5.5vw,28px);font-weight:700;font-variant-numeric:tabular-nums;
-  color:#fff;letter-spacing:-1px;line-height:1.05;
+  font-size:clamp(28px,7.5vw,40px);font-weight:800;font-variant-numeric:tabular-nums;
+  color:#fff;letter-spacing:-1.5px;line-height:1;
 }
-.fin2-tot-pct{font-size:11px;line-height:1.3;color:rgba(255,255,255,.45)}
-.fin2-pct-v{color:#3ddc84}
+.fin2-tot-pct{font-size:12px;line-height:1.4;color:rgba(255,255,255,.45)}
+.fin2-pct-v{color:#3de84a;font-weight:700}
 .fin2-pct-l{color:rgba(255,255,255,.38)}
 
 /* ======================== DESTAQUES ======================== */
