@@ -592,90 +592,94 @@
 /* ── Card Financeiro V2 (panorâmico 3 colunas) ── */
 .fin2{
   display:flex;align-items:center;
-  background:#131313;
-  border:12px solid #f0f0f0;
-  border-radius:42px;
-  padding:14px 0 10px;
+  background:#151415;
+  border:10px solid #F7F7F6;
+  border-radius:44px;
+  padding:16px 0 12px;
   margin-bottom:12px;
   gap:0;
   box-sizing:border-box;
-  box-shadow:0 10px 50px rgba(0,0,0,.4),0 2px 8px rgba(0,0,0,.25);
+  box-shadow:0 8px 40px rgba(0,0,0,.28),0 2px 6px rgba(0,0,0,.18);
 }
 .fin2-col{
-  flex:1.3;display:flex;flex-direction:column;align-items:center;gap:8px;
+  flex:1.15;display:flex;flex-direction:column;align-items:center;gap:10px;
   padding:0 2px;
 }
 .fin2-col--mid{
-  flex:.85;gap:4px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  flex:.85;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  padding:0 4px;
 }
 .fin2-sep{
-  width:1px;height:72px;
-  background:rgba(255,255,255,.07);
+  width:1px;
+  height:clamp(60px,18vw,75px);
+  background:#3A3A3A;
   flex-shrink:0;align-self:center;
 }
 .fin2-ring-wrap{
-  position:relative;width:clamp(108px,28vw,130px);height:clamp(108px,28vw,130px);
+  position:relative;
+  width:clamp(110px,29vw,132px);
+  height:clamp(110px,29vw,132px);
 }
 .fin2-svg{display:block;width:100%;height:100%}
 .fin2-trk{fill:none;stroke-width:13}
-.fin2-trk--g{stroke:#0D2914}
-.fin2-trk--r{stroke:#38270D}
+.fin2-trk--g{stroke:#3D7811}
+.fin2-trk--r{stroke:#703D08}
 .fin2-arc{
   fill:none;stroke-width:13;stroke-linecap:round;
   stroke-dasharray:0 314;
   transition:stroke-dasharray .6s ease;
 }
 .fin2-arc--g{
-  stroke:#39FF14;
-  filter:drop-shadow(0 0 5px rgba(57,255,20,.45));
+  stroke:#8DF227;
+  filter:drop-shadow(0 0 5px rgba(141,242,39,.4));
 }
 .fin2-arc--r{
-  stroke:#FF9414;
-  filter:drop-shadow(0 0 5px rgba(255,148,20,.45));
+  stroke:#FF8805;
+  filter:drop-shadow(0 0 5px rgba(255,136,5,.4));
 }
 .fin2-inner{
   position:absolute;inset:0;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
 }
 .fin2-main{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(18px,5vw,23px);font-weight:600;font-variant-numeric:tabular-nums;
-  color:#F5F5F5;letter-spacing:-.2px;line-height:1;
+  font-size:clamp(17px,4.6vw,21px);font-weight:600;font-variant-numeric:tabular-nums;
+  color:#F5F5F5;letter-spacing:.2px;line-height:1;
 }
 .fin2-ref{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(12px,3.2vw,15px);font-weight:400;font-variant-numeric:tabular-nums;
+  font-size:clamp(11px,3vw,14px);font-weight:400;font-variant-numeric:tabular-nums;
   color:#858585;line-height:1;
 }
 .fin2-plus{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(22px,6vw,28px);font-weight:400;
-  color:#F0F0F0;cursor:pointer;line-height:1;
-  -webkit-tap-highlight-color:transparent;margin-top:3px;
+  font-size:clamp(20px,5.5vw,26px);font-weight:400;
+  color:#F5F5F5;cursor:pointer;line-height:1;
+  -webkit-tap-highlight-color:transparent;margin-top:4px;
 }
 .fin2-lbl{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(13px,3.6vw,16px);font-weight:500;letter-spacing:.13em;
+  font-size:clamp(12px,3.2vw,14px);font-weight:500;letter-spacing:.14em;
   text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
-.fin2-lbl--g{color:#39FF14}
-.fin2-lbl--r{color:#FF9414}
+.fin2-lbl--g{color:#8DF227}
+.fin2-lbl--r{color:#FF8805}
 .fin2-tot-lbl{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(12px,3.2vw,15px);font-weight:500;letter-spacing:.18em;
+  font-size:clamp(11px,3vw,13px);font-weight:500;letter-spacing:.18em;
   text-transform:uppercase;color:#777777;
 }
 .fin2-tot-val{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(32px,8.5vw,44px);font-weight:600;font-variant-numeric:tabular-nums;
-  color:#F5F5F5;letter-spacing:-.5px;line-height:1;
+  font-size:clamp(30px,8vw,42px);font-weight:600;font-variant-numeric:tabular-nums;
+  color:#F5F5F5;letter-spacing:.5px;line-height:1;
 }
 .fin2-tot-pct{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
-  font-size:clamp(11px,3vw,14px);line-height:1.3;color:rgba(255,255,255,.45);
+  font-size:clamp(11px,2.9vw,14px);line-height:1.3;
 }
-.fin2-pct-v{color:#39FF14;font-weight:600}
-.fin2-pct-l{color:#777777}
+.fin2-pct-v{color:#8DF227;font-weight:600}
+.fin2-pct-l{color:#B0B0B0}
 
 /* ======================== DESTAQUES ======================== */
 .dest-card{
