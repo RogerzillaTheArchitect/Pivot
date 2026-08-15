@@ -481,45 +481,44 @@
       <!-- build marker: força novo deploy do cabeçalho conectado (Financeiro/Estatísticas) -->
       <section class="view active" id="v-hoje">
         <div id="dash-card-financeiro" class="u-hidden" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer">
-        <div class="fin-card">
-          <div class="fin-top">
-            <svg class="fin-svg" viewBox="0 0 340 222">
-              <circle class="fin-trk-out" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
-              <circle class="fin-trk-inn" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
-              <circle class="fin-arc-ghost-g" id="fin-ghost-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
-              <circle class="fin-arc-ghost-r" id="fin-ghost-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
-              <circle class="fin-arc-g" id="fin-arc-meta" cx="170" cy="218" r="150" transform="rotate(180,170,218)"/>
-              <circle class="fin-arc-r" id="fin-arc-desp" cx="170" cy="218" r="105" transform="rotate(180,170,218)"/>
-              <text class="fin-tip-lbl fin-tip-g" id="fin-tip-meta" x="20" y="205" text-anchor="end"></text>
-              <text class="fin-tip-lbl fin-tip-r" id="fin-tip-desp" x="65" y="205" text-anchor="end"></text>
-            </svg>
-            <div class="fin-center" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
-              <span class="fin-c-lbl">TOTAL</span>
-              <span class="fin-c-val" id="fin-total">€ 0</span>
-              <span class="fin-c-pct" id="fin-pct">0% da meta</span>
+        <div class="fin2">
+          <!-- ── RECEITAS ── -->
+          <div class="fin2-col">
+            <div class="fin2-ring-wrap">
+              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
+                <circle class="fin2-trk" cx="60" cy="60" r="50"/>
+                <circle class="fin2-arc fin2-arc--g" id="fin-arc-meta" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
+              </svg>
+              <div class="fin2-inner">
+                <span class="fin2-main" id="fin-receitas">€ 0</span>
+                <span class="fin2-ref" id="fin-esperado">€ 0</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirDefinirMetaReceita()">+</span>
+              </div>
             </div>
+            <span class="fin2-lbl fin2-lbl--g" onclick="event.stopPropagation();abrirReceitas()">RECEITAS</span>
           </div>
-          <div class="fin-blocks">
-            <div class="fin-block" onclick="abrirReceitas()">
-              <span class="fin-blk-lbl">RECEITAS</span>
-              <span class="fin-blk-val" id="fin-receitas">€ 0</span>
-              <span class="fin-blk-bar fin-blk-bar--g"></span>
+          <div class="fin2-sep"></div>
+          <!-- ── TOTAL ── -->
+          <div class="fin2-col fin2-col--mid" onclick="event.stopPropagation();abrirDefinirMetaReceita()">
+            <span class="fin2-tot-lbl">TOTAL</span>
+            <span class="fin2-tot-val" id="fin-total">€ 0</span>
+            <span class="fin2-tot-pct" id="fin-pct">↑ 0% até a meta</span>
+          </div>
+          <div class="fin2-sep"></div>
+          <!-- ── DESPESAS ── -->
+          <div class="fin2-col">
+            <div class="fin2-ring-wrap">
+              <svg class="fin2-svg" viewBox="0 0 120 120" fill="none">
+                <circle class="fin2-trk" cx="60" cy="60" r="50"/>
+                <circle class="fin2-arc fin2-arc--r" id="fin-arc-desp" cx="60" cy="60" r="50" transform="rotate(-90 60 60)" data-ring-full="1"/>
+              </svg>
+              <div class="fin2-inner">
+                <span class="fin2-main" id="fin-despesas">€ 0</span>
+                <span class="fin2-ref" id="fin-limite">€ 0</span>
+                <span class="fin2-plus" onclick="event.stopPropagation();abrirDefinirLimiteGastos()">+</span>
+              </div>
             </div>
-            <div class="fin-block" onclick="abrirRelatorios('faturamento')">
-              <span class="fin-blk-lbl">ESPERADO</span>
-              <span class="fin-blk-val" id="fin-esperado">€ 0</span>
-              <span class="fin-blk-bar fin-blk-bar--n"></span>
-            </div>
-            <div class="fin-block" onclick="abrirDespesas()">
-              <span class="fin-blk-lbl">DESPESAS</span>
-              <span class="fin-blk-val" id="fin-despesas">€ 0</span>
-              <span class="fin-blk-bar fin-blk-bar--r"></span>
-            </div>
-            <div class="fin-block" onclick="abrirDefinirLimiteGastos()">
-              <span class="fin-blk-lbl">LIMITE</span>
-              <span class="fin-blk-val" id="fin-limite">€ 0</span>
-              <span class="fin-blk-bar fin-blk-bar--n"></span>
-            </div>
+            <span class="fin2-lbl fin2-lbl--r" onclick="event.stopPropagation();abrirDespesas()">DESPESAS</span>
           </div>
         </div>
         </div>
@@ -4392,6 +4391,15 @@
   function setFinArc(id, p, r){
     const el=document.getElementById(id);
     if(!el) return;
+    if(el.dataset.ringFull){
+      /* full-circle ring (fin2 card) */
+      const C=2*Math.PI*r;
+      const ratio=Math.max(0,p);
+      const laps=Math.floor(ratio), frac=ratio-laps;
+      const pct=Math.min(1,(laps>0&&frac<0.001)?1:frac);
+      el.style.strokeDasharray=pct>0.005?(pct*C).toFixed(1)+' '+((1-pct)*C).toFixed(1):'0 '+C.toFixed(1);
+      return;
+    }
     const cx=170, cy=218, halfC=Math.PI*r, C=2*halfC;
     const ratio=Math.max(0,p);
     const laps=Math.floor(ratio), frac=ratio-laps;
@@ -4420,11 +4428,13 @@
     /* arco verde: RECEITAS ÷ ESPERADO; arco laranja: DESPESAS ÷ LIMITE */
     const pVerde=Math.max(0,esperado>0?(recebido+extras)/esperado:0);
     const pDesp=Math.max(0,teto>0?custos/teto:0);
-    setFinArc('fin-arc-meta', pVerde, 150);
-    setFinArc('fin-arc-desp', pDesp, 105);
+    setFinArc('fin-arc-meta', pVerde, 50);
+    setFinArc('fin-arc-desp', pDesp, 50);
     const fset=(id,v)=>{ const elx=document.getElementById(id); if(elx) elx.textContent=v; };
     fset('fin-total', fmtMoney(total));
-    fset('fin-pct', Math.round(meta>0?total/meta*100:0)+'% da meta');
+    const pctMeta=Math.round(meta>0?total/meta*100:0);
+    const pctEl=document.getElementById('fin-pct');
+    if(pctEl) pctEl.innerHTML='<span class="fin2-pct-v">'+(pctMeta>=0?'↑':'↓')+' '+Math.abs(pctMeta)+'%</span> <span class="fin2-pct-l">até a meta</span>';
     fset('fin-esperado', fmtMoney(esperado));
     fset('fin-limite', fmtMoney(teto));
     fset('fin-receitas', fmtMoney(recebido+extras));
