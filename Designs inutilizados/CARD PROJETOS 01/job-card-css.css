@@ -1,0 +1,75 @@
+/* CARD PROJETOS 01 — Design original dos cards de projetos (trabalhos)
+   Arquivo de referência. Copiado de styles/domains/trabalhos.css antes do redesign.
+   Estrutura: card preto superior (.job-head-row) + card vidro inferior (.job-body-rows)
+   com ações escondidas atrás (slide reveal no tap) + info sempre visível na base. */
+
+.job-card-wrap{position:relative;overflow:visible;border-radius:var(--r);margin-bottom:12px}
+.job-card-wrap .job{margin-bottom:0;touch-action:pan-y;position:relative;z-index:1}
+
+.job{
+  background:transparent;
+  border:none;border-radius:0;padding:0;
+  margin-bottom:0;cursor:pointer;
+  transition:transform .25s cubic-bezier(.34,1.56,.64,1);
+  animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
+  will-change:transform;
+  display:flex;flex-direction:column;
+}
+.job.late,.job.soon,.job.normal{box-shadow:none}
+.job:active{transform:scale(.97)}
+
+/* CARD SUPERIOR — preto, sobe no tap para revelar o card de vidro */
+.job-head-row{
+  display:flex;align-items:center;gap:var(--sp-3);
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:var(--r);
+  padding:12px 14px;
+  position:relative;z-index:2;
+  box-shadow:0 4px 10px rgba(0,0,0,.32),0 1px 3px rgba(0,0,0,.18);
+  transition:transform .3s cubic-bezier(.4,0,.2,1);
+}
+.job-head-info{flex:1;min-width:0}
+.job-title{font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:var(--text-xs);font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  line-height:1.3;color:var(--ink);margin:0 0 3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.job-client-name{display:flex;align-items:center;gap:5px;font-size:var(--text-11);font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;line-height:1.3;color:var(--ink-soft);overflow:hidden;min-width:0}
+.job-client-name svg{width:var(--ico-xs);height:var(--ico-xs);flex:none;color:var(--ink-soft)}
+.job-client-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* CARD DE VIDRO — estende-se para cima, por baixo do card preto.
+   Topo (44px): botões de ação, escondidos atrás do card preto ao repouso.
+   Base (44px): data/hora/etapa, sempre visível. */
+.job-body-rows{
+  display:flex;flex-direction:column;
+  margin-top:-44px;
+  height:88px;
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:var(--r);
+  position:relative;z-index:1;
+  overflow:hidden;
+}
+.job-act-section{
+  height:44px;flex:none;
+  display:flex;flex-direction:row;align-items:center;
+  padding:0 8px;gap:6px;
+}
+.job-act-section .tc-btn{flex:1;color:rgba(10,10,10,.75);background:rgba(0,0,0,.06);border:1px solid rgba(0,0,0,.08)}
+.job-act-section .tc-btn:active{background:rgba(0,0,0,.12)}
+.job-act-section .tc-btn svg{color:rgba(10,10,10,.55)}
+.job-info-section{
+  height:44px;flex:none;
+  display:flex;flex-direction:row;align-items:center;
+  padding:0 14px;
+  border-top:1px solid rgba(255,255,255,.18);
+}
+.job-datetime,.job-stage-row{
+  flex:1;display:flex;align-items:center;justify-content:center;gap:5px;
+  font-size:var(--text-11);font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  line-height:1;color:rgba(10,10,10,.72);
+}
+.job-datetime+.job-datetime,.job-datetime+.job-stage-row{border-left:1px solid rgba(0,0,0,.1)}
