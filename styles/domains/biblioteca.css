@@ -212,6 +212,18 @@
   .vis-bloco-tag svg{width:9px;height:9px;flex:none}
   .vis-bloco-txt{font-size:var(--text-12h);line-height:1.55;color:var(--bib-ink-soft);white-space:pre-wrap;word-break:break-word}
 
+  /* glass-mode: tela de visualização do contrato usa overlay escuro/blur */
+  .sheet.vis-glass-mode{background:linear-gradient(135deg,rgba(255,255,255,.04),transparent 50%),rgba(10,10,12,.82);backdrop-filter:blur(28px) saturate(115%);-webkit-backdrop-filter:blur(28px) saturate(115%)}
+
+  /* ===== Filter button icons ===== */
+  .bib-filter-ico{display:inline-flex;width:13px;height:13px;flex:none;vertical-align:-2px;margin-right:3px}
+
+  /* ===== Inline fav button in detail header ===== */
+  .bib-fav-inline{flex:none;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--bib-ink-soft);cursor:pointer;transition:background .15s,color .15s}
+  .bib-fav-inline:active{background:rgba(255,255,255,.12)}
+  .bib-fav-inline.on{color:var(--ink)}
+  .bib-fav-inline svg{width:15px;height:15px;flex:none}
+
   /* ===== ACTION SHEET =====
      Backdrop neutro (preto translúcido) — chegou a usar var(--btn-32), a cor
      da marca (verde) a 32%, o que lia como uma sombra verde indesejada
