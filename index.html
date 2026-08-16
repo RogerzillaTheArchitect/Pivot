@@ -5695,8 +5695,10 @@
       var aOff=Math.abs(off);
       var bright=aOff===0?null:Math.max(0.55, 1-aOff*0.18);
       var opacity=aOff===0?'1':(Math.max(0.65, 1-aOff*0.17)).toFixed(2);
+      /* active card rises, side cards drop to spread the fan vertically */
+      var yOff=aOff===0?-10:8;
       return {
-        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px)',
+        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px) translateY('+yOff+'px)',
         f:aOff===0?'none':'brightness('+bright.toFixed(2)+')',
         opacity:opacity,
         z:40-aOff*12
@@ -5799,7 +5801,8 @@
       ctx.setTransform(dpr,0,0,dpr,0,0);
 
       var now=new Date();
-      var totMin=now.getHours()*60+now.getMinutes()+(_rulerOffsetMin||0);
+      var nowMinC=now.getHours()*60+now.getMinutes(); /* actual clock time for coloring */
+      var totMin=nowMinC+(_rulerOffsetMin||0);
       var sub=0; /* snap on minute boundaries — no sub-minute scroll */
       var cx=W/2;
 
@@ -5807,19 +5810,50 @@
       var TICK_TOP=24;
       var H_H=10, H_T=7;
       var W_H=2.5, W_T=1.5, W_O=0.75;
-      var LINE_CENTER=TICK_TOP+H_T/2; /* 27.5 — glow line at center of all non-hour ticks */
       var TRI_TIP_Y=TICK_TOP+H_H+5;  /* 39 — upward triangle below ticks */
       var TRI_H=5, TRI_W=9;
 
-      /* ── 1. Task range blocks (drawn behind ticks) ── */
+      var er=_agdRulerRange;
+      var halfM=Math.ceil(cx/AGD_R_PPM)+2;
+
+      /* ── 1. Small ticks (non-hour) ── */
+      for(var i=-halfM;i<=halfM;i++){
+        var aMin=totMin+i;
+        var displayMin=((aMin%1440)+1440)%1440;
+        var isHr=(displayMin%60===0);
+        if(isHr) continue; /* hour ticks drawn after blocks */
+        if(displayMin%_rulerStep!==0) continue;
+        var x=cx+(i-sub)*AGD_R_PPM;
+        if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
+        var dFrac=Math.abs(x-cx)/cx;
+        var op;
+        if(dFrac<0.12) op=1;
+        else{ var t2=(dFrac-0.12)/0.88; op=Math.max(0,1-t2*t2*(3-2*t2)); }
+        if(op<0.01) continue;
+        var isTn=(displayMin%10===0);
+        var tW=isTn?W_T:W_O;
+        ctx.save();
+        ctx.strokeStyle='rgba(70,70,70,'+op.toFixed(3)+')';
+        ctx.lineWidth=tW;
+        ctx.lineCap='round';
+        ctx.beginPath();
+        ctx.moveTo(x, TICK_TOP);
+        ctx.lineTo(x, TICK_TOP+H_T);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      /* ── 2. Task range blocks (cover small ticks, drawn before hour ticks) ── */
       _agdRulerRanges.forEach(function(rng){
         var x0=cx+(rng.startMin-totMin-sub)*AGD_R_PPM;
         var x1=cx+(rng.endMin-totMin-sub)*AGD_R_PPM;
         var vx0=Math.max(0,x0), vx1=Math.min(W,x1);
         if(vx0>=vx1) return;
+        var isActNow=nowMinC>=rng.startMin&&nowMinC<rng.endMin;
+        var isPstNow=nowMinC>=rng.endMin;
         var r,g,b;
-        if(rng.isActive){r=255;g=210;b=55;}
-        else if(rng.isPast){r=155;g=28;b=45;}
+        if(isActNow){r=255;g=210;b=55;}
+        else if(isPstNow){r=155;g=28;b=45;}
         else{r=79;g=200;b=110;}
         ctx.save();
         ctx.fillStyle='rgba('+r+','+g+','+b+',0.72)';
@@ -5827,48 +5861,35 @@
         ctx.restore();
       });
 
-      /* ── 2. Ticks ── */
-      var er=_agdRulerRange;
-      var halfM=Math.ceil(cx/AGD_R_PPM)+2;
-
+      /* ── 3. Hour ticks (on top of blocks) + hour labels ── */
       for(var i=-halfM;i<=halfM;i++){
         var aMin=totMin+i;
         var displayMin=((aMin%1440)+1440)%1440;
-        var isHr=(displayMin%60===0);
-        /* Interval filter — hours always drawn regardless of step */
-        if(!isHr&&displayMin%_rulerStep!==0) continue;
-
-        var isTn=!isHr&&(displayMin%10===0);
-        var tH=isHr?H_H:H_T;
-        var tW=isHr?W_H:(isTn?W_T:W_O);
+        if(displayMin%60!==0) continue;
         var x=cx+(i-sub)*AGD_R_PPM;
         if(x<-AGD_R_PPM*3||x>W+AGD_R_PPM*3) continue;
-
-        /* Smooth opacity fade by distance from center */
         var dFrac=Math.abs(x-cx)/cx;
         var op;
         if(dFrac<0.12) op=1;
-        else{ var t=(dFrac-0.12)/0.88; op=Math.max(0,1-t*t*(3-2*t)); }
+        else{ var t2=(dFrac-0.12)/0.88; op=Math.max(0,1-t2*t2*(3-2*t2)); }
         if(op<0.01) continue;
-
-        /* Event range color */
+        /* Color: use event range if active card overlaps this minute */
         var inEv=er&&aMin>=er.startMin&&aMin<er.endMin;
         var r,g,b;
-        if(inEv){ if(er.isActive){r=255;g=210;b=55;}else if(er.isPast){r=255;g=140;b=60;}else{r=79;g=200;b=110;} }
-        else if(isHr){ r=255;g=255;b=255; }
-        else{ r=70;g=70;b=70; }
-
+        if(inEv){
+          var erAct=nowMinC>=er.startMin&&nowMinC<er.endMin;
+          var erPst=nowMinC>=er.endMin;
+          if(erAct){r=255;g=210;b=55;} else if(erPst){r=255;g=140;b=60;} else{r=79;g=200;b=110;}
+        } else{ r=255;g=255;b=255; }
         ctx.save();
         ctx.strokeStyle='rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
-        ctx.lineWidth=tW;
+        ctx.lineWidth=W_H;
         ctx.lineCap='round';
         ctx.beginPath();
         ctx.moveTo(x, TICK_TOP);
-        ctx.lineTo(x, TICK_TOP+tH);
+        ctx.lineTo(x, TICK_TOP+H_H);
         ctx.stroke();
-
-        /* Hour labels above the ticks */
-        if(op>0.15&&isHr){
+        if(op>0.15){
           var hh=Math.floor(displayMin/60);
           ctx.font='bold 8.5px Inter Tight,sans-serif';
           ctx.textAlign='center';
@@ -5879,7 +5900,7 @@
         ctx.restore();
       }
 
-      /* ── 3. Upward triangle (▲) below ticks ── */
+      /* ── 4. Upward triangle (▲) below ticks ── */
       ctx.beginPath();
       ctx.moveTo(cx, TRI_TIP_Y);
       ctx.lineTo(cx-TRI_W/2, TRI_TIP_Y+TRI_H);
