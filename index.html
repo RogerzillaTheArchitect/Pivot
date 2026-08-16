@@ -1377,8 +1377,9 @@
           </div>
           <div id="ta-items"></div>
           <div class="field"><label data-t="field.date">Data</label><input type="date" id="ta-data"></div>
-          <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ta-hora"></div>
-          <div class="field" id="ta-duracao-field"><label>Duração da tarefa</label><select id="ta-duracao"><option value="">Sem duração definida</option><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hora</option><option value="90">1h 30min</option><option value="120">2 horas</option><option value="180">3 horas</option><option value="240">4 horas</option><option value="480">8 horas</option></select></div>
+          <div class="field"><label data-t="field.timeOptional">Hora (opcional)</label><input type="time" id="ta-hora" onchange="agdVerificarConflitoTarefa()"></div>
+          <div id="ta-aviso-conflito" class="ta-aviso-conflito" style="display:none"></div>
+          <div class="field" id="ta-duracao-field"><label>Duração da tarefa</label><select id="ta-duracao" onchange="agdVerificarConflitoTarefa()"><option value="">Sem duração definida</option><option value="15">15 min</option><option value="30">30 min</option><option value="45">45 min</option><option value="60">1 hora</option><option value="90">1h 30min</option><option value="120">2 horas</option><option value="180">3 horas</option><option value="240">4 horas</option><option value="480">8 horas</option></select></div>
           <div class="field">
             <label data-t="field.priority">Prioridade</label>
             <div class="priority-picker" id="ta-prioridade-picker">
@@ -5690,15 +5691,14 @@
     ──────────────────────────────────────────────── */
     /* R = (W/2*(1+cos(STEP)) + gap) / sin(STEP) = (96*1.766+6)/0.643 ≈ 273px (~6px gap) */
     var AGD_3D_STEP=40, AGD_3D_R=273;
+    function _agdYOff(aOff){ return -10+18*Math.min(aOff,1); } /* -10 at center → +8 at ±1 */
     function _agd3dPos(off){
       var theta=off*AGD_3D_STEP;
       var aOff=Math.abs(off);
       var bright=aOff===0?null:Math.max(0.55, 1-aOff*0.18);
       var opacity=aOff===0?'1':(Math.max(0.65, 1-aOff*0.17)).toFixed(2);
-      /* active card rises, side cards drop to spread the fan vertically */
-      var yOff=aOff===0?-10:8;
       return {
-        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px) translateY('+yOff+'px)',
+        tr:'rotateY('+theta+'deg) translateZ('+AGD_3D_R+'px) translateY('+_agdYOff(aOff).toFixed(1)+'px)',
         f:aOff===0?'none':'brightness('+bright.toFixed(2)+')',
         opacity:opacity,
         z:40-aOff*12
@@ -5751,6 +5751,26 @@
     var _agdRulerRAF=null, _agdRulerCanvas=null;
     var _agdRulerRange=null, _agdRulerRanges=[];
     var _rulerOffsetMin=0;
+    var _agdReturnTimer=null, _agdReturnRaf=null;
+    function _agdCancelReturn(){ clearTimeout(_agdReturnTimer); _agdReturnTimer=null; if(_agdReturnRaf){cancelAnimationFrame(_agdReturnRaf);_agdReturnRaf=null;} }
+    function _agdScheduleReturn(){
+      _agdCancelReturn();
+      if(!_rulerOffsetMin) return;
+      _agdReturnTimer=setTimeout(function(){
+        var startOff=_rulerOffsetMin;
+        var dur=Math.min(1200, Math.abs(startOff)*50);
+        var t0=performance.now();
+        function step(now){
+          var p=Math.min(1,(now-t0)/dur);
+          var ease=1-Math.pow(1-p,3); /* ease-out cubic */
+          _rulerOffsetMin=Math.round(startOff*(1-ease));
+          _agdRulerDraw();
+          if(p<1){ _agdReturnRaf=requestAnimationFrame(step); }
+          else{ _rulerOffsetMin=0; _agdRulerDraw(); _agdReturnRaf=null; }
+        }
+        _agdReturnRaf=requestAnimationFrame(step);
+      },5000);
+    }
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
@@ -6340,7 +6360,7 @@
           var theta=effOff*AGD_3D_STEP;
           var aOff=Math.abs(effOff);
           var el=_fanEls[idx]; if(!el) return;
-          el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px)';
+          el.style.transform='rotateY('+theta.toFixed(2)+'deg) translateZ('+AGD_3D_R+'px) translateY('+_agdYOff(aOff).toFixed(1)+'px)';
           el.style.filter=aOff<0.06?'none':'brightness('+(Math.max(0.55,1-aOff*0.18)).toFixed(2)+')';
           el.style.opacity=aOff<0.06?'1':(Math.max(0.65,1-aOff*0.17)).toFixed(2);
         });
@@ -6377,6 +6397,7 @@
       var sx=null, startOffset=0, lpTimer=null, lpFired=false;
       function cancelLp(){ if(lpTimer){clearTimeout(lpTimer);lpTimer=null;} }
       outer.addEventListener('pointerdown',function(e){
+        _agdCancelReturn();
         sx=e.clientX; startOffset=_rulerOffsetMin; lpFired=false;
         try{ outer.setPointerCapture(e.pointerId); }catch(ex){}
         lpTimer=setTimeout(function(){
@@ -6396,6 +6417,7 @@
         cancelLp();
         if(sx===null||lpFired){ sx=null; return; }
         sx=null;
+        _agdScheduleReturn();
         /* Auto-focus card when ruler center lands on an event range */
         var now2=new Date();
         var cMin=now2.getHours()*60+now2.getMinutes()+_rulerOffsetMin;
@@ -16922,15 +16944,49 @@
      tarefasData (criarTarefa), Checklist grava em listasData (criarLista,
      reaproveitada tal e qual do antigo painel "Lista"). */
   function salvarTarefaPanel(){ criarTarefa(); }
+  var _taConflitoConfirmado=false;
+  function _detectarConflitoTarefa(data,hora,duracaoMin){
+    if(!data||!hora) return null;
+    var tMin=function(h){ var p=h.split(':'); return +p[0]*60+(+p[1]||0); };
+    var s=tMin(hora), e=duracaoMin>0?s+duracaoMin:s+1;
+    return gerarItensRadar().find(function(it){
+      if(it.dataISO!==data||!it.hora) return false;
+      var is=tMin(it.hora), ie=it.horaFim?tMin(it.horaFim):is+30;
+      return s<ie&&e>is;
+    })||null;
+  }
+  window.agdVerificarConflitoTarefa=function(){
+    var data=document.getElementById('ta-data').value||null;
+    var hora=document.getElementById('ta-hora').value||null;
+    var dur=parseInt(document.getElementById('ta-duracao').value||'0',10)||0;
+    var aviso=document.getElementById('ta-aviso-conflito');
+    var btn=document.querySelector('[onclick="criarTarefa()"]');
+    _taConflitoConfirmado=false;
+    if(btn) btn.dataset.step='';
+    if(!aviso) return;
+    var c=_detectarConflitoTarefa(data,hora,dur);
+    if(c){ aviso.textContent='⚠️ Conflito: "'+c.nome+'" já ocupa parte desse horário.'; aviso.style.display=''; }
+    else{ aviso.textContent=''; aviso.style.display='none'; }
+  };
   function criarTarefa(){
     const titulo=document.getElementById('ta-titulo').value.trim();
     if(!titulo){ showToast(t('toast.writeTaskDescription')); return; }
     const novaData=document.getElementById('ta-data').value||null;
     const novaHora=document.getElementById('ta-hora').value||null;
-    if(novaData&&novaHora){
-      const conflito=gerarItensRadar().find(it=>it.dataISO===novaData&&it.hora&&it.hora===novaHora);
-      if(conflito){ showToast('Conflito de horário: este horário já está ocupado por "'+conflito.nome+'"'); return; }
+    const duracaoMin=parseInt(document.getElementById('ta-duracao').value||'0',10)||0;
+    if(novaData&&novaHora&&!_taConflitoConfirmado){
+      const conflito=_detectarConflitoTarefa(novaData,novaHora,duracaoMin);
+      if(conflito){
+        _taConflitoConfirmado=true;
+        const btn=document.querySelector('[onclick="criarTarefa()"]');
+        if(btn){ btn.style.background='var(--late)'; btn.firstElementChild.textContent='Criar assim mesmo →'; }
+        showToast('⚠️ "'+conflito.nome+'" ocupa esse horário — clique novamente para confirmar');
+        return;
+      }
     }
+    _taConflitoConfirmado=false;
+    const btn=document.querySelector('[onclick="criarTarefa()"]');
+    if(btn){ btn.style.background=''; btn.firstElementChild.setAttribute('data-t','wizard.createTask'); btn.firstElementChild.textContent=t('wizard.createTask'); }
     const id='tar'+Date.now();
     const jobId=document.getElementById('ta-trabalho').value||null;
     const prioEl=document.querySelector('#ta-prioridade-picker .priority-opt.on');
@@ -16966,6 +17022,9 @@
     limparFormularioTarefa();
   }
   function limparFormularioTarefa(){
+    _taConflitoConfirmado=false;
+    const avisoEl=document.getElementById('ta-aviso-conflito'); if(avisoEl){ avisoEl.style.display='none'; avisoEl.textContent=''; }
+    const btnCriar=document.querySelector('[onclick="criarTarefa()"]'); if(btnCriar){ btnCriar.style.background=''; const sp=btnCriar.firstElementChild; if(sp){ sp.setAttribute('data-t','wizard.createTask'); sp.textContent=t('wizard.createTask')||'Criar tarefa →'; } }
     ['ta-titulo','ta-data','ta-hora','ta-duracao','ta-notas'].forEach(i=>{ const el=document.getElementById(i); if(el) el.value=''; });
     const sel=document.getElementById('ta-trabalho'); if(sel) sel.value='';
     const prioPicker=document.getElementById('ta-prioridade-picker');
