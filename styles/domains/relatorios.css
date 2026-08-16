@@ -97,15 +97,24 @@
      recuado visualmente pra ler como "só leitura". */
   .fin-item-auto{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px;opacity:.72}
   .fin-item-auto::before{content:none}
-  /* Itens manuais com botões de ação inline */
-  .fin-item-act{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:10px 4px 6px;cursor:default}
-  .fin-item-act::before{content:none}
-  .fin-item-act:first-child{border-top:none}
-  .fin-item-acts{grid-column:1/-1;display:flex;gap:2px;justify-content:flex-end;margin-top:4px}
-  .fin-item-acts button{display:flex;align-items:center;justify-content:center;width:32px;height:28px;background:none;border:none;cursor:pointer;color:var(--ink-faint);border-radius:6px;transition:background .15s,color .15s}
-  .fin-item-acts button:active,.fin-item-acts button:hover{background:rgba(255,255,255,.08);color:var(--ink)}
-  .fin-item-acts button.del:active,.fin-item-acts button.del:hover{background:rgba(180,40,40,.18);color:#e07070}
-  .fin-item-acts button svg{width:14px;height:14px}
+  /* Itens manuais clicáveis — abrem panel de ações */
+  .fin-item-row{background:none;border:none;border-top:1px solid var(--line-soft);border-radius:0;box-shadow:none;padding:13px 4px;cursor:pointer;transition:background .12s}
+  .fin-item-row::before{content:none}
+  .fin-item-row:first-child{border-top:none}
+  .fin-item-row:active{background:rgba(255,255,255,.05)}
+  /* Panel de ações (receitas/despesas) — 2 botões grandes lado a lado */
+  .fin-act-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0 4px}
+  .fin-act-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
+    transition:background .15s}
+  .fin-act-btn:active{background:rgba(255,255,255,.11)}
+  .fin-act-ico{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.08)}
+  .fin-act-ico svg{width:18px;height:18px}
+  .fin-act-del{border-color:rgba(200,60,60,.25);background:rgba(180,40,40,.1);color:#e07070}
+  .fin-act-del:active{background:rgba(180,40,40,.2)}
+  .fin-act-del .fin-act-ico{background:rgba(180,40,40,.18)}
   /* Campo de limite inline no topo da lista de despesas */
   .exp-limit-row{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--line-soft);margin-bottom:10px}
   .exp-limit-lbl{font-size:var(--text-xs);font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);flex:1;white-space:nowrap}

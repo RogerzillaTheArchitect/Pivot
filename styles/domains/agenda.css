@@ -701,3 +701,25 @@
   pointer-events: none;
   z-index: 0;
 }
+
+/* ── Painel de ações da tarefa (openInfo) ──────── */
+.agd-act-panel{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0 4px
+}
+.agd-panel-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
+  transition:background .15s;-webkit-tap-highlight-color:transparent
+}
+.agd-panel-btn:active{background:rgba(255,255,255,.11)}
+.agd-panel-ico{
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08)
+}
+.agd-panel-ico svg{width:18px;height:18px}
+.agd-panel-btn--done{
+  border-color:rgba(50,150,70,.35);background:rgba(20,80,40,.2);color:rgba(90,200,90,.9)
+}
+.agd-panel-btn--done:active{background:rgba(20,80,40,.32)}
+.agd-panel-btn--done .agd-panel-ico{background:rgba(30,100,50,.28)}
