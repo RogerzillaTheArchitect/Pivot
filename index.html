@@ -5871,12 +5871,8 @@
         var x1=cx+(rng.endMin-totMin-sub)*AGD_R_PPM;
         var vx0=Math.max(0,x0), vx1=Math.min(W,x1);
         if(vx0>=vx1) return;
-        var isActNow=nowMinC>=rng.startMin&&nowMinC<rng.endMin;
-        var isPstNow=nowMinC>=rng.endMin;
         var r,g,b;
-        if(isActNow){r=255;g=210;b=55;}
-        else if(isPstNow){r=155;g=28;b=45;}
-        else{r=79;g=200;b=110;}
+        r=79;g=200;b=110;
         ctx.save();
         ctx.fillStyle='rgba('+r+','+g+','+b+',0.72)';
         ctx.fillRect(vx0, TICK_TOP, vx1-vx0, H_T);
@@ -5898,11 +5894,7 @@
         /* Color: use event range if active card overlaps this minute */
         var inEv=er&&aMin>=er.startMin&&aMin<er.endMin;
         var r,g,b;
-        if(inEv){
-          var erAct=nowMinC>=er.startMin&&nowMinC<er.endMin;
-          var erPst=nowMinC>=er.endMin;
-          if(erAct){r=255;g=210;b=55;} else if(erPst){r=255;g=140;b=60;} else{r=79;g=200;b=110;}
-        } else{ r=255;g=255;b=255; }
+        if(inEv){r=79;g=200;b=110;} else{r=255;g=255;b=255;}
         ctx.save();
         ctx.strokeStyle='rgba('+r+','+g+','+b+','+op.toFixed(3)+')';
         ctx.lineWidth=W_H;
@@ -14966,7 +14958,7 @@
   function htmlCardArquivado(job){
     const done=job.arquivado.motivo==='concluido';
     const dataFmt=new Date(job.arquivado.em).toLocaleDateString(jsLocale(),{day:'2-digit',month:'short',year:'numeric'});
-    return '<div class="job u-cur-default">'+
+    return '<div class="job hist-card">'+
       '<div class="job-top"><div class="job-top-l">'+avatarHtml(job.client,30,clienteFotoPorNome(job.client))+'<div><div class="job-client">'+escapeHtml(job.client)+'</div><div class="job-type">'+escapeHtml(job.typeLabel)+'</div></div></div>'+
       '<div class="state '+(done?'s-active':'s-wait')+'">'+(done?t('jobs.history.done'):t('jobs.history.deleted'))+'</div></div>'+
       '<div class="job-next"><div class="nd" style="background:'+(done?'var(--brand)':'var(--late)')+'"></div><span>'+dataFmt+'</span></div>'+
