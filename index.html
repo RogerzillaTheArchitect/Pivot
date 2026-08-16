@@ -1482,6 +1482,7 @@
       <div class="sheet-x" onclick="closeInfo()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></div>
     </div>
     <div class="sheet-body" id="infoBody"></div>
+    <div id="infoDock" class="info-dock"></div>
     <div class="gls-close">
       <button onclick="closeInfo()" aria-label="Fechar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
     </div>
@@ -16014,21 +16015,23 @@
      comunitária, pushPanel dentro do sheet), Favoritos (bibFavoritos) e
      Salvos (modelosContratoData, com busca). */
   function abrirMenuNovoModelo(){
-    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
-    const html='<div class="plist">'+
-      '<div class="prow" onclick="closeInfo();abrirBuilderParaSelecao(null);showToast(t(\'toast.blankContract\'))">'+BIB_ICON_NOVO+'<div class="t">'+t('wizard.fromScratch')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'comunidade-contratos\')">'+BIB_ICON_EXPLORAR+'<div class="t">'+t('wizard.browseLibrary')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="closeInfo();abrirSalvosBiblioteca()">'+BIB_ICON_FAVORITOS+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="closeInfo();openSheet();pushPanel(\'contrato-usar\')">'+BIB_ICON_BOOKMARK+'<div class="t">'+t('library.saved')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="closeInfo();abrirImportarArquivo()">'+BIB_ICON_ARQUIVO+'<div class="t">'+t('import.menuLabel')+'</div>'+chevr+'</div>'+
+    const chevr='<svg class="opt-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
+    const _opt=(onclick,icon,label)=>'<div class="bib-sort-opt" onclick="'+onclick+'"><span class="opt-left"><span class="opt-icon">'+icon+'</span><span>'+label+'</span></span>'+chevr+'</div>';
+    const html='<div class="bib-sort-row">'+
+      _opt("closeInfo();abrirBuilderParaSelecao(null);showToast(t('toast.blankContract'))",BIB_ICON_NOVO,t('wizard.fromScratch'))+
+      _opt("closeInfo();openSheet();pushPanel('comunidade-contratos')",BIB_ICON_EXPLORAR,t('wizard.browseLibrary'))+
+      _opt("closeInfo();abrirSalvosBiblioteca()",BIB_ICON_FAVORITOS,t('library.favorites'))+
+      _opt("closeInfo();openSheet();pushPanel('contrato-usar')",BIB_ICON_BOOKMARK,t('library.saved'))+
+      _opt("closeInfo();abrirImportarArquivo()",BIB_ICON_ARQUIVO,t('import.menuLabel'))+
     '</div>';
     openInfo(t('library.newMenu.title'), html);
   }
   function abrirMenuMeusModelos(){
-    const chevr='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
-    const html='<div class="plist">'+
-      '<div class="prow" onclick="abrirSalvosBiblioteca()">'+BIB_ICON_FAVORITOS+'<div class="t">'+t('library.favorites')+'</div>'+chevr+'</div>'+
-      '<div class="prow" onclick="abrirMeusModelosBiblioteca()">'+BIB_ICON_MEUS+'<div class="t">'+t('library.origin.mine')+'</div>'+chevr+'</div>'+
+    const chevr='<svg class="opt-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 18 6-6-6-6"/></svg>';
+    const _opt=(onclick,icon,label)=>'<div class="bib-sort-opt" onclick="'+onclick+'"><span class="opt-left"><span class="opt-icon">'+icon+'</span><span>'+label+'</span></span>'+chevr+'</div>';
+    const html='<div class="bib-sort-row">'+
+      _opt("abrirSalvosBiblioteca()",BIB_ICON_FAVORITOS,t('library.favorites'))+
+      _opt("abrirMeusModelosBiblioteca()",BIB_ICON_MEUS,t('library.origin.mine'))+
     '</div>';
     openInfo(t('library.origin.mine'), html);
   }
@@ -16088,15 +16091,15 @@
     if(!btn) return;
     const check='<svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
     btn.classList.toggle('on', ativo);
-    const icoHtml=icon?'<svg class="bib-filter-ico" viewBox="0 0 24 24" fill="currentColor">'+icon+'</svg>':'';
+    const icoHtml=icon?'<svg class="bib-filter-ico" viewBox="0 0 24 24">'+icon+'</svg>':'';
     btn.innerHTML=icoHtml+'<span>'+escapeHtml(label)+'</span>'+check;
   }
   function bibAtualizarBotoesFiltro(){
     const catLabel = bibCategoriaSel ? (bibSegmentoSel ? bibCategoriaSel+' · '+bibSegmentoSel : bibCategoriaSel) : t('library.facet.category');
-    const ICO_SORT='<path d="M3,13H15V11H3M3,6V8H21V6M3,18H9V16H3V18Z"/>';
-    const ICO_LANG='<path d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.65L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z"/>';
-    const ICO_CAT='<path d="M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.42L11.59,21.42C11.95,21.78 12.45,22 13,22C13.55,22 14.05,21.78 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58M13,20L4,11V4H11L20,13M6.5,5A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 6.5,8A1.5,1.5 0 0,1 5,6.5A1.5,1.5 0 0,1 6.5,5Z"/>';
-    const ICO_ORIG='<path d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,3.18L19,6.3V11C19,15.5 16.04,19.8 12,21.1C7.96,19.8 5,15.5 5,11V6.3L12,3.18Z"/>';
+    const ICO_SORT='<path fill="currentColor" d="M3,13H15V11H3M3,6V8H21V6M3,18H9V16H3V18Z"/>';
+    const ICO_LANG='<path fill="currentColor" d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.65L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z"/>';
+    const ICO_CAT='<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4h6v6h-6zM4 14h6v6H4zm10 3a3 3 0 1 0 6 0a3 3 0 1 0-6 0M4 7a3 3 0 1 0 6 0a3 3 0 1 0-6 0"/>';
+    const ICO_ORIG='<path fill="currentColor" d="M10 9h4V6h3l-5-5l-5 5h3zm-1 1H6V7l-5 5l5 5v-3h3zm14 2l-5-5v3h-3v4h3v3zm-9 3h-4v3H7l5 5l5-5h-3z"/>';
     bibSetDropdownBtn('bib-cat-btn', catLabel, !!bibCategoriaSel, ICO_CAT);
     bibSetDropdownBtn('bib-sort-btn', bibOrdenacao!=='usos'?t(BIB_ORDENACOES.find(([k])=>k===bibOrdenacao)[1]):t('library.sortLabelShort'), bibOrdenacao!=='usos', ICO_SORT);
     bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel, ICO_LANG);
@@ -16138,7 +16141,7 @@
       const langBadge='<span class="bc-bdg-lang">'+langTag+'</span>';
       const hexN=i.numBlocos?String(i.numBlocos):'';
       const hexFs=hexN.length<=1?6:hexN.length<=2?5:4;
-      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="11" height="11" rx="1"/><rect x="6" y="6" width="11" height="11" rx="1"/><text x="11.5" y="11.5" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
+      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="5" width="11" height="11" rx="1.5"/><rect x="5" y="1" width="11" height="11" rx="1.5"/><text x="10.5" y="6.5" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-body">'+
@@ -16206,6 +16209,7 @@
         '<div class="vis-card">'+blocosHtml+'</div>'+
         '<button class="btn soft u-w-full" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+BIB_ICON_ARROW+t('library.import')+'</button>'+
       '</div>';
+    document.getElementById('infoOverlay').classList.add('vis-glass-mode');
     document.getElementById('infoSheet').classList.add('vis-glass-mode');
   }
   /* Em modo de seleção de blocos/cláusulas (Builder → Adicionar Bloco/
@@ -16247,15 +16251,17 @@
        continua reservada para o filtro de busca. */
     const tagsExibidas=it.tags||[];
     if(tagsExibidas.length) html+='<div class="bc-tags u-mb-14">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
-    if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
-    /* Chega aqui só fora do modo de seleção de blocos/cláusulas (abrirItemBiblioteca
-       roteia esses direto pros blocos, sem passar por este ecrã) — sobram o
-       fluxo normal de import e o de escolher contrato pra colaborador. */
+    /* Chega aqui só fora do modo de seleção de blocos/cláusulas — botões vão pro dock fixo */
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button class="btn soft" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
-    openInfo(it.titulo, html, undefined, 'bib-title-font');
+    const _icoX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
+    const _fechar={pt:'Fechar',en:'Close',es:'Cerrar'}[LANG]||'Fechar';
+    let dockHtml='';
+    if(!it.onclick) dockHtml+='<button class="idb" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')"><div class="idb-ico">'+BIB_ICON_EYE+'</div><span class="idb-label">'+t('library.viewBlock')+'</span></button>';
+    dockHtml+='<button class="idb" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'"><div class="idb-ico">'+BIB_ICON_ARROW+'</div><span class="idb-label">'+t('library.import')+'</span></button>';
+    dockHtml+='<button class="idb" onclick="closeInfo()"><div class="idb-ico">'+_icoX+'</div><span class="idb-label">'+_fechar+'</span></button>';
+    openInfo(it.titulo, html, undefined, 'bib-title-font', dockHtml);
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
      fechamento abrupto reportado noutras telas) — reabre o mesmo detalhe no
@@ -17252,9 +17258,11 @@
   }
 
   /* ===== INFO SHEET — Perfil, Builder (funções reais e contidas) ===== */
-  function openInfo(title, bodyHtml, onBack, titleClass){
+  function openInfo(title, bodyHtml, onBack, titleClass, dockHtml){
     _omOpen('info', function(){
       document.getElementById('infoSheet').classList.remove('vis-glass-mode');
+      document.getElementById('infoOverlay').classList.remove('vis-glass-mode');
+      document.getElementById('infoDock').innerHTML=dockHtml||'';
       const titleEl=document.getElementById('infoTitle');
       titleEl.textContent=title;
       titleEl.className = titleClass||'';
