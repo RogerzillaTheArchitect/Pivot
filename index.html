@@ -6580,6 +6580,8 @@
       _fanDirty=true;
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
       renderDays(); renderRuler(); renderFan();
+      if(typeof renderTasksList==='function') renderTasksList();
+      if(typeof renderRadarDashboard==='function') renderRadarDashboard();
       showToast(t('toast.archivedFromRadar'));
     };
 
@@ -6603,6 +6605,8 @@
       if(_active>=_items.length) _active=Math.max(0,_items.length-1);
       renderDays(); renderRuler(); renderFan();
       if(typeof renderMonthTicker==='function') renderMonthTicker();
+      if(typeof renderTasksList==='function') renderTasksList();
+      if(typeof renderRadarDashboard==='function') renderRadarDashboard();
       showToast(t('toast.done'));
     };
 
