@@ -5811,7 +5811,7 @@
       var TRI_TIP_Y=TICK_TOP+H_H+5;  /* 39 — upward triangle below ticks */
       var TRI_H=5, TRI_W=9;
 
-      /* ── 1. Appointment glow lines (drawn behind ticks) ── */
+      /* ── 1. Task range blocks (drawn behind ticks) ── */
       _agdRulerRanges.forEach(function(rng){
         var x0=cx+(rng.startMin-totMin-sub)*AGD_R_PPM;
         var x1=cx+(rng.endMin-totMin-sub)*AGD_R_PPM;
@@ -5819,18 +5819,11 @@
         if(vx0>=vx1) return;
         var r,g,b;
         if(rng.isActive){r=255;g=210;b=55;}
-        else if(rng.isPast){r=55;g=55;b=55;}
+        else if(rng.isPast){r=155;g=28;b=45;}
         else{r=79;g=200;b=110;}
         ctx.save();
-        ctx.shadowColor='rgba('+r+','+g+','+b+',0.85)';
-        ctx.shadowBlur=7;
-        ctx.strokeStyle='rgba('+r+','+g+','+b+',0.85)';
-        ctx.lineWidth=1.5;
-        ctx.lineCap='square';
-        ctx.beginPath();
-        ctx.moveTo(vx0, LINE_CENTER);
-        ctx.lineTo(vx1, LINE_CENTER);
-        ctx.stroke();
+        ctx.fillStyle='rgba('+r+','+g+','+b+',0.72)';
+        ctx.fillRect(vx0, TICK_TOP, vx1-vx0, H_T);
         ctx.restore();
       });
 

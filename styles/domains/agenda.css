@@ -435,8 +435,8 @@
   -webkit-box-orient: vertical;
   margin: 0 0 6px;
 }
-.agd-card.agd-active .agd-card-title { font-size: .88rem; }
-.agd-card:not(.agd-active) .agd-card-title { font-size: .76rem; }
+.agd-card.agd-active .agd-card-title { font-size: .82rem; }
+.agd-card:not(.agd-active) .agd-card-title { font-size: .71rem; }
 
 /* Project link row — full text, wraps */
 .agd-card-proj {
@@ -466,7 +466,7 @@
 }
 .agd-card-client svg { flex-shrink: 0; opacity: .5; margin-top: 1px; }
 .agd-card-client-name {
-  font-size: .7rem;
+  font-size: .62rem;
   font-weight: 500;
   color: var(--agd-card-soft);
   word-break: break-word;
@@ -474,10 +474,11 @@
   line-height: 1.35;
 }
 
-/* Tipo chip — top of card, flow */
+/* Tipo chip — pinned to the very top of card body, above the spacer */
 .agd-card-tipo {
   display: inline-block;
   align-self: center;
+  order: -1;
   font-family: var(--font-headline);
   font-size: 8px;
   letter-spacing: .12em;
@@ -488,7 +489,7 @@
   color: rgba(255,255,255,.65);
   line-height: 1.6;
   white-space: nowrap;
-  margin-bottom: 7px;
+  margin-bottom: 0;
   flex-shrink: 0;
 }
 .agd-paper .agd-card-tipo {
@@ -538,37 +539,34 @@
   padding-top: 6px;
 }
 .agd-card-date {
-  font-size: .68rem;
+  font-size: .58rem;
   color: var(--agd-card-soft);
   font-weight: 500;
   letter-spacing: .01em;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 .agd-card-hour {
-  font-size: .68rem;
+  font-size: .58rem;
   color: var(--agd-card-soft);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 .agd-card-datetime--notime { justify-content: center; }
 
-/* ── Card footer — dark band at bottom ─────────── */
+/* ── Card footer — no background bar, chips only ── */
 .agd-card-foot {
   flex-shrink: 0;
-  min-height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 12px;
+  padding: 4px 12px 10px;
   position: relative;
   z-index: 1;
-  background: rgba(0,0,0,0.52);
-  color: rgba(255,255,255,0.88);
 }
 
 /* Timer label inside footer — red */
@@ -586,17 +584,21 @@
 .agd-ft-active { color: #ff4040; font-weight: 700; }
 .agd-ft-past { color: #ff4040; }
 
-/* Status chips — text only, no border or background */
+/* Status chips — bordered pill matching tipo chip style */
 .agd-ft-chip {
   font-family: var(--font-headline);
-  font-size: 9px;
-  letter-spacing: .13em;
+  font-size: 8px;
+  letter-spacing: .12em;
   text-transform: uppercase;
   line-height: 1.6;
   white-space: nowrap;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: rgba(0,0,0,.28);
 }
 .agd-ft-today { color: #FCA311; }
-.agd-ft-late  { color: #ff4040; }
+.agd-ft-late  { color: #ff5050; }
 
 /* ── Long-press action overlay ─────────────────── */
 .agd-card-actions {
