@@ -99,7 +99,7 @@
   /* ===== CARD PROJETOS 02 — lista única, same material as biblioteca ===== */
   .job.job2{
     position:relative;display:flex;flex-direction:column;
-    height:160px;overflow:hidden;border-radius:var(--r);margin-bottom:12px;
+    overflow:hidden;border-radius:var(--r);margin-bottom:12px;
     background:linear-gradient(135deg, rgba(255,255,255,.05), transparent 45%), rgba(26,27,29,.62);
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid rgba(255,255,255,.10);color:#F5F5F3;
@@ -111,7 +111,7 @@
   .job.job2:active{transform:scale(.97)}
 
   /* corpo: foto + título + contato */
-  .j2-body{flex:1;overflow:hidden;display:flex;align-items:center;gap:12px;padding:14px 14px 0}
+  .j2-body{flex:1;overflow:hidden;display:flex;align-items:center;gap:12px;padding:10px 12px}
   .j2-body .client-avatar{width:52px;height:52px;border-radius:calc(var(--r) - 2px);flex:none}
   .j2-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
   .j2-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;
@@ -153,20 +153,23 @@
   .j2-act-btn svg{width:var(--ico-md);height:var(--ico-md)}
   .j2-act-btn.j2-arch{border-color:rgba(168,92,96,.35);color:#C08A8E}
   .j2-act-btn.j2-done{border-color:rgba(70,130,108,.35);color:#8FAFA0}
-  /* ===== Cards do Histórico (concluídos/arquivados) — versão simples,
-     reaproveitada de htmlCardArquivado(); não faz parte da listagem
-     principal, mantém o layout próprio (avatar/cliente/tipo + estado). */
+  /* ===== Cards do Histórico (concluídos/arquivados) ===== */
+  .job.hist-card{
+    background:var(--card-bg);border:1px solid var(--card-border);
+    border-radius:var(--r);padding:14px 16px;margin-bottom:10px;
+    box-shadow:var(--card-shadow);cursor:default;
+  }
   .job-top{display:flex;justify-content:space-between;align-items:center;gap:var(--sp-3)}
   .job-top-l{display:flex;align-items:center;gap:11px;min-width:0}
-  .job-client{font-size:var(--text-lg);font-weight:500}
-  .job-type{font-size:var(--text-12h);color:var(--neutral);margin-top:1px}
+  .job-client{font-size:var(--text-base);font-weight:600;color:var(--ink)}
+  .job-type{font-size:var(--text-sm);color:var(--ink-soft);margin-top:2px}
   .state{font-size:var(--text-11);font-weight:600;letter-spacing:.03em;padding:4px 9px;text-transform:uppercase;
     border-radius:var(--r);white-space:nowrap}
-  .s-active{background:rgba(79,161,137,.28);color:#F5F5F3}
-  .s-wait{background:rgba(203,162,106,.28);color:#F5F5F3}
-  .s-deliver{background:rgba(79,161,137,.22);color:#F5F5F3}
-  .s-done{background:rgba(255,255,255,.10);color:var(--neutral)}
-  .job-next{display:flex;align-items:center;gap:var(--sp-2);margin-top:12px;padding-top:12px;border-top:1px solid var(--line-soft)}
+  .s-active{background:rgba(79,161,137,.22);color:#8FAFA0}
+  .s-wait{background:rgba(203,162,106,.18);color:#C9A96A}
+  .s-deliver{background:rgba(79,161,137,.18);color:#8FAFA0}
+  .s-done{background:rgba(255,255,255,.08);color:var(--ink-soft)}
+  .job-next{display:flex;align-items:center;gap:var(--sp-2);margin-top:10px;padding-top:10px;border-top:1px solid var(--line-soft)}
   .job-next .nd{width:6px;height:6px;border-radius:50%;flex:none}
   .job-next span{font-size:var(--text-sm);color:var(--ink-soft)}
 
