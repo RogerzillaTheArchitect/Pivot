@@ -1496,14 +1496,7 @@
      ============================================================ */
   const SUPABASE_URL = 'https://erqdsaczclnqbyxjahgs.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-    auth: {
-      storage: window.localStorage,
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  });
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
   const PIVOT_VERSAO='1.0.0';
   let currentWorkspaceId = null;
