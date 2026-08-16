@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="theme-color" content="#F7F2E5">
 <title>Pivot · gere trabalhos do início ao fim</title>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='13' fill='%2315261C'/%3E%3Cpath d='M11 25L19 35L38 8' stroke='%231FA463' stroke-width='8' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,7 +113,7 @@
             <a class="demo-button" href="#tutorial">Ver demonstração <span class="play" aria-hidden="true">▶</span></a>
           </div>
         </div>
-        <div class="hero-image-wrap"><img id="hero-img" src="assets/landing-hero-balance.png" alt=""></div>
+        <div class="hero-image-wrap"><img id="hero-img" src="assets/landing-hero-new.jpg" alt=""></div>
       </div>
     </section>
 
@@ -177,17 +177,17 @@
 (function(){
   var campaigns = [
     {
-      img: 'assets/landing-hero-desktop.jpg.png',
+      img: 'assets/landing-hero-new.jpg',
       title: 'Seu escritório não deveria parecer um problema para resolver.',
       desc: 'Você abriu o computador para trabalhar.\nNão para procurar arquivos, responder notificações espalhadas e tentar lembrar onde cada informação ficou.\nO Pivots reúne tudo em um único fluxo de trabalho.'
     },
     {
-      img: 'assets/landing-hero-desktop.jpg.png',
+      img: 'assets/landing-hero-new.jpg',
       title: 'Contratos, clientes e projetos. Tudo no mesmo lugar.',
       desc: 'Chega de WhatsApp, e-mail, Drive e planilha ao mesmo tempo.\nO Pivots centraliza desde o primeiro contato até a entrega final, em um único fluxo pensado para quem presta serviços.'
     },
     {
-      img: 'assets/landing-hero-desktop.jpg.png',
+      img: 'assets/landing-hero-new.jpg',
       title: 'Menos aplicativos. Mais trabalho.',
       desc: 'Do briefing ao pagamento, da proposta ao contrato assinado.\nO Pivots elimina as ferramentas avulsas e devolve o que você precisa: foco para trabalhar.'
     }
@@ -239,10 +239,19 @@
     dots.append(dot);
   });
 
+  var slideImages = ['assets/showcase-painel.jpg'];
+  var frontCard = document.querySelector('#landing-page #product-card');
+
   function renderSlide(index){
     current = (index + slides.length) % slides.length;
     var slide = slides[current];
     title.textContent = slide[0]; lead.textContent = slide[1]; description.textContent = slide[2];
+    if(frontCard){
+      var img = slideImages[current] || '';
+      frontCard.style.backgroundImage = img ? 'url('+img+')' : '';
+      frontCard.style.backgroundSize = img ? 'cover' : '';
+      frontCard.style.backgroundPosition = img ? 'center top' : '';
+    }
     fitSlideTypography();
     [].slice.call(dots.children).forEach(function(dot, dotIndex){ dot.classList.toggle('active', dotIndex === current); });
   }
@@ -10128,35 +10137,12 @@
     saveMetas();
     renderMonthTicker();
   }
-  function mostrarAcoesDespesa(id){
-    const c=custosData[id]; if(!c) return;
-    const html=
-      '<div class="fin-act-grid">'+
-        '<button class="fin-act-btn" onclick="editarDespesa(\''+id+'\')">'+
-          '<span class="fin-act-ico">'+ICON_LAPIS+'</span>'+
-          '<span>'+t('action.edit')+'</span>'+
-        '</button>'+
-        '<button class="fin-act-btn fin-act-del" onclick="removerCusto(\''+id+'\')">'+
-          '<span class="fin-act-ico">'+ICON_LIXO+'</span>'+
-          '<span>'+t('action.remove')+'</span>'+
-        '</button>'+
-      '</div>';
-    openInfo(escapeHtml(c.descricao), html, abrirDespesas);
-  }
-  function mostrarAcoesReceita(id){
-    const r=receitasData[id]; if(!r) return;
-    const html=
-      '<div class="fin-act-grid">'+
-        '<button class="fin-act-btn" onclick="editarReceitaManual(\''+id+'\')">'+
-          '<span class="fin-act-ico">'+ICON_LAPIS+'</span>'+
-          '<span>'+t('action.edit')+'</span>'+
-        '</button>'+
-        '<button class="fin-act-btn fin-act-del" onclick="removerReceita(\''+id+'\')">'+
-          '<span class="fin-act-ico">'+ICON_LIXO+'</span>'+
-          '<span>'+t('action.remove')+'</span>'+
-        '</button>'+
-      '</div>';
-    openInfo(escapeHtml(r.descricao), html, abrirReceitas);
+  function toggleFinAcoes(id,evt){
+    if(evt) evt.stopPropagation();
+    const el=document.getElementById('fid-'+id);
+    if(!el) return;
+    document.querySelectorAll('.fin-item-row.open').forEach(function(o){if(o!==el)o.classList.remove('open');});
+    el.classList.toggle('open');
   }
   function abrirFormNovaDespesa(){
     const hoje=new Date().toISOString().slice(0,10);
@@ -10186,11 +10172,17 @@
     if(!wrap) return;
     const lista=Object.values(custosData).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
     wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="card fin-item fin-item-row" onclick="mostrarAcoesDespesa(\''+c.id+'\')">'+
-        '<div class="fin-item-title">'+escapeHtml(c.descricao)+'</div>'+
-        '<div class="fin-item-date">'+(c.data?c.data.split('-').reverse().join('/'):'')+'</div>'+
-        '<div class="fin-item-sub">'+(c.categoria?escapeHtml(c.categoria):'')+'</div>'+
-        '<div class="fin-item-valor">'+fmtMoney(c.valor)+'</div>'+
+      '<div class="card fin-item fin-item-row" id="fid-'+c.id+'" onclick="toggleFinAcoes(\''+c.id+'\',event)">'+
+        '<div class="fin-item-main">'+
+          '<div class="fin-item-title">'+escapeHtml(c.descricao)+'</div>'+
+          '<div class="fin-item-valor">'+fmtMoney(c.valor)+'</div>'+
+          '<div class="fin-item-date">'+(c.data?c.data.split('-').reverse().join('/'):'')+'</div>'+
+          '<div class="fin-item-sub">'+(c.categoria?escapeHtml(c.categoria):'')+'</div>'+
+        '</div>'+
+        '<div class="fin-item-acts">'+
+          '<button class="fin-act-btn" onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')"><span class="fin-act-ico">'+ICON_LAPIS+'</span><span>'+t('action.edit')+'</span></button>'+
+          '<button class="fin-act-btn fin-act-del" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')"><span class="fin-act-ico">'+ICON_LIXO+'</span><span>'+t('action.remove')+'</span></button>'+
+        '</div>'+
       '</div>'
     ).join('') : '<p class="u-label-nd u-p-10-2">'+t('cost.empty')+'</p>';
   }
@@ -10274,7 +10266,18 @@
         /* lançamento automático (parcela de contrato) — só leitura */
         return '<div class="card fin-item fin-item-auto">'+corpo+'</div>';
       }
-      return '<div class="card fin-item fin-item-row" onclick="mostrarAcoesReceita(\''+it.id+'\')">'+corpo+'</div>';
+      return '<div class="card fin-item fin-item-row" id="fid-'+it.id+'" onclick="toggleFinAcoes(\''+it.id+'\',event)">'+
+        '<div class="fin-item-main">'+
+          '<div class="fin-item-title">'+escapeHtml(it.desc)+'</div>'+
+          '<div class="fin-item-valor">'+fmtMoney(it.valor)+'</div>'+
+          '<div class="fin-item-date">'+(it.data?it.data.split('-').reverse().join('/'):'')+'</div>'+
+          '<div class="fin-item-sub">'+escapeHtml(it.projeto||'')+'</div>'+
+        '</div>'+
+        '<div class="fin-item-acts">'+
+          '<button class="fin-act-btn" onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')"><span class="fin-act-ico">'+ICON_LAPIS+'</span><span>'+t('action.edit')+'</span></button>'+
+          '<button class="fin-act-btn fin-act-del" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')"><span class="fin-act-ico">'+ICON_LIXO+'</span><span>'+t('action.remove')+'</span></button>'+
+        '</div>'+
+      '</div>';
     }).join('');
   }
   function pushHistory(job,text,tipo){
