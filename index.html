@@ -4686,6 +4686,8 @@
     pintarMetricaOp('executados', s.eventosExecutadosEsteMes||0, eventosTot, String(s.eventosExecutadosEsteMes||0), String(eventosTot));
     /* Concluídos: entregas do mês sobre total de trabalhos do mês */
     pintarMetricaOp('concluidos', s.entreguesPorDataEsteMes||0, totalJobs, String(s.entreguesPorDataEsteMes||0), String(totalJobs));
+    /* card ropm-* agora vive no dashboard — relatórios extintos */
+    if(typeof renderRelOpBars==='function') renderRelOpBars(s);
     /* s.recebido inclui as entradas manuais avulsas (ver calcularEstatisticasMes) —
        separadas aqui só para o card Financeiro do Dashboard mostrar "Extras" como
        categoria própria, sem mexer no que Relatórios entende por "Recebido". */
