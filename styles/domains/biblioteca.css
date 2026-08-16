@@ -111,13 +111,15 @@
   span.bib-seal{display:inline-flex;align-items:center;height:22px;box-sizing:border-box;padding:0 var(--sp-2);font-size:var(--text-2xs);gap:5px;border-radius:3px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
   span.bib-seal .sl-ic{width:12px;height:12px}
 
-  /* ===== lista de contratos: masonry 2 colunas ===== */
-  .bib-grid{display:flex;align-items:flex-start;gap:10px;width:100%}
-  .bib-col{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+  /* ===== lista de contratos: coluna única ===== */
+  .bib-grid{display:flex;flex-direction:column;gap:10px;width:100%}
   .bib-empty{font-size:var(--text-sm);color:var(--bib-ink-faint);margin-top:14px}
 
   /* ===== cards — placas do MESMO material do Header/Footer ===== */
-  .bib-card{position:relative;display:flex;flex-direction:column;border-radius:var(--r);padding:14px 15px 12px;cursor:pointer;
+  .bc-body{flex:1;overflow:hidden;padding:13px 15px 0;display:flex;flex-direction:column}
+  .bc-foot{flex:none;height:40px;padding:0 15px;display:flex;align-items:center;background:rgba(255,255,255,.05)}
+  .bc-foot .bc-meta{flex:1;min-width:0}
+  .bib-card{position:relative;display:flex;flex-direction:column;height:160px;overflow:hidden;border-radius:var(--r);cursor:pointer;
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid var(--bib-mat-line);color:var(--bib-ink);
@@ -128,7 +130,7 @@
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
   .bib-card .bc-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;font-size:var(--text-md);font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em}
   .bib-card .bc-cat{font-size:var(--text-2xs);font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--bib-brass-ink);margin:4px 0 8px}
-  .bib-card .bc-desc{font-size:var(--text-12);color:var(--bib-ink-soft);line-height:1.45}
+  .bib-card .bc-desc{font-size:var(--text-12);color:var(--bib-ink-soft);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .bib-card .bc-sep{border:none;border-top:1px solid var(--bib-mat-line);margin:10px 0 8px}
   .bib-card .bc-meta{display:flex;align-items:center;justify-content:space-between;gap:var(--sp-2);font-size:var(--text-11);color:var(--bib-ink-faint);font-weight:400}
   .bib-card .bc-meta-l{display:flex;align-items:center;gap:7px;flex-wrap:nowrap;min-width:0;flex:1}
@@ -136,7 +138,8 @@
   .bc-bdg{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;flex:none;color:var(--bib-ink-soft)}
   .bc-bdg>svg{width:100%;height:100%;display:block;overflow:visible}
   .bc-bdg-lang{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;
-    font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--bib-ink-soft);flex:none;line-height:1}
+    font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--bib-ink-soft);flex:none;line-height:1;
+    border-radius:50%;border:1.5px solid currentColor}
   .bc-bdg.s-oficial{color:var(--bib-silver-ink)}
   .bc-bdg.s-juridico{color:var(--bib-wine-ink)}
   .bc-bdg.s-recomendados{color:var(--bib-brass-ink)}
