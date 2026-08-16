@@ -996,7 +996,7 @@
 
   <!-- ===== FAB MENU ===== -->
   <div class="fab-menu" id="fab-menu">
-    <div class="fab-menu-backdrop" onclick="closeFabMenu()"></div>
+    <div class="fab-menu-backdrop" onclick="event.stopPropagation();closeFabMenu()"></div>
     <div class="fab-menu-items">
       <button class="fab-menu-btn" onclick="closeFabMenu();openSheetDirect('trabalho')"><span class="nav-ico ico-arquivos"></span><span data-t="sheet.job">Trabalho</span></button>
       <button class="fab-menu-btn" onclick="closeFabMenu();openSheetDirect('tarefa')"><span class="nav-ico ico-contrato"></span><span data-t="sheet.task">Tarefa</span></button>
@@ -4163,7 +4163,7 @@
     openInfo(t('settings.projectedLabel'), `
       <div class="field"><label>${t('settings.projectedLabel')}</label><input type="number" min="0" id="meta-receita-input" value="${m.receita}" placeholder="4300"></div>
       <p class="u-xs-nd u-m-n6-2-14">${t('settings.ringHint')}</p>
-      <button class="btn primary u-w-full" onclick="guardarMetaReceita()">${t('action.saveGoals')}</button>`);
+      <button class="btn sec u-w-full" onclick="guardarMetaReceita()">${t('action.saveGoals')}</button>`);
   }
   function guardarMetaReceita(){
     const r=parseFloat(document.getElementById('meta-receita-input').value)||0;
@@ -10087,11 +10087,23 @@
      reaproveitando o mesmo swipe do radar (.radar-card-wrap/ativarSwipeRadar)
      — esquerda revela Excluir, direita revela Editar. ===== */
   function abrirDespesas(){
-    const html='<button class="btn sec u-w-full u-mb-8" onclick="abrirDefinirLimiteGastos()">'+t('settings.limitLabel')+'</button>'+
-      '<button class="btn primary u-w-full u-mb-14" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
+    const m=metasMesAtual();
+    const html=
+      '<div class="exp-limit-row">'+
+        '<span class="exp-limit-lbl">'+t('settings.limitLabel')+'</span>'+
+        '<input type="number" min="0" id="exp-limit-input" class="exp-limit-inp" value="'+(m.gastos||'')+'" placeholder="500" onchange="salvarLimiteInline()" onblur="salvarLimiteInline()">'+
+      '</div>'+
+      '<button class="btn btn-warn u-w-full u-mb-14" onclick="abrirFormNovaDespesa()">+ '+t('reports.addExpense')+'</button>'+
       '<div id="exp-lista"></div>';
     openInfo(t('reports.expensesTitle'), html);
     renderDespesasLista();
+  }
+  function salvarLimiteInline(){
+    const inp=document.getElementById('exp-limit-input');
+    if(!inp) return;
+    metasMesAtual().gastos=parseFloat(inp.value)||0;
+    saveMetas();
+    renderMonthTicker();
   }
   function abrirFormNovaDespesa(){
     const hoje=new Date().toISOString().slice(0,10);
@@ -10121,18 +10133,17 @@
     if(!wrap) return;
     const lista=Object.values(custosData).sort((a,b)=>(b.data||'').localeCompare(a.data||''));
     wrap.innerHTML = lista.length ? lista.map(c=>
-      '<div class="radar-card-wrap">'+
-        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
-        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
-        '<div class="card radar-card fin-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarDespesa(\''+c.id+'\')">'+
-          '<div class="fin-item-title">'+escapeHtml(c.descricao)+'</div>'+
-          '<div class="fin-item-date">'+(c.data?c.data.split('-').reverse().join('/'):'')+'</div>'+
-          '<div class="fin-item-sub">'+(c.categoria?escapeHtml(c.categoria):'')+'</div>'+
-          '<div class="fin-item-valor">'+fmtMoney(c.valor)+'</div>'+
+      '<div class="card fin-item fin-item-act">'+
+        '<div class="fin-item-title">'+escapeHtml(c.descricao)+'</div>'+
+        '<div class="fin-item-date">'+(c.data?c.data.split('-').reverse().join('/'):'')+'</div>'+
+        '<div class="fin-item-sub">'+(c.categoria?escapeHtml(c.categoria):'')+'</div>'+
+        '<div class="fin-item-valor">'+fmtMoney(c.valor)+'</div>'+
+        '<div class="fin-item-acts">'+
+          '<button onclick="event.stopPropagation();editarDespesa(\''+c.id+'\')">'+ICON_LAPIS+'</button>'+
+          '<button class="del" onclick="event.stopPropagation();removerCusto(\''+c.id+'\')">'+ICON_LIXO+'</button>'+
         '</div>'+
       '</div>'
     ).join('') : '<p class="u-label-nd u-p-10-2">'+t('cost.empty')+'</p>';
-    ativarSwipeRadar();
   }
   function editarDespesa(id){
     const c=custosData[id]; if(!c) return;
@@ -10211,16 +10222,17 @@
           '<div class="fin-item-sub">'+escapeHtml(it.projeto||'')+'</div>'+
           '<div class="fin-item-valor">'+fmtMoney(it.valor)+'</div>';
       if(!it.manual){
-        /* lançamento automático (parcela de contrato) — sem swipe, sem editar/excluir */
+        /* lançamento automático (parcela de contrato) — só leitura */
         return '<div class="card fin-item fin-item-auto">'+corpo+'</div>';
       }
-      return '<div class="radar-card-wrap">'+
-        '<div class="radar-swipe-actions left"><button class="radar-swipe-btn editar" onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')">'+ICON_LAPIS+t('action.edit')+'</button></div>'+
-        '<div class="radar-swipe-actions right"><button class="radar-swipe-btn arquivar" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')">'+ICON_LIXO+t('action.remove')+'</button></div>'+
-        '<div class="card radar-card fin-item" onclick="if(this.closest(\'.radar-card-wrap\').classList.contains(\'active\')){event.stopPropagation();return;} editarReceitaManual(\''+it.id+'\')">'+corpo+'</div>'+
+      return '<div class="card fin-item fin-item-act">'+
+        corpo+
+        '<div class="fin-item-acts">'+
+          '<button onclick="event.stopPropagation();editarReceitaManual(\''+it.id+'\')">'+ICON_LAPIS+'</button>'+
+          '<button class="del" onclick="event.stopPropagation();removerReceita(\''+it.id+'\')">'+ICON_LIXO+'</button>'+
+        '</div>'+
       '</div>';
     }).join('');
-    ativarSwipeRadar();
   }
   function pushHistory(job,text,tipo){
     job.history=job.history||[];
@@ -16189,8 +16201,8 @@
       const origBadge='<span class="bc-bdg s-'+origKey+'">'+(_bdgIco[origKey]||_bdgIco.oficial)+'</span>';
       const langBadge='<span class="bc-bdg-lang">'+langTag+'</span>';
       const hexN=i.numBlocos?String(i.numBlocos):'';
-      const hexFs=hexN.length<=1?7:hexN.length<=2?6:5;
-      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="7" width="15" height="15" rx="2"/><rect x="7" y="1" width="15" height="15" rx="2" fill="currentColor" fill-opacity=".12"/><text x="14.5" y="8.5" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
+      const hexFs=hexN.length<=1?8:hexN.length<=2?7:6;
+      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 22 22"><rect x="1" y="6" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="8" y="1" width="13" height="13" rx="2" fill="#111111"/><rect x="8" y="1" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><text x="14.5" y="7.5" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="800" fill="currentColor">'+hexN+'</text></svg></span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-body">'+
@@ -16304,12 +16316,9 @@
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    const _icoX='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>';
-    const _fechar={pt:'Fechar',en:'Close',es:'Cerrar'}[LANG]||'Fechar';
     let dockHtml='';
     if(!it.onclick) dockHtml+='<button class="idb" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')"><div class="idb-ico">'+BIB_ICON_EYE+'</div><span class="idb-label">'+t('library.viewBlock')+'</span></button>';
     dockHtml+='<button class="idb" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'"><div class="idb-ico">'+BIB_ICON_ARROW+'</div><span class="idb-label">'+t('library.import')+'</span></button>';
-    dockHtml+='<button class="idb" onclick="closeInfo()"><div class="idb-ico">'+_icoX+'</div><span class="idb-label">'+_fechar+'</span></button>';
     openInfo(it.titulo, html, undefined, 'bib-title-font', dockHtml);
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
