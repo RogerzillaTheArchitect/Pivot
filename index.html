@@ -782,7 +782,6 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
               <span data-t="builder.tutorialBtn">Tutorial</span>
             </button>
-            <button class="btn soft save-tpl" id="save-tpl-btn" data-t="action.save" onclick="guardarBuilderContexto()">Guardar</button>
           </div>
         </div>
 
@@ -11809,8 +11808,8 @@
     builderTabAtual=tab;
     document.getElementById('builder-tab-btn-estrutura').classList.toggle('on', tab==='estrutura');
     document.getElementById('builder-tab-btn-variaveis').classList.toggle('on', tab==='variaveis');
-    document.getElementById('builder-tab-content-estrutura').style.display = tab==='estrutura' ? '' : 'none';
-    document.getElementById('builder-tab-content-variaveis').style.display = tab==='variaveis' ? '' : 'none';
+    document.getElementById('builder-tab-content-estrutura').style.display = tab==='estrutura' ? 'block' : 'none';
+    document.getElementById('builder-tab-content-variaveis').style.display = tab==='variaveis' ? 'block' : 'none';
   }
   /* Tutorial deixou de ficar sempre visível no topo do editor — agora é um
      modal (openInfo) sob demanda, reaproveitando as 3 dicas que antes
@@ -16084,19 +16083,24 @@
     if((item.avaliacao||0)>=4.7) badges.push(bibOtag('recomendados', t('library.origin.recommended')));
     return badges;
   }
-  function bibSetDropdownBtn(id, label, ativo){
+  function bibSetDropdownBtn(id, label, ativo, icon){
     const btn=document.getElementById(id);
     if(!btn) return;
     const check='<svg class="dd-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
     btn.classList.toggle('on', ativo);
-    btn.innerHTML='<span>'+escapeHtml(label)+'</span>'+check;
+    const icoHtml=icon?'<svg class="bib-filter-ico" viewBox="0 0 24 24" fill="currentColor">'+icon+'</svg>':'';
+    btn.innerHTML=icoHtml+'<span>'+escapeHtml(label)+'</span>'+check;
   }
   function bibAtualizarBotoesFiltro(){
     const catLabel = bibCategoriaSel ? (bibSegmentoSel ? bibCategoriaSel+' · '+bibSegmentoSel : bibCategoriaSel) : t('library.facet.category');
-    bibSetDropdownBtn('bib-cat-btn', catLabel, !!bibCategoriaSel);
-    bibSetDropdownBtn('bib-sort-btn', bibOrdenacao!=='usos'?t(BIB_ORDENACOES.find(([k])=>k===bibOrdenacao)[1]):t('library.sortLabelShort'), bibOrdenacao!=='usos');
-    bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel);
-    bibSetDropdownBtn('bib-origem-btn', bibOrigemSel.size ? [...bibOrigemSel].map(k=>t(BIB_ORIGENS.find(o=>o.key===k).labelKeyShort||BIB_ORIGENS.find(o=>o.key===k).labelKey)).join(', ') : t('library.facet.origin'), bibOrigemSel.size>0);
+    const ICO_SORT='<path d="M3,13H15V11H3M3,6V8H21V6M3,18H9V16H3V18Z"/>';
+    const ICO_LANG='<path d="M12.87,15.07L10.33,12.56L10.36,12.53C12.1,10.59 13.34,8.36 14.07,6H17V4H10V2H8V4H1V6H12.17C11.5,7.92 10.44,9.75 9,11.35C8.07,10.32 7.3,9.19 6.69,8H4.69C5.42,9.63 6.42,11.17 7.67,12.56L2.58,17.65L4,19L9,14L12.11,17.11L12.87,15.07M18.5,10H16.5L12,22H14L15.12,19H19.87L21,22H23L18.5,10M15.88,17L17.5,12.67L19.12,17H15.88Z"/>';
+    const ICO_CAT='<path d="M21.41,11.58L12.41,2.58C12.05,2.22 11.55,2 11,2H4C2.89,2 2,2.89 2,4V11C2,11.55 2.22,12.05 2.59,12.42L11.59,21.42C11.95,21.78 12.45,22 13,22C13.55,22 14.05,21.78 14.41,21.41L21.41,14.41C21.78,14.05 22,13.55 22,13C22,12.44 21.77,11.94 21.41,11.58M13,20L4,11V4H11L20,13M6.5,5A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 6.5,8A1.5,1.5 0 0,1 5,6.5A1.5,1.5 0 0,1 6.5,5Z"/>';
+    const ICO_ORIG='<path d="M10,17L5,12L6.41,10.58L10,14.17L17.59,6.58L19,8M12,1L3,5V11C3,16.55 6.84,21.74 12,23C17.16,21.74 21,16.55 21,11V5L12,1M12,3.18L19,6.3V11C19,15.5 16.04,19.8 12,21.1C7.96,19.8 5,15.5 5,11V6.3L12,3.18Z"/>';
+    bibSetDropdownBtn('bib-cat-btn', catLabel, !!bibCategoriaSel, ICO_CAT);
+    bibSetDropdownBtn('bib-sort-btn', bibOrdenacao!=='usos'?t(BIB_ORDENACOES.find(([k])=>k===bibOrdenacao)[1]):t('library.sortLabelShort'), bibOrdenacao!=='usos', ICO_SORT);
+    bibSetDropdownBtn('bib-idioma-btn', bibIdiomaSel?bibNomeIdioma(bibIdiomaSel):t('library.facet.language'), !!bibIdiomaSel, ICO_LANG);
+    bibSetDropdownBtn('bib-origem-btn', bibOrigemSel.size ? [...bibOrigemSel].map(k=>t(BIB_ORIGENS.find(o=>o.key===k).labelKeyShort||BIB_ORIGENS.find(o=>o.key===k).labelKey)).join(', ') : t('library.facet.origin'), bibOrigemSel.size>0, ICO_ORIG);
   }
   function renderBiblioteca(){
     const banner=document.getElementById('bib-pick-banner');
@@ -16134,7 +16138,7 @@
       const langBadge='<span class="bc-bdg-lang">'+langTag+'</span>';
       const hexN=i.numBlocos?String(i.numBlocos):'';
       const hexFs=hexN.length<=1?6:hexN.length<=2?5:4;
-      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="11" height="11" rx="1"/><rect x="6" y="6" width="11" height="11" rx="1"/><text x="9" y="9" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
+      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="11" height="11" rx="1"/><rect x="6" y="6" width="11" height="11" rx="1"/><text x="11.5" y="11.5" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
         '<div class="bc-body">'+
@@ -16164,15 +16168,10 @@
        jurídica do bloco (obrigatório cobre mais que opcional) fica visível
        de forma imediata em vez de uma barra de progresso genérica. */
     if(!item.blocks || !item.blocks.length) return '<p class="u-sm-nd u-mb-12">'+t('library.structureUnavailable')+'</p>';
-    const N=20;
-    const PESOS_PCT={REQUIRED:100, CONDITIONAL:70, OPTIONAL:45};
     return '<div class="bib-struct-list">'+item.blocks.map(b=>{
-      const pct=PESOS_PCT[b.status]||45;
-      const cheios=Math.round(pct/100*N);
       const tagKey = b.status==='REQUIRED' ? 'library.blockRequired' : b.status==='CONDITIONAL' ? 'library.blockConditional' : 'library.blockOptional';
       const icone = b.status==='REQUIRED' ? BIB_ICON_REQUIRED : b.status==='CONDITIONAL' ? BIB_ICON_CONDITIONAL : BIB_ICON_OPTIONAL;
-      const segs=Array.from({length:N},(_,i)=>'<span class="bib-struct-seg'+(i<cheios?' is-filled':'')+'"></span>').join('');
-      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div><div class="bib-struct-track" style="--fill:'+pct+'">'+segs+'</div></div>';
+      return '<div class="bib-struct-row"><div class="lbl">'+escapeHtml(blockName({key:null,name:b.name}))+' <span class="bib-struct-tag">'+icone+t(tagKey)+'</span></div></div>';
     }).join('')+'</div>';
   }
   /* "Visualizar" — mostra TODOS os blocos do contrato (nome + cláusulas) no
@@ -16205,8 +16204,9 @@
         '<h2 class="vis-title">'+escapeHtml(titulo||(it&&it.titulo)||'')+'</h2>'+
         '<div class="vis-head">'+head.join('')+'</div>'+
         '<div class="vis-card">'+blocosHtml+'</div>'+
-        '<button class="btn primary u-w-full" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+BIB_ICON_ARROW+t('library.import')+'</button>'+
+        '<button class="btn soft u-w-full" onclick="closeInfo();importarModeloBiblioteca(\''+rawId+'\',\''+(lang||LANG)+'\')">'+BIB_ICON_ARROW+t('library.import')+'</button>'+
       '</div>';
+    document.getElementById('infoSheet').classList.add('vis-glass-mode');
   }
   /* Em modo de seleção de blocos/cláusulas (Builder → Adicionar Bloco/
      Cláusulas), a tela de detalhe do contrato (descrição, estrutura, tags,
@@ -16229,10 +16229,11 @@
     const fav=bibFavoritos.has(it.baseId);
     let html='';
     if(it.desc) html+='<p style="font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px">'+escapeHtml(it.desc)+'</p>';
-    const metricas=[bibBadgesItem(it).join('')+'<span class="vis-meta">'+(BIB_LANG_TAG[it.lang]||'')+'</span>'];
-    if(it.usos) metricas.push('<span class="vis-meta">'+it.usos+' '+t('library.recommendCount')+'</span>');
-    if(it.numBlocos) metricas.push('<span class="vis-meta">'+it.numBlocos+' '+t('library.blocksCount')+'</span>');
-    html+='<div class="vis-head u-mb-14">'+metricas.join('')+'</div>';
+    const favIconOnly='<button class="bib-fav-inline'+(fav?' on':'')+'" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></button>';
+    const chips=[bibBadgesItem(it).join('')+'<span class="vis-meta">'+(BIB_LANG_TAG[it.lang]||'')+'</span>'];
+    if(it.usos) chips.push('<span class="vis-meta">'+it.usos+' '+t('library.recommendCount')+'</span>');
+    if(it.numBlocos) chips.push('<span class="vis-meta">'+it.numBlocos+' '+t('library.blocksCount')+'</span>');
+    html+='<div class="vis-head u-mb-14"><div style="flex:1;display:flex;flex-wrap:wrap;gap:6px;align-items:center">'+chips.join('')+'</div>'+favIconOnly+'</div>';
     html+='<div class="plabel">'+t('library.protectedStructure')+'</div>';
     html+=bibEstruturaProtegidaHtml(it);
     /* tagsBusca mistura as tags reais com facetas internas de busca
@@ -16246,8 +16247,6 @@
        continua reservada para o filtro de busca. */
     const tagsExibidas=it.tags||[];
     if(tagsExibidas.length) html+='<div class="bc-tags u-mb-14">'+tagsExibidas.map(tg=>'<span class="bib-minitag">'+escapeHtml(tg)+'</span>').join('')+'</div>';
-    const iconFavBtn='<svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;vertical-align:-3px;margin-right:5px"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>';
-    html+='<button class="btn soft u-w-full u-mb-8" onclick="toggleFavEReabrirDetalhe(\''+it.baseId+'\',\''+it.id+'\')">'+iconFavBtn+(fav?t('library.removeFav'):t('library.addFav'))+'</button>';
     if(!it.onclick) html+='<button class="btn soft u-w-full u-mb-8" onclick="abrirVisualizarContratoCompleto(\''+it.rawId+'\',\''+it.lang+'\',\''+escapeHtml(it.titulo).replace(/'/g,"\\'")+'\')">'+BIB_ICON_EYE+t('library.viewBlock')+'</button>';
     /* Chega aqui só fora do modo de seleção de blocos/cláusulas (abrirItemBiblioteca
        roteia esses direto pros blocos, sem passar por este ecrã) — sobram o
@@ -16255,7 +16254,7 @@
     const usarOnclick = bibPickModeCallback
       ? "closeInfo();bibSelecionarParaDestino('"+it.rawId+"','"+it.lang+"')"
       : (it.onclick ? "closeInfo();"+it.onclick : "closeInfo();importarModeloBiblioteca('"+it.rawId+"','"+it.lang+"')");
-    html+='<button class="btn primary" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
+    html+='<button class="btn soft" style="width:100%" onclick="'+usarOnclick.replace(/"/g,'&quot;')+'">'+BIB_ICON_ARROW+t('library.import')+'</button>';
     openInfo(it.titulo, html, undefined, 'bib-title-font');
   }
   /* Favoritar dentro do detalhe não pode fechar o sheet (era o mesmo bug de
@@ -17255,6 +17254,7 @@
   /* ===== INFO SHEET — Perfil, Builder (funções reais e contidas) ===== */
   function openInfo(title, bodyHtml, onBack, titleClass){
     _omOpen('info', function(){
+      document.getElementById('infoSheet').classList.remove('vis-glass-mode');
       const titleEl=document.getElementById('infoTitle');
       titleEl.textContent=title;
       titleEl.className = titleClass||'';
