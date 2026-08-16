@@ -16150,19 +16150,18 @@
       const langBadge='<span class="bc-bdg-lang">'+langTag+'</span>';
       const hexN=i.numBlocos?String(i.numBlocos):'';
       const hexFs=hexN.length<=1?6:hexN.length<=2?5:4;
-      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9L13 2H5L1 9L5 16H13Z"/><text x="9" y="9" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
+      const blocksBadge=hexN?'<span class="bc-bdg"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="1" width="11" height="11" rx="1"/><rect x="6" y="6" width="11" height="11" rx="1"/><text x="9" y="9" text-anchor="middle" dominant-baseline="central" font-size="'+hexFs+'" font-weight="700" fill="currentColor" stroke="none">'+hexN+'</text></svg></span>':'';
       const favBtn='<div class="bib-fav'+(fav?' on':'')+'" onclick="event.stopPropagation();toggleFavBiblioteca(\''+i.baseId+'\')"><svg viewBox="0 0 24 24" fill="'+(fav?'currentColor':'none')+'" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg></div>';
       return '<div class="bib-card" onclick="abrirItemBiblioteca(\''+i.id+'\')">'+
-        '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
-        (catLabel?'<div class="bc-cat">'+catLabel+'</div>':'')+
-        '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
-        '<hr class="bc-sep">'+
-        '<div class="bc-meta"><div class="bc-meta-l">'+origBadge+langBadge+blocksBadge+'</div>'+favBtn+'</div>'+
+        '<div class="bc-body">'+
+          '<div class="bc-title">'+escapeHtml(i.titulo)+'</div>'+
+          (catLabel?'<div class="bc-cat">'+catLabel+'</div>':'')+
+          '<div class="bc-desc">'+escapeHtml(i.desc||'')+'</div>'+
+        '</div>'+
+        '<div class="bc-foot"><div class="bc-meta"><div class="bc-meta-l">'+origBadge+langBadge+blocksBadge+'</div>'+favBtn+'</div></div>'+
       '</div>';
     };
-    const _col1=[], _col2=[];
-    itens.forEach((it,idx)=>{(idx%2===0?_col1:_col2).push(_mkCard(it));});
-    wrap.innerHTML='<div class="bib-col">'+_col1.join('')+'</div><div class="bib-col">'+_col2.join('')+'</div>';
+    wrap.innerHTML=itens.map(_mkCard).join('');
   }
   function toggleFavBiblioteca(id){
     if(bibFavoritos.has(id)){ bibFavoritos.delete(id); showToast(t('library.unfavorited')); }
