@@ -76,7 +76,7 @@
 
   :focus-visible{outline:2px solid var(--brand);outline-offset:2px}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.69.1/dist/umd/supabase.min.js"></script>
 </head>
 <body>
 
@@ -1496,7 +1496,14 @@
      ============================================================ */
   const SUPABASE_URL = 'https://erqdsaczclnqbyxjahgs.supabase.co';
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_RzySKs0BZaaPzukXHD8S_A_o-VKt-nb';
-  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    auth: {
+      storage: window.localStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  });
 
   const PIVOT_VERSAO='1.0.0';
   let currentWorkspaceId = null;
@@ -16994,7 +17001,6 @@
     const itens=[...document.querySelectorAll('#ta-items .ta-item-input')]
       .map(el=>el.value.trim()).filter(Boolean).map(tx=>({t:tx,feito:false}));
     const horaVal=document.getElementById('ta-hora').value||null;
-    const duracaoMin=parseInt(document.getElementById('ta-duracao').value||'0',10)||0;
     let horaFimVal=null;
     if(horaVal&&duracaoMin>0){
       const [hh,mm]=horaVal.split(':').map(Number);
