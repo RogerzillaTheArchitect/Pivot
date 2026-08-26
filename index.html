@@ -10,7 +10,7 @@
 <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Pivot%22%2C%22short_name%22%3A%22Pivot%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23F7F2E5%22%2C%22theme_color%22%3A%22%2314532D%22%7D">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles/tokens.css">
 <link rel="stylesheet" href="styles/background.css">
 <link rel="stylesheet" href="styles/domains/landing.css">
@@ -4108,6 +4108,7 @@
 
   const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
   function go(v){
+    if(v==='relatorios') v='hoje';
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
       bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
       contatos:'perfil','contato-detalhe':'perfil'};
@@ -9314,7 +9315,7 @@
     sincronizarTogglesDashboard();
     const cfg=perfilData.dashboardCards||{};
     const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro!==false?'block':'none';
-    const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display=cfg.operacional?'block':'none';
+    const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display='none';
     renderDestaques();
     const destWrap=document.getElementById('dash-card-destaques');
     if(destWrap){ destWrap.style.display=cfg.destaques?'block':'none'; if(cfg.destaques) clonarCardParaDashboard('rel-anchor-destaques','dash-card-destaques'); }
