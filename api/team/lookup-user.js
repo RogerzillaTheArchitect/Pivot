@@ -2,7 +2,7 @@
  * POST /api/team/lookup-user
  * Body: { access_token, email }
  *
- * Procura se já existe uma conta Pivot com este email — usado no fluxo de
+ * Procura se já existe uma conta Pivots com este email — usado no fluxo de
  * "Adicionar Colaborador Externo" para confirmar que a pessoa já está
  * registada antes de configurar permissões. Exige sessão válida (qualquer
  * utilizador autenticado pode procurar, mas nunca vê mais do que
