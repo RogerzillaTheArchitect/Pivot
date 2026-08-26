@@ -18,7 +18,7 @@
 }
 #landing-page .brand img{ display:block; width:clamp(90px, 12vw, 120px); height:auto; }
 #landing-page .account-actions{ display:flex; align-items:center; gap:var(--sp-6); font-size:var(--text-12); white-space:nowrap; }
-#landing-page .account-actions > a:first-child{ opacity:.84; transition:opacity .2s; }
+#landing-page .account-actions > a:first-child{ opacity:.84; transition:opacity var(--dur-3); }
 #landing-page .account-actions > a:first-child:hover{ opacity:1; }
 #landing-page .outline-button{ padding:10px 24px; border:1px solid rgba(255,255,255,.52); border-radius:var(--r); white-space:nowrap; }
 
@@ -38,7 +38,7 @@
   border:1px solid rgba(255,255,255,.28); background:linear-gradient(135deg, rgba(255,255,255,.19), rgba(255,255,255,.055));
   box-shadow:inset 0 1px rgba(255,255,255,.22), 0 8px 22px rgba(0,0,0,.16);
   backdrop-filter:blur(13px); -webkit-backdrop-filter:blur(13px);
-  transition:transform .2s, background .2s, border-color .2s; cursor:pointer;
+  transition:transform var(--dur-3), background var(--dur-3), border-color var(--dur-3); cursor:pointer;
 }
 #landing-page .primary-button{ color:#f8f8f7; }
 #landing-page .demo-button{ color:rgba(255,255,255,.84); }
@@ -47,7 +47,7 @@
 #landing-page .play{ display:grid; place-items:center; width:17px; height:17px; border:1px solid #aaa; border-radius:50%; font-size:7px; }
 #landing-page .hero-image-wrap{ position:absolute!important; z-index:1; inset:0!important; height:auto!important; margin:0!important; order:0!important; }
 #landing-page .hero-image-wrap::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(14,16,18,.55) 0%, rgba(14,16,18,.18) 40%, rgba(14,16,18,.72) 100%); }
-#landing-page .hero-image-wrap img{ width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity .5s ease; }
+#landing-page .hero-image-wrap img{ width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity var(--dur-5) var(--ease-out); }
 
 /* ===== PRODUCT SHOWCASE (Seção 2) ===== */
 #landing-page .product-showcase{
@@ -78,19 +78,19 @@
   position:absolute; inset:0; border:1px solid rgba(255,255,255,.23); border-radius:var(--r);
   background:linear-gradient(145deg, rgba(57,61,65,.4), rgba(20,22,25,.84) 45%, rgba(10,11,13,.96));
   box-shadow:0 28px 52px rgba(0,0,0,.48), inset 0 1px rgba(255,255,255,.055);
-  transition:transform .44s cubic-bezier(.22,.76,.2,1), opacity .36s ease, box-shadow .44s ease;
+  transition:transform var(--dur-5) cubic-bezier(.22,.76,.2,1), opacity var(--dur-4) var(--ease-out), box-shadow var(--dur-5) var(--ease-out);
   will-change:transform, opacity;
 }
 #landing-page .empty-card[data-rank="0"]{ z-index:4; transform:translate(0,0); opacity:1; box-shadow:0 30px 58px rgba(0,0,0,.56), inset 0 1px rgba(255,255,255,.075); }
 #landing-page .empty-card[data-rank="1"]{ z-index:3; transform:translate(18px,10px); opacity:.76; }
 #landing-page .empty-card[data-rank="2"]{ z-index:2; transform:translate(36px,20px); opacity:.52; }
 #landing-page .empty-card[data-rank="3"]{ z-index:1; transform:translate(54px,30px); opacity:.3; }
-#landing-page .empty-card.card-exiting{ z-index:8; opacity:0; transform:translateX(-78px) scale(.985); transition:transform .4s cubic-bezier(.4,0,.2,1), opacity .32s ease; }
+#landing-page .empty-card.card-exiting{ z-index:8; opacity:0; transform:translateX(-78px) scale(.985); transition:transform var(--dur-5) var(--ease-inout), opacity var(--dur-4) var(--ease-out); }
 #landing-page .empty-card.card-requeue{ transition:none !important; }
 #landing-page .card-chevron{
   position:absolute; z-index:7; top:50%; display:grid; place-items:center; width:34px; height:50px; border:0; border-radius:var(--r);
   color:rgba(255,255,255,.48); background:transparent; font:300 46px/.7 "DM Sans", sans-serif; cursor:pointer;
-  transition:color .2s, transform .2s;
+  transition:color var(--dur-3), transform var(--dur-3);
 }
 #landing-page .card-chevron:hover{ color:rgba(255,255,255,.92); transform:translateY(-50%) scale(1.08); }
 #landing-page .card-chevron-left{ left:-70px; transform:translateY(-50%); }
@@ -99,8 +99,8 @@
 #landing-page .slider-dots button{ width:5px; height:5px; padding:0; border:0; border-radius:50%; background:#525252; cursor:pointer; }
 #landing-page .slider-dots button.active{ background:#e7e6e3; }
 #landing-page .showcase-intro{ position:relative; z-index:1; max-width:610px; margin:76px auto 0; color:#aaa8a6; text-align:center; font-size:clamp(11px, 1.1vw, 12px); line-height:1.65; }
-#landing-page .slide-leaving{ animation:lpSlideLeaveLeft .4s cubic-bezier(.4,0,.2,1) both; }
-#landing-page .slide-entering{ animation:lpSlideEnterRight .48s cubic-bezier(.2,.8,.2,1) both; }
+#landing-page .slide-leaving{ animation:lpSlideLeaveLeft var(--dur-5) var(--ease-inout) both; }
+#landing-page .slide-entering{ animation:lpSlideEnterRight var(--dur-5) var(--ease-out) both; }
 @keyframes lpSlideLeaveLeft{ to{ opacity:0; transform:translateX(-58px); } }
 @keyframes lpSlideEnterRight{ from{ opacity:0; transform:translateX(58px); } to{ opacity:1; transform:none; } }
 
@@ -141,7 +141,7 @@
 #landing-page .footer-links{
   display:flex; flex-wrap:wrap; justify-content:center; gap:5px 24px; margin:10px 0 6px;
 }
-#landing-page .footer-links a{ color:#706e6c; font-size:var(--text-12); transition:color .2s; }
+#landing-page .footer-links a{ color:#706e6c; font-size:var(--text-12); transition:color var(--dur-3); }
 #landing-page .footer-links a:hover{ color:#dddbd8; }
 #landing-page footer small{ display:block; color:#454342; font-size:var(--text-10h); margin-top:14px; }
 #landing-page .sr-only{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); }

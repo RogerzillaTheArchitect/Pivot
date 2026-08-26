@@ -22,7 +22,7 @@
   .seg-fin-bar-track{height:10px;border-radius:var(--r);background:rgba(255,255,255,.05);overflow:hidden}
   .seg-fin-bar-fill{display:block;height:100%;width:0;border-radius:var(--r);
     background:linear-gradient(90deg,#F2F5F3,#B9BDC2);
-    transition:width .9s cubic-bezier(.2,.8,.2,1)}
+    transition:width .9s var(--ease-out)}
   .seg-fin-meta{font-size:var(--text-12);color:var(--ink-soft);margin-top:7px}
   .seg-fin-empty-title{font-size:var(--text-base);font-weight:600;color:var(--ink);margin-bottom:6px}
   .seg-fin-empty-text{font-size:var(--text-12h);color:var(--ink-soft);line-height:1.5;margin:0}
@@ -108,7 +108,7 @@
     background:rgba(10,11,12,.68);
     backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
     opacity:0;pointer-events:none;
-    transition:opacity .15s;
+    transition:opacity var(--dur-2);
     z-index:2;
   }
   .fin-item-row.open .fin-item-over{opacity:1;pointer-events:auto}
@@ -118,7 +118,7 @@
   .fin-act-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
     padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
     background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
-    transition:background .15s}
+    transition:background var(--dur-2)}
   .fin-act-btn:active{background:rgba(255,255,255,.11)}
   .fin-act-ico{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;
     background:rgba(255,255,255,.08)}
@@ -141,7 +141,7 @@
   .rel-month-grid{display:grid;grid-template-columns:var(--cols-4);gap:var(--sp-2)}
   .rel-month-grid.rel-year-grid{grid-template-columns:repeat(5,1fr)}
   .rel-month-cell{padding:10px 4px;text-align:center;border:1px solid var(--line);border-radius:var(--r);
-    font-size:var(--text-12h);font-weight:500;color:var(--ink-soft);cursor:pointer;transition:.15s}
+    font-size:var(--text-12h);font-weight:500;color:var(--ink-soft);cursor:pointer;transition:var(--dur-2)}
   .rel-month-cell:hover{border-color:var(--brand)}
   .rel-month-cell.on{background:rgba(255,255,255,.85);color:#1a1b1d;border-color:rgba(255,255,255,.85);font-weight:600}
 
@@ -166,7 +166,7 @@
   .heat-grid-ano{grid-template-columns:repeat(auto-fill,minmax(48px,1fr))}
   .heat-grid-semana{grid-template-columns:repeat(auto-fill,minmax(28px,1fr));gap:3px}
   .heat-cell{aspect-ratio:1;border-radius:3px;border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;
-    font-size:var(--text-2xs);font-weight:600;color:var(--ink-soft);cursor:pointer;transition:transform .12s}
+    font-size:var(--text-2xs);font-weight:600;color:var(--ink-soft);cursor:pointer;transition:transform var(--dur-1)}
   .heat-cell:active{transform:scale(.92)}
   .heat-grid-semana .heat-cell{font-size:8px}
   .heat-grid-empty{margin-top:14px}

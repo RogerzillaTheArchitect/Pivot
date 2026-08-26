@@ -47,8 +47,8 @@
   from { transform: translateX(-28%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
 }
-.agd-days.agd-anim-from-r { animation: agd-slide-from-r .12s cubic-bezier(0.25,0.46,0.45,0.94) both; }
-.agd-days.agd-anim-from-l { animation: agd-slide-from-l .12s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+.agd-days.agd-anim-from-r { animation:agd-slide-from-r var(--dur-1) var(--ease-out) both; }
+.agd-days.agd-anim-from-l { animation:agd-slide-from-l var(--dur-1) var(--ease-out) both; }
 
 .agd-day-col {
   flex: 1;
@@ -62,7 +62,7 @@
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: background .18s;
+  transition:background var(--dur-2);
 }
 .agd-day-col:active { background: rgba(255,255,255,.04); }
 
@@ -114,8 +114,8 @@
 }
 
 /* Slide animations for ruler navigation */
-.agd-ruler-viz.agd-anim-from-r { animation: agd-slide-from-r .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
-.agd-ruler-viz.agd-anim-from-l { animation: agd-slide-from-l .2s cubic-bezier(0.25,0.46,0.45,0.94) both; }
+.agd-ruler-viz.agd-anim-from-r { animation:agd-slide-from-r var(--dur-3) var(--ease-out) both; }
+.agd-ruler-viz.agd-anim-from-l { animation:agd-slide-from-l var(--dur-3) var(--ease-out) both; }
 
 /* Canvas fills the viz container */
 .agd-ruler-canvas {
@@ -129,31 +129,39 @@
 .agd-ruler-sep { display: none; }
 
 /* ── Interval selector overlay ──────────────────── */
+/* Seletor de intervalo — dialogo centrado. Passa a usar o scrim, o material
+   e o movimento partilhados (tokens.css + overlays.css). Antes tinha
+   z-index 9999, escurecimento proprio a .4, blur no contentor em vez do
+   scrim, cor em oklch quando o resto da app usa rgba, e nao animava. */
 .agd-isel {
   position: fixed;
   inset: 0;
-  z-index: 9999;
+  z-index: var(--z-scrim);
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 }
 .agd-isel-bd {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.4);
   z-index: 0;
+  background: var(--scrim);
+  backdrop-filter: var(--scrim-blur);
+  -webkit-backdrop-filter: var(--scrim-blur);
+  animation: scrim-in var(--dur-3) var(--ease-out) both;
 }
 .agd-isel-sheet {
   position: relative;
-  z-index: 1;
-  background: oklch(0.16 0.003 106 / 0.95);
-  border-radius: 16px;
+  z-index: var(--z-raised);
+  background: var(--sheet-bg);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border-radius: var(--sheet-r);
   padding: 8px 0 14px;
   min-width: 240px;
-  border: 1px solid rgba(255,255,255,.07);
-  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  border: 1px solid var(--sheet-border);
+  box-shadow: var(--sheet-shadow-float);
+  animation: dialog-pop var(--dur-3) var(--ease-out) both;
 }
 .agd-isel-title {
   font-family: var(--font-headline);
@@ -176,7 +184,7 @@
   font-size: 15px;
   text-align: left;
   cursor: pointer;
-  transition: opacity .1s;
+  transition:opacity var(--dur-1);
 }
 .agd-isel-opt:active { opacity: .55; }
 .agd-isel-opt--active {
@@ -219,7 +227,7 @@
 }
 .agd-chip-timer--active,
 .agd-chip-timer--upcoming {
-  animation: agd-chip-pulse 2.4s ease-in-out infinite;
+  animation:agd-chip-pulse 2.4s var(--ease-inout) infinite;
 }
 
 /* ══════════════════════════════════════════════════
@@ -271,15 +279,14 @@
   top: -141px;  /* -AGD_H_ACT/2 */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  transition:
-    transform  .22s cubic-bezier(0.25, 0.8, 0.35, 1),
-    filter     .16s ease;
+  transition:transform  var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1),
+    filter     var(--dur-2) var(--ease-out);
   will-change: transform, filter;
   -webkit-tap-highlight-color: transparent;
 }
 /* Disable transition during live drag so cards follow the finger */
 .agd-fan-wrap.agd-dragging .agd-card-positioner {
-  transition: none;
+  transition:none;
 }
 /* Side cards lose their shadow — in preserve-3d, box-shadow composites 2D
    and can bleed visually over the front card's surface */
@@ -417,7 +424,7 @@
 }
 .agd-card.agd-active .agd-card-body    { padding: 6px 16px 36px; }
 .agd-card:not(.agd-active) .agd-card-body { padding: 5px 12px 32px; }
-.agd-card-body { transition: padding .22s cubic-bezier(0.25, 0.8, 0.35, 1); }
+.agd-card-body { transition:padding var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1); }
 
 /* Spacer that pushes content to where it would be in the original stacked layout */
 .agd-card-body-spacer {
@@ -440,7 +447,7 @@
 }
 .agd-card.agd-active .agd-card-title { font-size: .82rem; }
 .agd-card:not(.agd-active) .agd-card-title { font-size: .71rem; }
-.agd-card-title { transition: font-size .22s cubic-bezier(0.25, 0.8, 0.35, 1); }
+.agd-card-title { transition:font-size var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1); }
 
 /* Project link row — full text, wraps */
 .agd-card-proj {
@@ -628,7 +635,7 @@
   gap: 7px;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .16s;
+  transition:opacity var(--dur-2);
 }
 .agd-card-actions.agd-vis { opacity: 1; pointer-events: auto; }
 
@@ -646,7 +653,7 @@
   justify-content: center;
   gap: 7px;
   -webkit-tap-highlight-color: transparent;
-  transition: opacity .12s;
+  transition:opacity var(--dur-1);
 }
 .agd-act-btn:active { opacity: .62; }
 .agd-act-btn svg { flex-shrink: 0; }
@@ -710,7 +717,7 @@
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
   padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
   background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
-  transition:background .15s;-webkit-tap-highlight-color:transparent
+  transition:background var(--dur-2);-webkit-tap-highlight-color:transparent
 }
 .agd-panel-btn:active{background:rgba(255,255,255,.11)}
 .agd-panel-ico{
@@ -719,7 +726,7 @@
 }
 .agd-panel-ico svg{width:18px;height:18px}
 .agd-panel-btn--done{
-  border-color:rgba(50,150,70,.35);background:rgba(20,80,40,.2);color:rgba(90,200,90,.9)
+  border-color:rgba(50,150,70,.38);background:linear-gradient(145deg,rgba(36,116,58,.30),rgba(16,62,32,.16));color:rgba(106,214,106,.94);box-shadow:var(--sheen-edge)
 }
 .agd-panel-btn--done:active{background:rgba(20,80,40,.32)}
 .agd-panel-btn--done .agd-panel-ico{background:rgba(30,100,50,.28)}
