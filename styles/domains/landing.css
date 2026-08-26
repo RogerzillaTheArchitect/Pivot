@@ -45,8 +45,8 @@
 #landing-page .primary-button:hover, #landing-page .demo-button:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.48); background:linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.08)); }
 #landing-page .primary-button span{ font-size:24px; line-height:0; }
 #landing-page .play{ display:grid; place-items:center; width:17px; height:17px; border:1px solid #aaa; border-radius:50%; font-size:7px; }
-#landing-page .hero-image-wrap{ position:absolute; z-index:1; inset:0; }
-#landing-page .hero-image-wrap::after{ content:""; position:absolute; inset:0; background:linear-gradient(90deg, #121416 0%, rgba(18,20,22,.95) 21%, rgba(18,20,22,.24) 47%, transparent 66%), linear-gradient(0deg, #0e1012 0%, transparent 24%); }
+#landing-page .hero-image-wrap{ position:absolute!important; z-index:1; inset:0!important; height:auto!important; margin:0!important; order:0!important; }
+#landing-page .hero-image-wrap::after{ content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(14,16,18,.55) 0%, rgba(14,16,18,.18) 40%, rgba(14,16,18,.72) 100%); }
 #landing-page .hero-image-wrap img{ width:100%; height:100%; object-fit:cover; object-position:center top; transition:opacity .5s ease; }
 
 /* ===== PRODUCT SHOWCASE (Seção 2) ===== */
@@ -152,17 +152,11 @@
   #landing-page .brand img{ width:clamp(80px, 18vw, 106px); }
   #landing-page .account-actions{ gap:var(--sp-4); }
   #landing-page .outline-button{ padding:9px 16px; }
-  #landing-page .hero{ min-height:0; }
+  #landing-page .hero{ min-height:480px; }
   #landing-page .hero-inner{
-    height:auto; display:flex; flex-direction:column; gap:28px;
-    padding:96px 24px 44px;
+    height:480px; padding:100px 24px 44px;
   }
-  #landing-page .hero-copy{ order:2; width:100%; }
-  #landing-page .hero-image-wrap{
-    order:1; position:relative; inset:auto; height:300px; margin:0 -24px;
-  }
-  #landing-page .hero-image-wrap img{ object-fit:cover; object-position:center; }
-  #landing-page .hero-image-wrap::after{ background:linear-gradient(180deg, rgba(14,16,18,0) 55%, #0e1012 100%); }
+  #landing-page .hero-copy{ width:100%; }
   #landing-page .product-showcase{ min-height:960px; }
   #landing-page .showcase-shell{ grid-template-columns:1fr; gap:25px; min-height:750px; }
   #landing-page .slide-copy{ height:320px; max-width:480px; }
@@ -183,12 +177,11 @@
   #landing-page .brand img{ width:82px; }
   #landing-page .account-actions{ gap:10px; font-size:var(--text-10h); }
   #landing-page .outline-button{ padding:var(--sp-2) var(--sp-3); }
-  #landing-page .hero-inner{ padding:80px 20px 36px; gap:22px; }
+  #landing-page .hero{ min-height:420px; }
+  #landing-page .hero-inner{ height:420px; padding:80px 20px 36px; }
   #landing-page .hero-copy{ width:100%; }
   #landing-page h1{ font-size:clamp(24px, 7vw, 34px); }
   #landing-page .hero-copy > p{ max-width:none; font-size:var(--text-12); }
-  #landing-page .hero-image-wrap{ height:220px; margin:0 -20px; }
-  #landing-page .hero-image-wrap img{ object-position:center; }
   #landing-page .hero-actions{ gap:var(--sp-2); font-size:var(--text-2xs); flex-wrap:wrap; }
   #landing-page .primary-button, #landing-page .demo-button{ height:37px; padding:0 11px; }
   /* Seção 2: desfaz absolute positioning para fluir corretamente no mobile */
