@@ -6801,14 +6801,16 @@
 
   function updateHoje(){
     const badge=document.getElementById('nav-badge');
+    const content=document.getElementById('hoje-content');
+    const empty=document.getElementById('hoje-empty');
     const total=document.querySelectorAll('#tasks-list .tsk-card').length;
     if(total<=0){
-      document.getElementById('hoje-content').style.display='none';
-      document.getElementById('hoje-empty').style.display='block';
+      if(content) content.style.display='none';
+      if(empty) empty.style.display='block';
       if(badge) badge.style.display='none';
     }else{
-      document.getElementById('hoje-content').style.display='block';
-      document.getElementById('hoje-empty').style.display='none';
+      if(content) content.style.display='block';
+      if(empty) empty.style.display='none';
       if(badge){ badge.style.display=''; badge.textContent=total; }
     }
   }
