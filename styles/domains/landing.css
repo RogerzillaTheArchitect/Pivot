@@ -33,16 +33,26 @@
 #landing-page h1{ min-height:0; margin-bottom:22px; font:400 clamp(32px, 3.2vw, 52px)/1.1 "DM Sans", sans-serif; letter-spacing:-.04em; }
 #landing-page .hero-copy > p{ margin-bottom:27px; color:#c0c0be; font-size:var(--text-sm); line-height:1.6; }
 #landing-page .hero-actions{ display:flex; align-items:center; gap:14px; font-size:var(--text-12); }
+/* "Começar gratuitamente" e "Ver demonstração" tinham o mesmo fundo, borda
+   e sombra — só a cor do texto diferia, quase impercetível. Sem ação
+   primária clara (ver auditoria de design, achado da Landing). Primário
+   ganha um preenchimento sólido; secundário fica outline/ghost. */
 #landing-page .primary-button, #landing-page .demo-button{
-  display:inline-flex; align-items:center; justify-content:center; gap:14px; height:40px; padding:0 16px; border-radius:var(--r);
-  border:1px solid rgba(255,255,255,.28); background:linear-gradient(135deg, rgba(255,255,255,.19), rgba(255,255,255,.055));
-  box-shadow:inset 0 1px rgba(255,255,255,.22), 0 8px 22px rgba(0,0,0,.16);
-  backdrop-filter:blur(13px); -webkit-backdrop-filter:blur(13px);
-  transition:transform var(--dur-3), background var(--dur-3), border-color var(--dur-3); cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center; gap:14px; height:42px; padding:0 18px; border-radius:var(--r);
+  transition:transform var(--dur-3) var(--ease-out), background var(--dur-3), border-color var(--dur-3); cursor:pointer;
+  font-weight:600;
 }
-#landing-page .primary-button{ color:#f8f8f7; }
-#landing-page .demo-button{ color:rgba(255,255,255,.84); }
-#landing-page .primary-button:hover, #landing-page .demo-button:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.48); background:linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.08)); }
+#landing-page .primary-button{
+  color:#14161a; border:1px solid rgba(255,255,255,.9);
+  background:linear-gradient(180deg, rgba(255,255,255,1), rgba(235,236,233,.94));
+  box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.6);
+}
+#landing-page .primary-button:hover{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.6); }
+#landing-page .demo-button{
+  color:rgba(255,255,255,.86); border:1px solid rgba(255,255,255,.24);
+  background:rgba(255,255,255,.06); backdrop-filter:blur(13px); -webkit-backdrop-filter:blur(13px);
+}
+#landing-page .demo-button:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.4); background:rgba(255,255,255,.10); }
 #landing-page .primary-button span{ font-size:24px; line-height:0; }
 #landing-page .play{ display:grid; place-items:center; width:17px; height:17px; border:1px solid #aaa; border-radius:50%; font-size:7px; }
 #landing-page .hero-image-wrap{ position:absolute!important; z-index:1; inset:0!important; height:auto!important; margin:0!important; order:0!important; }
@@ -180,7 +190,16 @@
   #landing-page .hero{ min-height:420px; }
   #landing-page .hero-inner{ height:420px; padding:80px 20px 36px; }
   #landing-page .hero-copy{ width:100%; }
-  #landing-page h1{ font-size:clamp(24px, 7vw, 34px); }
+  /* Abaixo de 900px o headline passa a ocupar a largura toda e cai
+     diretamente sobre a imagem de fundo — o degradê tinha um recuo a meio
+     (opacidade .18) pensado para o desktop, onde o texto fica numa coluna
+     estreita ao lado da imagem. Aqui o texto está sempre por cima da
+     mesma zona da imagem, por isso o escurecimento fica constante em vez
+     de recuar (ver auditoria de design, achado da Landing). */
+  #landing-page .hero-image-wrap::after{
+    background:linear-gradient(180deg, rgba(14,16,18,.72) 0%, rgba(14,16,18,.58) 45%, rgba(14,16,18,.82) 100%);
+  }
+  #landing-page h1{ font-size:clamp(24px, 7vw, 34px); text-shadow:0 2px 16px rgba(0,0,0,.35); }
   #landing-page .hero-copy > p{ max-width:none; font-size:var(--text-12); }
   #landing-page .hero-actions{ gap:var(--sp-2); font-size:var(--text-2xs); flex-wrap:wrap; }
   #landing-page .primary-button, #landing-page .demo-button{ height:37px; padding:0 11px; }

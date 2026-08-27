@@ -697,41 +697,45 @@
     })).sort((a,b)=>b.valor-a.valor);
   }
   function renderDestaques(){
-    const txt=(id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+    /* Estado vazio ("ainda sem dados") passa a ler-se claramente como
+       ausência — itálico, texto normal em vez de maiúsculas — em vez de
+       parecer mais um valor real em caps-lock, ver auditoria de design,
+       causa sistémica nº5. */
+    const txt=(id,v,vazio)=>{ const el=document.getElementById(id); if(el){ el.textContent=v; el.classList.toggle('is-empty', !!vazio); } };
     const cats=calcularCategoriasDetalhe();
     const desp=calcularDespesasDetalhe();
     const regioes=calcularMercadoRegional();
-    const semDados='SEM DADOS';
+    const semDados='Ainda sem dados';
     /* MAIOR RECEITA */
     const porReceita=[...cats].sort((a,b)=>b.receita-a.receita);
-    txt('dest-maior-receita-nome', porReceita[0]?porReceita[0].label:semDados);
+    txt('dest-maior-receita-nome', porReceita[0]?porReceita[0].label:semDados, !porReceita[0]);
     txt('dest-maior-receita-val',  porReceita[0]?fmtMoney(porReceita[0].receita):'');
     /* MELHOR POR HORA */
     const comHoras=cats.filter(c=>c.horas>0).sort((a,b)=>b.porHora-a.porHora);
-    txt('dest-melhor-hora-nome', comHoras[0]?comHoras[0].label:semDados);
+    txt('dest-melhor-hora-nome', comHoras[0]?comHoras[0].label:semDados, !comHoras[0]);
     txt('dest-melhor-hora-val',  comHoras[0]?fmtMoney(comHoras[0].porHora)+'/h':'');
     /* MAIS TRABALHOS */
     const porProjetos=[...cats].sort((a,b)=>b.projetos-a.projetos);
-    txt('dest-mais-trabalhos-nome', porProjetos[0]?porProjetos[0].label:semDados);
+    txt('dest-mais-trabalhos-nome', porProjetos[0]?porProjetos[0].label:semDados, !porProjetos[0]);
     txt('dest-mais-trabalhos-val',  porProjetos[0]?porProjetos[0].projetos+' trabalhos':'');
     /* MAIOR TICKET */
     const porTicket=cats.filter(c=>c.projetos>0).sort((a,b)=>b.ticket-a.ticket);
-    txt('dest-maior-ticket-nome', porTicket[0]?porTicket[0].label:semDados);
+    txt('dest-maior-ticket-nome', porTicket[0]?porTicket[0].label:semDados, !porTicket[0]);
     txt('dest-maior-ticket-val',  porTicket[0]?fmtMoney(porTicket[0].ticket):'');
     /* MAIOR DESPESA */
-    txt('dest-maior-despesa-nome', desp[0]?desp[0].label:semDados);
+    txt('dest-maior-despesa-nome', desp[0]?desp[0].label:semDados, !desp[0]);
     txt('dest-maior-despesa-val',  desp[0]?fmtMoney(desp[0].valor):'');
     /* PIOR POR HORA */
     const piorHora=comHoras.length>0?comHoras[comHoras.length-1]:null;
-    txt('dest-pior-hora-nome', piorHora?piorHora.label:semDados);
+    txt('dest-pior-hora-nome', piorHora?piorHora.label:semDados, !piorHora);
     txt('dest-pior-hora-val',  piorHora?fmtMoney(piorHora.porHora)+'/h':'');
     /* MAIOR RECEITA POR REGIÃO */
     const porReceitaReg=[...regioes].sort((a,b)=>b.receita-a.receita);
-    txt('dest-receita-regiao-nome', porReceitaReg[0]?porReceitaReg[0].cidade:semDados);
+    txt('dest-receita-regiao-nome', porReceitaReg[0]?porReceitaReg[0].cidade:semDados, !porReceitaReg[0]);
     txt('dest-receita-regiao-val',  porReceitaReg[0]?fmtMoney(porReceitaReg[0].receita):'');
     /* MAIS TRABALHOS POR REGIÃO */
     const porEventosReg=[...regioes].sort((a,b)=>b.eventos-a.eventos);
-    txt('dest-trabalhos-regiao-nome', porEventosReg[0]?porEventosReg[0].cidade:semDados);
+    txt('dest-trabalhos-regiao-nome', porEventosReg[0]?porEventosReg[0].cidade:semDados, !porEventosReg[0]);
     txt('dest-trabalhos-regiao-val',  porEventosReg[0]?porEventosReg[0].eventos+' trabalhos':'');
   }
   /* ===== DESTAQUE análises específicas ===== */
@@ -748,7 +752,7 @@
     const desp=calcularDespesasDetalhe();
     const regioes=calcularMercadoRegional();
     const row=(nome,val,sub)=>'<div class="da-row"><div class="da-row-left"><div class="da-row-name">'+escapeHtml(nome)+'</div>'+(sub?'<div class="da-row-sub">'+sub+'</div>':'')+'</div><div class="da-row-val">'+escapeHtml(val)+'</div></div>';
-    const vazio='<div class="da-empty">SEM DADOS NO PERÍODO</div>';
+    const vazio='<div class="da-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 17H7a5 5 0 0 1 0-10h2M15 7h2a5 5 0 0 1 0 10h-2M8 12h8"/></svg>Sem dados neste período</div>';
     let html='', label='';
     if(tipo==='maior-receita'){
       label='RECEITA POR CATEGORIA';

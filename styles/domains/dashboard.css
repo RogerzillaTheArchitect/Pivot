@@ -257,10 +257,14 @@
   .rtk-sub-prazo.amber{border-color:rgba(185,155,45,.45);color:#C9B55A}
   .rtk-sub-prazo.late{border-color:rgba(217,152,104,.5);color:#D98068}
   #tasks-list .rtk-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:14px 16px}
+  /* Título da tarefa/trabalho é conteúdo real escrito pela pessoa — passa a
+     Inter com peso, não Bebas forçada a maiúsculas (ver auditoria de
+     design, causa sistémica nº1: conteúdo do utilizador nunca deve gritar
+     na mesma voz dos rótulos de estrutura). */
   #tasks-list .rtk-title{
-    font-family:'Bebas Neue',sans-serif;
-    font-size:var(--text-23);font-weight:400;letter-spacing:.05em;text-transform:uppercase;
-    line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);margin:0}
+    font-family:var(--font-subtitle),-apple-system,sans-serif;
+    font-size:var(--text-lg);font-weight:600;letter-spacing:0;text-transform:none;
+    line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);margin:0}
   #tasks-list .rtk-client{display:none}
   #tasks-list .rtk-action{display:none}
   .rtk-left-name{
@@ -286,15 +290,21 @@
     position:relative;z-index:1;
     display:block;cursor:pointer;
     background:none;border:none;border-radius:0;
-    height:auto;padding:0;margin:21px 0 1px;
-    font-family:'Bebas Neue',sans-serif;
-    font-size:clamp(22px,5.5vw,34px);font-weight:400;letter-spacing:.02em;text-transform:uppercase;
-    color:rgba(255,255,255,.55);filter:blur(1px);
+    height:auto;padding:0 0 10px;margin:var(--sp-section) 0 var(--sp-3);
+    border-bottom:1px solid var(--line-soft);
+    font-family:var(--font-numeric),'Bebas Neue',sans-serif;
+    font-size:clamp(20px,5vw,30px);font-weight:400;letter-spacing:.02em;text-transform:uppercase;
+    color:rgba(255,255,255,.78);
     text-align:left;line-height:1;overflow:visible;white-space:nowrap;
   }
   .tasks-header::after{display:none}
-  /* DESTAQUES usa .rel-card-header (de relatorios.css) — override scoped ao dashboard */
-  #v-hoje .rel-card-header{font-size:clamp(22px,5.5vw,34px);letter-spacing:.02em;filter:blur(1px)}
+  /* DESTAQUES usa .rel-card-header (de relatorios.css) — override scoped ao dashboard.
+     Antes tinha filter:blur(1px) — lia como acidente/render partido, não
+     como escolha; a distinção de secção passa a vir do peso do texto, da
+     margem (--sp-section) e do fio inferior, não de desfocar o título. */
+  #v-hoje .rel-card-header{font-size:clamp(20px,5vw,30px);letter-spacing:.02em;
+    margin-top:var(--sp-section);padding-bottom:10px;border-bottom:1px solid var(--line-soft);
+    filter:none;color:rgba(255,255,255,.78)}
   #tasks-list .radar-card-wrap:first-child .card{border-radius:var(--r)}
   .tasks-header + .card{border-radius:var(--r);margin-top:0}
   /* variante com navegação (◄ mês ►) em vez de texto simples — usada no
@@ -369,7 +379,7 @@
   .tsk-act-right{width:55%;display:flex;align-items:stretch;flex:none}
   .tsk-swipe-btn{
     flex:1;border:none;background:transparent;color:rgba(255,255,255,.8);
-    font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:.08em;
+    font-family:var(--font-label),-apple-system,sans-serif;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
     cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
     -webkit-tap-highlight-color:transparent
   }
@@ -732,6 +742,10 @@
   color:rgba(255,255,255,.4);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
+/* "Ainda sem dados" — precisa de se ler como ausência, não como mais um
+   valor em maiúsculas ao lado dos que têm dados reais. Ver auditoria de
+   design, causa sistémica nº5. */
+.dest-name.is-empty{font-style:italic;opacity:.62}
 .dest-val{
   font-family:var(--font-numeric),'JetBrains Mono',monospace;
   font-size:var(--text-sm);font-weight:700;
@@ -821,8 +835,10 @@
 }
 .da-empty{
   padding:40px 16px;text-align:center;
-  font-size:var(--text-xs);color:rgba(255,255,255,.30);
+  font-size:var(--text-sm);color:rgba(255,255,255,.4);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
 }
+.da-empty svg{width:26px;height:26px;color:rgba(255,255,255,.24)}
 
 /* ── Dashboard card full-view ── */
 .dash-card-expanded{
@@ -860,7 +876,7 @@
   padding:7px 12px;flex:none;
   border:1px solid rgba(255,255,255,.15);border-radius:8px;
   background:transparent;color:rgba(255,255,255,.6);
-  font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:.09em;
+  font-family:var(--font-label),-apple-system,sans-serif;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
   cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
 .dash-fvh-periodo:active{opacity:.6}

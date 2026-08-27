@@ -52,7 +52,7 @@
     --font-headline:'Bebas Neue',sans-serif; --font-subtitle:'Inter',sans-serif; --font-subtext:'Inter',sans-serif; --font-numeric:'Bebas Neue',sans-serif;
     --font-month:'Bebas Neue',sans-serif; --font-year:'Bebas Neue',sans-serif;
     --font-title:'Bebas Neue',sans-serif;
-    --font-section:'Bebas Neue',sans-serif; --font-label:'Bebas Neue',sans-serif; --font-financial:'Bebas Neue',sans-serif;
+    --font-section:'Bebas Neue',sans-serif; --font-label:'Inter',sans-serif; --font-financial:'Bebas Neue',sans-serif;
     --font-ops:'Bebas Neue',sans-serif;
     /* ===== Escala tipográfica — substitui font-size hardcoded em toda a app =====
        Usar var(--text-*) em vez de px literal em componentes novos e em edições. */
@@ -63,6 +63,11 @@
     --text-22:22px; --text-23:23px; --text-display:46px;
     /* ===== Escala de espaçamento — substitui padding/gap/margin literal ===== */
     --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-8:32px; --sp-10:40px;
+    /* Espaço ENTRE secções inteiras (Financeiro → Operacional → Destaques) —
+       tem de ser claramente maior que o espaço DENTRO de um card (--sp-3 a
+       --sp-5), senão a página inteira lê como uma só coluna cinzenta sem
+       pausas. Ver auditoria de design, causa sistémica nº2. */
+    --sp-section:38px;
     /* ===== Grid — colunas simétricas reutilizáveis ===== */
     --cols-2:1fr 1fr; --cols-3:repeat(3,1fr); --cols-4:repeat(4,1fr); --cols-7:repeat(7,1fr);
     /* ===== Ícones — escala de tamanho (width e height juntos) ===== */

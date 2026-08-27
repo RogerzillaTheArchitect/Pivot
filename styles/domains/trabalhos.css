@@ -197,16 +197,20 @@
   .dm-item svg{width:13px;height:13px;flex:none;opacity:.75}
   .dm-item .nav-ico{width:13px;height:13px;flex:none;opacity:.75;background-color:currentColor}
   .dm-sep{width:3px;height:3px;border-radius:50%;background:var(--ink-faint);flex:none}
-  /* botão "Portal do Cliente" premium — mesmo glass do resto do app, sem
-     borda pontilhada verde nem aparência provisória. */
-  .clientbtn{margin:18px 0 6px;width:100%;border:1px solid rgba(255,255,255,.14);color:var(--ink);
-    background:var(--surface-btn-soft);
-    border-radius:var(--r);padding:13px;font-weight:500;font-size:var(--text-base);cursor:pointer;
+  /* botão "Portal do Cliente" — é a ação principal do ecrã de detalhe (é o
+     que se partilha com o cliente), mas usava a superfície "soft", a mesma
+     força visual dos cartões informativos passivos por baixo — nada dizia
+     "comece por aqui" (ver auditoria de design, achado do Detalhe do
+     Trabalho). Sobe para --surface-btn + gloss, o mesmo tratamento de
+     .btn.primary, para se destacar como a ação primeira do ecrã. */
+  .clientbtn{margin:18px 0 6px;width:100%;border:1px solid rgba(255,255,255,.20);color:var(--ink);
+    background:var(--gloss), var(--surface-btn);
+    border-radius:var(--r);padding:13px;font-weight:600;font-size:var(--text-base);cursor:pointer;
     display:flex;align-items:center;justify-content:center;gap:var(--sp-2);font-family:inherit;
-    box-shadow:0 6px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.07);
+    box-shadow:0 6px 18px rgba(0,0,0,.18),var(--sheen-edge);
     backdrop-filter:blur(18px) saturate(150%);-webkit-backdrop-filter:blur(18px) saturate(150%);
     transition:background var(--dur-2),border-color var(--dur-2)}
-  .clientbtn:hover{background:var(--surface-btn-soft-hover);border-color:rgba(255,255,255,.22)}
+  .clientbtn:hover{background:var(--gloss), var(--surface-btn-hover);border-color:rgba(255,255,255,.28)}
   .clientbtn svg{width:var(--ico-md);height:var(--ico-md)}
   .sec{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r);margin:11px 0;
     overflow:hidden;box-shadow:var(--card-shadow)}

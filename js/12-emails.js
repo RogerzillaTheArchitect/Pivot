@@ -569,7 +569,13 @@
           '<div class="t">'+escapeHtml(p.label)+'</div>'+
           (p.desc?'<div class="m">'+escapeHtml(p.desc)+'</div>':'')+
           (p.data?'<div class="tl-date">'+escapeHtml(p.data)+'</div>':'')+
-          (p.acaoLabel?'<button class="btn ghost" style="padding:5px 10px;font-size:11px;margin-top:6px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
+          /* Era .btn.ghost (texto sem fundo, 11px) — a ação que fecha uma
+             etapa da timeline ficava o elemento mais discreto do ecrã
+             inteiro, o oposto do que a sua importância pede (ver
+             auditoria de design, achado do Detalhe do Trabalho). Sobe
+             para .btn.dark — mesmo peso dos outros botões de ação do
+             cartão (Ver Contrato, Obter link). */
+          (p.acaoLabel?'<button class="btn dark" style="margin-top:8px" onclick="'+p.acaoFn+'">'+escapeHtml(p.acaoLabel)+'</button>':'')+
         '</div></div>';
     });
     html+='</div></div>';

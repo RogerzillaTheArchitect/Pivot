@@ -7,6 +7,18 @@
     .shell{height:100vh;max-width:480px;box-shadow:0 0 0 1px var(--line-soft)}
   }
   @media (min-width:900px){
+    /* Em ecrã largo, a vista ficava presa a 680px (herdado do mobile) a
+       flutuar ao centro-esquerda de uma coluna .screen muito mais larga —
+       metade do ecrã ficava vazia (ver auditoria de design, causa
+       sistémica nº6). A vista usa agora a largura disponível a sério; as
+       grelhas internas (Financeiro, Operacional, Destaques) já são grid
+       de várias colunas e passam a repartir esse espaço em vez de o
+       deixar por preencher. */
+    .view{max-width:920px}
+    .view.wide{max-width:1040px}
+    .screen{padding-left:44px;padding-right:44px}
+  }
+  @media (min-width:900px){
     /* Criar / info-sheet deixam de ser folha de baixo e passam a modal centrado, como num site a sério */
     .sheet{
       left:50%; right:auto; bottom:auto; top:50%;
