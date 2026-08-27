@@ -217,6 +217,7 @@
     "contract.between": { pt:"Entre {company} (prestador) e {client} (cliente), referente a {job}.", en:"Between {company} (provider) and {client} (client), regarding {job}.", es:"Entre {company} (prestador) y {client} (cliente), referente a {job}." },
     "contract.prefix": { pt:"Contrato: ", en:"Contract: ", es:"Contrato: " },
     "contract.tagPending": { pt:"PENDENTE", en:"PENDING", es:"PENDIENTE" },
+    "contract.tagMissing": { pt:"EM FALTA", en:"MISSING", es:"FALTA" },
     "contract.tagSigned": { pt:"ASSINADO", en:"SIGNED", es:"FIRMADO" },
     "contract.tagReview": { pt:"EM ANÁLISE", en:"IN REVIEW", es:"EN ANÁLISIS" },
     // --- Custos ---
@@ -1087,6 +1088,9 @@
     "profile.account.changePassword": { pt:"Alterar senha", en:"Change password", es:"Cambiar contraseña" },
     "profile.company.address": { pt:"Endereço", en:"Address", es:"Dirección" },
     "profile.organization": { pt:"Organização", en:"Organization", es:"Organización" },
+    "profile.groupBusiness": { pt:"Negócio", en:"Business", es:"Negocio" },
+    "profile.groupSystem": { pt:"Sistema", en:"System", es:"Sistema" },
+    "profile.groupSupport": { pt:"Suporte", en:"Support", es:"Soporte" },
     "profile.signatureHint": { pt:"Preferências usadas ao criar um novo trabalho — cada trabalho continua podendo ajustar isto individualmente na etapa de Contrato.", en:"Preferences used when creating a new job — each job can still adjust this individually in the Contract step.", es:"Preferencias usadas al crear un nuevo trabajo — cada trabajo sigue pudiendo ajustar esto individualmente en la etapa de Contrato." },
     "profile.signatureRequireDocId": { pt:"Exigir documento de identificação para assinar, por padrão", en:"Require an ID document to sign, by default", es:"Exigir documento de identificación para firmar, por defecto" },
     "profile.plan": { pt:"Plano", en:"Plan", es:"Plan" },

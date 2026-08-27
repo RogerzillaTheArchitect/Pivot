@@ -146,7 +146,14 @@
         return '<div class="pick-row" onclick="openJob(\''+j.id+'\')"><div class="u-flex-min"><div class="nm">'+escapeHtml(j.typeLabel||j.nome||'Trabalho')+'</div><div class="sub">'+escapeHtml(j.date||'')+' · '+estado+'</div></div><svg class="chevr u-flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
       }).join('');
     } else {
-      html+='<p class="u-label-nd">'+t('contacts.noHistory')+'</p>';
+      /* Estado vazio desenhado — ícone + frase + atalho para criar o
+         primeiro trabalho, em vez de texto pequeno a boiar sozinho no
+         resto do ecrã (ver auditoria de design, causa sistémica nº5). */
+      html+='<div class="empty-state">'+
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2M3 12h18"/></svg>'+
+        '<p>'+t('contacts.noHistory')+'</p>'+
+        '<button class="btn dark" onclick="openSheetDirect(\'trabalho\')">'+t('sheet.job')+'</button>'+
+        '</div>';
     }
     document.getElementById('contato-detalhe-corpo').innerHTML=html;
     go('contato-detalhe');

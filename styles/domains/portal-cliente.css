@@ -68,16 +68,22 @@
   .help{text-align:center;margin-top:24px;font-size:var(--text-13h);color:var(--neutral)}
   .help a{color:var(--ink);font-weight:500;text-decoration:none;border-bottom:1px solid var(--line)}
 
-  /* ===== MOBILE NAV ===== */
+  /* ===== MOBILE NAV =====
+     Rótulos por baixo do ícone: eram suprimidos (font-size:0 + span com id
+     escondido) e só "Geral" escapava por o seu span não ter id — resultado:
+     5 botões, 4 só com ícone e 1 com texto, sem razão visível para a
+     diferença. É preciso decorar o que cada ícone faz (ver auditoria de
+     design, achado do Dashboard). Volta a mostrar o rótulo nos 5. */
   .nav{display:none;position:absolute;bottom:calc(10px + env(safe-area-inset-bottom));left:18px;right:18px;
     background:#0f0f0f;
-    border-radius:999px;
+    border-radius:26px;
     border:1px solid rgba(255,255,255,.07);box-shadow:0 4px 24px rgba(0,0,0,.6);z-index:30;height:64px;
-    align-items:center;padding:0 20px}
-  .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:row;
-    align-items:center;justify-content:center;gap:0;padding:8px 4px;color:rgba(255,255,255,.5);font-family:inherit;font-size:0}
-  .nav button span[id]{display:none}
-  .nav button svg{width:var(--ico-xl);height:var(--ico-xl)}
+    align-items:center;padding:0 6px}
+  .nav button{flex:1;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:3px;padding:8px 4px;color:rgba(255,255,255,.5);font-family:var(--font-label),-apple-system,sans-serif}
+  .nav button span:not(.nav-ico){font-size:10px;font-weight:600;letter-spacing:.01em;line-height:1}
+  .nav button svg{width:var(--ico-lg);height:var(--ico-lg)}
+  .nav button .nav-ico{width:var(--ico-lg);height:var(--ico-lg)}
   .nav button.on{color:#fff}
   .nav button.on svg{color:#fff}
   .nav-ico{width:var(--ico-xl);height:var(--ico-xl);display:inline-block;background-color:currentColor;

@@ -136,7 +136,14 @@
   .collapse-l{display:flex;align-items:center;gap:11px;font-size:var(--text-base);font-weight:500}
   .collapse-l svg{width:var(--ico-md);height:var(--ico-md);color:var(--ink-soft)}
   .collapse-n{font-size:var(--text-12);color:var(--neutral);background:var(--paper-2);border-radius:var(--r);padding:2px 8px}
-  .chev{width:var(--ico-sm);height:var(--ico-sm);color:var(--neutral);transition:transform var(--dur-3)}
+  /* Chevron de secção expansível — era só o ícone a solo, cor apagada
+     (var(--neutral)), sinal fraco demais de que aquilo é tocável (ver
+     auditoria de design, achado do Detalhe do Trabalho: "Informações do
+     Cliente"). Ganha um fundo circular próprio, a mesma linguagem de botão
+     icon-only já usada noutros controlos da app. */
+  .chev{width:20px;height:20px;padding:3px;box-sizing:border-box;border-radius:50%;
+    background:rgba(255,255,255,.08);color:rgba(255,255,255,.72);
+    transition:transform var(--dur-3) var(--ease-out),background var(--dur-2)}
   .collapse.open .chev{transform:rotate(180deg)}
   .collapse-body{display:none;padding:0 16px 14px}
   .collapse.open .collapse-body{display:block}

@@ -34,6 +34,8 @@
 .u-mt-16 { margin-top: var(--sp-4) }
 .u-mt-18 { margin-top: 18px }
 .u-mt-22 { margin-top: 22px }
+/* Espaço entre secções inteiras — ver --sp-section em tokens.css */
+.u-mt-section { margin-top: var(--sp-section) !important }
 .u-mt-n6 { margin-top: -6px }
 
 /* --- Margin-bottom --------------------------------------------------------- */
@@ -187,3 +189,16 @@
 ::placeholder { color: rgba(255,255,255,.35); opacity: 1 }
 :-ms-input-placeholder { color: rgba(255,255,255,.35) }
 ::-ms-input-placeholder { color: rgba(255,255,255,.35) }
+
+/* --- Estado vazio — componente partilhado, não atómico ---------------------
+   ícone + frase + CTA, para qualquer secção sem conteúdo (ver auditoria de
+   design, causa sistémica nº5: "sem dados" resolvido com espaço preto vazio
+   em vez de estado desenhado). Fica aqui por ser global, como .plist/.plabel
+   em perfil.css. */
+.empty-state{
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  gap:14px; padding:40px 20px 32px; color:var(--ink-faint);
+}
+.empty-state svg{width:40px; height:40px; opacity:.28; color:var(--ink-soft)}
+.empty-state p{font-size:var(--text-sm); color:var(--ink-soft); max-width:36ch; line-height:1.5}
+.empty-state .btn{margin-top:2px}

@@ -1648,5 +1648,12 @@
     const st=job.contract.status;
     if(st==='assinado') return '<span class="sig-tag green">'+statusEmoji('done')+' '+t('contract.tagSigned')+'</span>';
     if(st==='enviado') return '<span class="sig-tag amber">'+statusEmoji('progress')+' '+t('contract.tagReview')+'</span>';
+    /* "vazio" (nenhum contrato criado) usa a mesma palavra do texto do
+       corpo do cartão ("Contrato em falta.") — antes ambos mostravam
+       "PENDENTE" aqui e "em falta" ali, dois registos para o mesmo facto
+       no mesmo cartão. Ver auditoria de design, achado do Detalhe do
+       Trabalho. "rascunho" (contrato existe, ainda não foi enviado)
+       continua "Pendente", que é a palavra certa para esse caso. */
+    if(st==='vazio') return '<span class="sig-tag gray">'+statusEmoji('pending')+' '+t('contract.tagMissing')+'</span>';
     return '<span class="sig-tag gray">'+statusEmoji('pending')+' '+t('contract.tagPending')+'</span>';
   }
