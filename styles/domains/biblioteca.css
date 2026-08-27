@@ -46,7 +46,7 @@
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid var(--bib-mat-line);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--bib-mat-shadow);
-    transition:border-color .15s,filter .15s;
+    transition:border-color var(--dur-2),filter var(--dur-2);
   }
   .bib-glass:hover{border-color:rgba(255,255,255,.16)}
   .bib-glass.on,.bib-glass:active{border-color:rgba(255,255,255,.18);filter:brightness(1.08)}
@@ -77,7 +77,7 @@
   /* ===== filtros: grid rígido de 4 colunas, mesmo vidro do Header ===== */
   .bib-filters{display:grid;grid-template-columns:var(--cols-4);gap:7px}
   .bib-filter{height:36px;min-width:0;display:flex;align-items:center;justify-content:space-between;gap:var(--sp-1);padding:0 9px;border-radius:var(--r-sm);
-    color:var(--bib-ink-soft);font-size:var(--text-11);font-weight:500;cursor:pointer;font-family:inherit;transition:color .15s}
+    color:var(--bib-ink-soft);font-size:var(--text-11);font-weight:500;cursor:pointer;font-family:inherit;transition:color var(--dur-2)}
   .bib-filter>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .bib-filter:hover{color:var(--bib-ink)}
   .bib-filter.on{color:var(--bib-ink)}
@@ -96,7 +96,7 @@
     background:linear-gradient(135deg, var(--bib-mat-hi), rgba(255,255,255,0) 45%), var(--bib-mat-base);
     border:1px solid var(--bib-mat-line);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--bib-mat-shadow);
-    transition:border-color .15s,filter .15s}
+    transition:border-color var(--dur-2),filter var(--dur-2)}
   .bib-seal:hover{filter:brightness(1.08)}
   .bib-seal.on{border-color:rgba(255,255,255,.20)}
   .bib-seal .sl-ic{flex:none;display:inline-flex;width:var(--ico-md);height:var(--ico-md)}
@@ -124,7 +124,7 @@
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
     border:1px solid var(--bib-mat-line);color:var(--bib-ink);
     box-shadow:inset 0 1px 0 rgba(255,255,255,.05), var(--bib-mat-shadow);
-    transition:border-color .15s;
+    transition:border-color var(--dur-2);
     --ink:#F5F5F3; --ink-soft:#9B9DA3; --ink-faint:#6A6C72; --neutral:#6A6C72;
     --paper:#292B2F; --paper-2:#1F2025; --line:rgba(255,255,255,.14); --line-soft:rgba(255,255,255,.07)}
   .bib-card:hover{border-color:rgba(255,255,255,.16)}
@@ -144,7 +144,7 @@
   .bc-bdg.s-juridico{color:var(--bib-wine-ink)}
   .bc-bdg.s-recomendados{color:var(--bib-brass-ink)}
   .bc-bdg.s-comunidade{color:var(--bib-bronze-ink)}
-  .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r-sm);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity .15s,color .15s}
+  .bib-fav{flex:none;width:26px;height:26px;border-radius:var(--r-sm);display:grid;place-items:center;cursor:pointer;color:var(--bib-ink-faint);opacity:.35;transition:opacity var(--dur-2),color var(--dur-2)}
   .bib-card:hover .bib-fav,.bib-fav:hover,.bib-fav:focus-visible{opacity:1}
   .bib-fav svg{width:var(--ico-md);height:var(--ico-md)}
   .bib-fav.on{color:var(--bib-brass-ink);opacity:1}
@@ -191,12 +191,12 @@
 
   .search-recent-item{display:flex;align-items:center;justify-content:space-between;gap:10px;
     padding:13px 14px;border:1px solid var(--line);border-radius:var(--r);background:var(--paper);
-    margin-bottom:8px;cursor:pointer;transition:background .15s}
+    margin-bottom:8px;cursor:pointer;transition:background var(--dur-2)}
   .search-recent-item:active{background:var(--paper-2)}
   .search-recent-txt{font-size:var(--text-base);color:var(--ink);flex:1;min-width:0;overflow:hidden;
     text-overflow:ellipsis;white-space:nowrap}
   .search-recent-x{width:26px;height:26px;flex:none;display:grid;place-items:center;color:var(--neutral);
-    border-radius:50%;transition:background .15s,color .15s}
+    border-radius:50%;transition:background var(--dur-2),color var(--dur-2)}
   .search-recent-x:hover{background:var(--paper-2);color:var(--ink)}
   .search-recent-x svg{width:var(--ico-sm);height:var(--ico-sm)}
 
@@ -220,9 +220,9 @@
   /* ===== Fixed bottom dock (Visualizar / Importar) ===== */
   .info-dock{display:flex;align-items:flex-start;justify-content:center;gap:16px;padding:10px 16px 12px;border-top:1px solid rgba(255,255,255,.07);flex:none}
   .info-dock:empty{display:none}
-  .idb{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:var(--ink-soft);cursor:pointer;min-width:58px;max-width:72px;padding:0;transition:color .15s}
+  .idb{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:var(--ink-soft);cursor:pointer;min-width:58px;max-width:72px;padding:0;transition:color var(--dur-2)}
   .idb:active .idb-ico{background:rgba(255,255,255,.14)}
-  .idb-ico{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:background .15s;flex:none}
+  .idb-ico{width:46px;height:46px;border-radius:50%;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;transition:background var(--dur-2);flex:none}
   .idb-ico svg{width:20px;height:20px}
   .idb-label{font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);text-align:center;line-height:1.2}
 
@@ -230,7 +230,7 @@
   .bib-filter-ico{display:inline-flex;width:13px;height:13px;flex:none;vertical-align:-2px;margin-right:3px}
 
   /* ===== Inline fav button in detail header ===== */
-  .bib-fav-inline{flex:none;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--bib-ink-soft);cursor:pointer;transition:background .15s,color .15s}
+  .bib-fav-inline{flex:none;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--bib-ink-soft);cursor:pointer;transition:background var(--dur-2),color var(--dur-2)}
   .bib-fav-inline:active{background:rgba(255,255,255,.12)}
   .bib-fav-inline.on{color:var(--ink)}
   .bib-fav-inline svg{width:15px;height:15px;flex:none}
@@ -243,23 +243,9 @@
      da marca (verde) a 32%, o que lia como uma sombra verde indesejada
      cobrindo a metade da tela por trás do sheet/menu. Nada aqui deve usar
      a cor da marca; só tons de preto/cinza, como o resto do vidro da app. */
-  .overlay{position:absolute;inset:0;background:rgba(8,9,10,.55);z-index:70;opacity:0;pointer-events:none;
-    transition:opacity .25s}
-  .overlay.show{opacity:1;pointer-events:all}
-  /* mesmo glass premium dos cards (.sec/.card/.job) — antes era um painel
-     plano (var(--paper) sólido, sem gradiente/blur), o que destoava do
-     resto do app. */
-  .sheet{position:absolute;left:0;right:0;bottom:0;
-    background:rgba(14,13,12,.96);
-    border-top:1px solid rgba(255,255,255,.12);border-radius:var(--r) var(--r) 0 0;
-    backdrop-filter:blur(24px) saturate(120%);-webkit-backdrop-filter:blur(24px) saturate(120%);
-    padding:10px 18px calc(20px + env(safe-area-inset-bottom));z-index:80;transform:translateY(100%);
-    transition:transform .32s cubic-bezier(.2,.8,.2,1);box-shadow:0 -12px 34px rgba(0,0,0,.32);overflow-x:hidden;will-change:transform;
-    --ink:#F5F5F3;--ink-soft:#C8C8C8;--ink-faint:#9B9B9B;--neutral:#B9B9B1;
-    --line:rgba(255,255,255,.10);--line-soft:rgba(255,255,255,.08);
-    --paper:rgba(255,255,255,.09);--paper-2:rgba(255,255,255,.07);color:var(--ink)}
-  .sheet.show{transform:translateY(0)}
-  .sheet-grab{width:36px;height:4px;background:var(--line);border-radius:99px;margin:6px auto 14px}
+  /* .overlay, .sheet e .sheet-grab mudaram para styles/overlays.css — sao
+     globais (sheet de Criar, openInfo, Biblioteca) e viviam aqui por acidente
+     historico. Ver a folha de sobreposicoes para o material e o movimento. */
   .sheet h3{font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600;font-size:var(--text-xl);margin-bottom:14px;padding:0 4px}
   .sheet-primary{display:flex;align-items:center;gap:13px;padding:var(--sp-4);border-radius:var(--r);background:rgba(255,255,255,.14);
     color:#fff;cursor:pointer;margin-bottom:14px;border:1px solid rgba(255,255,255,.20)}
@@ -275,7 +261,7 @@
     background:var(--surface-row);
     backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);
     box-shadow:0 4px 14px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.05);
-    transition:background .15s,border-color .15s}
+    transition:background var(--dur-2),border-color var(--dur-2)}
   .sheet-item:hover{background:var(--surface-row-hover);border-color:rgba(255,255,255,.16)}
   .sheet-item svg{width:var(--ico-lg);height:var(--ico-lg);color:var(--ink-soft)}
   .sheet-item .nav-ico{width:var(--ico-lg);height:var(--ico-lg);background-color:var(--ink-soft)}

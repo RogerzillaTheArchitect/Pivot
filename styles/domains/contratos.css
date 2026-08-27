@@ -22,7 +22,7 @@
   .builder-bottom-actions .save-tpl{flex:1;min-width:0;margin-top:0}
   .block{display:flex;flex-direction:column;background:var(--paper);border:1px solid var(--line);
     border-radius:var(--r);padding:14px 10px;margin-bottom:12px;box-shadow:var(--shadow);
-    transition:transform .18s,box-shadow .18s,opacity .18s}
+    transition:transform var(--dur-2),box-shadow var(--dur-2),opacity var(--dur-2)}
   /* Handle e toggle ficam só nesta linha — a lista de cláusulas abaixo é
      filha direta do .block, sem ficar espremida entre essas duas colunas
      pela altura inteira do bloco (era isso que deixava uma faixa vazia
@@ -53,14 +53,14 @@
   .bn-row .block-type-ico{width:var(--ico-sm);height:var(--ico-sm);flex:none;background-color:var(--ink-soft)}
   .bn-row .bn-title{font-size:var(--text-base);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .block-subtitle{font-size:var(--text-xs);font-weight:400;color:var(--neutral);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .block-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);transition:transform .2s}
+  .block-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);transition:transform var(--dur-3)}
   .block-preview{margin-top:12px}
   .block-preview.collapsed{display:none}
   .block.off .block-preview,.block.off .block-name{opacity:.45}
   /* cláusulas numeradas, separadas e com hierarquia clara */
   .clause-list{display:flex;flex-direction:column;gap:9px;width:100%}
   .clause{display:flex;gap:var(--sp-2);align-items:flex-start;padding:11px 10px;border:1px solid var(--line-soft);
-    border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color .15s,background .15s;width:100%}
+    border-radius:var(--r);background:var(--paper-2);cursor:pointer;transition:border-color var(--dur-2),background var(--dur-2);width:100%}
   .clause:hover{border-color:var(--ink-soft)}
   .clause.editing{cursor:default;border-color:var(--line)}
   .clause-n{flex:none;width:17px;height:17px;border-radius:var(--r-chip);background:rgba(255,255,255,.08);color:var(--ink);
@@ -68,7 +68,7 @@
   .clause-txt{flex:1;min-width:0;font-size:var(--text-sm);color:var(--ink-soft);line-height:1.5;white-space:pre-wrap;word-break:break-word}
   /* Menu de três pontos por cláusula (editar/duplicar/mover/excluir) */
   .clause-kebab{flex:none;border:none;background:none;color:var(--neutral);cursor:pointer;
-    padding:3px;margin:-2px -4px -2px 2px;display:flex;align-items:center;border-radius:var(--r-sm);transition:color .15s,background .15s}
+    padding:3px;margin:-2px -4px -2px 2px;display:flex;align-items:center;border-radius:var(--r-sm);transition:color var(--dur-2),background var(--dur-2)}
   .clause-kebab:hover{color:var(--ink);background:rgba(255,255,255,.08)}
   .clause-kebab svg{width:var(--ico-md);height:var(--ico-md)}
   .pick-row.disabled{opacity:.4;cursor:default}
@@ -79,7 +79,7 @@
   .dynf-tag:hover{background:rgba(232,118,58,.28)}
   .clause-edit{flex:1;min-width:0}
   .icon-sm{width:28px;height:28px;border-radius:var(--r-sm);border:1px solid var(--line);background:var(--paper);
-    display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;transition:border-color .15s,color .15s}
+    display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;transition:border-color var(--dur-2),color var(--dur-2)}
   .icon-sm:hover{border-color:var(--brand);color:var(--ink)}
   .icon-sm svg{width:var(--ico-sm);height:var(--ico-sm)}
   .block-textarea{width:100%;border:1px solid var(--line);border-radius:var(--r-sm);padding:9px 11px;
@@ -114,13 +114,13 @@
   .dynf-group-head{display:flex;align-items:center;gap:9px;padding:14px 14px;cursor:pointer;font-size:var(--text-base);font-weight:600;color:var(--ink)}
   .dynf-group-head svg:first-child{width:var(--ico-md);height:var(--ico-md);color:var(--ink-soft);flex:none}
   .dynf-count{font-size:var(--text-11);font-weight:700;color:var(--ink);background:rgba(255,255,255,.10);border-radius:var(--r);padding:2px 8px}
-  .dynf-group-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);margin-left:auto;transition:transform .2s}
+  .dynf-group-chev{width:var(--ico-sm);height:var(--ico-sm);flex:none;color:var(--neutral);margin-left:auto;transition:transform var(--dur-3)}
   .dynf-group.collapsed .dynf-group-chev{transform:rotate(-90deg)}
   .dynf-group-body{border-top:1px solid var(--line)}
   .dynf-group.collapsed .dynf-group-body{display:none}
   .dynf-row,.dynf-row-ro{display:flex;align-items:center;gap:var(--sp-3);padding:13px 14px;border-top:1px solid var(--line-soft)}
   .dynf-row:first-child,.dynf-row-ro:first-child{border-top:none}
-  .dynf-row{cursor:pointer;transition:background .15s}
+  .dynf-row{cursor:pointer;transition:background var(--dur-2)}
   .dynf-row:hover{background:rgba(255,255,255,.03)}
   .dynf-row .dynf-key,.dynf-row-ro .dynf-key{flex:1;min-width:0;font-size:var(--text-13h);font-weight:500;color:var(--ink);
     white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:none;border:none;padding:0;height:auto;min-height:0;cursor:inherit}
@@ -131,14 +131,14 @@
   /* botão "adicionar cláusula" dentro do bloco — integrado, largura total */
   .addclause{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;margin-top:8px;padding:9px;border-radius:var(--r);
     border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--ink-soft);font-family:inherit;font-size:var(--text-12h);font-weight:600;cursor:pointer;
-    transition:border-color .15s,color .15s,background .15s}
+    transition:border-color var(--dur-2),color var(--dur-2),background var(--dur-2)}
   .addclause:hover{border-color:var(--ink-soft);color:var(--ink);background:rgba(255,255,255,.06)}
   .addclause svg{width:15px;height:15px;flex:none}
 
   /* seleção por checkbox de blocos/cláusulas (import da biblioteca) */
   .pick-list{display:flex;flex-direction:column;gap:var(--sp-2)}
   .pick-check{display:flex;align-items:flex-start;gap:11px;padding:12px 13px;border:1px solid var(--line);
-    border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color .15s,background .15s}
+    border-radius:var(--r);cursor:pointer;background:var(--paper-2);transition:border-color var(--dur-2),background var(--dur-2)}
   .pick-check:hover{border-color:var(--ink-soft)}
   .pick-check.on{border-color:var(--ink);background:rgba(255,255,255,.06)}
   .pick-check .pc-box{flex:none;width:var(--ico-xl);height:var(--ico-xl);border-radius:var(--r);border:1.5px solid var(--line);
@@ -152,7 +152,7 @@
 
   /* ===== IMPORTAR ARQUIVO (Modelos → + Criar → Arquivo) ===== */
   .imp-dropzone{border:1.5px dashed var(--line);border-radius:var(--r);padding:38px 20px;text-align:center;
-    cursor:pointer;transition:border-color .15s,background .15s;margin-bottom:16px}
+    cursor:pointer;transition:border-color var(--dur-2),background var(--dur-2);margin-bottom:16px}
   .imp-dropzone.drag-over{border-color:var(--brand);background:var(--brand-10)}
   .imp-dropzone svg{width:30px;height:30px;color:var(--neutral);margin-bottom:10px}
   .imp-dropzone .ti{font-size:var(--text-14h);font-weight:600;color:var(--ink);margin-bottom:4px}
@@ -166,7 +166,7 @@
   .imp-progress-step.on{color:var(--ink);font-weight:600}
   .imp-progress-step.done{color:var(--brand)}
   .imp-progress-dot{width:9px;height:9px;border-radius:50%;background:var(--line);flex:none}
-  .imp-progress-step.on .imp-progress-dot{background:var(--ink);animation:imp-pulse 1s ease-in-out infinite}
+  .imp-progress-step.on .imp-progress-dot{background:var(--ink);animation:imp-pulse 1s var(--ease-inout) infinite}
   .imp-progress-step.done .imp-progress-dot{background:var(--brand)}
   @keyframes imp-pulse{0%,100%{opacity:1}50%{opacity:.35}}
   .imp-fail{background:var(--paper-2);border-radius:var(--r);padding:var(--sp-4);font-size:var(--text-13h);color:var(--ink-soft);

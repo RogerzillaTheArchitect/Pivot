@@ -59,8 +59,8 @@
   .ms-card-sq{flex:1;min-width:0;aspect-ratio:1;background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r);
     box-shadow:var(--card-shadow);
     padding:var(--sp-3);display:flex;flex-direction:column;justify-content:space-between;align-items:flex-start;text-align:left;cursor:pointer;
-    transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s ease;
-    animation:cardIn .5s cubic-bezier(.16,1,.3,1) both;
+    transition:transform var(--dur-3) var(--ease-spring),box-shadow var(--dur-3) var(--ease-out);
+    animation:cardIn var(--dur-5) var(--ease-glide) both;
     --c-icon-bg:rgba(255,255,255,.12)}
   .ms-card-sq:nth-child(1){animation-delay:.1s} .ms-card-sq:nth-child(2){animation-delay:.16s} .ms-card-sq:nth-child(3){animation-delay:.22s}
   .ms-card-sq:active{transform:scale(.95)}
@@ -175,10 +175,10 @@
   .mini-ring-wrap{position:relative;width:60px;height:60px}
   .mini-ring{width:60px;height:60px;transform:rotate(-90deg)}
   .mini-ring-track{fill:none;stroke:rgba(255,255,255,.16)}
-  .mini-ring-progress{fill:none;stroke:url(#grad-mini-progress);stroke-linecap:butt;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+  .mini-ring-progress{fill:none;stroke:url(#grad-mini-progress);stroke-linecap:butt;stroke-dasharray:157;stroke-dashoffset:157;transition:stroke-dashoffset 1s var(--ease-out)}
   [data-theme="light"] .mini-ring-progress{stroke:url(#grad-mini-progress-light)}
   .mini-ring-track-outer{fill:none;stroke:rgba(255,255,255,.10)}
-  .mini-ring-progress-outer{fill:none;stroke:var(--urgent);stroke-linecap:butt;stroke-dasharray:170;stroke-dashoffset:170;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+  .mini-ring-progress-outer{fill:none;stroke:var(--urgent);stroke-linecap:butt;stroke-dasharray:170;stroke-dashoffset:170;transition:stroke-dashoffset 1.2s var(--ease-out)}
   /* qualquer anel que já completou pelo menos uma volta: arco com brilho, pista mais clara */
   .ring-lapped-progress{filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
   .ring-lapped-track{opacity:.6}
@@ -207,9 +207,11 @@
   /* vidro escuro translúcido em vez de cor sólida saturada — o tom (cinza/
      verde/vermelho) só aparece dissolvido no fundo escuro, não como bloco
      de cor plano */
-  .radar-swipe-btn.editar{background:rgba(38,40,44,.74)}
-  .radar-swipe-btn.concluir{background:rgba(20,46,34,.78)}
-  .radar-swipe-btn.arquivar{background:rgba(48,20,22,.78)}
+  /* Acoes de swipe — degrade diagonal com a mesma fonte de luz (145deg) dos
+     restantes elementos coloridos, mais o fio de luz no topo. */
+  .radar-swipe-btn.editar{background:linear-gradient(145deg,rgba(58,61,67,.86),rgba(30,32,36,.78));box-shadow:var(--sheen-edge)}
+  .radar-swipe-btn.concluir{background:linear-gradient(145deg,rgba(38,84,60,.90),rgba(16,40,29,.80));box-shadow:var(--sheen-edge)}
+  .radar-swipe-btn.arquivar{background:linear-gradient(145deg,rgba(84,32,34,.90),rgba(40,16,18,.80));box-shadow:var(--sheen-edge)}
   /* card de tarefa — borda fina cinza-escuro uniforme (sem cor de urgência) +
      glow quase imperceptível só na base do card (não ao redor todo), com a
      cor de urgência em tom escuro/dessaturado — nunca neon. A cor comunica
@@ -305,7 +307,7 @@
   .card{background:var(--card-bg);
     border:1px solid var(--card-border);border-radius:var(--r);padding:var(--sp-5);
     margin-bottom:11px;box-shadow:var(--card-shadow);
-    transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s,margin .35s,padding .35s}
+    transition:transform var(--dur-4) var(--ease-out),opacity var(--dur-4),margin var(--dur-4),padding var(--dur-4)}
   .card.resolving{transform:translateX(110%);opacity:0;margin-bottom:0;padding-top:0;padding-bottom:0;max-height:0}
   /* Tarefas: altura FIXA e idêntica para todos os cards, independente de
      quantas linhas de conteúdo existam (2, 3 ou 4). O rtk-body usa
@@ -330,7 +332,7 @@
     border:1px solid var(--card-border);
     box-shadow:var(--card-shadow);
     will-change:transform;
-    transition:transform .15s cubic-bezier(.25,.1,.25,1)
+    transition:transform var(--dur-2) cubic-bezier(.25,.1,.25,1)
   }
   .tsk-front.tsk-dragging{transition:none}
   .tsk-body{display:flex;align-items:flex-start;padding:10px 12px 10px 10px;gap:12px;height:100%;box-sizing:border-box}
@@ -416,11 +418,14 @@
     font-size:8.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
     padding:2px 6px;border-radius:4px;border:1px solid;white-space:nowrap;line-height:1.5;
   }
-  .tsk-tag--tipo{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.11);color:rgba(255,255,255,.5)}
-  .tsk-tag--tipo.stage{background:rgba(90,110,200,.14);border-color:rgba(130,155,255,.25);color:rgba(165,185,255,.82)}
-  .tsk-prazo-neutral{background:rgba(46,100,38,.2);border-color:rgba(80,170,60,.3);color:rgba(110,200,80,.88)}
-  .tsk-prazo-amber{background:rgba(160,120,30,.2);border-color:rgba(220,170,40,.3);color:rgba(245,195,60,.9)}
-  .tsk-prazo-late{background:rgba(160,60,30,.2);border-color:rgba(220,90,55,.3);color:rgba(240,110,70,.9)}
+  /* Chips de estado — a tinta chapada passa a degrade vertical mais o fio de
+     luz no topo (--sheen-edge). A cor continua a ser a mesma; o que muda e
+     ler como pastilha com volume em vez de retangulo pintado. */
+  .tsk-tag--tipo{background:var(--sheen-soft), rgba(255,255,255,.06);border-color:rgba(255,255,255,.11);color:rgba(255,255,255,.5);box-shadow:var(--sheen-edge)}
+  .tsk-tag--tipo.stage{background:linear-gradient(165deg,rgba(120,142,232,.24),rgba(74,92,178,.12));border-color:rgba(130,155,255,.28);color:rgba(175,193,255,.88);box-shadow:var(--sheen-edge)}
+  .tsk-prazo-neutral{background:linear-gradient(165deg,rgba(70,140,56,.30),rgba(38,84,32,.14));border-color:rgba(80,170,60,.34);color:rgba(126,214,96,.92);box-shadow:var(--sheen-edge)}
+  .tsk-prazo-amber{background:linear-gradient(165deg,rgba(198,152,42,.30),rgba(132,98,24,.14));border-color:rgba(220,170,40,.34);color:rgba(250,204,78,.94);box-shadow:var(--sheen-edge)}
+  .tsk-prazo-late{background:linear-gradient(165deg,rgba(202,80,44,.30),rgba(132,48,24,.14));border-color:rgba(220,90,55,.34);color:rgba(246,126,88,.94);box-shadow:var(--sheen-edge)}
   /* padding para não sobrepor chips */
   .tsk-info.has-tags{padding-right:62px}
   .tsk-info.has-tags.has-people{padding-right:62px}
@@ -435,7 +440,7 @@
   .tsk-tag--prog{display:flex;align-items:center;gap:3px;background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.10);color:rgba(255,255,255,.55)}
   .tsk-tag--prog.done{background:rgba(46,100,38,.2);border-color:rgba(80,170,60,.3);color:rgba(110,200,80,.88)}
   .prg-bg{fill:none;stroke:rgba(255,255,255,.15);stroke-width:2.5}
-  .prg-fill{fill:none;stroke:rgba(255,255,255,.65);stroke-width:2.5;stroke-linecap:round;transition:stroke-dasharray .25s ease}
+  .prg-fill{fill:none;stroke:rgba(255,255,255,.65);stroke-width:2.5;stroke-linecap:round;transition:stroke-dasharray var(--dur-3) var(--ease-out)}
   .tsk-tag--prog.done .prg-fill{stroke:rgba(100,190,70,.9)}
   /* people picker no formulário */
   .pessoas-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
@@ -445,7 +450,7 @@
     border:1.5px solid rgba(255,255,255,.1);
     background:rgba(255,255,255,.04);
     cursor:pointer;font-size:12px;color:var(--ink-soft);
-    transition:border-color .15s,background .15s;user-select:none;-webkit-tap-highlight-color:transparent
+    transition:border-color var(--dur-2),background var(--dur-2);user-select:none;-webkit-tap-highlight-color:transparent
   }
   .pessoa-chip.on{border-color:var(--brand,#295244);background:rgba(41,82,68,.2);color:var(--ink)}
   .pessoa-chip .tsk-av{margin-left:0;flex:none;border:none}
@@ -479,28 +484,40 @@
   .card-info-item .lbl{font-size:var(--text-2xs);color:var(--neutral);letter-spacing:.05em;font-weight:600}
   .card-info-item .val{font-size:var(--text-sm);font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .actions{display:flex;gap:var(--sp-2);margin-top:14px;flex-wrap:wrap}
+  /* Botoes: o gradiente e o fio de luz no topo (--gloss + --sheen-edge) sao o
+     que os faz ler como material com volume em vez de retangulo chapado. A
+     fonte de luz e sempre a mesma do resto da app — de cima. */
   .btn{font-family:inherit;font-size:var(--text-13h);font-weight:500;border-radius:var(--r-sm);padding:9px 14px;
-    cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.10);color:#fff;transition:transform .12s,background .15s}
-  .btn:active{transform:scale(.97)}
+    cursor:pointer;border:1px solid rgba(255,255,255,.18);
+    background:var(--gloss), rgba(255,255,255,.10);color:#fff;
+    box-shadow:var(--sheen-edge);
+    transition:transform var(--dur-1) var(--ease-out),
+               background var(--dur-2) var(--ease-out),
+               box-shadow var(--dur-2) var(--ease-out),
+               border-color var(--dur-2) var(--ease-out)}
+  .btn:hover{box-shadow:var(--sheen-edge),0 4px 14px rgba(0,0,0,.22)}
+  .btn:active{transform:scale(.97);box-shadow:inset 0 1px 3px rgba(0,0,0,.28)}
+  .btn:focus-visible{outline:2px solid rgba(255,255,255,.55);outline-offset:2px}
   /* .primary deixou de ser verde — mesma família de vidro escuro premium do
      resto do app (era var(--btn-72), o verde de marca antigo, que já não
      existe em mais nenhum botão fora daqui). Levemente mais opaco que
      .dark abaixo pra continuar a ler como a ação principal do ecrã. */
-  .btn.primary{background:var(--surface-btn);
+  .btn.primary{background:var(--gloss), var(--surface-btn);
     backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
     border-color:rgba(255,255,255,.20);color:#fff;font-weight:600}
-  .btn.primary:hover{background:var(--surface-btn-hover)}
-  .btn.soft{background:rgba(255,255,255,.08)}
-  .btn.ghost{background:transparent;border-color:transparent;color:rgba(255,255,255,.7);padding-left:6px}
-  .btn.dark{background:var(--surface-btn-soft);
+  .btn.primary:hover{background:var(--gloss), var(--surface-btn-hover)}
+  .btn.soft{background:var(--sheen-soft), rgba(255,255,255,.08)}
+  .btn.ghost{background:transparent;border-color:transparent;color:rgba(255,255,255,.7);padding-left:6px;box-shadow:none}
+  .btn.dark{background:var(--sheen-soft), var(--surface-btn-soft);
     border-color:rgba(255,255,255,.16);color:#fff;font-weight:600;
     backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
-    box-shadow:0 2px 8px rgba(0,0,0,.10),inset 0 1px 0 rgba(255,255,255,.10)}
-  .btn.dark:hover{background:var(--surface-btn-soft-hover)}
-  .actions .btn{background:var(--surface-btn)!important;
+    box-shadow:0 2px 8px rgba(0,0,0,.10),var(--sheen-edge)}
+  .btn.dark:hover{background:var(--sheen-soft), var(--surface-btn-soft-hover)}
+  .actions .btn{background:var(--gloss), var(--surface-btn)!important;
     backdrop-filter:blur(10px) saturate(115%);-webkit-backdrop-filter:blur(10px) saturate(115%);
-    border:1px solid rgba(255,255,255,.20)!important;color:#fff!important;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,.10)}
-  .actions .btn:hover{background:var(--surface-btn-hover)!important}
+    border:1px solid rgba(255,255,255,.20)!important;color:#fff!important;font-weight:600;
+    box-shadow:0 2px 8px rgba(0,0,0,.10),var(--sheen-edge)}
+  .actions .btn:hover{background:var(--gloss), var(--surface-btn-hover)!important}
   .btn svg{width:var(--ico-sm);height:var(--ico-sm);vertical-align:-2px;margin-right:2px;flex:none}
 
   /* ======================== FIN-CARD ======================== */
@@ -631,7 +648,7 @@
 .fin2-arc{
   fill:none;stroke-width:13;stroke-linecap:round;
   stroke-dasharray:0 314;
-  transition:stroke-dasharray .6s ease;
+  transition:stroke-dasharray .6s var(--ease-out);
 }
 .fin2-arc--g{
   stroke:#8DF227;
@@ -725,23 +742,32 @@
 .dest-arrow{display:none}
 
 /* ======================== DESTAQUE ANÁLISE OVERLAY ======================== */
+/* Sheet de detalhe da Dashboard — usa o material e o movimento partilhados
+   (ver "ELEVAÇÃO E SOBREPOSIÇÃO" em tokens.css). Antes era um painel #111
+   chapado, com z-index 900 próprio e sem qualquer animação: aparecia de
+   repente e lia como outro produto ao lado do sheet de Criar. */
 .da-overlay{
-  position:fixed;inset:0;z-index:900;
+  position:fixed;inset:0;z-index:var(--z-scrim);
   display:flex;flex-direction:column;justify-content:flex-end;
 }
 .da-overlay.u-hidden{display:none;}
 .da-backdrop{
   position:absolute;inset:0;
-  background:rgba(0,0,0,.55);
-  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  background:var(--scrim);
+  backdrop-filter:var(--scrim-blur);-webkit-backdrop-filter:var(--scrim-blur);
+  animation:scrim-in var(--dur-3) var(--ease-out) both;
 }
 .da-sheet{
-  position:relative;z-index:1;
-  background:#111;
-  border-radius:20px 20px 0 0;
+  position:relative;z-index:var(--z-raised);
+  background:var(--sheet-bg);
+  border-top:1px solid var(--sheet-border);
+  box-shadow:var(--sheet-shadow);
+  backdrop-filter:blur(24px) saturate(120%);-webkit-backdrop-filter:blur(24px) saturate(120%);
+  border-radius:var(--sheet-r) var(--sheet-r) 0 0;
   max-height:80dvh;
   display:flex;flex-direction:column;
   overflow:hidden;
+  animation:sheet-up var(--dur-4) var(--ease-glide) both;
 }
 .da-header{
   display:flex;align-items:center;justify-content:space-between;

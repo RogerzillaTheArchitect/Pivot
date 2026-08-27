@@ -3,7 +3,7 @@
   .sheet-header{display:flex;align-items:center;gap:10px;padding:0 2px;margin-bottom:2px}
   .sheet-back,.sheet-x{width:30px;height:30px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.12);
     background:rgba(255,255,255,.05);display:grid;place-items:center;cursor:pointer;color:var(--ink-soft);flex:none;
-    transition:background .15s}
+    transition:background var(--dur-2)}
   .sheet-back:hover,.sheet-x:hover{background:rgba(255,255,255,.09)}
   .sheet-back svg,.sheet-x svg{width:15px;height:15px}
   .sheet-header h3{flex:1;font-family:var(--font-title),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-17);font-weight:600;margin:0}
@@ -12,7 +12,7 @@
   .sheet-header h3.bib-title-font{font-family:var(--font-subtext),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-weight:600}
   .sheet-header.wiz h3{text-align:center}
   .sheet-progress{display:flex;justify-content:center;align-items:center;gap:var(--sp-2);margin:12px 2px 18px}
-  .sheet-progress span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s,width .2s}
+  .sheet-progress span{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background var(--dur-3),transform var(--dur-3),width var(--dur-3)}
   .sheet-progress span.on{background:var(--brand)}
   .sheet-progress span.current{width:9px;height:9px}
   .resumo-grid{display:flex;flex-direction:column;gap:var(--sp-2)}
@@ -23,9 +23,9 @@
   .sheet-body::-webkit-scrollbar{width:6px}
   .sheet-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:var(--r)}
   .panel{display:none}
-  .panel.show{display:block;animation:fade .22s ease both}
+  .panel.show{display:block;animation:fade var(--dur-3) var(--ease-out) both}
   .sheet-outline{display:flex;align-items:center;gap:13px;padding:14px 16px;border-radius:var(--r);
-    border:1px solid var(--line);color:var(--ink);cursor:pointer;margin-top:9px;background:var(--paper);transition:border-color .15s}
+    border:1px solid var(--line);color:var(--ink);cursor:pointer;margin-top:9px;background:var(--paper);transition:border-color var(--dur-2)}
   .sheet-outline:hover{border-color:var(--brand)}
   .sheet-outline svg{width:var(--ico-lg);height:var(--ico-lg);flex:none;color:var(--ink-soft)}
   .sheet-outline .t{font-size:var(--text-14h);font-weight:600}
@@ -68,7 +68,7 @@
 
   .type-grid{display:grid;grid-template-columns:var(--cols-3);gap:var(--sp-2);margin-bottom:16px}
   .type-card{border:1px solid var(--line);border-radius:var(--r);padding:13px 4px;text-align:center;cursor:pointer;
-    background:var(--paper);transition:all .15s}
+    background:var(--paper);transition:all var(--dur-2)}
   .type-card .ic{margin-bottom:5px;line-height:1;display:flex;justify-content:center;color:var(--ink-soft)}
   .type-card .ic svg{width:19px;height:19px}
   .type-card.sel .ic{color:var(--ink)}
@@ -104,7 +104,7 @@
   .struct-l .sub{font-size:var(--text-12);color:var(--neutral);display:block;margin-top:1px}
 
   .pick-row{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;border:1px solid var(--line);
-    border-radius:var(--r);margin-bottom:9px;cursor:pointer;background:var(--paper);transition:border-color .15s}
+    border-radius:var(--r);margin-bottom:9px;cursor:pointer;background:var(--paper);transition:border-color var(--dur-2)}
   .pick-row:hover{border-color:var(--brand)}
   .pick-row.selected{border-color:var(--brand);background:var(--brand-10)}
   .pick-row .nm{font-size:var(--text-14h);font-weight:500}
@@ -136,7 +136,7 @@
     border:1px solid rgba(255,255,255,.10);
     box-shadow:0 8px 22px -8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.06);
     backdrop-filter:blur(18px) saturate(160%);-webkit-backdrop-filter:blur(18px) saturate(160%);
-    transition:transform .22s cubic-bezier(.2,.8,.2,1);
+    transition:transform var(--dur-3) var(--ease-out);
 }
   .notif-card .nm{font-size:var(--text-base);font-weight:500;color:var(--ink)}
   .notif-card .sub{font-size:var(--text-12);color:var(--ink-soft);margin-top:2px}
@@ -146,7 +146,7 @@
   .colrow-head .body{flex:1;min-width:0}
   .colrow-head .t{font-size:var(--text-base);font-weight:500}
   .colrow-head .s{font-size:var(--text-12);color:var(--neutral)}
-  .colrow-head .chev2{width:var(--ico-sm);height:var(--ico-sm);color:var(--neutral);transition:transform .2s;flex:none}
+  .colrow-head .chev2{width:var(--ico-sm);height:var(--ico-sm);color:var(--neutral);transition:transform var(--dur-3);flex:none}
   .colrow.open .chev2{transform:rotate(180deg)}
   .colrow-alt{display:none;padding:0 14px 12px;border-top:1px solid var(--line-soft)}
   .colrow.open .colrow-alt{display:block}
@@ -158,7 +158,7 @@
   .comm-tabs::-webkit-scrollbar{display:none}
 
   .model-card{border:1px solid var(--line);border-radius:var(--r);padding:var(--sp-4);margin-bottom:10px;cursor:pointer;
-    background:var(--paper);transition:border-color .15s,background .15s}
+    background:var(--paper);transition:border-color var(--dur-2),background var(--dur-2)}
   .model-card:hover{border-color:var(--brand)}
   .model-card.selected{border-color:var(--brand);background:var(--brand-10)}
   .model-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:6px}
@@ -185,7 +185,7 @@
   .rating-stars svg{width:var(--ico-2xl);height:var(--ico-2xl);color:#D8932E;cursor:pointer}
   .rating-hint{font-size:var(--text-12h);color:var(--neutral);margin-bottom:8px}
   .comm-card{border:1px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:9px;cursor:pointer;
-    background:var(--paper);transition:border-color .15s}
+    background:var(--paper);transition:border-color var(--dur-2)}
   .comm-card:hover{border-color:var(--brand)}
   .comm-card .top{display:flex;align-items:flex-start;justify-content:space-between;gap:var(--sp-2)}
   .comm-card .nm{font-size:var(--text-md);font-weight:600}
@@ -211,7 +211,7 @@
   @keyframes spin{to{transform:rotate(360deg)}}
   .loading-state p{color:var(--neutral);font-size:var(--text-13h)}
   .dropzone{border:1.5px dashed var(--line);border-radius:var(--r);padding:30px 16px;text-align:center;cursor:pointer;
-    margin-bottom:8px;transition:border-color .15s}
+    margin-bottom:8px;transition:border-color var(--dur-2)}
   .dropzone:hover{border-color:var(--brand)}
   .dropzone svg{width:var(--ico-2xl);height:var(--ico-2xl);color:var(--neutral);margin-bottom:8px}
   .dropzone .t{font-size:var(--text-base);font-weight:500}
