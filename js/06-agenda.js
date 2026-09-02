@@ -806,7 +806,10 @@
     function findCenter(items){
       if(!items.length) return 0;
       var now=new Date();
-      var hojeISO=now.toISOString().slice(0,10);
+      /* _agdIsoLocal (não toISOString, que é UTC) — perto da meia-noite,
+         num fuso à frente de UTC, toISOString() ainda devolve o dia
+         anterior e "hoje" deixava de bater certo com o item do dia. */
+      var hojeISO=_agdIsoLocal(now);
       var nowMin=now.getHours()*60+now.getMinutes();
       /* 1. Prioridade: evento/tarefa em curso agora */
       for(var i=0;i<items.length;i++){
@@ -836,7 +839,11 @@
       if(!document.getElementById('agenda-section')) return;
       _items=gerarItensRadar();
       _active=findCenter(_items);
-      _day=(_items[_active]&&_items[_active].dataISO)||new Date().toISOString().slice(0,10);
+      /* A faixa de dias começa sempre no dia real de hoje (data local, não
+         UTC) — não no dia do item que o carrossel escolhe para mostrar
+         primeiro. São coisas diferentes: o carrossel pode abrir num
+         compromisso de outro dia, mas o dia "atual" da faixa é sempre hoje. */
+      _day=_agdIsoLocal(new Date());
       _rulerOffsetMin=0; /* reset ruler scroll to current time */
       _fanDirty=true;
       renderDays(); renderRuler(); renderFan();

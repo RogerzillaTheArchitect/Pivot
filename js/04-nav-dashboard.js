@@ -737,18 +737,10 @@
       return !_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''));
     });
     const futuros=radar.filter(function(it){ return !it.dataISO||diasEntre(it.dataISO)>=0; });
+    /* Atrasados saem da lista cronológica de "Agenda" (misturados, o que
+       vem agora/a seguir ficava difícil de ler) e viram o próprio pill
+       "Atrasados", que os mostra à parte. */
     const atrasados=radar.filter(function(it){ return it.dataISO&&diasEntre(it.dataISO)<0; });
-
-    /* Banner "N tarefas atrasadas" — atrasados saem da timeline cronológica
-       (misturados, o dia de hoje ficava difícil de ler) e só aparecem aqui. */
-    const banner=document.getElementById('tsk-overdue-banner');
-    if(banner){
-      if(atrasados.length){
-        banner.classList.remove('u-hidden');
-        const txt=document.getElementById('tsk-overdue-txt');
-        if(txt) txt.textContent=atrasados.length+' '+(atrasados.length===1?t('tasks.overdueSingular'):t('tasks.overduePlural'));
-      } else banner.classList.add('u-hidden');
-    }
 
     let itens;
     if(_tasksListMode==='notas'){
@@ -768,21 +760,6 @@
     renderNotificacoesPendentes();
     if(!itens.length){ wrap.innerHTML='<div class="tsk-row-empty">'+t('tasks.emptyList')+'</div>'; return; }
     wrap.innerHTML=itens.map(construirLinhaTarefa).join('');
-  }
-  function abrirAtrasados(){
-    const radar=gerarItensRadar().filter(function(it){
-      return it.dataISO&&diasEntre(it.dataISO)<0&&!_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''));
-    });
-    const lista=document.getElementById('atrasados-lista');
-    if(lista) lista.innerHTML=radar.length?radar.map(construirLinhaTarefa).join(''):'<div class="tsk-row-empty">'+t('tasks.emptyList')+'</div>';
-    const scrim=document.getElementById('atrasados-scrim'), sheet=document.getElementById('atrasados-sheet');
-    if(scrim) scrim.classList.remove('u-hidden');
-    if(sheet) sheet.classList.remove('u-hidden');
-  }
-  function fecharAtrasados(){
-    const scrim=document.getElementById('atrasados-scrim'), sheet=document.getElementById('atrasados-sheet');
-    if(scrim) scrim.classList.add('u-hidden');
-    if(sheet) sheet.classList.add('u-hidden');
   }
   /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
      (cor de acordo com o nível) + o próprio card ganha um leve degradê do lado
