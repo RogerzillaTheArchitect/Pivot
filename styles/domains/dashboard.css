@@ -488,7 +488,7 @@
   /* Lista — cada linha reaproveita o .pick-row já usado em Contatos/
      Biblioteca (avatar+texto+chevron), mais uma tag de prioridade para
      o modo Lembretes. */
-  #tasks-list{ display:flex; flex-direction:column; gap:8px }
+  #tasks-list{ display:flex; flex-direction:column; gap:3px }
   .tsk-row-empty{
     padding:36px 16px; text-align:center; color:var(--ink-faint); font-size:var(--text-sm);
   }
@@ -498,6 +498,11 @@
   .tsk-row-prio--urgente{ background:#E27367 }
   .tsk-row-prio--importante{ background:#DCAD57 }
   .tsk-row-prio--normal{ background:rgba(255,255,255,.28) }
+  /* Pill Notas — origem da nota (avulsa vs. de projeto) em vez de
+     prioridade; mesmas cores usadas noutros lados do app para os mesmos
+     conceitos (--brand = pessoal, --progress = ligado a algo). */
+  .tsk-row-prio--avulsa{ background:var(--brand) }
+  .tsk-row-prio--projeto{ background:var(--progress) }
   /* people picker no formulário */
   .pessoas-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
   .pessoa-chip{
