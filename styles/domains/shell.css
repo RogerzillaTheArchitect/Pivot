@@ -186,12 +186,14 @@
   .menu-drawer .plist{background:none;border:none;border-radius:0;margin:0 -16px;padding:0}
   .menu-drawer .prow{border-bottom:1px solid rgba(255,255,255,.08)}
   .menu-drawer .plist + .plist{margin-top:20px}
-  /* ===== FAB MENU — os 4 botões (em pílula, ícone antes do nome, dentro
-     de um módulo-contentor também em pílula) saem de dentro do próprio
-     Criar, deslizando da direita para a esquerda, e ficam à esquerda dele
-     — nunca por cima. Sem escurecer nem desfocar o ecrã (o backdrop só
-     serve para o clique-fora fechar). O ícone "+" do .fab roda 45° e vira
-     "×" sozinho (ver portal-cliente.css), sem precisar de SVG novo. */
+  /* ===== FAB MENU — os 4 botões são clones do próprio Criar (mesmo
+     tamanho 60×60, mesmo raio, mesmo material — não uma barra em pílula
+     partilhada), cada um flutuando com a sua própria sombra. Saem de
+     dentro do Criar, deslizando da direita para a esquerda, e ficam à
+     esquerda dele — nunca por cima. Sem escurecer nem desfocar o ecrã (o
+     backdrop só serve para o clique-fora fechar). O ícone "+" do .fab
+     roda 45° e vira "×" sozinho (ver portal-cliente.css), sem precisar de
+     SVG novo. */
   .fab-menu{position:fixed;top:0;bottom:0;left:0;right:0;z-index:74;pointer-events:none}
   .fab-menu.open{pointer-events:auto}
   .fab-menu-backdrop{position:absolute;inset:0;background:transparent}
@@ -199,11 +201,7 @@
     position:absolute;
     right:calc(18px + 78px); /* 78px = largura do .fab (60px) + vão (18px) — os botões nunca alcançam o .fab */
     bottom:calc(64px + 10px + 14px + env(safe-area-inset-bottom));
-    display:flex;flex-direction:row;align-items:stretch;gap:8px;
-    padding:6px;
-    border-radius:var(--r-pill);
-    background:rgba(22,22,22,.97);border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 6px 18px rgba(0,0,0,.25);
+    display:flex;flex-direction:row;align-items:center;gap:12px;
     transform:translateX(78px);
     opacity:0;
     pointer-events:none;
@@ -211,13 +209,15 @@
   }
   .fab-menu.open .fab-menu-items{transform:translateX(0); opacity:1; pointer-events:auto}
   .fab-menu-btn{
-    display:flex;flex-direction:row;align-items:center;gap:7px;
-    padding:10px 14px 10px 10px;
-    background:rgba(255,255,255,.06);border:none;border-radius:var(--r-pill);
-    color:#fff;font-size:12px;font-weight:600;white-space:nowrap;
+    width:60px;height:60px;flex:none;border-radius:20px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    background:linear-gradient(180deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 100%),#000;
+    border:1.5px solid rgba(255,255,255,.22);
+    color:#fff;font-size:9px;font-weight:600;text-align:center;line-height:1.1;
     cursor:pointer;-webkit-tap-highlight-color:transparent;
+    box-shadow:0 6px 18px rgba(0,0,0,.25);
   }
-  .fab-menu-btn .nav-ico{background-color:rgba(255,255,255,.85);width:18px;height:18px;flex:none}
+  .fab-menu-btn .nav-ico{background-color:rgba(255,255,255,.85);width:20px;height:20px;flex:none}
   .fab-menu-btn span:not(.nav-ico){display:block;line-height:1.2}
   .drawer-company{font-size:var(--text-sm);color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .drawer-plan-badge{display:inline-block;margin-top:6px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:4px;background:rgba(255,255,255,.13);color:var(--ink);border:1px solid rgba(255,255,255,.18)}

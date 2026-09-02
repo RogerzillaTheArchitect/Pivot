@@ -455,35 +455,29 @@
   .prg-fill{fill:none;stroke:rgba(255,255,255,.65);stroke-width:2.5;stroke-linecap:round;transition:stroke-dasharray var(--dur-3) var(--ease-out)}
   .tsk-tag--prog.done .prg-fill{stroke:rgba(100,190,70,.9)}
 
-  /* ===== Dashboard de Tarefas — banner de atrasados + pills + lista =====
+  /* ===== Dashboard de Tarefas — pills + lista =====
      Fica junto dos outros .tsk-* por serem parte da mesma área (lista de
      tarefas do #v-hoje), mesmo não partilhando os cartões do carrossel. */
-  .tsk-overdue-banner{
-    display:flex; align-items:center; gap:9px;
-    margin:var(--sp-4) 0 var(--sp-3);
-    padding:11px 14px;
-    border-radius:var(--r-sm);
-    background:linear-gradient(165deg,rgba(202,80,44,.22),rgba(132,48,24,.10));
-    border:1px solid rgba(220,90,55,.30);
-    cursor:pointer; -webkit-tap-highlight-color:transparent;
-    transition:background var(--dur-2);
-  }
-  .tsk-overdue-banner:active{ background:linear-gradient(165deg,rgba(202,80,44,.30),rgba(132,48,24,.16)) }
-  .tsk-overdue-ico{ flex:none; font-size:15px; line-height:1 }
-  .tsk-overdue-txt{ flex:1; font-size:var(--text-13h); font-weight:600; color:rgba(246,126,88,.94) }
-  .tsk-overdue-link{
-    flex:none; font-size:var(--text-12); font-weight:700; letter-spacing:.03em;
-    color:rgba(255,255,255,.8); text-transform:uppercase;
-  }
 
-  /* Pills grandes — 4 colunas fixas, maior alvo de toque que o .chip
-     padrão de trabalhos.css (que é feito para caber 3 num scroll). */
-  #tasks-filter-row{ display:grid; grid-template-columns:var(--cols-4); gap:var(--sp-2); margin:var(--sp-4) 0 var(--sp-4) }
-  #tasks-filter-row .chip{
-    padding:11px 4px; font-size:var(--text-12h); font-weight:600;
-    justify-content:center; text-align:center; min-width:0;
+  /* Base em pílula "escavada" (fundo recuado + sombra interna, como um
+     segmented control) — os 3 pills dividem o espaço em partes iguais
+     dentro dela, cada um também em pílula, com ícone antes do nome. */
+  #tasks-filter-row{
+    display:grid; grid-template-columns:var(--cols-3); gap:4px;
+    margin:var(--sp-4) 0 var(--sp-4);
+    padding:4px;
+    border-radius:var(--r-pill);
+    background:rgba(0,0,0,.35);
+    box-shadow:inset 0 1px 4px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.06);
   }
+  #tasks-filter-row .chip{
+    padding:10px 4px; font-size:var(--text-12h); font-weight:600;
+    justify-content:center; text-align:center; min-width:0;
+    border-radius:var(--r-pill); border:none; background:transparent;
+  }
+  #tasks-filter-row .chip.on{ background:rgba(255,255,255,.92); color:#1a1b1d }
   #tasks-filter-row .chip span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+  #tasks-filter-row .chip svg{ width:15px; height:15px; flex:none }
 
   /* Lista — cada linha reaproveita o .pick-row já usado em Contatos/
      Biblioteca (avatar+texto+chevron), mais uma tag de prioridade para

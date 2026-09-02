@@ -535,44 +535,35 @@
           </div>
         </div>
 
-        <!-- Banner de atrasados — só aparece quando há pelo menos 1 item
-             atrasado (ver renderTasksList em js/04-nav-dashboard.js). Fica
-             fora da timeline de propósito: misturar atrasados na ordem
-             cronológica do que vem agora/a seguir tornava a lista confusa. -->
-        <div class="tsk-overdue-banner u-hidden" id="tsk-overdue-banner" onclick="abrirAtrasados()">
-          <span class="tsk-overdue-ico">⚠</span>
-          <span class="tsk-overdue-txt" id="tsk-overdue-txt"></span>
-          <span class="tsk-overdue-link" data-t="tasks.seeMore">Ver</span>
-        </div>
+        <!-- Banner de atrasados — removido: o pill "Atrasados" já cobre a
+             mesma função (filtra a lista embutida), o aviso acima dele
+             tinha ficado redundante. abrirAtrasados()/fecharAtrasados()
+             e o modal continuam a existir para quem clicar no pill. -->
 
-        <!-- Pills — Agenda / Notas / Atrasados. Agenda engloba compromissos
-             datados e tarefas soltas (com/sem data) numa lista só; Notas
-             junta avulsas + notas de projeto (job.notas); Atrasados filtra
-             o mesmo conjunto que já alimenta o banner acima. Cada uma
-             filtra o mesmo #tasks-list (ver filtrarListaTarefas em
-             js/04-nav-dashboard.js). -->
+        <!-- Pills — Agenda / Notas / Atrasados, cada um com ícone antes do
+             nome, dividindo a base em pílula em partes iguais. Agenda
+             engloba compromissos datados e tarefas soltas (com/sem data)
+             numa lista só; Notas junta avulsas + notas de projeto
+             (job.notas); Atrasados abre a mesma lista do modal, agora
+             também embutida. Cada uma filtra o mesmo #tasks-list (ver
+             filtrarListaTarefas em js/04-nav-dashboard.js). -->
         <div class="filter-row" id="tasks-filter-row">
-          <div class="chip on" data-key="agenda" onclick="filtrarListaTarefas(this,'agenda')" data-t="tasks.tabAgenda">Agenda</div>
-          <div class="chip" data-key="notas" onclick="filtrarListaTarefas(this,'notas')" data-t="tasks.tabNotes">Notas</div>
-          <div class="chip" data-key="atrasados" onclick="filtrarListaTarefas(this,'atrasados')" data-t="tasks.tabOverdue">Atrasados</div>
+          <div class="chip on" data-key="agenda" onclick="filtrarListaTarefas(this,'agenda')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span data-t="tasks.tabAgenda">Agenda</span>
+          </div>
+          <div class="chip" data-key="notas" onclick="filtrarListaTarefas(this,'notas')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h2M9 12h6M9 16h6"/></svg>
+            <span data-t="tasks.tabNotes">Notas</span>
+          </div>
+          <div class="chip" data-key="atrasados" onclick="filtrarListaTarefas(this,'atrasados')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span data-t="tasks.tabOverdue">Atrasados</span>
+          </div>
         </div>
 
         <div id="tasks-list"></div>
       </section>
-
-      <!-- Modal de tarefas atrasadas — .ov-scrim/.ov-sheet, mesmo sistema
-           partilhado dos outros modais da app (styles/overlays.css). -->
-      <div class="ov-scrim u-hidden" id="atrasados-scrim" onclick="fecharAtrasados()"></div>
-      <div class="ov-sheet u-hidden" id="atrasados-sheet">
-        <div class="ov-grab"></div>
-        <div class="sheet-header">
-          <h3 data-t="tasks.overdueTitle">Tarefas atrasadas</h3>
-          <button class="icon-btn" onclick="fecharAtrasados()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
-          </button>
-        </div>
-        <div class="ov-sheet-body" id="atrasados-lista"></div>
-      </div>
 
       <!-- ============ ESTATÍSTICAS ============
            Financeiro/Operacional/Destaques, extraídos da Dashboard de
