@@ -298,11 +298,13 @@
     text-align:left;line-height:1;overflow:visible;white-space:nowrap;
   }
   .tasks-header::after{display:none}
-  /* DESTAQUES usa .rel-card-header (de relatorios.css) — override scoped ao dashboard.
-     Antes tinha filter:blur(1px) — lia como acidente/render partido, não
-     como escolha; a distinção de secção passa a vir do peso do texto, da
-     margem (--sp-section) e do fio inferior, não de desfocar o título. */
-  #v-hoje .rel-card-header{font-size:clamp(20px,5vw,30px);letter-spacing:.02em;
+  /* Operacional/Destaques usam .rel-card-header (de relatorios.css) —
+     override scoped à vista Estatísticas, onde estes cards vivem agora
+     (antes vivia em #v-hoje, mudou com a reorganização da Dashboard de
+     Tarefas). Antes tinha filter:blur(1px) — lia como acidente/render
+     partido, não como escolha; a distinção de secção passa a vir do peso
+     do texto, da margem (--sp-section) e do fio inferior, não do blur. */
+  #v-estatisticas .rel-card-header{font-size:clamp(20px,5vw,30px);letter-spacing:.02em;
     margin-top:var(--sp-section);padding-bottom:10px;border-bottom:1px solid var(--line-soft);
     filter:none;color:rgba(255,255,255,.78)}
   #tasks-list .radar-card-wrap:first-child .card{border-radius:var(--r)}

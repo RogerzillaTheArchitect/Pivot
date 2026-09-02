@@ -34,11 +34,12 @@
     if(active){
       const vid=active.id.replace('v-','');
       if(vid==='hoje'&&typeof renderMonthTicker==='function')renderMonthTicker();
+      if(vid==='hoje'&&typeof renderTasksList==='function')renderTasksList();
       if(vid==='detalhe'&&typeof currentJobId!=='undefined'&&currentJobId&&typeof jobsData!=='undefined'&&jobsData[currentJobId]&&typeof renderJobDetailDynamic==='function')renderJobDetailDynamic(currentJobId);
       if(vid==='builder'&&typeof renderBuilder==='function')renderBuilder();
       if(vid==='equipa'&&typeof renderEquipaView==='function')renderEquipaView();
       if(vid==='bibliotecas'&&typeof renderBiblioteca==='function')renderBiblioteca();
-      if((vid==='relatorios'||vid==='hoje')&&typeof renderRelatorios==='function')renderRelatorios();
+      if(vid==='estatisticas'&&typeof renderRelatorios==='function')renderRelatorios();
     }
     if(document.getElementById('v-trabalhos').classList.contains('active')){
       document.querySelectorAll('.job[data-job-id]').forEach(div=>{
@@ -49,11 +50,14 @@
     }
   }
 
-  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','estatisticas','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
   function go(v){
-    if(v==='relatorios') v='hoje';
+    /* "relatorios" era o nome antigo — o conteúdo (Financeiro/Operacional/
+       Destaques) já não vive em "hoje" (Dashboard de Tarefas), vive na
+       vista Estatísticas. Mantém chamadas antigas a funcionar. */
+    if(v==='relatorios') v='estatisticas';
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
-      bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
+      bibliotecas:'bibliotecas',perfil:'perfil',pesquisa:'trabalhos',equipa:'perfil',
       contatos:'perfil','contato-detalhe':'perfil'};
     /* sair da área de Trabalhos (menu/página diferente) limpa a seleção de dia
        do calendário — ao voltar, mostra de novo os registos do dia atual em
@@ -67,7 +71,8 @@
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
-    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderRelatorios(); renderDashCustomCards(); }
+    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderTasksList(); }
+    if(v==='estatisticas'){ staggerCards('#v-estatisticas .card'); renderRelatorios(); renderDashCustomCards(); }
     if(v==='equipa') renderEquipaView();
     if(v==='bibliotecas') renderBiblioteca();
     if(v==='historico') renderHistorico();
@@ -123,7 +128,7 @@
     metasMesAtual().receita=r;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-estatisticas').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
@@ -139,7 +144,7 @@
     metasMesAtual().gastos=g;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-estatisticas').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }

@@ -957,9 +957,10 @@
     "nav.calendar": { pt:"Calendário", en:"Calendar", es:"Calendario" },
     "nav.create": { pt:"Criar", en:"Create", es:"Crear" },
     "nav.explore": { pt:"Explorar", en:"Explore", es:"Explorar" },
-    "nav.home": { pt:"Painel", en:"Dashboard", es:"Panel" },
+    "nav.home": { pt:"Tarefas", en:"Tasks", es:"Tareas" },
     "nav.jobs": { pt:"Projetos", en:"Projects", es:"Proyectos" },
     "nav.libraries": { pt:"Modelos", en:"Templates", es:"Modelos" },
+    "nav.stats": { pt:"Estatísticas", en:"Statistics", es:"Estadísticas" },
     "nav.profile": { pt:"Perfil", en:"Profile", es:"Perfil" },
     "nav.search": { pt:"Pesquisar", en:"Search", es:"Buscar" },
     // --- Notificações ---

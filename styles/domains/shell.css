@@ -163,12 +163,15 @@
   .menu-overlay{position:fixed;inset:0;z-index:var(--z-scrim);background:var(--scrim);
     backdrop-filter:var(--scrim-blur);-webkit-backdrop-filter:var(--scrim-blur);
     animation:scrim-in var(--dur-3) var(--ease-out) both}
-  /* Drawer de menu — material e elevacao partilhados (tokens.css). */
-  .menu-drawer{position:fixed;top:0;right:0;bottom:0;width:min(320px,90vw);z-index:var(--z-sheet);
+  /* Drawer de menu — material e elevacao partilhados (tokens.css).
+     "Geral" passou para a extrema esquerda da nav, por isso o drawer
+     inverteu de lado: ancora à esquerda e entra da esquerda para a
+     direita (era right:0/translateX(100%), o espelho exato). */
+  .menu-drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,90vw);z-index:var(--z-sheet);
     display:flex;flex-direction:column;
     background:var(--sheet-bg);backdrop-filter:blur(24px) saturate(120%);-webkit-backdrop-filter:blur(24px) saturate(120%);
-    border-left:1px solid var(--sheet-border);box-shadow:var(--sheet-shadow-float);
-    transform:translateX(100%);transition:transform var(--dur-4) var(--ease-glide);
+    border-right:1px solid var(--sheet-border);box-shadow:var(--sheet-shadow-float);
+    transform:translateX(-100%);transition:transform var(--dur-4) var(--ease-glide);
     --ink:#F5F5F3;--ink-soft:#C8C8C8;--ink-faint:#9B9B9B;--neutral:#B9B9B1;
     --line:rgba(255,255,255,.10);--line-soft:rgba(255,255,255,.08);
     --paper:rgba(255,255,255,.09);--paper-2:rgba(255,255,255,.07);
@@ -183,28 +186,36 @@
   .menu-drawer .plist{background:none;border:none;border-radius:0;margin:0 -16px;padding:0}
   .menu-drawer .prow{border-bottom:1px solid rgba(255,255,255,.08)}
   .menu-drawer .plist + .plist{margin-top:20px}
-  /* ===== FAB MENU — 4 botões quadrados horizontais, slide-up da nav bar ===== */
+  /* ===== FAB MENU — 4 botões saem de dentro do Criar, da direita para a
+     esquerda. O Criar agora flutua acima da nav (ver .fab-wrap em
+     portal-cliente.css) alinhado à coluna de "Tarefas", extrema direita —
+     por isso o menu ancora-se ao mesmo canto e cresce para a esquerda, em
+     vez do slide-up de largura total que fazia sentido quando o botão
+     ficava embutido no meio da barra. `max-width` com overflow:hidden faz
+     o "unfold" sem esticar os botões (scaleX distorceria o conteúdo). */
   .fab-menu{position:fixed;top:0;bottom:0;left:0;right:0;z-index:74;pointer-events:none}
   .fab-menu.open{pointer-events:auto}
   .fab-menu-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.50);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);opacity:0;transition:opacity var(--dur-3)}
   .fab-menu.open .fab-menu-backdrop{opacity:1}
   .fab-menu-items{
     position:absolute;
-    bottom:0;left:0;right:0;
-    display:flex;flex-direction:row;justify-content:center;gap:10px;
-    padding:12px 16px calc(60px + env(safe-area-inset-bottom) + 28px);
-    transform:translateY(100%);
-    transition:transform var(--dur-4) var(--ease-glide);
+    right:18px;
+    bottom:calc(64px + 10px + 14px + env(safe-area-inset-bottom));
+    display:flex;flex-direction:row;justify-content:flex-end;align-items:stretch;gap:10px;
+    max-width:0; overflow:hidden;
+    transition:max-width var(--dur-4) var(--ease-glide);
   }
-  .fab-menu.open .fab-menu-items{transform:translateY(0)}
+  .fab-menu.open .fab-menu-items{max-width:400px}
   .fab-menu-btn{
-    flex:1;max-width:80px;
+    flex:1;max-width:80px;min-width:74px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
     padding:14px 6px 12px;
     background:rgba(22,22,22,.97);border:1px solid rgba(255,255,255,.12);border-radius:16px;
     color:#fff;font-size:10px;font-weight:500;text-align:center;
     cursor:pointer;-webkit-tap-highlight-color:transparent;
+    opacity:0; transition:opacity var(--dur-2) var(--ease-out);
   }
+  .fab-menu.open .fab-menu-btn{opacity:1; transition-delay:var(--dur-2)}
   .fab-menu-btn .nav-ico{background-color:rgba(255,255,255,.8);width:22px;height:22px}
   .fab-menu-btn span:not(.nav-ico){display:block;line-height:1.2}
   .drawer-company{font-size:var(--text-sm);color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}

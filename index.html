@@ -434,14 +434,20 @@
       <span class="nav-ico ico-criar"></span> <span id="sb-label-criar" data-t="nav.create">Criar</span>
     </div>
     <div class="sb-sep"></div>
-    <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
-      <span class="nav-ico u-ico-18v ico-trabalhos"></span> <span id="sb-label-hoje" data-t="nav.home">Painel</span>
-    </div>
-    <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
-      <span class="nav-ico u-ico-18v ico-arquivos"></span> <span id="sb-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
+    <!-- Mesma ordem de prioridade da nav inferior mobile (Estatísticas →
+         Modelos → Projetos → Tarefas); "Geral" não tem equivalente aqui,
+         a sidebar já mostra os itens soltos em vez de um drawer. -->
+    <div class="sb-item" data-nav="estatisticas" onclick="go('estatisticas')">
+      <span class="nav-ico u-ico-18v ico-estatisticas"></span> <span id="sb-label-estatisticas" data-t="nav.stats">Estatísticas</span>
     </div>
     <div class="sb-item" data-nav="bibliotecas" onclick="go('bibliotecas')">
       <span class="nav-ico u-ico-18v ico-docs"></span> <span id="sb-label-bibliotecas" data-t="nav.libraries">Modelos</span>
+    </div>
+    <div class="sb-item" data-nav="trabalhos" onclick="go('trabalhos')">
+      <span class="nav-ico u-ico-18v ico-arquivos"></span> <span id="sb-label-trabalhos" data-t="nav.jobs">Projetos</span>
+    </div>
+    <div class="sb-item on" data-nav="hoje" onclick="go('hoje')">
+      <span class="nav-ico u-ico-18v ico-trabalhos"></span> <span id="sb-label-hoje" data-t="nav.home">Tarefas</span>
     </div>
     <div class="sb-item u-relative" onclick="abrirNotificacoes()">
       <span class="nav-ico u-ico-18v ico-notif"></span> <span data-t="profile.notifications">Notificações</span>
@@ -518,7 +524,34 @@
           </div>
         </div>
 
-        <!-- ── CARD FINANCEIRO (abaixo da agenda) ── -->
+        <!-- Ruler interval selector — fullscreen overlay, position:fixed -->
+        <div id="agd-isel" class="agd-isel u-hidden">
+          <div class="agd-isel-bd"></div>
+          <div class="agd-isel-sheet">
+            <div class="agd-isel-title">Intervalo dos ponteiros</div>
+            <button class="agd-isel-opt" data-step="1">1 minuto</button>
+            <button class="agd-isel-opt" data-step="5">5 minutos</button>
+            <button class="agd-isel-opt" data-step="10">10 minutos</button>
+            <button class="agd-isel-opt" data-step="15">15 minutos</button>
+            <button class="agd-isel-opt" data-step="30">30 minutos</button>
+          </div>
+        </div>
+
+        <div class="empty u-hidden" id="hoje-empty">
+          <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <h3 data-t="home.allGood">Está tudo em dia.</h3>
+        </div>
+      </section>
+
+      <!-- ============ ESTATÍSTICAS ============
+           Financeiro/Operacional/Destaques, extraídos da Dashboard de
+           Tarefas (que passou a focar-se em execução). Conteúdo igual ao
+           que já existia — a reformulação visual destes cards fica para
+           depois. Os containers `#dash-card-operacional`/`#dash-card-
+           destaques` que aqui existiam eram espelhos sempre escondidos
+           (código morto de um refactor incompleto) e não foram trazidos. -->
+      <section class="view wide" id="v-estatisticas">
+        <!-- ── CARD FINANCEIRO ── -->
         <button class="tasks-header">FINANCEIRO</button>
         <div id="dash-card-financeiro" onclick="abrirDashCard(event,'financeiro')" style="cursor:pointer;margin-top:4px">
         <div class="fin2">
@@ -563,69 +596,11 @@
         </div>
         </div>
 
-        <!-- Ruler interval selector — fullscreen overlay, position:fixed -->
-        <div id="agd-isel" class="agd-isel u-hidden">
-          <div class="agd-isel-bd"></div>
-          <div class="agd-isel-sheet">
-            <div class="agd-isel-title">Intervalo dos ponteiros</div>
-            <button class="agd-isel-opt" data-step="1">1 minuto</button>
-            <button class="agd-isel-opt" data-step="5">5 minutos</button>
-            <button class="agd-isel-opt" data-step="10">10 minutos</button>
-            <button class="agd-isel-opt" data-step="15">15 minutos</button>
-            <button class="agd-isel-opt" data-step="30">30 minutos</button>
-          </div>
-        </div>
-
-        <div id="dash-card-operacional" class="u-hidden" onclick="abrirDashCard(event,'operacional')" style="cursor:pointer">
-        <div class="tasks-header" id="dash-op-title" data-t="reports.opStats" onclick="abrirRelatorios('operacional')">OPERACIONAL</div>
-        <div class="card ops-card" aria-labelledby="dash-op-title">
-          <section class="metric" id="opm-horas" onclick="abrirRelatorios('operacional')">
-            <span class="icon u-ico-mask-base ico-loader"></span>
-            <div class="label" data-t="home.hours">Horas</div>
-            <div class="track" id="opm-horas-track"></div>
-            <div class="value-end" id="opm-horas-end"></div>
-          </section>
-          <section class="metric" id="opm-pendencias" onclick="abrirTrabalhosFiltrados('cliente')">
-            <span class="icon u-ico-mask-base ico-receita"></span>
-            <div class="label" data-t="home.pending">Pendências</div>
-            <div class="track" id="opm-pendencias-track"></div>
-            <div class="value-end" id="opm-pendencias-end"></div>
-          </section>
-          <section class="metric" id="opm-demandas" onclick="abrirTrabalhosFiltrados('meucargo')">
-            <span class="icon u-ico-mask-base ico-despesa"></span>
-            <div class="label" data-t="home.demands">Demandas</div>
-            <div class="track" id="opm-demandas-track"></div>
-            <div class="value-end" id="opm-demandas-end"></div>
-          </section>
-          <section class="metric" id="opm-executados" onclick="go('historico')">
-            <span class="icon u-ico-mask-base ico-contrato"></span>
-            <div class="label" data-t="home.executed">Executados</div>
-            <div class="track" id="opm-executados-track"></div>
-            <div class="value-end" id="opm-executados-end"></div>
-          </section>
-          <section class="metric" id="opm-concluidos" onclick="abrirTrabalhosFiltrados('entregues')">
-            <span class="icon u-ico-mask-base ico-flag"></span>
-            <div class="label" data-t="home.completedTile">Concluídos</div>
-            <div class="track" id="opm-concluidos-track"></div>
-            <div class="value-end" id="opm-concluidos-end"></div>
-          </section>
-          <section class="metric" id="opm-fechados" onclick="abrirRelatorios('operacional')">
-            <span class="icon u-ico-mask-base ico-handshake"></span>
-            <div class="label" data-t="home.closed">Fechados</div>
-            <div class="track" id="opm-fechados-track"></div>
-            <div class="value-end" id="opm-fechados-end"></div>
-          </section>
-        </div>
-        </div>
-
-        <div id="dash-card-destaques" class="u-hidden u-mt-22" onclick="abrirDashCard(event,'destaques')" style="cursor:pointer"></div>
-
-        <div class="empty u-hidden" id="hoje-empty">
-          <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
-          <h3 data-t="home.allGood">Está tudo em dia.</h3>
-        </div>
-
-        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span><span class="dash-card-toggle" data-dash-key="operacional" onclick="toggleDashboardCard('operacional')" aria-label="Mostrar na Dashboard"><span class="kn"></span></span></div>
+        <!-- Operacional/Destaques ficam sempre visíveis dentro de
+             Estatísticas agora — o toggle "mostrar na Dashboard" que
+             existia aqui não fazia mais nada desde que os containers-
+             espelho da Dashboard de Tarefas foram removidos. -->
+        <div class="rel-card-header tech" id="rel-anchor-operacional"><span data-t="reports.stats.title">Operacional</span></div>
         <div class="card ops-card rel-ops-card-sub">
           <section class="metric" id="ropm-horas">
             <span class="icon u-ico-mask-base ico-loader"></span>
@@ -986,8 +961,6 @@
         </div>
       </section>
 
-      <!-- ============ RELATÓRIOS (página unificada) ============ -->
-      <section class="view" id="v-relatorios"></section>
 
       <!-- ============ ORGANIZAÇÃO (dados da empresa + equipe) ============ -->
       <section class="view" id="v-equipa">
@@ -1036,26 +1009,38 @@
       <button class="fab-menu-btn" onclick="closeFabMenu();openSheetDirect('despesa')"><span class="nav-ico ico-saida"></span><span data-t="sheet.expense">Despesa</span></button>
     </div>
   </div>
-  <!-- ===== MOBILE NAV ===== -->
+  <!-- ===== MOBILE NAV =====
+       Ordem: Geral | Estatísticas | Modelos | Projetos | Tarefas — Geral
+       passou para a esquerda (ver .menu-drawer, agora abre desse lado) e
+       Tarefas (ex-"Painel"/hoje) passou para a direita, onde o Criar
+       flutuante fica alinhado. Chaves internas (`hoje`, `trabalhos`,
+       `bibliotecas`) não mudam, só posição e rótulo. -->
   <nav class="nav">
-    <button class="on" id="n-hoje" onclick="go('hoje')">
-      <span class="nav-ico nav-ico-painel"></span>
-      <span id="nav-label-hoje" data-t="nav.home">Painel</span>
-    </button>
-    <button id="n-trabalhos" onclick="go('trabalhos')">
-      <span class="nav-ico nav-ico-trabalhos"></span>
-      <span id="nav-label-trabalhos" data-t="nav.jobs">Trabalhos</span>
-    </button>
-    <div class="fab-wrap"><div class="fab" onclick="toggleFabMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div></div>
-    <button id="n-bibliotecas" onclick="go('bibliotecas')">
-      <span class="nav-ico nav-ico-modelos"></span>
-      <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
-    </button>
     <button id="n-geral" onclick="abrirMenuDrawer()">
       <img src="https://api.iconify.design/formkit:group.svg?color=white" width="20" height="20" alt="" style="opacity:.7">
       <span>Geral</span>
     </button>
+    <button id="n-estatisticas" onclick="go('estatisticas')">
+      <span class="nav-ico nav-ico-estatisticas"></span>
+      <span id="nav-label-estatisticas" data-t="nav.stats">Estatísticas</span>
+    </button>
+    <button id="n-bibliotecas" onclick="go('bibliotecas')">
+      <span class="nav-ico nav-ico-modelos"></span>
+      <span id="nav-label-bibliotecas" data-t="nav.libraries">Modelos</span>
+    </button>
+    <button id="n-trabalhos" onclick="go('trabalhos')">
+      <span class="nav-ico nav-ico-trabalhos"></span>
+      <span id="nav-label-trabalhos" data-t="nav.jobs">Projetos</span>
+    </button>
+    <button class="on" id="n-hoje" onclick="go('hoje')">
+      <span class="nav-ico nav-ico-painel"></span>
+      <span id="nav-label-hoje" data-t="nav.home">Tarefas</span>
+    </button>
   </nav>
+  <!-- Criar — flutuante acima da barra, alinhado à posição de "Tarefas"
+       (extrema direita). Deixou de ser um item inline da nav (ver
+       .fab-wrap em shell.css). -->
+  <div class="fab-wrap"><div class="fab" onclick="toggleFabMenu()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></div></div>
   <!-- ===== MENU DRAWER — slide-in da direita, substitui botão de Perfil no topbar mobile ===== -->
   <div class="menu-overlay u-hidden" id="menu-overlay" onclick="fecharMenuDrawer()"></div>
   <div class="menu-drawer" id="menu-drawer">
