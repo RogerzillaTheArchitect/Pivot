@@ -1654,6 +1654,9 @@
        no mesmo cartão. Ver auditoria de design, achado do Detalhe do
        Trabalho. "rascunho" (contrato existe, ainda não foi enviado)
        continua "Pendente", que é a palavra certa para esse caso. */
-    if(st==='vazio') return '<span class="sig-tag gray">'+statusEmoji('pending')+' '+t('contract.tagMissing')+'</span>';
-    return '<span class="sig-tag gray">'+statusEmoji('pending')+' '+t('contract.tagPending')+'</span>';
+    /* Chip de estado é sempre amarelo/vermelho/verde, nunca cinza neutro —
+       "em falta" (nenhum contrato criado ainda) é o estado mais urgente
+       dos três pendentes, por isso late (vermelho) em vez de amber. */
+    if(st==='vazio') return '<span class="sig-tag late">'+statusEmoji('pending')+' '+t('contract.tagMissing')+'</span>';
+    return '<span class="sig-tag amber">'+statusEmoji('pending')+' '+t('contract.tagPending')+'</span>';
   }
