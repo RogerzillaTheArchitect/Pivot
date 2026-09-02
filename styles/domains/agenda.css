@@ -24,21 +24,34 @@
 }
 
 /* ══════════════════════════════════════════════════
-   DAY NAVIGATION — 3 columns, swipeable + animated
-══════════════════════════════════════════════════ */
+   FAIXA DE DIAS — scroll horizontal, 3 linhas por dia
+   (dia da semana / número / mês). Era um seletor fixo de
+   3 colunas (anterior/atual/seguinte); passa a uma faixa
+   scrollável mais longa que funciona como mostrador de
+   data para o carrossel e a lista abaixo — ver reorganização
+   da Dashboard de Tarefas. O clique em qualquer dia chama
+   agdSelectDay(iso), já existente (era usado pelo calendário
+   de projetos); agdShiftDay(dir) continua a existir e a
+   chamar renderDays() — usado pelo swipe do próprio carrossel. */
 .agd-days-wrap {
-  overflow: hidden;
-  touch-action: pan-y;
-  cursor: grab;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.agd-days-wrap:active { cursor: grabbing; }
+.agd-days-wrap::-webkit-scrollbar { display: none; }
 
 .agd-days {
   display: flex;
   align-items: stretch;
+  gap: 6px;
+  padding: 4px 4px 6px;
+  width: max-content;
 }
 
-/* Slide-in animations (shared by days and ruler) */
+/* Slide-in animations — usadas pelo ruler (.agd-ruler-viz mais abaixo).
+   A faixa de dias (.agd-days) deixou de as usar: era o antigo seletor de
+   3 colunas com animação de slide a cada troca; agora é scroll nativo. */
 @keyframes agd-slide-from-r {
   from { transform: translateX(28%); opacity: 0; }
   to   { transform: translateX(0);   opacity: 1; }
@@ -47,56 +60,60 @@
   from { transform: translateX(-28%); opacity: 0; }
   to   { transform: translateX(0);    opacity: 1; }
 }
-.agd-days.agd-anim-from-r { animation:agd-slide-from-r var(--dur-1) var(--ease-out) both; }
-.agd-days.agd-anim-from-l { animation:agd-slide-from-l var(--dur-1) var(--ease-out) both; }
 
 .agd-day-col {
-  flex: 1;
+  flex: none;
+  scroll-snap-align: center;
+  width: 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  padding: 12px 8px 10px;
-  border: none;
+  gap: 1px;
+  padding: 10px 4px 9px;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition:background var(--dur-2);
+  transition: background var(--dur-2), border-color var(--dur-2);
+  position: relative;
 }
-.agd-day-col:active { background: rgba(255,255,255,.04); }
+.agd-day-col:active { background: rgba(255,255,255,.06); }
 
-/* Side days — smaller, muted */
-.agd-day-col.agd-day-side .agd-day-num {
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: rgba(255,255,255,.25);
-  line-height: 1;
+.agd-day-wd {
+  font-family: var(--font-label), -apple-system, sans-serif;
+  font-size: .62rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(255,255,255,.4); line-height: 1.3;
 }
-.agd-day-col.agd-day-side .agd-day-mon {
-  font-family: var(--font-headline);
-  font-size: .6rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.18);
+.agd-day-num {
+  font-family: var(--font-numeric), 'Bebas Neue', sans-serif;
+  font-size: 1.3rem; font-weight: 400; line-height: 1;
+  color: rgba(255,255,255,.7);
+}
+.agd-day-mon {
+  font-family: var(--font-label), -apple-system, sans-serif;
+  font-size: .6rem; font-weight: 600; letter-spacing: .06em;
+  text-transform: uppercase; color: rgba(255,255,255,.32); line-height: 1.3;
 }
 
-/* Center day — num width ≈ month label width */
-.agd-day-col.agd-day-center { cursor: default; }
-.agd-day-col.agd-day-center .agd-day-num {
-  font-size: 1.9rem;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--ink);
+/* Dia com itens marcados — ponto discreto por baixo do mês */
+.agd-day-col.agd-has-items::after {
+  content: ''; position: absolute; bottom: 3px; left: 50%;
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--brand); transform: translateX(-50%);
 }
-.agd-day-col.agd-day-center .agd-day-mon {
-  font-family: var(--font-headline);
-  font-size: .75rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  color: #E03030;
+
+/* Dia selecionado — o único que se destaca por cor/peso, não por tamanho
+   (todos os chips têm a mesma largura, para o scroll ficar previsível). */
+.agd-day-col.agd-day-center {
+  border-color: rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
 }
-.agd-day-dot { display: none !important; }
+.agd-day-col.agd-day-center .agd-day-wd { color: rgba(255,255,255,.65) }
+.agd-day-col.agd-day-center .agd-day-num { color: var(--ink); font-weight: 600 }
+.agd-day-col.agd-day-center .agd-day-mon { color: #E03030 }
+.agd-day-col.agd-day-center.agd-has-items::after { background: #E03030 }
 
 /* ══════════════════════════════════════════════════
    RULER v2 — scrolling minute timeline
@@ -235,13 +252,15 @@
 ══════════════════════════════════════════════════ */
 .agd-fan-wrap {
   position: relative;
-  height: 300px;
+  height: 247px;
   overflow: visible;
   touch-action: pan-y;
   margin-top: 0;
   isolation: isolate;
   transform: translate3d(0,0,0);
-  perspective: 600px;
+  /* Escalado na mesma proporção de AGD_3D_R (era 600px para R=273) para
+     preservar a mesma intensidade de profundidade com o cartão maior. */
+  perspective: 1047px;
   perspective-origin: 50% 50%;
 }
 
@@ -265,18 +284,19 @@
 .agd-fan {
   position: absolute;
   left: 50%;
-  top: 150px; /* vertical center of 300px wrap */
+  top: 123px; /* vertical center of 247px wrap */
   width: 0; height: 0;
-  /* R = W/(2·tan(STEP/2)) = 192/(2·tan(20°)) ≈ 264px.
-     Stage pulled back -R so the center card lands at world-Z=0 = natural size. */
-  transform: translateZ(-273px);
+  /* R = (W/2·(1+cos STEP)+gap)/sin STEP, W=340 STEP=40° ≈ 476.4px — mesma
+     fórmula de antes, recalculada para o cartão paisagem. Stage pulled
+     back -R so the center card lands at world-Z=0 = natural size. */
+  transform: translateZ(-476.4px);
   transform-style: preserve-3d;
 }
 
 .agd-card-positioner {
   position: absolute;
-  left: -96px;  /* -AGD_W_ACT/2: center card on fan origin */
-  top: -141px;  /* -AGD_H_ACT/2 */
+  left: -170px; /* -AGD_W_ACT/2: center card on fan origin */
+  top: -113.5px; /* -AGD_H_ACT/2 */
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition:transform  var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1),
@@ -426,10 +446,13 @@
 .agd-card:not(.agd-active) .agd-card-body { padding: 5px 12px 32px; }
 .agd-card-body { transition:padding var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1); }
 
-/* Spacer that pushes content to where it would be in the original stacked layout */
+/* Spacer that pushes content down over the photo, deixando a área de
+   texto respirar dentro do cartão mais baixo (era 44% de 282px; um
+   cartão paisagem tem menos altura total, por isso a fração baixa um
+   pouco para o texto não ficar espremido). */
 .agd-card-body-spacer {
   flex-shrink: 0;
-  height: 124px; /* 44% of AGD_H_ACT=282 — mirrors original photo height */
+  height: 82px; /* 36% of AGD_H_ACT=227 */
   pointer-events: none;
 }
 
