@@ -545,11 +545,19 @@
     div.dataset.entregue= c.entregue?'1':'0';
     const urgClasse = c.concluido ? '' : classificarUrgenciaJob(job);
     div.className='job job2'+(urgClasse?' '+urgClasse:'');
+    /* Badge de pendências — soma das flags que classificarTrabalho() já
+       calcula (nenhum dado novo). Pedido explícito: dar para perceber, só
+       de olhar para o card, se há pendências e quantas — sem abrir o
+       projeto (ver reorganização da Dashboard de Tarefas). */
+    const nPendencias=[c.pagamentoPendente,c.atrasado,c.aRealizar,c.aEntregar].filter(Boolean).length;
+    const pendenciasBadge=(!c.concluido&&nPendencias>0)
+      ?'<div class="j2-pend-badge">⚠ '+nPendencias+'</div>' : '';
     const hora=fmtHoraLinhaJob(job);
     const icoEdit='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     const icoArch='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     const icoDone='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
     div.innerHTML=
+      pendenciasBadge+
       '<div class="j2-body">'+
         avatarHtml(job.client,44,clienteFotoPorNome(job.client))+
         '<div class="j2-info">'+

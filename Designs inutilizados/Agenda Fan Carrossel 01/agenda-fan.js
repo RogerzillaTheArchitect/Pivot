@@ -20,14 +20,7 @@
        backface-visibility:hidden (CSS) prevents backs from showing at >90°.
     ──────────────────────────────────────────────── */
     /* R = (W/2*(1+cos(STEP)) + gap) / sin(STEP) = (96*1.766+6)/0.643 ≈ 273px (~6px gap) */
-    /* Cartões passam de retrato (192×282, ≈9:16) para paisagem (300×200,
-       3:2), ocupando quase toda a largura, com só uma fatia dos laterais
-       visível — ver reorganização da Dashboard de Tarefas. STEP mantém-se
-       em 40° de propósito (a lógica de drag/loop/swipe não muda, só a
-       geometria); R foi recalculado pela mesma fórmula já documentada
-       para o novo W, e a perspetiva escalou na mesma proporção R_novo/
-       R_antigo para preservar a mesma intensidade de profundidade 3D. */
-    var AGD_3D_STEP=40, AGD_3D_R=476.4;
+    var AGD_3D_STEP=40, AGD_3D_R=273;
     function _agdYOff(aOff){ return -10+18*Math.min(aOff,1); } /* -10 at center → +8 at ±1 */
     function _agd3dPos(off){
       var theta=off*AGD_3D_STEP;
@@ -41,7 +34,7 @@
         z:40-aOff*12
       };
     }
-    var AGD_W_ACT=340, AGD_H_ACT=227;
+    var AGD_W_ACT=192, AGD_H_ACT=282;
 
     /* Minimal hourglass SVG icon (stroke, no emoji) */
       +'<line x1="0.5" y1="0.65" x2="9.5" y2="0.65"/>'
@@ -51,7 +44,6 @@
       +'</svg>';
 
     var AGD_MESES=['JAN','FEV','MAR','ABR','MAI','JUN','JUL','AGO','SET','OUT','NOV','DEZ'];
-    var AGD_DIAS=['DOM','SEG','TER','QUA','QUI','SEX','SÁB'];
     var AGD_TIPO_LABEL={contrato:'CONTRATO',pagamento:'PGMT',evento:'EVENTO',entrega:'ENTREGA',lembrete:'LEMBRETE',lista:'LISTA',tarefa:'TAREFA'};
 
     var ICO_LINK='<svg viewBox="0 0 14 14" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 8.5a3 3 0 0 0 4.24 0l2-2A3 3 0 0 0 7.5 2.25l-1.1 1.1"/><path d="M8.5 5.5a3 3 0 0 0-4.24 0l-2 2a3 3 0 0 0 4.25 4.25l1.1-1.1"/></svg>';
@@ -101,45 +93,29 @@
 
     function pad(n){ return n<10?'0'+n:String(n); }
 
-    /* ── FAIXA DE DIAS (scroll horizontal) ──────────
-       Substituiu o seletor fixo de 3 colunas por uma faixa mais longa
-       (-7 a +30 dias a partir de hoje, não de _day — a faixa não desloca
-       o intervalo à medida que se navega, só o dia realçado muda). Cada
-       chip chama agdSelectDay(iso), a mesma função pública já usada
-       noutros pontos da app para saltar direto para um dia. */
-    var AGD_STRIP_BACK=7, AGD_STRIP_FWD=30;
-    /* d.toISOString() converte para UTC — à noite/madrugada, em fusos a
-       leste de UTC, isso pode devolver o dia a seguir ao que d.getDate()
-       mostra (o resto do calendário deste ficheiro já tinha esta mesma
-       exposição; aqui evita-se de propósito, porque a faixa mostra e
-       compara datas lado a lado, onde o desencontro fica visível). */
-    function _agdIsoLocal(d){ return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+    /* ── DAY NAV (3 cols) ────────────────────────── */
     function renderDays(){
       var wrap=document.getElementById('agd-days');
       if(!wrap) return;
-      var hoje=new Date(); hoje.setHours(0,0,0,0);
-      var html='';
-      for(var i=-AGD_STRIP_BACK;i<=AGD_STRIP_FWD;i++){
-        var d=new Date(hoje); d.setDate(hoje.getDate()+i);
-        var iso=_agdIsoLocal(d);
+      var cDate=new Date(_day+'T00:00:00');
+      var prev=new Date(cDate); prev.setDate(cDate.getDate()-1);
+      var next=new Date(cDate); next.setDate(cDate.getDate()+1);
+      function col(d,cls,onclick){
+        var iso=d.toISOString().slice(0,10);
         var hasItems=_items.some(function(it){return it.dataISO===iso;});
-        var isActive=iso===_day;
-        html+='<button class="agd-day-col'+(isActive?' agd-day-center':'')+(hasItems?' agd-has-items':'')+'"'
-          +' onclick="agdSelectDay(\''+iso+'\')" data-iso="'+iso+'" type="button">'
-          +'<span class="agd-day-wd">'+AGD_DIAS[d.getDay()]+'</span>'
+        var tag=onclick?'button':'div';
+        return '<'+tag+' class="agd-day-col '+cls+(hasItems?' agd-has-items':'')+'"'
+          +(onclick?' onclick="'+onclick+'"':'')+' type="button">'
           +'<span class="agd-day-num">'+d.getDate()+'</span>'
           +'<span class="agd-day-mon">'+AGD_MESES[d.getMonth()]+'</span>'
-          +'</button>';
+          +'<span class="agd-day-dot"></span>'
+          +'</'+tag+'>';
       }
-      wrap.innerHTML=html;
-      /* scrollIntoView logo a seguir ao innerHTML às vezes corre antes do
-         browser terminar o layout dos 38 botões novos (fica em scrollLeft
-         0, sem erro nenhum — só não centra). Um requestAnimationFrame
-         garante que o layout já assentou. */
-      requestAnimationFrame(function(){
-        var activeEl=wrap.querySelector('.agd-day-center');
-        if(activeEl) activeEl.scrollIntoView({inline:'center', block:'nearest'});
-      });
+      wrap.innerHTML=col(prev,'agd-day-side',"agdShiftDay(-1)")
+        +col(cDate,'agd-day-center',null)
+        +col(next,'agd-day-side',"agdShiftDay(1)");
+      /* swipe on days-wrap */
+      bindDaysSwipe();
     }
 
     /* ── RULER TICKS — canvas rendering ─────────── */
@@ -799,6 +775,21 @@
       });
     }
 
+    /* ── DAYS SWIPE ──────────────────────────────── */
+    function bindDaysSwipe(){
+      var wrap=document.getElementById('agd-days-wrap');
+      if(!wrap||wrap._agdSwipeBound) return;
+      wrap._agdSwipeBound=true;
+      var sx=null;
+      wrap.addEventListener('pointerdown',function(e){ sx=e.clientX; });
+      wrap.addEventListener('pointerup',function(e){
+        if(sx===null) return;
+        var dx=e.clientX-sx; sx=null;
+        if(Math.abs(dx)>44) agdShiftDay(dx<0?1:-1);
+      });
+      wrap.addEventListener('pointercancel',function(){ sx=null; });
+    }
+
     /* ── HELPERS ─────────────────────────────────── */
     function findCenter(items){
       if(!items.length) return 0;
@@ -839,11 +830,31 @@
       renderDays(); renderRuler(); renderFan();
     };
 
-    /* agdAnimSlide()/agdShiftDay() saíram — eram exclusivos do antigo
-       seletor de 3 colunas (botões anterior/seguinte com animação de
-       slide). A faixa de dias agora é scroll nativo + clique direto em
-       agdSelectDay(); o próprio carrossel muda de dia via agdSetActive(),
-       nunca chamou agdShiftDay(). */
+    function agdAnimSlide(elId,dir){
+      var el=document.getElementById(elId);
+      if(!el) return;
+      el.classList.remove('agd-anim-from-r','agd-anim-from-l');
+      void el.offsetWidth; /* force reflow to restart animation */
+      /* dir>0 = forward/next = content enters from right */
+      el.classList.add(dir>0?'agd-anim-from-r':'agd-anim-from-l');
+      el.addEventListener('animationend',function h(){
+        el.classList.remove('agd-anim-from-r','agd-anim-from-l');
+        el.removeEventListener('animationend',h);
+      });
+    }
+
+    window.agdShiftDay=function(dir){
+      var d=new Date(_day+'T00:00:00');
+      d.setDate(d.getDate()+dir);
+      var iso=d.toISOString().slice(0,10);
+      _day=iso;
+      _rulerOffsetMin=0; /* reset ruler scroll on day change */
+      var idx=_items.findIndex(function(it){return it.dataISO===iso;});
+      if(idx>=0) _active=idx;
+      renderDays(); renderRuler(); renderFan();
+      agdAnimSlide('agd-days',dir);
+    };
+
     window.agdSelectDay=function(iso){
       _day=iso;
       var idx=_items.findIndex(function(it){return it.dataISO===iso;});

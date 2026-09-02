@@ -22,8 +22,16 @@
 /* ===== Movimento partilhado ===== */
 @keyframes scrim-in   { from{ opacity:0 } to{ opacity:1 } }
 @keyframes sheet-up   { from{ transform:translateY(100%) } to{ transform:translateY(0) } }
-@keyframes dialog-pop { from{ opacity:0; transform:translateY(8px) scale(.97) }
-                        to  { opacity:1; transform:translateY(0) scale(1) } }
+/* A animação tem de incluir o translate(-50%,-50%) de centragem do
+   .ov-dialog no próprio keyframe — uma animação CSS substitui por
+   inteiro o valor de "transform" enquanto corre (e, com fill-mode both,
+   também depois de acabar), não o compõe com o transform base da regra.
+   Sem isto, o diálogo perdia a centragem assim que a animação começava
+   (apanhado ao testar o modal do calendário de Projetos — o diálogo
+   aparecia encostado ao canto superior-esquerdo do seu próprio ponto
+   50%/50%, em vez de centrado nele). */
+@keyframes dialog-pop { from{ opacity:0; transform:translate(-50%,-50%) translateY(8px) scale(.97) }
+                        to  { opacity:1; transform:translate(-50%,-50%) translateY(0) scale(1) } }
 @keyframes drawer-in  { from{ transform:translateX(100%) } to{ transform:translateX(0) } }
 
 /* ===== Scrim ===== */
@@ -48,6 +56,8 @@
 }
 
 .ov-sheet{
+  position:fixed; left:0; right:0; bottom:0; max-height:82vh;
+  display:flex; flex-direction:column; overflow:hidden;
   border-top:1px solid var(--sheet-border);
   border-radius:var(--sheet-r) var(--sheet-r) 0 0;
   box-shadow:var(--sheet-shadow);
@@ -55,6 +65,8 @@
 }
 
 .ov-dialog{
+  position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
+  width:min(360px,90vw); max-height:80vh; overflow:hidden;
   border:1px solid var(--sheet-border);
   border-radius:var(--sheet-r);
   box-shadow:var(--sheet-shadow-float);
@@ -62,6 +74,8 @@
 }
 
 .ov-drawer{
+  position:fixed; top:0; right:0; bottom:0; width:min(320px,90vw);
+  display:flex; flex-direction:column; overflow:hidden;
   border-left:1px solid var(--sheet-border);
   box-shadow:var(--sheet-shadow-float);
   animation:drawer-in var(--dur-4) var(--ease-glide) both;
@@ -112,6 +126,16 @@
   width:36px; height:4px; background:rgba(255,255,255,.22);
   border-radius:var(--r-pill); margin:6px auto 14px;
 }
+
+/* Corpo scrollável de um .ov-sheet — o wrapper em si é overflow:hidden
+   (para o cabeçalho/puxador nunca fugirem do raio arredondado do topo),
+   por isso o conteúdo que pode crescer vive aqui dentro. */
+.ov-sheet-body{
+  flex:1; min-height:0; overflow-y:auto;
+  padding:0 18px calc(20px + env(safe-area-inset-bottom));
+}
+.ov-sheet > .ov-grab{ margin-top:8px }
+.ov-sheet > .sheet-header{ padding:0 18px 10px; margin-bottom:0 }
 
 /* ==========================================================================
    Movimento reduzido — quem pediu ao sistema para reduzir animações continua

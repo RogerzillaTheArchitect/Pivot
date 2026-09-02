@@ -298,11 +298,13 @@
     text-align:left;line-height:1;overflow:visible;white-space:nowrap;
   }
   .tasks-header::after{display:none}
-  /* DESTAQUES usa .rel-card-header (de relatorios.css) — override scoped ao dashboard.
-     Antes tinha filter:blur(1px) — lia como acidente/render partido, não
-     como escolha; a distinção de secção passa a vir do peso do texto, da
-     margem (--sp-section) e do fio inferior, não de desfocar o título. */
-  #v-hoje .rel-card-header{font-size:clamp(20px,5vw,30px);letter-spacing:.02em;
+  /* Operacional/Destaques usam .rel-card-header (de relatorios.css) —
+     override scoped à vista Estatísticas, onde estes cards vivem agora
+     (antes vivia em #v-hoje, mudou com a reorganização da Dashboard de
+     Tarefas). Antes tinha filter:blur(1px) — lia como acidente/render
+     partido, não como escolha; a distinção de secção passa a vir do peso
+     do texto, da margem (--sp-section) e do fio inferior, não do blur. */
+  #v-estatisticas .rel-card-header{font-size:clamp(20px,5vw,30px);letter-spacing:.02em;
     margin-top:var(--sp-section);padding-bottom:10px;border-bottom:1px solid var(--line-soft);
     filter:none;color:rgba(255,255,255,.78)}
   #tasks-list .radar-card-wrap:first-child .card{border-radius:var(--r)}
@@ -452,6 +454,50 @@
   .prg-bg{fill:none;stroke:rgba(255,255,255,.15);stroke-width:2.5}
   .prg-fill{fill:none;stroke:rgba(255,255,255,.65);stroke-width:2.5;stroke-linecap:round;transition:stroke-dasharray var(--dur-3) var(--ease-out)}
   .tsk-tag--prog.done .prg-fill{stroke:rgba(100,190,70,.9)}
+
+  /* ===== Dashboard de Tarefas — banner de atrasados + pills + lista =====
+     Fica junto dos outros .tsk-* por serem parte da mesma área (lista de
+     tarefas do #v-hoje), mesmo não partilhando os cartões do carrossel. */
+  .tsk-overdue-banner{
+    display:flex; align-items:center; gap:9px;
+    margin:var(--sp-4) 0 var(--sp-3);
+    padding:11px 14px;
+    border-radius:var(--r-sm);
+    background:linear-gradient(165deg,rgba(202,80,44,.22),rgba(132,48,24,.10));
+    border:1px solid rgba(220,90,55,.30);
+    cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:background var(--dur-2);
+  }
+  .tsk-overdue-banner:active{ background:linear-gradient(165deg,rgba(202,80,44,.30),rgba(132,48,24,.16)) }
+  .tsk-overdue-ico{ flex:none; font-size:15px; line-height:1 }
+  .tsk-overdue-txt{ flex:1; font-size:var(--text-13h); font-weight:600; color:rgba(246,126,88,.94) }
+  .tsk-overdue-link{
+    flex:none; font-size:var(--text-12); font-weight:700; letter-spacing:.03em;
+    color:rgba(255,255,255,.8); text-transform:uppercase;
+  }
+
+  /* Pills grandes — 4 colunas fixas, maior alvo de toque que o .chip
+     padrão de trabalhos.css (que é feito para caber 3 num scroll). */
+  #tasks-filter-row{ display:grid; grid-template-columns:var(--cols-4); gap:var(--sp-2); margin:var(--sp-4) 0 var(--sp-4) }
+  #tasks-filter-row .chip{
+    padding:11px 4px; font-size:var(--text-12h); font-weight:600;
+    justify-content:center; text-align:center; min-width:0;
+  }
+  #tasks-filter-row .chip span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+
+  /* Lista — cada linha reaproveita o .pick-row já usado em Contatos/
+     Biblioteca (avatar+texto+chevron), mais uma tag de prioridade para
+     o modo Lembretes. */
+  #tasks-list{ display:flex; flex-direction:column; gap:8px }
+  .tsk-row-empty{
+    padding:36px 16px; text-align:center; color:var(--ink-faint); font-size:var(--text-sm);
+  }
+  .tsk-row-prio{
+    flex:none; width:8px; height:8px; border-radius:50%; margin-right:2px;
+  }
+  .tsk-row-prio--urgente{ background:#E27367 }
+  .tsk-row-prio--importante{ background:#DCAD57 }
+  .tsk-row-prio--normal{ background:rgba(255,255,255,.28) }
   /* people picker no formulário */
   .pessoas-picker{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
   .pessoa-chip{

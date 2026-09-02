@@ -34,11 +34,12 @@
     if(active){
       const vid=active.id.replace('v-','');
       if(vid==='hoje'&&typeof renderMonthTicker==='function')renderMonthTicker();
+      if(vid==='hoje'&&typeof renderTasksList==='function')renderTasksList();
       if(vid==='detalhe'&&typeof currentJobId!=='undefined'&&currentJobId&&typeof jobsData!=='undefined'&&jobsData[currentJobId]&&typeof renderJobDetailDynamic==='function')renderJobDetailDynamic(currentJobId);
       if(vid==='builder'&&typeof renderBuilder==='function')renderBuilder();
       if(vid==='equipa'&&typeof renderEquipaView==='function')renderEquipaView();
       if(vid==='bibliotecas'&&typeof renderBiblioteca==='function')renderBiblioteca();
-      if((vid==='relatorios'||vid==='hoje')&&typeof renderRelatorios==='function')renderRelatorios();
+      if(vid==='estatisticas'&&typeof renderRelatorios==='function')renderRelatorios();
     }
     if(document.getElementById('v-trabalhos').classList.contains('active')){
       document.querySelectorAll('.job[data-job-id]').forEach(div=>{
@@ -49,11 +50,14 @@
     }
   }
 
-  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','relatorios','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
+  const views = ['hoje','trabalhos','historico','detalhe','builder','bibliotecas','perfil','estatisticas','pesquisa','equipa','contatos','contato-detalhe','importar-arquivo','revisao-importacao'];
   function go(v){
-    if(v==='relatorios') v='hoje';
+    /* "relatorios" era o nome antigo — o conteúdo (Financeiro/Operacional/
+       Destaques) já não vive em "hoje" (Dashboard de Tarefas), vive na
+       vista Estatísticas. Mantém chamadas antigas a funcionar. */
+    if(v==='relatorios') v='estatisticas';
     const navMap={hoje:'hoje',trabalhos:'trabalhos',historico:'trabalhos',detalhe:'trabalhos',builder:'trabalhos',
-      bibliotecas:'bibliotecas',perfil:'perfil',relatorios:'relatorios',pesquisa:'trabalhos',equipa:'perfil',
+      bibliotecas:'bibliotecas',perfil:'perfil',pesquisa:'trabalhos',equipa:'perfil',
       contatos:'perfil','contato-detalhe':'perfil'};
     /* sair da área de Trabalhos (menu/página diferente) limpa a seleção de dia
        do calendário — ao voltar, mostra de novo os registos do dia atual em
@@ -67,7 +71,8 @@
     document.querySelectorAll('.nav button[id^="n-"]').forEach(el=>el.classList.toggle('on', el.id==='n-'+active));
     document.querySelector('.screen').scrollTop=0;
     if(v==='trabalhos'){ staggerCards('#v-trabalhos .job'); renderCalendar(); }
-    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderRelatorios(); renderDashCustomCards(); }
+    if(v==='hoje'){ staggerCards('#v-hoje .card, #v-hoje .collapse'); renderMonthTicker(); renderTasksList(); }
+    if(v==='estatisticas'){ staggerCards('#v-estatisticas .card'); renderRelatorios(); renderDashCustomCards(); }
     if(v==='equipa') renderEquipaView();
     if(v==='bibliotecas') renderBiblioteca();
     if(v==='historico') renderHistorico();
@@ -123,7 +128,7 @@
     metasMesAtual().receita=r;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-estatisticas').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
@@ -139,7 +144,7 @@
     metasMesAtual().gastos=g;
     saveMetas();
     renderMonthTicker();
-    if(document.getElementById('v-hoje').classList.contains('active')) renderRelatorios();
+    if(document.getElementById('v-estatisticas').classList.contains('active')) renderRelatorios();
     closeInfo();
     showToast(t('toast.goalsUpdated'));
   }
@@ -533,7 +538,6 @@
     if(mesEl) mesEl.textContent=nomesMeses[new Date().getMonth()];
     renderTasksList();
     if(typeof renderAgenda==='function') renderAgenda();
-    updateHoje();
   }
   function diasEntre(dataISO){
     const hoje=new Date(); hoje.setHours(0,0,0,0);
@@ -661,20 +665,97 @@
       f+'/'+tot+'</span>';
   }
   let _tcArquivados=new Set();
+  /* Pill ativa da Dashboard de Tarefas — Hoje/Tarefas/Lembretes/Agenda,
+     cada uma filtra #tasks-list de forma diferente (ver renderTasksList). */
+  let _tasksListMode='hoje';
+  function filtrarListaTarefas(el,modo){
+    _tasksListMode=modo;
+    document.querySelectorAll('#tasks-filter-row .chip').forEach(c=>c.classList.toggle('on',c===el));
+    renderTasksList();
+  }
+  /* Todas as tarefas simples (tipo 'simples', não concluídas) — com ou
+     sem data, ligadas ou não a um trabalho. gerarItensRadar() só inclui
+     as que TÊM data (fica só com o que entra na timeline cronológica);
+     esta função é a fonte para as pills "Tarefas" e "Lembretes", que
+     precisam de ver também as que não têm data marcada. */
+  function gerarTarefasCompletas(){
+    return Object.values(tarefasData).filter(function(tk){ return tk.tipo==='simples' && !tk.feito; })
+      .map(function(tk){
+        const job=tk.jobId?jobsData[tk.jobId]:null;
+        return { dataISO:tk.data||'', hora:tk.hora||'', nome:tk.titulo, cliente:job?job.client:'',
+          jobId:tk.jobId||null, tipo:'tarefa', idx:tk.id, prioridade:tk.prioridade||'Normal' };
+      });
+  }
+  /* Uma linha da lista — mais leve que .tsk-card (o carrossel já cobre o
+     formato "cartão"); reaproveita .pick-row, o mesmo padrão de Contatos/
+     Biblioteca, para a lista ler como lista, não como mais um carrossel. */
+  function construirLinhaTarefa(it){
+    const onclick=it.jobId?("openJob('"+it.jobId+"')"):("abrirDetalheItemSolto('"+it.tipo+"',"+(typeof it.idx==='string'?"'"+it.idx+"'":it.idx)+")");
+    let sub=it.cliente?escapeHtml(it.cliente):'';
+    if(it.dataISO){
+      const pts=it.dataISO.split('-');
+      const dataTxt=parseInt(pts[2],10)+' '+mesAbrev(parseInt(pts[1],10)-1);
+      sub=(sub?sub+' · ':'')+dataTxt+(it.hora?' · '+escapeHtml(it.hora):'');
+    } else if(!sub){
+      sub=t('tasks.noDate');
+    }
+    const prioClasse=it.prioridade==='Urgente'?'tsk-row-prio--urgente':(it.prioridade==='Importante'?'tsk-row-prio--importante':'tsk-row-prio--normal');
+    const prioDot=it.prioridade?'<span class="tsk-row-prio '+prioClasse+'"></span>':'';
+    return '<div class="pick-row" onclick="'+onclick+'">'+prioDot
+      +'<div class="u-flex-min"><div class="nm">'+escapeHtml(it.nome||'')+'</div><div class="sub">'+sub+'</div></div>'
+      +'<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'
+      +'</div>';
+  }
+  const AGD_COMPROMISSO_TIPOS=['evento','entrega','pagamento','contrato'];
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
     if(!wrap) return;
-    const _hoje=new Date(); _hoje.setHours(0,0,0,0);
-    const _limite=new Date(_hoje); _limite.setDate(_hoje.getDate()+14);
-    const itens=gerarItensRadar().filter(it=>{
-      if(_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''))) return false;
-      if(!it.dataISO) return true; /* sem data = item vencido, sempre inclui */
-      return new Date(it.dataISO+'T00:00:00')<=_limite;
+    const radar=gerarItensRadar().filter(function(it){
+      return !_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''));
     });
+    const futuros=radar.filter(function(it){ return !it.dataISO||diasEntre(it.dataISO)>=0; });
+    const atrasados=radar.filter(function(it){ return it.dataISO&&diasEntre(it.dataISO)<0; });
+
+    /* Banner "N tarefas atrasadas" — atrasados saem da timeline cronológica
+       (misturados, o dia de hoje ficava difícil de ler) e só aparecem aqui. */
+    const banner=document.getElementById('tsk-overdue-banner');
+    if(banner){
+      if(atrasados.length){
+        banner.classList.remove('u-hidden');
+        const txt=document.getElementById('tsk-overdue-txt');
+        if(txt) txt.textContent=atrasados.length+' '+(atrasados.length===1?t('tasks.overdueSingular'):t('tasks.overduePlural'));
+      } else banner.classList.add('u-hidden');
+    }
+
+    let itens;
+    if(_tasksListMode==='tarefas'){
+      itens=gerarTarefasCompletas();
+    } else if(_tasksListMode==='lembretes'){
+      itens=gerarTarefasCompletas().filter(function(it){ return !it.jobId&&!it.dataISO; });
+    } else if(_tasksListMode==='agenda'){
+      itens=futuros.filter(function(it){ return AGD_COMPROMISSO_TIPOS.indexOf(it.tipo)!==-1; });
+    } else { /* 'hoje' — cronológico, sem os atrasados */
+      itens=futuros;
+    }
+
     renderNotificacoesPendentes();
-    if(!itens.length){wrap.innerHTML='';return;}
-    wrap.innerHTML='<div class="tsk-stack" id="tsk-stack">'+itens.map(construirStackCard).join('')+'</div>';
-    ativarStackTarefas();
+    if(!itens.length){ wrap.innerHTML='<div class="tsk-row-empty">'+t('tasks.emptyList')+'</div>'; return; }
+    wrap.innerHTML=itens.map(construirLinhaTarefa).join('');
+  }
+  function abrirAtrasados(){
+    const radar=gerarItensRadar().filter(function(it){
+      return it.dataISO&&diasEntre(it.dataISO)<0&&!_tcArquivados.has((it.jobId||it.tipo||'')+'_'+(it.idx!=null?it.idx:''));
+    });
+    const lista=document.getElementById('atrasados-lista');
+    if(lista) lista.innerHTML=radar.length?radar.map(construirLinhaTarefa).join(''):'<div class="tsk-row-empty">'+t('tasks.emptyList')+'</div>';
+    const scrim=document.getElementById('atrasados-scrim'), sheet=document.getElementById('atrasados-sheet');
+    if(scrim) scrim.classList.remove('u-hidden');
+    if(sheet) sheet.classList.remove('u-hidden');
+  }
+  function fecharAtrasados(){
+    const scrim=document.getElementById('atrasados-scrim'), sheet=document.getElementById('atrasados-sheet');
+    if(scrim) scrim.classList.add('u-hidden');
+    if(sheet) sheet.classList.add('u-hidden');
   }
   /* Sinal de urgência por nível: em vez de ícone/bolinha, uma tag com moldura
      (cor de acordo com o nível) + o próprio card ganha um leve degradê do lado

@@ -156,9 +156,11 @@
     var hdr=document.getElementById('dash-fullview-hdr'); if(hdr) hdr.classList.add('u-hidden');
     document.body.style.overflow='';
   }
-  /* a dashboard leva para a secção correspondente da página única de Relatórios */
+  /* leva para a secção correspondente da vista Estatísticas — antes ia
+     para 'hoje' porque Financeiro/Operacional/Destaques viviam lá; agora
+     vivem em Estatísticas (ver reorganização da Dashboard de Tarefas). */
   function abrirRelatorios(tab){
-    go('hoje');
+    go('estatisticas');
     /* a view tem uma animação de entrada de 0.45s (fade + translateY) — rolar
        antes disso terminar faz o scrollIntoView mirar um alvo que ainda está
        a mover-se e falha silenciosamente (o ecrã fica preso no topo). Espera
@@ -610,51 +612,25 @@
     renderDestaques();
     sincronizarTogglesDashboard();
   }
-  /* ===== Personalizar Dashboard — cada card de Relatórios tem um toggle
-     discreto no cabeçalho ("mostrar na Dashboard"). Financeiro/Operacional
-     já existem nativamente no Dashboard (mesmos componentes, ids próprios
-     sem o prefixo "rf-"/"ropm-" de Relatórios) — o toggle só mostra/esconde
-     esses blocos. Os outros 4 (Fluxo/Desempenho/Rentabilidade/Geográfico)
-     não têm versão própria no Dashboard: quando ligados, o card inteiro
-     (cabeçalho + corpo, já renderizado com os dados do período em
-     Relatórios) é clonado pro Dashboard — sempre com dado fresco, porque
-     redesenhamos a fonte em Relatórios logo antes de clonar. Por padrão
-     todos os 6 ficam desligados: a Dashboard só mostra Tarefas. */
-  function toggleDashboardCard(key){
-    const ligado=!perfilData.dashboardCards[key];
-    perfilData.dashboardCards[key]=ligado;
-    savePerfilData();
-    document.querySelectorAll('[data-dash-key="'+key+'"]').forEach(el=>el.classList.toggle('on', ligado));
-    renderDashCustomCards();
-  }
   function sincronizarTogglesDashboard(){
     const cfg=perfilData.dashboardCards||{};
     document.querySelectorAll('.dash-card-toggle[data-dash-key]').forEach(el=>{
       el.classList.toggle('on', !!cfg[el.dataset.dashKey]);
     });
   }
-  /* Clona cabeçalho+corpo de um card de Relatórios (já com dado fresco) pro
-     container correspondente no Dashboard. Os ids internos do clone ficam
-     duplicados no DOM de propósito — é um retrato estático: a próxima vez
-     que a Dashboard reabrir, chamamos o render de novo e clonamos de novo,
-     então nunca fica desatualizado. */
-  function clonarCardParaDashboard(headerId, containerId){
-    const header=document.getElementById(headerId);
-    const wrap=document.getElementById(containerId);
-    if(!header || !wrap) return;
-    const body=header.nextElementSibling;
-    wrap.innerHTML='';
-    wrap.appendChild(header.cloneNode(true));
-    if(body) wrap.appendChild(body.cloneNode(true));
-  }
+  /* Financeiro/Operacional/Destaques mudaram-se para a vista Estatísticas
+     (deixaram de ser "cards opcionais da Dashboard de Tarefas"), por isso
+     esta função ficou só com o que ainda é real: mostrar/esconder o card
+     Financeiro (o único com config própria que ainda existe no DOM) e
+     recalcular os Destaques. `clonarCardParaDashboard()` e os containers-
+     espelho de Operacional/Destaques (`#dash-card-operacional`/
+     `#dash-card-destaques`) eram código morto — nunca chegavam a ficar
+     visíveis — e saíram junto com o HTML deles. */
   function renderDashCustomCards(){
     sincronizarTogglesDashboard();
     const cfg=perfilData.dashboardCards||{};
     const finEl=document.getElementById('dash-card-financeiro'); if(finEl) finEl.style.display=cfg.financeiro!==false?'block':'none';
-    const opEl=document.getElementById('dash-card-operacional'); if(opEl) opEl.style.display='none';
     renderDestaques();
-    const destWrap=document.getElementById('dash-card-destaques');
-    if(destWrap) destWrap.style.display='none';
   }
 
   /* ===== DESTAQUES — dados enriquecidos por categoria ===== */

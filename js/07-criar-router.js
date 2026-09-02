@@ -81,21 +81,12 @@
     showToast(t('toast.jobUpdated'));
   }
 
-  function updateHoje(){
-    const badge=document.getElementById('nav-badge');
-    const content=document.getElementById('hoje-content');
-    const empty=document.getElementById('hoje-empty');
-    const total=document.querySelectorAll('#tasks-list .tsk-card').length;
-    if(total<=0){
-      if(content) content.style.display='none';
-      if(empty) empty.style.display='block';
-      if(badge) badge.style.display='none';
-    }else{
-      if(content) content.style.display='block';
-      if(empty) empty.style.display='none';
-      if(badge){ badge.style.display=''; badge.textContent=total; }
-    }
-  }
+  /* updateHoje() saiu — mostrava "Está tudo em dia." (#hoje-empty)
+     contando .tsk-card (a antiga pilha), duplicando a mensagem vazia que
+     cada pill agora já mostra sozinha (.tsk-row-empty dentro de
+     #tasks-list, contextual à pill ativa — "nada em Lembretes" é
+     diferente de "nada em Agenda"). #nav-badge/#hoje-content nunca
+     existiram no HTML, eram referências mortas já antes disto. */
 
   function openClient(){
     if(!jobsData[currentJobId]) return;
