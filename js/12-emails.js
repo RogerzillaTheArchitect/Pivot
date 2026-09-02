@@ -602,6 +602,13 @@
     if(itens2.length) html+='<div class="dm-row">'+itens2.join('<span class="dm-sep"></span>')+'</div>';
     return html;
   }
+  /* renderJobDetailDynamic() gerava um único scroll contínuo (~13 blocos
+     concatenados numa string só). Passa a gerar ~10 painéis de ecrã
+     inteiro, um por bloco (ou grupo de blocos pequenos), para o
+     scroll-snap vertical de #detalhe-dynamic (ver .detalhe-panel em
+     trabalhos.css e inicializarDetalhePaginacao() logo abaixo) — cada
+     `if` que já existia decide se aquele painel entra, exatamente como
+     decidia se aquele bloco entrava no scroll único de antes. */
   function renderJobDetailDynamic(id){
     const job=jobsData[id];
     document.getElementById('d-title').textContent=job.nome||job.typeLabel;
@@ -617,7 +624,12 @@
     const avEl=document.getElementById('d-avatar');
     avEl.textContent=avatarInitials(job.client); avEl.style.background=avatarColor(job.client);
 
-    let html='';
+    const panels=[];
+
+    /* 1. Visão geral — Serviço/Duração/Equipa + Recursos + aviso "projeto
+       rápido" + Mapa: blocos pequenos que hoje aparecem sempre juntos no
+       topo, agrupados num só painel. */
+    let visaoGeral='';
     const sv=job.servico;
     if(sv && (sv.servicos.length || sv.horas || sv.equipa || sv.equipamento.length)){
       let bits=[];
@@ -625,96 +637,103 @@
       if(sv.horas) bits.push(sv.horas+'h');
       if(sv.equipa) bits.push(sv.equipa+' na equipe');
       if(sv.equipamento.length) bits.push(sv.equipamento.join(', '));
-      html+='<div class="card-info" style="margin:0 0 16px;padding-top:0;border-top:none">';
-      html+='<div class="card-info-item"><span class="lbl">Serviço</span><span class="val">'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
-      if(sv.horas) html+='<div class="card-info-item"><span class="lbl">Duração</span><span class="val">'+sv.horas+'h</span></div>';
-      if(sv.equipa) html+='<div class="card-info-item"><span class="lbl">'+t('profile.team')+'</span><span class="val">'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
-      html+='</div>';
+      visaoGeral+='<div class="card-info" style="margin:0 0 16px;padding-top:0;border-top:none">';
+      visaoGeral+='<div class="card-info-item"><span class="lbl">Serviço</span><span class="val">'+(sv.servicos[0]||job.typeLabel)+'</span></div>';
+      if(sv.horas) visaoGeral+='<div class="card-info-item"><span class="lbl">Duração</span><span class="val">'+sv.horas+'h</span></div>';
+      if(sv.equipa) visaoGeral+='<div class="card-info-item"><span class="lbl">'+t('profile.team')+'</span><span class="val">'+sv.equipa+' pessoa'+(sv.equipa==='1'?'':'s')+'</span></div>';
+      visaoGeral+='</div>';
     }
     if(job.recursos && job.recursos.length){
-      html+='<p class="csec-label" style="margin:0 2px 8px">'+t('job.resources')+'</p>';
+      visaoGeral+='<p class="csec-label" style="margin:0 2px 8px">'+t('job.resources')+'</p>';
       job.recursos.forEach(r=>{
-        html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(r.nome)+'</div><span class="sub">'+escapeHtml(r.tipo)+'</span></div>'+(r.custo?('<b class="u-label">'+fmtMoney(r.custo)+'</b>'):'')+'</div>';
+        visaoGeral+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(r.nome)+'</div><span class="sub">'+escapeHtml(r.tipo)+'</span></div>'+(r.custo?('<b class="u-label">'+fmtMoney(r.custo)+'</b>'):'')+'</div>';
       });
     }
     if(job.modo==='rapido'){
-      html+='<div class="warn-box" style="background:var(--paper-2);border-color:var(--line);color:var(--ink-soft);margin-bottom:14px">'+
+      visaoGeral+='<div class="warn-box" style="background:var(--paper-2);border-color:var(--line);color:var(--ink-soft);margin-bottom:14px">'+
         iconWrap('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')+
         '<div>Projeto rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing.</div></div>';
     }
+    visaoGeral+=mapCardHtml(job);
+    if(visaoGeral) panels.push(visaoGeral);
 
-    html+=mapCardHtml(job);
-
-    html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_DOC+'<div class="sec-title">'+t('job.contract')+'</div></div>'+contractStatusTagHtml(job)+'</div><div class="sec-body u-block">';
+    /* 2. Contrato — sempre presente (mesmo vazio, convida a anexar). */
+    let contratoHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_DOC+'<div class="sec-title">'+t('job.contract')+'</div></div>'+contractStatusTagHtml(job)+'</div><div class="sec-body u-block">';
     if(job.contract.status==='vazio'){
       /* decisão de ter ou não contrato é feita na criação do trabalho — depois
          de criado, não é mais possível anexar nem alterar isso aqui. */
-      html+='<p class="u-hint-bare">'+t('job.contract.missing')+'</p>';
+      contratoHtml+='<p class="u-hint-bare">'+t('job.contract.missing')+'</p>';
     } else {
       // rascunho / enviado / assinado: resumo único (modelo, status, datas) + Ver Contrato
-      html+='<div class="u-hint-bare u-lh-185 u-mb-10">';
-      html+='<div><span class="u-c-neutral">'+t('resumo.contractTemplate')+':</span> '+escapeHtml(job.contract.templateName||t('job.contract.custom'))+'</div>';
-      if(job.contract.enviadoEm) html+='<div><span class="u-c-neutral">'+t('job.contract.sentOn')+':</span> '+job.contract.enviadoEm+'</div>';
-      if(job.contract.signedAt) html+='<div><span class="u-c-neutral">'+t('portal.signedOn')+':</span> '+job.contract.signedAt+'</div>';
-      html+='</div>';
-      html+='<button class="btn soft u-w-full" onclick="abrirBuilder(\''+id+'\')">'+t('job.contract.view')+'</button>';
-      if(job.contract.status==='rascunho') html+='<button class="btn primary u-w-full u-mt-8" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
-      if(job.contract.status==='assinado') html+='<button class="btn ghost u-w-full u-mt-8" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
+      contratoHtml+='<div class="u-hint-bare u-lh-185 u-mb-10">';
+      contratoHtml+='<div><span class="u-c-neutral">'+t('resumo.contractTemplate')+':</span> '+escapeHtml(job.contract.templateName||t('job.contract.custom'))+'</div>';
+      if(job.contract.enviadoEm) contratoHtml+='<div><span class="u-c-neutral">'+t('job.contract.sentOn')+':</span> '+job.contract.enviadoEm+'</div>';
+      if(job.contract.signedAt) contratoHtml+='<div><span class="u-c-neutral">'+t('portal.signedOn')+':</span> '+job.contract.signedAt+'</div>';
+      contratoHtml+='</div>';
+      contratoHtml+='<button class="btn soft u-w-full" onclick="abrirBuilder(\''+id+'\')">'+t('job.contract.view')+'</button>';
+      if(job.contract.status==='rascunho') contratoHtml+='<button class="btn primary u-w-full u-mt-8" onclick="abrirDefinirPrazoPortal(\''+id+'\')">'+t('job.contract.getLink')+'</button>';
+      if(job.contract.status==='assinado') contratoHtml+='<button class="btn ghost u-w-full u-mt-8" onclick="descarregarCopiaContrato(\''+id+'\')">'+t('job.contract.download')+'</button>';
     }
-    html+='</div></div>';
+    contratoHtml+='</div></div>';
+    panels.push(contratoHtml);
 
+    /* 3. Cliente / Briefing — só se o trabalho usar essa estrutura. */
     if(job.structure.briefing && job.briefing){
       const respondido=job.briefing.respondido;
-      html+='<div class="sec" id="sec-briefing-dyn"><div class="sec-head" onclick="toggleSec(this)"><div class="sec-l">'+BADGE_BRIEF+'<div class="sec-title"><span data-t="job.clientInfo">'+t('job.clientInfo')+'</span></div></div><div style="display:flex;align-items:center;gap:7px"><div class="sec-state u-c-ink">'+gerarEstadoInformacoesCliente(job)+'</div><svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div></div><div class="sec-body">';
+      let briefingHtml='<div class="sec" id="sec-briefing-dyn"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_BRIEF+'<div class="sec-title"><span data-t="job.clientInfo">'+t('job.clientInfo')+'</span></div></div><div class="sec-state u-c-ink">'+gerarEstadoInformacoesCliente(job)+'</div></div><div class="sec-body u-block">';
       if(job.briefing.prazo){
         const prazoTxt=job.briefing.prazo.split('-').reverse().join('/');
         const expirado=diasEntre(job.briefing.prazo)<0;
-        html+='<p style="font-size:12.5px;color:'+(expirado?'var(--late)':'var(--neutral)')+';margin:0 2px 12px">'+(expirado?t('clientinfo.expiredOn'):t('clientinfo.availableUntil'))+prazoTxt+'</p>';
+        briefingHtml+='<p style="font-size:12.5px;color:'+(expirado?'var(--late)':'var(--neutral)')+';margin:0 2px 12px">'+(expirado?t('clientinfo.expiredOn'):t('clientinfo.availableUntil'))+prazoTxt+'</p>';
       }
       job.briefing.perguntas.forEach(p=>{
-        html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.q)+'</div></div><span style="font-size:12.5px;color:'+(p.r?'var(--ink)':'var(--neutral)')+'">'+(escapeHtml(p.r)||'sem resposta')+'</span></div>';
+        briefingHtml+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(p.q)+'</div></div><span style="font-size:12.5px;color:'+(p.r?'var(--ink)':'var(--neutral)')+'">'+(escapeHtml(p.r)||'sem resposta')+'</span></div>';
       });
       if(job.briefing.cronograma && job.briefing.cronograma.some(m=>m.hora)){
-        html+='<p class="csec-label u-m-16-2-6">'+t('job.eventSchedule')+'</p>';
+        briefingHtml+='<p class="csec-label u-m-16-2-6">'+t('job.eventSchedule')+'</p>';
         job.briefing.cronograma.forEach(m=>{
           if(!m.hora) return;
-          html+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(m.momento)+'</div></div><span style="font-size:13px;font-weight:600;color:var(--ink)">'+escapeHtml(m.hora)+'</span></div>';
+          briefingHtml+='<div class="struct-row"><div class="struct-l"><div class="nm">'+escapeHtml(m.momento)+'</div></div><span style="font-size:13px;font-weight:600;color:var(--ink)">'+escapeHtml(m.hora)+'</span></div>';
         });
       }
       if(job.briefing.pessoasImportantes && job.briefing.pessoasImportantes.length){
-        html+='<p class="csec-label u-m-16-2-6">'+t('job.keyPeople')+'</p>';
+        briefingHtml+='<p class="csec-label u-m-16-2-6">'+t('job.keyPeople')+'</p>';
         job.briefing.pessoasImportantes.forEach(c=>{
-          html+='<div class="conv-row"><div class="conv-av">'+avatarHtml(c.nome,32)+'</div>'+
+          briefingHtml+='<div class="conv-row"><div class="conv-av">'+avatarHtml(c.nome,32)+'</div>'+
             '<div class="conv-info"><div class="nm">'+escapeHtml(c.nome)+'</div><div class="sub">'+escapeHtml(c.funcao)+'</div></div></div>';
         });
       }
       if(job.briefing.observacoes){
-        html+='<p class="csec-label u-m-16-2-6">'+t('job.importantNotes')+'</p>';
-        html+='<p class="u-hint-bare u-lh-155">'+escapeHtml(job.briefing.observacoes)+'</p>';
+        briefingHtml+='<p class="csec-label u-m-16-2-6">'+t('job.importantNotes')+'</p>';
+        briefingHtml+='<p class="u-hint-bare u-lh-155">'+escapeHtml(job.briefing.observacoes)+'</p>';
       }
       if(!respondido && job.contract.status==='assinado'){
-        html+='<p style="font-size:12px;color:var(--neutral);margin-top:8px">'+t('job.clientRespondsViaLink')+'</p>';
+        briefingHtml+='<p style="font-size:12px;color:var(--neutral);margin-top:8px">'+t('job.clientRespondsViaLink')+'</p>';
       }
-      html+='</div></div>';
+      briefingHtml+='</div></div>';
+      panels.push(briefingHtml);
     }
 
-    html+=timelineCardHtml(job);
+    /* 4. Timeline — timelineCardHtml() já devolve '' se não houver passos. */
+    const timelineHtml=timelineCardHtml(job);
+    if(timelineHtml) panels.push(timelineHtml);
 
+    /* 5. Pagamentos */
     if(job.payments.length){
-      html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-body u-block">';
+      let pagamentosHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-body u-block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
         const sufixo=t((RECORRENCIA_FREQ[rec.frequencia]||{}).sufixoKey||'recur.per.month');
-        html+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:6px;padding:12px 2px;background:var(--paper-2);border-radius:var(--r);margin-bottom:8px">';
-        html+='<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6"/><path d="M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg><span class="sig-tag" style="background:var(--btn-14);color:rgb(var(--btn-rgb))">'+t('recur.badge')+'</span> '+freqLabel+'</span><b style="font-size:14px">'+fmtMoney(rec.valorPorCiclo)+sufixo+'</b></div>';
+        pagamentosHtml+='<div class="struct-row" style="flex-direction:column;align-items:stretch;gap:6px;padding:12px 2px;background:var(--paper-2);border-radius:var(--r);margin-bottom:8px">';
+        pagamentosHtml+='<div style="display:flex;justify-content:space-between;align-items:center"><span style="display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M17 2v4M3 8h18M21 12V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h6"/><path d="M17 22a3 3 0 1 0 0-6 3 3 0 0 0 0 6M20.5 19.5 22 21"/></svg><span class="sig-tag" style="background:var(--btn-14);color:rgb(var(--btn-rgb))">'+t('recur.badge')+'</span> '+freqLabel+'</span><b style="font-size:14px">'+fmtMoney(rec.valorPorCiclo)+sufixo+'</b></div>';
         if(rec.ativa){
-          html+='<div class="u-sm-soft">'+t('recur.nextCharge')+': '+rec.proximaCobranca.split('-').reverse().join('/')+(rec.fim?(' · até '+rec.fim.split('-').reverse().join('/')):'')+'</div>';
-          html+='<button class="btn ghost" style="padding:6px 10px;font-size:11.5px;align-self:flex-start" onclick="terminarRecorrenciaJob(\''+id+'\')">'+t('recur.stop')+'</button>';
+          pagamentosHtml+='<div class="u-sm-soft">'+t('recur.nextCharge')+': '+rec.proximaCobranca.split('-').reverse().join('/')+(rec.fim?(' · até '+rec.fim.split('-').reverse().join('/')):'')+'</div>';
+          pagamentosHtml+='<button class="btn ghost" style="padding:6px 10px;font-size:11.5px;align-self:flex-start" onclick="terminarRecorrenciaJob(\''+id+'\')">'+t('recur.stop')+'</button>';
         } else {
-          html+='<div class="u-sm-nd">'+t('recur.ended')+'</div>';
+          pagamentosHtml+='<div class="u-sm-nd">'+t('recur.ended')+'</div>';
         }
-        html+='</div>';
+        pagamentosHtml+='</div>';
       }
       const hojeIso=new Date().toISOString().slice(0,10);
       job.payments.forEach((p,i)=>{
@@ -723,65 +742,103 @@
         const statusTxt = p.status==='pago'?t('payment.statusPaid'):(p.status==='a_confirmar'?t('payment.statusReceiptReceived'):(atrasada?t('timeline.status.late'):t('payment.statusPending')));
         const vencTxt = p.dueDate ? p.dueDate.split('-').reverse().join('/') : '—';
         const pagoTxt = p.pagoEm ? p.pagoEm.split('-').reverse().join('/') : null;
-        html+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
-        html+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
+        pagamentosHtml+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
+        pagamentosHtml+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
           '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
         const pTagClasse={done:'green',progress:'amber',pending:'gray',late:'late'}[pStatus];
-        html+='<div class="u-row">';
-        html+='<span class="sig-tag '+pTagClasse+'">'+statusTxt+'</span>';
+        pagamentosHtml+='<div class="u-row">';
+        pagamentosHtml+='<span class="sig-tag '+pTagClasse+'">'+statusTxt+'</span>';
         if(p.status!=='pago'){
-          html+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
+          pagamentosHtml+='<button class="btn soft" style="padding:6px 10px;font-size:11.5px;white-space:nowrap" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+i+')">'+t('action.complete')+'</button>';
         }
-        html+='</div></div>';
+        pagamentosHtml+='</div></div>';
       });
-      html+='</div></div>';
+      pagamentosHtml+='</div></div>';
+      panels.push(pagamentosHtml);
     }
 
+    /* 6. Checklist */
     if(job.checklist){
       const feitos=job.checklist.itens.filter(c=>c.feito).length;
-      html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_HIST+'<div class="sec-title" data-t="wizard.model.checklist">Checklist</div></div><div class="sec-state u-c-soft">'+feitos+'/'+job.checklist.itens.length+'</div></div><div class="sec-body u-block">';
+      let checklistHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_HIST+'<div class="sec-title" data-t="wizard.model.checklist">Checklist</div></div><div class="sec-state u-c-soft">'+feitos+'/'+job.checklist.itens.length+'</div></div><div class="sec-body u-block">';
       job.checklist.itens.forEach((c,i)=>{
-        html+='<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(c.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(c.t)+'</div></div><div class="toggle'+(c.feito?' on':'')+'" onclick="toggleChecklistItem(\''+id+'\','+i+',this)"><div class="kn"></div></div></div>';
+        checklistHtml+='<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(c.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(c.t)+'</div></div><div class="toggle'+(c.feito?' on':'')+'" onclick="toggleChecklistItem(\''+id+'\','+i+',this)"><div class="kn"></div></div></div>';
       });
-      html+='</div></div>';
+      checklistHtml+='</div></div>';
+      panels.push(checklistHtml);
     }
 
+    /* 7. Tarefas do job */
     const tarefasJob=Object.values(tarefasData).filter(t=>t.jobId===id);
     if(tarefasJob.length){
-      html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_BELL+'<div class="sec-title" data-t="cost.tasks">Tarefas</div></div><div class="sec-state u-c-soft">'+tarefasJob.filter(t=>!t.feito).length+' por fazer</div></div><div class="sec-body u-block">';
+      let tarefasHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_BELL+'<div class="sec-title" data-t="cost.tasks">Tarefas</div></div><div class="sec-state u-c-soft">'+tarefasJob.filter(t=>!t.feito).length+' por fazer</div></div><div class="sec-body u-block">';
       tarefasJob.forEach(t=>{
-        html+='<div class="struct-row"><div class="struct-l"><div class="nm" style="display:flex;align-items:center;'+(t.feito?'text-decoration:line-through;color:var(--neutral)':'')+'"><span class="priority-dot '+prioClasse(t.prioridade)+'"></span>'+escapeHtml(t.titulo)+'</div><span class="sub">'+(t.prioridade||t('task.priorityNormal'))+(t.data?(' · '+t.data.split('-').reverse().slice(0,2).join('/')):'')+'</span></div><div class="toggle'+(t.feito?' on':'')+'" onclick="toggleTarefaItem(\''+t.id+'\',this)"><div class="kn"></div></div></div>';
+        tarefasHtml+='<div class="struct-row"><div class="struct-l"><div class="nm" style="display:flex;align-items:center;'+(t.feito?'text-decoration:line-through;color:var(--neutral)':'')+'"><span class="priority-dot '+prioClasse(t.prioridade)+'"></span>'+escapeHtml(t.titulo)+'</div><span class="sub">'+(t.prioridade||t('task.priorityNormal'))+(t.data?(' · '+t.data.split('-').reverse().slice(0,2).join('/')):'')+'</span></div><div class="toggle'+(t.feito?' on':'')+'" onclick="toggleTarefaItem(\''+t.id+'\',this)"><div class="kn"></div></div></div>';
       });
-      html+='</div></div>';
+      tarefasHtml+='</div></div>';
+      panels.push(tarefasHtml);
     }
 
+    /* 8. Lembretes do job */
     const lembretesJob=Object.values(lembretesData).filter(l=>l.jobId===id);
     if(lembretesJob.length){
-      html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_ALARM+'<div class="sec-title" data-t="reminder.sectionTitle">Lembretes</div></div><div class="sec-state u-c-soft">'+lembretesJob.filter(l=>!l.feito).length+' por fazer</div></div><div class="sec-body u-block">';
+      let lembretesHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_ALARM+'<div class="sec-title" data-t="reminder.sectionTitle">Lembretes</div></div><div class="sec-state u-c-soft">'+lembretesJob.filter(l=>!l.feito).length+' por fazer</div></div><div class="sec-body u-block">';
       lembretesJob.forEach(l=>{
-        html+='<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(l.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(l.titulo)+'</div><span class="sub">'+l.data.split('-').reverse().join('/')+(l.hora?(' · '+l.hora):'')+'</span></div><div class="toggle'+(l.feito?' on':'')+'" onclick="toggleLembreteItem(\''+l.id+'\',this)"><div class="kn"></div></div></div>';
+        lembretesHtml+='<div class="struct-row"><div class="struct-l"><div class="nm" style="'+(l.feito?'text-decoration:line-through;color:var(--neutral)':'')+'">'+escapeHtml(l.titulo)+'</div><span class="sub">'+l.data.split('-').reverse().join('/')+(l.hora?(' · '+l.hora):'')+'</span></div><div class="toggle'+(l.feito?' on':'')+'" onclick="toggleLembreteItem(\''+l.id+'\',this)"><div class="kn"></div></div></div>';
       });
-      html+='</div></div>';
+      lembretesHtml+='</div></div>';
+      panels.push(lembretesHtml);
     }
 
+    /* 9. Listas do job */
     const listasJob=Object.values(listasData).filter(ls=>ls.jobId===id);
     if(listasJob.length){
-      html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_CHECKLIST+'<div class="sec-title" data-t="list.sectionTitle">Listas</div></div></div><div class="sec-body u-block">';
+      let listasHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_CHECKLIST+'<div class="sec-title" data-t="list.sectionTitle">Listas</div></div></div><div class="sec-body u-block">';
       listasJob.forEach(ls=>{
         const feitos=(ls.itens||[]).filter(it=>it.feito).length;
-        html+='<div class="struct-row u-cur-pointer" onclick="abrirDetalheItemSolto(\'lista\',\''+ls.id+'\')"><div class="struct-l"><div class="nm">'+escapeHtml(ls.titulo)+'</div><span class="sub">'+feitos+'/'+(ls.itens||[]).length+'</span></div><svg class="chevr u-flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
+        listasHtml+='<div class="struct-row u-cur-pointer" onclick="abrirDetalheItemSolto(\'lista\',\''+ls.id+'\')"><div class="struct-l"><div class="nm">'+escapeHtml(ls.titulo)+'</div><span class="sub">'+feitos+'/'+(ls.itens||[]).length+'</span></div><svg class="chevr u-flex-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></div>';
       });
-      html+='</div></div>';
+      listasHtml+='</div></div>';
+      panels.push(listasHtml);
     }
 
-    html+='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body u-block">'+
+    /* 10. Colaboradores — sempre presente, sempre o último painel. */
+    let colabHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_TEAM+'<div class="sec-title">'+t('collab.sectionTitle')+'</div></div><button class="btn ghost" style="padding:6px 11px;font-size:12px" onclick="abrirAdicionarColaboradorExterno(\''+id+'\')">'+t('collab.add')+'</button></div><div class="sec-body u-block">'+
       '<div id="colab-lista-'+id+'"><p class="u-label-nd">'+t('collab.loading')+'</p></div>'+
       '<button class="btn ghost" style="width:100%;margin-top:12px;border-top:1px solid var(--line-soft);padding-top:14px;border-radius:0 0 var(--r) var(--r)" onclick="abrirContratosColaboradores(\''+id+'\')">'+t('collab.contractsSection')+'</button>'+
     '</div></div>';
+    panels.push(colabHtml);
 
-    document.getElementById('detalhe-dynamic').innerHTML=html;
+    document.getElementById('detalhe-dynamic').innerHTML=panels.map(p=>'<div class="detalhe-panel">'+p+'</div>').join('');
     carregarColaboradoresJob(id);
     setTimeout(inicializarMapasCard, 30);
+    inicializarDetalhePaginacao(panels.length);
+  }
+  /* Carrossel vertical do Detalhe — scroll-snap nativo entre .detalhe-panel
+     (CSS em trabalhos.css); esta função só cria os pontos de paginação e
+     liga um IntersectionObserver que marca qual painel está visível. Sem
+     geometria 3D nem lógica de arrasto — é scroll normal do browser. */
+  let _detalheObserver=null;
+  function inicializarDetalhePaginacao(n){
+    const dots=document.getElementById('detalhe-dots');
+    const scroller=document.getElementById('detalhe-dynamic');
+    if(!dots||!scroller) return;
+    if(_detalheObserver){ _detalheObserver.disconnect(); _detalheObserver=null; }
+    if(n<=1){ dots.innerHTML=''; dots.classList.add('u-hidden'); return; }
+    dots.classList.remove('u-hidden');
+    dots.innerHTML=Array.from({length:n}).map(()=>'<span class="detalhe-dot"></span>').join('');
+    const dotEls=Array.from(dots.children);
+    const panelEls=Array.from(scroller.querySelectorAll('.detalhe-panel'));
+    _detalheObserver=new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.intersectionRatio<0.5) return;
+        const idx=panelEls.indexOf(entry.target);
+        if(idx<0) return;
+        dotEls.forEach(function(d,i){ d.classList.toggle('on', i===idx); });
+      });
+    }, { root:scroller, threshold:0.5 });
+    panelEls.forEach(function(p){ _detalheObserver.observe(p); });
+    if(dotEls[0]) dotEls[0].classList.add('on');
   }
   function toggleChecklistItem(jobId, i, el){
     const job=jobsData[jobId];

@@ -665,9 +665,9 @@
       f+'/'+tot+'</span>';
   }
   let _tcArquivados=new Set();
-  /* Pill ativa da Dashboard de Tarefas — Hoje/Tarefas/Lembretes/Agenda,
-     cada uma filtra #tasks-list de forma diferente (ver renderTasksList). */
-  let _tasksListMode='hoje';
+  /* Pill ativa da Dashboard de Tarefas — Agenda/Notas/Atrasados, cada uma
+     filtra #tasks-list de forma diferente (ver renderTasksList). */
+  let _tasksListMode='agenda';
   function filtrarListaTarefas(el,modo){
     _tasksListMode=modo;
     document.querySelectorAll('#tasks-filter-row .chip').forEach(c=>c.classList.toggle('on',c===el));
@@ -686,27 +686,50 @@
           jobId:tk.jobId||null, tipo:'tarefa', idx:tk.id, prioridade:tk.prioridade||'Normal' };
       });
   }
+  /* Notas de projeto (job.notas não vazio) — fonte da pill "Notas", junto
+     das avulsas (tarefas sem projeto e sem data). Clicar abre o mesmo
+     modal de Notas do Detalhe do Projeto (abrirNotasProjeto), não a
+     página toda. */
+  function gerarNotasProjeto(){
+    return Object.values(jobsData).filter(function(j){ return j.notas && j.notas.trim(); })
+      .map(function(j){
+        return { nome:j.nome||j.client||'', jobId:j.id, tipo:'nota-projeto', idx:null,
+          origem:'projeto', preview:j.notas.trim().slice(0,80) };
+      });
+  }
   /* Uma linha da lista — mais leve que .tsk-card (o carrossel já cobre o
      formato "cartão"); reaproveita .pick-row, o mesmo padrão de Contatos/
-     Biblioteca, para a lista ler como lista, não como mais um carrossel. */
+     Biblioteca, para a lista ler como lista, não como mais um carrossel.
+     `origem` (avulsa/projeto) tinge o ponto à esquerda na pill Notas,
+     em vez da prioridade — as duas fontes (avulsa vs. de projeto) ficam
+     visualmente distintas por cor. */
   function construirLinhaTarefa(it){
-    const onclick=it.jobId?("openJob('"+it.jobId+"')"):("abrirDetalheItemSolto('"+it.tipo+"',"+(typeof it.idx==='string'?"'"+it.idx+"'":it.idx)+")");
-    let sub=it.cliente?escapeHtml(it.cliente):'';
-    if(it.dataISO){
-      const pts=it.dataISO.split('-');
-      const dataTxt=parseInt(pts[2],10)+' '+mesAbrev(parseInt(pts[1],10)-1);
-      sub=(sub?sub+' · ':'')+dataTxt+(it.hora?' · '+escapeHtml(it.hora):'');
-    } else if(!sub){
-      sub=t('tasks.noDate');
+    const onclick=it.tipo==='nota-projeto'
+      ?("abrirNotasProjeto('"+it.jobId+"')")
+      :(it.jobId?("openJob('"+it.jobId+"')"):("abrirDetalheItemSolto('"+it.tipo+"',"+(typeof it.idx==='string'?"'"+it.idx+"'":it.idx)+")"));
+    let sub;
+    if(it.preview){
+      sub=escapeHtml(it.preview);
+    } else {
+      sub=it.cliente?escapeHtml(it.cliente):'';
+      if(it.dataISO){
+        const pts=it.dataISO.split('-');
+        const dataTxt=parseInt(pts[2],10)+' '+mesAbrev(parseInt(pts[1],10)-1);
+        sub=(sub?sub+' · ':'')+dataTxt+(it.hora?' · '+escapeHtml(it.hora):'');
+      } else if(!sub){
+        sub=t('tasks.noDate');
+      }
     }
-    const prioClasse=it.prioridade==='Urgente'?'tsk-row-prio--urgente':(it.prioridade==='Importante'?'tsk-row-prio--importante':'tsk-row-prio--normal');
-    const prioDot=it.prioridade?'<span class="tsk-row-prio '+prioClasse+'"></span>':'';
+    let dotClasse, hasDot;
+    if(it.origem==='projeto'){ dotClasse='tsk-row-prio--projeto'; hasDot=true; }
+    else if(it.origem==='avulsa'){ dotClasse='tsk-row-prio--avulsa'; hasDot=true; }
+    else { dotClasse=it.prioridade==='Urgente'?'tsk-row-prio--urgente':(it.prioridade==='Importante'?'tsk-row-prio--importante':'tsk-row-prio--normal'); hasDot=!!it.prioridade; }
+    const prioDot=hasDot?'<span class="tsk-row-prio '+dotClasse+'"></span>':'';
     return '<div class="pick-row" onclick="'+onclick+'">'+prioDot
       +'<div class="u-flex-min"><div class="nm">'+escapeHtml(it.nome||'')+'</div><div class="sub">'+sub+'</div></div>'
       +'<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'
       +'</div>';
   }
-  const AGD_COMPROMISSO_TIPOS=['evento','entrega','pagamento','contrato'];
   function renderTasksList(){
     const wrap=document.getElementById('tasks-list');
     if(!wrap) return;
@@ -728,14 +751,18 @@
     }
 
     let itens;
-    if(_tasksListMode==='tarefas'){
-      itens=gerarTarefasCompletas();
-    } else if(_tasksListMode==='lembretes'){
-      itens=gerarTarefasCompletas().filter(function(it){ return !it.jobId&&!it.dataISO; });
-    } else if(_tasksListMode==='agenda'){
-      itens=futuros.filter(function(it){ return AGD_COMPROMISSO_TIPOS.indexOf(it.tipo)!==-1; });
-    } else { /* 'hoje' — cronológico, sem os atrasados */
-      itens=futuros;
+    if(_tasksListMode==='notas'){
+      /* Avulsas (sem projeto, sem data) + notas de projeto — cada origem
+         com a sua cor de acento (ver construirLinhaTarefa). */
+      const avulsas=gerarTarefasCompletas().filter(function(it){ return !it.jobId&&!it.dataISO; })
+        .map(function(it){ return Object.assign({},it,{origem:'avulsa'}); });
+      itens=avulsas.concat(gerarNotasProjeto());
+    } else if(_tasksListMode==='atrasados'){
+      itens=atrasados;
+    } else { /* 'agenda' — tudo: compromissos datados (já cronológicos,
+                incluindo tarefas com data) + tarefas soltas sem data no fim */
+      const semData=gerarTarefasCompletas().filter(function(it){ return !it.dataISO; });
+      itens=futuros.concat(semData);
     }
 
     renderNotificacoesPendentes();

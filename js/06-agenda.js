@@ -28,7 +28,10 @@
        para o novo W, e a perspetiva escalou na mesma proporção R_novo/
        R_antigo para preservar a mesma intensidade de profundidade 3D. */
     var AGD_3D_STEP=40, AGD_3D_R=476.4;
-    function _agdYOff(aOff){ return -10+18*Math.min(aOff,1); } /* -10 at center → +8 at ±1 */
+    /* Todas as posições na mesma linha de base — o efeito "leque" com
+       laterais mais baixas (herdado da era retrato) foi removido a pedido:
+       os 3 cards (central e laterais) devem alinhar verticalmente. */
+    function _agdYOff(aOff){ return -10; }
     function _agd3dPos(off){
       var theta=off*AGD_3D_STEP;
       var aOff=Math.abs(off);

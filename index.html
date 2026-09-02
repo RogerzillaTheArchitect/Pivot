@@ -515,12 +515,10 @@
           </div>
           <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>
-          </div>
-          <div id="agd-chip-timer-wrap"><span class="agd-chip-timer"></span></div>
-          <div class="agd-ruler-sep"></div>
-          <div class="agd-ruler-outer" id="agd-ruler-outer">
-            <div class="agd-ruler-viz" id="agd-ruler-viz"></div>
-            <div class="agd-ruler-cd" id="agd-ruler-cd"></div>
+            <!-- Setas discretas — só sugerem que há conteúdo anterior/
+                 seguinte; o arrasto já existe, isto é decoração, sem onclick. -->
+            <svg class="agd-fan-arrow agd-fan-arrow--l" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/></svg>
+            <svg class="agd-fan-arrow agd-fan-arrow--r" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m10 6 6 6-6 6"/></svg>
           </div>
         </div>
 
@@ -547,14 +545,16 @@
           <span class="tsk-overdue-link" data-t="tasks.seeMore">Ver</span>
         </div>
 
-        <!-- Pills — Hoje / Tarefas / Lembretes / Agenda. Cada uma filtra o
-             mesmo #tasks-list de forma diferente (ver filtrarListaTarefas
-             em js/04-nav-dashboard.js). -->
+        <!-- Pills — Agenda / Notas / Atrasados. Agenda engloba compromissos
+             datados e tarefas soltas (com/sem data) numa lista só; Notas
+             junta avulsas + notas de projeto (job.notas); Atrasados filtra
+             o mesmo conjunto que já alimenta o banner acima. Cada uma
+             filtra o mesmo #tasks-list (ver filtrarListaTarefas em
+             js/04-nav-dashboard.js). -->
         <div class="filter-row" id="tasks-filter-row">
-          <div class="chip on" data-key="hoje" onclick="filtrarListaTarefas(this,'hoje')" data-t="tasks.tabToday">Hoje</div>
-          <div class="chip" data-key="tarefas" onclick="filtrarListaTarefas(this,'tarefas')" data-t="tasks.tabTasks">Tarefas</div>
-          <div class="chip" data-key="lembretes" onclick="filtrarListaTarefas(this,'lembretes')" data-t="tasks.tabNotes">Lembretes</div>
-          <div class="chip" data-key="agenda" onclick="filtrarListaTarefas(this,'agenda')" data-t="tasks.tabAgenda">Agenda</div>
+          <div class="chip on" data-key="agenda" onclick="filtrarListaTarefas(this,'agenda')" data-t="tasks.tabAgenda">Agenda</div>
+          <div class="chip" data-key="notas" onclick="filtrarListaTarefas(this,'notas')" data-t="tasks.tabNotes">Notas</div>
+          <div class="chip" data-key="atrasados" onclick="filtrarListaTarefas(this,'atrasados')" data-t="tasks.tabOverdue">Atrasados</div>
         </div>
 
         <div id="tasks-list"></div>
@@ -790,12 +790,23 @@
           </div>
         </div>
 
-        <button class="clientbtn" onclick="abrirCompartilharPortal(currentJobId)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
-          <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
-        </button>
+        <div class="detail-actions-row">
+          <button class="clientbtn" onclick="abrirCompartilharPortal(currentJobId)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"/></svg>
+            <span id="lbl-previsualizar-portal" data-t="job.portalShare">Portal do Cliente</span>
+          </button>
+          <button class="clientbtn notas-btn" id="notas-projeto-btn" onclick="abrirNotasProjeto(currentJobId)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 12h6M9 16h6M9 8h2"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg>
+            <span data-t="job.notes">Notas</span>
+          </button>
+        </div>
 
-        <div id="detalhe-dynamic"></div>
+        <!-- Carrossel vertical — cada secção (renderJobDetailDynamic() em
+             js/12-emails.js) vira um .detalhe-panel de ecrã inteiro,
+             scroll-snap entre eles; #detalhe-dots acompanha qual está
+             visível (inicializarDetalhePaginacao(), mesmo ficheiro). -->
+        <div id="detalhe-dynamic" class="detalhe-scroller"></div>
+        <div class="detalhe-dots u-hidden" id="detalhe-dots"></div>
 
         <div class="detalhe-footer-actions">
           <button class="job-footer-btn arquivar" onclick="confirmarDeletarTrabalho(currentJobId)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg><span data-t="action.archive">Arquivar</span></button>
@@ -803,6 +814,21 @@
           <button class="job-footer-btn concluir" onclick="arquivarTrabalho(currentJobId,'concluido')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg><span data-t="action.complete">Concluir</span></button>
         </div>
       </section>
+
+      <!-- Modal de Notas do Projeto — texto livre por job (job.notas),
+           mesmo padrão .ov-scrim/.ov-sheet do modal de atrasados. -->
+      <div class="ov-scrim u-hidden" id="notas-projeto-scrim" onclick="fecharNotasProjeto()"></div>
+      <div class="ov-sheet u-hidden" id="notas-projeto-sheet">
+        <div class="ov-grab"></div>
+        <div class="sheet-header">
+          <h3 data-t="job.notesTitle">Notas do projeto</h3>
+          <button class="icon-btn" onclick="fecharNotasProjeto()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+        </div>
+        <div class="ov-sheet-body">
+          <textarea id="notas-projeto-texto" class="notas-projeto-textarea" data-t-placeholder="job.notesPlaceholder" placeholder="Escreve aqui as tuas anotações sobre este projeto…"></textarea>
+          <button class="btn primary notas-projeto-save" onclick="guardarNotasProjeto()" data-t="action.save">Guardar</button>
+        </div>
+      </div>
 
       <!-- ============ BUILDER DE CONTRATO ============ -->
       <section class="view wide" id="v-builder">
