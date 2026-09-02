@@ -253,12 +253,36 @@
   .detalhe-scroller::-webkit-scrollbar{display:none}
   .detalhe-panel{
     scroll-snap-align:start;
-    min-height:100%;
+    height:100%; /* fixo, não min-height — todos os painéis do mesmo
+      tamanho; conteúdo mais alto do que cabe rola dentro do próprio
+      painel em vez de esticá-lo (ver overflow-y abaixo). */
+    overflow-y:auto;
+    scrollbar-width:none;
     display:flex;
     flex-direction:column;
     justify-content:center;
     padding:2px 1px;
   }
+  .detalhe-panel::-webkit-scrollbar{display:none}
+  /* Ícone da secção sem moldura — era uma caixa cinza (.sec-icon) em volta;
+     fica só o ícone. Título alinhado à esquerda em vez de centrado.
+     Escopado ao carrossel do Detalhe — o mesmo .sec-head é reaproveitado
+     no preview do portal (js/14-overlay-i18n.js), que fica como estava. */
+  .detalhe-panel .sec-icon{background:none;border-radius:0;width:auto;height:auto}
+  .detalhe-panel .sec-title{text-align:left}
+  /* Chips de estado — sempre por baixo do título, nunca ao lado (ver
+     contractStatusTagHtml()/pagChip em js/12-emails.js). Quando existem,
+     a borda que separa cabeçalho de corpo desce para debaixo dos chips
+     em vez de cortar entre título e chips. */
+  .sec-head:has(+ .sec-chips){border-bottom:none}
+  .sec-chips{display:flex;gap:6px;padding:0 16px 13px;background:var(--surface-card);
+    border-bottom:1px solid rgba(255,255,255,.08);flex-wrap:wrap}
+  /* Botões dentro do Detalhe respeitam cinza escuro flat — sem o gradiente/
+     reflexo (--gloss/--sheen-soft) que .btn.primary/.btn.soft usam no
+     resto do app. */
+  .detalhe-panel .btn.primary,
+  .detalhe-panel .btn.soft,
+  .detalhe-panel .btn.dark{background:rgba(255,255,255,.08)}
   /* Rail de pontos — acompanha qual painel está visível
      (inicializarDetalhePaginacao(), js/12-emails.js). */
   .detalhe-dots{

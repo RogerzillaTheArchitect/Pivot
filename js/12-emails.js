@@ -658,7 +658,7 @@
     if(visaoGeral) panels.push(visaoGeral);
 
     /* 2. Contrato — sempre presente (mesmo vazio, convida a anexar). */
-    let contratoHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_DOC+'<div class="sec-title">'+t('job.contract')+'</div></div>'+contractStatusTagHtml(job)+'</div><div class="sec-body u-block">';
+    let contratoHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_DOC+'<div class="sec-title">'+t('job.contract')+'</div></div></div><div class="sec-chips">'+contractStatusTagHtml(job)+'</div><div class="sec-body u-block">';
     if(job.contract.status==='vazio'){
       /* decisão de ter ou não contrato é feita na criação do trabalho — depois
          de criado, não é mais possível anexar nem alterar isso aqui. */
@@ -720,7 +720,13 @@
 
     /* 5. Pagamentos */
     if(job.payments.length){
-      let pagamentosHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-body u-block">';
+      const hojeIsoPag=new Date().toISOString().slice(0,10);
+      const pagAtrasado=job.payments.some(p=>p.status!=='pago' && p.dueDate && p.dueDate<hojeIsoPag);
+      const pagPendente=job.payments.some(p=>p.status!=='pago');
+      const pagChip = pagAtrasado ? '<span class="sig-tag late">'+t('timeline.status.late')+'</span>'
+        : pagPendente ? '<span class="sig-tag amber">'+t('payment.statusPending')+'</span>'
+        : '<span class="sig-tag green">'+t('payment.statusPaid')+'</span>';
+      let pagamentosHtml='<div class="sec"><div class="sec-head u-cur-default"><div class="sec-l">'+BADGE_MONEY+'<div class="sec-title">'+t('job.payments')+'</div></div></div><div class="sec-chips">'+pagChip+'</div><div class="sec-body u-block">';
       const rec=job.recorrencia;
       if(rec){
         const freqLabel=t((RECORRENCIA_FREQ[rec.frequencia]||{}).labelKey||'recur.freq.monthly');
@@ -745,7 +751,7 @@
         pagamentosHtml+='<div class="struct-row" style="padding:12px 2px;cursor:pointer;gap:10px" onclick="abrirDetalheParcela(\''+id+'\','+i+')">';
         pagamentosHtml+='<div class="struct-l" style="flex:1;min-width:0"><div class="nm" style="font-weight:600;display:flex;align-items:center;gap:6px">'+statusEmoji(pStatus)+' '+escapeHtml(p.label)+' · '+fmtMoney(p.amount)+'</div>'+
           '<span class="sub">'+(pagoTxt?(t('payment.paidOn')+': '+pagoTxt):(t('payment.dueOn')+': '+vencTxt))+'</span></div>';
-        const pTagClasse={done:'green',progress:'amber',pending:'gray',late:'late'}[pStatus];
+        const pTagClasse={done:'green',progress:'amber',pending:'amber',late:'late'}[pStatus];
         pagamentosHtml+='<div class="u-row">';
         pagamentosHtml+='<span class="sig-tag '+pTagClasse+'">'+statusTxt+'</span>';
         if(p.status!=='pago'){
@@ -753,6 +759,10 @@
         }
         pagamentosHtml+='</div></div>';
       });
+      /* CTA grande no rodapé do painel — só quando há uma parcela por pagar;
+         marca a mais próxima sem precisar de tocar na linha certa. */
+      const idxPendente=job.payments.findIndex(p=>p.status!=='pago');
+      if(idxPendente>=0) pagamentosHtml+='<button class="btn soft u-w-full u-mt-8" onclick="event.stopPropagation();marcarPagoDynamic(\''+id+'\','+idxPendente+')">'+t('jobs.cta.markPaid')+'</button>';
       pagamentosHtml+='</div></div>';
       panels.push(pagamentosHtml);
     }

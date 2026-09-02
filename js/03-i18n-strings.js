@@ -745,6 +745,7 @@
     "jobs.stage.editing": { pt:"Edição", en:"Editing", es:"Edición" },
     "jobs.stage.delivery": { pt:"Entrega", en:"Delivery", es:"Entrega" },
     "jobs.stage.done": { pt:"Concluído", en:"Completed", es:"Completado" },
+    "jobs.cta.markPaid": { pt:"Marcar como pago", en:"Mark as paid", es:"Marcar como pagado" },
     "jobs.sessionToday": { pt:"Sessão hoje", en:"Session today", es:"Sesión hoy" },
     "jobtype.wedding": { pt:"Casamento", en:"Wedding", es:"Boda" },
     "jobtype.commercial": { pt:"Comercial", en:"Commercial", es:"Comercial" },
