@@ -109,6 +109,16 @@
   }
   .job.job2:hover{border-color:rgba(255,255,255,.16)}
   .job.job2:active{transform:scale(.97)}
+  /* Badge de pendências — canto superior direito, visível sem abrir o
+     projeto (ver reorganização da Dashboard de Tarefas). */
+  .j2-pend-badge{
+    position:absolute; top:10px; right:10px; z-index:2;
+    display:flex; align-items:center; gap:3px;
+    padding:3px 8px; border-radius:var(--r-pill);
+    background:linear-gradient(165deg,rgba(202,80,44,.32),rgba(132,48,24,.20));
+    border:1px solid rgba(220,90,55,.4);
+    font-size:11px; font-weight:700; color:rgba(246,126,88,.96);
+  }
 
   /* corpo: foto + título + contato */
   .j2-body{flex:1;overflow:hidden;display:flex;align-items:center;gap:12px;padding:10px 12px}

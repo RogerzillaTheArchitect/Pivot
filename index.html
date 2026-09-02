@@ -721,20 +721,14 @@
       <!-- ============ TRABALHOS ============ -->
       <section class="view" id="v-trabalhos">
 
-        <!-- Calendário — mesmo padrão de cabeçalho conectado do card Financeiro
-             (Dashboard): faixa com o próprio material do card, título/nav no
-             cabeçalho, linha divisória (a própria borda do card logo abaixo)
-             separando do resto do calendário. -->
-        <div class="tasks-header cal-header">
-          <button class="rel-nav-tall" id="cal-prev" onclick="calNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
-          <div class="rel-month-center">
-            <span class="rel-mes-big" id="cal-mes-label">JUNHO</span>
-            <span class="rel-ano-small" id="cal-ano-label">2026</span>
-          </div>
-          <button class="rel-nav-tall" id="cal-next" onclick="calNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
-        </div>
-        <div class="card rel-card-body">
-          <div class="cal-grid" id="calgrid"></div>
+        <!-- Botão de calendário — o calendário deixou de ocupar espaço
+             permanente na lista de projetos; abre agora num modal
+             (#calendario-dialog, mais abaixo). -->
+        <div class="page-head">
+          <div class="page-title" data-t="nav.jobs">Projetos</div>
+          <button class="icon-btn" onclick="abrirCalendarioProjetos()" aria-label="Calendário">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </button>
         </div>
 
         <!-- 4 filtros do mesmo tamanho, com ícone antes do nome (reaproveitando
@@ -753,6 +747,25 @@
         </div>
         <div id="jobsArquivadosList" class="u-hidden"></div>
       </section>
+
+      <!-- Modal do calendário de Projetos — mesmo motor de sempre
+           (renderCalendar()/calNav()/selecionarDiaCal() em
+           js/20-detalhe-filtros.js), só o container mudou de "sempre
+           visível na lista" para "dentro de um .ov-dialog". -->
+      <div class="ov-scrim u-hidden" id="calendario-scrim" onclick="fecharCalendarioProjetos()"></div>
+      <div class="ov-dialog u-hidden" id="calendario-dialog">
+        <div class="tasks-header cal-header">
+          <button class="rel-nav-tall" id="cal-prev" onclick="calNav(-1)" aria-label="Mês anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button>
+          <div class="rel-month-center">
+            <span class="rel-mes-big" id="cal-mes-label">JUNHO</span>
+            <span class="rel-ano-small" id="cal-ano-label">2026</span>
+          </div>
+          <button class="rel-nav-tall" id="cal-next" onclick="calNav(1)" aria-label="Próximo mês"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+        <div class="card rel-card-body">
+          <div class="cal-grid" id="calgrid"></div>
+        </div>
+      </div>
 
       <!-- ============ HISTÓRICO (trabalhos concluídos/deletados) ============ -->
       <section class="view" id="v-historico">

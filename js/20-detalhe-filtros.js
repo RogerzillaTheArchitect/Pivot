@@ -293,6 +293,21 @@
     renderCalendar();
     aplicarFiltrosTrabalhos();
   }
+  /* Calendário de Projetos — deixou de ocupar espaço permanente na lista
+     (ver reorganização da Dashboard de Tarefas); abre agora num
+     .ov-dialog. renderCalendar()/calNav()/selecionarDiaCal() continuam
+     exatamente iguais, só o container onde o resultado aparece mudou. */
+  function abrirCalendarioProjetos(){
+    renderCalendar();
+    const scrim=document.getElementById('calendario-scrim'), dlg=document.getElementById('calendario-dialog');
+    if(scrim) scrim.classList.remove('u-hidden');
+    if(dlg) dlg.classList.remove('u-hidden');
+  }
+  function fecharCalendarioProjetos(){
+    const scrim=document.getElementById('calendario-scrim'), dlg=document.getElementById('calendario-dialog');
+    if(scrim) scrim.classList.add('u-hidden');
+    if(dlg) dlg.classList.add('u-hidden');
+  }
 
   /* Arrastar um bloco: o item segue o dedo/cursor em tempo real (translateY)
      e só troca de posição com o vizinho imediato quando o centro do bloco
