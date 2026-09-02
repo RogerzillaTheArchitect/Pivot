@@ -132,8 +132,14 @@
           +'</button>';
       }
       wrap.innerHTML=html;
-      var activeEl=wrap.querySelector('.agd-day-center');
-      if(activeEl) activeEl.scrollIntoView({inline:'center', block:'nearest'});
+      /* scrollIntoView logo a seguir ao innerHTML às vezes corre antes do
+         browser terminar o layout dos 38 botões novos (fica em scrollLeft
+         0, sem erro nenhum — só não centra). Um requestAnimationFrame
+         garante que o layout já assentou. */
+      requestAnimationFrame(function(){
+        var activeEl=wrap.querySelector('.agd-day-center');
+        if(activeEl) activeEl.scrollIntoView({inline:'center', block:'nearest'});
+      });
     }
 
     /* ── RULER TICKS — canvas rendering ─────────── */

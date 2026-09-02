@@ -537,11 +537,42 @@
           </div>
         </div>
 
-        <div class="empty u-hidden" id="hoje-empty">
-          <div class="empty-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div>
-          <h3 data-t="home.allGood">Está tudo em dia.</h3>
+        <!-- Banner de atrasados — só aparece quando há pelo menos 1 item
+             atrasado (ver renderTasksList em js/04-nav-dashboard.js). Fica
+             fora da timeline de propósito: misturar atrasados na ordem
+             cronológica do que vem agora/a seguir tornava a lista confusa. -->
+        <div class="tsk-overdue-banner u-hidden" id="tsk-overdue-banner" onclick="abrirAtrasados()">
+          <span class="tsk-overdue-ico">⚠</span>
+          <span class="tsk-overdue-txt" id="tsk-overdue-txt"></span>
+          <span class="tsk-overdue-link" data-t="tasks.seeMore">Ver</span>
         </div>
+
+        <!-- Pills — Hoje / Tarefas / Lembretes / Agenda. Cada uma filtra o
+             mesmo #tasks-list de forma diferente (ver filtrarListaTarefas
+             em js/04-nav-dashboard.js). -->
+        <div class="filter-row" id="tasks-filter-row">
+          <div class="chip on" data-key="hoje" onclick="filtrarListaTarefas(this,'hoje')" data-t="tasks.tabToday">Hoje</div>
+          <div class="chip" data-key="tarefas" onclick="filtrarListaTarefas(this,'tarefas')" data-t="tasks.tabTasks">Tarefas</div>
+          <div class="chip" data-key="lembretes" onclick="filtrarListaTarefas(this,'lembretes')" data-t="tasks.tabNotes">Lembretes</div>
+          <div class="chip" data-key="agenda" onclick="filtrarListaTarefas(this,'agenda')" data-t="tasks.tabAgenda">Agenda</div>
+        </div>
+
+        <div id="tasks-list"></div>
       </section>
+
+      <!-- Modal de tarefas atrasadas — .ov-scrim/.ov-sheet, mesmo sistema
+           partilhado dos outros modais da app (styles/overlays.css). -->
+      <div class="ov-scrim u-hidden" id="atrasados-scrim" onclick="fecharAtrasados()"></div>
+      <div class="ov-sheet u-hidden" id="atrasados-sheet">
+        <div class="ov-grab"></div>
+        <div class="sheet-header">
+          <h3 data-t="tasks.overdueTitle">Tarefas atrasadas</h3>
+          <button class="icon-btn" onclick="fecharAtrasados()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="ov-sheet-body" id="atrasados-lista"></div>
+      </div>
 
       <!-- ============ ESTATÍSTICAS ============
            Financeiro/Operacional/Destaques, extraídos da Dashboard de
