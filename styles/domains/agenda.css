@@ -117,8 +117,8 @@
 }
 .agd-day-col.agd-day-center .agd-day-wd { color: rgba(255,255,255,.65) }
 .agd-day-col.agd-day-center .agd-day-num { color: var(--ink); font-weight: 600 }
-.agd-day-col.agd-day-center .agd-day-mon { color: #E03030 }
-.agd-day-col.agd-day-center.agd-has-items::after { background: #E03030 }
+.agd-day-col.agd-day-center .agd-day-mon { color: var(--brand) }
+.agd-day-col.agd-day-center.agd-has-items::after { background: var(--brand) }
 
 /* ══════════════════════════════════════════════════
    RULER v2 — scrolling minute timeline
@@ -214,43 +214,10 @@
   font-weight: 600;
 }
 
-/* Old ruler timer card — hidden (timer moved to card chip) */
-.agd-ruler-cd { display: none; }
-
-/* ── Timer chip — above the fan carousel ──────── */
-#agd-chip-timer-wrap {
-  display: none;
-}
-.agd-chip-timer {
-  display: none;
-  font-family: var(--font-headline);
-  font-size: 8.5px;
-  letter-spacing: .08em;
-  padding: 3px 12px;
-  border-radius: 999px;
-  line-height: 1.6;
-  white-space: nowrap;
-  pointer-events: none;
-  background: none;
-}
-.agd-chip-timer--active {
-  display: inline-block;
-  color: #FCA311;
-  border: 1px solid rgba(252,163,17,.65);
-}
-.agd-chip-timer--upcoming {
-  display: inline-block;
-  color: #5DD62C;
-  border: 1px solid rgba(93,214,44,.6);
-}
-@keyframes agd-chip-pulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.5; }
-}
-.agd-chip-timer--active,
-.agd-chip-timer--upcoming {
-  animation:agd-chip-pulse 2.4s var(--ease-inout) infinite;
-}
+/* .agd-ruler-cd / #agd-chip-timer-wrap / .agd-chip-timer* removidos —
+   código morto: os elementos HTML (#agd-ruler-outer, #agd-chip-timer-wrap)
+   já não existem desde a reorganização da Dashboard de Tarefas (Ronda 2),
+   e ambos já vinham com display:none próprio antes disso. */
 
 /* ══════════════════════════════════════════════════
    FAN CAROUSEL
@@ -339,7 +306,7 @@
 /* ── Card article ─────────────────────────────── */
 .agd-card {
   width: 100%; height: 100%;
-  border-radius: 16px;
+  border-radius: var(--r);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -637,11 +604,11 @@
   white-space: nowrap;
 }
 .agd-ink .agd-ft-upcoming  { color: rgba(255,255,255,.55); }
-.agd-ink .agd-ft-active    { color: #FCA311; font-weight: 700; }
-.agd-ink .agd-ft-past      { color: #ff5050; }
+.agd-ink .agd-ft-active    { color: var(--now); font-weight: 700; }
+.agd-ink .agd-ft-past      { color: var(--late); }
 .agd-paper .agd-ft-upcoming { color: rgba(0,0,0,.45); }
-.agd-paper .agd-ft-active   { color: #C07500; font-weight: 700; }
-.agd-paper .agd-ft-past     { color: #8B1525; }
+.agd-paper .agd-ft-active   { color: var(--now-dk); font-weight: 700; }
+.agd-paper .agd-ft-past     { color: var(--late-dk); }
 
 /* Status chips — bordered pill, no fill */
 .agd-ft-chip {
@@ -656,16 +623,16 @@
   border: 1px solid currentColor;
   background: none;
 }
-.agd-ft-today { color: #FCA311; }
-.agd-ink .agd-ft-late  { color: #ff5050; }
-.agd-paper .agd-ft-late { color: #8B1525; }
+.agd-ft-today { color: var(--now); }
+.agd-ink .agd-ft-late  { color: var(--late); }
+.agd-paper .agd-ft-late { color: var(--late-dk); }
 
 /* ── Long-press action overlay ─────────────────── */
 .agd-card-actions {
   position: absolute;
   inset: 0;
   z-index: 10;
-  border-radius: 16px;
+  border-radius: var(--r);
   background: rgba(5,6,8,.84);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -699,9 +666,9 @@
 .agd-act-btn:active { opacity: .62; }
 .agd-act-btn svg { flex-shrink: 0; }
 .agd-act-editar   { background: rgba(255,255,255,.1);  color: rgba(255,255,255,.88); }
-.agd-act-tempo    { background: rgba(93,214,44,.14);   color: #5DD62C; }
-.agd-act-arquivar { background: rgba(217,86,76,.2);    color: #E07878; }
-.agd-act-concluir { background: rgba(79,161,137,.2);   color: var(--brand); }
+.agd-act-tempo    { background: var(--btn-14);         color: var(--brand); }
+.agd-act-arquivar { background: rgba(193,120,114,.2);  color: var(--late); }
+.agd-act-concluir { background: rgba(79,161,137,.2);   color: var(--done); }
 
 
 /* Empty state */
@@ -725,9 +692,9 @@
 /* Conflict warning shown during task creation */
 .ta-aviso-conflito {
   font-size: var(--text-11);
-  color: #FCA311;
-  background: rgba(252,163,17,.1);
-  border: 1px solid rgba(252,163,17,.3);
+  color: var(--urgent);
+  background: rgba(232,197,71,.1);
+  border: 1px solid rgba(232,197,71,.3);
   border-radius: 8px;
   padding: 7px 12px;
   margin: -6px 0 8px;
@@ -756,7 +723,7 @@
 }
 .agd-panel-btn{
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
-  padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+  padding:22px 10px;border-radius:var(--r);border:1px solid rgba(255,255,255,.12);
   background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
   transition:background var(--dur-2);-webkit-tap-highlight-color:transparent
 }

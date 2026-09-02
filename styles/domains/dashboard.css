@@ -124,7 +124,7 @@
   .ops-card .value-end{display:block;text-align:center;line-height:1.1}
   .ops-card .value-end .ve-cur{display:block;color:var(--ink);font-size:22px;font-weight:700;line-height:1.1}
   .ops-card .value-end .ve-sep{display:none}
-  .ops-card .value-end .ve-tot{display:block;color:#e05555;font-size:13px;font-weight:500;line-height:1.3;margin-top:1px}
+  .ops-card .value-end .ve-tot{display:block;color:var(--late);font-size:13px;font-weight:500;line-height:1.3;margin-top:1px}
   #opm-fechados::after,#ropm-fechados::after{content:'';display:block;height:14px;flex:none}
   /* .track/.segment NÃO são escopados a .ops-card de propósito — é o mesmo
      componente reaproveitado no card Fluxo de Relatórios (ver
@@ -161,8 +161,8 @@
     background:rgba(255,255,255,.03);
   }
   .segment.is-filled{
-    border-color:#BED4CA;
-    background:#BED4CA;
+    border-color:var(--done);
+    background:var(--done);
     box-shadow:inset 0 1px rgba(255,255,255,.35);
   }
 
@@ -253,9 +253,9 @@
     border:1px solid var(--line);background:transparent;
     display:flex;align-items:center;justify-content:center}
   .rtk-sub-prazo span{font-size:9px;font-weight:600;line-height:1;white-space:nowrap}
-  .rtk-sub-prazo.neutral{border-color:rgba(127,170,112,.35);color:#7FAA70}
-  .rtk-sub-prazo.amber{border-color:rgba(185,155,45,.45);color:#C9B55A}
-  .rtk-sub-prazo.late{border-color:rgba(217,152,104,.5);color:#D98068}
+  .rtk-sub-prazo.neutral{border-color:rgba(79,161,137,.35);color:var(--done)}
+  .rtk-sub-prazo.amber{border-color:rgba(203,162,106,.45);color:var(--pend)}
+  .rtk-sub-prazo.late{border-color:rgba(193,120,114,.5);color:var(--late)}
   #tasks-list .rtk-body{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:14px 16px}
   /* Título da tarefa/trabalho é conteúdo real escrito pela pessoa — passa a
      Inter com peso, não Bebas forçada a maiúsculas (ver auditoria de
@@ -275,9 +275,9 @@
   #tasks-list .rtk-prazo{display:flex;align-items:center;gap:6px;font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:var(--text-10h);font-weight:400;line-height:1.3;letter-spacing:0;color:var(--ink-faint)}
   #tasks-list .rtk-prazo svg{width:var(--ico-xs);height:var(--ico-xs);flex:none}
   #tasks-list .rtk-prazo .nav-ico{width:var(--ico-xs);height:var(--ico-xs);flex:none;background-color:currentColor}
-  .card.radar-card.late .rtk-prazo{color:#D98068}
-  .card.radar-card.soon .rtk-prazo{color:#C9B55A}
-  .card.radar-card.normal .rtk-prazo{color:#7FAA70}
+  .card.radar-card.late .rtk-prazo{color:var(--late)}
+  .card.radar-card.soon .rtk-prazo{color:var(--pend)}
+  .card.radar-card.normal .rtk-prazo{color:var(--done)}
   /* cabeçalho "Tarefas" — em vez de um rótulo solto flutuando acima da
      lista, agora é uma faixa com o mesmo material dos cards, cantos de
      baixo retos encostados no primeiro card (visualmente "ligado" à
@@ -339,7 +339,7 @@
   /* same material as operational card */
   .tsk-front{
     position:relative;z-index:2;width:100%;height:100%;
-    border-radius:20px;overflow:hidden;
+    border-radius:var(--r);overflow:hidden;
     background:var(--card-bg);
     border:1px solid var(--card-border);
     box-shadow:var(--card-shadow);
@@ -367,7 +367,7 @@
   .tsk-actions{
     position:absolute;inset:0;z-index:1;
     display:flex;align-items:stretch;justify-content:space-between;
-    overflow:hidden;border-radius:20px;
+    overflow:hidden;border-radius:var(--r);
     background:rgba(14,15,17,.92);
     backdrop-filter:blur(20px);
     -webkit-backdrop-filter:blur(20px);
@@ -475,7 +475,7 @@
     justify-content:center; text-align:center; min-width:0;
     border-radius:var(--r-pill); border:none; background:transparent;
   }
-  #tasks-filter-row .chip.on{ background:rgba(255,255,255,.92); color:#1a1b1d }
+  #tasks-filter-row .chip.on{ background:var(--brand); color:#0B0D10 }
   #tasks-filter-row .chip span{ overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
   #tasks-filter-row .chip svg{ width:15px; height:15px; flex:none }
 
@@ -489,8 +489,8 @@
   .tsk-row-prio{
     flex:none; width:8px; height:8px; border-radius:50%; margin-right:2px;
   }
-  .tsk-row-prio--urgente{ background:#E27367 }
-  .tsk-row-prio--importante{ background:#DCAD57 }
+  .tsk-row-prio--urgente{ background:var(--late) }
+  .tsk-row-prio--importante{ background:var(--urgent) }
   .tsk-row-prio--normal{ background:rgba(255,255,255,.28) }
   /* Pill Notas — origem da nota (avulsa vs. de projeto) em vez de
      prioridade; mesmas cores usadas noutros lados do app para os mesmos
@@ -513,7 +513,7 @@
   .notif-inv-card{
     background:rgba(255,255,255,.05);
     border:1px solid rgba(255,255,255,.09);
-    border-radius:14px;padding:12px 14px;margin-bottom:8px
+    border-radius:var(--r);padding:12px 14px;margin-bottom:8px
   }
   .notif-inv-title{font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:2px}
   .notif-inv-sub{font-size:12px;color:var(--ink-soft);margin-bottom:10px;line-height:1.4}
@@ -581,7 +581,7 @@
     backdrop-filter:blur(28px) saturate(120%);
     -webkit-backdrop-filter:blur(28px) saturate(120%);
     border:1px solid rgba(255,255,255,.07);
-    border-radius:18px;
+    border-radius:var(--r);
     box-shadow:0 18px 52px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.05);
     overflow:hidden;margin-bottom:12px;
     display:flex;flex-direction:column;
@@ -594,15 +594,15 @@
   .fin-trk-inn{fill:none;stroke:rgba(255,255,255,.04);stroke-width:26;stroke-linecap:butt;
     stroke-dasharray:330 330}
   /* ghost: volta completa a meia opacidade (dasharray via JS) */
-  .fin-arc-ghost-g{fill:none;stroke:#3A7229;stroke-width:26;stroke-linecap:butt;
+  .fin-arc-ghost-g{fill:none;stroke:var(--done);stroke-width:26;stroke-linecap:butt;
     stroke-dasharray:0 943;opacity:.42}
-  .fin-arc-ghost-r{fill:none;stroke:#B05018;stroke-width:26;stroke-linecap:butt;
+  .fin-arc-ghost-r{fill:none;stroke:var(--late);stroke-width:26;stroke-linecap:butt;
     stroke-dasharray:0 660;opacity:.42}
-  /* arcos de progresso — verde profundo / laranja queimado; dasharray via JS */
-  .fin-arc-g{fill:none;stroke:#3A7229;stroke-width:26;stroke-linecap:butt;
+  /* arcos de progresso — receita/despesa, um só tom cada (--done/--late); dasharray via JS */
+  .fin-arc-g{fill:none;stroke:var(--done);stroke-width:26;stroke-linecap:butt;
     stroke-dasharray:0 943;
     filter:drop-shadow(0 4px 6px rgba(0,0,0,.65))}
-  .fin-arc-r{fill:none;stroke:#B05018;stroke-width:26;stroke-linecap:butt;
+  .fin-arc-r{fill:none;stroke:var(--late);stroke-width:26;stroke-linecap:butt;
     stroke-dasharray:0 660;
     filter:drop-shadow(0 3px 5px rgba(0,0,0,.55))}
   /* rótulos na ponta dos arcos */
@@ -610,8 +610,8 @@
     font-family:var(--font-label),-apple-system,sans-serif;
     font-size:9.5px;font-weight:700;letter-spacing:.04em;
   }
-  .fin-tip-g{fill:rgba(110,190,80,.85)}
-  .fin-tip-r{fill:rgba(210,115,65,.85)}
+  .fin-tip-g{fill:rgba(79,161,137,.85)}
+  .fin-tip-r{fill:rgba(193,120,114,.85)}
   /* texto central */
   .fin-center{
     position:absolute;left:50%;top:75%;
@@ -661,8 +661,8 @@
   .fin-blk-bar{
     position:absolute;bottom:0;left:0;right:0;height:3px;display:block;opacity:.7;
   }
-  .fin-blk-bar--g{background:#3A7229}
-  .fin-blk-bar--r{background:#B05018}
+  .fin-blk-bar--g{background:var(--done)}
+  .fin-blk-bar--r{background:var(--late)}
   .fin-blk-bar--n{background:rgba(255,255,255,.14)}
 
 /* ── Card Financeiro V2 (panorâmico 3 colunas) ── */
@@ -698,20 +698,20 @@
 }
 .fin2-svg{display:block;width:100%;height:100%}
 .fin2-trk{fill:none;stroke-width:13}
-.fin2-trk--g{stroke:#3D7811}
-.fin2-trk--r{stroke:#703D08}
+.fin2-trk--g{stroke:rgba(79,161,137,.22)}
+.fin2-trk--r{stroke:rgba(193,120,114,.22)}
 .fin2-arc{
   fill:none;stroke-width:13;stroke-linecap:round;
   stroke-dasharray:0 314;
   transition:stroke-dasharray .6s var(--ease-out);
 }
 .fin2-arc--g{
-  stroke:#8DF227;
-  filter:drop-shadow(0 0 5px rgba(141,242,39,.4));
+  stroke:var(--done);
+  filter:drop-shadow(0 0 5px rgba(79,161,137,.4));
 }
 .fin2-arc--r{
-  stroke:#FF8805;
-  filter:drop-shadow(0 0 5px rgba(255,136,5,.4));
+  stroke:var(--late);
+  filter:drop-shadow(0 0 5px rgba(193,120,114,.4));
 }
 .fin2-inner{
   position:absolute;inset:0;
@@ -733,8 +733,8 @@
   font-size:clamp(12px,3.2vw,14px);font-weight:500;letter-spacing:.14em;
   text-transform:uppercase;cursor:pointer;-webkit-tap-highlight-color:transparent;
 }
-.fin2-lbl--g{color:#8DF227}
-.fin2-lbl--r{color:#FF8805}
+.fin2-lbl--g{color:var(--done)}
+.fin2-lbl--r{color:var(--late)}
 .fin2-tot-lbl{
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
   font-size:clamp(11px,3vw,13px);font-weight:500;letter-spacing:.18em;
@@ -749,7 +749,7 @@
   font-family:'Barlow Condensed',-apple-system,'Arial Narrow',sans-serif;
   font-size:clamp(11px,2.9vw,14px);line-height:1.3;
 }
-.fin2-pct-v{color:#8DF227;font-weight:600}
+.fin2-pct-v{color:var(--done);font-weight:600}
 .fin2-pct-l{color:#B0B0B0}
 
 /* ======================== DESTAQUES ======================== */
