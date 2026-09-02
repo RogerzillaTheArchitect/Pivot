@@ -1,0 +1,732 @@
+/* =====================================================
+   AGENDA FAN — v4
+   ===================================================== */
+
+:root {
+  --agd-ink:      oklch(0.19 0.002 106);
+  --agd-ink-fg:   oklch(0.975 0.002 106);
+  --agd-ink-soft: oklch(0.76 0.003 106);
+  --agd-ink-line: oklch(1 0 0 / 14%);
+  --agd-ink-el:   oklch(0.27 0.003 106);
+  --agd-paper:    oklch(0.985 0.003 92);
+  --agd-paper-fg: oklch(0.2 0.004 92);
+  --agd-paper-soft:oklch(0.53 0.008 92);
+  --agd-paper-line:oklch(0.2 0.004 92 / 12%);
+  --agd-paper-el: oklch(0.93 0.004 92);
+}
+
+/* ── Section ──────────────────────────────────────── */
+.agenda-section {
+  padding: 0 0 28px;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* ══════════════════════════════════════════════════
+   DAY NAVIGATION — 3 columns, swipeable + animated
+══════════════════════════════════════════════════ */
+.agd-days-wrap {
+  overflow: hidden;
+  touch-action: pan-y;
+  cursor: grab;
+}
+.agd-days-wrap:active { cursor: grabbing; }
+
+.agd-days {
+  display: flex;
+  align-items: stretch;
+}
+
+/* Slide-in animations (shared by days and ruler) */
+@keyframes agd-slide-from-r {
+  from { transform: translateX(28%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+@keyframes agd-slide-from-l {
+  from { transform: translateX(-28%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+.agd-days.agd-anim-from-r { animation:agd-slide-from-r var(--dur-1) var(--ease-out) both; }
+.agd-days.agd-anim-from-l { animation:agd-slide-from-l var(--dur-1) var(--ease-out) both; }
+
+.agd-day-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 12px 8px 10px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:background var(--dur-2);
+}
+.agd-day-col:active { background: rgba(255,255,255,.04); }
+
+/* Side days — smaller, muted */
+.agd-day-col.agd-day-side .agd-day-num {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.25);
+  line-height: 1;
+}
+.agd-day-col.agd-day-side .agd-day-mon {
+  font-family: var(--font-headline);
+  font-size: .6rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.18);
+}
+
+/* Center day — num width ≈ month label width */
+.agd-day-col.agd-day-center { cursor: default; }
+.agd-day-col.agd-day-center .agd-day-num {
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ink);
+}
+.agd-day-col.agd-day-center .agd-day-mon {
+  font-family: var(--font-headline);
+  font-size: .75rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #E03030;
+}
+.agd-day-dot { display: none !important; }
+
+/* ══════════════════════════════════════════════════
+   RULER v2 — scrolling minute timeline
+══════════════════════════════════════════════════ */
+.agd-ruler-outer {
+  margin: 8px 0 4px;
+  touch-action: pan-y;
+}
+
+.agd-ruler-viz {
+  position: relative;
+  height: 72px;
+  margin: 0 18px 0;
+  overflow: hidden;
+}
+
+/* Slide animations for ruler navigation */
+.agd-ruler-viz.agd-anim-from-r { animation:agd-slide-from-r var(--dur-3) var(--ease-out) both; }
+.agd-ruler-viz.agd-anim-from-l { animation:agd-slide-from-l var(--dur-3) var(--ease-out) both; }
+
+/* Canvas fills the viz container */
+.agd-ruler-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Separator — removed (ruler moved below cards) */
+.agd-ruler-sep { display: none; }
+
+/* ── Interval selector overlay ──────────────────── */
+/* Seletor de intervalo — dialogo centrado. Passa a usar o scrim, o material
+   e o movimento partilhados (tokens.css + overlays.css). Antes tinha
+   z-index 9999, escurecimento proprio a .4, blur no contentor em vez do
+   scrim, cor em oklch quando o resto da app usa rgba, e nao animava. */
+.agd-isel {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agd-isel-bd {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--scrim);
+  backdrop-filter: var(--scrim-blur);
+  -webkit-backdrop-filter: var(--scrim-blur);
+  animation: scrim-in var(--dur-3) var(--ease-out) both;
+}
+.agd-isel-sheet {
+  position: relative;
+  z-index: var(--z-raised);
+  background: var(--sheet-bg);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+  border-radius: var(--sheet-r);
+  padding: 8px 0 14px;
+  min-width: 240px;
+  border: 1px solid var(--sheet-border);
+  box-shadow: var(--sheet-shadow-float);
+  animation: dialog-pop var(--dur-3) var(--ease-out) both;
+}
+.agd-isel-title {
+  font-family: var(--font-headline);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.35);
+  text-align: center;
+  padding: 4px 24px 14px;
+}
+.agd-isel-opt {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 13px 24px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,.78);
+  font-family: 'Inter Tight', ui-sans-serif, sans-serif;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+  transition:opacity var(--dur-1);
+}
+.agd-isel-opt:active { opacity: .55; }
+.agd-isel-opt--active {
+  color: oklch(0.82 0.16 90);
+  font-weight: 600;
+}
+
+/* Old ruler timer card — hidden (timer moved to card chip) */
+.agd-ruler-cd { display: none; }
+
+/* ── Timer chip — above the fan carousel ──────── */
+#agd-chip-timer-wrap {
+  display: none;
+}
+.agd-chip-timer {
+  display: none;
+  font-family: var(--font-headline);
+  font-size: 8.5px;
+  letter-spacing: .08em;
+  padding: 3px 12px;
+  border-radius: 999px;
+  line-height: 1.6;
+  white-space: nowrap;
+  pointer-events: none;
+  background: none;
+}
+.agd-chip-timer--active {
+  display: inline-block;
+  color: #FCA311;
+  border: 1px solid rgba(252,163,17,.65);
+}
+.agd-chip-timer--upcoming {
+  display: inline-block;
+  color: #5DD62C;
+  border: 1px solid rgba(93,214,44,.6);
+}
+@keyframes agd-chip-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+.agd-chip-timer--active,
+.agd-chip-timer--upcoming {
+  animation:agd-chip-pulse 2.4s var(--ease-inout) infinite;
+}
+
+/* ══════════════════════════════════════════════════
+   FAN CAROUSEL
+══════════════════════════════════════════════════ */
+.agd-fan-wrap {
+  position: relative;
+  height: 300px;
+  overflow: visible;
+  touch-action: pan-y;
+  margin-top: 0;
+  isolation: isolate;
+  transform: translate3d(0,0,0);
+  perspective: 600px;
+  perspective-origin: 50% 50%;
+}
+
+/* Edge-fade gradients — soften side cards near screen borders */
+.agd-fan-grad {
+  position: absolute;
+  top: -60px;
+  bottom: -60px;
+  width: 64px;
+  pointer-events: none;
+  z-index: 45;
+}
+.agd-fan-grad--l {
+  left: 0;
+  background: linear-gradient(to right, #000 0%, transparent 100%);
+}
+.agd-fan-grad--r {
+  right: 0;
+  background: linear-gradient(to left, #000 0%, transparent 100%);
+}
+.agd-fan {
+  position: absolute;
+  left: 50%;
+  top: 150px; /* vertical center of 300px wrap */
+  width: 0; height: 0;
+  /* R = W/(2·tan(STEP/2)) = 192/(2·tan(20°)) ≈ 264px.
+     Stage pulled back -R so the center card lands at world-Z=0 = natural size. */
+  transform: translateZ(-273px);
+  transform-style: preserve-3d;
+}
+
+.agd-card-positioner {
+  position: absolute;
+  left: -96px;  /* -AGD_W_ACT/2: center card on fan origin */
+  top: -141px;  /* -AGD_H_ACT/2 */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:transform  var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1),
+    filter     var(--dur-2) var(--ease-out);
+  will-change: transform, filter;
+  -webkit-tap-highlight-color: transparent;
+}
+/* Disable transition during live drag so cards follow the finger */
+.agd-fan-wrap.agd-dragging .agd-card-positioner {
+  transition:none;
+}
+/* Side cards lose their shadow — in preserve-3d, box-shadow composites 2D
+   and can bleed visually over the front card's surface */
+.agd-fan .agd-card:not(.agd-active) {
+  box-shadow: none;
+}
+.agd-card-positioner.agd-offscreen {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Card article ─────────────────────────────── */
+.agd-card {
+  width: 100%; height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+  font-family: 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+}
+.agd-ink {
+  --agd-card-bg: oklch(0.19 0.002 106);
+  --agd-card-fg: oklch(0.975 0.002 106);
+  --agd-card-soft: oklch(0.76 0.003 106);
+  --agd-card-line: oklch(1 0 0 / 14%);
+  background: var(--agd-card-bg);
+  color: var(--agd-card-fg);
+  border: 2px solid #262626;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.55),
+    0 12px 32px rgba(0,0,0,.5),
+    0 28px 60px rgba(0,0,0,.45);
+}
+.agd-paper {
+  --agd-card-bg: oklch(0.985 0.003 92);
+  --agd-card-fg: oklch(0.2 0.004 92);
+  --agd-card-soft: oklch(0.53 0.008 92);
+  --agd-card-line: oklch(0.2 0.004 92 / 12%);
+  background: var(--agd-card-bg);
+  color: var(--agd-card-fg);
+  border: 2px solid rgba(210,208,202,.75);
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.45),
+    0 12px 32px rgba(0,0,0,.38),
+    0 28px 60px rgba(0,0,0,.32);
+}
+
+/* ── Photo area — absolute, full card, behind body ─── */
+.agd-card-photo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.agd-photo-fill {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.agd-photo-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agd-initials-text {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.7);
+  letter-spacing: -.02em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+/* Gradient fade — same feel as original, extended lower, not fully opaque at end */
+.agd-card-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.agd-ink .agd-card-photo::after {
+  background: linear-gradient(to bottom,
+    oklch(0.19 0.002 106 / 0)    0%,
+    oklch(0.19 0.002 106 / 0)   38%,
+    oklch(0.19 0.002 106 / 0.06) 46%,
+    oklch(0.19 0.002 106 / 0.22) 57%,
+    oklch(0.19 0.002 106 / 0.52) 68%,
+    oklch(0.19 0.002 106 / 0.76) 80%,
+    oklch(0.19 0.002 106 / 0.82) 100%
+  );
+}
+.agd-paper .agd-card-photo::after {
+  background: linear-gradient(to bottom,
+    oklch(0.985 0.003 92 / 0)    0%,
+    oklch(0.985 0.003 92 / 0)   38%,
+    oklch(0.985 0.003 92 / 0.06) 46%,
+    oklch(0.985 0.003 92 / 0.22) 57%,
+    oklch(0.985 0.003 92 / 0.52) 68%,
+    oklch(0.985 0.003 92 / 0.76) 80%,
+    oklch(0.985 0.003 92 / 0.82) 100%
+  );
+}
+
+/* ── Card body — sits above photo, semi-transparent so image bleeds through ── */
+.agd-card-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 14px 8px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.agd-ink .agd-card-body {
+  background: linear-gradient(to bottom,
+    oklch(0.19 0.002 106 / 0)    0%,
+    oklch(0.19 0.002 106 / 0)   51%,
+    oklch(0.19 0.002 106 / 0.55) 67%,
+    oklch(0.19 0.002 106 / 0.80) 84%,
+    oklch(0.19 0.002 106 / 0.80) 100%
+  );
+}
+.agd-paper .agd-card-body {
+  background: linear-gradient(to bottom,
+    oklch(0.985 0.003 92 / 0)    0%,
+    oklch(0.985 0.003 92 / 0)   51%,
+    oklch(0.985 0.003 92 / 0.55) 67%,
+    oklch(0.985 0.003 92 / 0.80) 84%,
+    oklch(0.985 0.003 92 / 0.80) 100%
+  );
+}
+.agd-card.agd-active .agd-card-body    { padding: 6px 16px 36px; }
+.agd-card:not(.agd-active) .agd-card-body { padding: 5px 12px 32px; }
+.agd-card-body { transition:padding var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1); }
+
+/* Spacer that pushes content to where it would be in the original stacked layout */
+.agd-card-body-spacer {
+  flex-shrink: 0;
+  height: 124px; /* 44% of AGD_H_ACT=282 — mirrors original photo height */
+  pointer-events: none;
+}
+
+.agd-card-title {
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -.015em;
+  text-align: center;
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin: 0 0 6px;
+}
+.agd-card.agd-active .agd-card-title { font-size: .82rem; }
+.agd-card:not(.agd-active) .agd-card-title { font-size: .71rem; }
+.agd-card-title { transition:font-size var(--dur-3) cubic-bezier(0.25, 0.8, 0.35, 1); }
+
+/* Project link row — full text, wraps */
+.agd-card-proj {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 5px;
+  width: 100%;
+}
+.agd-card-proj svg { flex-shrink: 0; opacity: .55; margin-top: 1px; }
+.agd-card-proj-name {
+  font-size: .65rem;
+  color: var(--agd-card-soft);
+  word-break: break-word;
+  text-align: left;
+  line-height: 1.35;
+}
+
+/* Client name row — full text, wraps */
+.agd-card-client {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+.agd-card-client svg { flex-shrink: 0; opacity: .5; margin-top: 1px; }
+.agd-card-client-name {
+  font-size: .62rem;
+  font-weight: 500;
+  color: var(--agd-card-soft);
+  word-break: break-word;
+  text-align: left;
+  line-height: 1.35;
+}
+
+/* Tipo chip — pinned to the very top of card body, above the spacer */
+.agd-card-tipo {
+  display: inline-block;
+  align-self: center;
+  order: -1;
+  font-family: var(--font-headline);
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.35);
+  color: rgba(255,255,255,.65);
+  line-height: 1.6;
+  white-space: nowrap;
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+.agd-paper .agd-card-tipo {
+  background: rgba(0,0,0,.14);
+  color: rgba(0,0,0,.4);
+}
+
+/* People chips — flow, below datetime */
+.agd-people {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.agd-av {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--agd-card-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 7px;
+  font-weight: 700;
+  color: rgba(255,255,255,.88);
+  background: rgba(80,80,90,.8);
+  margin-left: -5px;
+  flex-shrink: 0;
+  overflow: hidden;
+  letter-spacing: 0;
+}
+.agd-av:first-child { margin-left: 0; }
+.agd-av-more {
+  background: rgba(255,255,255,.14);
+  color: rgba(255,255,255,.65);
+  font-size: 6.5px;
+}
+
+/* ── Date + time row ──────────────────────────── */
+.agd-card-datetime {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 6px;
+}
+.agd-card-date {
+  font-size: .58rem;
+  color: var(--agd-card-soft);
+  font-weight: 500;
+  letter-spacing: .01em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.agd-card-hour {
+  font-size: .58rem;
+  color: var(--agd-card-soft);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.agd-card-datetime--notime { justify-content: center; }
+
+/* ── Card footer — floats over gradient, no background bar ── */
+.agd-card-foot {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 12px 10px;
+  z-index: 2;
+}
+
+/* Timer labels — pill style matching status chips */
+.agd-ft-lbl {
+  font-family: var(--font-headline);
+  font-size: 8px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.6;
+  font-variant-numeric: tabular-nums;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: none;
+  white-space: nowrap;
+}
+.agd-ink .agd-ft-upcoming  { color: rgba(255,255,255,.55); }
+.agd-ink .agd-ft-active    { color: #FCA311; font-weight: 700; }
+.agd-ink .agd-ft-past      { color: #ff5050; }
+.agd-paper .agd-ft-upcoming { color: rgba(0,0,0,.45); }
+.agd-paper .agd-ft-active   { color: #C07500; font-weight: 700; }
+.agd-paper .agd-ft-past     { color: #8B1525; }
+
+/* Status chips — bordered pill, no fill */
+.agd-ft-chip {
+  font-family: var(--font-headline);
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  white-space: nowrap;
+  padding: 2px 9px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  background: none;
+}
+.agd-ft-today { color: #FCA311; }
+.agd-ink .agd-ft-late  { color: #ff5050; }
+.agd-paper .agd-ft-late { color: #8B1525; }
+
+/* ── Long-press action overlay ─────────────────── */
+.agd-card-actions {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  border-radius: 16px;
+  background: rgba(5,6,8,.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  opacity: 0;
+  pointer-events: none;
+  transition:opacity var(--dur-2);
+}
+.agd-card-actions.agd-vis { opacity: 1; pointer-events: auto; }
+
+.agd-act-btn {
+  width: 80%;
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font-headline);
+  font-size: 12px;
+  letter-spacing: .09em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  -webkit-tap-highlight-color: transparent;
+  transition:opacity var(--dur-1);
+}
+.agd-act-btn:active { opacity: .62; }
+.agd-act-btn svg { flex-shrink: 0; }
+.agd-act-editar   { background: rgba(255,255,255,.1);  color: rgba(255,255,255,.88); }
+.agd-act-tempo    { background: rgba(93,214,44,.14);   color: #5DD62C; }
+.agd-act-arquivar { background: rgba(217,86,76,.2);    color: #E07878; }
+.agd-act-concluir { background: rgba(79,161,137,.2);   color: var(--brand); }
+
+
+/* Empty state */
+.agd-empty {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.agd-empty svg { opacity: .2; }
+.agd-empty-text {
+  font-family: var(--font-headline);
+  font-size: 11px;
+  letter-spacing: .1em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+}
+/* Conflict warning shown during task creation */
+.ta-aviso-conflito {
+  font-size: var(--text-11);
+  color: #FCA311;
+  background: rgba(252,163,17,.1);
+  border: 1px solid rgba(252,163,17,.3);
+  border-radius: 8px;
+  padding: 7px 12px;
+  margin: -6px 0 8px;
+  line-height: 1.4;
+}
+
+/* Empty state for a day with no tasks — anchored to fan-wrap (has height) */
+.agd-empty-day {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-headline);
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Painel de ações da tarefa (openInfo) ──────── */
+.agd-act-panel{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:8px 0 4px
+}
+.agd-panel-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  padding:22px 10px;border-radius:14px;border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);color:var(--ink);font-size:var(--text-sm);font-weight:500;cursor:pointer;
+  transition:background var(--dur-2);-webkit-tap-highlight-color:transparent
+}
+.agd-panel-btn:active{background:rgba(255,255,255,.11)}
+.agd-panel-ico{
+  display:flex;align-items:center;justify-content:center;
+  width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.08)
+}
+.agd-panel-ico svg{width:18px;height:18px}
+.agd-panel-btn--done{
+  border-color:rgba(50,150,70,.38);background:linear-gradient(145deg,rgba(36,116,58,.30),rgba(16,62,32,.16));color:rgba(106,214,106,.94);box-shadow:var(--sheen-edge)
+}
+.agd-panel-btn--done:active{background:rgba(20,80,40,.32)}
+.agd-panel-btn--done .agd-panel-ico{background:rgba(30,100,50,.28)}
