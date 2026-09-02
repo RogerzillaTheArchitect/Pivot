@@ -44,6 +44,7 @@
     if(!jobsData[id]) return;
     currentJobId=id;
     document.getElementById('detalhe-dynamic').style.display='block';
+    if(typeof _atualizarIndicadorNotas==='function') _atualizarIndicadorNotas(id);
     try{
       renderJobDetailDynamic(id);
     }catch(e){

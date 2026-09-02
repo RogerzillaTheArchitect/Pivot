@@ -222,6 +222,55 @@
     transition:background var(--dur-2),border-color var(--dur-2)}
   .clientbtn:hover{background:var(--gloss), var(--surface-btn-hover);border-color:rgba(255,255,255,.28)}
   .clientbtn svg{width:var(--ico-md);height:var(--ico-md)}
+  /* Notas fica lado a lado com Portal do Cliente, metade cada. */
+  .detail-actions-row{display:flex;gap:10px}
+  .detail-actions-row .clientbtn{margin:18px 0 6px;flex:1}
+  .notas-btn{position:relative}
+  .notas-btn.has-content::after{
+    content:'';position:absolute;top:10px;right:12px;
+    width:7px;height:7px;border-radius:50%;background:var(--progress)}
+  .notas-projeto-textarea{
+    width:100%;min-height:220px;resize:vertical;margin-bottom:14px;
+    background:var(--surface-row);border:1px solid var(--card-border);border-radius:var(--r);
+    padding:13px;color:var(--ink);font-family:inherit;font-size:var(--text-base);line-height:1.5}
+  .notas-projeto-textarea::placeholder{color:var(--ink-faint)}
+  .notas-projeto-save{width:100%}
+
+  /* ===== DETALHE — carrossel vertical =====
+     #detalhe-dynamic passa de scroll contínuo a scroll-snap entre
+     .detalhe-panel (um por secção de renderJobDetailDynamic(), js/12-
+     emails.js). O cabeçalho e o rodapé do Detalhe ficam fora deste
+     contentor, por isso a altura é o ecrã menos essas duas faixas —
+     230px aproxima cabeçalho+ações+rodapé (afinado visualmente). */
+  .detalhe-scroller{
+    height:calc(100dvh - var(--topbar-pad,86px) - var(--nav-pad,98px) - 230px);
+    min-height:280px;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .detalhe-scroller::-webkit-scrollbar{display:none}
+  .detalhe-panel{
+    scroll-snap-align:start;
+    min-height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding:2px 1px;
+  }
+  /* Rail de pontos — acompanha qual painel está visível
+     (inicializarDetalhePaginacao(), js/12-emails.js). */
+  .detalhe-dots{
+    position:fixed; right:8px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:6px; z-index:20;
+  }
+  .detalhe-dot{
+    width:5px; height:5px; border-radius:50%;
+    background:rgba(255,255,255,.25);
+    transition:background var(--dur-2), transform var(--dur-2);
+  }
+  .detalhe-dot.on{ background:var(--ink); transform:scale(1.4) }
   .sec{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--r);margin:11px 0;
     overflow:hidden;box-shadow:var(--card-shadow)}
   /* Faixa de título sempre mais escura que o corpo do card logo abaixo —

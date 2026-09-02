@@ -588,6 +588,37 @@
   function saveJobsData(){
     savePersisted('pivot-jobsData', ()=>jobsData);
   }
+  /* Notas do Projeto — texto livre por job, sem storage novo (viaja dentro
+     de pivot-jobsData, já persistido por saveJobsData()). Modal .ov-sheet
+     no mesmo padrão do de atrasados (js/04-nav-dashboard.js). */
+  function abrirNotasProjeto(jobId){
+    const job=jobsData[jobId]; if(!job) return;
+    const ta=document.getElementById('notas-projeto-texto');
+    if(ta) ta.value=job.notas||'';
+    const scrim=document.getElementById('notas-projeto-scrim'), sheet=document.getElementById('notas-projeto-sheet');
+    if(scrim) scrim.classList.remove('u-hidden');
+    if(sheet) sheet.classList.remove('u-hidden');
+  }
+  function fecharNotasProjeto(){
+    const scrim=document.getElementById('notas-projeto-scrim'), sheet=document.getElementById('notas-projeto-sheet');
+    if(scrim) scrim.classList.add('u-hidden');
+    if(sheet) sheet.classList.add('u-hidden');
+  }
+  function _atualizarIndicadorNotas(jobId){
+    const btn=document.getElementById('notas-projeto-btn');
+    if(!btn) return;
+    const job=jobsData[jobId];
+    btn.classList.toggle('has-content', !!(job&&job.notas&&job.notas.trim()));
+  }
+  function guardarNotasProjeto(){
+    const job=jobsData[currentJobId]; if(!job) return;
+    const ta=document.getElementById('notas-projeto-texto');
+    job.notas=ta?ta.value:'';
+    saveJobsData();
+    _atualizarIndicadorNotas(currentJobId);
+    if(typeof renderTasksList==='function') renderTasksList();
+    fecharNotasProjeto();
+  }
   async function loadJobsData(){
     await loadPersisted('pivot-jobsData', d=>{
       jobsData=d;
