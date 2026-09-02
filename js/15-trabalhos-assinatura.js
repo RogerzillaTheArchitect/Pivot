@@ -326,6 +326,22 @@
     const id=btn.closest('.job').dataset.jobId;
     arquivarTrabalho(id,'concluido');
   }
+  /* CTA único do card de Projeto — "Marcar como pago" adianta a primeira
+     parcela pendente sem abrir o projeto (mesma marcarPagoDynamic() do
+     Detalhe); "Concluir" arquiva como concluído. event.stopPropagation()
+     evita que o clique no botão também abra o projeto (o card inteiro é
+     clicável). */
+  function jobCtaMarcarPago(id, event){
+    if(event) event.stopPropagation();
+    const job=jobsData[id]; if(!job) return;
+    const idx=(job.payments||[]).findIndex(p=>p.status!=='pago');
+    if(idx<0) return;
+    marcarPagoDynamic(id, idx);
+  }
+  function jobCtaConcluir(id, event){
+    if(event) event.stopPropagation();
+    arquivarTrabalho(id,'concluido');
+  }
   /* arquivo de trabalhos: Concluir e Deletar são ações distintas, ambas reversíveis —
      o trabalho sai da lista ativa (e do calendário) e passa a viver no Histórico,
      de onde pode ser restaurado a qualquer momento. */
@@ -525,12 +541,39 @@
     if(!job.horaIni) return '';
     return job.horaIni+(job.horaFim?(' - '+job.horaFim):'');
   }
-  /* Card de Projeto — só responde 2 perguntas (que projeto é este, em que
-     etapa está): título, cliente (avatar+nome), data/hora numa linha, etapa
-     atual. Endereço/valor/observações/equipa só existem na página interna
-     do projeto (ver #v-detalhe), pra não duplicar informação em duas
-     listas. Prioridade (atrasado/hoje/futuro) é só o glow inferior do
-     card — mesmo sistema visual do card Tarefas (Dashboard) — nunca texto. */
+  /* Chips de estado — sempre amarelo/vermelho/verde (nunca cinza neutro),
+     reaproveitando .sig-tag (já usado nos pagamentos do Detalhe) em vez de
+     inventar componente novo. Um projeto rápido (sem contrato/briefing)
+     não mostra chip de contrato — não se aplica a ele. */
+  function construirChipsProjeto(job, c){
+    const chips=[];
+    if(c.concluido){
+      chips.push({txt:t('jobs.chip.done'), tone:'green'});
+      return chips;
+    }
+    if(!c.fechado && job.modo!=='rapido') chips.push({txt:t('jobs.chip.contract'), tone:'amber'});
+    if(c.atrasado) chips.push({txt:t('jobs.chip.overdue'), tone:'late'});
+    else if(c.pagamentoPendente) chips.push({txt:t('jobs.chip.payment'), tone:'amber'});
+    if(c.aRealizar) chips.push({txt:t('jobs.chip.toExecute'), tone:'amber'});
+    if(c.aEntregar) chips.push({txt:t('jobs.chip.toDeliver'), tone:'amber'});
+    return chips;
+  }
+  /* CTA único do rodapé — só aparece quando há uma ação de um clique que
+     resolve o item mais urgente do card; nos restantes estados (ainda a
+     meio do fluxo, sem nada que se resolva num clique só) fica vazio, o
+     espaço reservado continua lá (cards do mesmo tamanho). */
+  function construirCtaProjeto(job, c){
+    if(c.pagamentoPendente) return {txt:t('jobs.cta.markPaid'), fn:'jobCtaMarcarPago'};
+    if(c.concluido===false && c.fechado && !c.aRealizar && !c.aEntregar) return {txt:t('jobs.cta.complete'), fn:'jobCtaConcluir'};
+    return null;
+  }
+  /* Card de Projeto — todos do mesmo tamanho (altura fixa, ver .job.job2 em
+     trabalhos.css), independente de quanto conteúdo cada projeto tem: um
+     ícone simples (sem moldura/avatar) + título alinhado à esquerda,
+     chips de estado sempre coloridos por baixo, e um botão de ação grande
+     no rodapé quando há uma ação de um clique que resolve o mais urgente.
+     Endereço/valor/observações/equipa só existem na página interna do
+     projeto (ver #v-detalhe), pra não duplicar informação em duas listas. */
   function updateJobCardInner(div, job){
     const c=classificarTrabalho(job);
     div.dataset.state= c.concluido?'done':(c.aEntregar?'deliver':(c.fechado?'active':'wait'));
@@ -553,23 +596,27 @@
     const pendenciasBadge=(!c.concluido&&nPendencias>0)
       ?'<div class="j2-pend-badge">⚠ '+nPendencias+'</div>' : '';
     const hora=fmtHoraLinhaJob(job);
+    const icoProjeto='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 0 1 2-2h3.5l1.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/></svg>';
     const icoEdit='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><path d="M7 1.5L9.5 4 3.5 10H1V7.5L7 1.5z"/></svg>';
     const icoArch='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><rect x="1" y="4" width="9" height="6" rx="1"/><path d="M1 2h9v2H1z" fill="currentColor" stroke="none"/><path d="M3.5 7h4" stroke-linecap="round"/></svg>';
     const icoDone='<svg viewBox="0 0 11 11" width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 5.5l3 3L9.5 2"/></svg>';
+    const chips=construirChipsProjeto(job,c);
+    const cta=construirCtaProjeto(job,c);
     div.innerHTML=
       pendenciasBadge+
-      '<div class="j2-body">'+
-        avatarHtml(job.client,44,clienteFotoPorNome(job.client))+
-        '<div class="j2-info">'+
+      '<div class="j2-head">'+
+        '<span class="j2-ico">'+icoProjeto+'</span>'+
+        '<div class="j2-head-txt">'+
           '<div class="j2-title">'+escapeHtml(job.nome||job.typeLabel||'')+'</div>'+
           '<div class="j2-contact">'+RTK_ICONS.client+'<span>'+escapeHtml(job.client)+'</span></div>'+
         '</div>'+
       '</div>'+
+      '<div class="j2-chips">'+chips.map(function(ch){ return '<span class="sig-tag '+ch.tone+'">'+escapeHtml(ch.txt)+'</span>'; }).join('')+'</div>'+
       '<div class="j2-foot">'+
         '<div class="j2-dt">'+RTK_ICONS.calendar+'<span>'+escapeHtml(fmtDataLinhaJob(job))+'</span></div>'+
         (hora?'<div class="j2-dt">'+RTK_ICONS.clock+'<span>'+escapeHtml(hora)+'</span></div>':'')+
-        '<div class="j2-dt">'+(etapaIconJob(job)||RTK_ICONS.action)+'<span>'+escapeHtml(etapaAtualJob(job))+'</span></div>'+
       '</div>'+
+      '<div class="j2-cta">'+(cta?'<button class="j2-cta-btn" onclick="'+cta.fn+'(\''+job.id+'\',event)">'+escapeHtml(cta.txt)+'</button>':'')+'</div>'+
       '<div class="j2-lp-overlay">'+
         '<button class="j2-act-btn" onclick="event.stopPropagation();jobActEditar(this)">'+icoEdit+'<span>'+t('action.edit')+'</span></button>'+
         '<button class="j2-act-btn j2-arch" onclick="event.stopPropagation();jobActArquivar(this)">'+icoArch+'<span>Arquivar</span></button>'+

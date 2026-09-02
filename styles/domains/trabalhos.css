@@ -96,9 +96,13 @@
     font-weight:600;color:#fff;flex:none;font-family:var(--font-headline),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;letter-spacing:.02em}
   .client-avatar[style*="background-image"]{filter:none}
 
-  /* ===== CARD PROJETOS 02 — lista única, same material as biblioteca ===== */
+  /* ===== CARD PROJETOS 02 — lista única, same material as biblioteca =====
+     Altura fixa — todos os cards do mesmo tamanho, independente de quanto
+     conteúdo cada projeto tem (chips/CTA que não se aplicam deixam o
+     espaço em branco em vez de encolher o card). */
   .job.job2{
-    position:relative;display:flex;flex-direction:column;
+    position:relative;display:flex;flex-direction:column;justify-content:space-between;
+    height:220px;
     overflow:hidden;border-radius:var(--r);margin-bottom:12px;
     background:linear-gradient(135deg, rgba(255,255,255,.05), transparent 45%), rgba(26,27,29,.62);
     backdrop-filter:blur(24px) saturate(115%);-webkit-backdrop-filter:blur(24px) saturate(115%);
@@ -120,30 +124,49 @@
     font-size:11px; font-weight:700; color:rgba(246,126,88,.96);
   }
 
-  /* corpo: foto + título + contato */
-  .j2-body{flex:1;overflow:hidden;display:flex;align-items:center;gap:12px;padding:10px 12px}
-  .j2-body .client-avatar{width:52px;height:52px;border-radius:calc(var(--r) - 2px);flex:none}
-  .j2-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+  /* cabeçalho: ícone simples (sem moldura/avatar) + título alinhado à
+     esquerda + nome do cliente por baixo */
+  .j2-head{flex:none;display:flex;align-items:center;gap:10px;padding:14px 14px 0}
+  .j2-ico{flex:none;width:20px;height:20px;color:rgba(245,245,243,.5)}
+  .j2-ico svg{width:100%;height:100%}
+  .j2-head-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;text-align:left}
   .j2-title{font-family:var(--font-headline),Georgia,'Times New Roman',serif;
     font-size:var(--text-md);font-weight:400;line-height:1.2;color:#FBFBFA;letter-spacing:.01em;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .j2-contact{display:flex;align-items:center;gap:5px;font-size:var(--text-11);font-weight:500;
     letter-spacing:.05em;text-transform:uppercase;color:rgba(245,245,243,.55);overflow:hidden;min-width:0}
   .j2-contact svg{width:11px;height:11px;flex:none;color:rgba(245,245,243,.4)}
   .j2-contact .nav-ico{width:11px;height:11px;flex:none;background-color:rgba(245,245,243,.4)}
   .j2-contact span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-  /* faixa inferior: data / hora / etapa */
-  .j2-foot{flex:none;height:40px;padding:0 14px;display:flex;align-items:center;
-    background:rgba(255,255,255,.05)}
-  .j2-dt{flex:1;display:flex;align-items:center;justify-content:center;gap:4px;
+  /* chips de estado — sempre coloridos (amarelo/vermelho/verde), nunca
+     cinza neutro (ver .sig-tag); scroll horizontal em vez de quebrar
+     linha, para o card nunca crescer conforme o número de chips. */
+  .j2-chips{flex:none;display:flex;gap:6px;padding:10px 14px 0;overflow-x:auto;scrollbar-width:none}
+  .j2-chips::-webkit-scrollbar{display:none}
+  .j2-chips .sig-tag{white-space:nowrap}
+
+  /* faixa de data/hora */
+  .j2-foot{flex:1;min-height:0;padding:8px 14px 0;display:flex;align-items:center;gap:14px}
+  .j2-dt{display:flex;align-items:center;gap:4px;
     font-family:var(--font-label),-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
     font-size:var(--text-11);font-weight:600;letter-spacing:.05em;text-transform:uppercase;
     line-height:1;color:rgba(245,245,243,.55)}
-  .j2-dt+.j2-dt{border-left:1px solid rgba(255,255,255,.08)}
   .j2-dt svg{width:11px;height:11px;flex:none;color:rgba(245,245,243,.35)}
   .j2-dt .nav-ico{width:11px;height:11px;flex:none;background-color:rgba(245,245,243,.35)}
   .j2-dt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* CTA do rodapé — grande, quase toda a largura, altura normal de botão;
+     cinza escuro flat, sem gradiente/reflexo (ver auditoria de botões). O
+     contentor fica sempre presente (reserva a altura) mesmo sem botão —
+     é assim que os cards mantêm o mesmo tamanho com ou sem ação. */
+  .j2-cta{flex:none;height:60px;padding:0 14px 14px;display:flex;align-items:center}
+  .j2-cta-btn{width:100%;height:44px;border-radius:var(--r-sm);
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    color:#F5F5F3;font-size:var(--text-sm);font-weight:600;letter-spacing:.01em;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transition:background var(--dur-2)}
+  .j2-cta-btn:active{background:rgba(255,255,255,.14)}
 
   /* overlay long-press: escurece + blur, revela 3 botões de ação */
   .j2-lp-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
