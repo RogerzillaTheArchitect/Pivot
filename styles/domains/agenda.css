@@ -69,15 +69,19 @@
 .agd-day-col {
   flex: none;
   scroll-snap-align: center;
-  width: 72px;
+  /* Mais estreito que alto de propósito — 999px de raio só lê como
+     "pílula vertical" se a coluna for claramente mais alta que larga
+     (72px de largura dava quase quadrado, virava blob arredondado, não
+     pílula). */
+  width: 54px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1px;
-  padding: 10px 4px 9px;
+  padding: 12px 4px 11px;
   border: 1px solid transparent;
-  border-radius: var(--r-sm);
+  border-radius: 999px;
   background: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
