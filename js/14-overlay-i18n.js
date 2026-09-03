@@ -86,6 +86,11 @@
     _omOpen('drawer', function(){
       document.getElementById('menu-overlay').classList.remove('u-hidden');
       document.getElementById('menu-drawer').classList.add('open');
+      /* Rede de segurança: aplicarPerfilData() só corre no arranque/edição
+         de perfil — se a foto for carregada e a sessão nunca mais tocar em
+         Conta, o cabeçalho ficava preso no fallback sem foto. Reaplicar aqui
+         garante que a layer sobre a foto está sempre atualizada ao abrir. */
+      if(typeof aplicarPerfilData==='function') aplicarPerfilData();
     });
   }
   function fecharMenuDrawer(){
