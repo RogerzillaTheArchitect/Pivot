@@ -510,8 +510,14 @@
 
         <!-- ===== AGENDA FAN ===== -->
         <div id="agenda-section" class="agenda-section">
-          <div class="agd-days-wrap" id="agd-days-wrap">
-            <div class="agd-days" id="agd-days"></div>
+          <!-- .agd-days-outer NÃO tem scroll (só .agd-days-wrap lá dentro
+               tem) — a moldura fica aqui fora, fixa, para não deslizar
+               junto com o conteúdo por baixo dela. -->
+          <div class="agd-days-outer">
+            <div class="agd-days-wrap" id="agd-days-wrap">
+              <div class="agd-days" id="agd-days"></div>
+            </div>
+            <div class="agd-days-frame" aria-hidden="true"></div>
           </div>
           <div class="agd-fan-wrap" id="agd-fan-wrap">
             <div class="agd-fan" id="agd-fan"></div>

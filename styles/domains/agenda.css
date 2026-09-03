@@ -33,6 +33,11 @@
    agdSelectDay(iso), já existente (era usado pelo calendário
    de projetos); agdShiftDay(dir) continua a existir e a
    chamar renderDays() — usado pelo swipe do próprio carrossel. */
+/* Âncora não-scrollável da moldura — só .agd-days-wrap tem overflow-x,
+   isto aqui fica parado enquanto o conteúdo lá dentro desliza. */
+.agd-days-outer {
+  position: relative;
+}
 .agd-days-wrap {
   overflow-x: auto;
   overflow-y: hidden;
@@ -45,6 +50,20 @@
   -webkit-mask-image: linear-gradient(to right, transparent 0, #000 36px, #000 calc(100% - 36px), transparent 100%);
 }
 .agd-days-wrap::-webkit-scrollbar { display: none; }
+/* Moldura fixa no centro — não se move; os dias é que fluem por trás dela
+   ao deslizar (scroll nativo de .agd-days), em vez do destaque saltar de
+   botão em botão. O dia que estiver dentro dela no momento é o
+   selecionado (mesma classe .agd-day-center já usada no texto). */
+.agd-days-frame {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px; height: 72px;
+  border: 1.5px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  pointer-events: none;
+  z-index: 2;
+}
 
 .agd-days {
   display: flex;
@@ -113,11 +132,10 @@
   background: var(--brand); transform: translateX(-50%);
 }
 
-/* Dia selecionado — o único que se destaca por cor/peso, não por tamanho
-   (todos os chips têm a mesma largura, para o scroll ficar previsível). */
+/* Dia selecionado — destaca-se por cor/peso do texto; o contorno/fundo
+   próprio saiu daqui, quem marca "este é o selecionado" agora é a
+   .agd-days-frame fixa no centro (por trás da qual os dias passam). */
 .agd-day-col.agd-day-center {
-  border-color: rgba(255,255,255,.16);
-  background: rgba(255,255,255,.06);
 }
 .agd-day-col.agd-day-center .agd-day-wd { color: rgba(255,255,255,.65) }
 .agd-day-col.agd-day-center .agd-day-num { color: var(--ink); font-weight: 600 }
