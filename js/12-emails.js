@@ -655,6 +655,7 @@
         '<div>Projeto rápido: fica na sua agenda com lembrete na data. Sem contrato nem briefing.</div></div>';
     }
     visaoGeral+=mapCardHtml(job);
+    visaoGeral+=corTagPickerHtml(id, job);
     if(visaoGeral) panels.push(visaoGeral);
 
     /* 2. Contrato — sempre presente (mesmo vazio, convida a anexar). */

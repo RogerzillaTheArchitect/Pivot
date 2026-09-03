@@ -725,7 +725,12 @@
     else if(it.origem==='avulsa'){ dotClasse='tsk-row-prio--avulsa'; hasDot=true; }
     else { dotClasse=it.prioridade==='Urgente'?'tsk-row-prio--urgente':(it.prioridade==='Importante'?'tsk-row-prio--importante':'tsk-row-prio--normal'); hasDot=!!it.prioridade; }
     const prioDot=hasDot?'<span class="tsk-row-prio '+dotClasse+'"></span>':'';
-    return '<div class="pick-row" onclick="'+onclick+'">'+prioDot
+    /* Tag colorida à esquerda do card — cor do projeto (corTagJob(),
+       js/15), só quando o item está ligado a um; avulsos ficam com a
+       borda transparente já definida em dashboard.css. */
+    const corTag=it.jobId&&typeof corTagJob==='function'?corTagJob(it.jobId):null;
+    const corStyle=corTag?' style="border-left-color:'+corTag+'"':'';
+    return '<div class="pick-row"'+corStyle+' onclick="'+onclick+'">'+prioDot
       +'<div class="u-flex-min"><div class="nm">'+escapeHtml(it.nome||'')+'</div><div class="sub">'+sub+'</div></div>'
       +'<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>'
       +'</div>';
