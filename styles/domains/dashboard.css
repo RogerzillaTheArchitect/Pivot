@@ -483,8 +483,16 @@
 
   /* Lista — cada linha reaproveita o .pick-row já usado em Contatos/
      Biblioteca (avatar+texto+chevron), mais uma tag de prioridade para
-     o modo Lembretes. */
+     o modo Lembretes. O .pick-row genérico usa --paper (9% branco), que
+     ao lado do vidro escuro do resto desta leva ficava indistinguível do
+     próprio fundo do ecrã — aqui, escopado à Dashboard de Tarefas, ganha
+     o mesmo material fosco dos outros módulos (pills, drawer). */
   #tasks-list{ display:flex; flex-direction:column; gap:3px }
+  #tasks-list .pick-row{
+    background:rgba(255,255,255,.07);
+    backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);
+    border-color:rgba(255,255,255,.09);
+  }
   .tsk-row-empty{
     padding:36px 16px; text-align:center; color:var(--ink-faint); font-size:var(--text-sm);
   }
