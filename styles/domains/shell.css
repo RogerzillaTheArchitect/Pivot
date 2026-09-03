@@ -1,10 +1,10 @@
   /* ===== MAIN ===== */
   .main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;background:transparent}
-  /* Vidro escuro fosco — gradiente + base translúcida, não preto chapado
-     (mesmo material do resto do app, ver .job.job2/tokens --sheet-bg). */
+  /* Vidro escuro fosco translúcido — sem gradiente (pedido explícito),
+     só a base translúcida + blur real, para se ver mesmo através dela. */
   .topbar-mobile{display:none;position:absolute;top:10px;left:18px;right:18px;z-index:40;
     padding:12px 18px;align-items:center;justify-content:space-between;border-radius:999px;
-    background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, transparent 70%), rgba(15,15,17,.68);
+    background:rgba(15,15,17,.42);
     backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
     border:1px solid rgba(255,255,255,.08);box-shadow:0 4px 20px rgba(0,0,0,.5);
 }
@@ -190,17 +190,20 @@
     padding:32px 16px 20px;background-color:#1F2224;background-repeat:no-repeat}
   .menu-drawer-hd .profile-head{flex:1;min-width:0}
   .menu-drawer-hd .p-avatar-wrap{display:none}
-  .menu-drawer-body{flex:1;overflow-y:auto;padding:0 16px 40px}
+  /* Sem padding lateral — a lista ocupa a largura toda do drawer, o
+     .prow interno já tem o seu próprio padding (perfil.css). */
+  .menu-drawer-body{flex:1;overflow-y:auto;padding:0 0 40px}
   .menu-drawer-body::-webkit-scrollbar{width:4px}
   .menu-drawer-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:var(--r)}
   /* Secções em vidro escuro translúcido, com divisórias entre linhas —
      cantos bem menos arredondados que o resto do app (--r é 18px) e só
      1-3px entre secções, para a lista ler como um bloco contínuo em vez
-     de cartões soltos. */
+     de cartões soltos. Alpha mais alto que a primeira tentativa — a
+     4.5% ficava indistinguível do próprio fundo do drawer. */
   .menu-drawer .plist{
-    background:rgba(255,255,255,.045);
-    backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);
-    border:1px solid rgba(255,255,255,.07);border-radius:6px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
+    border:none;border-radius:6px;
     margin:0 0 2px;padding:0;overflow:hidden;
   }
   .menu-drawer .plist:first-of-type{margin-top:0}
@@ -229,12 +232,14 @@
     transition:transform var(--dur-4) var(--ease-glide), opacity var(--dur-3) var(--ease-out);
   }
   .fab-menu.open .fab-menu-items{transform:translateX(0); opacity:1; pointer-events:auto}
+  /* Vidro escuro translúcido, sem gradiente nem borda — mesma base do
+     próprio .fab (portal-cliente.css). */
   .fab-menu-btn{
     width:60px;height:60px;flex:none;border-radius:20px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    background:linear-gradient(180deg,rgba(255,255,255,.09) 0%,transparent 70%), rgba(15,15,17,.68);
+    background:rgba(15,15,17,.42);
     backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
-    border:1.5px solid rgba(255,255,255,.22);
+    border:none;
     color:#fff;font-size:9px;font-weight:600;text-align:center;line-height:1.1;
     cursor:pointer;-webkit-tap-highlight-color:transparent;
     box-shadow:0 6px 18px rgba(0,0,0,.25);

@@ -229,9 +229,10 @@
        cabeçalho: o .p-avatar-profile do Perfil continua um avatar normal. */
     const drawerHd=document.querySelector('.menu-drawer-hd');
     if(drawerHd){
-      drawerHd.style.backgroundImage = perfilData.fotoUrl
-        ? 'linear-gradient(180deg, rgba(10,10,12,.35) 0%, rgba(10,10,12,.82) 100%), url('+perfilData.fotoUrl+')'
-        : 'none';
+      /* O gradiente escuro fica sempre, com ou sem foto — sem foto ainda
+         dá profundidade ao cabeçalho em vez de ficar uma cor lisa. */
+      drawerHd.style.backgroundImage = 'linear-gradient(180deg, rgba(10,10,12,.35) 0%, rgba(10,10,12,.82) 100%)'
+        + (perfilData.fotoUrl ? ', url('+perfilData.fotoUrl+')' : '');
       drawerHd.style.backgroundSize='cover';
       drawerHd.style.backgroundPosition='center';
     }
