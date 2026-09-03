@@ -1,9 +1,12 @@
   /* ===== MAIN ===== */
   .main{flex:1;display:flex;flex-direction:column;min-width:0;position:relative;background:transparent}
+  /* Vidro escuro fosco — gradiente + base translúcida, não preto chapado
+     (mesmo material do resto do app, ver .job.job2/tokens --sheet-bg). */
   .topbar-mobile{display:none;position:absolute;top:10px;left:18px;right:18px;z-index:40;
     padding:12px 18px;align-items:center;justify-content:space-between;border-radius:999px;
-    background:#0f0f0f;
-    border:1px solid rgba(255,255,255,.07);box-shadow:0 4px 20px rgba(0,0,0,.5);
+    background:linear-gradient(180deg, rgba(255,255,255,.06) 0%, transparent 70%), rgba(15,15,17,.68);
+    backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
+    border:1px solid rgba(255,255,255,.08);box-shadow:0 4px 20px rgba(0,0,0,.5);
 }
   .wordmark{display:flex;align-items:center;gap:var(--sp-2)}
   .wordmark .logo-text{font-size:var(--text-xl)}
@@ -177,15 +180,33 @@
     --paper:rgba(255,255,255,.09);--paper-2:rgba(255,255,255,.07);
     color:var(--ink)}
   .menu-drawer.open{transform:translateX(0)}
+  /* Cabeçalho vira a própria foto de perfil como fundo (gradiente escuro
+     por cima, aplicado via JS em aplicarPerfilData()/js/17), em vez do
+     ícone quadrado — que fica escondido só aqui (.p-avatar do Perfil
+     continua normal). Padding maior — deixou de ser uma linha fina, é
+     um cabeçalho "hero" com foto. Sem borda a separar da lista debaixo:
+     o módulo deve ler como uma peça só com a primeira secção. */
   .menu-drawer-hd{display:flex;align-items:center;justify-content:space-between;
-    padding:20px 16px 16px;border-bottom:1px solid rgba(255,255,255,.10)}
+    padding:32px 16px 20px;background-color:#1F2224;background-repeat:no-repeat}
   .menu-drawer-hd .profile-head{flex:1;min-width:0}
-  .menu-drawer-body{flex:1;overflow-y:auto;padding:16px 16px 40px}
+  .menu-drawer-hd .p-avatar-wrap{display:none}
+  .menu-drawer-body{flex:1;overflow-y:auto;padding:0 16px 40px}
   .menu-drawer-body::-webkit-scrollbar{width:4px}
   .menu-drawer-body::-webkit-scrollbar-thumb{background:var(--line);border-radius:var(--r)}
-  .menu-drawer .plist{background:none;border:none;border-radius:0;margin:0 -16px;padding:0}
-  .menu-drawer .prow{border-bottom:1px solid rgba(255,255,255,.08)}
-  .menu-drawer .plist + .plist{margin-top:20px}
+  /* Secções em vidro escuro translúcido, com divisórias entre linhas —
+     cantos bem menos arredondados que o resto do app (--r é 18px) e só
+     1-3px entre secções, para a lista ler como um bloco contínuo em vez
+     de cartões soltos. */
+  .menu-drawer .plist{
+    background:rgba(255,255,255,.045);
+    backdrop-filter:blur(16px) saturate(130%);-webkit-backdrop-filter:blur(16px) saturate(130%);
+    border:1px solid rgba(255,255,255,.07);border-radius:6px;
+    margin:0 0 2px;padding:0;overflow:hidden;
+  }
+  .menu-drawer .plist:first-of-type{margin-top:0}
+  .menu-drawer .prow{border-bottom:1px solid rgba(255,255,255,.07)}
+  .menu-drawer .prow:last-child{border-bottom:none}
+  .menu-drawer .plist + .plist{margin-top:2px}
   /* ===== FAB MENU — os 4 botões são clones do próprio Criar (mesmo
      tamanho 60×60, mesmo raio, mesmo material — não uma barra em pílula
      partilhada), cada um flutuando com a sua própria sombra. Saem de
@@ -211,7 +232,8 @@
   .fab-menu-btn{
     width:60px;height:60px;flex:none;border-radius:20px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    background:linear-gradient(180deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,0) 100%),#000;
+    background:linear-gradient(180deg,rgba(255,255,255,.09) 0%,transparent 70%), rgba(15,15,17,.68);
+    backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
     border:1.5px solid rgba(255,255,255,.22);
     color:#fff;font-size:9px;font-weight:600;text-align:center;line-height:1.1;
     cursor:pointer;-webkit-tap-highlight-color:transparent;

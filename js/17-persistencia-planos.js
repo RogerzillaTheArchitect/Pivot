@@ -223,6 +223,18 @@
         el.textContent=inicial;
       }
     });
+    /* Cabeçalho do drawer "Geral" — a foto vira o fundo do próprio
+       cabeçalho (com gradiente escuro por cima, para o nome/empresa
+       continuarem legíveis) em vez de um ícone quadrado à parte. Só este
+       cabeçalho: o .p-avatar-profile do Perfil continua um avatar normal. */
+    const drawerHd=document.querySelector('.menu-drawer-hd');
+    if(drawerHd){
+      drawerHd.style.backgroundImage = perfilData.fotoUrl
+        ? 'linear-gradient(180deg, rgba(10,10,12,.35) 0%, rgba(10,10,12,.82) 100%), url('+perfilData.fotoUrl+')'
+        : 'none';
+      drawerHd.style.backgroundSize='cover';
+      drawerHd.style.backgroundPosition='center';
+    }
     aplicarIdiomaUI();
   }
   async function loadTarefasData(){ await loadPersisted('pivot-tarefasData', d=>{ tarefasData=d; }); }
