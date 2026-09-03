@@ -483,16 +483,24 @@
 
   /* Lista — cada linha reaproveita o .pick-row já usado em Contatos/
      Biblioteca (avatar+texto+chevron), mais uma tag de prioridade para
-     o modo Lembretes. O .pick-row genérico usa --paper (9% branco), que
-     ao lado do vidro escuro do resto desta leva ficava indistinguível do
-     próprio fundo do ecrã — aqui, escopado à Dashboard de Tarefas, ganha
-     o mesmo material fosco dos outros módulos (pills, drawer). */
-  #tasks-list{ display:flex; flex-direction:column; gap:3px }
+     o modo Lembretes. Aqui, escopado à Dashboard de Tarefas: bloco único
+     de cards retangulares (sem raio, sem espaço entre eles — só a
+     divisória fina) em vez do .pick-row genérico (cantos arredondados,
+     margem própria). Fundo em gradiente das cores escuras da app (não
+     uma cor lisa — lisa lia como cinza morto ao lado do resto do vidro
+     fosco desta leva). */
+  #tasks-list{ display:flex; flex-direction:column; gap:0 }
   #tasks-list .pick-row{
-    background:rgba(255,255,255,.07);
+    background:linear-gradient(180deg, #373C3F 0%, #1F2224 100%);
     backdrop-filter:blur(14px) saturate(130%);-webkit-backdrop-filter:blur(14px) saturate(130%);
-    border-color:rgba(255,255,255,.09);
+    border:none; border-bottom:1px solid rgba(255,255,255,.06);
+    border-radius:0; margin-bottom:0;
   }
+  #tasks-list .pick-row:last-child{ border-bottom:none }
+  /* Tag colorida à esquerda — cor do projeto (job.corTag), customizável no
+     Detalhe (ver abrirCorProjeto()/js/15). Itens sem projeto (avulsos)
+     ficam com a borda transparente — mesmo padding, sem cor nenhuma. */
+  #tasks-list .pick-row{ border-left:4px solid transparent; padding-left:12px }
   .tsk-row-empty{
     padding:36px 16px; text-align:center; color:var(--ink-faint); font-size:var(--text-sm);
   }

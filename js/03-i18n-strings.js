@@ -663,6 +663,7 @@
     "job.notes": { pt:"Notas", en:"Notes", es:"Notas" },
     "job.notesTitle": { pt:"Notas do projeto", en:"Project notes", es:"Notas del proyecto" },
     "job.notesPlaceholder": { pt:"Escreve aqui as tuas anotações sobre este projeto…", en:"Write your notes about this project here…", es:"Escribe aquí tus notas sobre este proyecto…" },
+    "job.tagColor": { pt:"Cor do projeto", en:"Project color", es:"Color del proyecto" },
     "job.clientEmailTitle": { pt:"Email do cliente", en:"Client email", es:"Email del cliente" },
     "job.clientEmailHint": { pt:"{client} ainda não tem email registado. Adiciona um para poder enviar as notificações por email.", en:"{client} has no email on file yet. Add one so email notifications can be sent.", es:"{client} aún no tiene email registrado. Añade uno para poder enviar las notificaciones por email." },
     "portal.shareTitle": { pt:"Compartilhar Portal", en:"Share Portal", es:"Compartir Portal" },

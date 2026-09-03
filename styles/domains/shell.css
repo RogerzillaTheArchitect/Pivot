@@ -198,10 +198,10 @@
   /* Secções em vidro escuro translúcido, com divisórias entre linhas —
      cantos bem menos arredondados que o resto do app (--r é 18px) e só
      1-3px entre secções, para a lista ler como um bloco contínuo em vez
-     de cartões soltos. Alpha mais alto que a primeira tentativa — a
-     4.5% ficava indistinguível do próprio fundo do drawer. */
+     de cartões soltos. Gradiente das cores escuras da app (não uma cor
+     lisa — lisa lê como cinza morto, sem profundidade nenhuma). */
   .menu-drawer .plist{
-    background:rgba(255,255,255,.08);
+    background:linear-gradient(180deg, #373C3F 0%, #1F2224 100%);
     backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%);
     border:none;border-radius:6px;
     margin:0 0 2px;padding:0;overflow:hidden;
@@ -232,19 +232,22 @@
     transition:transform var(--dur-4) var(--ease-glide), opacity var(--dur-3) var(--ease-out);
   }
   .fab-menu.open .fab-menu-items{transform:translateX(0); opacity:1; pointer-events:auto}
-  /* Vidro escuro translúcido, sem gradiente nem borda — mesma base do
-     próprio .fab (portal-cliente.css). */
+  /* Vidro BRANCO translúcido, como o próprio .fab (portal-cliente.css) —
+     conteúdo escuro por cima, mesma borda subtil da barra inferior. */
   .fab-menu-btn{
     width:60px;height:60px;flex:none;border-radius:20px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    background:rgba(15,15,17,.42);
+    background:rgba(245,245,245,.78);
     backdrop-filter:blur(20px) saturate(150%);-webkit-backdrop-filter:blur(20px) saturate(150%);
-    border:none;
-    color:#fff;font-size:9px;font-weight:600;text-align:center;line-height:1.1;
+    border:1px solid rgba(255,255,255,.08);
+    color:#0B0D10;font-size:9px;font-weight:600;text-align:center;line-height:1.1;
     cursor:pointer;-webkit-tap-highlight-color:transparent;
     box-shadow:0 6px 18px rgba(0,0,0,.25);
   }
-  .fab-menu-btn .nav-ico{background-color:rgba(255,255,255,.85);width:20px;height:20px;flex:none}
+  .fab-menu-btn .nav-ico{background-color:#0B0D10;width:20px;height:20px;flex:none}
   .fab-menu-btn span:not(.nav-ico){display:block;line-height:1.2}
   .drawer-company{font-size:var(--text-sm);color:var(--ink-soft);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .drawer-plan-badge{display:inline-block;margin-top:6px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:4px;background:rgba(255,255,255,.13);color:var(--ink);border:1px solid rgba(255,255,255,.18)}
+  /* Chip de plano — colorido (era cinza/branco genérico, ilegível como
+     hierarquia de plano). Usa --brand, a mesma cor de marca do resto do
+     app, em vez de inventar uma cor nova só para isto. */
+  .drawer-plan-badge{display:inline-block;margin-top:6px;padding:2px 8px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:4px;background:var(--brand-10);color:var(--brand);border:1px solid rgba(143,193,232,.3)}

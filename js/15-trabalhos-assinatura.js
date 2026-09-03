@@ -3,6 +3,44 @@
    ordem fixa; escopo global partilhado, tal como no script unico original.
    Codigo de arranque vive em js/99-boot.js. */
 
+  /* ===== Tag colorida do projeto =====
+     Aparece na barra esquerda dos cards de Agenda/Notas/Atrasados
+     (#tasks-list, dashboard.css) sempre que o item está ligado a um
+     projeto. Customizável aqui no Detalhe (corTagPickerHtml, painel
+     "Visão geral"); se o utilizador nunca escolheu, corTagJob() atribui
+     uma cor estável (hash do id) na primeira vez que é pedida, para o
+     card nunca aparecer sem cor nenhuma antes de alguém a escolher. */
+  const CORES_TAG_PROJETO=['#8FC1E8','#4FA189','#C17872','#CBA26A','#9B8FE8','#5AB8B0'];
+  function corTagJob(jobId){
+    const job=jobsData[jobId];
+    if(!job) return null;
+    if(!job.corTag){
+      let h=0; for(let i=0;i<jobId.length;i++) h=(h*31+jobId.charCodeAt(i))>>>0;
+      job.corTag=CORES_TAG_PROJETO[h%CORES_TAG_PROJETO.length];
+      saveJobsData();
+    }
+    return job.corTag;
+  }
+  function corTagPickerHtml(jobId, job){
+    const atual=corTagJob(jobId);
+    return '<p class="csec-label" style="margin:14px 2px 8px">'+t('job.tagColor')+'</p>'
+      +'<div style="display:flex;gap:10px;padding:0 2px 4px">'
+      +CORES_TAG_PROJETO.map(function(c){
+        const on=c===atual;
+        return '<div onclick="event.stopPropagation();setCorTagJob(\''+jobId+'\',\''+c+'\')" '
+          +'style="width:28px;height:28px;border-radius:50%;background:'+c+';cursor:pointer;'
+          +'border:2px solid '+(on?'#fff':'transparent')+';box-shadow:'+(on?'0 0 0 2px rgba(0,0,0,.4)':'none')+'"></div>';
+      }).join('')
+      +'</div>';
+  }
+  function setCorTagJob(jobId, cor){
+    const job=jobsData[jobId]; if(!job) return;
+    job.corTag=cor;
+    saveJobsData();
+    if(typeof renderJobDetailDynamic==='function') renderJobDetailDynamic(jobId);
+    if(typeof renderTasksList==='function') renderTasksList();
+  }
+
   let sigCanvasCtx=null, sigDrawing=false, sigHasDrawing=false;
   function inicializarCanvasAssinatura(){
     const canvas=document.getElementById('sig-canvas');
